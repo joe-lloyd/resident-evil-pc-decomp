@@ -48,12 +48,16 @@ void plat_test_link_poll(void (*on_line)(const char* line))
 {
     if (s_listen == INVALID_SOCKET) return;
 
-    if (s_client == INVALID_SOCKET) {
-        s_client = accept(s_listen, NULL, NULL);
-        if (s_client == INVALID_SOCKET) return;
+    // The newest connection wins, so a harness that reconnects is never stuck
+    // behind a stale client the game still thinks is alive.
+    SOCKET incoming = accept(s_listen, NULL, NULL);
+    if (incoming != INVALID_SOCKET) {
+        drop_client();
+        s_client = incoming;
         u_long nonblocking = 1;
         ioctlsocket(s_client, FIONBIO, &nonblocking);
     }
+    if (s_client == INVALID_SOCKET) return;
 
     for (;;) {
         int room = (int)sizeof(s_inbuf) - 1 - s_inlen;
