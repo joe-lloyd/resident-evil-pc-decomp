@@ -59,7 +59,7 @@ export function tunnel(port: number): ChildProcess {
  */
 export function buildAndDeploy(branch: string): string[] {
   const out = powershell(`
-    Get-Process residentevil -ErrorAction SilentlyContinue | Stop-Process -Force
+    Get-Process residentevil -ErrorAction SilentlyContinue | Where-Object { $_.Path -like '${gameDir}\\*' } | Stop-Process -Force
     Set-Location '${repoDir}'
     git fetch -q fork
     git checkout -q -B ${branch} fork/${branch}
@@ -72,7 +72,7 @@ export function buildAndDeploy(branch: string): string[] {
       # A game that is still exiting holds the exe: retry, then prove the copy.
       $built = (Get-FileHash 'bin\\Release\\residentevil.exe').Hash
       for ($i = 0; $i -lt 20; $i++) {
-        Get-Process residentevil -ErrorAction SilentlyContinue | Stop-Process -Force
+        Get-Process residentevil -ErrorAction SilentlyContinue | Where-Object { $_.Path -like '${gameDir}\\*' } | Stop-Process -Force
         Copy-Item 'bin\\Release\\residentevil.exe' '${gameDir}' -Force -ErrorAction SilentlyContinue
         if ((Get-FileHash '${gameDir}\\residentevil.exe').Hash -eq $built) { 'DEPLOYED'; break }
         Start-Sleep 1

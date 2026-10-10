@@ -67,7 +67,8 @@ function blocked(view: DataView, x: number, z: number): boolean {
   const count = view.getInt32(at + 4 + quadrant * 4, true);
   for (let i = first; i < first + count; i++) {
     const r = at + 0x18 + i * 12;
-    const [xMax, zMax, xMin, zMin] = [0, 2, 4, 6].map((o) => view.getInt16(r + o, true)) as [number, number, number, number];
+    // Zero-extended, as boundary_classify reads them.
+    const [xMax, zMax, xMin, zMin] = [view.getUint16(r, true), view.getUint16(r + 2, true), view.getUint16(r + 4, true), view.getUint16(r + 6, true)];
     const inside = x >= xMin - PLAYER_RADIUS && x <= xMax + PLAYER_RADIUS && z >= zMin - PLAYER_RADIUS && z <= zMax + PLAYER_RADIUS;
     if (inside && (view.getUint16(r + 10, true) & 0x100) !== 0) return true;
   }
@@ -149,9 +150,9 @@ test('the trail is walkable and its edges are walls', { skip }, () => {
   }
   assert.equal(blocked(view, 1800, 4000), true);
   assert.equal(blocked(view, 5200, 12000), true);
-  assert.equal(blocked(view, 3500, -100), true);
+  assert.equal(blocked(view, 3500, 0), true);
+  assert.equal(blocked(view, 3500, 150), true);
   assert.equal(blocked(view, 3500, 16100), true);
-  assert.equal(blocked(view, -3000, 8000), true);
 });
 
 test('the main script is one procedure holding return', { skip }, () => {

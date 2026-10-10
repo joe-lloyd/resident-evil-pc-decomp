@@ -205,15 +205,22 @@ interface Rect {
   readonly z1: number;
 }
 
+/**
+ * Four walls around the trail. Collision coordinates are unsigned (the engine
+ * zero-extends them), so nothing can reach below 0: the trail starts at Z = 0,
+ * which makes the north wall a line at Z = 0. That still holds, because the
+ * engine grows every box by the character's radius before testing.
+ */
 function wallsAround(trailX: Range, trailZ: Range): Rect[] {
   const [x0, x1] = trailX;
   const [z0, z1] = trailZ;
   const w = WALL_THICKNESS;
+  const low = (v: number) => Math.max(0, v);
   return [
-    { x0: x0 - w, z0: z0 - w, x1: x0, z1: z1 + w }, // west
-    { x0: x1, z0: z0 - w, x1: x1 + w, z1: z1 + w }, // east
-    { x0: x0 - w, z0: z0 - w, x1: x1 + w, z1: z0 }, // north, the top of the trail
-    { x0: x0 - w, z0: z1, x1: x1 + w, z1: z1 + w }, // south, behind the door
+    { x0: low(x0 - w), z0: low(z0 - w), x1: x0, z1: z1 + w }, // west
+    { x0: x1, z0: low(z0 - w), x1: x1 + w, z1: z1 + w }, // east
+    { x0: low(x0 - w), z0: low(z0 - w), x1: x1 + w, z1: z0 }, // north, the top of the trail
+    { x0: low(x0 - w), z0: z1, x1: x1 + w, z1: z1 + w }, // south, behind the door
   ];
 }
 
@@ -261,8 +268,8 @@ function writeCollision(c: Cursor, scene: Scene): void {
   c.i32(0);
   for (let quadrant = 0; quadrant < 4; quadrant++) {
     for (const w of walls) {
-      // MAX corner first: xMax, zMax, xMin, zMin.
-      c.i16(w.x1).i16(w.z1).i16(w.x0).i16(w.z0).u16(WALL_SHAPE_PUSH_RECT).u16(WALL_FLAGS_BLOCK);
+      // MAX corner first: xMax, zMax, xMin, zMin, all unsigned.
+      c.u16(w.x1).u16(w.z1).u16(w.x0).u16(w.z0).u16(WALL_SHAPE_PUSH_RECT).u16(WALL_FLAGS_BLOCK);
     }
   }
 }

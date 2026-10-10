@@ -1,16 +1,19 @@
 // A viewable picture of the game right now: capture the back buffer, fetch
 // it, lay the room's background under it (composite.ts) and save a PNG of
 // the 320x240 scene scaled 2x.
-import { mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
-import { loadBackground } from './background.ts';
+import { backgroundPath, loadBackground } from './background.ts';
 import { readBmp, writePng, type Image } from './image.ts';
 import { underlay } from './composite.ts';
 import { fetch } from './lab.ts';
 import type { GameLink } from './link.ts';
 
 const remoteDir = process.env.RE1_LAB_SHOT_DIR ?? 'C:\\Users\\joell\\Tools\\wintool';
-const dataRoot = process.env.RE1_DATA ?? '/tmp/re1-pc';
+// Folders that hold Stage<n>/RC<n><room><camera>.pak, first match wins. The REB
+// overlay comes first, so the backgrounds of rooms it adds are found; every other
+// room falls through to the player's game data. RE1_OVERLAY and RE1_DATA override.
+const dataRoots = [process.env.RE1_OVERLAY ?? '/tmp/rae-reb/REB', process.env.RE1_DATA ?? '/tmp/re1-pc'];
 
 function cropScale(image: Image, w: number, h: number, scale: number): Image {
   const out = new Uint8Array(w * scale * h * scale * 3);
@@ -33,7 +36,8 @@ export async function snapshot(link: GameLink, outDir: string, name: string): Pr
   let image = readBmp(bmp);
   if (state.play) {
     try {
-      image = underlay(image, loadBackground(dataRoot, state.stage, state.room, state.camera), 1);
+      const root = dataRoots.find((r) => existsSync(backgroundPath(r, state.stage, state.room, state.camera)));
+      if (root !== undefined) image = underlay(image, loadBackground(root, state.stage, state.room, state.camera), 1);
     } catch {
       // Stages without PC backgrounds (arrange rooms): keep the raw frame.
     }
