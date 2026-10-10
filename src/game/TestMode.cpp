@@ -105,7 +105,7 @@ static FlagBank flag_bank(int bank)
 static void capture_before_present(void)
 {
     g_MarniBeforePresent = NULL;
-    int ok = plat_window_capture(s_shotPath);
+    int ok = g_MarniFrameBuffer.SaveBitmapToFile(s_shotPath);
     reply("{\"t\":\"ack\",\"cmd\":\"shot\",\"ok\":%d,\"frame\":%u}\n", ok ? 1 : 0, s_frame);
 }
 
