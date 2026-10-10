@@ -19,6 +19,28 @@ import { buildTrailRoom, trailRoom, trailRoomFile, trailStart } from './new_room
  */
 export const start = { ...trailRoom, ...trailStart };
 
+/**
+ * Enemies that are already dead when her game starts: enemy() skips a spawn
+ * whose kill flag (its third argument) is set. Chapter 1 thins Chris's route
+ * for a medic with one Beretta clip; the Cerberus in 11A and one zombie in 10A
+ * stay as her fights.
+ */
+export const killedAtStart = [
+  48, 49, 50, // ROOM3000 courtyard garden: all three Cerberus
+  113, // ROOM10A0 back passage: one of its two zombies
+  9, 10, 11, // ROOM1010 1F left stairs: all three zombies
+];
+
+/** BioCardLayout offsets (src/game/BioCard.h). */
+const CARD_ENEMY_FLAGS = 0x25c;
+
+/** Set flag `index` of a bank: word index / 32, top bit first, as cmd_bit_op does. */
+function setFlag(card: Uint8Array, bankOffset: number, index: number): void {
+  const at = bankOffset + (index >> 5) * 4;
+  const view = new DataView(card.buffer, card.byteOffset, card.byteLength);
+  view.setUint32(at, (view.getUint32(at, true) | (0x80000000 >>> (index & 31))) >>> 0, true);
+}
+
 const here = path.dirname(fileURLToPath(import.meta.url));
 const roomsDir = path.join(here, 'rooms');
 
@@ -43,6 +65,7 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   card.writeInt16LE(start.x, 0x22c);
   card.writeInt16LE(start.z, 0x22e);
   card.writeInt16LE(start.angle, 0x230);
+  for (const index of killedAtStart) setFlag(card, CARD_ENEMY_FLAGS, index);
   mkdirSync(path.join(reb, 'DATA'), { recursive: true });
   writeFileSync(path.join(reb, 'DATA', 'BIO_CARD.DAT'), card);
   written.push('DATA/BIO_CARD.DAT');
