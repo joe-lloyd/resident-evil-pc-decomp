@@ -33,3 +33,4 @@ void plat_test_link_poll(void (*on_line)(const char* line)) { (void)on_line; }
 void plat_test_link_send(const char* text) { (void)text; }
 void plat_key_inject_exclusive(BOOL on) { (void)on; }
 void plat_key_inject(int vk, BOOL down) { (void)vk; (void)down; }
+BOOL plat_window_capture(const char* path) { (void)path; return FALSE; }

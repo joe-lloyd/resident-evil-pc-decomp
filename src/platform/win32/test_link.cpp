@@ -6,6 +6,8 @@
 
 #include <winsock2.h>
 #include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #pragma comment(lib, "ws2_32.lib")
 
@@ -107,4 +109,54 @@ void plat_test_link_send(const char* text)
             return;
         }
     }
+}
+
+extern HWND g_hWnd;
+
+BOOL plat_window_capture(const char* path)
+{
+    if (g_hWnd == NULL) return FALSE;
+    RECT r;
+    GetClientRect(g_hWnd, &r);
+    int w = r.right, h = r.bottom;
+    if (w <= 0 || h <= 0) return FALSE;
+
+    HDC screen = GetDC(g_hWnd);
+    HDC mem = CreateCompatibleDC(screen);
+    HBITMAP bmp = CreateCompatibleBitmap(screen, w, h);
+    HGDIOBJ old = SelectObject(mem, bmp);
+    // PW_CLIENTONLY | PW_RENDERFULLCONTENT: include the Direct3D content.
+    BOOL ok = PrintWindow(g_hWnd, mem, 1 | 2);
+
+    BITMAPINFOHEADER bi = {};
+    bi.biSize = sizeof(bi);
+    bi.biWidth = w;
+    bi.biHeight = -h;
+    bi.biPlanes = 1;
+    bi.biBitCount = 24;
+    bi.biCompression = BI_RGB;
+    int stride = (w * 3 + 3) & ~3;
+    DWORD size = (DWORD)(stride * h);
+    BYTE* pixels = (BYTE*)malloc(size);
+    if (pixels != NULL && ok) {
+        GetDIBits(mem, bmp, 0, (UINT)h, pixels, (BITMAPINFO*)&bi, DIB_RGB_COLORS);
+        BITMAPFILEHEADER bf = {};
+        bf.bfType = 0x4d42;
+        bf.bfOffBits = sizeof(bf) + sizeof(bi);
+        bf.bfSize = bf.bfOffBits + size;
+        FILE* f = fopen(path, "wb");
+        ok = f != NULL;
+        if (f) {
+            fwrite(&bf, sizeof(bf), 1, f);
+            fwrite(&bi, sizeof(bi), 1, f);
+            fwrite(pixels, size, 1, f);
+            fclose(f);
+        }
+    }
+    free(pixels);
+    SelectObject(mem, old);
+    DeleteObject(bmp);
+    DeleteDC(mem);
+    ReleaseDC(g_hWnd, screen);
+    return ok && pixels != NULL;
 }

@@ -49,6 +49,9 @@ BOOL plat_test_link_open(int port);
 void plat_test_link_poll(void (*on_line)(const char* line));
 // Send text to the connected client; dropped when none is connected.
 void plat_test_link_send(const char* text);
+// Save the game window as it appears on screen, background included, as a
+// 24-bit BMP. The renderer's back buffer lacks the pre-rendered background.
+BOOL plat_window_capture(const char* path);
 
 // ---------------------------------------------------------------------------
 // Time
