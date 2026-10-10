@@ -2,6 +2,8 @@
 // game_start, InitializeGame and all player/inventory initialization.
 // All functions decompiled from Ghidra with original addresses
 #include "../Globals.h"
+#include "TestMode.h"
+extern void DebugRoomChange_ArmPlacement(void);
 #include "dc/ItemTables.h"
 #include "dc/Items.h"
 #include "../marni/MarniSystem.h"
@@ -432,6 +434,15 @@ void InitializeGame(void)
 
         memcpy(&g_BioCardData[0], g_loadDataDestPointer, 1052);
 
+        // Port addition: a dev boot that names a room starts there instead.
+        int bootStage, bootRoom;
+        if (DevBoot_StartRoom(&bootStage, &bootRoom)) {
+            g_stageId = (unsigned char)bootStage;
+            g_roomId = (unsigned char)bootRoom;
+            g_roomCameraId = 0;
+            DebugRoomChange_ArmPlacement();
+        }
+
         g_SpecialRoomLightState = (short)0xFFFF;
         g_CharacterModelId = g_playerEntity.id;
 
@@ -600,6 +611,7 @@ void InitializeGame(void)
     g_main_state_flags = g_main_state_flags & ~MSF_ROOM_TRANSITION;
 
     init_room();
+    DebugRoomChange_ApplyPendingPlacement();   // no-op unless a dev boot armed it
 
     g_AttractModeIdleTimer = 1;
     update_room_bgm();

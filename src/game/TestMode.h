@@ -29,3 +29,6 @@ int  DevBoot_Configure(const char* spec);
 // Called where startup would chain the logos: chains game_start instead and
 // returns 1 when a dev boot was configured.
 int  DevBoot_Begin(void);
+// The room a dev boot starts in, if the spec named one. InitializeGame uses it
+// in place of the new-game start room.
+int  DevBoot_StartRoom(int* stage, int* room);

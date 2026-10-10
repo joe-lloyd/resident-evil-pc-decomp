@@ -151,6 +151,8 @@ static void on_command(const char* line)
 extern void game_start(void);
 
 static int s_bootCharacter = -1;
+static int s_bootStage = -1;
+static int s_bootRoom = -1;
 
 int DevBoot_Configure(const char* spec)
 {
@@ -163,8 +165,8 @@ int DevBoot_Configure(const char* spec)
     else if (strcmp(name, "rebecca") == 0) s_bootCharacter = CHAR_REBECCA;
     else return 0;
     if (n == 3) {
-        s_pendingStage = stage;
-        s_pendingRoom = room;
+        s_bootStage = stage;
+        s_bootRoom = room;
     }
     return 1;
 }
@@ -178,6 +180,14 @@ int DevBoot_Begin(void)
     else g_main_state_flags &= ~MSF_CHAR_VARIANT;
     g_bGameActive = 2;
     Task_chain((void*)game_start);
+    return 1;
+}
+
+int DevBoot_StartRoom(int* stage, int* room)
+{
+    if (s_bootCharacter < 0 || s_bootStage < 0) return 0;
+    *stage = s_bootStage;
+    *room = s_bootRoom;
     return 1;
 }
 
