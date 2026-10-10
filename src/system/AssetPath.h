@@ -119,6 +119,12 @@ const char*  GetAssetModeName(void);
 // running the resolved path through again is a no-op.
 const char*  ResolveAssetRoot(const char* path, char* out, size_t outSize);
 
+// 1 when `path` (rooted at GAME_DATA_ROOT, like every game asset path) opens
+// through the same lookup LoadFile uses: the content-mode overlay first, then
+// the base tree. Lets callers ask whether a file ships, overlay files included,
+// without loading it.
+int          AssetFileExists(const char* path);
+
 #ifdef __cplusplus
 }
 #endif

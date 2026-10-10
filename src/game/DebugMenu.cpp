@@ -441,12 +441,45 @@ static void DebugRoomChange_Trigger(void)
     StMask(0, 0);
 }
 
+// Does the room file LoadRoomRdt would open for this stage and room resolve,
+// overlay included? Same name template as LoadRoomRdt (RoomInit.cpp).
+static int DebugRoomFileExists(int stage, int room)
+{
+    static const char hexDigits[] = "0123456789abcdef";
+    int variant = (g_main_state_flags & MSF_CHAR_VARIANT) ? 1 : 0;
+    char path[64];
+    sprintf(path, GAME_DATA_ROOT "stage%c\\room%c%c%c%c.rdt",
+            hexDigits[stage + 1], hexDigits[stage + 1],
+            hexDigits[room >> 4], hexDigits[room & 0xF], hexDigits[variant]);
+    return AssetFileExists(path);
+}
+
 // Dev boot (TestMode.cpp): whether a stage and room have a room file to load.
+// The menu's own list decides for the rooms it names. A room past the list
+// (a room a mode overlay adds, like the REB mountain trail) counts when its
+// file resolves. A door record keeps the room in five bits, so 0x1f is the top.
 int DebugRoomChange_IsSelectable(int stage, int room)
 {
     if (stage < 0 || stage > DebugStageMax()) return 0;
-    if (room < 0 || room >= s_dbgStageRooms[stage].count) return 0;
-    return DebugRoomSelectable(stage, room);
+    if (room < 0 || room >= 0x20) return 0;
+    if (room < s_dbgStageRooms[stage].count) return DebugRoomSelectable(stage, room);
+    return DebugRoomFileExists(stage, room);
+}
+
+// A new game's start spot inside its start room, from the card the game
+// starts from (REB's bio_card.dat names one in its saved-position fields).
+// ApplyPendingPlacement uses it instead of the first-door guess, once.
+static struct {
+    int stage, room, x, z, angle;
+} s_startSpot = { -1, -1, 0, 0, 0 };
+
+void DebugRoomChange_SetStartSpot(int stage, int room, int x, int z, int angle)
+{
+    s_startSpot.stage = stage;
+    s_startSpot.room = room;
+    s_startSpot.x = x;
+    s_startSpot.z = z;
+    s_startSpot.angle = angle;
 }
 
 // Dev boot (TestMode.cpp): stand the player by the first door of the start
@@ -566,6 +599,21 @@ static void DebugRoom_DecodeDest(unsigned char dest, unsigned char curStage,
     }
 }
 
+// Stand the player at a spot. X and Z are zero-extended into the 32-bit matrix
+// translation, Y is sign-extended (heights go negative) - the same asymmetry as
+// room_transition_load's own placement code.
+static void DebugRoom_PlacePlayer(int spotX, int spotY, int spotZ, int spotAngle)
+{
+    g_playerEntity.scaMatrixData.localMatrix.t[0] = spotX;
+    g_playerEntity.scaMatrixData.localMatrix.t[1] = spotY;
+    g_playerEntity.scaMatrixData.localMatrix.t[2] = spotZ;
+    g_playerEntity.position.x = (short)spotX;
+    g_playerEntity.position.y = (short)spotY;
+    g_playerEntity.position.z = (short)spotZ;
+    g_playerEntity.posY = (unsigned short)spotY;
+    g_playerEntity.directionAngle = (short)spotAngle;
+}
+
 void DebugRoomChange_ApplyPendingPlacement(void)
 {
     if (s_dbgRoomChangeArmed == 0) {
@@ -577,6 +625,15 @@ void DebugRoomChange_ApplyPendingPlacement(void)
     if (s_dbgRestoreVariant != 0) {
         Flg_on((int)g_ScenarioFlags, SCENARIO_FLAG_STAGE_VARIANT);
         s_dbgRestoreVariant = 0;
+    }
+
+    // The new game's own start spot, when this is its start room.
+    if (s_startSpot.stage == (int)g_stageId && s_startSpot.room == (int)g_roomId) {
+        DebugRoom_PlacePlayer(s_startSpot.x, 0, s_startSpot.z, s_startSpot.angle);
+        dbg_printf("[debugmenu] start spot: x=%d z=%d ang=0x%X\n",
+                   s_startSpot.x, s_startSpot.z, s_startSpot.angle);
+        s_startSpot.stage = -1;
+        return;
     }
 
     unsigned char* table = g_RoomActionTable;
@@ -760,17 +817,7 @@ void DebugRoomChange_ApplyPendingPlacement(void)
         // carry the neighbour-side camera id, which can exceed the loaded
         // room's camera count and crashes Room_LoadCameraSprites.)
 
-        // X and Z are zero-extended into the 32-bit matrix translation,
-        // Y is sign-extended (heights go negative) - the same asymmetry as
-        // room_transition_load's own placement code.
-        g_playerEntity.scaMatrixData.localMatrix.t[0] = spotX;
-        g_playerEntity.scaMatrixData.localMatrix.t[1] = spotY;
-        g_playerEntity.scaMatrixData.localMatrix.t[2] = spotZ;
-        g_playerEntity.position.x = (short)spotX;
-        g_playerEntity.position.y = (short)spotY;
-        g_playerEntity.position.z = (short)spotZ;
-        g_playerEntity.posY = (unsigned short)spotY;
-        g_playerEntity.directionAngle = (short)spotAngle;
+        DebugRoom_PlacePlayer(spotX, spotY, spotZ, spotAngle);
 
         dbg_printf("[debugmenu] room change: placed at x=%d z=%d ang=0x%X cam=%d (door dir=%d zone %u,%u %ux%u)\n",
                    spotX, spotZ, (int)g_playerEntity.directionAngle,
