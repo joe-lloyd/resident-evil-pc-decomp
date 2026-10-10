@@ -177,6 +177,8 @@ static void on_command(const char* line)
 // --- Dev boot -----------------------------------------------------------------
 
 extern void game_start(void);
+extern void SetVideoResolution(int w, int h);   // VideoPlayback.cpp
+extern void setSomeColor(int r, int g, int b);  // 0x00470a50
 
 static int s_bootCharacter = -1;
 static int s_bootStage = -1;
