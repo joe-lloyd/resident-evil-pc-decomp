@@ -10,6 +10,8 @@ dist/
 *.BMP
 *.jpg
 *.png
+# The mountain trail's own renders (our art, not the game's) feed tools/rebecca/new_room.ts.
+!tools/rebecca/rooms/mountain_trail/*.png
 *.log
 # Runtime state (P8): config.ini is created by the game and rewritten on exit,
 # so it is no longer tracked; re1.lock is the single-instance guard.

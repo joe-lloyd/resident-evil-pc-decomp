@@ -26,10 +26,12 @@ TRAIL_Z = (0, 16000)
 
 # Cameras in game units: position, look-at target, and the engine's fov value.
 CAMERAS = [
-    # 0: high above the top of the trail, looking down it towards the mansion.
-    {"from": (3500, -4200, -1500), "to": (3600, -800, 7000), "fov": 230},
-    # 1: low at the bottom of the trail, looking back up at Rebecca coming down.
-    {"from": (3300, -1500, 16500), "to": (3500, -900, 7000), "fov": 230},
+    # 0: high behind the top of the trail, looking down it towards the mansion.
+    # Covers Z 0-8000; Rebecca is about 60 px tall at Z = 0 and 30 px at Z = 8000.
+    {"from": (3300, -4400, -5400), "to": (3600, 0, 9000), "fov": 250},
+    # 1: beyond the foot of the trail, looking back up at Rebecca coming down.
+    # Covers Z 8000-16000; the door at Z = 15500 sits near the bottom edge.
+    {"from": (3500, -3300, 19000), "to": (3500, -500, 11500), "fov": 250},
 ]
 
 
@@ -114,7 +116,7 @@ def forest(rng, mats):
         y = rng.uniform(-14, 30)
         # Keep the trail and a margin clear, and keep trees out from in front
         # of the cameras so no foreground masks are needed.
-        if TRAIL_X[0] / 1000 - 3.5 < x < TRAIL_X[1] / 1000 + 3.5 and -4 < y < 20:
+        if TRAIL_X[0] / 1000 - 3.5 < x < TRAIL_X[1] / 1000 + 3.5 and -8 < y < 20:
             continue
         if y > 20 and abs(x - 3.5) < 9:   # keep the view down the valley open
             continue
