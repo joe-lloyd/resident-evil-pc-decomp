@@ -1,7 +1,7 @@
 // Rebecca's scenario from the title screen, the way a player starts it:
-// NEW GAME in REB mode must show her opening narration, start her in the
-// scenario's start room, and run that room's REB script (a lab-coat zombie in
-// ROOM102 for now), proving the overlay, the assembler and appended scripts.
+// NEW GAME in REB mode must show her opening narration and start her on the
+// mountain trail (stage 2 room 0x12), near its top, facing down it. That proves
+// the overlay, the card's start room and spot, and the new room itself.
 import { open } from '../lab.ts';
 import { Key } from '../link.ts';
 import { settle } from '../flows.ts';
@@ -10,7 +10,6 @@ import { snapshot } from '../snapshot.ts';
 
 const CHAR_REBECCA = 3;
 const NARRATION = 0x7f;
-const ZOMBIE_WHITE_COAT = 0x00;
 
 const session = await open(Number(process.env.PORT ?? 7801), '--mode REB');
 const failures: string[] = [];
@@ -29,10 +28,11 @@ try {
   const narration = await link.waitFor((s) => s.messageId === NARRATION, 'her opening narration', 60_000).catch(() => undefined);
   expect(narration !== undefined, 'no opening narration (message 0x7f)');
 
-  const s = await settle(link, (st) => st.stage === 0 && st.room === 2);
-  console.log(`room ${roomLabel(s)} player ${s.player.id} hp ${s.player.hp}/${s.player.maxHp} enemies [${s.enemies.map((e) => e.type.toString(16)).join(', ')}]`);
+  const s = await settle(link, (st) => st.stage === 2 && st.room === 0x12);
+  console.log(`room ${roomLabel(s)} camera ${s.camera} player ${s.player.id} at (${s.player.x}, ${s.player.z}) facing 0x${(s.player.angle & 0xfff).toString(16)}`);
   expect(s.player.id === CHAR_REBECCA, `player ${s.player.id}, expected Rebecca`);
-  expect(s.enemies.some((e) => e.type === ZOMBIE_WHITE_COAT), 'the REB script for ROOM102 did not place its zombie');
+  expect(s.camera === 0, `camera ${s.camera}, expected 0`);
+  expect(Math.abs(s.player.x - 3500) <= 100 && Math.abs(s.player.z - 1000) <= 100, `started at (${s.player.x}, ${s.player.z}), expected near (3500, 1000)`);
   console.log(`picture: ${await snapshot(link, process.env.OUT ?? '/tmp/rae-tests', 'reb-new-game')}`);
 
   if (failures.length) {

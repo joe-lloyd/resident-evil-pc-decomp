@@ -17,12 +17,11 @@ import { roomLabel, type GameState } from '../state.ts';
 import { snapshot } from '../snapshot.ts';
 
 const TRAIL = { x0: 2000, x1: 5000, split: 8000 };
-const FACING_PLUS_Z = 0x400;
+const FACING_PLUS_Z = 0xc00; // measured: the engine's angle 0xC00 points down +Z, 0x400 up the trail
 const FACING_PLUS_X = 0x000;
 const FACING_MINUS_X = 0x800;
 /** The state line is read every few frames, and walking covers under 100 units a frame. */
 const POLL_FRAMES = 3;
-const SLACK = 300;
 const OUT = process.env.OUT ?? '/tmp/rae-tests';
 
 const failures: string[] = [];
@@ -61,7 +60,9 @@ async function face(target: number): Promise<GameState> {
     await link.tap(key, Math.abs(diff) > 0x200 ? 6 : 2);
     await link.frames(1);
   }
-  return link.state();
+  s = await link.state();
+  console.log(`  facing 0x${(s.player.angle & 0xfff).toString(16)} (wanted 0x${target.toString(16)}), left turns ${leftIs > 0 ? 'up' : 'down'}`);
+  return s;
 }
 
 /** Hold forward until `done` passes or `maxFrames` pass; returns the last state. */
@@ -81,7 +82,7 @@ try {
   console.log(`start: room ${roomLabel(s)} camera ${s.camera} at (${s.player.x}, ${s.player.z}) facing 0x${(s.player.angle & 0xfff).toString(16)}`);
   expect(s.camera === 0, `started under camera ${s.camera}, expected 0`);
   expect(Math.abs(s.player.x - 3500) <= 100 && Math.abs(s.player.z - 1000) <= 100, `started at (${s.player.x}, ${s.player.z}), expected near (3500, 1000)`);
-  expect(Math.abs(angleDiff(s.player.angle, FACING_PLUS_Z)) <= 0x40, `started facing 0x${(s.player.angle & 0xfff).toString(16)}, expected down the trail (0x400)`);
+  expect(Math.abs(angleDiff(s.player.angle, FACING_PLUS_Z)) <= 0x40, `started facing 0x${(s.player.angle & 0xfff).toString(16)}, expected down the trail (0xc00)`);
   console.log(`picture: ${await snapshot(link, OUT, 'mountain-trail-start-cam0')}`);
 
   // The edges: face each side and walk into it.
@@ -104,8 +105,11 @@ try {
   const crossing = trace.filter((t) => t.camera === 0).at(-1);
   console.log(`cut: camera ${s.camera} at Z ${s.player.z}; last reading under camera 0 at Z ${crossing?.player.z}`);
   expect(s.camera === 1, `no cut to camera 1 (camera ${s.camera}, Z ${s.player.z})`);
-  expect(s.player.z >= TRAIL.split && s.player.z <= TRAIL.split + SLACK, `camera 1 took over at Z ${s.player.z}, expected 8000..${TRAIL.split + SLACK}`);
-  expect(crossing === undefined || crossing.player.z < TRAIL.split + SLACK, `still under camera 0 at Z ${crossing?.player.z}`);
+  // The cut happens in the frame she crosses: the last reading under camera 0 is
+  // short of Z 8000 and the first reading under camera 1 is past it.
+  expect(crossing !== undefined && crossing.player.z < TRAIL.split, `last reading under camera 0 was at Z ${crossing?.player.z}, expected under ${TRAIL.split}`);
+  const cutReading = trace.find((t) => t.camera === 1);
+  expect(cutReading !== undefined && cutReading.player.z >= TRAIL.split, `first reading under camera 1 was at Z ${cutReading?.player.z}, expected ${TRAIL.split} or more`);
   console.log(`picture: ${await snapshot(link, OUT, 'mountain-trail-cam1-top')}`);
 
   // Partway down the lower half, then to the door.

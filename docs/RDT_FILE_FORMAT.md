@@ -556,6 +556,36 @@ Room 1070 has both cases:
 Neither sets bit 0x20, so both push; only slot 0 sets bit 0x40, so only it
 climbs.
 
+## Building a new room (what the mountain trail taught)
+
+`tools/rebecca/new_room.ts` builds `ROOM3120.RDT` (stage 2 room 0x12) by
+overwriting a courtyard room's sections in place; the loaded game proves each
+point below (`tools/harness/tests/mountain-trail.ts`).
+
+- **Cameras.** Set `cameras_count` and overwrite the records at 0x94. The mask
+  block each record points at opens with a group count; 0 means no sprites and
+  no `objspr` pak, so a room with no foreground art needs only a 4-byte zero.
+- **Switch zones.** One group per camera: a header record whose quad is the floor
+  that camera shows (the engine culls entities and effects outside it, see
+  `is_entity_in_switch_zone` callers), then the trigger records. The table ends
+  with a record whose `camFrom` is 0xFFFF. Quad corners go (low X, low Z),
+  (low X, high Z), (high X, high Z), (high X, low Z); coordinates are unsigned.
+- **Collision.** Coordinates are **unsigned**, so no wall can reach below 0. A
+  wall on the edge of the map is a line at 0, which works because boxes are grown
+  by the character's radius (about 370 units for the player). Walls may sit in
+  every quadrant list, which makes the split point irrelevant.
+- **Floor.** There is no floor height table. Y only changes inside collision
+  records that carry a step value.
+- **Angles.** 0 faces +X, 0x400 faces -Z, 0x800 faces -X, 0xC00 faces +Z.
+- **Doors.** An action entry whose flag byte (the last `door_aot_set` operand)
+  has 0x80 set fires only on the action key. With 0x80 clear it fires as soon as
+  the point 600 units ahead of the player is inside the zone, so a zone beside a
+  wall has to extend past the wall.
+- **Scripts.** `return` is `00 00`; a script section is `[u16 size][body]...[u16 0]`,
+  so an empty main script is `04 00 00 00 00 00`.
+- **Rooms past the debug list.** `DebugRoomChange_IsSelectable` accepts a room
+  whose file resolves through the asset overlay, so `--boot rebecca:2:18` works.
+
 ## Message Data Format (.msg)
 
 The `messages` pointer (RDT+0x74) points to a message table with the format:

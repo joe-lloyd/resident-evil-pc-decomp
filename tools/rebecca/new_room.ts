@@ -26,8 +26,8 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 export const trailRoomFile = 'ROOM3120';
 /** Stage 2 counts from 0, as the debug menu and BIO_CARD.DAT do. */
 export const trailRoom = { stage: 2, room: 0x12 } as const;
-/** Where a new game stands: near the top of the trail, facing down it (+Z is angle 0x400). */
-export const trailStart = { x: 3500, z: 1000, angle: 0x400 } as const;
+/** Where a new game stands: near the top of the trail, facing down it (+Z is angle 0xC00, +X is 0, -X is 0x800, -Z is 0x400). */
+export const trailStart = { x: 3500, z: 1000, angle: 0xc00 } as const;
 
 const TEMPLATE_FILE = 'ROOM3000.RDT';
 const SCENE_FILE = path.join(here, 'blender', 'mountain_trail.py');
