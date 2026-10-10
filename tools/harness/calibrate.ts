@@ -11,7 +11,8 @@ const [outDir, ...steps] = process.argv.slice(2);
 if (!outDir) throw new Error('usage: calibrate.ts <outdir> "<line>|<frames>" ...');
 mkdirSync(outDir, { recursive: true });
 
-const session = await open(7801);
+// RE1_ARGS adds launch arguments, e.g. RE1_ARGS='--boot chris:0:4'.
+const session = await open(7801, process.env.RE1_ARGS ?? '');
 const remoteDir = 'C:\\Users\\joell\\Tools\\wintool';
 try {
   for (const [i, step] of steps.entries()) {
