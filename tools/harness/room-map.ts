@@ -88,7 +88,11 @@ export function planPath(shapes: Shape[], fromX: number, fromZ: number, toX: num
   for (let i = 0; i < w * h; i++) free[i] = blocked(shapes, cx(i), cz(i)) ? 0 : 1;
 
   const start = cellOf(fromX, fromZ);
-  free[start] = 1; // she is standing there, whatever the grid says
+  // She is standing there, whatever the grid says, and the margin round the
+  // walls is wider than the engine's own: let her step out of it.
+  for (let i = 0; i < w * h; i++) {
+    if (Math.hypot(cx(i) - fromX, cz(i) - fromZ) <= PLAYER_RADIUS + CELL) free[i] = 1;
+  }
   const goal = cellOf(toX, toZ);
   const g = new Float64Array(w * h).fill(Infinity);
   const came = new Int32Array(w * h).fill(-1);

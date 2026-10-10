@@ -1,5 +1,6 @@
-// Chapter 1 played through, the way a player would: from the courtyard garden
-// in through the back of the mansion to the save room, fighting what is left
+// The prologue and Chapter 1 played through, the way a player would: down the
+// mountain trail, across the courtyard garden and in through the back of the
+// mansion to the save room, fighting what is left
 // on the way, until the meeting with Chris plays.
 //
 //   OVERLAY=<REB build folder> node tools/harness/tests/chapter1-walkthrough.ts
@@ -7,18 +8,20 @@
 // path planner sees the same room files as the game.
 import path from 'node:path';
 import { open } from '../lab.ts';
-import { fight, settle, useDoor, useRoomData } from '../flows.ts';
+import { fight, settle, useDoor, useFightBack, useRoomData } from '../flows.ts';
 import { roomLabel, type GameState } from '../state.ts';
 import { snapshot } from '../snapshot.ts';
 
 const overlay = process.env.OVERLAY;
 if (!overlay) throw new Error('set OVERLAY to the REB build folder');
 useRoomData([path.join(overlay, 'REB'), process.env.RE1_DATA ?? '/tmp/re1-pc']);
+useFightBack();
 const out = process.env.OUT ?? '/tmp/rae-tests';
 const MEETING = 0x80 + 46;
 
 type Door = { x: number; z: number; w: number; d: number };
 const route: { name: string; stage: number; room: number; fight: boolean; door: Door }[] = [
+  { name: 'mountain trail', stage: 2, room: 0x12, fight: false, door: { x: 1500, z: 15200, w: 4000, d: 2000 } },
   { name: 'courtyard garden', stage: 2, room: 0x00, fight: false, door: { x: 22300, z: 3200, w: 4700, d: 4100 } },
   { name: 'storeroom', stage: 0, room: 0x1b, fight: false, door: { x: 0, z: 5200, w: 2600, d: 2400 } },
   { name: 'roofed passage', stage: 0, room: 0x1a, fight: true, door: { x: 4700, z: 2700, w: 1800, d: 2300 } },
@@ -26,7 +29,8 @@ const route: { name: string; stage: number; room: number; fight: boolean; door: 
   { name: '1F left stairs', stage: 0, room: 0x01, fight: false, door: { x: 7600, z: 7700, w: 2400, d: 1500 } },
 ];
 
-const session = await open(Number(process.env.PORT ?? 7802), '--mode REB --boot rebecca:2:0');
+// A plain REB dev boot starts where a new game does: the mountain trail.
+const session = await open(Number(process.env.PORT ?? 7802), '--mode REB --boot rebecca');
 const link = session.link;
 const failures: string[] = [];
 const started = Date.now();

@@ -208,6 +208,12 @@ int DevBoot_Configure(const char* spec)
 int DevBoot_Begin(void)
 {
     if (s_bootCharacter < 0) return 0;
+    // logos_state's video setup, which the boot skips along with the logos:
+    // without it the game draws at 320x240 in the window's top-left corner
+    // and the pre-rendered backgrounds never appear.
+    SetVideoResolution(640, 480);
+    SetVideoResolution(320, 240);
+    setSomeColor(128, 128, 128);
     g_SelectedCharactedId = (unsigned char)s_bootCharacter;
     // Jill alone has her own room variants; Rebecca walks Chris's rooms.
     if (s_bootCharacter == CHAR_JILL) g_main_state_flags |= MSF_CHAR_VARIANT;

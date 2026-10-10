@@ -87,6 +87,13 @@ export function useRoomData(dirs: string[]): void {
   roomDataDirs = dirs;
 }
 
+/** When on, walking stops to shoot any live enemy that comes within this range. */
+let fightBackRange = 0;
+
+export function useFightBack(range = 3500): void {
+  fightBackRange = range;
+}
+
 export class StuckError extends Error {
   readonly state: GameState;
   constructor(message: string, state: GameState) {
@@ -126,9 +133,21 @@ export async function walkTo(
   const deadline = Date.now() + timeoutMs;
   let best = Infinity;
   let sinceBest = 0;
+  const first = await link.state();
   for (;;) {
-    const s = await link.state();
+    let s = await link.state();
+    // A door that fires on touch (or a scripted move) can change the room
+    // mid-walk; the target means nothing in the new room.
+    if (s.stage !== first.stage || s.room !== first.room) return s;
+    if (fightBackRange > 0 && s.enemies.some((e) => e.hp > 0 && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
+      await fight(link, { range: fightBackRange + 1500 });
+      s = await link.state();
+      best = Infinity; // fighting moves her; judge progress afresh
+    }
     const dist = Math.hypot(x - s.player.x, z - s.player.z);
+    if (process.env.HARNESS_TRACE === '2') {
+      console.log(`    walk (${s.player.x}, ${s.player.z}) angle ${s.player.angle} -> (${Math.round(x)}, ${Math.round(z)}) dist ${Math.round(dist)} enemies ${s.enemies.length}`);
+    }
     if (dist <= radius) return s;
     if (Date.now() > deadline) throw new StuckError(`never reached (${x}, ${z}); ${Math.round(dist)} away`, s);
     if (dist < best - 50) {
@@ -192,13 +211,19 @@ export async function useDoor(
       }
     }
   }
-  await goTo(link, roomDataDirs, target.x, target.z, { radius: 250 });
+  const arrived = await goTo(link, roomDataDirs, target.x, target.z, { radius: 250 });
+  if (arrived.stage !== start.stage || arrived.room !== start.room) {
+    return settle(link, (st) => st.room === arrived.room && st.stage === arrived.stage);
+  }
   await faceTowards(link, cx, cz);
   const deadline = Date.now() + timeoutMs;
   for (;;) {
     await link.tap(Key.action, 3);
     const s = await link.frames(20);
-    if (s.room !== start.room || s.stage !== start.stage) return settle(link, (st) => st.room === s.room && st.stage === s.stage);
+    if (s.room !== start.room || s.stage !== start.stage) {
+      if (process.env.HARNESS_TRACE) console.log(`  door: ${start.stage}:${start.room.toString(16)} -> ${s.stage}:${s.room.toString(16)} from (${start.player.x}, ${start.player.z})`);
+      return settle(link, (st) => st.room === s.room && st.stage === s.stage);
+    }
     if (Date.now() > deadline) throw new StuckError('the door never opened', s);
     if (messageOnScreen(s) || screen(s) === 'menu') {
       // Something other than the door answered (an item, a note): take it,
@@ -260,6 +285,7 @@ export async function goTo(
   let last = s;
   for (const [i, p] of path.entries()) {
     last = await navigate(link, p.x, p.z, { radius: i === path.length - 1 ? radius : 350, tries: 4 });
+    if (last.stage !== s.stage || last.room !== s.room) return last;
   }
   return last;
 }
