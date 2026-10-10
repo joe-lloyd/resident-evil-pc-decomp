@@ -83,6 +83,12 @@ export function buildAndDeploy(branch: string): string[] {
   return lines.includes('DEPLOYED') ? [] : lines;
 }
 
+/** Replace the game folder's `name` overlay (e.g. REB) with a local build of it. */
+export function deployOverlay(localOverlayDir: string, name = 'REB'): void {
+  powershell(`Remove-Item -Recurse -Force '${gameDir}\\${name}' -ErrorAction SilentlyContinue`);
+  execFileSync('scp', ['-q', '-r', '-o', 'BatchMode=yes', localOverlayDir, `${host}:${gameDir.replace(/\\/g, '/')}/${name}`]);
+}
+
 /** Copy a file from the game machine, e.g. a screenshot taken with shot(). */
 export function fetch(remotePath: string, localPath: string): void {
   execFileSync('scp', ['-q', '-o', 'BatchMode=yes', `${host}:${remotePath.replace(/\\/g, '/')}`, localPath]);
