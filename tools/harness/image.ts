@@ -1,7 +1,7 @@
 // Minimal image I/O for the harness: read the BMPs the game's screenshot
-// command writes, write PNGs. Node built-ins only.
+// command writes, read and write PNGs. Node built-ins only.
 import { readFileSync, writeFileSync } from 'node:fs';
-import { deflateSync } from 'node:zlib';
+import { deflateSync, inflateSync } from 'node:zlib';
 
 export interface Image {
   width: number;
@@ -116,4 +116,91 @@ export function encodePng(image: Image): Uint8Array {
 
 export function writePng(path: string, image: Image): void {
   writeFileSync(path, encodePng(image));
+}
+
+const PNG_SIGNATURE = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+/** Colour type to samples per pixel, for the 8 bit types decodePng accepts. */
+const PNG_SAMPLES: Record<number, number> = { 0: 1, 2: 3, 4: 2, 6: 4 };
+
+function paeth(a: number, b: number, c: number): number {
+  const p = a + b - c;
+  const pa = Math.abs(p - a);
+  const pb = Math.abs(p - b);
+  const pc = Math.abs(p - c);
+  return pa <= pb && pa <= pc ? a : pb <= pc ? b : c;
+}
+
+/**
+ * Decode a non-interlaced 8 bit PNG (grey, grey + alpha, RGB or RGBA) to RGB.
+ * Alpha is dropped, which is right for the opaque renders Blender writes.
+ */
+export function decodePng(data: Uint8Array): Image {
+  if (data.length < 8 || PNG_SIGNATURE.some((b, i) => data[i] !== b)) throw new Error('not a PNG file');
+  const view = new DataView(data.buffer, data.byteOffset, data.byteLength);
+  let width = 0;
+  let height = 0;
+  let samples = 0;
+  const idat: Uint8Array[] = [];
+  for (let at = 8; at + 8 <= data.length; ) {
+    const length = view.getUint32(at);
+    const type = String.fromCharCode(data[at + 4]!, data[at + 5]!, data[at + 6]!, data[at + 7]!);
+    const body = data.subarray(at + 8, at + 8 + length);
+    if (body.length !== length) throw new Error('PNG chunk is truncated');
+    if (type === 'IHDR') {
+      width = view.getUint32(at + 8);
+      height = view.getUint32(at + 12);
+      const depth = body[8];
+      const colourType = body[9]!;
+      const interlace = body[12];
+      samples = PNG_SAMPLES[colourType] ?? 0;
+      if (depth !== 8 || samples === 0) throw new Error(`unsupported PNG: bit depth ${depth}, colour type ${colourType}`);
+      if (interlace !== 0) throw new Error('interlaced PNGs are not supported');
+    } else if (type === 'IDAT') {
+      idat.push(body);
+    } else if (type === 'IEND') {
+      break;
+    }
+    at += 12 + length;
+  }
+  if (width <= 0 || height <= 0 || samples === 0) throw new Error('PNG has no IHDR');
+
+  const raw = inflateSync(Buffer.concat(idat));
+  const stride = width * samples;
+  if (raw.length < height * (stride + 1)) throw new Error('PNG pixel data is truncated');
+
+  const pixels = new Uint8Array(height * stride);
+  for (let y = 0; y < height; y++) {
+    const filter = raw[y * (stride + 1)]!;
+    const src = y * (stride + 1) + 1;
+    const dst = y * stride;
+    for (let x = 0; x < stride; x++) {
+      const left = x >= samples ? pixels[dst + x - samples]! : 0;
+      const up = y > 0 ? pixels[dst - stride + x]! : 0;
+      const upLeft = y > 0 && x >= samples ? pixels[dst - stride + x - samples]! : 0;
+      let predictor: number;
+      switch (filter) {
+        case 0: predictor = 0; break;
+        case 1: predictor = left; break;
+        case 2: predictor = up; break;
+        case 3: predictor = (left + up) >> 1; break;
+        case 4: predictor = paeth(left, up, upLeft); break;
+        default: throw new Error(`bad PNG filter type ${filter}`);
+      }
+      pixels[dst + x] = (raw[src + x]! + predictor) & 0xff;
+    }
+  }
+
+  const rgb = new Uint8Array(width * height * 3);
+  for (let i = 0; i < width * height; i++) {
+    const s = i * samples;
+    const grey = samples < 3;
+    rgb[i * 3] = pixels[s]!;
+    rgb[i * 3 + 1] = pixels[grey ? s : s + 1]!;
+    rgb[i * 3 + 2] = pixels[grey ? s : s + 2]!;
+  }
+  return { width, height, rgb };
+}
+
+export function readPng(path: string): Image {
+  return decodePng(readFileSync(path));
 }
