@@ -169,7 +169,7 @@ export async function useDoor(
   const inset = 250;
   const tx = Math.min(Math.max(start.player.x, zone.x + inset), zone.x + zone.w - inset);
   const tz = Math.min(Math.max(start.player.z, zone.z + inset), zone.z + zone.d - inset);
-  await walkTo(link, tx, tz, { radius: 200 });
+  await navigate(link, tx, tz, { radius: 200 });
   await faceTowards(link, cx, cz);
   const deadline = Date.now() + timeoutMs;
   for (;;) {
@@ -179,5 +179,34 @@ export async function useDoor(
     if (Date.now() > deadline) throw new StuckError('the door never opened', s);
     // Face a little to each side in case the door is not straight ahead.
     await link.tap(Key.left, 1);
+  }
+}
+
+/**
+ * walkTo with detours: when the straight line is blocked, back off, try a
+ * heading 60 degrees to either side for a short walk, and go again. Rooms are
+ * mostly corridors and furniture, so this gets round corners without a map.
+ */
+export async function navigate(
+  link: GameLink,
+  x: number,
+  z: number,
+  { radius = 500, tries = 8 }: { radius?: number; tries?: number } = {},
+): Promise<GameState> {
+  let side = 1;
+  for (let i = 0; ; i++) {
+    try {
+      return await walkTo(link, x, z, { radius, timeoutMs: 40_000 });
+    } catch (err) {
+      if (!(err instanceof StuckError) || i >= tries) throw err;
+      const s = err.state;
+      const direct = headingTo(s.player.x, s.player.z, x, z);
+      await link.tap(Key.down, 8);
+      await link.frames(10);
+      await face(link, (direct + side * 683 + 4096) % 4096);
+      await link.tap(Key.up, 15);
+      await link.frames(18);
+      side = -side;
+    }
   }
 }

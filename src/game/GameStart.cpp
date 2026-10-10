@@ -127,9 +127,12 @@ void SetInitialItems(void)
     g_pickupQtyC = 240;
 
     if ((g_playerEntity.id & 3) == CHAR_REBECCA) {
-        // Port addition: Rebecca as the player carries 6 items, like Chris.
+        // Port addition: Rebecca as the player carries 6 items, like Chris,
+        // and starts with her Beretta (slot 0) in hand. g_EquippedItemId is
+        // the 1-based slot number SetupCharacterData equips from.
         item_slot = initial_items + 16;
         total_items_slots = 6;
+        g_EquippedItemId = 1;
     } else if ((g_playerEntity.id & 3) == CHAR_CHRIS) {
         // Chris: 6 slots, Rebecca gets Baretta with 15 bullets
         item_slot = initial_items;           // Chris items at offset 0
