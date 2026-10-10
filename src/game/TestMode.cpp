@@ -27,6 +27,8 @@ static int          s_gameplayFrame = 0;  // set by game_loop's inner loop each 
 static int          s_pendingStage = -1;
 static int          s_pendingRoom = -1;
 static char         s_shotPath[260];
+static int          s_shotPending = 0;
+static int          s_clientSeen = 0;      // plat_test_link_client_id at the last tick
 static char         s_body[8192];
 static char         s_lastBody[8192];
 
@@ -106,6 +108,7 @@ static FlagBank flag_bank(int bank)
 static void capture_before_present(void)
 {
     g_MarniBeforePresent = NULL;
+    s_shotPending = 0;
     int ok = g_MarniFrameBuffer.SaveBitmapToFile(s_shotPath);
     reply("{\"t\":\"ack\",\"cmd\":\"shot\",\"ok\":%d,\"frame\":%u}\n", ok ? 1 : 0, s_frame);
 }
@@ -115,11 +118,19 @@ static void on_command(const char* line)
     char cmd[32] = "";
     char rest[400] = "";
     sscanf(line, "%31s %399[^\n]", cmd, rest);
+    // Replies quote the command back; keep anything odd out of the JSON.
+    for (char* c = cmd; *c; c++) {
+        if (!((*c >= 'a' && *c <= 'z') || *c == '-')) {
+            snprintf(cmd, sizeof(cmd), "?");
+            break;
+        }
+    }
     int a = -1, b = -1, c = -1;
     sscanf(rest, "%i %i %i", &a, &b, &c);
 
     if (strcmp(cmd, "tap") == 0 && a >= 0 && a < 256) {
-        s_heldUntil[a] = plat_time_ms() + (DWORD)(b > 0 ? b : 2) * kFrameMs;
+        int frames = b > 0 ? (b < 3000 ? b : 3000) : 2;   // at most 100 s
+        s_heldUntil[a] = plat_time_ms() + (DWORD)frames * kFrameMs;
     } else if (strcmp(cmd, "down") == 0 && a >= 0 && a < 256) {
         s_heldUntil[a] = kHeldForever;
     } else if (strcmp(cmd, "up") == 0 && a >= 0 && a < 256) {
@@ -134,7 +145,12 @@ static void on_command(const char* line)
     } else if (strcmp(cmd, "shot") == 0 && rest[0] != '\0') {
         // Captured just before the next present, while the back buffer still
         // holds a whole frame; the ack is sent from there.
+        if (s_shotPending) {
+            // The earlier request never reached a present; answer it now.
+            reply("{\"t\":\"ack\",\"cmd\":\"shot\",\"ok\":0,\"frame\":%u}\n", s_frame);
+        }
         snprintf(s_shotPath, sizeof(s_shotPath), "%s", rest);
+        s_shotPending = 1;
         g_MarniBeforePresent = capture_before_present;
         return;
     } else if (strcmp(cmd, "room") == 0 && a >= 0 && b >= 0) {
@@ -170,8 +186,14 @@ int DevBoot_Configure(const char* spec)
 {
     char name[16] = "";
     int stage = -1, room = -1;
-    int n = sscanf(spec, "%15[a-z]:%i:%i", name, &stage, &room);
-    if (n < 1) return 0;
+    char extra = 0;
+    int n = sscanf(spec, "%15[a-z]:%i:%i%c", name, &stage, &room, &extra);
+    // Either a bare name or name:stage:room; a room needs a stage, and the
+    // seven base stages hold at most 32 rooms each.
+    if (n == 4 && extra != ' ') return 0;
+    if (n != 1 && n < 3) return 0;
+    if (n == 1 && spec[strlen(name)] != '\0' && spec[strlen(name)] != ' ') return 0;
+    if (n >= 3 && (stage < 0 || stage > 6 || room < 0 || room > 31)) return 0;
     if (strcmp(name, "chris") == 0) s_bootCharacter = CHAR_CHRIS;
     else if (strcmp(name, "jill") == 0) s_bootCharacter = CHAR_JILL;
     else if (strcmp(name, "rebecca") == 0) s_bootCharacter = CHAR_REBECCA;
@@ -195,9 +217,17 @@ int DevBoot_Begin(void)
     return 1;
 }
 
+extern int DebugRoomChange_IsSelectable(int stage, int room);
+
 int DevBoot_StartRoom(int* stage, int* room)
 {
     if (s_bootCharacter < 0 || s_bootStage < 0) return 0;
+    if (!DebugRoomChange_IsSelectable(s_bootStage, s_bootRoom)) {
+        dbg_printf("[devboot] stage %d room %02X has no room file; using the normal start\n",
+                   s_bootStage, s_bootRoom);
+        s_bootStage = -1;
+        return 0;
+    }
     *stage = s_bootStage;
     *room = s_bootRoom;
     return 1;
@@ -260,6 +290,14 @@ void TestMode_Tick(int gameFrame)
     if (!s_active) return;
     if (gameFrame) s_frame++;
     plat_test_link_poll(on_command);
+
+    // A new client starts clean: nothing held from the last one, and a state
+    // line straight away even if the game is idle.
+    if (plat_test_link_client_id() != s_clientSeen) {
+        s_clientSeen = plat_test_link_client_id();
+        memset(s_heldUntil, 0, sizeof(s_heldUntil));
+        s_forceState = 1;
+    }
 
     DWORD now = plat_time_ms();
     for (int vk = 0; vk < 256; vk++) {

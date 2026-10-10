@@ -149,7 +149,7 @@ static void DebugAssembleSaveFile(char* fileBuffer)
 static void DebugAdoptLoadedCharacter(void)
 {
     g_playerEntityPointer.id = g_SelectedCharactedId;
-    if ((g_SelectedCharactedId & 3) != 0) {
+    if ((g_SelectedCharactedId & 3) == CHAR_JILL) {   // port: was != 0, which gave Rebecca Jill's rooms
         g_main_state_flags |= MSF_CHAR_VARIANT;
     } else {
         g_main_state_flags &= ~MSF_CHAR_VARIANT;

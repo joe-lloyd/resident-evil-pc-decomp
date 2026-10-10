@@ -98,13 +98,15 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // Port addition: --test-port <n> starts test mode (src/game/TestMode.cpp).
     // Test runs may run side by side, so they skip the single-instance check.
     const char* testPort = lpCmdLine ? strstr(lpCmdLine, "--test-port") : NULL;
-    if (testPort != NULL && !TestMode_Start(atoi(testPort + strlen("--test-port")))) {
+    int port = 0;
+    if (testPort != NULL && (sscanf(testPort + strlen("--test-port"), " %d", &port) != 1 || !TestMode_Start(port))) {
         ShowMessageBox(NULL, "Test mode could not open its port.", "RESIDENT EVIL", MB_OK | MB_ICONSTOP);
         return 1;
     }
 
-    const char* boot = lpCmdLine ? strstr(lpCmdLine, "--boot ") : NULL;
-    if (boot != NULL && !DevBoot_Configure(boot + strlen("--boot "))) {
+    const char* boot = lpCmdLine ? strstr(lpCmdLine, "--boot") : NULL;
+    if (boot != NULL) boot += strspn(boot + strlen("--boot"), " ") + strlen("--boot");
+    if (boot != NULL && !DevBoot_Configure(boot)) {
         ShowMessageBox(NULL, "--boot expects chris, jill or rebecca, optionally :stage:room.", "RESIDENT EVIL", MB_OK | MB_ICONSTOP);
         return 1;
     }

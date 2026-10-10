@@ -49,6 +49,8 @@ BOOL plat_test_link_open(int port);
 void plat_test_link_poll(void (*on_line)(const char* line));
 // Send text to the connected client; dropped when none is connected.
 void plat_test_link_send(const char* text);
+// Changes whenever a new client connects, so test mode can reset per client.
+int  plat_test_link_client_id(void);
 
 // ---------------------------------------------------------------------------
 // Time

@@ -66,7 +66,8 @@ export function buildAndDeploy(branch: string): string[] {
     $env:RE1_TOOLSET = 'v142'
     $env:RE1_SDK = '10.0.19041.0'
     cmd /c build.bat 2>&1 | Out-File -Encoding utf8 build.log
-    $errors = Select-String -Path build.log -Pattern ': error' | ForEach-Object { $_.Line }
+    $errors = Select-String -Path build.log -Pattern ': error|fatal error|LNK\\d+:' | ForEach-Object { $_.Line }
+    if (-not $errors -and -not (Test-Path 'bin\\Release\\residentevil.exe')) { $errors = 'no exe was built' }
     if ($errors) { $errors } else {
       # A game that is still exiting holds the exe: retry, then prove the copy.
       $built = (Get-FileHash 'bin\\Release\\residentevil.exe').Hash

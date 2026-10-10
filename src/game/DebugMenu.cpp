@@ -441,6 +441,14 @@ static void DebugRoomChange_Trigger(void)
     StMask(0, 0);
 }
 
+// Dev boot (TestMode.cpp): whether a stage and room have a room file to load.
+int DebugRoomChange_IsSelectable(int stage, int room)
+{
+    if (stage < 0 || stage > DebugStageMax()) return 0;
+    if (room < 0 || room >= s_dbgStageRooms[stage].count) return 0;
+    return DebugRoomSelectable(stage, room);
+}
+
 // Dev boot (TestMode.cpp): stand the player by the first door of the start
 // room, the way a menu room change does, once init_room has loaded it.
 void DebugRoomChange_ArmPlacement(void)
@@ -453,9 +461,7 @@ void DebugRoomChange_ArmPlacement(void)
 // menu. Must run inside the game loop task, like the menu itself.
 int DebugRoomChange_Request(int stage, int room)
 {
-    if (stage < 0 || stage > DebugStageMax()) return 0;
-    if (room < 0 || room >= s_dbgStageRooms[stage].count) return 0;
-    if (!DebugRoomSelectable(stage, room)) return 0;
+    if (!DebugRoomChange_IsSelectable(stage, room)) return 0;
     s_dbgStage = stage;
     s_dbgRoom = room;
     DebugRoomChange_Trigger();

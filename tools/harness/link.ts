@@ -29,6 +29,8 @@ export class GameLink {
   latest: GameState | undefined;
   /** Every state line received, in order, for logs and judges. */
   readonly history: GameState[] = [];
+  /** Lines from the game that did not parse; a test can fail on them. */
+  readonly badLines: string[] = [];
 
   private constructor(socket: net.Socket) {
     this.socket = socket;
@@ -73,7 +75,13 @@ export class GameLink {
       const line = this.buffer.slice(0, nl);
       this.buffer = this.buffer.slice(nl + 1);
       if (!line) continue;
-      const reply = parseReply(line);
+      let reply: Reply;
+      try {
+        reply = parseReply(line);
+      } catch (err) {
+        this.badLines.push(`${String(err)}: ${line.slice(0, 200)}`);
+        continue;
+      }
       if (reply.t === 'state') {
         this.latest = reply.state;
         this.history.push(reply.state);
@@ -87,7 +95,19 @@ export class GameLink {
     }
   }
 
+  /**
+   * A promise for the first reply that passes `test`. It is created before the
+   * command that causes the reply is sent, so it may reject before anyone
+   * awaits it; the no-op catch keeps that from being an unhandled rejection
+   * (awaiting it still throws).
+   */
   private next(test: (r: Reply) => boolean, timeoutMs: number, label: string): Promise<Reply> {
+    const p = this.waitReply(test, timeoutMs, label);
+    p.catch(() => undefined);
+    return p;
+  }
+
+  private waitReply(test: (r: Reply) => boolean, timeoutMs: number, label: string): Promise<Reply> {
     return new Promise((resolve, reject) => {
       const waiter: Waiter = {
         test,
