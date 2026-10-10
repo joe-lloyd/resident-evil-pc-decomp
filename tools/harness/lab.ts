@@ -5,12 +5,14 @@
 // RE1_LAB_HOST      ssh host of the Windows machine (default: jellybingus)
 // RE1_LAB_GAME_DIR  folder with residentevil.exe, config.ini and USA\ (default: D:\Games\RE1-decomp)
 // RE1_LAB_USER      Windows user that owns the desktop session (default: joell)
+// RE1_LAB_REPO_DIR  clone of this fork on that machine, with a `fork` remote (default: C:\Users\joell\Tools\re1-decomp)
 import { spawn, execFileSync, type ChildProcess } from 'node:child_process';
 import { GameLink } from './link.ts';
 
 const host = process.env.RE1_LAB_HOST ?? 'jellybingus';
 const gameDir = process.env.RE1_LAB_GAME_DIR ?? 'D:\\Games\\RE1-decomp';
 const user = process.env.RE1_LAB_USER ?? 'joell';
+const repoDir = process.env.RE1_LAB_REPO_DIR ?? 'C:\\Users\\joell\\Tools\\re1-decomp';
 
 function powershell(script: string): string {
   const encoded = Buffer.from(`$ProgressPreference = 'SilentlyContinue'\n${script}`, 'utf16le').toString('base64');
@@ -48,6 +50,31 @@ export function tunnel(port: number): ChildProcess {
   return spawn('ssh', ['-o', 'BatchMode=yes', '-o', 'ExitOnForwardFailure=yes', '-N', '-L', `${port}:127.0.0.1:${port}`, host], {
     stdio: 'ignore',
   });
+}
+
+/**
+ * Build `branch` of the fork on the game machine and copy the exe into the
+ * game folder. Stops any test games first, since a running exe cannot be
+ * replaced. Returns the compiler errors, empty when the build succeeded.
+ */
+export function buildAndDeploy(branch: string): string[] {
+  const out = powershell(`
+    Get-Process residentevil -ErrorAction SilentlyContinue | Stop-Process -Force
+    Set-Location '${repoDir}'
+    git fetch -q fork
+    git checkout -q -B ${branch} fork/${branch}
+    $env:RE1_TOOLSET = 'v142'
+    $env:RE1_SDK = '10.0.19041.0'
+    cmd /c build.bat 2>&1 | Out-File -Encoding utf8 build.log
+    $errors = Select-String -Path build.log -Pattern ': error' | ForEach-Object { $_.Line }
+    if ($errors) { $errors } else {
+      Start-Sleep 2
+      Copy-Item bin\Release\residentevil.exe '${gameDir}' -Force
+      'DEPLOYED'
+    }
+  `);
+  const lines = out.split(/\r?\n/).filter(Boolean);
+  return lines.includes('DEPLOYED') ? [] : lines;
 }
 
 /** Copy a file from the game machine, e.g. a screenshot taken with shot(). */

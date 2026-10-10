@@ -9,9 +9,10 @@
 int  TestMode_Start(int port);
 int  TestMode_Active(void);
 
-// Once per frame, after main_loop: run harness commands, advance held keys and
-// send the state line if anything changed.
-void TestMode_Tick(void);
+// Run harness commands, expire held keys and send the state line if anything
+// changed. gameFrame is 1 after main_loop and 0 from the movie loop, which
+// spins without game frames; only game frames advance the frame counter.
+void TestMode_Tick(int gameFrame);
 
 // Called by set_message_display so the state can name the message on screen.
 void TestMode_NoteMessage(unsigned short msgId);

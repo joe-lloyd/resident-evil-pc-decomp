@@ -113,7 +113,7 @@ export class GameLink {
 
   async ping(): Promise<number> {
     const token = Math.random().toString(36).slice(2);
-    const pong = this.next((r) => r.t === 'pong' && r.token === token, 5000, 'pong');
+    const pong = this.next((r) => r.t === 'pong' && r.token === token, 30_000, 'pong');
     this.socket.write(`ping ${token}\n`);
     const reply = await pong;
     return reply.t === 'pong' ? reply.frame : -1;
@@ -127,13 +127,16 @@ export class GameLink {
     return reply.state;
   }
 
-  /** Wait a number of game frames (30 per second). */
+  /**
+   * Wait a number of game frames (30 per second). Movies run no game frames,
+   * so the wait also ends after the same span of wall-clock time.
+   */
   async frames(n: number): Promise<GameState> {
     const start = await this.ping();
-    await this.state();
+    const until = Date.now() + Math.ceil((n * 1000) / 30);
     for (;;) {
       const now = await this.ping();
-      if (now - start >= n) return this.state();
+      if (now - start >= n || Date.now() >= until) return this.state();
       await new Promise((r) => setTimeout(r, 30));
     }
   }

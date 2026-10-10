@@ -15,7 +15,11 @@ extern int  DebugRoomChange_Request(int stage, int room);
 
 static int          s_active = 0;
 static unsigned int s_frame = 0;
-static int          s_heldFrames[256];   // frames left; -1 = held until released
+// Held keys expire by the clock, one game frame being 33 ms: during movies the
+// main loop spins without game frames, so a frame count would never run down.
+static const DWORD  kFrameMs = 33;
+static DWORD        s_heldUntil[256];    // plat_time_ms deadline; 0 = up
+static const DWORD  kHeldForever = 0xFFFFFFFFu;
 static int          s_forceState = 0;
 static int          s_lastMessageId = -1;
 static int          s_pendingStage = -1;
@@ -27,7 +31,7 @@ int TestMode_Start(int port)
 {
     if (!plat_test_link_open(port)) return 0;
     s_active = 1;
-    memset(s_heldFrames, 0, sizeof(s_heldFrames));
+    memset(s_heldUntil, 0, sizeof(s_heldUntil));
     plat_key_inject_exclusive(TRUE);
     return 1;
 }
@@ -105,13 +109,13 @@ static void on_command(const char* line)
     sscanf(rest, "%i %i %i", &a, &b, &c);
 
     if (strcmp(cmd, "tap") == 0 && a >= 0 && a < 256) {
-        s_heldFrames[a] = b > 0 ? b : 2;
+        s_heldUntil[a] = plat_time_ms() + (DWORD)(b > 0 ? b : 2) * kFrameMs;
     } else if (strcmp(cmd, "down") == 0 && a >= 0 && a < 256) {
-        s_heldFrames[a] = -1;
+        s_heldUntil[a] = kHeldForever;
     } else if (strcmp(cmd, "up") == 0 && a >= 0 && a < 256) {
-        s_heldFrames[a] = 0;
+        s_heldUntil[a] = 0;
     } else if (strcmp(cmd, "release") == 0) {
-        memset(s_heldFrames, 0, sizeof(s_heldFrames));
+        memset(s_heldUntil, 0, sizeof(s_heldUntil));
     } else if (strcmp(cmd, "state") == 0) {
         s_forceState = 1;
     } else if (strcmp(cmd, "ping") == 0) {
@@ -193,15 +197,18 @@ static void build_state(void)
     put("]");
 }
 
-void TestMode_Tick(void)
+void TestMode_Tick(int gameFrame)
 {
     if (!s_active) return;
-    s_frame++;
+    if (gameFrame) s_frame++;
     plat_test_link_poll(on_command);
 
+    DWORD now = plat_time_ms();
     for (int vk = 0; vk < 256; vk++) {
-        plat_key_inject(vk, s_heldFrames[vk] != 0);
-        if (s_heldFrames[vk] > 0) s_heldFrames[vk]--;
+        if (s_heldUntil[vk] != 0 && s_heldUntil[vk] != kHeldForever && now >= s_heldUntil[vk]) {
+            s_heldUntil[vk] = 0;
+        }
+        plat_key_inject(vk, s_heldUntil[vk] != 0);
     }
 
     build_state();

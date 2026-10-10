@@ -620,6 +620,7 @@ int RunMessageLoop(void)
         if (g_bMCINotifyEnabled) {
             if (g_bMCINotifyFlag) {
                 UpdateVideoPlayback();
+                TestMode_Tick(0);
                 continue;
             }
             g_bMCINotifyFlag = TRUE;
@@ -720,7 +721,7 @@ int RunMessageLoop(void)
                 // 0x00441f75: Execute game loop
                 g_dwGameTimer1 = currentTime;
                 int loopResult = main_loop();
-                TestMode_Tick();
+                TestMode_Tick(1);
                 
                 if (loopResult == 0) {
                     // Game loop requested exit
