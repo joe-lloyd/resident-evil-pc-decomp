@@ -611,7 +611,15 @@ void InitializeGame(void)
     g_main_state_flags = g_main_state_flags & ~MSF_ROOM_TRANSITION;
 
     init_room();
-    DebugRoomChange_ApplyPendingPlacement();   // no-op unless a dev boot armed it
+    {
+        // Port addition: a dev boot skips the opening scene, which is what
+        // normally first draws a room background; ask game_loop to draw it.
+        int bootStage, bootRoom;
+        if (DevBoot_StartRoom(&bootStage, &bootRoom)) {
+            DebugRoomChange_ApplyPendingPlacement();
+            g_main_state_flags |= MSF_CAMERA_REDRAW;
+        }
+    }
 
     g_AttractModeIdleTimer = 1;
     update_room_bgm();
