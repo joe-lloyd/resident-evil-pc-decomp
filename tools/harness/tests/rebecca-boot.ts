@@ -3,6 +3,7 @@
 import { open } from '../lab.ts';
 import { settle } from '../flows.ts';
 import { roomLabel } from '../state.ts';
+import { snapshot } from '../snapshot.ts';
 
 const CHAR_REBECCA = 3;
 const ITEM_BERETTA = 0x02;
@@ -41,7 +42,7 @@ try {
   ).catch(() => undefined);
   await session.link.release();
   expect(moved !== undefined, 'she did not move when walking forward');
-  await session.link.shot('C:\\Users\\joell\\Tools\\wintool\\rebecca-boot.bmp');
+  console.log(`picture: ${await snapshot(session.link, process.env.OUT ?? '/tmp/rae-tests', 'rebecca-boot')}`);
 
   if (failures.length) {
     console.error(`FAIL\n  ${failures.join('\n  ')}`);
