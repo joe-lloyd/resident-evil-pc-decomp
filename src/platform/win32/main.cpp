@@ -3,6 +3,7 @@
 // Adapted from Ghidra decompilation for modern Win32/VS2022
 
 #include "Globals.h"
+#include "game/TestMode.h"
 #include "system/AssetPath.h"
 #include "system/ConfigFile.h"
 
@@ -94,8 +95,16 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // --- 0x00441486: CD-ROM check (skipped in dev mode) ---
     BOOL hasCDROM = EnumerateDriveTypes();
     
+    // Port addition: --test-port <n> starts test mode (src/game/TestMode.cpp).
+    // Test runs may run side by side, so they skip the single-instance check.
+    const char* testPort = lpCmdLine ? strstr(lpCmdLine, "--test-port") : NULL;
+    if (testPort != NULL && !TestMode_Start(atoi(testPort + strlen("--test-port")))) {
+        ShowMessageBox(NULL, "Test mode could not open its port.", "RESIDENT EVIL", MB_OK | MB_ICONSTOP);
+        return 1;
+    }
+
     // --- 0x004414a2: Single instance checks via mutex ---
-    if (!CheckSingleInstance()) {
+    if (!TestMode_Active() && !CheckSingleInstance()) {
         return 3; // already running
     }
     
@@ -645,7 +654,9 @@ int RunMessageLoop(void)
         // Losing focus therefore stops main_loop() being called at all - that is
         // the pause. The port previously ORed the two flags together with an
         // always-TRUE g_bWindowActive, so it never paused.
-        if (!g_bQuitFlag && g_bWindowFocused) {
+        // Port addition: test mode keeps running without focus, so automated
+        // runs work in the background.
+        if (!g_bQuitFlag && (g_bWindowFocused || TestMode_Active())) {
             if (g_hWnd != NULL || g_bWindowActive) {
                 DWORD currentTime = timeGetTime();
                 
@@ -709,6 +720,7 @@ int RunMessageLoop(void)
                 // 0x00441f75: Execute game loop
                 g_dwGameTimer1 = currentTime;
                 int loopResult = main_loop();
+                TestMode_Tick();
                 
                 if (loopResult == 0) {
                     // Game loop requested exit

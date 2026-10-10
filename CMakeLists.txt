@@ -61,6 +61,7 @@ set(RE1_SOURCES
     src/game/FileLoader.cpp
     src/game/GameInit.cpp
     src/game/GameLoop.cpp
+    src/game/TestMode.cpp
     src/game/GameStart.cpp
     src/game/GteMatrix.cpp
     src/game/InputSystem.cpp

@@ -441,6 +441,19 @@ static void DebugRoomChange_Trigger(void)
     StMask(0, 0);
 }
 
+// Test tooling (TestMode.cpp): the ROOM CHANGE menu's transition without the
+// menu. Must run inside the game loop task, like the menu itself.
+int DebugRoomChange_Request(int stage, int room)
+{
+    if (stage < 0 || stage > DebugStageMax()) return 0;
+    if (room < 0 || room >= s_dbgStageRooms[stage].count) return 0;
+    if (!DebugRoomSelectable(stage, room)) return 0;
+    s_dbgStage = stage;
+    s_dbgRoom = room;
+    DebugRoomChange_Trigger();
+    return 1;
+}
+
 static void DebugRoomChange_Draw(void)
 {
     DebugMenu_DrawBox();
