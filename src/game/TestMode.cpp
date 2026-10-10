@@ -23,6 +23,7 @@ static DWORD        s_heldUntil[256];    // plat_time_ms deadline; 0 = up
 static const DWORD  kHeldForever = 0xFFFFFFFFu;
 static int          s_forceState = 0;
 static int          s_lastMessageId = -1;
+static int          s_gameplayFrame = 0;  // set by game_loop's inner loop each frame
 static int          s_pendingStage = -1;
 static int          s_pendingRoom = -1;
 static char         s_shotPath[260];
@@ -202,8 +203,9 @@ int DevBoot_StartRoom(int* stage, int* room)
     return 1;
 }
 
-void TestMode_RunPendingRoomChange(void)
+void TestMode_GameplayFrame(void)
 {
+    s_gameplayFrame = 1;
     if (s_pendingStage < 0) return;
     int ok = DebugRoomChange_Request(s_pendingStage, s_pendingRoom);
     reply("{\"t\":\"ack\",\"cmd\":\"room-start\",\"ok\":%d,\"frame\":%u}\n", ok, s_frame);
@@ -216,8 +218,8 @@ void TestMode_RunPendingRoomChange(void)
 static void build_state(void)
 {
     s_len = 0;
-    put("\"msf\":\"%08x\",\"msf2\":\"%08x\",\"title\":%d,\"fmv\":%d,\"dbg\":%d,",
-        (unsigned int)g_MainStateFlagBank[0], (unsigned int)g_MainStateFlagBank[1],
+    put("\"play\":%d,\"msf\":\"%08x\",\"msf2\":\"%08x\",\"title\":%d,\"fmv\":%d,\"dbg\":%d,",
+        s_gameplayFrame, (unsigned int)g_MainStateFlagBank[0], (unsigned int)g_MainStateFlagBank[1],
         (int)g_titleMode, plat_video_is_active() ? 1 : 0, g_debugMenuOpen);
     put("\"stage\":%d,\"room\":%d,\"cam\":%d,\"cut\":%d,\"charModel\":%d,",
         (int)g_stageId, (int)g_roomId, (int)g_roomCameraId, (int)g_cutId,
@@ -268,6 +270,7 @@ void TestMode_Tick(int gameFrame)
     }
 
     build_state();
+    if (gameFrame) s_gameplayFrame = 0;
     if (s_forceState || strcmp(s_body, s_lastBody) != 0) {
         char head[64];
         snprintf(head, sizeof(head), "{\"t\":\"state\",\"frame\":%u,", s_frame);

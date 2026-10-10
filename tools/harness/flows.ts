@@ -50,3 +50,26 @@ export async function newGame(link: GameLink, character: Character = 'chris'): P
     await link.tap(s.fmv ? Key.run : Key.action, 3);
   }
 }
+
+/**
+ * Press through messages and scripted scenes until the player has control in
+ * a room matching `where`, for at least two checks in a row.
+ */
+export async function settle(
+  link: GameLink,
+  where: (s: GameState) => boolean = () => true,
+  timeoutMs = 120_000,
+): Promise<GameState> {
+  const deadline = Date.now() + timeoutMs;
+  let calm = 0;
+  for (;;) {
+    if (Date.now() > deadline) throw new Error('the player never got control');
+    const s = await link.frames(15);
+    if (where(s) && inControl(s) && !messageOnScreen(s)) {
+      if (++calm >= 2) return s;
+      continue;
+    }
+    calm = 0;
+    if (messageOnScreen(s)) await link.tap(Key.action, 3);
+  }
+}

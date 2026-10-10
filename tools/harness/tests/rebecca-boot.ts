@@ -1,7 +1,7 @@
 // A new game as Rebecca (--boot rebecca) must give her own character, health
 // and starting items, and leave her in control in the room asked for.
 import { open } from '../lab.ts';
-import { inControl } from '../flows.ts';
+import { settle } from '../flows.ts';
 import { roomLabel } from '../state.ts';
 
 const CHAR_REBECCA = 3;
@@ -9,13 +9,13 @@ const ITEM_BERETTA = 0x02;
 const ITEM_FIRST_AID_SPRAY = 0x41;
 const ITEM_GREEN_HERB = 0x44;
 
-const session = await open(Number(process.env.PORT ?? 7801), '--boot rebecca:0:0');
+const session = await open(Number(process.env.PORT ?? 7801), '--boot rebecca:0:2');
 const failures: string[] = [];
 const expect = (ok: boolean, what: string) => {
   if (!ok) failures.push(what);
 };
 try {
-  const s = await session.link.waitFor((st) => st.stage === 0 && st.room === 0 && inControl(st), 'control in ROOM100', 120_000);
+  const s = await settle(session.link, (st) => st.stage === 0 && st.room === 2);
   console.log(`room ${roomLabel(s)} player ${s.player.id} hp ${s.player.hp}/${s.player.maxHp} items ${JSON.stringify(s.items)}`);
   expect(s.player.id === CHAR_REBECCA, `player id ${s.player.id}, expected ${CHAR_REBECCA}`);
   expect(s.charModel === CHAR_REBECCA, `character model ${s.charModel}, expected ${CHAR_REBECCA}`);

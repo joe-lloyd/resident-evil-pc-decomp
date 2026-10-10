@@ -24,6 +24,8 @@ export interface Enemy {
 
 export interface GameState {
   frame: number;
+  /** game_loop's inner loop ran this frame: the game is in a room, not a menu screen. */
+  play: boolean;
   msf: number;
   msf2: number;
   title: number;
@@ -86,6 +88,7 @@ function parseGameState(o: Record<string, unknown>): GameState {
   }
   return {
     frame: num(o, 'frame'),
+    play: num(o, 'play') !== 0,
     msf: parseInt(str(o, 'msf'), 16),
     msf2: parseInt(str(o, 'msf2'), 16),
     title: num(o, 'title'),
@@ -138,7 +141,11 @@ export function parseReply(line: string): Reply {
 
 // --- Readings ----------------------------------------------------------------
 
-/** Main state flags, from src/Globals.h. */
+/**
+ * Main state flags, from src/Globals.h. MSF_GAMEPLAY_ACTIVE (0x02000000) is
+ * left out on purpose: game_loop clears it as soon as its frame loop starts,
+ * so it does not mean "in gameplay"; use GameState.play.
+ */
 export const MSF = {
   doorTransition: 0x00000080,
   menuPending: 0x00007f00,
@@ -148,7 +155,6 @@ export const MSF = {
   cameraLock: 0x00100000,
   charVariant: 0x00800000,
   playerDead: 0x01000000,
-  gameplayActive: 0x02000000,
   roomTransition: 0x04000000,
   fadeActive: 0x20000000,
 } as const;
@@ -190,7 +196,7 @@ export function screen(s: GameState): Screen {
   if (messageOnScreen(s)) return 'message';
   if (s.msf & (MSF.menuActive | MSF.menuPending)) return 'menu';
   if (s.debugMenu) return 'debug-menu';
-  if (s.msf & MSF.gameplayActive) return 'gameplay';
+  if (s.play) return 'gameplay';
   return 'other';
 }
 

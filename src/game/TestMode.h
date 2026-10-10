@@ -17,9 +17,10 @@ void TestMode_Tick(int gameFrame);
 // Called by set_message_display so the state can name the message on screen.
 void TestMode_NoteMessage(unsigned short msgId);
 
-// Called from inside the game loop task (debug_menu_overlay): runs a room
-// change the harness asked for, which needs task context to sleep a frame.
-void TestMode_RunPendingRoomChange(void);
+// Called once per frame of game_loop's inner loop, inside the game task: marks
+// the frame as gameplay for the state line, and runs a room change the harness
+// asked for, which needs task context to sleep a frame.
+void TestMode_GameplayFrame(void);
 
 // Dev boot (port addition): --boot <chris|jill|rebecca>[:<stage>:<room>]
 // starts a new game straight from launch, skipping the logos, title, character
