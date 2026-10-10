@@ -1,5 +1,6 @@
 // Reusable ways to get the game somewhere: from launch to a playable room.
 import { Key, type GameLink } from './link.ts';
+import { blocked, loadShapes, planPath } from './room-map.ts';
 import { MSF, messageOnScreen, screen, type GameState } from './state.ts';
 
 export type Character = 'chris' | 'jill';
@@ -71,7 +72,19 @@ export async function settle(
     }
     calm = 0;
     if (messageOnScreen(s)) await link.tap(Key.action, 3);
+    // An item pickup or the status screen: back out with cancel.
+    else if (screen(s) === 'menu') await link.tap(Key.run, 3);
   }
+}
+
+/**
+ * Folders holding Stage1..Stage7 room files for path planning, the overlay
+ * build first so its changed rooms win. Tests set it with useRoomData.
+ */
+let roomDataDirs: string[] = [process.env.RE1_DATA ?? '/tmp/re1-pc'];
+
+export function useRoomData(dirs: string[]): void {
+  roomDataDirs = dirs;
 }
 
 export class StuckError extends Error {
@@ -164,12 +177,22 @@ export async function useDoor(
   const start = await link.state();
   const cx = zone.x + zone.w / 2;
   const cz = zone.z + zone.d / 2;
-  // Door zones run into the wall, so aim for the nearest point just inside the
-  // zone rather than its middle, then face the middle (the door).
-  const inset = 250;
-  const tx = Math.min(Math.max(start.player.x, zone.x + inset), zone.x + zone.w - inset);
-  const tz = Math.min(Math.max(start.player.z, zone.z + inset), zone.z + zone.d - inset);
-  await navigate(link, tx, tz, { radius: 200 });
+  // Door zones run into walls, so aim for the open spot inside the zone that
+  // is nearest to the player, not its middle; then face the middle (the door).
+  const shapes = loadShapes(roomDataDirs, start.stage, start.room);
+  let target = { x: cx, z: cz };
+  let bestDist = Infinity;
+  for (let x = zone.x + 150; x < zone.x + zone.w; x += 150) {
+    for (let z = zone.z + 150; z < zone.z + zone.d; z += 150) {
+      if (blocked(shapes, x, z)) continue;
+      const d = Math.hypot(x - start.player.x, z - start.player.z);
+      if (d < bestDist) {
+        bestDist = d;
+        target = { x, z };
+      }
+    }
+  }
+  await goTo(link, roomDataDirs, target.x, target.z, { radius: 250 });
   await faceTowards(link, cx, cz);
   const deadline = Date.now() + timeoutMs;
   for (;;) {
@@ -177,6 +200,13 @@ export async function useDoor(
     const s = await link.frames(20);
     if (s.room !== start.room || s.stage !== start.stage) return settle(link, (st) => st.room === s.room && st.stage === s.stage);
     if (Date.now() > deadline) throw new StuckError('the door never opened', s);
+    if (messageOnScreen(s) || screen(s) === 'menu') {
+      // Something other than the door answered (an item, a note): take it,
+      // close whatever opened, face the door again.
+      await settle(link);
+      await faceTowards(link, cx, cz);
+      continue;
+    }
     // Face a little to each side in case the door is not straight ahead.
     await link.tap(Key.left, 1);
   }
@@ -208,5 +238,62 @@ export async function navigate(
       await link.frames(18);
       side = -side;
     }
+  }
+}
+
+/**
+ * Walk to (x, z) along a path planned from the room's collision data
+ * (room-map.ts). `dataDirs` are the folders holding Stage1..Stage7 room files,
+ * the overlay first. Falls back to detours between waypoints.
+ */
+export async function goTo(
+  link: GameLink,
+  dataDirs: string[],
+  x: number,
+  z: number,
+  { radius = 400, log = false }: { radius?: number; log?: boolean } = {},
+): Promise<GameState> {
+  const s = await link.state();
+  const path = planPath(loadShapes(dataDirs, s.stage, s.room), s.player.x, s.player.z, x, z);
+  if (!path) throw new StuckError(`no path to (${x}, ${z}) in this room`, s);
+  if (log) console.log(`  path ${path.map((p) => `(${Math.round(p.x)},${Math.round(p.z)})`).join(' ')}`);
+  let last = s;
+  for (const [i, p] of path.entries()) {
+    last = await navigate(link, p.x, p.z, { radius: i === path.length - 1 ? radius : 350, tries: 4 });
+  }
+  return last;
+}
+
+/**
+ * Shoot every live enemy within `range` of the player: face the nearest, hold
+ * aim and fire until its health drops to 0 or it is gone. Returns the shots
+ * fired. Needs a gun equipped.
+ */
+export async function fight(link: GameLink, { range = 9000, timeoutMs = 60_000 }: { range?: number; timeoutMs?: number } = {}): Promise<number> {
+  const deadline = Date.now() + timeoutMs;
+  let shots = 0;
+  for (;;) {
+    const s = await link.state();
+    const live = s.enemies
+      .filter((e) => e.hp > 0)
+      .map((e) => ({ e, d: Math.hypot(e.x - s.player.x, e.z - s.player.z) }))
+      .filter((t) => t.d <= range)
+      .sort((a, b) => a.d - b.d);
+    if (live.length === 0) {
+      await link.release();
+      return shots;
+    }
+    if (Date.now() > deadline) {
+      await link.release();
+      throw new StuckError(`${live.length} enemies still standing`, s);
+    }
+    const target = live[0].e;
+    await link.up(Key.aim);
+    await faceTowards(link, target.x, target.z).catch(() => undefined);
+    await link.down(Key.aim);
+    await link.frames(8);
+    await link.tap(Key.action, 3);
+    shots++;
+    await link.frames(18);
   }
 }
