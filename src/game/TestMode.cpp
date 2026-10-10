@@ -6,6 +6,7 @@
 #include "../Globals.h"
 #include "../platform/platform.h"
 #include "TestMode.h"
+#include "../marni/MarniSystem.h"
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
@@ -24,6 +25,7 @@ static int          s_forceState = 0;
 static int          s_lastMessageId = -1;
 static int          s_pendingStage = -1;
 static int          s_pendingRoom = -1;
+static char         s_shotPath[260];
 static char         s_body[8192];
 static char         s_lastBody[8192];
 
@@ -100,6 +102,13 @@ static FlagBank flag_bank(int bank)
     }
 }
 
+static void capture_before_present(void)
+{
+    g_MarniBeforePresent = NULL;
+    int ok = g_MarniFrameBuffer.SaveBitmapToFile(s_shotPath);
+    reply("{\"t\":\"ack\",\"cmd\":\"shot\",\"ok\":%d,\"frame\":%u}\n", ok ? 1 : 0, s_frame);
+}
+
 static void on_command(const char* line)
 {
     char cmd[32] = "";
@@ -122,8 +131,10 @@ static void on_command(const char* line)
         reply("{\"t\":\"pong\",\"token\":\"%.64s\",\"frame\":%u}\n", rest, s_frame);
         return;
     } else if (strcmp(cmd, "shot") == 0 && rest[0] != '\0') {
-        int ok = g_MarniFrameBuffer.SaveBitmapToFile(rest);
-        reply("{\"t\":\"ack\",\"cmd\":\"shot\",\"ok\":%d,\"frame\":%u}\n", ok ? 1 : 0, s_frame);
+        // Captured just before the next present, while the back buffer still
+        // holds a whole frame; the ack is sent from there.
+        snprintf(s_shotPath, sizeof(s_shotPath), "%s", rest);
+        g_MarniBeforePresent = capture_before_present;
         return;
     } else if (strcmp(cmd, "room") == 0 && a >= 0 && b >= 0) {
         s_pendingStage = a;

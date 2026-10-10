@@ -15,6 +15,9 @@
 #include "MarniBits.h"
 #include "MarniDX.h"
 
+// Port addition (test tooling): called before each present; see MarniSystem.cpp.
+extern void (*g_MarniBeforePresent)(void);
+
 // ============================================================================
 // CMarniDirect3D - Capcom's original D3D wrapper class (vtable at 0x004af230)
 // Object size: 0x21DC (8676 bytes) — preserved via trailing padding.
