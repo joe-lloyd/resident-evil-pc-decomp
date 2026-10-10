@@ -7,6 +7,7 @@
 #include "dc/ItemDescriptions.h"
 #include "dc/EntityModels.h"    // the arrange wardrobe's two outfit flags
 #include "../system/AssetPath.h"
+#include "TestMode.h"
 #include <cstdio>
 
 // Forward declarations for helpers defined in other files
@@ -65,6 +66,7 @@ unsigned int set_message_display(unsigned short msg_id, unsigned short pause_gam
     }
 
     g_menu_choice_id = 0x80;
+    TestMode_NoteMessage(msg_id);
 
     g_messageFlagsBackup = g_message_flags;
     g_PauseGameInMsgFlag = pause_game;

@@ -1,6 +1,7 @@
 // GameInit.cpp - Game initialization and startup
 // All functions decompiled from Ghidra with original addresses
 #include "../Globals.h"
+#include "TestMode.h"
 #include "../marni/MarniSystem.h"
 #include "../marni/PSXTexture.h"
 #include "FileLoader.h"
@@ -225,5 +226,6 @@ void load_global_assets(void)
     };
     CreateTexturedQuad(0, 0x2F, rectConfig);
 
+    if (DevBoot_Begin()) return;   // port addition: --boot skips to gameplay
     Task_chain((void*)logos_state);
 }

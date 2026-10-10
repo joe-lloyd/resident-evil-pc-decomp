@@ -14,6 +14,7 @@
 // Called by: game_start (0x00480710)
 // ============================================================================
 #include "../Globals.h"
+#include "TestMode.h"
 #include "../marni/MarniInput.h"
 #include <cstdio>
 #include <cstdlib>
@@ -258,6 +259,7 @@ LAB_00480d7c:
                 // not re-fire held keys as fresh presses. Confirming "ROOM
                 // CHANGE" closes it and hands a synthetic door record to
                 // game_loop's menu path (DebugMenu.cpp).
+                TestMode_GameplayFrame();
                 if (debug_menu_overlay() != 0) {
                     g_debugMenuOpen = 1;
                 } else {

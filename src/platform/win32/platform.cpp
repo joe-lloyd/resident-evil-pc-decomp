@@ -12,6 +12,7 @@
 #include <windows.h>
 #include <mmsystem.h>
 #include <stdlib.h>   // malloc/free for plat_file_read_all
+#include <string.h>   // memset for the test-mode key table
 
 // Cached system wave-out volume, owned by Globals.cpp. Declared here rather
 // than pulled in through Globals.h: that header redefines OutputDebugStringA
@@ -56,8 +57,26 @@ static void PlatLoadTestKeys(void)
     }
 }
 
+// Test-mode injection (see platform.h). Indexed by virtual-key code.
+static BOOL          s_injectExclusive = FALSE;
+static unsigned char s_injected[256];
+
+void plat_key_inject_exclusive(BOOL on)
+{
+    s_injectExclusive = on;
+    memset(s_injected, 0, sizeof(s_injected));
+}
+
+void plat_key_inject(int vk, BOOL down)
+{
+    s_injected[vk & 0xFF] = down ? 1 : 0;
+}
+
 int plat_key_state(int vk)
 {
+    if (s_injectExclusive) {
+        return s_injected[vk & 0xFF] ? (int)0x8000 : 0;
+    }
     if (s_testKeyCount < 0) {
         s_testT0 = timeGetTime();
         PlatLoadTestKeys();

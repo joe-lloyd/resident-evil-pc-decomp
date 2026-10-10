@@ -235,11 +235,16 @@ static int VTable_Clear(void* self)
     return 1;
 }
 
+// Port addition (test tooling): runs once per present, before it, while the
+// back buffer still holds the finished frame. NULL unless something armed it.
+void (*g_MarniBeforePresent)(void) = NULL;
+
 // [4] Present — 0x00448ff0
 static int VTable_Present(void* self)
 {
     CMarniDirect3D* pD3D = (CMarniDirect3D*)self;
     if (!pD3D || !pD3D->m_isInitialized) return 1;
+    if (g_MarniBeforePresent) g_MarniBeforePresent();
     pD3D->m_pDX->Present();
     return 1;
 }

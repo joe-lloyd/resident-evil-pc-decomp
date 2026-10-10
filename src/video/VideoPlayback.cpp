@@ -6,6 +6,7 @@
 // skip grace period and the prologue scenario cut.
 
 #include "../Globals.h"
+#include "../game/TestMode.h"
 #include "../game/Ps1EndingCredits.h"
 #include "../game/Ps1FmvSubtitles.h"
 #include "../platform/platform.h"
@@ -322,7 +323,9 @@ void UpdateVideoPlayback(void)
                 videoFile = GetFmvTable()[g_CurrentFMVID].filename;
             }
 
-            if (videoFile != NULL && CheckVideoFileExists(videoFile)) {
+            // Test mode skips every movie the way a missing file does: MCI
+            // playback needs a foreground window that automated runs lack.
+            if (videoFile != NULL && !TestMode_Active() && CheckVideoFileExists(videoFile)) {
                 PauseGameSoundsAsync();
 
                 plat_video_set_window_mode(TRUE);

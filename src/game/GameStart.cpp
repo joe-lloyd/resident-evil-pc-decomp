@@ -2,6 +2,8 @@
 // game_start, InitializeGame and all player/inventory initialization.
 // All functions decompiled from Ghidra with original addresses
 #include "../Globals.h"
+#include "TestMode.h"
+extern void DebugRoomChange_ArmPlacement(void);
 #include "dc/ItemTables.h"
 #include "dc/Items.h"
 #include "../marni/MarniSystem.h"
@@ -93,6 +95,11 @@ void SetInitialItems(void)
         ITEM_KNIFE,             0,
         ITEM_BERETTA,          15,
         ITEM_FIRST_AID_SPRAY,   1,
+        ITEM_NONE,              0,
+        // rebecca items (port addition: a new game as Rebecca, --boot rebecca)
+        ITEM_BERETTA,          15,
+        ITEM_FIRST_AID_SPRAY,   1,
+        ITEM_GREEN_HERB,        1,
         ITEM_NONE,              0
     };
 
@@ -118,7 +125,11 @@ void SetInitialItems(void)
     g_pickupQtyB = 240;
     g_pickupQtyC = 240;
 
-    if ((g_playerEntity.id & 3) == CHAR_CHRIS) {
+    if ((g_playerEntity.id & 3) == CHAR_REBECCA) {
+        // Port addition: Rebecca as the player carries 6 items, like Chris.
+        item_slot = initial_items + 16;
+        total_items_slots = 6;
+    } else if ((g_playerEntity.id & 3) == CHAR_CHRIS) {
         // Chris: 6 slots, Rebecca gets Baretta with 15 bullets
         item_slot = initial_items;           // Chris items at offset 0
         total_items_slots = 6;
@@ -423,6 +434,15 @@ void InitializeGame(void)
 
         memcpy(&g_BioCardData[0], g_loadDataDestPointer, 1052);
 
+        // Port addition: a dev boot that names a room starts there instead.
+        int bootStage, bootRoom;
+        if (DevBoot_StartRoom(&bootStage, &bootRoom)) {
+            g_stageId = (unsigned char)bootStage;
+            g_roomId = (unsigned char)bootRoom;
+            g_roomCameraId = 0;
+            DebugRoomChange_ArmPlacement();
+        }
+
         g_SpecialRoomLightState = (short)0xFFFF;
         g_CharacterModelId = g_playerEntity.id;
 
@@ -446,6 +466,10 @@ void InitializeGame(void)
             * jill: 96hp
             */
             g_playerEntity.health = (short)((g_playerEntity.id & 1) * -44 + 140);
+            if ((g_playerEntity.id & 3) == CHAR_REBECCA) {
+                // Port addition: the 88 room_set gives her when control switches.
+                g_playerEntity.health = 88;
+            }
             g_PlayerHealthCopy = g_playerEntity.health;
 
             if (g_bDcMode) {
@@ -542,6 +566,9 @@ void InitializeGame(void)
     g_playerEntity.pSca_hit_data = (DWORD)g_entityDataBlock;
 
     g_playerEntity.maxHealth = (unsigned char)((g_playerEntity.id & 1) * -44 + 140);
+    if ((g_playerEntity.id & 3) == CHAR_REBECCA) {
+        g_playerEntity.maxHealth = 88;   // port addition, see the health above
+    }
 
     if (g_bDcMode) {
         // DC InitializeGame's second mode block (PS1 DAT_800c5299 =
@@ -584,6 +611,15 @@ void InitializeGame(void)
     g_main_state_flags = g_main_state_flags & ~MSF_ROOM_TRANSITION;
 
     init_room();
+    {
+        // Port addition: a dev boot skips the opening scene, which is what
+        // normally first draws a room background; ask game_loop to draw it.
+        int bootStage, bootRoom;
+        if (DevBoot_StartRoom(&bootStage, &bootRoom)) {
+            DebugRoomChange_ApplyPendingPlacement();
+            g_main_state_flags |= MSF_CAMERA_REDRAW;
+        }
+    }
 
     g_AttractModeIdleTimer = 1;
     update_room_bgm();

@@ -32,6 +32,26 @@ void plat_key_event(int keycode, BOOL down);
 // ResetGetAsyncKeyStateFlags (0x00497e60) does by querying 0..255.
 void plat_key_flush(void);
 
+// Test tooling (port addition): once exclusive injection is on, plat_key_state
+// reports only keys set here and ignores the real keyboard, so an automated run
+// is not disturbed by someone using the machine. Off unless test mode starts.
+void plat_key_inject_exclusive(BOOL on);
+void plat_key_inject(int vk, BOOL down);
+
+// ---------------------------------------------------------------------------
+// Test link (port addition, test tooling only): one localhost TCP client that
+// receives state lines and sends commands. Nothing listens unless the game was
+// started with --test-port (src/game/TestMode.cpp).
+// ---------------------------------------------------------------------------
+BOOL plat_test_link_open(int port);
+// Non-blocking: accepts a waiting client and calls on_line once per complete
+// received line, without the line ending.
+void plat_test_link_poll(void (*on_line)(const char* line));
+// Send text to the connected client; dropped when none is connected.
+void plat_test_link_send(const char* text);
+// Changes whenever a new client connects, so test mode can reset per client.
+int  plat_test_link_client_id(void);
+
 // ---------------------------------------------------------------------------
 // Time
 // ---------------------------------------------------------------------------
