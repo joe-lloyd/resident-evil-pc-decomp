@@ -90,7 +90,7 @@ export function useRoomData(dirs: string[]): void {
 /** When on, walking stops to shoot any live enemy that comes within this range. */
 let fightBackRange = 0;
 
-export function useFightBack(range = 3500): void {
+export function useFightBack(range = 6000): void {
   fightBackRange = range;
 }
 
@@ -136,17 +136,18 @@ export async function walkTo(
   const first = await link.state();
   for (;;) {
     let s = await link.state();
+    checkAlive(s);
     // A door that fires on touch (or a scripted move) can change the room
     // mid-walk; the target means nothing in the new room.
     if (s.stage !== first.stage || s.room !== first.room) return s;
     if (fightBackRange > 0 && s.enemies.some((e) => e.hp > 0 && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
-      await fight(link, { range: fightBackRange + 1500 });
+      await fight(link, { range: fightBackRange + 3000 });
       s = await link.state();
       best = Infinity; // fighting moves her; judge progress afresh
     }
     const dist = Math.hypot(x - s.player.x, z - s.player.z);
     if (process.env.HARNESS_TRACE === '2') {
-      console.log(`    walk (${s.player.x}, ${s.player.z}) angle ${s.player.angle} -> (${Math.round(x)}, ${Math.round(z)}) dist ${Math.round(dist)} enemies ${s.enemies.length}`);
+      console.log(`    walk ${s.stage}:${s.room.toString(16)} (${s.player.x}, ${s.player.z}) angle ${s.player.angle} hp ${s.player.hp} ${screen(s)} msf ${s.msf.toString(16)} -> (${Math.round(x)}, ${Math.round(z)}) dist ${Math.round(dist)} enemies ${JSON.stringify(s.enemies.map((e) => [e.type, e.hp, e.x, e.z]))}`);
     }
     if (dist <= radius) return s;
     if (Date.now() > deadline) throw new StuckError(`never reached (${x}, ${z}); ${Math.round(dist)} away`, s);
@@ -290,36 +291,50 @@ export async function goTo(
   return last;
 }
 
+/** The player died (health 0 or the game's dead flag). */
+export class DiedError extends StuckError {}
+
+function checkAlive(s: GameState): void {
+  if (s.player.hp <= 0 || (s.msf & MSF.playerDead) !== 0) throw new DiedError(`she died in room ${s.stage}:${s.room.toString(16)}`, s);
+}
+
 /**
- * Shoot every live enemy within `range` of the player: face the nearest, hold
- * aim and fire until its health drops to 0 or it is gone. Returns the shots
- * fired. Needs a gun equipped.
+ * Shoot every live enemy within `range`. RE1 turns the aim onto the nearest
+ * enemy in front by itself while aim is held, so: face the target once, hold
+ * aim, fire every 16 frames, and turn again only when the target leaves the
+ * aim arc. Aim is released when nothing near is left standing. Returns the
+ * shots fired. Needs a gun equipped.
  */
-export async function fight(link: GameLink, { range = 9000, timeoutMs = 60_000 }: { range?: number; timeoutMs?: number } = {}): Promise<number> {
+export async function fight(link: GameLink, { range = 9000, timeoutMs = 90_000 }: { range?: number; timeoutMs?: number } = {}): Promise<number> {
   const deadline = Date.now() + timeoutMs;
   let shots = 0;
-  for (;;) {
-    const s = await link.state();
-    const live = s.enemies
-      .filter((e) => e.hp > 0)
-      .map((e) => ({ e, d: Math.hypot(e.x - s.player.x, e.z - s.player.z) }))
-      .filter((t) => t.d <= range)
-      .sort((a, b) => a.d - b.d);
-    if (live.length === 0) {
-      await link.release();
-      return shots;
+  let aiming = false;
+  try {
+    for (;;) {
+      const s = await link.state();
+      checkAlive(s);
+      const live = s.enemies
+        .filter((e) => e.hp > 0)
+        .map((e) => ({ e, d: Math.hypot(e.x - s.player.x, e.z - s.player.z) }))
+        .filter((t) => t.d <= range)
+        .sort((a, b) => a.d - b.d);
+      if (live.length === 0) return shots;
+      if (Date.now() > deadline) throw new StuckError(`${live.length} enemies still standing`, s);
+      const target = live[0].e;
+      const off = Math.abs(turnBetween(s.player.angle, headingTo(s.player.x, s.player.z, target.x, target.z)));
+      if (!aiming || off > 500) {
+        // Turning is done with aim released; then aim again.
+        if (aiming) await link.up(Key.aim);
+        await faceTowards(link, target.x, target.z).catch(() => undefined);
+        await link.down(Key.aim);
+        aiming = true;
+        await link.frames(6);
+      }
+      await link.tap(Key.action, 3);
+      shots++;
+      await link.frames(16);
     }
-    if (Date.now() > deadline) {
-      await link.release();
-      throw new StuckError(`${live.length} enemies still standing`, s);
-    }
-    const target = live[0].e;
-    await link.up(Key.aim);
-    await faceTowards(link, target.x, target.z).catch(() => undefined);
-    await link.down(Key.aim);
-    await link.frames(8);
-    await link.tap(Key.action, 3);
-    shots++;
-    await link.frames(18);
+  } finally {
+    if (aiming) await link.up(Key.aim);
   }
 }

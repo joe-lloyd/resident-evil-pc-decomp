@@ -122,7 +122,7 @@ try {
   console.log(`door: now in room ${roomLabel(s)} camera ${s.camera} at (${s.player.x}, ${s.player.z})`);
   expect(s.stage === 2 && s.room === 0, `the door led to stage ${s.stage} room ${s.room}, expected stage 2 room 0`);
   if (s.stage === 2 && s.room === 0) {
-    expect(Math.abs(s.player.x - 5000) <= 600 && Math.abs(s.player.z - 11400) <= 600, `arrived at (${s.player.x}, ${s.player.z}), expected near (5000, 11400)`);
+    expect(Math.abs(s.player.x - 23800) <= 600 && Math.abs(s.player.z - 27500) <= 600, `arrived at (${s.player.x}, ${s.player.z}), expected near the garden gate (23800, 27500)`);
     expect(s.camera === 2, `arrived under camera ${s.camera}, expected the entry camera 2`);
     console.log(`picture: ${await snapshot(link, OUT, 'mountain-trail-garden')}`);
   }

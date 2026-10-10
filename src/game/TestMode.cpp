@@ -183,6 +183,7 @@ extern void setSomeColor(int r, int g, int b);  // 0x00470a50
 static int s_bootCharacter = -1;
 static int s_bootStage = -1;
 static int s_bootRoom = -1;
+static int s_bootRoomUsed = 0;   // the start room applies to the boot's own game only
 
 int DevBoot_Configure(const char* spec)
 {
@@ -216,6 +217,11 @@ int DevBoot_Begin(void)
     SetVideoResolution(640, 480);
     SetVideoResolution(320, 240);
     setSomeColor(128, 128, 128);
+    // One boot per launch: dying sends the game back through
+    // init_and_start_game, and that must reach the title, not a new game.
+    static int s_booted = 0;
+    if (s_booted) return 0;
+    s_booted = 1;
     g_SelectedCharactedId = (unsigned char)s_bootCharacter;
     // Jill alone has her own room variants; Rebecca walks Chris's rooms.
     if (s_bootCharacter == CHAR_JILL) g_main_state_flags |= MSF_CHAR_VARIANT;
@@ -229,13 +235,14 @@ extern int DebugRoomChange_IsSelectable(int stage, int room);
 
 int DevBoot_StartRoom(int* stage, int* room)
 {
-    if (s_bootCharacter < 0 || s_bootStage < 0) return 0;
+    if (s_bootCharacter < 0 || s_bootStage < 0 || s_bootRoomUsed) return 0;
     if (!DebugRoomChange_IsSelectable(s_bootStage, s_bootRoom)) {
         dbg_printf("[devboot] stage %d room %02X has no room file; using the normal start\n",
                    s_bootStage, s_bootRoom);
         s_bootStage = -1;
         return 0;
     }
+    s_bootRoomUsed = 1;
     *stage = s_bootStage;
     *room = s_bootRoom;
     return 1;

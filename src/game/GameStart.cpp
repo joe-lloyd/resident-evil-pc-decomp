@@ -4,6 +4,10 @@
 #include "../Globals.h"
 #include "TestMode.h"
 extern void DebugRoomChange_ArmPlacement(void);
+
+// Port addition: set when this new game starts in a room the dev boot or the
+// REB bio card chose, so init_room is followed by the door placement.
+static int s_placeAfterInitRoom = 0;
 extern void DebugRoomChange_SetStartSpot(int stage, int room, int x, int z, int angle);
 #include "dc/ItemTables.h"
 #include "dc/Items.h"
@@ -453,9 +457,11 @@ void InitializeGame(void)
             g_roomId = (unsigned char)bootRoom;
             g_roomCameraId = 0;
             DebugRoomChange_ArmPlacement();
+            s_placeAfterInitRoom = 1;
         } else if (g_bRebMode) {
             g_roomCameraId = 0;
             DebugRoomChange_ArmPlacement();
+            s_placeAfterInitRoom = 1;
         }
 
         g_SpecialRoomLightState = (short)0xFFFF;
@@ -629,9 +635,8 @@ void InitializeGame(void)
     {
         // Port addition: a dev boot skips the opening scene, which is what
         // normally first draws a room background; ask game_loop to draw it.
-        int bootStage, bootRoom;
-        if (DevBoot_StartRoom(&bootStage, &bootRoom) ||
-            (g_bRebMode && (g_main_state_flags & MSF_CONTINUE_GAME) == 0)) {
+        if (s_placeAfterInitRoom) {
+            s_placeAfterInitRoom = 0;
             DebugRoomChange_ApplyPendingPlacement();
             g_main_state_flags |= MSF_CAMERA_REDRAW;
         }
