@@ -85,7 +85,7 @@ export function buildAndDeploy(branch: string): string[] {
 
 /** Replace the game folder's `name` overlay (e.g. REB) with a local build of it. */
 export function deployOverlay(localOverlayDir: string, name = 'REB'): void {
-  powershell(`Remove-Item -Recurse -Force '${gameDir}\\${name}' -ErrorAction SilentlyContinue`);
+  powershell(`if (Test-Path '${gameDir}\\${name}') { Remove-Item -Recurse -Force '${gameDir}\\${name}' }`);
   execFileSync('scp', ['-q', '-r', '-o', 'BatchMode=yes', localOverlayDir, `${host}:${gameDir.replace(/\\/g, '/')}/${name}`]);
 }
 
