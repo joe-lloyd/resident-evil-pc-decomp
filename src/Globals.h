@@ -463,6 +463,7 @@ extern DWORD         g_MainStateFlagBank[2];           // 0x00be41c0
 #define GAME_MODE_DC                 1   // Director's Cut (SLUS_005.51)
 #define GAME_MODE_SATURN             2   // reserved, not implemented
 #define GAME_MODE_NDS                3   // reserved, not implemented
+#define GAME_MODE_REB                4   // port addition: Rebecca's scenario (docs/REBECCA_SCENARIO.md)
 
 extern int           g_GameMode;               // [Game] Mode -> GAME_MODE_*
 extern bool          g_bPs1EndingCredits;
@@ -476,6 +477,9 @@ extern bool          g_bSkipUnskippableFmv;    // [Game] SkipUnskippableFmv
 // over g_GameMode rather than a second global: there is one stored value, so
 // the two cannot drift, and an accidental assignment fails to compile.
 #define g_bDcMode                    (g_GameMode == GAME_MODE_DC)
+// Rebecca's scenario: NEW GAME starts her, and her room scripts come from the
+// REB overlay, built from the player's own data by tools/rebecca.
+#define g_bRebMode                   (g_GameMode == GAME_MODE_REB)
 
 // g_DcDifficulty is the DC title screen's choice (PS1 g_abDcGameMode
 // 0x800c8693); it is also stored in the save block, so a DC save reloads as its

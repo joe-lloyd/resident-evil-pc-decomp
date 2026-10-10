@@ -1497,7 +1497,9 @@ static constexpr auto s_gm60 = STR("You can't use it here.");
 static constexpr auto s_gm61 = STR("You can't use it here.");
 // [62] 0x004BFC27 - Don't need to use at the moment
 static constexpr auto s_gm62 = STR("You don't need to use this\\nitem at the moment.");
-// [63] - NULL (pointer 0x73755C2E is out of bounds)
+// [63] - NULL in the original (pointer 0x73755C2E is out of bounds). Port
+// addition: Rebecca's opening narration, shown only in her scenario (REB).
+static constexpr auto s_gm63 = STR("\\s\\nDawn.\\nBilly is gone.\\pTOfficially,\\nhe died in the crash.\\pTBravo team is still\\nout there somewhere.\\pTDown the mountain...\\dT");
 
 unsigned char* global_messages[64] = {
     (unsigned char*)s_gm00.bytes,  // [0]  Will you take the [L1]
@@ -1563,7 +1565,7 @@ unsigned char* global_messages[64] = {
     (unsigned char*)s_gm60.bytes,  // [60] Can't use it here.
     (unsigned char*)s_gm61.bytes,  // [61] Can't use it here.
     (unsigned char*)s_gm62.bytes,  // [62] Don't need to use at the moment.
-    NULL,                            // [63] (out of bounds pointer)
+    (unsigned char*)s_gm63.bytes,  // [63] Rebecca's opening narration (port addition, REB only)
 };
 
 // ============================================================================

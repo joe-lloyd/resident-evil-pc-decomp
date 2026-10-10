@@ -435,10 +435,15 @@ void InitializeGame(void)
         memcpy(&g_BioCardData[0], g_loadDataDestPointer, 1052);
 
         // Port addition: a dev boot that names a room starts there instead.
+        // Rebecca's scenario starts in the room its own bio_card.dat names
+        // (REB overlay); both stand the player by the room's first door.
         int bootStage, bootRoom;
         if (DevBoot_StartRoom(&bootStage, &bootRoom)) {
             g_stageId = (unsigned char)bootStage;
             g_roomId = (unsigned char)bootRoom;
+            g_roomCameraId = 0;
+            DebugRoomChange_ArmPlacement();
+        } else if (g_bRebMode) {
             g_roomCameraId = 0;
             DebugRoomChange_ArmPlacement();
         }
@@ -615,7 +620,8 @@ void InitializeGame(void)
         // Port addition: a dev boot skips the opening scene, which is what
         // normally first draws a room background; ask game_loop to draw it.
         int bootStage, bootRoom;
-        if (DevBoot_StartRoom(&bootStage, &bootRoom)) {
+        if (DevBoot_StartRoom(&bootStage, &bootRoom) ||
+            (g_bRebMode && (g_main_state_flags & MSF_CONTINUE_GAME) == 0)) {
             DebugRoomChange_ApplyPendingPlacement();
             g_main_state_flags |= MSF_CAMERA_REDRAW;
         }

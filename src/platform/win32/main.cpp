@@ -104,6 +104,13 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return 1;
     }
 
+    const char* mode = lpCmdLine ? strstr(lpCmdLine, "--mode ") : NULL;
+    if (mode != NULL) {
+        char name[16] = "";
+        sscanf(mode + strlen("--mode "), "%15s", name);
+        Config_OverrideGameMode(name);
+    }
+
     const char* boot = lpCmdLine ? strstr(lpCmdLine, "--boot") : NULL;
     if (boot != NULL) boot += strspn(boot + strlen("--boot"), " ") + strlen("--boot");
     if (boot != NULL && !DevBoot_Configure(boot)) {

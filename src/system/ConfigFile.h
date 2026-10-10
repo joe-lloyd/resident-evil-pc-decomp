@@ -28,5 +28,9 @@ void ConfigFile_EnsureExists(void);
 // Read the file into the game globals. FALSE if there is no file.
 BOOL ConfigFile_Load(void);
 
+// Port addition: use this [Game] Mode instead of the file's (--mode). Call
+// before ConfigFile_Load.
+void Config_OverrideGameMode(const char* name);
+
 // Write the current settings back, preserving everything else in the file.
 void ConfigFile_Save(void);

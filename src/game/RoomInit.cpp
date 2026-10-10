@@ -234,7 +234,8 @@ void display_game_loading_message(void)
         set_message_display(0x5c, 0);
         Task_exit();
     }
-    set_message_display(0x5b, 0);
+    // Port addition: Rebecca's scenario opens with her own narration.
+    set_message_display(g_bRebMode ? 0x7f : 0x5b, 0);
     Task_exit();
 }
 

@@ -286,7 +286,16 @@ const char* ConfigFile_Find(void)
 // missing name falls back to OG rather than refusing to start: a typo should
 // give the stock game, not a black screen.
 // ---------------------------------------------------------------------------
-static const char* const kGameModeNames[] = { "OG", "DC", "SATURN", "DS" };
+static const char* const kGameModeNames[] = { "OG", "DC", "SATURN", "DS", "REB" };
+
+// Port addition: --mode <name> beats [Game] Mode, so tests can pick a mode
+// without editing config.ini. Never written back to the file.
+static char s_modeOverride[16] = "";
+
+void Config_OverrideGameMode(const char* name)
+{
+    snprintf(s_modeOverride, sizeof(s_modeOverride), "%s", name);
+}
 static const int kGameModeCount =
     (int)(sizeof(kGameModeNames) / sizeof(kGameModeNames[0]));
 
@@ -496,7 +505,9 @@ BOOL ConfigFile_Load(void)
     // Content mode. [Game] Mode is the single switch: it sets g_GameMode AND
     // the asset overlay folder.
     char modeName[16];
-    if (ReadValue(path, "Game", "Mode", modeName, sizeof(modeName))) {
+    if (s_modeOverride[0] != '\0') {
+        g_GameMode = ParseGameMode(s_modeOverride);   // --mode on the command line
+    } else if (ReadValue(path, "Game", "Mode", modeName, sizeof(modeName))) {
         g_GameMode = ParseGameMode(modeName);
     } else {
         // Pre-Mode config files said [Game] DcMode=1. Honour it rather than
