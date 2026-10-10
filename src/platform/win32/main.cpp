@@ -103,6 +103,12 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         return 1;
     }
 
+    const char* boot = lpCmdLine ? strstr(lpCmdLine, "--boot ") : NULL;
+    if (boot != NULL && !DevBoot_Configure(boot + strlen("--boot "))) {
+        ShowMessageBox(NULL, "--boot expects chris, jill or rebecca, optionally :stage:room.", "RESIDENT EVIL", MB_OK | MB_ICONSTOP);
+        return 1;
+    }
+
     // --- 0x004414a2: Single instance checks via mutex ---
     if (!TestMode_Active() && !CheckSingleInstance()) {
         return 3; // already running

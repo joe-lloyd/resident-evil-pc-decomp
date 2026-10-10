@@ -146,9 +146,44 @@ static void on_command(const char* line)
     reply("{\"t\":\"ack\",\"cmd\":\"%s\",\"ok\":1,\"frame\":%u}\n", cmd, s_frame);
 }
 
+// --- Dev boot -----------------------------------------------------------------
+
+extern void game_start(void);
+
+static int s_bootCharacter = -1;
+
+int DevBoot_Configure(const char* spec)
+{
+    char name[16] = "";
+    int stage = -1, room = -1;
+    int n = sscanf(spec, "%15[a-z]:%i:%i", name, &stage, &room);
+    if (n < 1) return 0;
+    if (strcmp(name, "chris") == 0) s_bootCharacter = CHAR_CHRIS;
+    else if (strcmp(name, "jill") == 0) s_bootCharacter = CHAR_JILL;
+    else if (strcmp(name, "rebecca") == 0) s_bootCharacter = CHAR_REBECCA;
+    else return 0;
+    if (n == 3) {
+        s_pendingStage = stage;
+        s_pendingRoom = room;
+    }
+    return 1;
+}
+
+int DevBoot_Begin(void)
+{
+    if (s_bootCharacter < 0) return 0;
+    g_SelectedCharactedId = (unsigned char)s_bootCharacter;
+    // Jill alone has her own room variants; Rebecca walks Chris's rooms.
+    if (s_bootCharacter == CHAR_JILL) g_main_state_flags |= MSF_CHAR_VARIANT;
+    else g_main_state_flags &= ~MSF_CHAR_VARIANT;
+    g_bGameActive = 2;
+    Task_chain((void*)game_start);
+    return 1;
+}
+
 void TestMode_RunPendingRoomChange(void)
 {
-    if (!s_active || s_pendingStage < 0) return;
+    if (s_pendingStage < 0) return;
     int ok = DebugRoomChange_Request(s_pendingStage, s_pendingRoom);
     reply("{\"t\":\"ack\",\"cmd\":\"room-start\",\"ok\":%d,\"frame\":%u}\n", ok, s_frame);
     s_pendingStage = -1;
