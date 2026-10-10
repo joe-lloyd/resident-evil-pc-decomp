@@ -8,7 +8,7 @@
 // RAE_CLI points at retro-archive-explorer's scripts/cli.mjs, which assembles
 // the room scripts (`rae asm`).
 import { execFileSync } from 'node:child_process';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildTrailRoom, trailRoom, trailRoomFile, trailStart } from './new_room.ts';
@@ -82,9 +82,19 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
     const original = findFile(stageDir, `${room}.RDT`);
     const outStage = path.join(reb, `Stage${room[4]}`);
     mkdirSync(outStage, { recursive: true });
-    execFileSync(process.execPath, [raeCli, 'asm', path.join(roomsDir, file), original, path.join(outStage, `${room}.RDT`)], {
-      stdio: ['ignore', 'ignore', 'inherit'],
-    });
+    const out = path.join(outStage, `${room}.RDT`);
+    const run = (args: string[]) => execFileSync(process.execPath, [raeCli, ...args], { stdio: ['ignore', 'ignore', 'inherit'] });
+    // rooms/ROOMsrrv.msg.txt, if present, replaces the room's messages
+    // (`rae msg` format); it is applied after the scripts.
+    const messages = path.join(roomsDir, `${room}.msg.txt`);
+    if (existsSync(messages)) {
+      const scripted = `${out}.scripts`;
+      run(['asm', path.join(roomsDir, file), original, scripted]);
+      run(['msg-set', messages, scripted, out]);
+      rmSync(scripted);
+    } else {
+      run(['asm', path.join(roomsDir, file), original, out]);
+    }
     written.push(`Stage${room[4]}/${room}.RDT`);
   }
   return written;

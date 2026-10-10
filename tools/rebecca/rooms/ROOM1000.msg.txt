@@ -1,0 +1,48 @@
+0: \s{0}\n\s{2}\d{70}
+1: \s{0}\n\s{2}\d{120}
+2: \s{0}\n\s{1}\p{90}\s{0}\n\s{2}\d{100}
+3: \s{0}\n\s{1}\p{100}\s{0}\n\s{1}\p{130}\s{0}\n\s{2}\d{130}
+4: \s{0}\n\s{1}\p{120}\s{0}\n\s{2}\d{100}
+5: \s{0}\n\s{1}\p{115}\s{0}\n\s{2}\d{90}
+6: \s{0}\n\s{1}\p{60}\s{0}\n\s{2}\d{120}
+7: \s{0}\n\s{2}\d{70}
+8: \s{0}\n\s{1}\p{80}\s{0}\n\s{1}\p{145}\s{0}\n\s{2}\d{80}
+9: \s{0}\n\s{2}\d{100}
+10: \s{0}\n\s{2}\d{100}
+11: \s{0}\n\s{2}\d{170}
+12: \s{0}\n\s{1}\p{70}\s{0}\n\s{2}\d{80}
+13: \s{0}\n\s{2}\d{130}
+14: \s{0}\n\s{1}\p{120}\s{0}\n\s{1}\p{100}\s{0}\n\s{2}\d{130}
+15: \s{0}\n\s{2}\d{100}
+16: Will you take Rebecca with\nyou?\s{1}\c 
+17: \s{0}\n\s{2}\p{70}\s{0}\n\s{2}\p{100}\s{0}\n\s{2}\d{150}
+18: \s{0}\n\s{2}\d{130}
+19: \s{0}\n\s{2}\d{110}
+20: \s{0}\n\s{2}\d{60}
+21: \s{0}\n\s{2}\p{50}\s{0}\n\s{2}\d{120}
+22: \s{0}\n\s{2}\d{155}
+23: \s{0}\n\s{2}\d{130}
+24: \s{0}\n\s{2}\p{60}\s{0}\n\s{2}\d{60}
+25: \s{0}\n\s{2}\d{75}
+26: \s{0}\n\s{2}\p{50}\s{0}\n\s{2}\d{100}
+27: \s{0}\n\s{2}\p{80}\s{0}\n\s{2}\d{130}
+28: \s{0}\n\s{2}\d{140}
+29: \s{0}\n\s{2}\p{80}\s{0}\n\s{2}\p{80}\s{0}\n\s{2}\d{140}
+30: \s{0}\n\s{2}\d{105}
+31: \s{0}\n\s{2}\d{80}
+32: \s{0}\n\s{2}\p{75}\s{0}\n\s{2}\d{95}
+33: Do you want me to heal\nyour wounds?\s{1}\c 
+34: \s{0}\n\s{2}\d{75}
+35: \s{0}\n\s{2}\d{90}
+36: \s{0}\n\s{2}\d{100}
+37: \s{0}\n\s{2}\d{135}
+38: \s{0}\n\s{2}\d{145}
+39: \s{0}\n\s{2}\d{200}
+40: \s{0}\n\s{2}\d{125}
+41: \s{0}\n\s{2}\d{115}
+42: \nVitamins and serums.\s{2}
+43: \nOne dose would do.\s{2}
+44: \nRebecca treats Chris.\s{2}
+45: \n\s{2}\p{0}\n\s{2}
+46: \oFreeze!"\p{0}\o...Wait. You're S.T.A.R.S.?\nBravo team?"\p{0}\oRebecca Chambers.\nI'm the team's medic."\p{0}\oChris Redfield, Alpha.\nWhere's the rest of Bravo?"\p{0}\oI don't know.\nWe got separated."\p{0}\oStay here. It's safe.\nI'll check the house."
+47: \oBe careful, Rebecca.\nThis place is crawling"\p{0}\owith those things.\nDon't go out alone."

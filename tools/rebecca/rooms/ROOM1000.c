@@ -14,9 +14,15 @@ tbl37_set(0, 0, 9);
 // Chris stands where Rebecca waits in his game; checking him gives his line.
 enemy(32 /* Chris (Stars) */, 0, 255, 1, 2, 0, 0, 2220, 0, 0, 7280, 0, 3920, 0, 0, 0, 0);
 aot_set(1, 6780, 3420, 1000, 1000, SCE_MESSAGE, 129, 175, 0, 0, 0, 0, 0);
+return;
+
+// main procedure 0
 // First time in: the meeting. FG_COMMON 36 is the canon "Chris met Rebecca".
+// It runs from main, once the room is playing: a message opened during init
+// leaves the player frozen after it closes, because game_loop resets the
+// message state that the message would restore.
 if (ck(FG_COMMON, 36, 1)) {
     set(FG_COMMON, 36, 0);
-    message(174, 255, 0);
+    message(174, 0, 0);
 }
 return;
