@@ -68,9 +68,14 @@ export function buildAndDeploy(branch: string): string[] {
     cmd /c build.bat 2>&1 | Out-File -Encoding utf8 build.log
     $errors = Select-String -Path build.log -Pattern ': error' | ForEach-Object { $_.Line }
     if ($errors) { $errors } else {
-      Start-Sleep 2
-      Copy-Item bin\Release\residentevil.exe '${gameDir}' -Force
-      'DEPLOYED'
+      # A game that is still exiting holds the exe: retry, then prove the copy.
+      $built = (Get-FileHash 'bin\\Release\\residentevil.exe').Hash
+      for ($i = 0; $i -lt 20; $i++) {
+        Get-Process residentevil -ErrorAction SilentlyContinue | Stop-Process -Force
+        Copy-Item 'bin\\Release\\residentevil.exe' '${gameDir}' -Force -ErrorAction SilentlyContinue
+        if ((Get-FileHash '${gameDir}\\residentevil.exe').Hash -eq $built) { 'DEPLOYED'; break }
+        Start-Sleep 1
+      }
     }
   `);
   const lines = out.split(/\r?\n/).filter(Boolean);
