@@ -167,7 +167,7 @@ static void build_state(void)
     put("\"player\":{\"id\":%d,\"x\":%d,\"y\":%d,\"z\":%d,\"angle\":%d,\"hp\":%d,"
         "\"maxHp\":%d,\"weapon\":%d},",
         (int)p.id, (int)p.position.x, (int)p.position.y, (int)p.position.z,
-        (int)p.directionAngle, (int)p.health, (int)g_PlayerMaxHealth, (int)g_EquippedItemId);
+        (int)p.directionAngle, (int)p.health, (int)p.maxHealth, (int)g_EquippedItemId);
 
     // Rebecca and Chris carry 6 items, Jill 8.
     const ItemSlot* items = (const ItemSlot*)g_ItemSlotsPointer;
