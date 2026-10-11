@@ -76,6 +76,11 @@ bool LoadWalk(unsigned char variant)
 void WalkTask(void)
 {
     g_bGameActive = 0;
+    // A transition presents in the flat-colour screen mode, which leaves out
+    // the background picture (the door animation is 3D, so it still shows).
+    // The walk is the picture, so it shows in the picture mode, and the
+    // transition's own mode comes back when it ends.
+    const DWORD transitionMode = g_main_state_flags & MSF_SCREEN_MODE_MASK;
     const unsigned int frames = u16(s_walk + 4);
     const unsigned int ticks = s_walk[6] ? s_walk[6] : 2;
     const unsigned int stepTicks = s_walk[7];
@@ -84,11 +89,7 @@ void WalkTask(void)
     for (unsigned int f = 0; f < frames; f++) {
         unpack_pakfile_(s_walk + u32(s_walk + 8 + f * 4), s_frame);
         display_image(8, s_frame + 20, 320, 240);
-        if (f < 3 || f == 20) {
-            dbg_printf("[walk] frame %u msf %08x msf2 %08x screen %d render %d countdown %d active %d\n", f,
-                       (unsigned)g_main_state_flags, (unsigned)g_main_state_flags2, (int)g_ScreenAccessReady,
-                       (int)g_RenderAccessReady, (int)g_ScreenAccessCountdown, (int)g_bGameActive);
-        }
+        g_main_state_flags = (g_main_state_flags & ~MSF_SCREEN_MODE_MASK) | MSF_SCREEN_REBUILD;
         for (unsigned int k = 0; k < ticks; k++, t++) {
             if (stepTicks && t % stepTicks == stepTicks / 2) play_sfx(0, (int)(step++ & 1), 0);
             Task_sleep(1);
@@ -98,6 +99,7 @@ void WalkTask(void)
     }
     free(s_walk);
     s_walk = NULL;
+    g_main_state_flags = (g_main_state_flags & ~MSF_SCREEN_MODE_MASK) | transitionMode;
     g_bGameActive = 2;
     g_main_state_flags &= ~MSF_ROOM_TRANSITION;
     Task_exit();
