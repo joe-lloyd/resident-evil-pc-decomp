@@ -561,7 +561,7 @@ climbs.
 `tools/rebecca/day/room.ts` builds the new rooms of Rebecca's day, the trail
 (`ROOM3120.RDT`, stage 2 room 0x12) among them, by composing a donor room's
 file with new sections (`tools/rebecca/rdt.ts`); the loaded game proves each
-point below (`tools/harness/tests/mountain-trail.ts`, `day-act1.ts`).
+point below (`tools/harness/tests/mountain-trail.ts`, `tests/day.ts`).
 
 - **Cameras.** Set `cameras_count` and overwrite the records at 0x94. The mask
   block each record points at opens with a group count; 0 means no sprites and

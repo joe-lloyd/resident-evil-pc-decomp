@@ -93,9 +93,12 @@ export function useRoomData(dirs: string[]): void {
 
 /** When on, walking stops to shoot any live enemy that comes within this range. */
 let fightBackRange = 0;
+let fightBackIgnores: readonly number[] = [];
 
-export function useFightBack(range = 9000): void {
+/** Fight what comes within `range` while walking, except enemy types in `ignore` (snakes: walk past them). */
+export function useFightBack(range = 9000, ignore: readonly number[] = []): void {
   fightBackRange = range;
+  fightBackIgnores = ignore;
 }
 
 export class StuckError extends Error {
@@ -144,8 +147,8 @@ export async function walkTo(
     // A door that fires on touch (or a scripted move) can change the room
     // mid-walk; the target means nothing in the new room.
     if (s.stage !== first.stage || s.room !== first.room) return s;
-    if (fightBackRange > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
-      await fight(link, { range: fightBackRange + 3000 });
+    if (fightBackRange > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !fightBackIgnores.includes(e.type) && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
+      await fight(link, { range: fightBackRange + 3000, ignore: fightBackIgnores });
       s = await link.state();
       best = Infinity; // fighting moves her; judge progress afresh
     }
@@ -395,7 +398,7 @@ const FIRST_NPC_TYPE = 32;
 
 export async function fight(
   link: GameLink,
-  { range = 40_000, timeoutMs = 120_000 }: { range?: number; timeoutMs?: number } = {},
+  { range = 40_000, timeoutMs = 120_000, ignore = [] }: { range?: number; timeoutMs?: number; ignore?: readonly number[] } = {},
 ): Promise<number> {
   const deadline = Date.now() + timeoutMs;
   let shots = 0;
@@ -411,7 +414,7 @@ export async function fight(
       const s = await link.state();
       checkAlive(s);
       const live = s.enemies
-        .filter((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE)
+        .filter((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !ignore.includes(e.type))
         .map((e) => ({ e, d: Math.hypot(e.x - s.player.x, e.z - s.player.z) }))
         .filter((t) => t.d <= range)
         .sort((a, b) => a.d - b.d);

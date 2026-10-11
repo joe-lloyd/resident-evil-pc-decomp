@@ -2,7 +2,7 @@
 // run logged as a link that jumps the video there, grouped by chapter.
 //
 //   node tools/harness/video-page.ts <run log> <video file name> <out.html> [title] [scale]
-// The log is full-playthrough.ts's output; its [Ns] stamps are seconds of the
+// The log is tests/day.ts's output; its [Ns] stamps are seconds of the
 // run. `scale` (video seconds per run second, default 1) corrects a video
 // whose capture fell behind real time. The video file name is written as given, relative to the page.
 import { readFileSync, writeFileSync } from 'node:fs';

@@ -6,7 +6,7 @@ below. The near bank is long grass, where the adders are. On the far bank
 the trail goes on down into the valley.
 
 Metres, real sizes. She walks the near bank (x 2-10, y 2-7), the bridge
-(x 5.3-6.7, y 7-17, the deck flat at z 0) and the far bank (x 2-10, y 17-20).
+(x 5.3-6.7, y 7-15, the deck flat at z 0) and the far bank (x 2-10, y 15-18).
 
 Moving: the river, the grass, the rope rails in the wind.
 """
@@ -22,8 +22,8 @@ from mathutils import Vector, noise  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))
 FRAMES = 16
-X0, X1, Y0, Y1 = 2.0, 10.0, 2.0, 20.0
-NEAR, FAR = 7.0, 17.0           # the gorge's lips (y)
+X0, X1, Y0, Y1 = 2.0, 10.0, 2.0, 18.0   # Y1 * 1700 stays under 32767: positions are signed 16-bit
+NEAR, FAR = 7.0, 15.0           # the gorge's lips (y)
 BX0, BX1 = 5.3, 6.7             # the bridge deck (x)
 RIVER_Z = -16.0
 
@@ -38,7 +38,7 @@ CAMERAS = [
     # 1: from out over the gorge, side on: the bridge, the drop, the river.
     {"from": G(0.5, 8.6, 1.6), "to": G(7.0, 13.0, -1.6), "fov": 180},
     # 2: from the far bank, back across the bridge toward the station.
-    {"from": G(3.0, 19.8, 3.0), "to": G(6.2, 10.5, -0.3), "fov": 200},
+    {"from": G(3.0, 17.9, 3.0), "to": G(6.2, 9.5, -0.3), "fov": 200},
 ]
 
 
@@ -222,9 +222,9 @@ def build():
     # The trail sign on the far bank, pointing on down.
     sign_m = reb.mat_plain("Sign brown", (0.16, 0.09, 0.04), 0.7)
     letter = reb.mat_plain("Sign letters", (0.75, 0.7, 0.5), 0.6)
-    reb.mask(reb.wall(reb.prim("cyl", "Trail sign post", post_m, (7.4, 19.4, 0.85), (0.14, 0.14, 1.7), segments=10), "circle"))
-    reb.mask(reb.prim("cube", "Trail sign arm", sign_m, (7.0, 19.4, 1.45), (1.1, 0.05, 0.28), rot=(0, 0, 0.0), bevel=0.01))
-    bpy.ops.object.text_add(location=(6.55, 19.37, 1.4), rotation=(math.pi / 2, 0, 0))
+    reb.mask(reb.wall(reb.prim("cyl", "Trail sign post", post_m, (7.4, 17.4, 0.85), (0.14, 0.14, 1.7), segments=10), "circle"))
+    reb.mask(reb.prim("cube", "Trail sign arm", sign_m, (7.0, 17.4, 1.45), (1.1, 0.05, 0.28), rot=(0, 0, 0.0), bevel=0.01))
+    bpy.ops.object.text_add(location=(6.55, 17.37, 1.4), rotation=(math.pi / 2, 0, 0))
     t = bpy.context.active_object
     t.data.body = "VALLEY TRAIL"
     t.data.size = 0.13

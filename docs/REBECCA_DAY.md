@@ -1,9 +1,10 @@
 # Rebecca's day
 
-Rebecca's scenario is a game of its own, a couple of hours long, that runs
-on this engine in front of Resident Evil. It covers the day nobody saw: from
-the morning she says goodbye to Billy to the night Chris finds her in the
-mansion's save room.
+Rebecca's scenario is a game of its own that runs on this engine in front of
+Resident Evil. It covers the day nobody saw: from the morning she says
+goodbye to Billy to the night Chris finds her in the mansion's save room. It
+should take as long to play as the mansion does the first time: about fifty
+rooms, two to three hours.
 
 This plan replaces the chapter-by-chapter remix of Chris's game. That work is
 shelved on the `chapters-2-6` branch. The engine fixes and the test harness
@@ -22,25 +23,33 @@ Umbrella's water works, and into a forgotten cellar beneath the mansion. She
 climbs up through the floor into the save room. Spent, she sits down against
 the wall and falls asleep. Footsteps wake her, and Chris walks in.
 
-The light tells the time. Each act is rendered for its hour, from dawn on the
-ridge to the dark of the cellar.
-
-Every scene has something moving in it: a lamp flame, smoke from a chimney,
-grass in the wind, a river far below. The original game's backgrounds were
-still pictures; ours loop a few seconds of animation, and change when the
-story changes them (a tree dragged off a path).
-
-The way down is blocked, again and again, and getting past takes more than
-one step: the thing that clears the way is locked up, and what unlocks it is
-somewhere else. Places tell their own story through what was left in them.
-
-| Act | Time | Where | What it is about |
+| Act | Time | Hub | What it is about |
 | --- | --- | --- | --- |
-| 1 | Dawn to morning | The ridge, the forest trail, the ranger's lookout | Alone for the first time; finding her feet |
-| 2 | Midday | The logging camp, the sawmill, the cable car | The infection has reached the mountain |
-| 3 | Afternoon | The pump house, Umbrella's service tunnel | Umbrella built under the whole valley |
-| 4 | Dusk | The aqueduct, the scientist's cache, the old cistern | Someone else survived down here |
-| 5 | Night | The crawlspace, the save room | Sleep, waking, Chris; her credits |
+| 1 | Dawn to morning | Ranger Station 3 | Alone for the first time; finding her feet |
+| 2 | Midday | The logging camp | The infection has reached the mountain |
+| 3 | Afternoon | The pump house | Umbrella built under the whole valley |
+| 4 | Dusk | The aqueduct | Someone else survived down here |
+| 5 | Night | The save room | Sleep, waking, Chris; her credits |
+
+## How the levels work
+
+- **Every act is a hub with spokes.** The way on from the hub is blocked.
+  What clears it is out along a spoke, and that spoke is blocked by
+  something found along another. She goes out, comes back, goes out again,
+  and the hub changes as she does: the lights come on, a gate stands open,
+  a tree lies off the path.
+- **The way on is never one step.** The thing that clears the way is locked
+  up, and what unlocks it is somewhere else: power for a machine, fuel for
+  the generator, a key on a dead man.
+- **Shortcuts.** Once she is past an obstacle, something on the far side
+  opens a quick way back: a gate that only opens from one side, a lowered
+  bridge section, a lift. Later acts send her back for something she saw and
+  could not use yet, and the shortcut makes that a short walk.
+- **Something moves in every scene:** a lamp flame, smoke from a chimney,
+  grass in the wind, a river far below. The backgrounds loop a few seconds
+  of animation and change when the story changes them.
+- **Places tell their own story** through what was left in them.
+- **The light tells the time.** Each act is rendered for its hour.
 
 ## Places
 
@@ -48,62 +57,93 @@ Each place is one or more new rooms: our own backgrounds, cameras, collision
 and scripts. Room ids come from the free slots in stages 3, 4 and 5 (14, 14
 and 10 slots); a room's stage only decides its file name and id.
 
-### Act 1: dawn to morning
+### Act 1: the mountain, dawn to morning
 
-1. **The ridge.** The game opens here. Smoke rises from the training facility
-   below. Billy has just gone into the trees. Her first thought sets her goal:
-   the Bravo team's last position was near an old mansion in the valley.
-2. **The forest trail.** The mountain trail room we already have, re-rendered
-   at morning. Crows.
-3. **The ranger station.** A yard with the ranger's cabin, his tool shed and
-   his truck. The trail down is blocked by a pine the storm brought down.
-   - The cabin: he left in a hurry. Breakfast half eaten, a chair knocked
-     over, the rifle gone from its rack, the east window smashed in with blood
-     on the sill. The radio picks up S.T.A.R.S. chatter. His logbook says he
-     meant to winch the pine clear after breakfast, and that the crank is in
-     the shed. The shed key hangs by the door; a first aid spray is on the
-     table.
-   - The yard: his rifle lies empty in the grass by drag marks into the trees.
-     Once she has the key, a Cerberus comes out of them.
-   - The shed: padlocked. Inside, the chainsaw he gave up on, and the crank.
-   - The truck: the crank turns the winch, and the pine drags off the trail.
-4. **The ravine bridge.** A plank footbridge over a gorge, adders in the long
-   grass, and the valley trail sign on the far side.
+Hub: **Ranger Station 3**, a yard with the ranger's cabin, his tool shed and
+his truck. Three ways lead out of it.
 
-### Act 2: midday
+| Room | Built | What is there |
+| --- | --- | --- |
+| The ridge | yes | Where the game opens; the training facility burning below |
+| The mountain trail | yes | Down through the spruces to the station |
+| The station yard | yes | The hub: the pine across the trail down, the truck and its winch, his rifle in the grass |
+| The cabin | yes | He left in a hurry; the radio; the logbook; the shed key |
+| The tool shed | yes | The winch's crank; spare fuses he had no use for |
+| The woods behind the cabin | | Where the drag marks lead: the ranger, dead, his truck keys in his jacket; dogs |
+| The forestry road | | West out of the yard to a chained gate |
+| The generator hut | | Powers the station and the gorge ferry; out of fuel |
+| The fire lookout tower, foot and top | | The ferry's control key; the valley seen from above, and smoke where Bravo's helicopter came down |
+| The gorge, near bank | yes, as the bridge | The footbridge is out in the middle; the cable ferry's station |
+| The gorge, far bank | | The valley trail on down; the lever that lowers the bridge's missing section |
 
-5. **The logging camp.** A yard of stacked timber and trucks.
-6. **The bunkhouse and the sawmill.** Interiors. The loggers have turned.
-   Zombies, a shotgun, and a fuse for the cable car.
-7. **The cable car station.** She restores power and rides down to the
-   valley. The ride is a fade between two stations.
+How it chains:
 
-### Act 3: afternoon
+1. The trail down is blocked by a fallen pine. The truck's winch can drag
+   it, but its crank is in the shed, the shed is padlocked, and the key is in
+   the cabin. Taking the key brings a dog out of the trees. *(Built.)*
+2. Past the pine the gorge bridge is out. The cable ferry across needs power
+   and its control key.
+3. The power is the generator up the forestry road. The road's gate is
+   chained; bolt cutters are in the truck's toolbox, which is locked; the
+   truck keys are on the ranger's body in the woods, where the dogs are.
+4. The generator is dry. The jerrycan in the truck's bed, there from the
+   start, fills it. The station's lights come on.
+5. The ferry key is at the top of the fire lookout tower, further along the
+   forestry road.
+6. Across on the ferry, the far bank's lever lowers the bridge's missing
+   section: the shortcut back to the station. Act 2 sends her back up it for
+   the fuses in the shed.
 
-8. **The pump house.** By the reservoir, Umbrella's water works, built to
-   look like a municipal plant. She has to work out its pressure controls.
-9. **The service tunnel.** Concrete, emergency lights, Web Spinners. Umbrella
-   signage gives the first hint of what lies under the valley.
+### Act 2: the logging camp, midday
 
-### Act 4: dusk
+Hub: **the camp yard**, stacked timber and trucks. About twelve rooms: the
+yard; the bunkhouse, where the loggers have turned; the mess hall; the
+foreman's office and its safe; the sawmill; the mill pond; the log flume; the
+cable car's upper station; the fuel depot; the radio shed; the lower camp.
 
-10. **The aqueduct.** An old brick watercourse, partly flooded, that predates
-    Umbrella. Something large moves in the water.
-11. **The scientist's cache.** A researcher who fled the lab is hiding in a
-    supply room, hurt and frightened. He tells her what the T-virus is doing
-    to the valley, and that the tunnels come up under the mansion. He gives
-    her the key to the cistern gate. When she comes back past, he is gone,
-    or worse.
-12. **The cistern.** Under the mansion's foundations: a Black Tiger's nest.
-    Her first real boss fight.
+- The cable car down to the valley needs power at the sawmill, a fuse (the
+  ones left in the ranger's shed: back up over the Act 1 shortcut), and the
+  operator's key from the foreman's safe, its combination on the bunkhouse
+  calendar.
+- The sawmill's power needs the belt refitted and the mill race opened from
+  the pond.
+- The log flume is a one-way ride from the mill down to the lower camp, and
+  once ridden, the lower camp's gate opens back to the yard.
+
+### Act 3: the water works, afternoon
+
+Hub: **the pump house** by the reservoir, Umbrella's water works built to
+look like a municipal plant. About ten rooms: the dam walkway, the pump
+house, its control room, the valve gallery, the filter beds, the service
+tunnel's mouth, the tunnel junction, the maintenance office, the Web
+Spinners' storeroom, Umbrella's lift.
+
+- The pumps' pressure has to be set, valve by valve, from readings around
+  the plant, to drain the tunnel.
+- The lift down needs power and a keycard; once down, the lift is the
+  shortcut back up.
+
+### Act 4: the aqueduct, dusk
+
+Hub: **the aqueduct**, an old brick watercourse that predates Umbrella,
+partly flooded. About ten rooms: the channel, the sluice room, the
+scientist's cache, the brick gallery, the Neptune pool, the old cellar, the
+cistern and its control room, the gate under the mansion.
+
+- A researcher who fled the lab is hiding in the cache, hurt and frightened.
+  He tells her what the T-virus is doing to the valley and that the tunnels
+  come up under the mansion, and gives her the key to the cistern gate. When
+  she comes back past, he is gone, or worse.
+- Draining the aqueduct at the sluice opens a dry way back to the cache.
+- The cistern under the mansion's foundations is a Black Tiger's nest: her
+  first real boss fight.
 
 ### Act 5: night
 
-13. **The crawlspace.** A low passage beneath the floorboards, to a hatch.
-14. **The save room.** She climbs up through the floor of ROOM1000. Too
-    tired to go on, she sits against the wall. The screen fades, and time
-    passes. Footsteps wake her, and Chris walks in: the meeting we already
-    built. Then her own credits.
+The crawlspace, the passage under the floorboards, and the save room. She
+climbs up through the floor of ROOM1000. Too tired to go on, she sits against
+the wall. The screen fades, and time passes. Footsteps wake her, and Chris
+walks in: the meeting we already built. Then her own credits.
 
 ## Her voice
 
@@ -189,15 +229,31 @@ Built so far, beyond the list above:
 - **Rendering on the Blender machine** (`tools/rebecca/day/render.ts`, with
   `--preview` for a quick look).
 
+## Testing
+
+`tools/harness/tests/day.ts` plays the day, or part of it, the way a player
+would. Each stretch starts from a checkpoint: the game boots straight into
+the stretch's room with the flags and items a player would have by then, so
+a change to the shed is tested from the shed, not from the ridge.
+
+    node tools/harness/tests/day.ts shed           # just the shed
+    node tools/harness/tests/day.ts shed bridge    # from the shed to the bridge
+    node tools/harness/tests/day.ts                # the whole day, end to end
+
+The whole day runs before a recording for the owner, before a merge, and
+after a change to the engine.
+
 ## Building order
 
 Each step ends with something playable, a harness test that plays it, and a
 recording on the research page.
 
-1. **The production line, on Act 1.** Room specs, masks and collision from
-   the scene, proved by building the ridge and the ranger's lookout.
-2. **Act 1 complete.** The ridge, the trail at morning, the lookout and the
-   bridge, played from a new game.
-3. **Acts 2 to 4,** one at a time.
-4. **Act 5,** with the sleep, the meeting and her credits.
-5. **Polish:** sound, music choices, balance, and her lines read aloud.
+1. **The production line.** Room specs, masks, moving backgrounds, camera
+   floors and collision from the scene. *(Done.)*
+2. **Act 1's first loop.** The ridge, the trail, the station yard, the cabin,
+   the shed, the winch and the gorge. *(Done.)*
+3. **Act 1 complete.** The woods, the forestry road, the generator, the
+   lookout tower, the ferry and the far bank's shortcut.
+4. **Acts 2 to 4,** one at a time, each a hub with its spokes and shortcuts.
+5. **Act 5,** with the sleep, the meeting and her credits.
+6. **Polish:** sound, music choices, balance, and her lines read aloud.

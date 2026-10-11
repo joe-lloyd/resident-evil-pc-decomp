@@ -2,7 +2,8 @@
 // it; each starts where the one before ends. docs/REBECCA_DAY.md is the plan,
 // tools/rebecca/day/ the rooms. Zones are the ones the rooms' scripts set
 // (game units, metres * 1700 in the new rooms).
-import { check, fight, goTo, settle, useDoor, useItem } from './flows.ts';
+import { check, fight, goTo, settle, useFightBack, useItem } from './flows.ts';
+import type { GameLink } from './link.ts';
 import { Run, commonFlag, inRoom } from './scenario.ts';
 import type { GameState } from './state.ts';
 
@@ -26,6 +27,7 @@ const CRANK_FLAG = 243;
 const HEX_CRANK = 30;
 const FIRST_AID_SPRAY = 65;
 const CERBERUS = 2;
+const ADDER = 10;
 
 const YARD = {
   pine: { x: 24310, z: 19380, w: 4930, d: 1360 },
@@ -45,7 +47,7 @@ const SHED = {
   crank: { x: 2805, z: 3145, w: 1105, d: 1360 },
 };
 const BRIDGE = {
-  sign: { x: 5950, z: 32640, w: 8500, d: 1360 },
+  sign: { x: 5950, z: 28900, w: 8500, d: 1360 },
 };
 
 /** Check a zone until `done` holds, a few tries; returns the last state. */
@@ -177,7 +179,9 @@ export async function bridge(run: Run): Promise<void> {
   if (!commonFlag(s, 204)) run.fail('her first thought at the gorge never showed');
   await run.picture('day-bridge-0');
   await heal(run);
-  s = await goTo(link, run.dataDirs, 10200, 19500, { radius: 500 });
+  // Adders lie low in the grass and only strike close: walk past them.
+  useFightBack(9000, [ADDER]);
+  s = await goTo(link, run.dataDirs, 10200, 18700, { radius: 500 });
   run.log(s, 'on the bridge');
   await run.picture('day-bridge-mid');
   s = await check(link, BRIDGE.sign);
@@ -186,14 +190,89 @@ export async function bridge(run: Run): Promise<void> {
   await run.picture('day-bridge-1');
 }
 
-/** Act 1 from the ridge to the far side of the gorge. */
-export async function act1(run: Run): Promise<void> {
-  await ridge(run);
-  await trail(run);
-  await yard(run);
-  await lookout(run);
-  await dog(run);
-  await shed(run);
-  await winch(run);
-  await bridge(run);
+// ---------------------------------------------------------------------------
+// Stretches and checkpoints: start a test where the stretch under test starts
+// ---------------------------------------------------------------------------
+
+type FlagSet = readonly [bank: number, index: number, on: boolean];
+
+/** Where a stretch starts, and what a player who got there carries and has done. */
+export interface Checkpoint {
+  readonly room: { stage: number; room: number };
+  readonly at: { x: number; z: number; angle: number };
+  readonly flags: readonly FlagSet[];
+  readonly items: readonly (readonly [id: number, qty: number])[];
+}
+
+// Flag banks: 1 FG_COMMON, 2 FG_LOCK, 3 FG_ENEMY (set = dead), 7 FG_ITEM (clear = taken).
+const SEEN_RIDGE: FlagSet = [1, 200, true];
+const SEEN_YARD: FlagSet = [1, 202, true];
+const SEEN_CABIN: FlagSet = [1, 201, true];
+const SEEN_SHED: FlagSet = [1, 203, true];
+const TOOK_SPRAY: FlagSet = [7, SPRAY_FLAG, false];
+const TOOK_KEY: FlagSet = [7, KEY_FLAG, false];
+const DOG_DEAD: FlagSet = [3, 200, true];
+const SHED_OPEN: FlagSet = [2, 60, true];
+const TOOK_CRANK: FlagSet = [7, CRANK_FLAG, false];
+const PINE_MOVED: FlagSet = [1, 205, true];
+const SMALL_KEY = 61;
+const UP_TO_THE_CABIN = [SEEN_RIDGE, SEEN_YARD, SEEN_CABIN, TOOK_SPRAY, TOOK_KEY];
+const UP_TO_THE_SHED = [...UP_TO_THE_CABIN, DOG_DEAD, SHED_OPEN, SEEN_SHED, TOOK_CRANK];
+
+/** The day's stretches in order: each one's function and where it starts (none: a new game). */
+export const STRETCHES: Record<string, { play: (run: Run) => Promise<void>; from?: Checkpoint }> = {
+  ridge: { play: ridge },
+  trail: { play: trail, from: { room: DAY.trail, at: { x: 3500, z: 1200, angle: 0xc00 }, flags: [SEEN_RIDGE], items: [] } },
+  yard: { play: yard, from: { room: DAY.yard, at: { x: 5610, z: 4930, angle: 0xe00 }, flags: [SEEN_RIDGE], items: [] } },
+  lookout: { play: lookout, from: { room: DAY.lookout, at: { x: 6715, z: 9180, angle: 0x400 }, flags: [SEEN_RIDGE, SEEN_YARD], items: [] } },
+  dog: {
+    play: dog,
+    from: { room: DAY.yard, at: { x: 22015, z: 13515, angle: 0xc00 }, flags: UP_TO_THE_CABIN, items: [[FIRST_AID_SPRAY, 1], [SMALL_KEY, 1]] },
+  },
+  shed: {
+    play: shed,
+    from: { room: DAY.yard, at: { x: 12000, z: 13000, angle: 0x800 }, flags: [...UP_TO_THE_CABIN, DOG_DEAD], items: [[FIRST_AID_SPRAY, 1], [SMALL_KEY, 1]] },
+  },
+  winch: {
+    play: winch,
+    from: { room: DAY.yard, at: { x: 10880, z: 13090, angle: 0 }, flags: UP_TO_THE_SHED, items: [[FIRST_AID_SPRAY, 1], [SMALL_KEY, 1], [HEX_CRANK, 1]] },
+  },
+  bridge: {
+    play: bridge,
+    from: { room: DAY.bridge, at: { x: 10200, z: 6120, angle: 0xc00 }, flags: [...UP_TO_THE_SHED, PINE_MOVED], items: [[FIRST_AID_SPRAY, 1], [SMALL_KEY, 1]] },
+  },
+};
+
+export const stretchNames = Object.keys(STRETCHES);
+
+/** The game's launch arguments for a test starting at `stretch`: a new game, or straight into its room. */
+export function bootFor(stretch: string): string {
+  const from = STRETCHES[stretch]?.from;
+  return from ? `--mode REB --boot rebecca:${from.room.stage}:${from.room.room}` : '--mode REB --boot rebecca';
+}
+
+/**
+ * Make the game what it would be at `cp` after playing up to it: the flags,
+ * her bag, then the room entered again so its scripts set it up for those
+ * flags, and her on the spot.
+ */
+export async function reach(link: GameLink, cp: Checkpoint): Promise<GameState> {
+  await settle(link);
+  for (const [bank, index, on] of cp.flags) await link.setFlag(bank, index, on);
+  const s = await link.state();
+  for (const [id, qty] of cp.items) if (!s.items.some((it) => it.id === id)) await link.give(id, qty);
+  await link.room(cp.room.stage, cp.room.room);
+  await settle(link, (st) => inRoom(st, cp.room));
+  await link.place(cp.at.x, cp.at.z, cp.at.angle);
+  return settle(link, (st) => inRoom(st, cp.room));
+}
+
+/** Play the stretches from `first` to `last`, in order, starting at `first`'s checkpoint. */
+export async function play(run: Run, first: string, last: string): Promise<void> {
+  const i0 = stretchNames.indexOf(first);
+  const i1 = stretchNames.indexOf(last);
+  if (i0 < 0 || i1 < i0) throw new Error(`no stretches from ${first} to ${last}; the stretches are ${stretchNames.join(', ')}`);
+  const from = STRETCHES[first]!.from;
+  if (from) run.log(await reach(run.link, from), `checkpoint: the start of ${first}`);
+  for (const name of stretchNames.slice(i0, i1 + 1)) await STRETCHES[name]!.play(run);
 }

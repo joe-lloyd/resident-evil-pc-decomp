@@ -170,10 +170,9 @@ function collision(json: RoomJson): Uint8Array {
   return w.out();
 }
 
-/** The NPC navigation grid: one zone, the whole floor (its corners are signed, so a long room is cut at 0x7FFF). */
+/** The NPC navigation grid: one zone, the whole floor. */
 function walkZones(bounds: Rect): Uint8Array {
-  const c = (v: number) => Math.min(v, 0x7fff);
-  return new Writer().u8(1).u8(0).i16(c(bounds.x0)).i16(c(bounds.z0)).i16(c(bounds.x1)).i16(c(bounds.z1)).u16(0x03ff).u16(0).out();
+  return new Writer().u8(1).u8(0).i16(bounds.x0).i16(bounds.z0).i16(bounds.x1).i16(bounds.z1).u16(0x03ff).u16(0).out();
 }
 
 /** One catch-all footstep zone: the scan has no terminator. */
@@ -197,6 +196,10 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
   const json = JSON.parse(readFileSync(path.join(renders, 'room.json'), 'utf8')) as RoomJson;
   if (spec.cameraFloor !== 'auto' && json.cameras.length !== spec.cameraFloor.length) {
     throw new Error(`${spec.slug}: the scene has ${json.cameras.length} cameras, the spec gives floor for ${spec.cameraFloor.length}`);
+  }
+  // The player's position is a signed 16-bit pair: past 0x7FFF she wraps to the far side of the world.
+  if (Math.max(json.bounds.x1, json.bounds.z1) > 0x7fff) {
+    throw new Error(`${spec.slug}: the floor reaches ${Math.max(json.bounds.x1, json.bounds.z1)}; rooms must stay under 32768 game units`);
   }
   const [donorStage, donorFile] = spec.donor.split('/') as [string, string];
   const donor = readFileSync(findFile(findFile(baseDir, donorStage), donorFile));
