@@ -12,6 +12,8 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDayRoom } from './day/room.ts';
+import { buildCardSheet } from './card.ts';
+import { readPng } from '../harness/image.ts';
 import { dayRooms, dayStart } from './day/rooms.ts';
 
 /**
@@ -70,6 +72,16 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   mkdirSync(path.join(reb, 'DATA'), { recursive: true });
   writeFileSync(path.join(reb, 'DATA', 'BIO_CARD.DAT'), card);
   written.push('DATA/BIO_CARD.DAT');
+
+  // Her card on the character select screen, built from the player's own sheet and faces.
+  const dataDir = findFile(baseDir, 'DATA');
+  const sheet = buildCardSheet(
+    readFileSync(findFile(dataDir, 'Select_b.tim')),
+    readFileSync(findFile(dataDir, 'Statface.tim')),
+    readPng(path.join(here, 'card', 'rebecca-id-lettering.png')),
+  );
+  writeFileSync(path.join(reb, 'DATA', 'Select_b.tim'), sheet);
+  written.push('DATA/Select_b.tim');
 
   // New rooms: the rooms of her day (day/rooms.ts).
   for (const room of dayRooms) written.push(...buildDayRoom(room, baseDir, outDir, raeCli));

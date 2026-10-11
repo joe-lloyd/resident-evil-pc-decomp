@@ -1,7 +1,9 @@
-// Rebecca's scenario from the title screen, the way a player starts it:
-// NEW GAME in REB mode must show her opening narration and start her on the
-// ridge (stage 2 room 0x13), near the edge, facing out over the valley. That
-// proves the overlay, the card's start room and spot, and the new room itself.
+// Rebecca's day from the title screen, the way a player starts it: the
+// shipped game's NEW GAME shows the character select, which has her card when
+// her day is installed. Turning the cards to hers and choosing her must switch
+// to her mode, show her opening narration and start her on the ridge (stage 2
+// room 0x13, which only her overlay has), near the edge, facing out over the
+// valley.
 import { open } from '../lab.ts';
 import { Key } from '../link.ts';
 import { settle } from '../flows.ts';
@@ -10,8 +12,9 @@ import { snapshot } from '../snapshot.ts';
 
 const CHAR_REBECCA = 3;
 const NARRATION = 0x7f;
+const OUT = process.env.OUT ?? '/tmp/rae-tests';
 
-const session = await open(Number(process.env.PORT ?? 7801), '--mode REB');
+const session = await open(Number(process.env.PORT ?? 7801), '--mode OG');
 const failures: string[] = [];
 const expect = (ok: boolean, what: string) => {
   if (!ok) failures.push(what);
@@ -24,6 +27,13 @@ try {
   await link.tap(Key.action, 3); // PRESS START BUTTON
   await link.frames(45);
   await link.tap(Key.action, 3); // NEW GAME
+  await link.frames(90);
+  console.log(`picture: ${await snapshot(link, OUT, 'reb-new-game-select')}`);
+  // Chris is in front; LEFT turns the cards back round to Rebecca.
+  await link.tap(Key.left, 3);
+  await link.frames(75);
+  console.log(`picture: ${await snapshot(link, OUT, 'reb-new-game-rebecca-card')}`);
+  await link.tap(Key.action, 3); // choose her
 
   const narration = await link.waitFor((s) => s.messageId === NARRATION, 'her opening narration', 60_000).catch(() => undefined);
   expect(narration !== undefined, 'no opening narration (message 0x7f)');
@@ -33,7 +43,7 @@ try {
   expect(s.player.id === CHAR_REBECCA, `player ${s.player.id}, expected Rebecca`);
   expect(s.camera === 0, `camera ${s.camera}, expected 0`);
   expect(Math.abs(s.player.x - 7000) <= 100 && Math.abs(s.player.z - 8800) <= 100, `started at (${s.player.x}, ${s.player.z}), expected near (7000, 8800)`);
-  console.log(`picture: ${await snapshot(link, process.env.OUT ?? '/tmp/rae-tests', 'reb-new-game')}`);
+  console.log(`picture: ${await snapshot(link, OUT, 'reb-new-game')}`);
 
   if (failures.length) {
     console.error(`FAIL\n  ${failures.join('\n  ')}`);

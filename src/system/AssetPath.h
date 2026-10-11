@@ -124,6 +124,10 @@ const char*  ResolveAssetRoot(const char* path, char* out, size_t outSize);
 // the base tree. Lets callers ask whether a file ships, overlay files included,
 // without loading it.
 int          AssetFileExists(const char* path);
+// Whether `mode`'s overlay folder holds `path` (an asset-rooted path), whatever
+// mode is active: the character select asks it whether Rebecca's day is
+// installed.
+int          ModeHasAsset(const char* mode, const char* path);
 
 #ifdef __cplusplus
 }

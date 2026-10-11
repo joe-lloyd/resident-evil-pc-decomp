@@ -52,7 +52,18 @@ static unsigned char g_selState = 0;       // DAT_00ac9880 - main state
 static unsigned char g_selSubState = 0;    // DAT_00ac9881
 static unsigned char g_bSelResetGameFlag = 0;  // 0x00ac9882
 
-static unsigned char g_selSelected = 0;    // DAT_00ac93f0 - 0=Chris, 1=Jill
+static unsigned char g_selSelected = 0;    // DAT_00ac93f0 - the panel in front, 0 or 1
+
+// Port addition: Rebecca's card. The two panels stay; each shows one of up to
+// three characters, so LEFT and RIGHT turn through them. The back panel shows
+// who the next press brings forward. Rebecca is there when her day is
+// installed (the REB overlay holds her copy of the card sheet).
+enum { SEL_CHRIS = 0, SEL_JILL = 1, SEL_REBECCA = 2 };
+static unsigned char g_panelChar[2] = { SEL_CHRIS, SEL_JILL };
+static unsigned char g_selCount = 2;
+// The ID half of each character's card on the sheet (the badge half is shared).
+static const unsigned char g_idUV[3][2] = { { 0x50, 0x00 }, { 0x00, 0x80 }, { 0x70, 0x80 } };
+static const char* const kRebeccaSheet = GAME_DATA_ROOT "data\\select_b.tim";
 static char g_selTimer = 0;                // DAT_00ac93f1
 static unsigned char g_selSwapDir = 0;     // DAT_00ac93f2
 
@@ -277,22 +288,22 @@ static void CharSelectDrawPortraits(void)
     if (g_char0Tpage > g_char1Tpage) {
         // Char 0 has higher tpage = back panel → draw first
         CharSelectRenderSprite(0, 0, 0x50, 0x80, g_char0PosX - 0x100, g_char0PosY - 0x98, 0, 0, scale0, g_char0Tpage << 4, 0x0C);
-        CharSelectRenderSprite(0x50, 0, 0x70, 0x80, g_char0PosX - 0x100, g_char0PosY - 0x98, -0x50, 0, scale0, g_char0Tpage << 4, 0x0C);
+        CharSelectRenderSprite(g_idUV[g_panelChar[0]][0], g_idUV[g_panelChar[0]][1], 0x70, 0x80, g_char0PosX - 0x100, g_char0PosY - 0x98, -0x50, 0, scale0, g_char0Tpage << 4, 0x0C);
         // Shadow on back card
         CharSelectDrawShadowRect(g_char0PosX, g_char0PosY, scale0);
         // Char 1 is front panel → draw last
         // Original FUN_00492d80: char1 first sprite uses texU=0, texV=0 (same as char0 left half)
         CharSelectRenderSprite(0, 0, 0x50, 0x80, g_char1PosX - 0x100, g_char1PosY - 0x98, 0, 0, scale1, g_char1Tpage << 4, 0x0C);
-        CharSelectRenderSprite(0, 0x80, 0x70, 0x80, g_char1PosX - 0x100, g_char1PosY - 0x98, -0x50, 0, scale1, g_char1Tpage << 4, 0x0C);
+        CharSelectRenderSprite(g_idUV[g_panelChar[1]][0], g_idUV[g_panelChar[1]][1], 0x70, 0x80, g_char1PosX - 0x100, g_char1PosY - 0x98, -0x50, 0, scale1, g_char1Tpage << 4, 0x0C);
     } else {
         // Char 1 has higher tpage = back panel → draw first
         CharSelectRenderSprite(0, 0, 0x50, 0x80, g_char1PosX - 0x100, g_char1PosY - 0x98, 0, 0, scale1, g_char1Tpage << 4, 0x0C);
-        CharSelectRenderSprite(0, 0x80, 0x70, 0x80, g_char1PosX - 0x100, g_char1PosY - 0x98, -0x50, 0, scale1, g_char1Tpage << 4, 0x0C);
+        CharSelectRenderSprite(g_idUV[g_panelChar[1]][0], g_idUV[g_panelChar[1]][1], 0x70, 0x80, g_char1PosX - 0x100, g_char1PosY - 0x98, -0x50, 0, scale1, g_char1Tpage << 4, 0x0C);
         // Shadow on back card
         CharSelectDrawShadowRect(g_char1PosX, g_char1PosY, scale1);
         // Char 0 is front panel → draw last
         CharSelectRenderSprite(0, 0, 0x50, 0x80, g_char0PosX - 0x100, g_char0PosY - 0x98, 0, 0, scale0, g_char0Tpage << 4, 0x0C);
-        CharSelectRenderSprite(0x50, 0, 0x70, 0x80, g_char0PosX - 0x100, g_char0PosY - 0x98, -0x50, 0, scale0, g_char0Tpage << 4, 0x0C);
+        CharSelectRenderSprite(g_idUV[g_panelChar[0]][0], g_idUV[g_panelChar[0]][1], 0x70, 0x80, g_char0PosX - 0x100, g_char0PosY - 0x98, -0x50, 0, scale0, g_char0Tpage << 4, 0x0C);
     }
 }
 
@@ -317,8 +328,28 @@ void characterSelectionScreen(void)
 
     LoadSoundBank(BANK_SELECT, g_DataBuffer);
 
-    // Load characters police cards and selection arrow texture
-    LoadFile(GAME_DATA_ROOT "data\\select_b.tim", g_TimImageBuffer__bitmap, 0x20);
+    // Load characters police cards and selection arrow texture. With
+    // Rebecca's day installed, its copy of the sheet adds her card.
+    const bool rebeccaInstalled = ModeHasAsset("REB", kRebeccaSheet) != 0;
+    if (rebeccaInstalled) {
+        char savedMode[32];
+        strncpy(savedMode, GetAssetModeName(), sizeof(savedMode) - 1);
+        savedMode[sizeof(savedMode) - 1] = '\0';
+        SetAssetMode("REB");
+        LoadFile(kRebeccaSheet, g_TimImageBuffer__bitmap, 0x20);
+        SetAssetMode(savedMode);
+    } else {
+        LoadFile(GAME_DATA_ROOT "data\\select_b.tim", g_TimImageBuffer__bitmap, 0x20);
+    }
+    g_selCount = rebeccaInstalled ? 3 : 2;
+    // Her own mode puts her card in front; otherwise Chris, then Jill, as shipped.
+    if (rebeccaInstalled && g_bRebMode) {
+        g_panelChar[0] = SEL_REBECCA;
+        g_panelChar[1] = SEL_CHRIS;
+    } else {
+        g_panelChar[0] = SEL_CHRIS;
+        g_panelChar[1] = SEL_JILL;
+    }
     g_TextureBankID = 0x0A;
     g_TextureCurrentPage = 5;
     LoadTexturePage(g_TimImageBuffer__bitmap, 5, 10, 0x0C, 0, 0, 0, 0);
@@ -514,6 +545,8 @@ void characterSelectionScreen(void)
                         g_selSubState = 0;
                         g_selState = 2;
                         g_selSwapDir = (g_RawPadHeld & 0x8000) ? 1 : 0;
+                        // The back panel turns to whoever this direction brings forward.
+                        g_panelChar[g_selSelected ^ 1] = (unsigned char)((g_panelChar[g_selSelected] + (g_selSwapDir ? g_selCount - 1 : 1)) % g_selCount);
         
                         play_sfx(1, 0);
         
@@ -659,6 +692,8 @@ sub_5:
                 if (g_selTimer == 0) {
                     g_selState = 1;
                     g_selSelected ^= 1;
+                    // Behind again: the card going back shows who comes next.
+                    g_panelChar[g_selSelected ^ 1] = (unsigned char)((g_panelChar[g_selSelected] + 1) % g_selCount);
                 }
                 goto do_update_velocity;
             }
@@ -696,15 +731,32 @@ sub_5:
         case 6:
 case_6:
             // Set selected player and transition to game.
-            g_SelectedCharactedId = g_selSelected;
-            if (g_selSelected != 0) {
-                g_main_state_flags |= MSF_CHAR_VARIANT;
-            }
             g_bGameActive = 2;
             nullsub_0047eb80();
             cleanup_texture_slot(12);
             cleanup_texture_slot(13);
             cleanup_texture_slot(14);
+            if (g_panelChar[g_selSelected] == SEL_REBECCA) {
+                // Port addition: her day is a mode of its own, with its own
+                // rooms in the REB overlay and its own opening, not the
+                // mansion intro movie.
+                g_GameMode = GAME_MODE_REB;
+                SetAssetMode("REB");
+                g_SelectedCharactedId = CHAR_REBECCA;
+                g_main_state_flags &= ~MSF_CHAR_VARIANT;
+                sounds_reset();
+                Task_chain((void*)game_start);
+                return;
+            }
+            if (g_bRebMode) {
+                // Chris or Jill chosen in a session that was Rebecca's: back to the shipped game.
+                g_GameMode = GAME_MODE_OG;
+                SetAssetMode("");
+            }
+            g_SelectedCharactedId = g_panelChar[g_selSelected];
+            if (g_SelectedCharactedId != CHAR_CHRIS) {
+                g_main_state_flags |= MSF_CHAR_VARIANT;
+            }
             DisplayIntroAndStartGame();
             return;
 

@@ -395,6 +395,18 @@ const char* ResolveAssetRoot(const char* path, char* out, size_t outSize)
     return out;
 }
 
+int ModeHasAsset(const char* mode, const char* path)
+{
+    char saved[sizeof(s_modeName)];
+    strncpy(saved, s_modeName, sizeof(saved));
+    SetAssetMode(mode);
+    char resolved[260];
+    const char* file = ResolveAssetRoot(path, resolved, sizeof(resolved));
+    const int hit = s_overlayRoot != NULL && strncmp(file, s_overlayRoot, strlen(s_overlayRoot)) == 0;
+    SetAssetMode(saved);
+    return hit;
+}
+
 int AssetFileExists(const char* path)
 {
     char resolved[260];
