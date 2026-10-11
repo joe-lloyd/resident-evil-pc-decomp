@@ -185,23 +185,19 @@ export async function faceTowards(link: GameLink, x: number, z: number): Promise
   return face(link, headingTo(s.player.x, s.player.z, x, z));
 }
 
+type Zone = { x: number; z: number; w: number; d: number };
+
 /**
- * Go through a door: walk into its zone (the box door_aot_set gives), face
- * into it and press action until the room changes.
+ * Walk up to a zone (a door, a switch, a piano): to the open spot inside it
+ * nearest to the player, or, when it lies wholly inside a wall or furniture,
+ * to the open spot just outside it nearest its middle. Then face its middle,
+ * where the engine's action probe (600 ahead) lands. Returns the state, which
+ * may be in another room if a touch door fired on the way.
  */
-export async function useDoor(
-  link: GameLink,
-  zone: { x: number; z: number; w: number; d: number },
-  timeoutMs = 60_000,
-): Promise<GameState> {
+export async function approach(link: GameLink, zone: Zone): Promise<GameState> {
   const start = await link.state();
   const cx = zone.x + zone.w / 2;
   const cz = zone.z + zone.d / 2;
-  // Door zones run into walls, so aim for the open spot inside the zone that
-  // is nearest to the player, then face the middle (the door). A zone with no
-  // open spot (the stairs in ROOM2010, a door set deep in a wall) is used from
-  // just outside, from the open spot nearest its middle: the engine tests a
-  // point 600 in front of her, which then lands in the zone.
   const shapes = loadShapes(roomDataDirs, start.stage, start.room, start.player.cf);
   const reach = 350;
   const toZone = (x: number, z: number) =>
@@ -230,11 +226,43 @@ export async function useDoor(
     }
   }
   if (inside === Infinity && outsideTarget) target = outsideTarget;
-  const arrived = await goTo(link, roomDataDirs, target.x, target.z, { radius: 250 });
+  let arrived: GameState;
+  try {
+    arrived = await goTo(link, roomDataDirs, target.x, target.z, { radius: 250 });
+  } catch (err) {
+    // Furniture objects block her where the room's collision map does not;
+    // stuck close to the zone is close enough for the action probe.
+    if (!(err instanceof StuckError) || err instanceof DiedError || toZone(err.state.player.x, err.state.player.z) > 800) throw err;
+    arrived = err.state;
+  }
+  if (arrived.stage !== start.stage || arrived.room !== start.room) return arrived;
+  return faceTowards(link, cx, cz);
+}
+
+/** Walk up to a zone, press action once and let whatever opens close. */
+export async function check(link: GameLink, zone: Zone): Promise<GameState> {
+  await approach(link, zone);
+  await link.tap(Key.action, 3);
+  await link.frames(20);
+  return settle(link);
+}
+
+/**
+ * Go through a door: walk up to its zone (the box door_aot_set gives), face
+ * into it and press action until the room changes.
+ */
+export async function useDoor(
+  link: GameLink,
+  zone: Zone,
+  timeoutMs = 60_000,
+): Promise<GameState> {
+  const start = await link.state();
+  const cx = zone.x + zone.w / 2;
+  const cz = zone.z + zone.d / 2;
+  const arrived = await approach(link, zone);
   if (arrived.stage !== start.stage || arrived.room !== start.room) {
     return settle(link, (st) => st.room === arrived.room && st.stage === arrived.stage);
   }
-  await faceTowards(link, cx, cz);
   const deadline = Date.now() + timeoutMs;
   for (;;) {
     await link.tap(Key.action, 3);

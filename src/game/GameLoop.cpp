@@ -486,6 +486,15 @@ switchD_00480ff4_caseD_2:
                 else if ((g_openMenuFlag == 3) && ((short)g_fading_state < 1)) {
                     // State 3 -> 0: menu closing, restore flags
                     g_message_flags = g_short_message_flags | 0x200;
+                    // Port addition: a message a room script opened while the
+                    // room was still fading in (state 2 zeroed the flags) saved
+                    // that 0 as the flags to restore when it closes, which left
+                    // menus, item pickups and, from init, the player's controls
+                    // off for the rest of the visit. Retail scripts never open
+                    // one that early; Rebecca's scenes and chapter titles do.
+                    if ((g_menu_choice_id & 0x80) != 0) {
+                        g_messageFlagsBackup = g_message_flags;
+                    }
                     g_openMenuFlag = 0;
                     FUN_00473f10((int*)g_ScenarioFlags, SCENARIO_FLAG_MENU_FADE_LATCH);
                 }

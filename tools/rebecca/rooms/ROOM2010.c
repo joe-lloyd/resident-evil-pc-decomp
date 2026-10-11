@@ -19,7 +19,13 @@
 // Room messages are 0x80 + index: 132 is message 4.
 // init procedure 0
 door_aot_set(0, 17200, 900, 2000, 2000, 1, 0, 3, 4, 0, ROOM_S02, 6400, 0, 14000, 1024, UNLOCKED, 129);
-door_aot_set(1, 14700, 25700, 1500, 1900, 1, 0, 0, 1, 255, ROOM_S14, 6400, 0, 14000, 3072, UNLOCKED, 0);
+// Door 1 leads nowhere in Chris's game (ROOM2140 is an empty slot). Once
+// Richard's fate is settled it is her way on: a chapter break to the bar.
+if (ck(FG_COMMON, 201, 0)) {
+    door_aot_set(1, 14700, 25700, 1500, 1900, 1, 0, 0, 1, 0, ROOM_10F, 14500, 0, 3500, 3072, UNLOCKED, 129);
+} else {
+    door_aot_set(1, 14700, 25700, 1500, 1900, 1, 0, 0, 1, 255, ROOM_S14, 6400, 0, 14000, 3072, UNLOCKED, 0);
+}
 door_aot_set(2, 12900, 16500, 2100, 1800, 0, 0, 0, 4, 204, ROOM_S15, 8100, 0, 3800, 2048, 54 /* Helmet Key */, 129);
 door_aot_set(3, 11345, 10300, 2605, 2500, 1, 5, 24, 96, 0, ROOM_101, 4300, 0, 3100, 2048, UNLOCKED, 129);
 aot_set(4, 2000, 10300, 300, 1900, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
@@ -61,14 +67,17 @@ if (ck(FG_COMMON, 201, 1)) {
                 set(FG_COMMON, 202, 0);
                 remove_item(66 /* Serum */);
                 message(133, 0, 0);
+                door_aot_set(1, 14700, 25700, 1500, 1900, 1, 0, 0, 1, 0, ROOM_10F, 14500, 0, 3500, 3072, UNLOCKED, 129);
             } else {
                 set(FG_COMMON, 201, 0);
                 message(134, 0, 0);
+                door_aot_set(1, 14700, 25700, 1500, 1900, 1, 0, 0, 1, 0, ROOM_10F, 14500, 0, 3500, 3072, UNLOCKED, 129);
             }
         } else {
             if (cmpw(0, 4, 1, 180)) {
                 set(FG_COMMON, 201, 0);
                 message(134, 0, 0);
+                door_aot_set(1, 14700, 25700, 1500, 1900, 1, 0, 0, 1, 0, ROOM_10F, 14500, 0, 3500, 3072, UNLOCKED, 129);
             }
         }
     }
