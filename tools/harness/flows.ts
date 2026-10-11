@@ -197,26 +197,39 @@ export async function useDoor(
   const start = await link.state();
   const cx = zone.x + zone.w / 2;
   const cz = zone.z + zone.d / 2;
-  // Door zones run into walls, so aim for the open spot nearest to the player
-  // inside the zone, or within reach of it: the engine tests a point 600 in
-  // front of her, so a zone that lies wholly inside a wall (the stairs in
-  // ROOM2010) is used from just outside. Then face the middle (the door).
+  // Door zones run into walls, so aim for the open spot inside the zone that
+  // is nearest to the player, then face the middle (the door). A zone with no
+  // open spot (the stairs in ROOM2010, a door set deep in a wall) is used from
+  // just outside, from the open spot nearest its middle: the engine tests a
+  // point 600 in front of her, which then lands in the zone.
   const shapes = loadShapes(roomDataDirs, start.stage, start.room, start.player.cf);
+  const reach = 350;
+  const toZone = (x: number, z: number) =>
+    Math.hypot(Math.max(zone.x - x, 0, x - (zone.x + zone.w)), Math.max(zone.z - z, 0, z - (zone.z + zone.d)));
   let target = { x: cx, z: cz };
-  let bestDist = Infinity;
-  const inZone = (x: number, z: number) => x > zone.x && x < zone.x + zone.w && z > zone.z && z < zone.z + zone.d;
-  const reach = 500;
+  let inside = Infinity;
+  let outside = Infinity;
+  let outsideTarget: { x: number; z: number } | undefined;
   for (let x = zone.x - reach; x < zone.x + zone.w + reach; x += 150) {
     for (let z = zone.z - reach; z < zone.z + zone.d + reach; z += 150) {
       if (blocked(shapes, x, z)) continue;
-      // Spots outside the zone count for a little more, so one inside wins when there is one.
-      const d = Math.hypot(x - start.player.x, z - start.player.z) + (inZone(x, z) ? 0 : 2000);
-      if (d < bestDist) {
-        bestDist = d;
-        target = { x, z };
+      const off = toZone(x, z);
+      if (off === 0) {
+        const d = Math.hypot(x - start.player.x, z - start.player.z);
+        if (d < inside) {
+          inside = d;
+          target = { x, z };
+        }
+      } else if (off <= reach) {
+        const d = Math.hypot(x - cx, z - cz);
+        if (d < outside) {
+          outside = d;
+          outsideTarget = { x, z };
+        }
       }
     }
   }
+  if (inside === Infinity && outsideTarget) target = outsideTarget;
   const arrived = await goTo(link, roomDataDirs, target.x, target.z, { radius: 250 });
   if (arrived.stage !== start.stage || arrived.room !== start.room) {
     return settle(link, (st) => st.room === arrived.room && st.stage === arrived.stage);
