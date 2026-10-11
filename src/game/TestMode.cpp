@@ -164,6 +164,19 @@ static void on_command(const char* line)
         g_playerEntity.position.x = (short)a;
         g_playerEntity.position.z = (short)b;
         if (c >= 0) g_playerEntity.directionAngle = (short)c;
+    } else if (strcmp(cmd, "give") == 0 && a > 0 && a < 256 && b >= 0 && b < 256) {
+        // Put item a, quantity b, in the first empty slot, so a test can start
+        // from a point in the game with what she would carry there.
+        ItemSlot* items = (ItemSlot*)g_ItemSlotsPointer;
+        int capacity = (items == g_RebeccaItemSlots || (g_playerEntity.id & 3) != CHAR_JILL) ? 6 : 8;
+        int slot = 0;
+        while (items != NULL && slot < capacity && items[slot].Id != 0) slot++;
+        if (items == NULL || slot == capacity) {
+            reply("{\"t\":\"ack\",\"cmd\":\"give\",\"ok\":0,\"frame\":%u}\n", s_frame);
+            return;
+        }
+        items[slot].Id = (unsigned char)a;
+        items[slot].qty = (unsigned char)b;
     } else if (strcmp(cmd, "flag") == 0 && a >= 0 && b >= 0 && b < 256 && (c == 0 || c == 1)) {
         FlagBank fb = flag_bank(a);
         int byteAt = (b >> 5) * 4;

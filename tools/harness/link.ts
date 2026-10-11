@@ -200,6 +200,11 @@ export class GameLink {
     return this.command(`pos ${x} ${z}${angle === undefined ? '' : ` ${angle}`}`, 'pos');
   }
 
+  /** Put an item in her first empty slot. */
+  give(id: number, qty: number): Promise<void> {
+    return this.command(`give ${id} ${qty}`, 'give');
+  }
+
   setFlag(bank: number, index: number, on: boolean): Promise<void> {
     return this.command(`flag ${bank} ${index} ${on ? 1 : 0}`, 'flag');
   }
