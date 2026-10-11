@@ -56,7 +56,8 @@ async function walk(legs: Leg[]): Promise<GameState> {
     s = await useDoor(link, leg.door);
     log(s, 'through the door');
   }
-  return settle(link);
+  // No settle here: a scene that opens on arrival stays on screen for its picture.
+  return s;
 }
 
 /** Take the serum off the medicine shelf in the save room. */
@@ -87,6 +88,7 @@ try {
   const atRichard = await found.catch(() => undefined);
   if (!atRichard) failures.push('the scene with Richard never played');
   else console.log(`picture: ${await snapshot(link, out, 'ch2-00-richard')}`);
+  await settle(link);
 
   if (!serumFirst) {
     await walk(down);
@@ -94,9 +96,9 @@ try {
     await walk(up);
   }
   const end = await link.waitFor((s) => s.messageId === TREATED || s.messageId === DEAD, 'Richard treated', 30_000).catch(() => undefined);
+  console.log(`picture: ${await snapshot(link, out, 'ch2-99-richard-after')}`);
   await settle(link);
   const s = await link.state();
-  console.log(`picture: ${await snapshot(link, out, 'ch2-99-richard-after')}`);
   if (!end) failures.push('neither the treatment nor his death played');
   else if (end.messageId === DEAD) failures.push('Richard died before the serum arrived');
   if (!savedFlag(s)) failures.push('FG_COMMON 202 (Richard saved) is not set');
