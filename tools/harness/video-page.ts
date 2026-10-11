@@ -16,14 +16,14 @@ if (!logPath || !video || !outPath) {
 
 /** Where each chapter's function starts, by the first event it logs. */
 const chapterStarts: [RegExp, string][] = [
-  [/^on the ridge$/, 'Act 1: dawn on the mountain'],
-  [/^at the lookout$/, "The ranger's lookout"],
-  [/in the mountain trail/, 'Prologue and Chapter 1: the back way in'],
-  [/in the save room after the meeting/, "Chapter 2: Bravo's medic"],
-  [/in the bar$/, 'Chapter 3: Moonlight'],
-  [/in the guardhouse passage/, 'Chapter 4: the guardhouse'],
-  [/in the power room/, 'Chapter 5: underground'],
-  [/on the stairs, enemies/, 'Chapter 6: the hunters, and the epilogue'],
+  [/^on the ridge$/, 'Dawn on the ridge'],
+  [/^down the path to the trail$/, 'The mountain trail'],
+  [/^at the ranger station$/, 'Ranger Station 3: the pine across the trail'],
+  [/^into the ranger's cabin$/, "The ranger's cabin"],
+  [/^out to the yard$/, 'The dog'],
+  [/^unlocked the shed and went in$/, 'The tool shed'],
+  [/^out of the shed$/, 'The winch'],
+  [/^down the trail past the pine$/, 'The gorge'],
 ];
 
 type Event = { t: number; room: string; hp: string; what: string };
