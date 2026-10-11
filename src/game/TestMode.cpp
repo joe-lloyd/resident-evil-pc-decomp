@@ -284,11 +284,15 @@ static void build_state(void)
         put("%s[%d,%d]", i ? "," : "", (int)items[i].Id, (int)items[i].qty);
     }
     put("],\"enemies\":[");
-    int count = g_enemy_count < 30 ? g_enemy_count : 30;
-    for (int i = 0; i < count; i++) {
+    // enemy_set puts each enemy in the slot its script names, so the live ones
+    // are not the first g_enemy_count slots; a door clears every slot's status.
+    bool first = true;
+    for (int i = 0; i < 30; i++) {
         const Entity& e = g_EnemiesList[i];
-        put("%s[%d,%d,%d,%d,%d,%d]", i ? "," : "", (int)e.id, (int)e.status_flags,
+        if (e.status_flags == 0) continue;
+        put("%s[%d,%d,%d,%d,%d,%d]", first ? "" : ",", (int)e.id, (int)e.status_flags,
             (int)e.position.x, (int)e.position.y, (int)e.position.z, (int)e.health);
+        first = false;
     }
     put("],\"msg\":{\"choice\":%d,\"id\":%d},\"banks\":[",
         (int)g_menu_choice_id, s_lastMessageId);

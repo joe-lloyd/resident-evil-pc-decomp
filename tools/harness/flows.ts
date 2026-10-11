@@ -90,7 +90,7 @@ export function useRoomData(dirs: string[]): void {
 /** When on, walking stops to shoot any live enemy that comes within this range. */
 let fightBackRange = 0;
 
-export function useFightBack(range = 6000): void {
+export function useFightBack(range = 9000): void {
   fightBackRange = range;
 }
 
@@ -299,16 +299,27 @@ function checkAlive(s: GameState): void {
 }
 
 /**
- * Shoot every live enemy within `range`. RE1 turns the aim onto the nearest
- * enemy in front by itself while aim is held, so: face the target once, hold
- * aim, fire every 16 frames, and turn again only when the target leaves the
- * aim arc. Aim is released when nothing near is left standing. Returns the
- * shots fired. Needs a gun equipped.
+ * Shoot every live enemy within `range` (the default covers any room), nearest
+ * first, one step at a time: face it with aim released, hold aim, fire.
+ * RE1 turns the held aim onto the nearest enemy in front by itself. A target
+ * beyond `shootRange` is waited for, since dogs charge; one that does not come
+ * closer within a few seconds is walked towards. When three shots in a row
+ * leave its health unchanged she turns to it again. Returns the shots fired.
+ * Needs a gun equipped.
  */
-export async function fight(link: GameLink, { range = 9000, timeoutMs = 90_000 }: { range?: number; timeoutMs?: number } = {}): Promise<number> {
+export async function fight(
+  link: GameLink,
+  { range = 40_000, shootRange = 7000, timeoutMs = 120_000 }: { range?: number; shootRange?: number; timeoutMs?: number } = {},
+): Promise<number> {
   const deadline = Date.now() + timeoutMs;
   let shots = 0;
   let aiming = false;
+  let misses = 0;
+  let waitedFrom: { d: number; at: number } | undefined;
+  const release = async () => {
+    if (aiming) await link.up(Key.aim);
+    aiming = false;
+  };
   try {
     for (;;) {
       const s = await link.state();
@@ -320,21 +331,46 @@ export async function fight(link: GameLink, { range = 9000, timeoutMs = 90_000 }
         .sort((a, b) => a.d - b.d);
       if (live.length === 0) return shots;
       if (Date.now() > deadline) throw new StuckError(`${live.length} enemies still standing`, s);
-      const target = live[0].e;
+      const { e: target, d } = live[0];
       const off = Math.abs(turnBetween(s.player.angle, headingTo(s.player.x, s.player.z, target.x, target.z)));
-      if (!aiming || off > 500) {
-        // Turning is done with aim released; then aim again.
-        if (aiming) await link.up(Key.aim);
+      if (process.env.HARNESS_TRACE) console.log(`    fight type ${target.type} hp ${target.hp} at ${Math.round(d)} off ${off} her hp ${s.player.hp} shots ${shots}`);
+
+      if (d > shootRange) {
+        // Out of reach: wait aimed for it to come, then go to it.
+        if (!waitedFrom || d < waitedFrom.d - 500) waitedFrom = { d, at: Date.now() };
+        if (Date.now() - waitedFrom.at < 4000) {
+          if (!aiming || off > 300) {
+            await release();
+            await faceTowards(link, target.x, target.z).catch(() => undefined);
+            await link.down(Key.aim);
+            aiming = true;
+          }
+          await link.frames(6);
+        } else {
+          await release();
+          await faceTowards(link, target.x, target.z).catch(() => undefined);
+          await link.tap(Key.up, 12);
+          await link.frames(12);
+        }
+        continue;
+      }
+      waitedFrom = undefined;
+      if (!aiming || off > 500 || misses >= 3) {
+        await release();
         await faceTowards(link, target.x, target.z).catch(() => undefined);
         await link.down(Key.aim);
         aiming = true;
+        misses = 0;
         await link.frames(6);
       }
+      const before = target.hp;
       await link.tap(Key.action, 3);
       shots++;
-      await link.frames(16);
+      const after = await link.frames(16);
+      const same = after.enemies.find((e) => e.type === target.type && Math.hypot(e.x - target.x, e.z - target.z) < 2500);
+      misses = same && same.hp === before ? misses + 1 : 0;
     }
   } finally {
-    if (aiming) await link.up(Key.aim);
+    await release();
   }
 }

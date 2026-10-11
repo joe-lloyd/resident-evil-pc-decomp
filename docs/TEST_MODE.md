@@ -51,7 +51,7 @@ reports raw values; `tools/harness/state.ts` turns them into meanings.
 | `charModel` | `g_CharacterModelId`; 3 is Rebecca |
 | `player` | `id`, `x`, `y`, `z`, `angle`, `hp`, `maxHp`, `weapon` |
 | `items` | `[id, qty]` for each slot: 6 for Chris and Rebecca, 8 for Jill |
-| `enemies` | `[type, status, x, y, z, hp]` for each entry in `g_EnemiesList` |
+| `enemies` | `[type, status, x, y, z, hp]` for each occupied slot of `g_EnemiesList` (status not 0) |
 | `msg` | `choice` (`g_menu_choice_id`; 0x80 means a message is open) and `id`, the last message shown |
 | `banks` | script flag banks 0-9 as hex bytes, numbered like `cmd_bit_test` |
 
@@ -72,10 +72,8 @@ One per line. Each is answered with `{"t":"ack","cmd":...,"ok":0|1}`.
 | `flag <bank> <index> <0\|1>` | clear or set a script flag |
 | `shot <path>` | save the next frame's back buffer as a BMP on the game machine |
 
-The back buffer has no pre-rendered background. `tools/harness/snapshot.ts`
-lays the room's `.pak` background under the shot to make a viewable picture. It
-looks in the REB overlay first (`RE1_OVERLAY`, default `/tmp/rae-reb/REB`), then
-in the game data (`RE1_DATA`, default `/tmp/re1-pc`).
+The shot is the whole 640x480 frame, background included.
+`tools/harness/snapshot.ts` fetches it and saves it as a PNG.
 
 ## The harness
 
