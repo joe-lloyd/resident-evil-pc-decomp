@@ -123,7 +123,7 @@ try {
   expect(s.stage === 2 && s.room === 0, `the door led to stage ${s.stage} room ${s.room}, expected stage 2 room 0`);
   if (s.stage === 2 && s.room === 0) {
     expect(Math.abs(s.player.x - 23800) <= 600 && Math.abs(s.player.z - 27500) <= 600, `arrived at (${s.player.x}, ${s.player.z}), expected near the garden gate (23800, 27500)`);
-    expect(s.camera === 2, `arrived under camera ${s.camera}, expected the entry camera 2`);
+    expect(s.camera === 4, `arrived under camera ${s.camera}, expected camera 4, the iron gate`);
     console.log(`picture: ${await snapshot(link, OUT, 'mountain-trail-garden')}`);
   }
 

@@ -174,19 +174,23 @@ function overwrite(rdt: Uint8Array, view: DataView, r: Region, fill: (c: Cursor)
 // The room's data
 // ---------------------------------------------------------------------------
 
-/** Twelve-bit PS1 channels, fed to setBackColor: a cool, low dawn ambient. */
-const AMBIENT = [1250, 1200, 1350] as const;
+/**
+ * Twelve-bit PS1 channels, fed to setBackColor: a cool night ambient, a
+ * little under the garden's (ROOM3000 uses 1167, 1087, 1056).
+ */
+const AMBIENT = [1000, 1080, 1120] as const;
 
 /**
  * Three point lights above the trail. A point light's colour falls off with
  * the horizontal distance to the character (update_entity_lighting), and its
- * radius is the distance at which it reaches zero. Two warm sun-side lights
- * cover the two halves of the trail, a faint cool one fills the gap.
+ * radius is the distance at which it reaches zero. Two cool green-white
+ * lights stand where the background's key lights are, one over each half of
+ * the trail, as dim as the garden's (60, 60, 60); a faint blue one fills the gap.
  */
 const LIGHTS = [
-  { x: 3500, y: -5000, z: 2500, rgb: [130, 105, 80], radius: 9000 },
-  { x: 3500, y: -5000, z: 12500, rgb: [130, 105, 80], radius: 9000 },
-  { x: 3500, y: -6000, z: 8000, rgb: [50, 60, 85], radius: 14000 },
+  { x: 3500, y: -7000, z: 3000, rgb: [58, 68, 62], radius: 10000 },
+  { x: 3500, y: -6500, z: 13000, rgb: [58, 68, 62], radius: 10000 },
+  { x: 3500, y: -6000, z: 8000, rgb: [30, 36, 50], radius: 14000 },
 ] as const;
 
 // The floor is flat at Y = 0. The format has no floor-height table to fill in:

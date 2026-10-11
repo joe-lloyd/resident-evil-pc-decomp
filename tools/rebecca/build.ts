@@ -22,7 +22,7 @@ export const start = { ...trailRoom, ...trailStart };
 /**
  * Enemies that are already dead when her game starts: enemy() skips a spawn
  * whose kill flag (its third argument) is set. Chapter 1 thins Chris's route
- * for a medic with one Beretta clip; the Cerberus in 11A and one zombie in 10A
+ * for a medic with a Beretta and one spare clip; the Cerberus in 11A and one zombie in 10A
  * stay as her fights.
  */
 export const killedAtStart = [
