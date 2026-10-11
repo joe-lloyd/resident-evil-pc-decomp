@@ -5,6 +5,7 @@
 //
 //   OVERLAY=<REB build folder> node tools/harness/tests/chapter2-richard.ts
 // SERUM_FIRST=1 takes the serum before going up, so he is treated on sight.
+// LATE=1 waits out the clock in the save room, so he dies.
 import path from 'node:path';
 import { open } from '../lab.ts';
 import { faceTowards, fight, goTo, settle, useDoor, useFightBack, useRoomData } from '../flows.ts';
@@ -19,15 +20,16 @@ useRoomData(dataDirs);
 useFightBack();
 const out = process.env.OUT ?? '/tmp/rae-tests';
 const serumFirst = process.env.SERUM_FIRST === '1';
+const late = process.env.LATE === '1';
 
 const SERUM = 66;
 const FOUND = 0x80 + 4;
 const TREATED = 0x80 + 5;
 const DEAD = 0x80 + 6;
 /** FG_COMMON (bank 1) flag 202: she saved Richard. Flags count from the top bit of each LE word. */
-const savedFlag = (s: GameState) => {
+const commonFlag = (s: GameState, n: number) => {
   const b = s.banks[1];
-  return ((new DataView(b.buffer, b.byteOffset, b.byteLength).getUint32((202 >> 5) * 4, true) >>> (31 - (202 & 31))) & 1) === 1;
+  return ((new DataView(b.buffer, b.byteOffset, b.byteLength).getUint32((n >> 5) * 4, true) >>> (31 - (n & 31))) & 1) === 1;
 };
 
 type Door = { x: number; z: number; w: number; d: number };
@@ -93,6 +95,12 @@ try {
   if (!serumFirst) {
     await walk(down);
     await takeSerum();
+    if (late) {
+      // The clock is three minutes from finding him; 200 seconds is past it.
+      const until = Date.now() + 200_000;
+      while (Date.now() < until) await link.frames(30);
+      log(await link.state(), 'waited out the clock');
+    }
     await walk(up);
   }
   const end = await link.waitFor((s) => s.messageId === TREATED || s.messageId === DEAD, 'Richard treated', 30_000).catch(() => undefined);
@@ -100,9 +108,11 @@ try {
   await settle(link);
   const s = await link.state();
   if (!end) failures.push('neither the treatment nor his death played');
-  else if (end.messageId === DEAD) failures.push('Richard died before the serum arrived');
-  if (!savedFlag(s)) failures.push('FG_COMMON 202 (Richard saved) is not set');
-  if (s.items.some((it) => it.id === SERUM)) failures.push('the serum is still in her bag');
+  else if (late && end.messageId !== DEAD) failures.push('Richard was treated after the clock ran out');
+  else if (!late && end.messageId === DEAD) failures.push('Richard died before the serum arrived');
+  if (!commonFlag(s, 201)) failures.push('FG_COMMON 201 (his fate is settled) is not set');
+  if (commonFlag(s, 202) === late) failures.push(`FG_COMMON 202 (Richard saved) is ${late ? 'set' : 'not set'}`);
+  if (s.items.some((it) => it.id === SERUM) !== late) failures.push(late ? 'the serum was used on a dead man' : 'the serum is still in her bag');
   log(s, 'chapter 2 done');
   if (failures.length) {
     console.error(`FAIL\n  ${failures.join('\n  ')}`);
