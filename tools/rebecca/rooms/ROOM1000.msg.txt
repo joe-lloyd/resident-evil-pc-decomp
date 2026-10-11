@@ -44,5 +44,5 @@
 43: \nOne dose would do.\s{2}
 44: \nRebecca treats Chris.\s{2}
 45: \n\s{2}\p{0}\n\s{2}
-46: \oFreeze!"\p{0}\o...Wait. You're S.T.A.R.S.?\nBravo team?"\p{0}\oRebecca Chambers.\nI'm the team's medic."\p{0}\oChris Redfield, Alpha.\nWhere's the rest of Bravo?"\p{0}\oI don't know.\nWe got separated."\p{0}\oStay here. It's safe.\nI'll check the house."\p{0}\n...A gunshot. Upstairs.\p{0}\oThat came from the\nsecond floor. Wait here!"
+46: \oFreeze!"\p{0}\o...Wait. You're S.T.A.R.S.?\nBravo team?"\p{0}\oRebecca Chambers.\nI'm the team's medic."\p{0}\oChris Redfield, Alpha.\nWhere's the rest of Bravo?"\p{0}\oI don't know.\nWe got separated."\p{0}\oStay here. It's safe.\nI'll check the house."
 47: \oBe careful, Rebecca.\nThis place is crawling"\p{0}\owith those things.\nDon't go out alone."

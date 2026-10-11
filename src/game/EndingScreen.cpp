@@ -840,15 +840,6 @@ draw:
 // ============================================================================
 void ending_state(void)
 {
-    // Port addition: Rebecca's scenario ends on the heliport with Chris, so it
-    // takes Chris's ending in which his partner lived. Her own words come
-    // before it, in the heliport scene. Everything below that picks the
-    // ending, the movies and the backdrop by character then reads Chris.
-    if (g_bRebMode) {
-        g_playerEntity.id = (unsigned char)((g_playerEntity.id & ~3) | CHAR_CHRIS);
-        Flg_on((int)g_ScenarioFlags2, SCENARIO2_FLAG_PARTNER_ALIVE);
-    }
-
     g_loadSaveStateFlag = 1;
     g_blockF9Flag = 1;    // 0x004b3870 - F9 return-to-title is inert for the whole ending
     g_main_state_flags |= MSF_PANNING_RESET;

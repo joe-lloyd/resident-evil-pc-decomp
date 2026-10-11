@@ -1,9 +1,0 @@
-0: \nA numeric key panel.
-1: You don't know the pass\nnumber.
-2: You've entered the pass\nnumber.
-3: The howling of an animal\ncan be heard on and off.\s{2}
-4: \oRichard!"\p{0}\oRebecca...? Something bit\nme. A snake... a huge one."\p{0}\oThe venom's spreading.\nYou need antiserum, now."\p{0}\oThere's serum in the\nsave room downstairs."\p{0}\oHold on, Richard.\nI'll be right back!"
-5: \oRichard, I'm here.\nThis is going to sting."\p{0}\nRebecca injects the serum.\p{0}\o...Thanks, rookie.\nI owe you one."\p{0}\oRest. I'll find the\nothers and come back."
-6: \oRichard...?"\p{0}\nRichard is dead.
-7: \oThe venom's spreading.\nI need that serum..."
-8: \oGo on, Rebecca.\nI just need to rest."
