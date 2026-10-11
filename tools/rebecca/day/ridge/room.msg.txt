@@ -1,0 +1,4 @@
+0: \nJuly 24th, 1998. Dawn.\p{0}\nThe sun is coming up over\nthe Arklay Mountains.\p{0}\nBilly's gone. It's just\nme now.\p{0}\nThe rest of Bravo team is\nout there somewhere.\p{0}\nI have to find them.
+1: \nThe trail goes down through\nthe pines.
+2: \nThe training facility is\nstill burning down there.\p{0}\nNo one could have lived\nthrough that.
+3: \nSheer rock. There's no way\nup from here.

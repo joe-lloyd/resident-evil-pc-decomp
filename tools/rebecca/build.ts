@@ -11,13 +11,15 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildTrailRoom, trailRoom, trailRoomFile, trailStart } from './new_room.ts';
+import { buildTrailRoom, trailRoomFile } from './new_room.ts';
+import { buildDayRoom } from './day/room.ts';
+import { dayRooms, dayStart } from './day/rooms.ts';
 
 /**
  * Where a new game in REB mode starts (stage counts from 0, as in the debug
  * menu): the mountain trail, near its top, facing down it.
  */
-export const start = { ...trailRoom, ...trailStart };
+export const start = dayStart;
 
 /**
  * Enemies that are already dead when her game starts: enemy() skips a spawn
@@ -70,8 +72,10 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   writeFileSync(path.join(reb, 'DATA', 'BIO_CARD.DAT'), card);
   written.push('DATA/BIO_CARD.DAT');
 
-  // New rooms: the mountain trail, built from the courtyard garden's file.
+  // New rooms: the mountain trail, built from the courtyard garden's file,
+  // and the rooms of her day (day/rooms.ts).
   written.push(...buildTrailRoom(baseDir, outDir, raeCli));
+  for (const room of dayRooms) written.push(...buildDayRoom(room, baseDir, outDir, raeCli));
 
   // Room scripts: rooms/ROOMsrrv.c replaces that room's init and main scripts.
   // The new room's script is assembled into its own file above.
