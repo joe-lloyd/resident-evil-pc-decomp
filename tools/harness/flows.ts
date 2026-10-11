@@ -302,17 +302,20 @@ function checkAlive(s: GameState): void {
  * Shoot every live enemy within `range` (the default covers any room), nearest
  * first, one step at a time: face it with aim released, hold aim, fire.
  * RE1 turns the held aim onto the nearest enemy in front by itself. A target
- * beyond `shootRange` is waited for, since dogs charge; one that does not come
- * closer within a few seconds is walked towards. When three shots in a row
+ * out of shooting range is waited for, since dogs charge; one that does not
+ * come closer within a few seconds is walked towards. A zombie in grabbing
+ * distance is backed away from. When three shots in a row
  * leave its health unchanged she turns to it again. Returns the shots fired.
  * Needs a gun equipped.
  */
 /** Item 0x0B, the Beretta's ammunition. */
 const CLIP = 0x0b;
+/** Enemy type 2, the dog. */
+const CERBERUS = 2;
 
 export async function fight(
   link: GameLink,
-  { range = 40_000, shootRange = 3500, timeoutMs = 120_000 }: { range?: number; shootRange?: number; timeoutMs?: number } = {},
+  { range = 40_000, timeoutMs = 120_000 }: { range?: number; timeoutMs?: number } = {},
 ): Promise<number> {
   const deadline = Date.now() + timeoutMs;
   let shots = 0;
@@ -338,6 +341,9 @@ export async function fight(
       const off = Math.abs(turnBetween(s.player.angle, headingTo(s.player.x, s.player.z, target.x, target.z)));
       if (process.env.HARNESS_TRACE) console.log(`    fight type ${target.type} hp ${target.hp} at ${Math.round(d)} off ${off} her hp ${s.player.hp} shots ${shots}`);
 
+      // Dogs leap about and most shots at them miss until they close in;
+      // zombies walk straight on and can be hit from further away.
+      const shootRange = target.type === CERBERUS ? 3500 : 7000;
       if (d > shootRange) {
         // Out of reach: wait aimed for it to come, then go to it.
         if (!waitedFrom || d < waitedFrom.d - 500) waitedFrom = { d, at: Date.now() };
@@ -361,6 +367,14 @@ export async function fight(
       // player.weapon is the 1-based slot of the gun in hand.
       const rounds = (s.items[s.player.weapon - 1]?.qty ?? 0) + s.items.filter((it) => it.id === CLIP).reduce((n, it) => n + it.qty, 0);
       if (rounds === 0) throw new StuckError(`out of ammo with ${live.length} enemies standing`, s);
+      if (target.type !== CERBERUS && d < 1800) {
+        // Close enough to grab her: step back before the next shot.
+        await release();
+        await faceTowards(link, target.x, target.z).catch(() => undefined);
+        await link.tap(Key.down, 10);
+        await link.frames(10);
+        continue;
+      }
       if (!aiming || off > 500 || misses >= 3) {
         await release();
         await faceTowards(link, target.x, target.z).catch(() => undefined);
