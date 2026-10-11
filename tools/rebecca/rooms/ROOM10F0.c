@@ -4,7 +4,7 @@
 // Emblem turns up on the piano. None of Chris's events run.
 //
 // FG_COMMON 210: she has played the piano. 211: the chapter title has shown.
-// 212: she has the sheet music.
+// 212: she has the sheet music. 213: the door to Chapter 4 is open.
 // (ck(bank, n, 1) holds while flag n is clear; set(bank, n, 0) sets it.)
 // cmpb(16, 0, n) holds on the frame she presses action facing zone n - 1.
 // Room messages are 0x80 + index: 157 is message 29.
@@ -12,7 +12,13 @@
 // aot_delete(n, type, flags) re-arms zone n with that handler and flags; a
 // zone is dead only with SCE_NONE and flags 0 (cmd_room_action_arm).
 // init procedure 0
-door_aot_set(0, 13700, 960, 1700, 1900, 1, 0, 31, 5, 134, ROOM_S04, 30700, 0, 3900, 1024, 51 /* Sword Key */, 129);
+// Door 0 needs the Sword Key in Chris's game. Once she has the emblem it is
+// her way on: a chapter break to the guardhouse (ROOM4080).
+if (ck(FG_ITEM, 21, 1)) {
+    door_aot_set(0, 13700, 960, 1700, 1900, 1, 0, 31, 5, 0, ROOM_408, 4000, 0, 4500, 0, UNLOCKED, 129);
+} else {
+    door_aot_set(0, 13700, 960, 1700, 1900, 1, 0, 31, 5, 134, ROOM_S04, 30700, 0, 3900, 1024, 51 /* Sword Key */, 129);
+}
 // The piano (zone 2) and the sheet music (zone 5) are message zones: the
 // engine skips SCE_NONE zones when she presses action, and a message zone
 // records which zone she checked (cmpb(16, 0, zone + 1)) for main to react to.
@@ -53,5 +59,10 @@ if (ck(FG_COMMON, 212, 0) && ck(FG_COMMON, 210, 1) && cmpb(16, 0, 3)) {
     set(FG_COMMON, 210, 0);
     aot_delete(2, SCE_NONE, 0);
     item_aot_set(4, 10200, 7300, 600, 1500, 32 /* Gold Emblem */, 1, 1, 255, 4, 41, 224, 252, 114, 31, 0, 4, 21, 129, 0, 0);
+}
+// She took the emblem: the door opens onto the guardhouse.
+if (ck(FG_ITEM, 21, 1) && ck(FG_COMMON, 213, 1)) {
+    set(FG_COMMON, 213, 0);
+    door_aot_set(0, 13700, 960, 1700, 1900, 1, 0, 31, 5, 0, ROOM_408, 4000, 0, 4500, 0, UNLOCKED, 129);
 }
 return;

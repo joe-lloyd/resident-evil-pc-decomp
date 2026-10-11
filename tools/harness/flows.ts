@@ -140,7 +140,7 @@ export async function walkTo(
     // A door that fires on touch (or a scripted move) can change the room
     // mid-walk; the target means nothing in the new room.
     if (s.stage !== first.stage || s.room !== first.room) return s;
-    if (fightBackRange > 0 && s.enemies.some((e) => e.hp > 0 && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
+    if (fightBackRange > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
       await fight(link, { range: fightBackRange + 3000 });
       s = await link.state();
       best = Infinity; // fighting moves her; judge progress afresh
@@ -358,6 +358,8 @@ function checkAlive(s: GameState): void {
 const CLIP = 0x0b;
 /** Enemy type 2, the dog. */
 const CERBERUS = 2;
+/** Types from 32 up are people (Chris 32, Rebecca 35, Wesker 36, Richard 39), not enemies. */
+const FIRST_NPC_TYPE = 32;
 
 export async function fight(
   link: GameLink,
@@ -377,7 +379,7 @@ export async function fight(
       const s = await link.state();
       checkAlive(s);
       const live = s.enemies
-        .filter((e) => e.hp > 0)
+        .filter((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE)
         .map((e) => ({ e, d: Math.hypot(e.x - s.player.x, e.z - s.player.z) }))
         .filter((t) => t.d <= range)
         .sort((a, b) => a.d - b.d);

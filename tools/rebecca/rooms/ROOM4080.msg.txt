@@ -1,0 +1,20 @@
+0: \s{0}\n \s{1}\p{20}\s{0}\n \s{1}\p{60}\s{0}\n \s{1}\d{60}
+1: \s{0}\n \s{1}\p{72}\s{0}\n \s{1}\d{142}
+2: \s{0}\n \s{1}\d{42}
+3: \s{0}\n \s{1}\d{62}
+4: \s{0}\n \s{1}\d{62}
+5: \s{0}\n \s{1}\d{62}
+6: \s{0}\n \s{1}\d{170}
+7: \s{0}\n \s{1}\d{51}
+8: \s{0}\n \s{1}\d{80}
+9: \s{0}\n \s{1}\p{170}\s{0}\n \s{1}\d{110}
+10: \s{0}\n \s{1}\d{100}
+11: \s{0}\n \s{1}\p{100}\s{0}\n \s{1}\d{100}
+12: \s{0}\n \s{1}\p{80}\s{0}\n \s{1}\d{100}
+13: \nIt won't move at all.\p{0}It seems to be obstructed\nfrom the opposite side.
+14: There's a panel with\nnumber keys.\p{0}Will you push the keys?\n \c 
+15: \nIt's locked.
+16: \nChapter 4: The Guardhouse
+17: \nRoots as thick as an arm\npush under the door.\p{0}\oSomething huge grows in\nthere. I need a herbicide."
+18: \nRebecca pours the V-JOLT\non the roots.\p{0}\nThe roots shrivel and die.
+19: \nThe roots are dead.

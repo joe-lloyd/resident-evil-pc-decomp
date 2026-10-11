@@ -6744,8 +6744,10 @@ int door_try_enter(unsigned char* entry)
     unsigned char* record = *(unsigned char**)(entry + 8);
     unsigned char  lock   = record[0xc];
 
-    // 0x0041b41a: some doors are barred for one of the two characters.
-    if ((lock & 0x40) != 0 && (g_playerEntity.id & 3) == 3) {
+    // 0x0041b41a: some doors are barred for one of the two characters: they
+    // keep Chris's game's short Rebecca sections to their rooms. Port
+    // addition: not in Rebecca's own scenario, where the whole house is hers.
+    if ((lock & 0x40) != 0 && (g_playerEntity.id & 3) == 3 && !g_bRebMode) {
         set_message_display(0xd6, 0xff);
         return 0;
     }
