@@ -12,8 +12,17 @@ aot_set(8, 2300, 8750, 1600, 2000, SCE_TYPEWRITER, 129, 0, 0, 0, 0, 0, 0);
 obj(0, 17, 255, 7480, -1410, 1780, -1024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 tbl37_set(0, 0, 9);
 // Chris stands where Rebecca waits in his game; checking him gives his line.
-enemy(32 /* Chris (Stars) */, 0, 255, 1, 2, 0, 0, 2220, 0, 0, 7280, 0, 3920, 0, 0, 0, 0);
-aot_set(1, 6780, 3420, 1000, 1000, SCE_MESSAGE, 129, 175, 0, 0, 0, 0, 0);
+// He is here only until the meeting: after it he goes to search the house.
+// (ck(bank, n, 1) holds while flag n is clear.)
+if (ck(FG_COMMON, 36, 1)) {
+    enemy(32 /* Chris (Stars) */, 0, 255, 1, 2, 0, 0, 2220, 0, 0, 7280, 0, 3920, 0, 0, 0, 0);
+    aot_set(1, 6780, 3420, 1000, 1000, SCE_MESSAGE, 129, 175, 0, 0, 0, 0, 0);
+}
+// Chapter 2: the serum, on the medicine shelf along the east wall. In Chris's
+// game it is item 6 with no zone, which Rebecca hands him in a scene.
+if (ck(FG_ITEM, 23, 0)) {
+    item_aot_set(6, 5300, 6900, 2000, 1400, 66 /* Serum */, 1, 1, 255, 74, 31, 74, 247, 130, 20, 0, 8, 23, 129, 0, 0);
+}
 return;
 
 // main procedure 0

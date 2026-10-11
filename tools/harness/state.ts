@@ -11,6 +11,8 @@ export interface Player {
   hp: number;
   maxHp: number;
   weapon: number;
+  /** Byte 0xDC, the player's collision flags (an enemy's collisionFlags): 0x04 makes records without flag 0x100 floor zones, 0x10 skips shape 5. */
+  cf: number;
 }
 
 export interface Enemy {
@@ -108,6 +110,7 @@ function parseGameState(o: Record<string, unknown>): GameState {
       hp: num(p, 'hp'),
       maxHp: num(p, 'maxHp'),
       weapon: num(p, 'weapon'),
+      cf: num(p, 'cf'),
     },
     items: o.items.map((it, i) => {
       const [id, qty] = numbers(it, `items[${i}]`, 2);

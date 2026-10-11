@@ -50,7 +50,7 @@ reports raw values; `tools/harness/state.ts` turns them into meanings.
 | `title`, `fmv`, `dbg` | `g_titleMode`, a movie is playing, the F1 debug menu is open |
 | `stage`, `room`, `cam`, `cut` | where the player is |
 | `charModel` | `g_CharacterModelId`; 3 is Rebecca |
-| `player` | `id`, `x`, `y`, `z`, `angle`, `hp`, `maxHp`, `weapon` |
+| `player` | `id`, `x`, `y`, `z`, `angle`, `hp`, `maxHp`, `weapon` (the 1-based slot in hand), `cf` (byte 0xDC: the collision flags `check_room_collision` reads) |
 | `items` | `[id, qty]` for each slot: 6 for Chris and Rebecca, 8 for Jill |
 | `enemies` | `[type, status, x, y, z, hp]` for each occupied slot of `g_EnemiesList` (status not 0) |
 | `msg` | `choice` (`g_menu_choice_id`; 0x80 means a message is open) and `id`, the last message shown |
