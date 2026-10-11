@@ -252,6 +252,34 @@ export async function check(link: GameLink, zone: Zone): Promise<GameState> {
 }
 
 /**
+ * Use an item from the status screen, as a player does: open it, move the
+ * cursor to the item (it starts on slot 0; slots run two to a row) and pick
+ * USE, the first entry of the item's menu. Returns once she has control again,
+ * with any message the use opened closed.
+ */
+export async function useItem(link: GameLink, id: number): Promise<GameState> {
+  const s = await link.state();
+  const slot = s.items.findIndex((it) => it.id === id);
+  if (slot < 0) throw new StuckError(`she has no item ${id}`, s);
+  await link.tap(Key.menu, 3);
+  await link.waitFor((st) => st.menuState === 1, 'the status screen', 15_000);
+  await link.frames(30);
+  for (let row = 0; row < slot >> 1; row++) {
+    await link.tap(Key.down, 3);
+    await link.frames(8);
+  }
+  if (slot & 1) {
+    await link.tap(Key.right, 3);
+    await link.frames(8);
+  }
+  await link.tap(Key.action, 3); // the item's menu
+  await link.frames(15);
+  await link.tap(Key.action, 3); // USE
+  await link.frames(30);
+  return settle(link);
+}
+
+/**
  * Go through a door: walk up to its zone (the box door_aot_set gives), face
  * into it and press action until the room changes.
  */

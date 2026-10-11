@@ -25,6 +25,15 @@ the wall and falls asleep. Footsteps wake her, and Chris walks in.
 The light tells the time. Each act is rendered for its hour, from dawn on the
 ridge to the dark of the cellar.
 
+Every scene has something moving in it: a lamp flame, smoke from a chimney,
+grass in the wind, a river far below. The original game's backgrounds were
+still pictures; ours loop a few seconds of animation, and change when the
+story changes them (a tree dragged off a path).
+
+The way down is blocked, again and again, and getting past takes more than
+one step: the thing that clears the way is locked up, and what unlocks it is
+somewhere else. Places tell their own story through what was left in them.
+
 | Act | Time | Where | What it is about |
 | --- | --- | --- | --- |
 | 1 | Dawn to morning | The ridge, the forest trail, the ranger's lookout | Alone for the first time; finding her feet |
@@ -46,10 +55,20 @@ and 10 slots); a room's stage only decides its file name and id.
    the Bravo team's last position was near an old mansion in the valley.
 2. **The forest trail.** The mountain trail room we already have, re-rendered
    at morning. Crows.
-3. **The ranger's lookout.** An exterior and a two-room interior. A first aid
-   spray, the ranger's log about the "dog attacks", a radio that picks up
-   S.T.A.R.S. chatter, and the ranger's key. A Cerberus waits outside.
-4. **The ravine bridge.** A rope bridge, Adders in the grass, and the way down.
+3. **The ranger station.** A yard with the ranger's cabin, his tool shed and
+   his truck. The trail down is blocked by a pine the storm brought down.
+   - The cabin: he left in a hurry. Breakfast half eaten, a chair knocked
+     over, the rifle gone from its rack, the east window smashed in with blood
+     on the sill. The radio picks up S.T.A.R.S. chatter. His logbook says he
+     meant to winch the pine clear after breakfast, and that the crank is in
+     the shed. The shed key hangs by the door; a first aid spray is on the
+     table.
+   - The yard: his rifle lies empty in the grass by drag marks into the trees.
+     Once she has the key, a Cerberus comes out of them.
+   - The shed: padlocked. Inside, the chainsaw he gave up on, and the crank.
+   - The truck: the crank turns the winch, and the pine drags off the trail.
+4. **The ravine bridge.** A plank footbridge over a gorge, adders in the long
+   grass, and the valley trail sign on the far side.
 
 ### Act 2: midday
 
@@ -122,6 +141,13 @@ ranger's key, a fuse, a valve handle, the cistern key. The puzzles are small
 and physical: power for the cable car, pressure in the pump house, a gate key
 from the scientist. Notes are messages, read where she finds them.
 
+## Scale
+
+Rebecca stands 2700 game units tall (measured on screen,
+`tools/harness/measure-height.ts`), so the scenes are built in metres with a
+metre as 1700 units (`reb.UNITS`). Built at 1000, the first cabin came out
+with her as tall as its door.
+
 ## What the engine and tools need
 
 The trail proved that a new room can be built from a Blender scene. Making
@@ -149,6 +175,19 @@ some 25 of them needs that to become a production line.
    ending movies.
 10. **The scientist.** An NPC with a swapped texture, loaded from the
     overlay.
+
+Built so far, beyond the list above:
+
+- **Moving backgrounds** (`src/game/BgAnim.cpp`, `tools/rebecca/bganim.ts`):
+  Blender renders a loop of frames and any changes of state; the builder keeps
+  the 16-pixel tiles that differ from the background, and the engine patches
+  the background texture as the game runs.
+- **Camera floors worked out from the scene** (`tools/rebecca/day/floors.ts`):
+  each half metre of floor goes to the camera that shows her whole, unhidden
+  and nearest the middle of the screen. `coverage.ts` prints the map and the
+  share of floor where she is lost.
+- **Rendering on the Blender machine** (`tools/rebecca/day/render.ts`, with
+  `--preview` for a quick look).
 
 ## Building order
 

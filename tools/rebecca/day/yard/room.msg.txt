@@ -1,0 +1,9 @@
+0: \nA ranger station.\p{0}\nSmoke from the chimney.\nSomeone's here. Or was.
+1: \nA pine has come down across\nthe trail.\p{0}\nIt's far too heavy to move\nby hand.
+2: \nA winch on the truck's\nbumper.\p{0}\nThe crank handle is\nmissing.
+3: \nThe driver's door is open.\nNo keys.\p{0}\nThe hazard lights are still\non. The battery's nearly\ndead.
+4: \nARKLAY MOUNTAINS\nRANGER STATION 3\p{0}\nThe valley trail starts\nhere.
+5: \nHis rifle. The magazine's\nempty.\p{0}\nWhatever he was shooting at,\nhe didn't stop it.
+6: \nThe window's been smashed\nin from out here.
+7: \nBlood, and drag marks into\nthe trees.\p{0}\nThe paw prints are bigger\nthan any dog's.\p{0}\nI'm not going in there.
+8: \nThe crank fits.\p{0}\nThe cable takes the strain.\nSlowly, the pine drags\noff the trail.

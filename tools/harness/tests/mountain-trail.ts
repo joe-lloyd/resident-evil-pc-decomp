@@ -8,7 +8,7 @@
 // Checks, in order: she stands near the top of the trail under camera 0; the
 // west and east edges hold her inside X 2000-5000; walking down the trail cuts
 // from camera 0 to camera 1 as she crosses Z 8000; the door at the bottom
-// takes her to stage 2 room 0x14, the ranger's lookout. A picture is taken under
+// takes her to stage 2 room 0x15, the ranger station's yard. A picture is taken under
 // each camera for a person to look at.
 import path from 'node:path';
 import { open } from '../lab.ts';
@@ -80,7 +80,7 @@ async function walkUntil(done: (s: GameState) => boolean, maxFrames: number): Pr
 
 try {
   let s = await settle(link, (st) => st.stage === 2 && st.room === 0x12);
-  // A dev boot stands her by a door into the room, which may be the lookout's
+  // A dev boot stands her by a door into the room, which may be the yard's
   // at the foot; walk to the top, where she arrives from the ridge.
   useRoomData([path.join(process.env.OVERLAY ?? '/tmp/rae-reb', 'REB'), process.env.RE1_DATA ?? '/tmp/re1-pc']);
   s = await goTo(link, [path.join(process.env.OVERLAY ?? '/tmp/rae-reb', 'REB'), process.env.RE1_DATA ?? '/tmp/re1-pc'], 3500, 1300, { radius: 200 });
@@ -122,11 +122,11 @@ try {
   console.log(`picture: ${await snapshot(link, OUT, 'mountain-trail-cam1-door')}`);
 
   s = await walkUntil((st) => st.room !== 0x12 || st.stage !== 2, 450);
-  s = await settle(link, (st) => st.stage === 2 && st.room === 0x14, 30_000).catch(() => s);
-  expect(s.stage === 2 && s.room === 0x14, `the door led to stage ${s.stage} room ${s.room}, expected the lookout, stage 2 room 0x14`);
-  if (s.stage === 2 && s.room === 0x14) {
-    expect(Math.abs(s.player.x - 6000) <= 600 && Math.abs(s.player.z - 7300) <= 600, `arrived at (${s.player.x}, ${s.player.z}), expected inside the lookout's door (6000, 7300)`);
-    console.log(`picture: ${await snapshot(link, OUT, 'mountain-trail-lookout')}`);
+  s = await settle(link, (st) => st.stage === 2 && st.room === 0x15, 30_000).catch(() => s);
+  expect(s.stage === 2 && s.room === 0x15, `the door led to stage ${s.stage} room ${s.room}, expected the ranger station's yard, stage 2 room 0x15`);
+  if (s.stage === 2 && s.room === 0x15) {
+    expect(Math.abs(s.player.x - 5610) <= 600 && Math.abs(s.player.z - 4930) <= 600, `arrived at (${s.player.x}, ${s.player.z}), expected by the station sign (5610, 4930)`);
+    console.log(`picture: ${await snapshot(link, OUT, 'mountain-trail-yard')}`);
   }
 
   if (failures.length) {

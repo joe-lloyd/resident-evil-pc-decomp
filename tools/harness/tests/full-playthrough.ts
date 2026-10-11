@@ -7,7 +7,7 @@
 import path from 'node:path';
 import { fetch, open, startRecording, stopRecording } from '../lab.ts';
 import { useFightBack } from '../flows.ts';
-import { lookout, ridge, trail } from '../day.ts';
+import { act1 } from '../day.ts';
 import { Run } from '../scenario.ts';
 
 const overlay = process.env.OVERLAY;
@@ -20,9 +20,7 @@ const remoteVideo = record ? `${process.env.RE1_LAB_GAME_DIR ?? 'D:\\Games\\RE1-
 if (remoteVideo) startRecording(remoteVideo);
 const run = new Run(session.link, overlay);
 try {
-  await ridge(run);
-  await trail(run);
-  await lookout(run);
+  await act1(run);
   run.finish();
 } catch (err) {
   await run.crashed();

@@ -1,0 +1,4 @@
+0: \nThe trail drops to a gorge.\nAn old footbridge crosses\nit.\p{0}\nSomething is moving in the\ngrass.
+1: \nVALLEY TRAIL\nCIDER DISTRICT 6 MI\p{0}\nThe trail goes on down into\nthe valley.\p{0}\nBravo's last position was\nnear the old estate.\p{0}\nIf anyone made it, they'll\nbe down there.
+2: \nAn old footbridge. The\nplanks look sound.\p{0}\nMostly.
+3: \nIt's a long way down.\nWhite water all the way.

@@ -40,20 +40,7 @@ export const lookout: DayRoom = {
     { x: 11730, y: -2550, z: 5100, rgb: [80, 74, 64], radius: 10000 },
     { x: 7650, y: -3570, z: 7140, rgb: [45, 46, 52], radius: 14000 },
   ],
-  // Corner cameras: 0 from the south-west sees the east half, 1 from the
-  // north-east sees the west half and the door.
-  cameraFloor: [
-    [
-      { x0: 6800, z0: 0, x1: 8500, z1: 6800 },
-      { x0: 8500, z0: 0, x1: 10200, z1: 8500 },
-      { x0: 10200, z0: 0, x1: 14000, z1: 13000 },
-    ],
-    [
-      { x0: 0, z0: 0, x1: 6800, z1: 13000 },
-      { x0: 6800, z0: 6800, x1: 8500, z1: 13000 },
-      { x0: 8500, z0: 8500, x1: 10200, z1: 13000 },
-    ],
-  ],
+  cameraFloor: 'auto',
   footsteps: 0x2d,
   itemModels: [
     { from: 'Stage3/ROOM3090.RDT', index: 0 }, // F-Aid Spray
@@ -61,4 +48,61 @@ export const lookout: DayRoom = {
   ],
 };
 
-export const dayRooms: readonly DayRoom[] = [ridge, lookout];
+/**
+ * The ranger station's yard, outside the lookout: the cabin, the shed, the
+ * truck and its winch, and the pine down across the trail (game units =
+ * metres * 1700).
+ */
+export const yard: DayRoom = {
+  slug: 'yard',
+  stage: 2,
+  room: 0x15,
+  donor: 'Stage3/ROOM3000.RDT',
+  // Morning sun from the south-east, sky from above, the hazard lights' glow.
+  ambient: [1150, 1100, 1050],
+  lights: [
+    { x: 37400, y: -15300, z: 27200, rgb: [95, 85, 70], radius: 40000 },
+    { x: 17000, y: -17000, z: 11900, rgb: [55, 62, 75], radius: 40000 },
+    { x: 19550, y: -1700, z: 18360, rgb: [60, 35, 10], radius: 5100 },
+  ],
+  cameraFloor: 'auto',
+  footsteps: 0x2d,
+  itemModels: [],
+};
+
+/** The ranger's tool shed, off the yard: the winch's crank on the bench (game units = metres * 1700). */
+export const shed: DayRoom = {
+  slug: 'shed',
+  stage: 2,
+  room: 0x16,
+  donor: 'Stage3/ROOM3000.RDT',
+  // A bare bulb and daylight through the boards.
+  ambient: [850, 800, 750],
+  lights: [
+    { x: 3910, y: -2550, z: 3570, rgb: [110, 85, 55], radius: 6000 },
+    { x: 4250, y: -2380, z: 5440, rgb: [60, 58, 52], radius: 6000 },
+    { x: 3910, y: -2720, z: 3570, rgb: [30, 32, 38], radius: 9000 },
+  ],
+  cameraFloor: 'auto',
+  footsteps: 0x2d,
+  itemModels: [{ from: 'Stage3/ROOM30A0.RDT', index: 1 }], // Hex Crank, as the winch's crank
+};
+
+/** The ravine bridge below the station: a plank footbridge over a gorge, adders in the grass (game units = metres * 1700). */
+export const bridge: DayRoom = {
+  slug: 'bridge',
+  stage: 2,
+  room: 0x17,
+  donor: 'Stage3/ROOM3000.RDT',
+  // Mid-morning: the sun high over the gorge, the sky, light off the far cliff.
+  ambient: [1200, 1150, 1100],
+  lights: [
+    { x: 20400, y: -20400, z: 5100, rgb: [95, 88, 72], radius: 60000 },
+    { x: 10200, y: -17000, z: 20400, rgb: [55, 62, 78], radius: 60000 },
+    { x: 10200, y: 5100, z: 20400, rgb: [30, 34, 34], radius: 30000 },
+  ],
+  cameraFloor: 'auto',
+  footsteps: 0x2d,
+};
+
+export const dayRooms: readonly DayRoom[] = [ridge, lookout, yard, shed, bridge];
