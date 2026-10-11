@@ -84,6 +84,11 @@ void WalkTask(void)
     for (unsigned int f = 0; f < frames; f++) {
         unpack_pakfile_(s_walk + u32(s_walk + 8 + f * 4), s_frame);
         display_image(8, s_frame + 20, 320, 240);
+        if (f < 3 || f == 20) {
+            dbg_printf("[walk] frame %u msf %08x msf2 %08x screen %d render %d countdown %d active %d\n", f,
+                       (unsigned)g_main_state_flags, (unsigned)g_main_state_flags2, (int)g_ScreenAccessReady,
+                       (int)g_RenderAccessReady, (int)g_ScreenAccessCountdown, (int)g_bGameActive);
+        }
         for (unsigned int k = 0; k < ticks; k++, t++) {
             if (stepTicks && t % stepTicks == stepTicks / 2) play_sfx(0, (int)(step++ & 1), 0);
             Task_sleep(1);

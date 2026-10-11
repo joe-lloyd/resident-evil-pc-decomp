@@ -1112,6 +1112,11 @@ static void DoorAnimLoop(void)
         }
 
         DoorPhaseCheck();
+        if (g_doorFrameCount < 3 || g_doorFrameCount == 20) {
+            dbg_printf("[door] frame %d msf %08x msf2 %08x screen %d render %d countdown %d active %d\n", g_doorFrameCount,
+                       (unsigned)g_main_state_flags, (unsigned)g_main_state_flags2, (int)g_ScreenAccessReady,
+                       (int)g_RenderAccessReady, (int)g_ScreenAccessCountdown, (int)g_bGameActive);
+        }
 
         // Dispatch the command-entry scripts. The gate (state bit 1) is
         // re-opened once g_main_state_flags2 bit 0x800000 clears (BGM ready).
