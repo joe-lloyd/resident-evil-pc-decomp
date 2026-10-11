@@ -2,7 +2,7 @@
 // Reads the built room back the way the engine reads it: the switch-zone
 // table through a port of is_entity_in_switch_zone (Room.cpp), the collision
 // block through the quadrant and box tests (RoomCollision.cpp), and checks
-// that nothing outside the overwritten sections changed. Needs the player's
+// what the composer (rdt.ts) keeps of the donor. Needs the player's
 // ROOM3000.RDT: RE1_DATA, default /tmp/re1-pc.
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
@@ -96,29 +96,34 @@ test('camera records, counts and empty masks', { skip }, () => {
   });
 });
 
-test('only the overwritten sections change, and no pointer moves', { skip }, () => {
-  const { template, room } = load();
-  assert.equal(room.length, template.length);
-  assert.deepEqual(room.subarray(0x48, 0x94), template.subarray(0x48, 0x94));
+test('the donor sections it keeps are byte for byte the donor\'s, and snd.vb is last', { skip }, () => {
+  const { template, room, view } = load();
   const tv = new DataView(template.buffer, template.byteOffset, template.byteLength);
-  const ptr = (at: number) => tv.getUint32(at, true);
-  const firstMask = Math.min(...Array.from({ length: template[1]! }, (_, i) => ptr(0x94 + i * 0x2c)));
-  const allowed: [number, number][] = [
-    [0, ptr(0x54)], // header, lights and the camera records, up to the item model table
-    [ptr(0x48), firstMask], // switch zones
-    ...[0, 1].map((i): [number, number] => [ptr(0x94 + i * 0x2c), ptr(0x94 + i * 0x2c) + 4]), // mask group counts
-    [ptr(0x4c), ptr(0x58)], // collision
-    [ptr(0x58), ptr(0x5c)], // walkable zones
-    [ptr(0x5c), ptr(0x60)], // footstep zones
-    [ptr(0x64), ptr(0x68)], // main script
-  ];
-  for (let i = 0; i < room.length; i++) {
-    if (room[i] === template[i]) continue;
-    assert.ok(
-      allowed.some(([a, b]) => i >= a && i < b),
-      `byte 0x${i.toString(16)} changed outside the overwritten sections`,
-    );
+  const slot = (v: DataView, s: number) => v.getUint32(0x48 + 4 * s, true);
+  // Every pointer lands inside the file.
+  for (let s = 0; s < 19; s++) assert.ok(slot(view, s) < room.length, `slot ${s} points past the end`);
+  // Kept sections: the event table, the player animations, the effects and the sound bank.
+  for (const s of [8, 9, 10, 13, 16, 17, 18]) {
+    const from = slot(tv, s);
+    const to = slot(view, s);
+    assert.ok(to, `slot ${s} was dropped`);
+    assert.deepEqual(room.subarray(to, to + 64), template.subarray(from, from + 64), `slot ${s} bytes`);
   }
+  // The effect tables name the same effect data as the donor's.
+  for (const s of [14, 15]) {
+    for (let i = 0; i < 8; i++) {
+      const was = tv.getUint32(slot(tv, s) - 4 * i, true);
+      const now = view.getUint32(slot(view, s) - 4 * i, true);
+      if (was === 0xffffffff) assert.equal(now, was);
+      else assert.deepEqual(room.subarray(now, now + 32), template.subarray(was, was + 32), `effect table ${s} entry ${i}`);
+    }
+  }
+  // snd.vb is the last section, whole: the engine loads models over it.
+  const vb = slot(view, 18);
+  assert.ok(room.length - vb > 100_000, `snd.vb is ${room.length - vb} bytes`);
+  assert.deepEqual(room.subarray(vb), template.subarray(slot(tv, 18), slot(tv, 18) + room.length - vb));
+  // Dead donor data is gone: the room is far smaller than its donor.
+  assert.ok(room.length < template.length / 2, `${room.length} bytes from a ${template.length}-byte donor`);
 });
 
 test('camera 0 cuts to camera 1 below Z 8000 and camera 1 cuts back above it', { skip }, () => {

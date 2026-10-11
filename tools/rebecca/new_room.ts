@@ -19,6 +19,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readPng } from '../harness/image.ts';
 import { makePak } from './pak.ts';
+import { composeRoom, SLOT, type PointLight } from './rdt.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -83,27 +84,6 @@ export function parseScene(source: string): Scene {
   return { cameras: [first, second], trailX: pythonPair(source, 'TRAIL_X'), trailZ: pythonPair(source, 'TRAIL_Z') };
 }
 
-// ---------------------------------------------------------------------------
-// RDT layout. Pointers in the header are file offsets (the loader adds the base).
-// ---------------------------------------------------------------------------
-
-const HDR_SPRITES = 0x00;
-const HDR_CAMERAS = 0x01;
-const HDR_OMODELS = 0x02;
-const HDR_ITEMS = 0x03;
-const HDR_AMBIENT = 0x06;
-const HDR_LIGHTS = 0x0c;
-const LIGHT_SIZE = 0x14;
-const PTR_ZONES = 0x48;
-const PTR_BOUNDS = 0x4c;
-const PTR_WALK = 0x58;
-const PTR_FOOTSTEPS = 0x5c;
-const PTR_INIT = 0x60;
-const PTR_MAIN = 0x64;
-const PTR_EVENTS = 0x68;
-const CAMERAS_AT = 0x94;
-const CAMERA_SIZE = 0x2c;
-
 /** Little-endian writer over one RDT. Out-of-range values throw instead of wrapping. */
 class Cursor {
   readonly #view: DataView;
@@ -149,25 +129,12 @@ class Cursor {
   }
 }
 
-/** A section of the template that is overwritten in place: where it starts and how many bytes it has. */
-interface Region {
-  readonly name: string;
-  readonly start: number;
-  readonly size: number;
-}
-
-function region(name: string, start: number, end: number): Region {
-  if (end < start) throw new Error(`${name}: section ends (${end}) before it starts (${start})`);
-  return { name, start, size: end - start };
-}
-
-/** Clear the region, then let `fill` write into it; throws when `fill` writes past its end. */
-function overwrite(rdt: Uint8Array, view: DataView, r: Region, fill: (c: Cursor) => void): void {
-  rdt.fill(0, r.start, r.start + r.size);
-  const c = new Cursor(view, r.start);
+/** Encode a section: `fill` writes into a buffer of up to `max` bytes; the bytes written are returned. */
+function encode(max: number, fill: (c: Cursor) => void): Uint8Array {
+  const bytes = new Uint8Array(max);
+  const c = new Cursor(new DataView(bytes.buffer), 0);
   fill(c);
-  const used = c.at - r.start;
-  if (used > r.size) throw new Error(`${r.name} needs ${used} bytes, the template gives it ${r.size}`);
+  return bytes.slice(0, c.at);
 }
 
 // ---------------------------------------------------------------------------
@@ -178,7 +145,7 @@ function overwrite(rdt: Uint8Array, view: DataView, r: Region, fill: (c: Cursor)
  * Twelve-bit PS1 channels, fed to setBackColor: a cool night ambient, a
  * little under the garden's (ROOM3000 uses 1167, 1087, 1056).
  */
-const AMBIENT = [1000, 1080, 1120] as const;
+const AMBIENT: readonly [number, number, number] = [1000, 1080, 1120];
 
 /**
  * Three point lights above the trail. A point light's colour falls off with
@@ -187,11 +154,11 @@ const AMBIENT = [1000, 1080, 1120] as const;
  * lights stand where the background's key lights are, one over each half of
  * the trail, as dim as the garden's (60, 60, 60); a faint blue one fills the gap.
  */
-const LIGHTS = [
+const LIGHTS: readonly [PointLight, PointLight, PointLight] = [
   { x: 3500, y: -7000, z: 3000, rgb: [58, 68, 62], radius: 10000 },
   { x: 3500, y: -6500, z: 13000, rgb: [58, 68, 62], radius: 10000 },
   { x: 3500, y: -6000, z: 8000, rgb: [30, 36, 50], radius: 14000 },
-] as const;
+];
 
 // The floor is flat at Y = 0. The format has no floor-height table to fill in:
 // the engine only changes a character's height inside collision records that
@@ -301,55 +268,30 @@ function writeEmptyMain(c: Cursor): void {
   c.u16(0);
 }
 
-function writeCamera(c: Cursor, camera: Camera): void {
-  c.i32(camera.from.x).i32(camera.from.y).i32(camera.from.z);
-  c.i32(camera.to.x).i32(camera.to.y).i32(camera.to.z);
-  c.i32(0).i32(0).i32(camera.fov); // roll, reserved, fov
+/** An init script that does nothing; `rae asm` writes the room's own over it. */
+function writeEmptyInit(c: Cursor): void {
+  writeEmptyMain(c);
 }
 
 /**
- * The room file before its init script exists: the template with every
- * section above overwritten. Pure; `template` is not modified.
+ * The room file before its init script exists: the template's sound bank,
+ * effects and player animations, with the trail's cameras, lights, zones,
+ * collision and an empty main script (rdt.ts). Pure; `template` is not modified.
  */
 export function buildRoomRdt(template: Uint8Array, scene: Scene): Uint8Array {
-  const rdt = Uint8Array.from(template);
-  const view = new DataView(rdt.buffer);
-  const ptr = (at: number): number => view.getUint32(at, true);
-  const camerasIn = template[HDR_CAMERAS]!;
-  if (camerasIn < scene.cameras.length) throw new Error(`the template has ${camerasIn} cameras, the scene needs ${scene.cameras.length}`);
-
-  // Camera records, and a mask block per camera that draws nothing: a block
-  // opens with its group count, and a count of 0 means no sprites and no
-  // objspr pak to load (Room_LoadCameraSprites, load_room_bg_masks).
-  const firstMask = Math.min(...Array.from({ length: camerasIn }, (_, i) => ptr(CAMERAS_AT + i * CAMERA_SIZE)));
-  scene.cameras.forEach((camera, i) => {
-    const at = CAMERAS_AT + i * CAMERA_SIZE;
-    view.setInt32(ptr(at), 0, true);
-    writeCamera(new Cursor(view, at + 8), camera);
+  return composeRoom(template, {
+    cameras: scene.cameras.map((c) => ({ from: c.from, to: c.to, fov: c.fov })),
+    ambient: AMBIENT,
+    lights: LIGHTS,
+    sections: {
+      [SLOT.switchZones]: encode(4096, (c) => writeSwitchZones(c, scene)),
+      [SLOT.collision]: encode(4096, (c) => writeCollision(c, scene)),
+      [SLOT.walkZones]: encode(64, (c) => writeWalkZones(c, scene)),
+      [SLOT.footsteps]: encode(64, writeFootsteps),
+      [SLOT.init]: encode(16, writeEmptyInit),
+      [SLOT.main]: encode(16, writeEmptyMain),
+    },
   });
-  rdt.fill(0, CAMERAS_AT + scene.cameras.length * CAMERA_SIZE, CAMERAS_AT + camerasIn * CAMERA_SIZE);
-
-  rdt[HDR_SPRITES] = 0;
-  rdt[HDR_CAMERAS] = scene.cameras.length;
-  // No room models and no pick-ups: the init script places none.
-  rdt[HDR_OMODELS] = 0;
-  rdt[HDR_ITEMS] = 0;
-
-  const ambient = new Cursor(view, HDR_AMBIENT);
-  for (const channel of AMBIENT) ambient.i16(channel);
-  LIGHTS.forEach((light, i) => {
-    const c = new Cursor(view, HDR_LIGHTS + i * LIGHT_SIZE);
-    c.i32(light.x).i32(light.y).i32(light.z);
-    for (const channel of light.rgb) c.u8(channel);
-    c.u8(0).u16(0).i16(light.radius); // padding, type 0 = point light, radius
-  });
-
-  overwrite(rdt, view, region('switch zones', ptr(PTR_ZONES), firstMask), (c) => writeSwitchZones(c, scene));
-  overwrite(rdt, view, region('collision', ptr(PTR_BOUNDS), ptr(PTR_WALK)), (c) => writeCollision(c, scene));
-  overwrite(rdt, view, region('walkable zones', ptr(PTR_WALK), ptr(PTR_FOOTSTEPS)), (c) => writeWalkZones(c, scene));
-  overwrite(rdt, view, region('footstep zones', ptr(PTR_FOOTSTEPS), ptr(PTR_INIT)), writeFootsteps);
-  overwrite(rdt, view, region('main script', ptr(PTR_MAIN), ptr(PTR_EVENTS)), writeEmptyMain);
-  return rdt;
 }
 
 // ---------------------------------------------------------------------------
