@@ -177,6 +177,9 @@ static void on_command(const char* line)
         }
         items[slot].Id = (unsigned char)a;
         items[slot].qty = (unsigned char)b;
+        // The held-item count (get_item_slot searches only that far) and the
+        // status screen's icons, as a new game sets them up.
+        LoadHeldItemsImages();
     } else if (strcmp(cmd, "flag") == 0 && a >= 0 && b >= 0 && b < 256 && (c == 0 || c == 1)) {
         FlagBank fb = flag_bank(a);
         int byteAt = (b >> 5) * 4;
