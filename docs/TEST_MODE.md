@@ -16,8 +16,7 @@ debug menu's ROOM CHANGE places them. Stages are numbered from 0, as in the
 debug menu, so `rebecca:0:2` is ROOM102.
 
 `rebecca` starts a new game as Rebecca Chambers. She has 88 HP and 6 item
-slots, holding a Beretta with 15 rounds, a First Aid Spray, a Green Herb and a
-clip of 15 rounds.
+slots, holding a Beretta with 15 rounds and a clip of 15 rounds.
 She uses Chris's room files. Scenes written for Chris do not expect her as
 the player and can stall.
 

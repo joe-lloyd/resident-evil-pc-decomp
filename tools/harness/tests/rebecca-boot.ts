@@ -7,8 +7,6 @@ import { snapshot } from '../snapshot.ts';
 
 const CHAR_REBECCA = 3;
 const ITEM_BERETTA = 0x02;
-const ITEM_FIRST_AID_SPRAY = 0x41;
-const ITEM_GREEN_HERB = 0x44;
 const ITEM_CLIP = 0x0b;
 
 const session = await open(Number(process.env.PORT ?? 7801), '--boot rebecca:0:2');
@@ -28,8 +26,6 @@ try {
     JSON.stringify(held) ===
       JSON.stringify([
         { id: ITEM_BERETTA, qty: 15 },
-        { id: ITEM_FIRST_AID_SPRAY, qty: 1 },
-        { id: ITEM_GREEN_HERB, qty: 1 },
         { id: ITEM_CLIP, qty: 15 },
       ]),
     `items ${JSON.stringify(held)}`,

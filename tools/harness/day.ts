@@ -11,9 +11,13 @@ export const DAY = {
   lookout: { stage: 2, room: 0x14 },
 } as const;
 
-const has = (s: GameState, id: number) => s.items.some((it) => it.id === id);
-const FIRST_AID_SPRAY = 0x41;
-const SMALL_KEY = 0x3d;
+/** Room item flag `n` (bank 7, set while the item is still there) is clear: she took it. */
+const taken = (s: GameState, n: number) => {
+  const b = s.banks[7];
+  return ((new DataView(b.buffer, b.byteOffset, b.byteLength).getUint32((n >> 5) * 4, true) >>> (31 - (n & 31))) & 1) === 0;
+};
+const SPRAY_FLAG = 241;
+const KEY_FLAG = 242;
 
 /** The ridge: the opening monologue, then the path east down to the trail. */
 export async function ridge(run: Run): Promise<void> {
@@ -45,11 +49,11 @@ export async function lookout(run: Run): Promise<void> {
   s = await check(link, { x: 3600, z: 3000, w: 1100, d: 1100 });
   if (await radio()) run.log(s, 'listened to the radio');
   else run.fail('the radio said nothing');
-  for (let i = 0; i < 3 && !has(s, FIRST_AID_SPRAY); i++) s = await check(link, { x: 5600, z: 5500, w: 1400, d: 1300 });
-  if (has(s, FIRST_AID_SPRAY)) run.log(s, 'took the First Aid Spray');
+  for (let i = 0; i < 3 && !taken(s, SPRAY_FLAG); i++) s = await check(link, { x: 5600, z: 5500, w: 1400, d: 1300 });
+  if (taken(s, SPRAY_FLAG)) run.log(s, 'took the First Aid Spray');
   else run.fail('could not take the First Aid Spray from the table');
-  for (let i = 0; i < 3 && !has(s, SMALL_KEY); i++) s = await check(link, { x: 4900, z: 3000, w: 900, d: 1200 });
-  if (has(s, SMALL_KEY)) run.log(s, 'took the ranger\'s key');
+  for (let i = 0; i < 3 && !taken(s, KEY_FLAG); i++) s = await check(link, { x: 4900, z: 3000, w: 900, d: 1200 });
+  if (taken(s, KEY_FLAG)) run.log(s, 'took the ranger\'s key');
   else run.fail('could not take the ranger\'s key from the desk');
   await run.picture('day-lookout-1');
   s = await useDoor(link, { x: 5400, z: 7600, w: 1200, d: 900 });

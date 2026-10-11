@@ -101,12 +101,13 @@ void SetInitialItems(void)
         ITEM_BERETTA,          15,
         ITEM_FIRST_AID_SPRAY,   1,
         ITEM_NONE,              0,
-        // rebecca items (port addition: a new game as Rebecca, --boot rebecca)
+        // rebecca items (port addition: a new game as Rebecca, --boot rebecca).
+        // Her day starts with what she has left after the training facility:
+        // her Beretta and one spare clip; she finds the rest on the way.
         ITEM_BERETTA,          15,
-        ITEM_FIRST_AID_SPRAY,   1,
-        ITEM_GREEN_HERB,        1,
         ITEM_CLIP,             15,
-        ITEM_NONE,              0       // ends the list: the copy stops at an empty id
+        ITEM_NONE,              0,      // ends the list: the copy stops at an empty id
+        ITEM_NONE,              0
     };
 
     // init room items flags (bit set = item not taken)
