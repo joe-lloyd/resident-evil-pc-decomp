@@ -7,6 +7,8 @@
 #include "SpriteRenderer.h"
 #include "SFXIds.h"
 #include <cstdio>
+#include <cstring>
+#include <math.h>
 #include "../system/AssetPath.h"
 
 // ============================================================================
@@ -281,30 +283,75 @@ static void CharSelectApplyPosition(void)
 // Renders the character portrait sprites with scaling and shadow
 // Back card (higher tpage) is drawn first, shadow on back card, then front card
 // ============================================================================
-// Port addition: with Rebecca's card there are three, and the one on neither
-// panel lies at the back of the stack, smaller and in deeper shadow, so all
-// three can be seen. It does not move; the two panels swap in front of it.
-static const short kThirdPosX = 0x100;
-static const short kThirdPosY = 0x84;
-static const short kThirdScale = 0x12C;
-static const int kThirdDepth = 4 << 4;
+// Port addition: with Rebecca's card there are three, dealt as a deck of
+// three places, front to back. A turn moves every card one place: RIGHT
+// brings the middle card forward and sends the front card round the left of
+// the deck to the back; LEFT brings the back card round to the front. Each
+// card's place, size, shade and depth are blended through the turn.
+struct DeckPlace { short x, y, scale; };
+static const DeckPlace kDeck[3] = { { 0x88, 0x48, 0xF0 }, { 200, 0x68, 0x110 }, { 0x100, 0x84, 0x12C } };
+static const float kDeckShade[3] = { 0.0f, 100.0f / 255.0f, 150.0f / 255.0f };
+static const int kTurnFrames = 20;
+static unsigned char g_deck[3];       // who holds each place now, front first
+static unsigned char g_deckFrom[3];   // ... before the turn in progress
+static int g_turnLeft = 0;            // frames of that turn still to play
+static unsigned char g_selActive = 0; // the select screen is up (for the test link)
 
-static void CharSelectDrawThirdCard(void)
+static int DeckPlaceOf(const unsigned char* deck, unsigned char who)
 {
-    if (g_selCount < 3) return;
-    const unsigned char who = (unsigned char)(3 - g_panelChar[0] - g_panelChar[1]);
-    const short scale = ComputeScale(kThirdScale);
-    CharSelectRenderSprite(0, 0, 0x50, 0x80, kThirdPosX - 0x100, kThirdPosY - 0x98, 0, 0, scale, kThirdDepth, 0x0C);
-    CharSelectRenderSprite(g_idUV[who][0], g_idUV[who][1], 0x70, 0x80, kThirdPosX - 0x100, kThirdPosY - 0x98, -0x50, 0, scale, kThirdDepth, 0x0C);
-    CharSelectDrawShadowRect(kThirdPosX, kThirdPosY, scale, 58, 150.0f / 255.0f);
+    for (int i = 0; i < 3; i++) if (deck[i] == who) return i;
+    return 0;
+}
+
+static float Lerp(float a, float b, float t) { return a + (b - a) * t; }
+
+static void CharSelectDrawDeck(void)
+{
+    const float t = g_turnLeft > 0 ? 1.0f - (float)g_turnLeft / (float)kTurnFrames : 1.0f;
+    const float e = t * t * (3.0f - 2.0f * t);
+    for (unsigned char who = 0; who < 3; who++) {
+        const int b = DeckPlaceOf(g_deck, who);
+        const int a = g_turnLeft > 0 ? DeckPlaceOf(g_deckFrom, who) : b;
+        float x = Lerp(kDeck[a].x, kDeck[b].x, e);
+        float y = Lerp(kDeck[a].y, kDeck[b].y, e);
+        const float scaleIn = Lerp(kDeck[a].scale, kDeck[b].scale, e);
+        float place = Lerp((float)a, (float)b, e);
+        if (a - b == 2 || b - a == 2) {
+            // Round the outside of the deck: out to the left, then in. It
+            // stays in front (or behind) until halfway, then changes sides.
+            const float arc = sinf(3.14159265f * e);
+            x -= 120.0f * arc;
+            y -= 14.0f * arc;
+            place = (e < 0.5f) == (a == 0) ? -0.5f : 2.5f;
+        }
+        const float slot = place < 0.0f ? 0.0f : place > 2.0f ? 2.0f : place;
+        const int lower = slot >= 2.0f ? 1 : (int)slot;
+        const float shade = Lerp(kDeckShade[lower], kDeckShade[lower + 1], slot - (float)lower);
+        const int depth = (int)(32.0f + 16.0f * place);
+        const short scale = ComputeScale((short)scaleIn);
+        CharSelectRenderSprite(0, 0, 0x50, 0x80, (short)x - 0x100, (short)y - 0x98, 0, 0, scale, (unsigned short)depth, 0x0C);
+        CharSelectRenderSprite(g_idUV[who][0], g_idUV[who][1], 0x70, 0x80, (short)x - 0x100, (short)y - 0x98, -0x50, 0, scale, (unsigned short)depth, 0x0C);
+        if (shade > 0.01f) CharSelectDrawShadowRect((short)x, (short)y, scale, depth - 4, shade);
+    }
+}
+
+// For the test link: the select screen's state (1 = waiting for a choice)
+// and the character on the front card, or -1 when the screen is not up.
+int CharSelect_State(int* front)
+{
+    if (!g_selActive) return -1;
+    *front = g_selCount == 3 ? g_deck[0] : g_panelChar[g_selSelected];
+    return g_selState;
 }
 
 static void CharSelectDrawPortraits(void)
 {
+    if (g_selCount == 3) {
+        CharSelectDrawDeck();
+        return;
+    }
     short scale0 = ComputeScale(g_char0Scale);
     short scale1 = ComputeScale(g_char1Scale);
-
-    CharSelectDrawThirdCard();
 
     if (g_char0Tpage > g_char1Tpage) {
         // Char 0 has higher tpage = back panel → draw first
@@ -364,13 +411,15 @@ void characterSelectionScreen(void)
     }
     g_selCount = rebeccaInstalled ? 3 : 2;
     // Her own mode puts her card in front; otherwise Chris, then Jill, as shipped.
-    if (rebeccaInstalled && g_bRebMode) {
-        g_panelChar[0] = SEL_REBECCA;
-        g_panelChar[1] = SEL_CHRIS;
+    g_panelChar[0] = SEL_CHRIS;
+    g_panelChar[1] = SEL_JILL;
+    if (g_bRebMode) {
+        g_deck[0] = SEL_REBECCA; g_deck[1] = SEL_CHRIS; g_deck[2] = SEL_JILL;
     } else {
-        g_panelChar[0] = SEL_CHRIS;
-        g_panelChar[1] = SEL_JILL;
+        g_deck[0] = SEL_CHRIS; g_deck[1] = SEL_JILL; g_deck[2] = SEL_REBECCA;
     }
+    g_turnLeft = 0;
+    g_selActive = 1;
     g_TextureBankID = 0x0A;
     g_TextureCurrentPage = 5;
     LoadTexturePage(g_TimImageBuffer__bitmap, 5, 10, 0x0C, 0, 0, 0, 0);
@@ -522,6 +571,7 @@ void characterSelectionScreen(void)
         // Check game reset flag
         if (g_bSelResetGameFlag != 0) {
             g_bSelResetGameFlag = 0;
+            g_selActive = 0;
             StMask(0, 3);
             g_main_state_flags2 = g_main_state_flags2 & MSF2_RESET_KEEP_MASK;
             g_main_state_flags = (g_main_state_flags & ~(MSF_SCREEN_MODE_MASK | MSF_CONTINUE_GAME)) | MSF_SCREEN_STANDALONE;
@@ -566,8 +616,17 @@ void characterSelectionScreen(void)
                         g_selSubState = 0;
                         g_selState = 2;
                         g_selSwapDir = (g_RawPadHeld & 0x8000) ? 1 : 0;
-                        // The back panel turns to whoever this direction brings forward.
-                        g_panelChar[g_selSelected ^ 1] = (unsigned char)((g_panelChar[g_selSelected] + (g_selSwapDir ? g_selCount - 1 : 1)) % g_selCount);
+                        if (g_selCount == 3) {
+                            // LEFT: the back card comes round to the front;
+                            // RIGHT: the middle card comes forward.
+                            memcpy(g_deckFrom, g_deck, 3);
+                            const int shift = g_selSwapDir ? 2 : 1;
+                            for (int i = 0; i < 3; i++) g_deck[i] = g_deckFrom[(i + shift) % 3];
+                            g_turnLeft = kTurnFrames;
+                            g_selState = 8;
+                            play_sfx(1, 0);
+                            break;
+                        }
         
                         play_sfx(1, 0);
         
@@ -713,8 +772,6 @@ sub_5:
                 if (g_selTimer == 0) {
                     g_selState = 1;
                     g_selSelected ^= 1;
-                    // Behind again: the card going back shows who comes next.
-                    g_panelChar[g_selSelected ^ 1] = (unsigned char)((g_panelChar[g_selSelected] + 1) % g_selCount);
                 }
                 goto do_update_velocity;
             }
@@ -751,13 +808,16 @@ sub_5:
 
         case 6:
 case_6:
+        {
             // Set selected player and transition to game.
             g_bGameActive = 2;
             nullsub_0047eb80();
             cleanup_texture_slot(12);
             cleanup_texture_slot(13);
             cleanup_texture_slot(14);
-            if (g_panelChar[g_selSelected] == SEL_REBECCA) {
+            g_selActive = 0;
+            const unsigned char chosen = g_selCount == 3 ? g_deck[0] : g_panelChar[g_selSelected];
+            if (chosen == SEL_REBECCA) {
                 // Port addition: her day is a mode of its own, with its own
                 // rooms in the REB overlay and its own opening, not the
                 // mansion intro movie.
@@ -774,16 +834,26 @@ case_6:
                 g_GameMode = GAME_MODE_OG;
                 SetAssetMode("");
             }
-            g_SelectedCharactedId = g_panelChar[g_selSelected];
+            g_SelectedCharactedId = chosen;
             if (g_SelectedCharactedId != CHAR_CHRIS) {
                 g_main_state_flags |= MSF_CHAR_VARIANT;
             }
             DisplayIntroAndStartGame();
             return;
+        }
+
+        case 8:
+            // Port addition: a turn of the three-card deck.
+            if (--g_turnLeft <= 0) {
+                g_turnLeft = 0;
+                g_selState = 1;
+            }
+            break;
 
         case 7:
             // Return to title screen
             if ((g_main_state_flags & MSF_FADE_ACTIVE) == 0) {
+                g_selActive = 0;
                 g_bGameActive = 2;
                 nullsub_0047eb80();
                 cleanup_texture_slot(0x0C);
@@ -796,7 +866,7 @@ case_6:
         }
 
         // Render portraits when in selection or transition states
-        if (g_selState < 4) {
+        if (g_selState < 4 || g_selState == 8) {
             CharSelectDrawPortraits();
         }
 

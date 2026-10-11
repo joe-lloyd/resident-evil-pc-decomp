@@ -3,7 +3,7 @@ seen at her eye height as she walks it, a pool of grey morning light around
 her and darkness beyond. Plays where a door animation would
 (src/game/PathWalk.cpp), with her footsteps.
 
-Metres, real sizes. The path runs along +y; she walks 3 m of it in 3.2 s.
+Metres, real sizes. The path runs along +y; she walks 2.2 m of it in 4.8 s.
 """
 import math
 import os
@@ -16,11 +16,11 @@ import reb  # noqa: E402
 from mathutils import Vector, noise  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))
-FRAMES = 48          # at 2 game frames each: 3.2 s
+FRAMES = 72          # at 2 game frames each: 4.8 s
 TICKS = 2
-STEP_TICKS = 16      # a step every 0.53 s: a slow, careful walk
+STEP_TICKS = 24      # a step every 0.8 s: slow and careful
 EYE = 1.5
-WALKED = 3.0
+WALKED = 2.2
 
 
 def height(x, y):

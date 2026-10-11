@@ -47,6 +47,10 @@ export interface GameState {
   messageFlags: number;
   /** g_openMenuFlag: the menu state machine (0 none, 1 open, 2 init, 3 closing). */
   menuState: number;
+  /** The character select's state (1 = waiting for a choice, 8 = turning the cards), -1 when it is not up. */
+  selectState: number;
+  /** The character on the front card: 0 Chris, 1 Jill, 2 Rebecca; -1 off the screen. */
+  selectFront: number;
   banks: Uint8Array[];
 }
 
@@ -128,6 +132,8 @@ function parseGameState(o: Record<string, unknown>): GameState {
     messageId: num(msg, 'id'),
     messageFlags: num(msg, 'flags'),
     menuState: num(msg, 'menu'),
+    selectState: o.sel === undefined ? -1 : num(obj(o.sel, 'sel'), 'state'),
+    selectFront: o.sel === undefined ? -1 : num(obj(o.sel, 'sel'), 'front'),
     banks: o.banks.map((b, i) => hexBytes(b, `banks[${i}]`)),
   };
 }

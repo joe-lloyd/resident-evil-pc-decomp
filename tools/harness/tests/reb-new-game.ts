@@ -1,6 +1,7 @@
 // Rebecca's day from the title screen, the way a player starts it: the
-// shipped game's NEW GAME shows the character select, which has her card when
-// her day is installed. Turning the cards to hers and choosing her must switch
+// shipped game's NEW GAME shows the character select, which deals her card
+// with Chris's and Jill's when her day is installed. Turning the deck to hers
+// and choosing her must switch
 // to her mode, show her opening narration and start her on the ridge (stage 2
 // room 0x13, which only her overlay has), near the edge, facing out over the
 // valley.
@@ -25,14 +26,19 @@ try {
   while (!(await link.frames(20)).title) await link.tap(Key.enter, 3);
   await link.frames(30);
   await link.tap(Key.action, 3); // NEW GAME, the title's first choice
-  // The cards fade in once the select screen has taken over (its screen mode,
-  // the top bit of the state flags); a press before they settle picks Chris.
-  await link.waitFor((st) => (st.msf & 0x80000000) !== 0, 'the character select', 60_000);
-  await link.frames(120);
+  // The deck: Chris in front, Jill and Rebecca behind. Each RIGHT turns the
+  // deck and brings the middle card forward.
+  const SELECT_WAITING = 1;
+  const front = (who: number) => (st: { selectState: number; selectFront: number }) => st.selectState === SELECT_WAITING && st.selectFront === who;
+  const names = ['Chris', 'Jill', 'Rebecca'];
+  let sel = await link.waitFor((st) => st.selectState === SELECT_WAITING, 'the character select', 60_000);
+  expect(sel.selectFront === 0, `${names[sel.selectFront] ?? sel.selectFront} is in front, expected Chris`);
   console.log(`picture: ${await snapshot(link, OUT, 'reb-new-game-select')}`);
-  // Chris is in front; LEFT turns the cards back round to Rebecca.
-  await link.tap(Key.left, 3);
-  await link.frames(75);
+  for (const who of [1, 2]) {
+    await link.tap(Key.right, 3);
+    sel = await link.waitFor(front(who), `${names[who]} turned to the front`, 10_000).catch(() => sel);
+    expect(sel.selectFront === who, `after a turn ${names[sel.selectFront] ?? sel.selectFront} is in front, expected ${names[who]}`);
+  }
   console.log(`picture: ${await snapshot(link, OUT, 'reb-new-game-rebecca-card')}`);
   await link.tap(Key.action, 3); // choose her
 

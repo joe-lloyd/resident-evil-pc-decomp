@@ -113,6 +113,8 @@ static void capture_before_present(void)
     reply("{\"t\":\"ack\",\"cmd\":\"shot\",\"ok\":%d,\"frame\":%u}\n", ok ? 1 : 0, s_frame);
 }
 
+int CharSelect_State(int* front);   // CharacterSelectionScreen.cpp
+
 static void on_command(const char* line)
 {
     char cmd[32] = "";
@@ -319,8 +321,10 @@ static void build_state(void)
             (int)e.position.x, (int)e.position.y, (int)e.position.z, (int)e.health);
         first = false;
     }
-    put("],\"msg\":{\"choice\":%d,\"id\":%d,\"flags\":%d,\"menu\":%d},\"banks\":[",
-        (int)g_menu_choice_id, s_lastMessageId, (int)g_message_flags, (int)g_openMenuFlag);
+    int selFront = -1;
+    const int selState = CharSelect_State(&selFront);
+    put("],\"msg\":{\"choice\":%d,\"id\":%d,\"flags\":%d,\"menu\":%d},\"sel\":{\"state\":%d,\"front\":%d},\"banks\":[",
+        (int)g_menu_choice_id, s_lastMessageId, (int)g_message_flags, (int)g_openMenuFlag, selState, selFront);
     for (int bank = 0; bank < 10; bank++) {
         FlagBank fb = flag_bank(bank);
         if (bank) put(",");
