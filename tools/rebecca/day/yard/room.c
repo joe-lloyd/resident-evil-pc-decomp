@@ -34,9 +34,10 @@ aot_set(7, 9180, 6120, 2720, 1360, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);     
 aot_set(8, 26010, 13260, 2210, 2040, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);   // his rifle in the grass
 aot_set(9, 27540, 4420, 1360, 1700, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);    // the smashed window
 aot_set(10, 27540, 9860, 2380, 2040, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);   // drag marks into the trees
-// The dog comes out of the trees by the drag marks once she has the key.
+// The dog comes out of the trees once she has the key: from behind the
+// cabin's far corner, so she sees it come round before it reaches her.
 if (ck(FG_ITEM, 242, 1)) {
-    enemy(2 /* Cerberus */, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 30600, 0, 11900, 0, 0, 0, 0);
+    enemy(2 /* Cerberus */, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);
 }
 return;
 

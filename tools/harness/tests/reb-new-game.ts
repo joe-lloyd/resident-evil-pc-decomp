@@ -5,7 +5,8 @@
 // to her mode, show her opening narration and start her on the ridge (stage 2
 // room 0x13, which only her overlay has), near the edge, facing out over the
 // valley.
-import { open } from '../lab.ts';
+import path from 'node:path';
+import { fetch, open, startRecording, stopRecording } from '../lab.ts';
 import { Key } from '../link.ts';
 import { settle } from '../flows.ts';
 import { roomLabel } from '../state.ts';
@@ -16,6 +17,10 @@ const NARRATION = 0x7f;
 const OUT = process.env.OUT ?? '/tmp/rae-tests';
 
 const session = await open(Number(process.env.PORT ?? 7801), '--mode OG');
+// RECORD=<name> records the game window to <name>.mp4 and fetches it to $OUT.
+const record = process.env.RECORD;
+const remoteVideo = record ? `${process.env.RE1_LAB_GAME_DIR ?? 'D:\\Games\\RE1-decomp'}\\${record}.mp4` : undefined;
+if (remoteVideo) startRecording(remoteVideo);
 const failures: string[] = [];
 const expect = (ok: boolean, what: string) => {
   if (!ok) failures.push(what);
@@ -59,5 +64,10 @@ try {
     console.log('PASS');
   }
 } finally {
+  if (remoteVideo) {
+    const local = path.join(OUT, `${record}.mp4`);
+    fetch(stopRecording(remoteVideo), local);
+    console.log(`video: ${local}`);
+  }
   session.end();
 }

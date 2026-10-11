@@ -142,7 +142,7 @@ export async function walkTo(
   let sinceBest = 0;
   const first = await link.state();
   for (;;) {
-    let s = await link.state();
+    let s = await throughTransition(link, await link.state());
     checkAlive(s);
     // A door that fires on touch (or a scripted move) can change the room
     // mid-walk; the target means nothing in the new room.
@@ -174,10 +174,22 @@ export async function walkTo(
   }
 }
 
+/**
+ * If a door or a walk between rooms is playing, wait for it to finish: she
+ * has no control until then. Returns the state after (perhaps in another room).
+ */
+async function throughTransition(link: GameLink, s: GameState): Promise<GameState> {
+  if (screen(s) !== 'transition') return s;
+  return link.waitFor((st) => screen(st) !== 'transition', 'the way into the next room', 60_000);
+}
+
 /** Turn on the spot until facing `angle` (within `tolerance`), re-reading each step. */
 export async function face(link: GameLink, angle: number, tolerance = 100): Promise<GameState> {
+  const start = await link.state();
   for (let i = 0; i < 40; i++) {
-    const s = await link.state();
+    const s = await throughTransition(link, await link.state());
+    // A touch door fired as she turned: the angle meant the room she left.
+    if (s.stage !== start.stage || s.room !== start.room) return s;
     const turn = turnBetween(s.player.angle, angle);
     if (Math.abs(turn) <= tolerance) return s;
     await link.tap(turn > 0 ? Key.right : Key.left, Math.abs(turn) > 600 ? 3 : 1);

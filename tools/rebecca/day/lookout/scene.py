@@ -221,8 +221,8 @@ def build():
     reb.prim("cyl", "Ashtray", glass, (3.62, 2.64, 0.77), (0.12, 0.12, 0.025), segments=20)
     for i in range(4):
         reb.prim("cyl", "Butt", reb.mat_plain("Butt", (0.75, 0.65, 0.5)), (3.62 + rng.uniform(-0.03, 0.03), 2.64 + rng.uniform(-0.03, 0.03), 0.79), (0.008, 0.008, 0.035), rot=(math.pi / 2, 0, rng.uniform(0, 3)))
-    # The chair pushed back from the desk, turned as he got up.
-    chair_at, chair_turn = (3.25, 3.05), 0.5
+    # The desk chair, tucked in under the desk so nothing on it is out of reach.
+    chair_at, chair_turn = (3.62, 2.62), math.pi
     def chair(name, at, turn, tipped=False):
         parts = []
         c, s = math.cos(turn), math.sin(turn)
