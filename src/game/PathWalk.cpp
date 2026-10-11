@@ -112,6 +112,10 @@ void WalkTask(void)
 bool PathWalk_Start(unsigned char variant)
 {
     if (!g_bRebMode || !LoadWalk(variant)) return false;
+    // Slots 0 and 1 (handles at g_RoomSfxBanks[0] and [2]) hold the footsteps
+    // the door record's sound row loaded; say so, as the walk has no picture of them.
+    dbg_printf("[walk] walk %u, footsteps %s\n", (unsigned int)variant,
+               g_RoomSfxBanks[0] != 0 && g_RoomSfxBanks[2] != 0 ? "loaded" : "MISSING");
     g_main_state_flags |= MSF_ROOM_TRANSITION;
     Task_execute(1, (void*)WalkTask);
     return true;
