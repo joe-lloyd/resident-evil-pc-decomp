@@ -356,8 +356,8 @@ function checkAlive(s: GameState): void {
  */
 /** Item 0x0B, the Beretta's ammunition. */
 const CLIP = 0x0b;
-/** Enemy type 2, the dog. */
-const CERBERUS = 2;
+/** Enemies that leap about, so most shots at range miss: the dog (2) and the Hunter (6). */
+const LEAPERS = [2, 6];
 /** Types from 32 up are people (Chris 32, Rebecca 35, Wesker 36, Richard 39), not enemies. */
 const FIRST_NPC_TYPE = 32;
 
@@ -389,9 +389,9 @@ export async function fight(
       const off = Math.abs(turnBetween(s.player.angle, headingTo(s.player.x, s.player.z, target.x, target.z)));
       if (process.env.HARNESS_TRACE) console.log(`    fight type ${target.type} hp ${target.hp} at ${Math.round(d)} off ${off} her hp ${s.player.hp} shots ${shots}`);
 
-      // Dogs leap about and most shots at them miss until they close in;
-      // zombies walk straight on and can be hit from further away.
-      const shootRange = target.type === CERBERUS ? 3500 : 7000;
+      // Dogs and Hunters leap about and most shots at them miss until they
+      // close in; zombies walk straight on and can be hit from further away.
+      const shootRange = LEAPERS.includes(target.type) ? 3500 : 7000;
       if (d > shootRange) {
         // Out of reach: wait aimed for it to come, then go to it.
         if (!waitedFrom || d < waitedFrom.d - 500) waitedFrom = { d, at: Date.now() };
@@ -415,7 +415,7 @@ export async function fight(
       // player.weapon is the 1-based slot of the gun in hand.
       const rounds = (s.items[s.player.weapon - 1]?.qty ?? 0) + s.items.filter((it) => it.id === CLIP).reduce((n, it) => n + it.qty, 0);
       if (rounds === 0) throw new StuckError(`out of ammo with ${live.length} enemies standing`, s);
-      if (target.type !== CERBERUS && d < 1800) {
+      if (!LEAPERS.includes(target.type) && d < 1800) {
         // Close enough to grab her: step back before the next shot.
         await release();
         await faceTowards(link, target.x, target.z).catch(() => undefined);

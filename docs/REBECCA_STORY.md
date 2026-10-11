@@ -59,37 +59,67 @@ the top (2010), poisoned by the giant snake.
 ## Chapter 3: Moonlight
 
 The mansion bar (10F0). In Chris's game he cannot read music and she plays.
-Here she finds the sheet music herself and plays "Moonlight Sonata" to open
-the hidden room behind the bar.
+Here she finds the sheet music on the shelf herself, plays "Moonlight Sonata",
+and a hidden drawer in the piano gives up the Gold Emblem.
+
+- **Way in:** a chapter break. Once Richard's fate is settled, the corridor's
+  dead-end door (2010 door 1, which leads to an empty room slot in Chris's
+  game) takes her to the bar.
+- **Flags:** FG_COMMON 210 (played), 211 (title shown), 212 (has the sheet
+  music), 213 (way on open).
+- **Way on:** the bar's Sword Key door, open once she has the emblem, is a
+  chapter break to the guardhouse.
 
 ## Chapter 4: the guardhouse
 
-The courtyard and the guardhouse, her chemistry chapter.
+Her chemistry chapter.
 
-- **Rooms:** the beehive passage (4080), the drug storehouse (4090) and the
-  Plant 42 room (40C0).
-- **Her challenge:** mixing the chemicals for V-Jolt in the drug storehouse.
-  In Chris's game only she can do this.
-- **Fight:** Plant 42.
+- **Rooms:** the guardhouse passage (4080), the drug storehouse (4090) and
+  Plant 42's room (40C0).
+- **Her challenge:** she works out V-JOLT at the storehouse's mixing table and
+  pours it on the roots that push under the door to Plant 42's room. That kills
+  the plant (its kill flag, FG_ENEMY 96), and the Helmet Key lies beside it.
+  Without the V-JOLT, the plant is alive when she goes in, as in Chris's game.
+- **Flags:** FG_COMMON 220 (roots dead), 221 (title), 222 (mixed), 223 (way
+  on open); FG_ITEM 240 (V-JOLT taken).
+- **Way on:** with the key, Plant 42's door is a chapter break to the lab.
 
 ## Chapter 5: underground
 
-The lab. She powers the elevators (5110) and meets Wesker at the main lab
-entry (5140). In this remix she gets away from him.
+She turns the elevator power on in the power room (5110) and meets Wesker by
+the main lab (5140). He means to kill her; the lights fail and she runs.
+
+- **Flags:** FG_COMMON 230 (power on), 231 (title), 240 (Wesker scene played).
+- **Way on:** Wesker's far door is a chapter break back to the house.
 
 ## Chapter 6: the hunters
 
-Back in the mansion, Hunters roam. The attack on the 1F left stairs (6010)
-and the small library (7060) are hers to survive.
+Back in the house, a Hunter prowls the 1F left stairs (6010). She has to get
+past it to the stairs up; the stairs are a chapter break to the heliport.
+
+- **Flags:** FG_COMMON 250 (title).
 
 ## Ending
 
-She reaches the heliport with Chris. Her ending is new text, then the
-credits.
+The heliport (3030). Chris waits for Brad's helicopter; her epilogue is the
+scene's text. When it closes the script sets MSF2_DEATH_VARIANT and
+MSF_PLAYER_DEAD, so the game ends with no death screen, and ending_state plays
+Chris's ending in which his partner lived (REB mode counts the player as Chris
+there), then the credits and the offer to save the clear.
+
+## Chapter breaks
+
+Chris's routes between these places run through his own scenes: his opening
+in the main hall, Kenneth's corridor, the courtyard and the caves. Until her
+own routes are built, each chapter ends at a door that takes her straight to
+the next chapter's first room, and each chapter opens with its title. These
+are the places to add play areas next.
 
 ## Building order
 
-The prologue and Chapter 1 come first, end to end, with a harness test that
-plays them. Later chapters follow the same pattern: scripts in
+Every chapter has a harness test that boots into its first room and plays
+it (`tools/harness/tests/chapterN-*.ts`), and `full-playthrough.ts` plays them
+all from a new game to the title after the ending. The chapters live in
+`tools/harness/scenario.ts`. New chapters follow the same pattern: scripts in
 `tools/rebecca/rooms/`, messages beside them, flags in the bio card or set by
 scripts, and a test in `tools/harness/tests/`.
