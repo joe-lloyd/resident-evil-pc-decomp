@@ -1,7 +1,7 @@
 // Rebecca's scenario from the title screen, the way a player starts it:
 // NEW GAME in REB mode must show her opening narration and start her on the
-// mountain trail (stage 2 room 0x12), near its top, facing down it. That proves
-// the overlay, the card's start room and spot, and the new room itself.
+// ridge (stage 2 room 0x13), near the edge, facing out over the valley. That
+// proves the overlay, the card's start room and spot, and the new room itself.
 import { open } from '../lab.ts';
 import { Key } from '../link.ts';
 import { settle } from '../flows.ts';
@@ -28,11 +28,11 @@ try {
   const narration = await link.waitFor((s) => s.messageId === NARRATION, 'her opening narration', 60_000).catch(() => undefined);
   expect(narration !== undefined, 'no opening narration (message 0x7f)');
 
-  const s = await settle(link, (st) => st.stage === 2 && st.room === 0x12);
+  const s = await settle(link, (st) => st.stage === 2 && st.room === 0x13);
   console.log(`room ${roomLabel(s)} camera ${s.camera} player ${s.player.id} at (${s.player.x}, ${s.player.z}) facing 0x${(s.player.angle & 0xfff).toString(16)}`);
   expect(s.player.id === CHAR_REBECCA, `player ${s.player.id}, expected Rebecca`);
   expect(s.camera === 0, `camera ${s.camera}, expected 0`);
-  expect(Math.abs(s.player.x - 3500) <= 100 && Math.abs(s.player.z - 1000) <= 100, `started at (${s.player.x}, ${s.player.z}), expected near (3500, 1000)`);
+  expect(Math.abs(s.player.x - 7000) <= 100 && Math.abs(s.player.z - 8800) <= 100, `started at (${s.player.x}, ${s.player.z}), expected near (7000, 8800)`);
   console.log(`picture: ${await snapshot(link, process.env.OUT ?? '/tmp/rae-tests', 'reb-new-game')}`);
 
   if (failures.length) {

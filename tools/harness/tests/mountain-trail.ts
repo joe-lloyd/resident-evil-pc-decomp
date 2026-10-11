@@ -8,11 +8,12 @@
 // Checks, in order: she stands near the top of the trail under camera 0; the
 // west and east edges hold her inside X 2000-5000; walking down the trail cuts
 // from camera 0 to camera 1 as she crosses Z 8000; the door at the bottom
-// takes her to stage 2 room 0, the courtyard garden. A picture is taken under
+// takes her to stage 2 room 0x14, the ranger's lookout. A picture is taken under
 // each camera for a person to look at.
+import path from 'node:path';
 import { open } from '../lab.ts';
 import { Key, type GameLink } from '../link.ts';
-import { settle } from '../flows.ts';
+import { goTo, settle, useRoomData } from '../flows.ts';
 import { roomLabel, type GameState } from '../state.ts';
 import { snapshot } from '../snapshot.ts';
 
@@ -79,10 +80,13 @@ async function walkUntil(done: (s: GameState) => boolean, maxFrames: number): Pr
 
 try {
   let s = await settle(link, (st) => st.stage === 2 && st.room === 0x12);
-  console.log(`start: room ${roomLabel(s)} camera ${s.camera} at (${s.player.x}, ${s.player.z}) facing 0x${(s.player.angle & 0xfff).toString(16)}`);
-  expect(s.camera === 0, `started under camera ${s.camera}, expected 0`);
-  expect(Math.abs(s.player.x - 3500) <= 100 && Math.abs(s.player.z - 1000) <= 100, `started at (${s.player.x}, ${s.player.z}), expected near (3500, 1000)`);
-  expect(Math.abs(angleDiff(s.player.angle, FACING_PLUS_Z)) <= 0x40, `started facing 0x${(s.player.angle & 0xfff).toString(16)}, expected down the trail (0xc00)`);
+  // A dev boot stands her by a door into the room, which may be the lookout's
+  // at the foot; walk to the top, where she arrives from the ridge.
+  useRoomData([path.join(process.env.OVERLAY ?? '/tmp/rae-reb', 'REB'), process.env.RE1_DATA ?? '/tmp/re1-pc']);
+  s = await goTo(link, [path.join(process.env.OVERLAY ?? '/tmp/rae-reb', 'REB'), process.env.RE1_DATA ?? '/tmp/re1-pc'], 3500, 1300, { radius: 200 });
+  s = await face(FACING_PLUS_Z);
+  console.log(`at the top: (${s.player.x}, ${s.player.z}) camera ${s.camera}`);
+  expect(s.camera === 0, `at the top under camera ${s.camera}, expected 0`);
   console.log(`picture: ${await snapshot(link, OUT, 'mountain-trail-start-cam0')}`);
 
   // The edges: face each side and walk into it.
@@ -118,13 +122,11 @@ try {
   console.log(`picture: ${await snapshot(link, OUT, 'mountain-trail-cam1-door')}`);
 
   s = await walkUntil((st) => st.room !== 0x12 || st.stage !== 2, 450);
-  s = await settle(link, (st) => st.stage === 2 && st.room === 0, 30_000).catch(() => s);
-  console.log(`door: now in room ${roomLabel(s)} camera ${s.camera} at (${s.player.x}, ${s.player.z})`);
-  expect(s.stage === 2 && s.room === 0, `the door led to stage ${s.stage} room ${s.room}, expected stage 2 room 0`);
-  if (s.stage === 2 && s.room === 0) {
-    expect(Math.abs(s.player.x - 23800) <= 600 && Math.abs(s.player.z - 27500) <= 600, `arrived at (${s.player.x}, ${s.player.z}), expected near the garden gate (23800, 27500)`);
-    expect(s.camera === 4, `arrived under camera ${s.camera}, expected camera 4, the iron gate`);
-    console.log(`picture: ${await snapshot(link, OUT, 'mountain-trail-garden')}`);
+  s = await settle(link, (st) => st.stage === 2 && st.room === 0x14, 30_000).catch(() => s);
+  expect(s.stage === 2 && s.room === 0x14, `the door led to stage ${s.stage} room ${s.room}, expected the lookout, stage 2 room 0x14`);
+  if (s.stage === 2 && s.room === 0x14) {
+    expect(Math.abs(s.player.x - 6000) <= 600 && Math.abs(s.player.z - 7300) <= 600, `arrived at (${s.player.x}, ${s.player.z}), expected inside the lookout's door (6000, 7300)`);
+    console.log(`picture: ${await snapshot(link, OUT, 'mountain-trail-lookout')}`);
   }
 
   if (failures.length) {
