@@ -15,7 +15,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 
 # Built when a metre was taken as 1000 units; reb.UNITS has the measured scale.
+# Its world stays at 1000 units a metre; the grass is stretched up a little
+# to stand right next to her.
 reb.UNITS = 1000.0
+GROW = 1.3
+FRAMES = 16
 from mathutils import Vector, noise  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))
@@ -152,8 +156,9 @@ def build():
     verts, faces = [], []
     for wx in (-9, -4, 3, 8):
         reb.box(verts, faces, (base.x + wx, base.y - 6.1, base.z + 5), (2.0, 0.2, 1.2))
-    reb.mesh_object("Fire", verts, faces, reb.mat_emit("Fire glow", (1.0, 0.35, 0.08), 60), smooth=False)
-    reb.point("Fire light", (base.x, base.y - 9, base.z + 6), 400000, (1.0, 0.42, 0.12), 4.0)
+    fire_m = reb.mat_emit("Fire glow", (1.0, 0.35, 0.08), 60)
+    reb.mesh_object("Fire", verts, faces, fire_m, smooth=False)
+    fire = reb.point("Fire light", (base.x, base.y - 9, base.z + 6), 400000, (1.0, 0.42, 0.12), 4.0)
     import bpy  # noqa: E402
 
     bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=4, radius2=22, depth=120, location=(base.x - 4, base.y + 4, base.z + 62))
@@ -165,18 +170,29 @@ def build():
     nodes.remove(nodes["Principled BSDF"])
     vol = nodes.new("ShaderNodeVolumePrincipled")
     vol.inputs["Color"].default_value = (0.08, 0.075, 0.07, 1)
-    # Billowing: noise drives the density, thinning towards the top.
+    # Billowing: noise drives the density. Two layers rise through the plume,
+    # half a loop apart, each fading out as it wraps, so the loop is seamless.
+    links = m.node_tree.links
     tc = nodes.new("ShaderNodeTexCoord")
-    tex = nodes.new("ShaderNodeTexNoise")
-    tex.inputs["Scale"].default_value = 3.0
-    tex.inputs["Detail"].default_value = 6
-    m.node_tree.links.new(tc.outputs["Generated"], tex.inputs["Vector"])
+    layers = []
+    for _ in range(2):
+        mapping = nodes.new("ShaderNodeMapping")
+        links.new(tc.outputs["Generated"], mapping.inputs["Vector"])
+        tex = nodes.new("ShaderNodeTexNoise")
+        tex.inputs["Scale"].default_value = 3.0
+        tex.inputs["Detail"].default_value = 6
+        links.new(mapping.outputs["Vector"], tex.inputs["Vector"])
+        layers.append((mapping, tex))
+    mix = nodes.new("ShaderNodeMix")
+    mix.data_type = "FLOAT"
+    links.new(layers[0][1].outputs["Fac"], mix.inputs["A"])
+    links.new(layers[1][1].outputs["Fac"], mix.inputs["B"])
     ramp = nodes.new("ShaderNodeValToRGB")
     ramp.color_ramp.elements[0].position = 0.45
     ramp.color_ramp.elements[0].color = (0, 0, 0, 1)
     ramp.color_ramp.elements[1].color = (0.6, 0.6, 0.6, 1)
-    m.node_tree.links.new(tex.outputs["Fac"], ramp.inputs["Fac"])
-    m.node_tree.links.new(ramp.outputs["Color"], vol.inputs["Density"])
+    links.new(mix.outputs["Result"], ramp.inputs["Fac"])
+    links.new(ramp.outputs["Color"], vol.inputs["Density"])
     m.node_tree.links.new(vol.outputs["Volume"], nodes["Material Output"].inputs["Volume"])
     smoke.data.materials.append(m)
 
@@ -188,6 +204,10 @@ def build():
             if noise.noise(Vector((x * 0.35, y * 0.35, 9))) > -0.1:
                 return x, y
     reb.grass_tufts(rng, 1800, patchy, ground_height, gv, gf)
+    # Tufts made for a 1000-unit metre: stretch them up to her scale.
+    for i in range(2, len(gv), 3):
+        b = (Vector(gv[i - 2]) + Vector(gv[i - 1])) / 2
+        gv[i] = tuple(b + (Vector(gv[i]) - b) * GROW)
     # Stones scattered over the bare patches.
     sv, sf = [], []
     for _ in range(60):
@@ -195,7 +215,14 @@ def build():
         r = rng.uniform(0.05, 0.16)
         reb.boulder(rng, (x, y, ground_height(x, y)), r, sv, sf, squash=0.6)
     reb.mesh_object("Stones", sv, sf, rock)
-    reb.mesh_object("Grass", gv, gf, grass, smooth=False)
+    grass_ob = reb.mesh_object("Grass", gv, gf, grass, smooth=False)
+    grass_rest = [Vector(p) for p in gv]
+    # Birds wheeling over the valley.
+    bird_m = reb.mat_plain("Bird", (0.01, 0.01, 0.012), 0.6)
+    birds = []
+    for i in range(4):
+        bv = [(-0.5, 0, 0), (0, 0.1, 0), (0.5, 0, 0), (0, -0.25, 0)]
+        birds.append((reb.mesh_object(f"Bird {i}", bv, [(0, 1, 3), (1, 2, 3)], bird_m, smooth=False), rng.uniform(0, 1), rng.uniform(8, 16), rng.uniform(-2, 2)))
 
     # Ridges beyond the valley, one behind another, fading into the mist.
     for i, (dist, top, col) in enumerate(((180, 60, (0.03, 0.04, 0.05)), (320, 110, (0.06, 0.065, 0.09)), (520, 170, (0.1, 0.1, 0.14)))):
@@ -217,9 +244,34 @@ def build():
     # A soft key on the clearing, from the cameras' side, for the RE look.
     reb.spot("Key", (7.0, 3.5, 9.0), (7.0, 8.0, 0.0), 2500, (1.0, 0.8, 0.65), 110, 1.0, 2.0)
     reb.spot("Back key", (6.0, 11.0, 8.0), (8.0, 4.0, 0.0), 1800, (0.8, 0.85, 1.0), 110, 1.0, 2.0)
+    fflick = [1.0] + [1.0 + random.Random(i).uniform(-0.25, 0.2) for i in range(1, FRAMES)]
+
+    def pose(k):
+        t = k / FRAMES
+        phase = 2 * math.pi * t
+        for idx in range(2, len(grass_rest), 3):
+            p = grass_rest[idx]
+            w = math.sin(phase + p.x * 0.7 + p.y * 0.4)
+            grass_ob.data.vertices[idx].co = (p.x + 0.08 * w, p.y + 0.03 * w, p.z)
+        grass_ob.data.update()
+        # The smoke rises: layer A drifts up through the loop, layer B half a loop behind.
+        rise = 0.35
+        layers[0][0].inputs["Location"].default_value = (0, 0, -rise * t)
+        layers[1][0].inputs["Location"].default_value = (0, 0, -rise * ((t + 0.5) % 1.0))
+        mix.inputs["Factor"].default_value = math.cos(math.pi * t) ** 2
+        reb.emit_strength(fire_m, 60 * fflick[k])
+        fire.data.energy = 400000 * fflick[k]
+        # Birds circle slowly far out over the valley.
+        for ob, start, radius, dz in birds:
+            a = 2 * math.pi * ((start + t) % 1.0)
+            ob.location = (8 + radius * math.cos(a), 45 + radius * 0.6 * math.sin(a), 6 + dz)
+            ob.rotation_euler = (0.5 if k % 2 else -0.5, 0, a + math.pi)
+            ob.scale = (1.8, 1.8, 1.8)
+
     reb.export(
         CAMERAS,
         OUT,
+        anim={"frames": FRAMES, "ticks": 3, "set": pose},
         extra={
             # The walls the game needs, in game units: the rock face, the pines
             # either side, and the cliff edge, which has no object of its own.

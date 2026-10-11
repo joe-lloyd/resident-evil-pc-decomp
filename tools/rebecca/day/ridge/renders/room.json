@@ -61,6 +61,10 @@
    "name": "Boulder north"
   }
  ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
  "bounds": {
   "x0": 3000,
   "z0": 3000,

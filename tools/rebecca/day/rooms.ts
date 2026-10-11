@@ -4,6 +4,30 @@
 // Stage5 files); docs/REBECCA_DAY.md has the plan.
 import type { DayRoom } from './room.ts';
 
+/**
+ * The mountain trail from the ridge down to the ranger station, early
+ * morning. Its walkable strip and cameras are the ones the trail has always
+ * had, and so is the cut between them at Z 8000.
+ */
+export const trail: DayRoom = {
+  slug: 'trail',
+  stage: 2,
+  room: 0x12,
+  donor: 'Stage3/ROOM3000.RDT',
+  // Low sun from the east through the trunks; sky; the mist's grey.
+  ambient: [1050, 1000, 980],
+  lights: [
+    { x: 30000, y: -6000, z: 6000, rgb: [85, 72, 55], radius: 40000 },
+    { x: 3500, y: -8000, z: 8000, rgb: [45, 50, 62], radius: 30000 },
+    { x: 3500, y: -2000, z: 15000, rgb: [30, 32, 34], radius: 12000 },
+  ],
+  cameraFloor: [
+    { x0: 0, z0: 0, x1: 9000, z1: 8000 }, // camera 0: the top half, from behind the top
+    { x0: 0, z0: 8000, x1: 9000, z1: 22000 }, // camera 1: the lower half, from beyond the foot
+  ],
+  footsteps: 0x2d,
+};
+
 /** The ridge: the clearing on the mountain top where the game opens, at dawn. */
 export const ridge: DayRoom = {
   slug: 'ridge',
@@ -105,4 +129,4 @@ export const bridge: DayRoom = {
   footsteps: 0x2d,
 };
 
-export const dayRooms: readonly DayRoom[] = [ridge, lookout, yard, shed, bridge];
+export const dayRooms: readonly DayRoom[] = [ridge, trail, lookout, yard, shed, bridge];

@@ -11,7 +11,6 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildTrailRoom, trailRoomFile } from './new_room.ts';
 import { buildDayRoom } from './day/room.ts';
 import { dayRooms, dayStart } from './day/rooms.ts';
 
@@ -72,14 +71,11 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   writeFileSync(path.join(reb, 'DATA', 'BIO_CARD.DAT'), card);
   written.push('DATA/BIO_CARD.DAT');
 
-  // New rooms: the mountain trail, built from the courtyard garden's file,
-  // and the rooms of her day (day/rooms.ts).
-  written.push(...buildTrailRoom(baseDir, outDir, raeCli));
+  // New rooms: the rooms of her day (day/rooms.ts).
   for (const room of dayRooms) written.push(...buildDayRoom(room, baseDir, outDir, raeCli));
 
   // Room scripts: rooms/ROOMsrrv.c replaces that room's init and main scripts.
-  // The new room's script is assembled into its own file above.
-  const scripts = readdirSync(roomsDir).filter((f) => /^ROOM[1-7][0-9A-F]{2}[01]\.c$/i.test(f) && f.slice(0, 8).toUpperCase() !== trailRoomFile);
+  const scripts = readdirSync(roomsDir).filter((f) => /^ROOM[1-7][0-9A-F]{2}[01]\.c$/i.test(f));
   for (const file of scripts) {
     const room = file.slice(0, 8).toUpperCase();
     const stageDir = findFile(baseDir, `Stage${room[4]}`);
