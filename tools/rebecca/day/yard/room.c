@@ -10,9 +10,11 @@
 // it moved while this is set, src/game/BgAnim.cpp); FG_ITEM 242 clear once she
 // has the shed key; FG_LOCK 60 the shed's padlock is open; FG_ENEMY 200 the
 // dog is dead. ck(bank, n, 1) is true while flag n is clear.
+// Outdoor doors walk rather than open: door bytes 0, 15, 48 play walk 0 with
+// the footsteps of sound row 15 (src/game/PathWalk.cpp).
 // init procedure 0
 // Back up the trail to the ridge, on touch at the yard's north-west corner.
-door_aot_set(0, 3400, 3400, 4250, 850, 0, 0, 0, 4, 0, ROOM_312, 3500, 0, 14400, 1024, UNLOCKED, 1);
+door_aot_set(0, 3400, 3400, 4250, 850, 0, 15, 48, 4, 0, ROOM_312, 3500, 0, 14400, 1024, UNLOCKED, 1);
 // The cabin door, from the porch steps: inside the door, facing in (-Z).
 door_aot_set(1, 21080, 12325, 1870, 1020, 0, 0, 0, 4, 0, ROOM_314, 6715, 0, 9180, 1024, UNLOCKED, 129);
 // The shed, padlocked: lock 60 (0x80 | 60 = 188) opens with the Small Key.
@@ -21,7 +23,7 @@ door_aot_set(2, 9180, 12410, 1190, 1360, 0, 0, 0, 4, 188, ROOM_316, 4845, 0, 357
 if (ck(FG_COMMON, 205, 1)) {
     aot_set(3, 24310, 19380, 4930, 1360, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 } else {
-    door_aot_set(3, 24310, 19380, 4930, 1360, 0, 0, 0, 4, 0, ROOM_317, 10200, 0, 6120, 3072, UNLOCKED, 1);
+    door_aot_set(3, 24310, 19380, 4930, 1360, 0, 15, 48, 4, 0, ROOM_317, 10200, 0, 6120, 3072, UNLOCKED, 1);
 }
 // In front of the winch: the Hex Crank can be used here (item-use bank 9,
 // bit 30 - 27 = 3), and checking it says what it needs.
@@ -59,7 +61,7 @@ if (ck(FG_COMMON, 205, 1)) {
         // the player-property op's sub-command 7 stands her back up.
         sys_multi(7);
         set(FG_COMMON, 205, 0);
-        door_aot_set(3, 24310, 19380, 4930, 1360, 0, 0, 0, 4, 0, ROOM_317, 10200, 0, 6120, 3072, UNLOCKED, 1);
+        door_aot_set(3, 24310, 19380, 4930, 1360, 0, 15, 48, 4, 0, ROOM_317, 10200, 0, 6120, 3072, UNLOCKED, 1);
         message(136, 255, 0);
     }
 }

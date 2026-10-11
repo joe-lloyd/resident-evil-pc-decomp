@@ -1448,6 +1448,12 @@ void room_transition_load(void)
     }
 
     load_room_sfx(g_nextRoomSfxId);
+
+    // Port addition: Rebecca's outdoor rooms join with a walk down a dark
+    // path (PathWalk.cpp) where a door would open; it runs in the door
+    // animation's place, under the same transition flag.
+    const bool walking = g_nextRoom_be05b7 == DOOR_TYPE_WALK && PathWalk_Start(g_nextRoomDoorType);
+    if (!walking) {
     door_system_load_data();            // FUN_00412300 - load the .dor + start the texture page
 
     // The original does:
@@ -1460,6 +1466,7 @@ void room_transition_load(void)
     // panels through the TMD queue) while this task loads the destination room,
     // and clears the bit on teardown. The wait loop below polls that bit.
     door_system_start_animation();
+    }
     Task_sleep(1);
 
     // 0x0048148c: place the player at the destination's entry point.

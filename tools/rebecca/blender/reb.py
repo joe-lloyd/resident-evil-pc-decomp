@@ -724,3 +724,48 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
         scene.camera = cam
         scene.render.filepath = os.path.join(out_dir, f"cam{i}.depth.png")
         bpy.ops.render.render(write_still=True)
+
+
+def export_walk(pose, frames, out_dir, samples=128, ticks=2, step_ticks=16, light=None):
+    """Render the walk between two rooms (src/game/PathWalk.cpp): `frames`
+    pictures of 320x240, frame k seen from pose(k) -> (eye, look-at) in
+    metres. The game shows each for `ticks` game frames (30 a second) and
+    plays a footstep every `step_ticks`. `light`, if given, is moved to
+    pose's eye each frame, a lamp that walks with her. Writes walk.NNNN.png
+    and walk.json beside them."""
+    os.makedirs(out_dir, exist_ok=True)
+    scene = bpy.context.scene
+    data = bpy.data.cameras.new("Walk camera")
+    data.sensor_fit = "HORIZONTAL"
+    data.sensor_width = 32.0
+    data.lens = 22.0
+    data.clip_start = 0.05
+    data.clip_end = 200
+    cam = bpy.data.objects.new("Walk camera", data)
+    scene.collection.objects.link(cam)
+    scene.camera = cam
+    if os.environ.get("RE1_PREVIEW"):
+        samples = min(samples, 48)
+        frames_to_render = [0, frames // 2, frames - 1]
+    else:
+        frames_to_render = range(frames)
+    _cycles(samples, True, 1.0)
+    scene.cycles.seed = 0
+    scene.view_settings.view_transform = "Standard"
+    scene.view_settings.look = "None"
+    for k in frames_to_render:
+        eye, at = pose(k)
+        cam.location = Vector(eye)
+        cam.rotation_euler = (Vector(at) - Vector(eye)).to_track_quat("-Z", "Y").to_euler()
+        if light is not None:
+            # Just above and behind her eyes, down onto the path ahead.
+            ahead = Vector(at) - Vector(eye)
+            ahead.z = 0
+            ahead.normalize()
+            light.location = Vector(eye) + Vector((0, 0, 0.5)) - ahead * 0.5
+            target = Vector(eye) + ahead * 2.5 - Vector((0, 0, 1.4))
+            light.rotation_euler = (target - light.location).to_track_quat("-Z", "Y").to_euler()
+        scene.render.filepath = os.path.join(out_dir, f"walk.{k:04d}.png")
+        bpy.ops.render.render(write_still=True)
+    with open(os.path.join(out_dir, "walk.json"), "w") as f:
+        json.dump({"frames": frames, "ticks": ticks, "stepTicks": step_ticks}, f)

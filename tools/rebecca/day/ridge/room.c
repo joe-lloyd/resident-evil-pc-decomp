@@ -8,8 +8,10 @@
 // is up, which pauses the game the way Chris's scripts do; with 0 she can
 // still act under the message box.
 // Room messages are 0x80 + index: 128 is message 0.
+// Outdoor doors walk rather than open: door bytes 0, 15, 48 play walk 0 with
+// the footsteps of sound row 15 (src/game/PathWalk.cpp).
 // init procedure 0
-door_aot_set(0, 11400, 3800, 1600, 3000, 0, 0, 0, 4, 0, ROOM_312, 3500, 0, 1200, 3072, UNLOCKED, 1);
+door_aot_set(0, 11400, 3800, 1600, 3000, 0, 15, 48, 4, 0, ROOM_312, 3500, 0, 1200, 3072, UNLOCKED, 1);
 // The edge, all along the south side of the clearing.
 aot_set(1, 3000, 9200, 8000, 1000, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 // The rock face at the back.

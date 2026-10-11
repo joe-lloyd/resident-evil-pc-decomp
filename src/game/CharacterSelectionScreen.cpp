@@ -133,7 +133,8 @@ static short ComputeScale(short panelScale)
 // CharSelectDrawShadowRect - Renders a semi-transparent shadow overlay on a card
 // Submits to g_SpriteCommandBuffer so it renders between back and front cards
 // ============================================================================
-static void CharSelectDrawShadowRect(short posX, short posY, short scaleFix12)
+static void CharSelectDrawShadowRect(short posX, short posY, short scaleFix12,
+                                     int depthKey = 42, float alpha = 100.0f / 255.0f)
 {
     if (g_SpriteQueueCount >= MAX_SPRITE_COMMANDS - 1) return;
 
@@ -148,7 +149,7 @@ static void CharSelectDrawShadowRect(short posX, short posY, short scaleFix12)
     cmd->type = 10;
     cmd->sortClass = SPRITE_CLASS_NORMAL;
     cmd->spriteFlags = 0;
-    cmd->alpha = 100.0f / 255.0f;  // ~0.392
+    cmd->alpha = alpha;            // ~0.392 for the original's back card
     cmd->r = 0.0f;
     cmd->g = 0.0f;
     cmd->b = 0.0f;
@@ -159,7 +160,7 @@ static void CharSelectDrawShadowRect(short posX, short posY, short scaleFix12)
     cmd->x1 = (short)(sx + shadowW - 1);
     cmd->y1 = (short)(sy + shadowH - 1);
 
-    cmd->depthSort = 42 * 16 + 500;
+    cmd->depthSort = depthKey * 16 + 500;
 
     // Use an opaque pixel from the portrait texture page (slot 0x0C)
     cmd->u0 = 0x40;
@@ -280,10 +281,30 @@ static void CharSelectApplyPosition(void)
 // Renders the character portrait sprites with scaling and shadow
 // Back card (higher tpage) is drawn first, shadow on back card, then front card
 // ============================================================================
+// Port addition: with Rebecca's card there are three, and the one on neither
+// panel lies at the back of the stack, smaller and in deeper shadow, so all
+// three can be seen. It does not move; the two panels swap in front of it.
+static const short kThirdPosX = 0x100;
+static const short kThirdPosY = 0x84;
+static const short kThirdScale = 0x12C;
+static const int kThirdDepth = 4 << 4;
+
+static void CharSelectDrawThirdCard(void)
+{
+    if (g_selCount < 3) return;
+    const unsigned char who = (unsigned char)(3 - g_panelChar[0] - g_panelChar[1]);
+    const short scale = ComputeScale(kThirdScale);
+    CharSelectRenderSprite(0, 0, 0x50, 0x80, kThirdPosX - 0x100, kThirdPosY - 0x98, 0, 0, scale, kThirdDepth, 0x0C);
+    CharSelectRenderSprite(g_idUV[who][0], g_idUV[who][1], 0x70, 0x80, kThirdPosX - 0x100, kThirdPosY - 0x98, -0x50, 0, scale, kThirdDepth, 0x0C);
+    CharSelectDrawShadowRect(kThirdPosX, kThirdPosY, scale, 58, 150.0f / 255.0f);
+}
+
 static void CharSelectDrawPortraits(void)
 {
     short scale0 = ComputeScale(g_char0Scale);
     short scale1 = ComputeScale(g_char1Scale);
+
+    CharSelectDrawThirdCard();
 
     if (g_char0Tpage > g_char1Tpage) {
         // Char 0 has higher tpage = back panel → draw first

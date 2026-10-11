@@ -24,10 +24,11 @@ try {
   // Intro text, then the title screen.
   while (!(await link.frames(20)).title) await link.tap(Key.enter, 3);
   await link.frames(30);
-  await link.tap(Key.action, 3); // PRESS START BUTTON
-  await link.frames(45);
-  await link.tap(Key.action, 3); // NEW GAME
-  await link.frames(90);
+  await link.tap(Key.action, 3); // NEW GAME, the title's first choice
+  // The cards fade in once the select screen has taken over (its screen mode,
+  // the top bit of the state flags); a press before they settle picks Chris.
+  await link.waitFor((st) => (st.msf & 0x80000000) !== 0, 'the character select', 60_000);
+  await link.frames(120);
   console.log(`picture: ${await snapshot(link, OUT, 'reb-new-game-select')}`);
   // Chris is in front; LEFT turns the cards back round to Rebecca.
   await link.tap(Key.left, 3);

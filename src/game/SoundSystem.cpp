@@ -399,6 +399,9 @@ static const char* g_roomSfx_11[2] = { "Ladder01", NULL       };   // 0x004d0228
 static const char* g_roomSfx_12[2] = { "Dr_air01", "Dr_air02" };   // 0x004d0230
 static const char* g_roomSfx_13[2] = { "Ev_lab01", NULL       };   // 0x004d0238
 static const char* g_roomSfx_14[2] = { "Ev_ftn01", "Ev_ftn02" };   // 0x004d0240
+// Port addition: footsteps on a forest path, for the walk between Rebecca's
+// outdoor rooms (PathWalk.cpp). Her overlay supplies the files.
+static const char* g_roomSfx_15[2] = { "St_path01", "St_path02" };
 
 // --- room_sound_effects table (0x004d0248) ---
 // Indexed by soundTableIndex. Terminated by NULL sentinel.
@@ -418,6 +421,7 @@ static const char** g_roomSoundEffectsTable[] = {
     g_roomSfx_12,  // 0x004d0278: index 12 - Dr_air01/02 (Lab gates open/close)
     g_roomSfx_13,  // 0x004d027c: index 13 - Ev_lab01 (Lab elevator door open)
     g_roomSfx_14,  // 0x004d0280: index 14 - Ev_ftn01/02 (Fountain elevetor door open/close)
+    g_roomSfx_15,  // port addition: index 15 - St_path01/02 (footsteps on a forest path)
     NULL,          // 0x004d0284: terminator
 };
 

@@ -1979,6 +1979,10 @@ void room_transition_load(void);                      // 0x004813c0 - room/stage
 // room_transition_load while the destination room loads underneath.
 void door_system_load_data(void);                     // FUN_00412300 - .dor + texture page
 void door_system_start_animation(void);               // Task_execute(1, FUN_00444770)
+// Port addition (PathWalk.cpp): a door record of this type plays walk number
+// record +0x08 between Rebecca's outdoor rooms instead of a .dor animation.
+#define DOOR_TYPE_WALK 0x30
+bool PathWalk_Start(unsigned char variant);
 void set_fading(int type, int counter);               // 0x0047b980
 int  cmd_bgm_stop_all(void);                                  // 0x00460b80 - stop sound banks
 void display_die_screen(void);                        // 0x00443090 - death screen display

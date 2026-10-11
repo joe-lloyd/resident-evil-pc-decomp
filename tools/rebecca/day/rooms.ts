@@ -127,3 +127,9 @@ export const bridge: DayRoom = {
 };
 
 export const dayRooms: readonly DayRoom[] = [ridge, trail, lookout, yard, shed, bridge];
+
+/**
+ * The walks between outdoor rooms, by number: a door whose door type is the
+ * walk (0x30) plays walk number its first door byte gives (PathWalk.cpp).
+ */
+export const walks: readonly string[] = ['walk-forest'];

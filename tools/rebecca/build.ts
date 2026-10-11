@@ -13,8 +13,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildDayRoom } from './day/room.ts';
 import { buildCardSheet } from './card.ts';
+import { footstepFiles } from './footsteps.ts';
+import { buildWalk, walkFileName } from './walks.ts';
 import { readPng } from '../harness/image.ts';
-import { dayRooms, dayStart } from './day/rooms.ts';
+import { dayRooms, dayStart, walks } from './day/rooms.ts';
 
 /**
  * Where a new game in REB mode starts (stage counts from 0, as in the debug
@@ -82,6 +84,18 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   );
   writeFileSync(path.join(reb, 'DATA', 'Select_b.tim'), sheet);
   written.push('DATA/Select_b.tim');
+
+  // The walks between her outdoor rooms, and her footsteps on the path.
+  mkdirSync(path.join(reb, 'objspr'), { recursive: true });
+  walks.forEach((slug, n) => {
+    writeFileSync(path.join(reb, 'objspr', walkFileName(n)), buildWalk(path.join(here, 'day', slug, 'renders')));
+    written.push(`objspr/${walkFileName(n)}`);
+  });
+  mkdirSync(path.join(reb, 'sound'), { recursive: true });
+  for (const { name, bytes } of footstepFiles()) {
+    writeFileSync(path.join(reb, 'sound', name), bytes);
+    written.push(`sound/${name}`);
+  }
 
   // New rooms: the rooms of her day (day/rooms.ts).
   for (const room of dayRooms) written.push(...buildDayRoom(room, baseDir, outDir, raeCli));
