@@ -16,6 +16,8 @@ if (!logPath || !video || !outPath) {
 
 /** Where each chapter's function starts, by the first event it logs. */
 const chapterStarts: [RegExp, string][] = [
+  [/^on the ridge$/, 'Act 1: dawn on the mountain'],
+  [/^at the lookout$/, "The ranger's lookout"],
   [/in the mountain trail/, 'Prologue and Chapter 1: the back way in'],
   [/in the save room after the meeting/, "Chapter 2: Bravo's medic"],
   [/in the bar$/, 'Chapter 3: Moonlight'],
