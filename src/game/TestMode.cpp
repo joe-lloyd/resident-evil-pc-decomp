@@ -295,8 +295,8 @@ static void build_state(void)
             (int)e.position.x, (int)e.position.y, (int)e.position.z, (int)e.health);
         first = false;
     }
-    put("],\"msg\":{\"choice\":%d,\"id\":%d},\"banks\":[",
-        (int)g_menu_choice_id, s_lastMessageId);
+    put("],\"msg\":{\"choice\":%d,\"id\":%d,\"flags\":%d,\"menu\":%d},\"banks\":[",
+        (int)g_menu_choice_id, s_lastMessageId, (int)g_message_flags, (int)g_openMenuFlag);
     for (int bank = 0; bank < 10; bank++) {
         FlagBank fb = flag_bank(bank);
         if (bank) put(",");

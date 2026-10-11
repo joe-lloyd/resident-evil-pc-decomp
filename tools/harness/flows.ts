@@ -42,7 +42,9 @@ export async function newGame(link: GameLink, character: Character = 'chris'): P
     if (Date.now() > deadline) throw new Error('never got control after a new game');
     const s = await link.frames(15);
     if (inControl(s) && !messageOnScreen(s)) {
-      if (++calm >= 2) return s;
+      // Three calm looks (45 frames): a room script opens its arrival
+      // message a moment after the room starts playing.
+      if (++calm >= 3) return s;
       continue;
     }
     calm = 0;
@@ -67,7 +69,9 @@ export async function settle(
     if (Date.now() > deadline) throw new Error('the player never got control');
     const s = await link.frames(15);
     if (where(s) && inControl(s) && !messageOnScreen(s)) {
-      if (++calm >= 2) return s;
+      // Three calm looks (45 frames): a room script opens its arrival
+      // message a moment after the room starts playing.
+      if (++calm >= 3) return s;
       continue;
     }
     calm = 0;

@@ -43,6 +43,10 @@ export interface GameState {
   enemies: Enemy[];
   messageChoice: number;
   messageId: number;
+  /** g_message_flags: 0x100 and 0x40 gate menus and item pickups (GameLoop.cpp). */
+  messageFlags: number;
+  /** g_openMenuFlag: the menu state machine (0 none, 1 open, 2 init, 3 closing). */
+  menuState: number;
   banks: Uint8Array[];
 }
 
@@ -122,6 +126,8 @@ function parseGameState(o: Record<string, unknown>): GameState {
     }),
     messageChoice: num(msg, 'choice'),
     messageId: num(msg, 'id'),
+    messageFlags: num(msg, 'flags'),
+    menuState: num(msg, 'menu'),
     banks: o.banks.map((b, i) => hexBytes(b, `banks[${i}]`)),
   };
 }

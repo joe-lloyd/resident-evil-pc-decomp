@@ -1,0 +1,6 @@
+0: \nA ranger's lookout.\p{0}\o"Hello? Is anyone here?"\p{0}\nNo answer. The stove is\nstill warm.
+1: \nThe radio is on. Under the\nstatic, voices.\p{0}\n"...Bravo team, do you\nread? Respond..."\p{0}\n"...Alpha going in tonight,\nover..."\p{0}\nShe tries the handset. Only\nstatic answers.
+2: \nThe ranger's logbook.\p{0}\n"July 21. Another hiker\nmissing near Cider District.\p{0}\nThe dogs are back. Big ones,\nwild. Not like any wolves\nI know.\p{0}\nJuly 23. Gunfire in the\nvalley all night. I'm going\ndown to look."
+3: \nThe bunk hasn't been\nslept in.
+4: \nAn iron stove. The embers\nare still glowing.
+5: \nTins of beans, coffee,\nrifle shells. No rifle.

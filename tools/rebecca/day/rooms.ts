@@ -27,4 +27,28 @@ export const ridge: DayRoom = {
 /** Where a new game stands: on the ridge, near the edge, facing out over the valley (+Z is angle 0xC00). */
 export const dayStart = { stage: ridge.stage, room: ridge.room, x: 7000, z: 8800, angle: 0xc00 } as const;
 
-export const dayRooms: readonly DayRoom[] = [ridge];
+/** The ranger's lookout, inside: the log cabin below the ridge, in the morning. */
+export const lookout: DayRoom = {
+  slug: 'lookout',
+  stage: 2,
+  room: 0x14,
+  donor: 'Stage3/ROOM3000.RDT',
+  // Indoors in the morning: a warm lamp, daylight from the window.
+  ambient: [900, 850, 800],
+  lights: [
+    { x: 6300, y: -1400, z: 6100, rgb: [110, 80, 50], radius: 6000 },
+    { x: 4600, y: -2000, z: 3500, rgb: [70, 75, 85], radius: 6000 },
+    { x: 6000, y: -2400, z: 5500, rgb: [40, 40, 45], radius: 9000 },
+  ],
+  cameraFloor: [
+    { x0: 3000, z0: 3000, x1: 9000, z1: 5500 }, // camera 0, from the south-west, at the desk and bunk
+    { x0: 3000, z0: 5500, x1: 9000, z1: 9000 }, // camera 1, from the north-east, at the stove and door
+  ],
+  footsteps: 0x2d,
+  itemModels: [
+    { from: 'Stage3/ROOM3090.RDT', index: 0 }, // F-Aid Spray
+    { from: 'Stage1/ROOM1130.RDT', index: 0 }, // Small Key, as the ranger's key
+  ],
+};
+
+export const dayRooms: readonly DayRoom[] = [ridge, lookout];

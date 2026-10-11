@@ -17,7 +17,7 @@ import { fileURLToPath } from 'node:url';
 import { readPng } from '../../harness/image.ts';
 import { buildMasks, FRAME_H, FRAME_W, maskPakName } from '../masks.ts';
 import { makePak } from '../pak.ts';
-import { composeRoom, SLOT, type PointLight, type Vec3 } from '../rdt.ts';
+import { composeRoom, itemModel, SLOT, type PointLight, type Vec3 } from '../rdt.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -36,6 +36,11 @@ export interface DayRoom {
   readonly cameraFloor: readonly Rect[];
   /** Footstep sound set (the low byte of the footstep zone record; 0x2D is outdoor earth). */
   readonly footsteps: number;
+  /**
+   * Item models the room's pick-ups use, in slot order (item_aot_set's model
+   * index): a base-game room and the slot its own item_aot_set uses.
+   */
+  readonly itemModels?: readonly { readonly from: string; readonly index: number }[];
 }
 
 interface RoomJson {
@@ -217,8 +222,13 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
     return { from: v(c.from), to: v(c.to), fov: c.fov, maskBlock: masks?.block };
   });
 
+  const baseRoom = (from: string) => {
+    const [stage, file] = from.split('/') as [string, string];
+    return readFileSync(findFile(findFile(baseDir, stage), file));
+  };
   const rdt = composeRoom(donor, {
     cameras,
+    itemModels: spec.itemModels?.map((m) => itemModel(baseRoom(m.from), m.index)),
     ambient: spec.ambient,
     lights: spec.lights,
     sections: {

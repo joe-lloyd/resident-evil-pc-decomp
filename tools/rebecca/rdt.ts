@@ -86,6 +86,32 @@ export interface RoomPlan {
   readonly sections: Partial<Record<Slot, Uint8Array>>;
   /** Keep the donor's object and item models (and icons); otherwise the room has none. */
   readonly keepModels?: boolean;
+  /**
+   * The room's item models, in slot order (item_aot_set's model index), from
+   * other rooms (itemModel()). Replaces the donor's; implies no omodels.
+   */
+  readonly itemModels?: readonly ItemModel[];
+}
+
+/** One item model: the TMD (mesh) and TIM (texture) a room's item model pair points at. */
+export interface ItemModel {
+  readonly tmd?: Uint8Array;
+  readonly tim?: Uint8Array;
+}
+
+/** Item model `index` of room `rdt`, copied out of it. */
+export function itemModel(rdt: Uint8Array, index: number): ItemModel {
+  const v = new DataView(rdt.buffer, rdt.byteOffset, rdt.byteLength);
+  const count = rdt[HDR_ITEMS]!;
+  if (index >= count) throw new Error(`the room has ${count} item models, not ${index + 1}`);
+  const table = u32(v, SLOTS_AT + 4 * SLOT.itemModels);
+  const sections = cut(rdt);
+  const grab = (p: number) => {
+    if (!p) return undefined;
+    const s = holder(sections, p)!;
+    return rdt.slice(p, s.end);
+  };
+  return { tmd: grab(u32(v, table + 8 * index)), tim: grab(u32(v, table + 8 * index + 4)) };
 }
 
 const u32 = (v: DataView, at: number) => v.getUint32(at, true);
@@ -192,6 +218,9 @@ export function composeRoom(donor: Uint8Array, plan: RoomPlan): Uint8Array {
   for (const s of [...kept].sort((a, b) => a.start - b.start)) moved.set(s, place(donor.subarray(s.start, s.end)));
   const ours = new Map<Slot, number>();
   for (const [s, bytes] of Object.entries(plan.sections) as [string, Uint8Array][]) ours.set(Number(s) as Slot, place(bytes));
+  // Item models from other rooms: each TMD and TIM, then the table of pairs.
+  const models = (plan.itemModels ?? []).map((m) => ({ tmd: m.tmd ? place(m.tmd) : 0, tim: m.tim ? place(m.tim) : 0 }));
+  const modelTable = plan.itemModels ? place(new Uint8Array(Math.max(4, models.length * 8))) : 0;
   const masks = plan.cameras.map((c) => place(c.maskBlock ?? new Uint8Array(4)));
   if (vb) moved.set(vb, place(donor.subarray(vb.start, vb.end)));
 
@@ -228,6 +257,18 @@ export function composeRoom(donor: Uint8Array, plan: RoomPlan): Uint8Array {
   for (let s = 0 as Slot; s < 19; s++) {
     const own = ours.get(s);
     ov.setUint32(SLOTS_AT + 4 * s, own ?? map(u32(dv, SLOTS_AT + 4 * s)), true);
+  }
+  if (plan.itemModels) {
+    out[HDR_OMODELS] = 0;
+    out[HDR_ITEMS] = models.length;
+    models.forEach((m, i) => {
+      ov.setUint32(modelTable + 8 * i, m.tmd, true);
+      ov.setUint32(modelTable + 8 * i + 4, m.tim, true);
+    });
+    ov.setUint32(SLOTS_AT + 4 * SLOT.objectModels, 0, true);
+    ov.setUint32(SLOTS_AT + 4 * SLOT.itemModels, modelTable, true);
+    // The icon tiles are a PS1 leftover nothing on PC reads (RDT_FILE_FORMAT.md).
+    ov.setUint32(SLOTS_AT + 4 * SLOT.itemIcons, 0, true);
   }
 
   // Cameras.
