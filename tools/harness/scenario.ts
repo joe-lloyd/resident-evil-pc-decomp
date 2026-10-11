@@ -223,21 +223,21 @@ export async function chapter2(run: Run, { serumFirst = false, late = false } = 
 const GOLD_EMBLEM = 32;
 const BAR_TITLE = 0x80 + 29;
 const PIANO_PLAYED = 0x80 + 31;
-const SHEET_FOUND = 0x80 + 32;
+const MUSIC_NOTES = 35;
 const SHEET = { x: 16900, z: 10000, w: 1000, d: 2500 };
 const PIANO = { x: 10200, z: 7300, w: 600, d: 1500 };
 const BAR_EXIT = { x: 13700, z: 960, w: 1700, d: 1900 };
 
-/** Find the sheet music, play the piano, take the Gold Emblem, go on to the guardhouse. */
+/** Take the Music Notes, play the piano, take the Gold Emblem, go on to the guardhouse. */
 export async function chapter3(run: Run, title = run.expectMessage(BAR_TITLE, 'chapter 3 title')): Promise<void> {
   const { link } = run;
   let s = await settle(link, (st) => inRoom(st, ROOMS.bar));
   if (!(await title())) run.fail('the chapter 3 title never showed');
   run.log(s, 'in the bar');
-  const sheet = run.expectMessage(SHEET_FOUND, 'the sheet music', 60_000);
   s = await check(link, SHEET);
-  if (await sheet()) run.log(s, 'found the sheet music');
-  else run.fail('the sheet music was not found');
+  for (let i = 0; i < 2 && !has(s, MUSIC_NOTES); i++) s = await check(link, SHEET);
+  if (has(s, MUSIC_NOTES)) run.log(s, 'took the Music Notes');
+  else run.fail('could not take the Music Notes');
   const played = run.expectMessage(PIANO_PLAYED, 'the piano', 60_000);
   s = await check(link, PIANO);
   if (await played()) {
@@ -247,6 +247,7 @@ export async function chapter3(run: Run, title = run.expectMessage(BAR_TITLE, 'c
   for (let i = 0; i < 3 && !has(s, GOLD_EMBLEM); i++) s = await check(link, PIANO);
   if (has(s, GOLD_EMBLEM)) run.log(s, 'took the Gold Emblem');
   else run.fail('the Gold Emblem was not on the piano');
+  if (has(s, MUSIC_NOTES)) run.fail('the Music Notes are still in her bag');
   await run.door(BAR_EXIT, ROOMS.guardhouse, 'on to the guardhouse');
 }
 

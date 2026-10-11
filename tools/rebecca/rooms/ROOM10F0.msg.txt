@@ -30,4 +30,3 @@
 29: \nChapter 3: Moonlight
 30: \nA fine grand piano.\p{0}\oIf only I had the music..."
 31: \nRebecca plays \oMoonlight\nSonata".\p{0}\nSomething clicks inside\nthe piano.\p{0}\nThere's an emblem in a\nhidden drawer.
-32: \nSheet music. \oMoonlight\nSonata".\p{0}\nRebecca takes it.

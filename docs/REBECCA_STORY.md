@@ -59,14 +59,14 @@ the top (2010), poisoned by the giant snake.
 ## Chapter 3: Moonlight
 
 The mansion bar (10F0). In Chris's game he cannot read music and she plays.
-Here she finds the sheet music on the shelf herself, plays "Moonlight Sonata",
-and a hidden drawer in the piano gives up the Gold Emblem.
+Here she takes the Music Notes off the shelf herself, plays "Moonlight
+Sonata", and a hidden drawer in the piano gives up the Gold Emblem.
 
 - **Way in:** a chapter break. Once Richard's fate is settled, the corridor's
   dead-end door (2010 door 1, which leads to an empty room slot in Chris's
   game) takes her to the bar.
-- **Flags:** FG_COMMON 210 (played), 211 (title shown), 212 (has the sheet
-  music), 213 (way on open).
+- **Flags:** FG_COMMON 210 (played), 211 (title shown), 213 (way on open);
+  FG_ITEM 7 (Music Notes taken).
 - **Way on:** the bar's Sword Key door, open once she has the emblem, is a
   chapter break to the guardhouse.
 

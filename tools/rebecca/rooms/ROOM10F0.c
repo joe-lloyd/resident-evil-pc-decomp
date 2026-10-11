@@ -1,10 +1,10 @@
 // ROOM10F0, the bar, in Rebecca's scenario (Chapter 3: Moonlight). In Chris's
 // game he cannot read music and Rebecca plays from the sheet he finds. Here
-// she finds the sheet music herself, plays "Moonlight Sonata", and the Gold
+// she finds the Music Notes herself, plays "Moonlight Sonata", and the Gold
 // Emblem turns up on the piano. None of Chris's events run.
 //
 // FG_COMMON 210: she has played the piano. 211: the chapter title has shown.
-// 212: she has the sheet music. 213: the door to Chapter 4 is open.
+// 213: the door to Chapter 4 is open. FG_ITEM 7: the Music Notes are taken.
 // (ck(bank, n, 1) holds while flag n is clear; set(bank, n, 0) sets it.)
 // cmpb(16, 0, n) holds on the frame she presses action facing zone n - 1.
 // Room messages are 0x80 + index: 157 is message 29.
@@ -19,19 +19,20 @@ if (ck(FG_ITEM, 21, 1)) {
 } else {
     door_aot_set(0, 13700, 960, 1700, 1900, 1, 0, 31, 5, 134, ROOM_S04, 30700, 0, 3900, 1024, 51 /* Sword Key */, 129);
 }
-// The piano (zone 2) and the sheet music (zone 5) are message zones: the
-// engine skips SCE_NONE zones when she presses action, and a message zone
-// records which zone she checked (cmpb(16, 0, zone + 1)) for main to react to.
-// The sheet music lies past the furniture in front of it (object 1, whose
-// collision stops her at Z 10270); its zone reaches out to her. It is a flag,
-// not the Music Notes item: picking that item up here stalls the game with
-// the item viewer requested and never opened (MSF_MENU_MODE_ITEM_VIEW).
-if (ck(FG_COMMON, 212, 1)) {
-    aot_set(5, 16900, 10000, 1000, 2500, SCE_MESSAGE, 129, 160, 0, 255, 0, 0, 0);
-    aot_set(2, 10200, 7300, 600, 1500, SCE_MESSAGE, 129, 158, 0, 255, 0, 0, 0);
-} else {
-    if (ck(FG_COMMON, 210, 1)) {
+// The piano (zone 2) is a message zone: the engine skips SCE_NONE zones when
+// she presses action, and a message zone records which zone she checked
+// (cmpb(16, 0, zone + 1)) for main to react to. Its message is the scene, so
+// it is chosen to suit: no music, or the music in her bag.
+// The Music Notes lie past the furniture in front of them (object 1, whose
+// collision stops her at Z 10270); their zone reaches out to her.
+if (ck(FG_COMMON, 210, 1)) {
+    if (ck(FG_ITEM, 7, 0)) {
+        item_aot_set(5, 16900, 10000, 1000, 2500, 35 /* Music Notes */, 1, 2, 255, 98, 67, 72, 244, 30, 45, 226, 4, 7, 129, 0, 0);
+    }
+    if (item_ck(35 /* Music Notes */)) {
         aot_set(2, 10200, 7300, 600, 1500, SCE_MESSAGE, 129, 159, 0, 255, 0, 0, 0);
+    } else {
+        aot_set(2, 10200, 7300, 600, 1500, SCE_MESSAGE, 129, 158, 0, 255, 0, 0, 0);
     }
 }
 // Once she has played, the emblem lies on the piano: model at (10500, -800, 8050).
@@ -48,15 +49,14 @@ if (ck(FG_COMMON, 211, 1)) {
     set(FG_COMMON, 211, 0);
     message(157, 0, 0);
 }
-// She read the sheet music: take it, and the piano now plays.
-if (ck(FG_COMMON, 212, 1) && cmpb(16, 0, 6)) {
-    set(FG_COMMON, 212, 0);
-    aot_delete(5, SCE_NONE, 0);
+// She took the Music Notes: the piano now plays.
+if (testpickup(35 /* Music Notes */)) {
     aot_reset(2, SCE_MESSAGE, 129, 159, 255, 0);
 }
-// She played: the piano gives up the emblem.
-if (ck(FG_COMMON, 212, 0) && ck(FG_COMMON, 210, 1) && cmpb(16, 0, 3)) {
+// She played: the notes are spent and the piano gives up the emblem.
+if (ck(FG_COMMON, 210, 1) && cmpb(16, 0, 3) && item_ck(35 /* Music Notes */)) {
     set(FG_COMMON, 210, 0);
+    remove_item(35 /* Music Notes */);
     aot_delete(2, SCE_NONE, 0);
     item_aot_set(4, 10200, 7300, 600, 1500, 32 /* Gold Emblem */, 1, 1, 255, 4, 41, 224, 252, 114, 31, 0, 4, 21, 129, 0, 0);
 }
