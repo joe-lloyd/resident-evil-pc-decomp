@@ -307,9 +307,12 @@ function checkAlive(s: GameState): void {
  * leave its health unchanged she turns to it again. Returns the shots fired.
  * Needs a gun equipped.
  */
+/** Item 0x0B, the Beretta's ammunition. */
+const CLIP = 0x0b;
+
 export async function fight(
   link: GameLink,
-  { range = 40_000, shootRange = 7000, timeoutMs = 120_000 }: { range?: number; shootRange?: number; timeoutMs?: number } = {},
+  { range = 40_000, shootRange = 3500, timeoutMs = 120_000 }: { range?: number; shootRange?: number; timeoutMs?: number } = {},
 ): Promise<number> {
   const deadline = Date.now() + timeoutMs;
   let shots = 0;
@@ -355,6 +358,9 @@ export async function fight(
         continue;
       }
       waitedFrom = undefined;
+      // player.weapon is the 1-based slot of the gun in hand.
+      const rounds = (s.items[s.player.weapon - 1]?.qty ?? 0) + s.items.filter((it) => it.id === CLIP).reduce((n, it) => n + it.qty, 0);
+      if (rounds === 0) throw new StuckError(`out of ammo with ${live.length} enemies standing`, s);
       if (!aiming || off > 500 || misses >= 3) {
         await release();
         await faceTowards(link, target.x, target.z).catch(() => undefined);

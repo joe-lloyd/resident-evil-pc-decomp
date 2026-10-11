@@ -105,7 +105,7 @@ void SetInitialItems(void)
         ITEM_BERETTA,          15,
         ITEM_FIRST_AID_SPRAY,   1,
         ITEM_GREEN_HERB,        1,
-        ITEM_NONE,              0
+        ITEM_CLIP,             15
     };
 
     // init room items flags (bit set = item not taken)
