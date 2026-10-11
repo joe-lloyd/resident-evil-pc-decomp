@@ -41,10 +41,7 @@ export const ridge: DayRoom = {
     { x: 7000, y: -7000, z: 9000, rgb: [70, 58, 54], radius: 12000 },
     { x: 7000, y: -9000, z: 6500, rgb: [40, 42, 55], radius: 16000 },
   ],
-  cameraFloor: [
-    { x0: 3000, z0: 6000, x1: 11000, z1: 10000 }, // camera 0 looks out over the edge
-    { x0: 3000, z0: 3000, x1: 13000, z1: 6000 }, // camera 1 looks back at the rock face and the way out
-  ],
+  cameraFloor: 'auto',
   footsteps: 0x2d,
 };
 

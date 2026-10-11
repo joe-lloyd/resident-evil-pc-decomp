@@ -14,11 +14,13 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 
-# Built when a metre was taken as 1000 units; reb.UNITS has the measured scale.
-# Its world stays at 1000 units a metre; the grass is stretched up a little
-# to stand right next to her.
+# Laid out when a metre was taken as 1000 units, and its world stays that
+# way (reb.UNITS = 1000): the cameras, the clearing and the valley keep their
+# places. What grows or lies in it is GROW (1700 / 1000) times its real size,
+# so it stands right next to her (reb.UNITS has the measured scale), and the
+# trees stand back from the clearing to leave the view open.
 reb.UNITS = 1000.0
-GROW = 1.3
+GROW = 1.7
 FRAMES = 16
 from mathutils import Vector, noise  # noqa: E402
 
@@ -85,14 +87,14 @@ def build():
     for i in range(14):
         x = rng.uniform(-1, 15)
         y = rng.uniform(2.2, 3.0)
-        reb.boulder(rng, (x, y, ground_height(x, y) + 0.2), rng.uniform(0.35, 0.9), verts, faces)
+        reb.boulder(rng, (x, y, ground_height(x, y) + 0.2), rng.uniform(0.35, 0.9) * GROW, verts, faces)
     reb.mesh_object("Fallen rocks", verts, faces, rock)
     # Pines along the top of the rock face, against the sky.
     tv, tf, tb = [], [], []
     for i in range(12):
         x = rng.uniform(-4, 18)
         base = Vector((x, rng.uniform(-3.5, -1.5), 14.5))
-        h = rng.uniform(7, 11)
+        h = rng.uniform(7, 11) * GROW
         reb.conifer(rng, base, h, tv, tf)
         tb.append((base, h))
     reb.mesh_object("Cliff-top pines", tv, tf, needles, smooth=False)
@@ -105,7 +107,7 @@ def build():
         "Boulder north": (8.6, 4.2, 0.55, False),
     }.items():
         verts, faces = [], []
-        reb.boulder(rng, (x, y, ground_height(x, y) + r * 0.3), r, verts, faces)
+        reb.boulder(rng, (x, y, ground_height(x, y) + r * 0.3 * GROW), r * GROW, verts, faces)
         ob = reb.wall(reb.mesh_object(name, verts, faces, rock), "circle")
         if in_front:
             reb.mask(ob)
@@ -114,16 +116,16 @@ def build():
     # the trail out, and the forest down the valley.
     needle_v, needle_f, bases = [], [], []
     ring = []
-    for _ in range(40):
-        x, y = rng.uniform(-6, 2.6), rng.uniform(2, 11)
+    for _ in range(30):
+        x, y = rng.uniform(-8, 1.2), rng.uniform(1, 13)
         ring.append((x, y))
-    for _ in range(40):
-        x, y = rng.uniform(11.6, 20), rng.uniform(1.5, 11)
-        if 3.6 < y < 7.0 and x < 15:
+    for _ in range(30):
+        x, y = rng.uniform(12.8, 23), rng.uniform(0.5, 13)
+        if 2.5 < y < 8.0 and x < 19:
             continue  # the trail out
         ring.append((x, y))
     for x, y in ring:
-        h = rng.uniform(8, 14)
+        h = rng.uniform(8, 14) * GROW
         base = Vector((x, y, ground_height(x, y) - 0.2))
         reb.conifer(rng, base, h, needle_v, needle_f)
         bases.append((base, h))
@@ -212,7 +214,7 @@ def build():
     sv, sf = [], []
     for _ in range(60):
         x, y = rng.uniform(3.0, 11.0), rng.uniform(3.2, 10.0)
-        r = rng.uniform(0.05, 0.16)
+        r = rng.uniform(0.05, 0.16) * GROW
         reb.boulder(rng, (x, y, ground_height(x, y)), r, sv, sf, squash=0.6)
     reb.mesh_object("Stones", sv, sf, rock)
     grass_ob = reb.mesh_object("Grass", gv, gf, grass, smooth=False)
@@ -275,7 +277,8 @@ def build():
         extra={
             # The walls the game needs, in game units: the rock face, the pines
             # either side, and the cliff edge, which has no object of its own.
-            "bounds": {"x0": 3000, "z0": 3000, "x1": 11000, "z1": 10000},
+            # The west edge stops short of the pines: both cameras lose her there.
+            "bounds": {"x0": 3900, "z0": 3000, "x1": 11000, "z1": 10000},
             "exit": {"x0": 11000, "z0": 3800, "x1": 13000, "z1": 6800},
         },
     )
