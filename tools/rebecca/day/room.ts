@@ -16,7 +16,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readPng } from '../../harness/image.ts';
 import { animFileName, buildAnim, type AnimLayer } from '../bganim.ts';
-import { buildMasks, FRAME_H, FRAME_W, maskPakName } from '../masks.ts';
+import { buildMasks, maskPakName } from '../masks.ts';
+import { autoFloors, readDepth } from './floors.ts';
 import { makePak } from '../pak.ts';
 import { composeRoom, itemModel, SLOT, type PointLight, type Vec3 } from '../rdt.ts';
 
@@ -33,8 +34,12 @@ export interface DayRoom {
   readonly donor: string;
   readonly ambient: readonly [number, number, number];
   readonly lights: readonly [PointLight, PointLight, PointLight];
-  /** The part of the floor each camera shows, one or more rectangles that do not overlap another camera's; walking into one cuts to it. */
-  readonly cameraFloor: readonly (Rect | readonly Rect[])[];
+  /**
+   * The part of the floor each camera shows, one or more rectangles that do
+   * not overlap another camera's; walking into one cuts to it. 'auto' works
+   * them out from the scene (floors.ts).
+   */
+  readonly cameraFloor: readonly (Rect | readonly Rect[])[] | 'auto';
   /** Footstep sound set (the low byte of the footstep zone record; 0x2D is outdoor earth). */
   readonly footsteps: number;
   /**
@@ -49,6 +54,8 @@ interface RoomJson {
   walls: { shape: 'box' | 'circle'; x0: number; z0: number; x1: number; z1: number; name: string }[];
   /** The walkable floor; walls go round it, leaving the exits open. */
   bounds: Rect;
+  /** Floor that is not there, inside the bounds (a gorge either side of a bridge): walls too. */
+  voids?: Rect[];
   exits?: Rect[];
   exit?: Rect;
   /** Looping animation: cam<N>.a<k>.png for k = 1 .. frames - 1, cam<N>.png being frame 0. */
@@ -103,13 +110,13 @@ function zoneRecord(w: Writer, camTo: number, camFrom: number, r: Rect): void {
  * (the engine culls entities outside it), then a trigger into every other
  * camera's floor. The table ends with camFrom 0xFFFF.
  */
-function switchZones(spec: DayRoom, bounds: Rect): Uint8Array {
+function switchZones(floors: readonly (Rect | readonly Rect[])[], bounds: Rect): Uint8Array {
   const w = new Writer();
   const margin = 1500;
   const seen: Rect = { x0: bounds.x0 - margin, z0: bounds.z0 - margin, x1: bounds.x1 + margin, z1: bounds.z1 + margin };
-  spec.cameraFloor.forEach((_, from) => {
+  floors.forEach((_, from) => {
     zoneRecord(w, from, from, seen);
-    spec.cameraFloor.forEach((floor, to) => {
+    floors.forEach((floor, to) => {
       if (to !== from) for (const r of [floor].flat()) zoneRecord(w, to, from, r);
     });
   });
@@ -145,6 +152,7 @@ function walls(json: RoomJson): { shape: number; r: Rect }[] {
   return [
     ...strips.map((r) => ({ shape: PUSH_RECT, r: clampRect(r) })),
     ...json.walls.map((wl) => ({ shape: wl.shape === 'circle' ? PUSH_CIRCLE : PUSH_RECT, r: clampRect(wl) })),
+    ...(json.voids ?? []).map((r) => ({ shape: PUSH_RECT, r: clampRect(r) })),
   ];
 }
 
@@ -162,9 +170,10 @@ function collision(json: RoomJson): Uint8Array {
   return w.out();
 }
 
-/** The NPC navigation grid: one zone, the whole floor. */
+/** The NPC navigation grid: one zone, the whole floor (its corners are signed, so a long room is cut at 0x7FFF). */
 function walkZones(bounds: Rect): Uint8Array {
-  return new Writer().u8(1).u8(0).i16(bounds.x0).i16(bounds.z0).i16(bounds.x1).i16(bounds.z1).u16(0x03ff).u16(0).out();
+  const c = (v: number) => Math.min(v, 0x7fff);
+  return new Writer().u8(1).u8(0).i16(c(bounds.x0)).i16(c(bounds.z0)).i16(c(bounds.x1)).i16(c(bounds.z1)).u16(0x03ff).u16(0).out();
 }
 
 /** One catch-all footstep zone: the scan has no terminator. */
@@ -174,18 +183,6 @@ function footstepZones(sound: number): Uint8Array {
 
 /** A script section holding one procedure that only returns; `rae asm` writes the room's own. */
 const emptyScript = () => new Writer().u16(4).u8(0).u8(0).u16(0).out();
-
-/** Foreground depth from cam<N>.depth.png: view Z / 16 as R * 256 + G, 0 where nothing is in front. */
-function readDepth(file: string): Float32Array {
-  const img = readPng(file);
-  if (img.width !== FRAME_W || img.height !== FRAME_H) throw new Error(`${file} is not ${FRAME_W}x${FRAME_H}`);
-  const depth = new Float32Array(FRAME_W * FRAME_H);
-  for (let i = 0; i < depth.length; i++) {
-    const v = img.rgb[i * 3]! * 256 + img.rgb[i * 3 + 1]!;
-    depth[i] = v === 0 ? Infinity : v * 16;
-  }
-  return depth;
-}
 
 function findFile(dir: string, name: string): string {
   const hit = readdirSync(dir).find((f) => f.toLowerCase() === name.toLowerCase());
@@ -198,7 +195,7 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
   const dir = path.join(here, spec.slug);
   const renders = path.join(dir, 'renders');
   const json = JSON.parse(readFileSync(path.join(renders, 'room.json'), 'utf8')) as RoomJson;
-  if (json.cameras.length !== spec.cameraFloor.length) {
+  if (spec.cameraFloor !== 'auto' && json.cameras.length !== spec.cameraFloor.length) {
     throw new Error(`${spec.slug}: the scene has ${json.cameras.length} cameras, the spec gives floor for ${spec.cameraFloor.length}`);
   }
   const [donorStage, donorFile] = spec.donor.split('/') as [string, string];
@@ -210,10 +207,15 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
   mkdirSync(outStage, { recursive: true });
   const written: string[] = [];
 
+  const depths = json.cameras.map((_, i) => {
+    const file = path.join(renders, `cam${i}.depth.png`);
+    return existsSync(file) ? readDepth(file) : undefined;
+  });
+  const floors = spec.cameraFloor === 'auto' ? autoFloors({ ...json, walls: [...json.walls, ...(json.voids ?? [])] }, depths) : spec.cameraFloor;
   const cameras = json.cameras.map((c, i) => {
     const background = readPng(path.join(renders, `cam${i}.png`));
-    const depthFile = path.join(renders, `cam${i}.depth.png`);
-    const masks = existsSync(depthFile) ? buildMasks(background, readDepth(depthFile)) : undefined;
+    const depth = depths[i];
+    const masks = depth ? buildMasks(background, depth) : undefined;
     const pak = `RC${stem.slice(4, 7)}${i}.pak`;
     writeFileSync(path.join(outStage, pak), makePak(background));
     written.push(`${stageDir}/${pak}`);
@@ -253,7 +255,7 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
     ambient: spec.ambient,
     lights: spec.lights,
     sections: {
-      [SLOT.switchZones]: switchZones(spec, json.bounds),
+      [SLOT.switchZones]: switchZones(floors, json.bounds),
       [SLOT.collision]: collision(json),
       [SLOT.walkZones]: walkZones(json.bounds),
       [SLOT.footsteps]: footstepZones(spec.footsteps),

@@ -688,14 +688,12 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
             bpy.ops.render.render(write_still=True)
 
     render_all("")
-    if preview:
-        return
-    if anim:
+    if anim and not preview:
         for k in range(1, anim["frames"]):
             anim["set"](k)
             render_all(f".a{k}")
         anim["set"](0)
-    for st in states:
+    for st in states if not preview else ():
         st["set"](True)
         render_all(f".s-{st['name']}")
         st["set"](False)
