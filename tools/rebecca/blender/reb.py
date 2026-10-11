@@ -509,11 +509,31 @@ def _holdout_material():
     return m
 
 
-def export(cameras, out_dir, samples=512, extra=None):
-    """Render every camera's background and foreground depth, and write room.json."""
+def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
+    """Render every camera's background and foreground depth, and write room.json.
+
+    anim: {"frames": N, "ticks": T, "set": f} makes the background move in the
+    game (src/game/BgAnim.cpp). f(k) poses the scene for frame k of a loop of
+    N; frame 0 is the background itself, frames 1 .. N - 1 are rendered as
+    cam<N>.a<k>.png. The game shows each frame for T game frames (30 a second),
+    so the loop should come back round to frame 0.
+
+    states: [{"name", "bank", "bit", "set": f}] are changes the room's script
+    makes, shown while FG_SCENARIO (bank 0) or FG_COMMON (bank 1) flag `bit`
+    is set. f(True) poses the change, f(False) undoes it; rendered as
+    cam<N>.s-<name>.png. Neither may move a mask() object: masks are cut from
+    frame 0.
+    """
     os.makedirs(out_dir, exist_ok=True)
     scene = bpy.context.scene
     cams = [add_camera(i, c) for i, c in enumerate(cameras)]
+    if anim:
+        anim["set"](0)
+    meta = {}
+    if anim:
+        meta["anim"] = {"frames": anim["frames"], "ticks": anim["ticks"]}
+    if states:
+        meta["states"] = [{"name": st["name"], "bank": st["bank"], "bit": st["bit"]} for st in states]
 
     walls = []
     for ob in scene.objects:
@@ -522,17 +542,32 @@ def export(cameras, out_dir, samples=512, extra=None):
             x0, z0, x1, z1 = _game_footprint(ob)
             walls.append({"shape": shape, "x0": x0, "z0": z0, "x1": x1, "z1": z1, "name": ob.name})
     with open(os.path.join(out_dir, "room.json"), "w") as f:
-        json.dump({"cameras": cameras, "walls": walls, **(extra or {})}, f, indent=1)
+        json.dump({"cameras": cameras, "walls": walls, **meta, **(extra or {})}, f, indent=1)
 
     # Backgrounds.
     _cycles(samples, True, 1.0)
     scene.view_settings.view_transform = "Standard"
     scene.view_settings.look = "None"
     scene.render.film_transparent = False
-    for i, cam in enumerate(cams):
-        scene.camera = cam
-        scene.render.filepath = os.path.join(out_dir, f"cam{i}.png")
-        bpy.ops.render.render(write_still=True)
+    scene.cycles.seed = 0  # every render the same noise, so still parts match frame 0
+    scene.cycles.use_animated_seed = False
+
+    def render_all(suffix):
+        for i, cam in enumerate(cams):
+            scene.camera = cam
+            scene.render.filepath = os.path.join(out_dir, f"cam{i}{suffix}.png")
+            bpy.ops.render.render(write_still=True)
+
+    render_all("")
+    if anim:
+        for k in range(1, anim["frames"]):
+            anim["set"](k)
+            render_all(f".a{k}")
+        anim["set"](0)
+    for st in states:
+        st["set"](True)
+        render_all(f".s-{st['name']}")
+        st["set"](False)
 
     # Foreground depth: tagged objects emit their depth, the rest hold out, so
     # they still hide what is behind them. One sample at the pixel centre, so

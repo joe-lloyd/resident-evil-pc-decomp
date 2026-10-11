@@ -15,6 +15,7 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readPng } from '../../harness/image.ts';
+import { animFileName, buildAnim, type AnimLayer } from '../bganim.ts';
 import { buildMasks, FRAME_H, FRAME_W, maskPakName } from '../masks.ts';
 import { makePak } from '../pak.ts';
 import { composeRoom, itemModel, SLOT, type PointLight, type Vec3 } from '../rdt.ts';
@@ -50,6 +51,10 @@ interface RoomJson {
   bounds: Rect;
   exits?: Rect[];
   exit?: Rect;
+  /** Looping animation: cam<N>.a<k>.png for k = 1 .. frames - 1, cam<N>.png being frame 0. */
+  anim?: { frames: number; ticks: number };
+  /** Changes of state: cam<N>.s-<name>.png, shown while the flag is set. */
+  states?: { name: string; bank: 0 | 1; bit: number }[];
 }
 
 export const fileStem = (r: Pick<DayRoom, 'stage' | 'room'>) =>
@@ -216,6 +221,22 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
       mkdirSync(outMasks, { recursive: true });
       const name = maskPakName(spec.stage, spec.room, i);
       writeFileSync(path.join(outMasks, name), masks.pak);
+      written.push(`objspr/${name}`);
+    }
+    const layers: AnimLayer[] = [];
+    if (json.anim && json.anim.frames > 1) {
+      const frames = [background];
+      for (let k = 1; k < json.anim.frames; k++) frames.push(readPng(path.join(renders, `cam${i}.a${k}.png`)));
+      layers.push({ frames, ticks: json.anim.ticks });
+    }
+    for (const st of json.states ?? []) {
+      layers.push({ frames: [readPng(path.join(renders, `cam${i}.s-${st.name}.png`))], ticks: 0, when: { bank: st.bank, bit: st.bit, value: true } });
+    }
+    const anim = buildAnim(background, layers);
+    if (anim) {
+      mkdirSync(outMasks, { recursive: true });
+      const name = animFileName(spec.stage, spec.room, i);
+      writeFileSync(path.join(outMasks, name), anim);
       written.push(`objspr/${name}`);
     }
     const v = (p: [number, number, number]): Vec3 => ({ x: p[0], y: p[1], z: p[2] });

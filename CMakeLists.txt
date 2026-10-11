@@ -79,6 +79,7 @@ set(RE1_SOURCES
     src/game/PrintText.cpp
     src/game/Rendering.cpp
     src/game/Room.cpp
+    src/game/BgAnim.cpp
     src/game/RoomCollision.cpp
     src/game/RoomEvents.cpp
     src/game/RoomInit.cpp

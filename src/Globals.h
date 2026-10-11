@@ -1133,6 +1133,10 @@ extern const unsigned char g_ItemExamineTypes[48];     // 0x004bd9b8
 
 // Title screen display image SRV
 extern MarniHandle   g_displayImageSRV;
+extern unsigned int  g_displayImageSerial;            // port: bumped by every display_image
+void BgAnim_Load(const void* bitmap, int width, int height);  // BgAnim.cpp
+void BgAnim_Clear(void);
+void BgAnim_Tick(void);
 
 // Title state globals
 extern unsigned char g_titleLoopFlag;                  // 0x00d22777

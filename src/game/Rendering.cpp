@@ -48,6 +48,7 @@ static PendingSprite g_pendingSprites[MAX_PENDING_SPRITES];
 static int g_pendingSpriteCount = 0;
 
 MarniHandle g_displayImageSRV = MARNI_NULL_HANDLE;
+unsigned int g_displayImageSerial = 0;
 
 // ============================================================================
 // AddTintSprite (0x0046e0a0)
@@ -588,6 +589,8 @@ void OT_InsertPrimitive(void* prim, unsigned int depth)
     }
     if (g_pendingSpriteCount >= MAX_PENDING_SPRITES) return;
 
+    BgAnim_Tick();
+
     CMarniDirect3D* pD3D = (CMarniDirect3D*)g_pMarniDirect3D;
 
     // The display image is a logical-resolution framebuffer (320x240 in game);
@@ -1009,6 +1012,7 @@ void display_image(int slot, void* buffer, int width, int height)
 {
     g_DisplayImageWidth = width;
     g_DisplayImageHeight = height;
+    g_displayImageSerial++;
 
     if (g_displayImageSRV != MARNI_NULL_HANDLE) {
         Marni_DX()->DestroyTexture(g_displayImageSRV);
