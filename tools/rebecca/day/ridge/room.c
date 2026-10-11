@@ -4,6 +4,9 @@
 // through the pines on the east side, by a touch door to the mountain trail.
 //
 // FG_COMMON 200: the opening has played.
+// message(n, 255, 0): the 255 is the mask of message flags cleared while it
+// is up, which pauses the game the way Chris's scripts do; with 0 she can
+// still act under the message box.
 // Room messages are 0x80 + index: 128 is message 0.
 // init procedure 0
 door_aot_set(0, 11400, 3800, 1600, 3000, 0, 0, 0, 4, 0, ROOM_312, 3500, 0, 1200, 3072, UNLOCKED, 1);
@@ -16,6 +19,6 @@ return;
 // main procedure 0
 if (ck(FG_COMMON, 200, 1)) {
     set(FG_COMMON, 200, 0);
-    message(128, 0, 0);
+    message(128, 255, 0);
 }
 return;

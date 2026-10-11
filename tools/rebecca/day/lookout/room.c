@@ -8,6 +8,9 @@
 // item_aot_set operands after the model index: 255, the model's position
 // (X, Y, Z as little-endian 16-bit pairs), two rotation bytes, the item flag,
 // then 129 (taken with the action key), 0, 0.
+// message(n, 255, 0): the 255 is the mask of message flags cleared while it
+// is up, which pauses the game the way Chris's scripts do; with 0 she can
+// still act under the message box.
 // Room messages are 0x80 + index: 128 is message 0.
 // init procedure 0
 door_aot_set(0, 5400, 7600, 1200, 900, 0, 0, 0, 4, 0, ROOM_312, 3500, 0, 14400, 1024, UNLOCKED, 129);
@@ -29,6 +32,6 @@ return;
 // main procedure 0
 if (ck(FG_COMMON, 201, 1)) {
     set(FG_COMMON, 201, 0);
-    message(128, 0, 0);
+    message(128, 255, 0);
 }
 return;

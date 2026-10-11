@@ -492,8 +492,11 @@ switchD_00480ff4_caseD_2:
                     // menus, item pickups and, from init, the player's controls
                     // off for the rest of the visit. Retail scripts never open
                     // one that early; Rebecca's scenes and chapter titles do.
+                    // It also keeps that message's pause (the flags it clears
+                    // while up), so she cannot act under the message box.
                     if ((g_menu_choice_id & 0x80) != 0) {
                         g_messageFlagsBackup = g_message_flags;
+                        g_message_flags = (unsigned short)(g_message_flags & ~g_PauseGameInMsgFlag);
                     }
                     g_openMenuFlag = 0;
                     FUN_00473f10((int*)g_ScenarioFlags, SCENARIO_FLAG_MENU_FADE_LATCH);

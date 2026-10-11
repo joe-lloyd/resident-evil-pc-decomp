@@ -27,6 +27,6 @@ return;
 // message state that the message would restore.
 if (ck(FG_COMMON, 36, 1)) {
     set(FG_COMMON, 36, 0);
-    message(174, 0, 0);
+    message(174, 255, 0);
 }
 return;
