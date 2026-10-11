@@ -228,6 +228,14 @@ Built so far, beyond the list above:
   share of floor where she is lost.
 - **Rendering on the Blender machine** (`tools/rebecca/day/render.ts`, with
   `--preview` for a quick look).
+- **Rebecca on the character select.** New Game deals three police cards when
+  her day is installed; her ID is built from the player's own select sheet
+  and status faces (`tools/rebecca/card.ts`). Choosing her switches the
+  session to her mode and starts her day; her opening and intro come later.
+- **Walks between outdoor rooms.** A door of the walk type plays a few
+  seconds of a dark forest path at her eye height, with her footsteps
+  crunching, where a door would open (`src/game/PathWalk.cpp`,
+  `day/walk-forest`, `tools/rebecca/footsteps.ts`).
 
 ## Testing
 
