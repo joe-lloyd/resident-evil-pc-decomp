@@ -105,7 +105,8 @@ void SetInitialItems(void)
         ITEM_BERETTA,          15,
         ITEM_FIRST_AID_SPRAY,   1,
         ITEM_GREEN_HERB,        1,
-        ITEM_CLIP,             15
+        ITEM_CLIP,             15,
+        ITEM_NONE,              0       // ends the list: the copy stops at an empty id
     };
 
     // init room items flags (bit set = item not taken)
