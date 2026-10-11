@@ -1691,14 +1691,8 @@ extern DWORD        g_animObjectBuffer[0x680];       // 0x00c133c0 - weapon anim
 // 0x00c14dc0 - Shoot direction data buffer
 extern BYTE          g_shootDirEspBuffer[73728];
 
-// 0x00c26dc0 - General purpose data buffer: the room file, then the models
-// room_set loads from its snd.vb address upward. The original's is 832728
-// bytes. Port addition: 512 KiB more, for room files the REB overlay rewrote.
-// Its writer keeps a room's old snd.vb as dead bytes and copies it behind the
-// new sections, which moves the model area 140 KB further in and leaves less
-// than the least any retail room has (the game died loading ROOM2010).
-#define DATA_BUFFER_SIZE (832728 + 0x80000)
-extern BYTE          g_DataBuffer[DATA_BUFFER_SIZE];
+// 0x00c26dc0 - General purpose data buffer (832728 bytes)
+extern BYTE          g_DataBuffer[832728];
 
 // 0x00cf2298 - TIM Image buffer, first 20 bytes are the header
 // Buffer Size: 187180 bytes (187160 headless)

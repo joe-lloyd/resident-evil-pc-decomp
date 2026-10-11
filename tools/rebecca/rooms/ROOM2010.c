@@ -27,9 +27,11 @@ aot_set(5, 14700, 25700, 1500, 1900, SCE_EVENT, 129, 9, 0, 0, 0, 0, 0);
 // Chris's three zombies are left out: they stand in the half of the room she
 // cannot reach, and the room has no space to spare for their model next to
 // Richard's (the writer's headroom check).
-// Richard's own clip lies beside him for her to take.
+// Richard's own clip lies beside him for her to take. The second-to-last
+// argument picks a model from the room's item model table; this room has
+// none, and Chris's line from ROOM20D0, which asks for model 1, crashed the game.
 if (ck(FG_ITEM, 40, 0)) {
-    item_aot_set(7, 14500, 23300, 2100, 1400, 11 /* Clip */, 15, 0, 255, 10, 0, 0, 0, 10, 0, 0, 0, 40, 129, 1, 0);
+    item_aot_set(7, 14500, 23300, 2100, 1400, 11 /* Clip */, 15, 0, 255, 10, 0, 0, 0, 10, 0, 0, 0, 40, 129, 0, 0);
 }
 if (ck(FG_COMMON, 201, 1)) {
     // Alive, waiting for the serum.
