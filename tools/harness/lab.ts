@@ -45,6 +45,42 @@ export function stop(port: number): void {
   `);
 }
 
+const recorder = 'C:\\Users\\joell\\Tools\\re1-record.cmd';
+const recordTarget = 'C:\\Users\\joell\\Tools\\re1-record-target.txt';
+
+/**
+ * Start recording the game window to `remoteFile` (an .mp4 on the game
+ * machine) with ffmpeg's gdigrab, through the scheduled task "RE1 Record" so
+ * it runs in the desktop session the window is in. lab/re1-record.cmd is the
+ * script; it is copied over each time. Needs ffmpeg there (winget Gyan.FFmpeg)
+ * and the game window open. No sound: the machine has no loopback device.
+ */
+export function startRecording(remoteFile: string): void {
+  execFileSync('scp', ['-q', '-o', 'BatchMode=yes', new URL('./lab/re1-record.cmd', import.meta.url).pathname, `${host}:${recorder.replace(/\\/g, '/')}`]);
+  powershell(`
+    Set-Content -Path '${recordTarget}' -Value '${remoteFile}' -NoNewline -Encoding ascii
+    $p = New-ScheduledTaskPrincipal -UserId '${user}' -LogonType Interactive -RunLevel Limited
+    $a = New-ScheduledTaskAction -Execute '${recorder}'
+    Register-ScheduledTask -TaskName 'RE1 Record' -Action $a -Principal $p -Force | Out-Null
+    Start-ScheduledTask -TaskName 'RE1 Record'
+  `);
+}
+
+/**
+ * Stop the recording and rewrite it as a plain MP4 with its index at the
+ * front, so a browser can play it while it downloads. Returns that file.
+ */
+export function stopRecording(remoteFile: string): string {
+  const final = remoteFile.replace(/\.mp4$/i, '-final.mp4');
+  powershell(`
+    Get-Process ffmpeg -ErrorAction SilentlyContinue | Stop-Process -Force
+    Start-Sleep -Seconds 2
+    $ff = (Get-ChildItem "$env:LOCALAPPDATA\\Microsoft\\WinGet\\Packages" -Recurse -Filter ffmpeg.exe | Select-Object -First 1).FullName
+    & $ff -y -hide_banner -loglevel error -i '${remoteFile}' -c copy -movflags +faststart '${final}'
+  `);
+  return final;
+}
+
 /** Forward the game's localhost port to this machine. */
 export function tunnel(port: number): ChildProcess {
   return spawn('ssh', ['-o', 'BatchMode=yes', '-o', 'ExitOnForwardFailure=yes', '-N', '-L', `${port}:127.0.0.1:${port}`, host], {
