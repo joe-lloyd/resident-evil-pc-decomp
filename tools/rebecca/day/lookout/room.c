@@ -1,32 +1,39 @@
-// The ranger's lookout (ROOM3140), inside: a log cabin on the mountain,
-// morning. Nobody is home. The radio on the desk picks up S.T.A.R.S. chatter;
-// the ranger's logbook tells of the "dog attacks"; a First Aid Spray stands
-// on the table and the ranger's key lies on the desk.
+// The ranger's lookout (ROOM3140), inside: a one-room log cabin, the morning
+// after. The ranger left in a hurry: breakfast half eaten, a chair knocked
+// over, his rifle gone, the east window smashed in with blood on the sill.
+// His logbook says the crank for the truck's winch is in the shed; the shed
+// key hangs on the board by the door.
 //
-// FG_COMMON 201: she has been in before. FG_ITEM 241: the spray is taken,
-// 242: the key is taken (bit set = still there).
+// Game units are metres * 1700 (scene.py builds the room in metres).
+// FG_COMMON 201: she has been in before. FG_ITEM 241: the spray is still on
+// the table, 242: the shed key is still on its hook (bit set = still there).
 // item_aot_set operands after the model index: 255, the model's position
 // (X, Y, Z as little-endian 16-bit pairs), two rotation bytes, the item flag,
 // then 129 (taken with the action key), 0, 0.
-// message(n, 255, 0): the 255 is the mask of message flags cleared while it
-// is up, which pauses the game the way Chris's scripts do; with 0 she can
-// still act under the message box.
-// Room messages are 0x80 + index: 128 is message 0.
+// message(n, 255, 0): the 255 pauses the game under the message, as Chris's
+// scripts do. Room messages are 0x80 + index: 128 is message 0.
 // init procedure 0
-door_aot_set(0, 5400, 7600, 1200, 900, 0, 0, 0, 4, 0, ROOM_312, 3500, 0, 14400, 1024, UNLOCKED, 129);
-// On the table: the First Aid Spray, model at (6300, -760, 6100).
+// The door out to the yard (ROOM3150): she comes out onto the porch steps,
+// facing the yard (+Z, angle 0xC00).
+door_aot_set(0, 5950, 9100, 1530, 1100, 0, 0, 0, 4, 0, ROOM_315, 22015, 0, 12920, 3072, UNLOCKED, 129);
+// On the table by the cards: the First Aid Spray, model at (7276, -1292, 7310).
 if (ck(FG_ITEM, 241, 0)) {
-    item_aot_set(1, 5600, 5500, 1400, 1300, 65 /* F-Aid Spray */, 1, 0, 255, 156, 24, 8, 253, 212, 23, 0, 0, 241, 129, 0, 0);
+    item_aot_set(1, 6120, 6630, 1700, 1700, 65 /* F-Aid Spray */, 1, 0, 255, 108, 28, 244, 250, 142, 28, 0, 0, 241, 129, 0, 0);
 }
-// On the desk: the ranger's key, model at (5300, -780, 3450).
+// On the key board by the door: the shed key, model at (5576, -2414, 10132).
 if (ck(FG_ITEM, 242, 0)) {
-    item_aot_set(2, 4900, 3000, 900, 1200, 61 /* Small Key */, 1, 1, 255, 180, 20, 244, 252, 122, 13, 0, 0, 242, 129, 0, 0);
+    item_aot_set(2, 4930, 9095, 935, 1105, 61 /* Small Key */, 1, 1, 255, 200, 21, 146, 246, 148, 39, 0, 0, 242, 129, 0, 0);
 }
-aot_set(3, 3600, 3000, 1100, 1100, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
-aot_set(4, 4700, 3000, 300, 1100, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
-aot_set(5, 7900, 3800, 1100, 2300, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
-aot_set(6, 3000, 5400, 1000, 1100, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
-aot_set(7, 5900, 3000, 1400, 600, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
+aot_set(3, 4335, 4675, 850, 935, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);   // the radio
+aot_set(4, 5440, 4675, 1020, 935, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);  // the logbook
+aot_set(5, 9520, 7480, 765, 2550, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);  // the bunk
+aot_set(6, 4590, 7310, 850, 1360, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);  // the stove
+aot_set(7, 10880, 4420, 1020, 1530, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0); // the broken window
+aot_set(8, 8500, 9180, 1530, 1020, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);  // the empty rifle rack
+aot_set(9, 7820, 5440, 1190, 714, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);   // breakfast
+aot_set(10, 3485, 4760, 765, 935, SCE_MESSAGE, 129, 136, 0, 255, 0, 0, 0);   // the survey map
+aot_set(11, 7565, 9180, 850, 1020, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);  // his hat
+aot_set(12, 7820, 4080, 2040, 850, SCE_MESSAGE, 129, 138, 0, 255, 0, 0, 0);  // the shelves
 return;
 
 // main procedure 0

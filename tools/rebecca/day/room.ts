@@ -33,8 +33,8 @@ export interface DayRoom {
   readonly donor: string;
   readonly ambient: readonly [number, number, number];
   readonly lights: readonly [PointLight, PointLight, PointLight];
-  /** The part of the floor each camera shows; walking into one cuts to it. */
-  readonly cameraFloor: readonly Rect[];
+  /** The part of the floor each camera shows, one or more rectangles that do not overlap another camera's; walking into one cuts to it. */
+  readonly cameraFloor: readonly (Rect | readonly Rect[])[];
   /** Footstep sound set (the low byte of the footstep zone record; 0x2D is outdoor earth). */
   readonly footsteps: number;
   /**
@@ -110,7 +110,7 @@ function switchZones(spec: DayRoom, bounds: Rect): Uint8Array {
   spec.cameraFloor.forEach((_, from) => {
     zoneRecord(w, from, from, seen);
     spec.cameraFloor.forEach((floor, to) => {
-      if (to !== from) zoneRecord(w, to, from, floor);
+      if (to !== from) for (const r of [floor].flat()) zoneRecord(w, to, from, r);
     });
   });
   w.u16(0xffff).u16(0xffff);

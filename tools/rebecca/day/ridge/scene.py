@@ -13,6 +13,9 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
+
+# Built when a metre was taken as 1000 units; reb.UNITS has the measured scale.
+reb.UNITS = 1000.0
 from mathutils import Vector, noise  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))

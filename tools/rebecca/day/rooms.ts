@@ -27,27 +27,37 @@ export const ridge: DayRoom = {
 /** Where a new game stands: on the ridge, near the edge, facing out over the valley (+Z is angle 0xC00). */
 export const dayStart = { stage: ridge.stage, room: ridge.room, x: 7000, z: 8800, angle: 0xc00 } as const;
 
-/** The ranger's lookout, inside: the log cabin below the ridge, in the morning. */
+/** The ranger's lookout, inside: the log cabin by the yard, in the morning (game units = metres * 1700). */
 export const lookout: DayRoom = {
   slug: 'lookout',
   stage: 2,
   room: 0x14,
   donor: 'Stage3/ROOM3000.RDT',
-  // Indoors in the morning: a warm lamp, daylight from the window.
+  // Indoors in the morning: the oil lamp, sun through the broken east window, a dim fill.
   ambient: [900, 850, 800],
   lights: [
-    { x: 6300, y: -1400, z: 6100, rgb: [110, 80, 50], radius: 6000 },
-    { x: 4600, y: -2000, z: 3500, rgb: [70, 75, 85], radius: 6000 },
-    { x: 6000, y: -2400, z: 5500, rgb: [40, 40, 45], radius: 9000 },
+    { x: 8075, y: -1615, z: 6494, rgb: [120, 80, 45], radius: 9000 },
+    { x: 11730, y: -2550, z: 5100, rgb: [80, 74, 64], radius: 10000 },
+    { x: 7650, y: -3570, z: 7140, rgb: [45, 46, 52], radius: 14000 },
   ],
+  // Corner cameras: 0 from the south-west sees the east half, 1 from the
+  // north-east sees the west half and the door.
   cameraFloor: [
-    { x0: 3000, z0: 3000, x1: 9000, z1: 5500 }, // camera 0, from the south-west, at the desk and bunk
-    { x0: 3000, z0: 5500, x1: 9000, z1: 9000 }, // camera 1, from the north-east, at the stove and door
+    [
+      { x0: 6800, z0: 0, x1: 8500, z1: 6800 },
+      { x0: 8500, z0: 0, x1: 10200, z1: 8500 },
+      { x0: 10200, z0: 0, x1: 14000, z1: 13000 },
+    ],
+    [
+      { x0: 0, z0: 0, x1: 6800, z1: 13000 },
+      { x0: 6800, z0: 6800, x1: 8500, z1: 13000 },
+      { x0: 8500, z0: 8500, x1: 10200, z1: 13000 },
+    ],
   ],
   footsteps: 0x2d,
   itemModels: [
     { from: 'Stage3/ROOM3090.RDT', index: 0 }, // F-Aid Spray
-    { from: 'Stage1/ROOM1130.RDT', index: 0 }, // Small Key, as the ranger's key
+    { from: 'Stage1/ROOM1130.RDT', index: 0 }, // Small Key, as the shed key
   ],
 };
 

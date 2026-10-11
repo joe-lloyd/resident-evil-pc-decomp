@@ -10,8 +10,11 @@ game needs to know, and calls export(). export() renders, per camera:
 and writes room.json: the cameras in game units and the collision taken from
 objects tagged with wall().
 
-Game space is millimetres with Y pointing down; the floor is Y = 0. Blender
-space is metres with Z up: Blender (x, y, z) = (X, Z, -Y) / 1000. The engine
+Game space has Y pointing down; the floor is Y = 0. Blender space is metres
+with Z up: Blender (x, y, z) = (X, Z, -Y) / UNITS. UNITS is the game's own
+scale: Rebecca stands 2700 units tall, measured on screen
+(tools/harness/measure-height.ts), so a metre is 1700 units and a scene built
+in real sizes fits her. The engine
 projects with sx = X*f/Z + 160 and sy = -Y*f/Z + 120 on a 320x240 screen, so a
 32 mm sensor with a focal length of f/10 mm matches it exactly. Collision
 coordinates are unsigned in the game, so every room lives at X, Z >= 0.
@@ -28,9 +31,17 @@ from mathutils import Vector, noise
 # ---------------------------------------------------------------------------
 
 
+UNITS = 1700.0
+
+
+def g(metres):
+    """A length in metres as whole game units."""
+    return round(metres * UNITS)
+
+
 def game_to_blender(p):
     x, y, z = p
-    return Vector((x / 1000.0, z / 1000.0, -y / 1000.0))
+    return Vector((x / UNITS, z / UNITS, -y / UNITS))
 
 
 def clear_scene():
@@ -268,6 +279,120 @@ def boulder(rng, centre, r, verts, faces, squash=0.9):
 
 
 # ---------------------------------------------------------------------------
+# Props: primitives sized in metres
+# ---------------------------------------------------------------------------
+
+
+def prim(kind, name, mat, at, size=(1, 1, 1), rot=(0, 0, 0), segments=16, top=0.0, bevel=0.0):
+    """A primitive `size` metres across (x, y, z) centred on `at`, rotated by
+    `rot` (radians, XYZ). kind: cube, cyl, cone (narrowing to `top` of its
+    base), sphere or plane. Scale is applied, so bevels and object-space
+    textures stay true to size."""
+    if kind == "cube":
+        bpy.ops.mesh.primitive_cube_add(size=1)
+    elif kind == "cyl":
+        bpy.ops.mesh.primitive_cylinder_add(vertices=segments, radius=0.5, depth=1)
+    elif kind == "cone":
+        bpy.ops.mesh.primitive_cone_add(vertices=segments, radius1=0.5, radius2=0.5 * top, depth=1)
+    elif kind == "sphere":
+        bpy.ops.mesh.primitive_uv_sphere_add(segments=segments, ring_count=max(6, segments // 2), radius=0.5)
+    elif kind == "plane":
+        bpy.ops.mesh.primitive_plane_add(size=1)
+    else:
+        raise ValueError(kind)
+    ob = bpy.context.active_object
+    ob.name = name
+    ob.scale = size
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    ob.location = at
+    ob.rotation_euler = rot
+    if kind in ("cyl", "cone", "sphere"):
+        bpy.ops.object.shade_smooth_by_angle(angle=math.radians(40))
+    if mat is not None:
+        ob.data.materials.append(mat)
+    if bevel:
+        mod = ob.modifiers.new("Bevel", "BEVEL")
+        mod.width = bevel
+        mod.segments = 2
+        mod.limit_method = "ANGLE"
+    return ob
+
+
+def cloth(name, mat, at, size, rot=(0, 0, 0), cuts=24, lumps=0.04, seed=0):
+    """A sheet of cloth `size` (x, y) metres, crumpled by up to `lumps` metres."""
+    bpy.ops.mesh.primitive_grid_add(x_subdivisions=cuts, y_subdivisions=cuts, size=1)
+    ob = bpy.context.active_object
+    ob.name = name
+    ob.scale = (size[0], size[1], 1)
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    off = Vector((seed * 7.1, seed * 3.3, seed * 1.7))
+    for v in ob.data.vertices:
+        v.co.z += lumps * noise.noise(v.co * 6 + off)
+    ob.location = at
+    ob.rotation_euler = rot
+    bpy.ops.object.shade_smooth()
+    ob.data.materials.append(mat)
+    return ob
+
+
+def mat_metal(name, rgb, rough=0.35):
+    m, nodes, links, bsdf = nodes_material(name)
+    bsdf.inputs["Base Color"].default_value = (*rgb, 1)
+    bsdf.inputs["Metallic"].default_value = 1.0
+    bsdf.inputs["Roughness"].default_value = rough
+    return m
+
+
+def mat_glass(name, rgb=(0.9, 0.95, 0.9)):
+    m, nodes, links, bsdf = nodes_material(name)
+    bsdf.inputs["Base Color"].default_value = (*rgb, 1)
+    bsdf.inputs["Transmission Weight"].default_value = 1.0
+    bsdf.inputs["Roughness"].default_value = 0.05
+    return m
+
+
+def mat_plain(name, rgb, rough=0.8):
+    m, nodes, links, bsdf = nodes_material(name)
+    bsdf.inputs["Base Color"].default_value = (*rgb, 1)
+    bsdf.inputs["Roughness"].default_value = rough
+    return m
+
+
+def mat_stripes(name, colours, across=8.0, axis="X"):
+    """Bands of `colours` in turn, `across` bands per metre along `axis`: a rag rug, a blanket."""
+    m, nodes, links, bsdf = nodes_material(name)
+    bsdf.inputs["Roughness"].default_value = 0.95
+    tc = nodes.new("ShaderNodeTexCoord")
+    sep = nodes.new("ShaderNodeSeparateXYZ")
+    links.new(tc.outputs["Object"], sep.inputs["Vector"])
+    mul = nodes.new("ShaderNodeMath")
+    mul.operation = "MULTIPLY"
+    mul.inputs[1].default_value = across / len(colours)
+    links.new(sep.outputs[axis], mul.inputs[0])
+    frac = nodes.new("ShaderNodeMath")
+    frac.operation = "FRACT"
+    links.new(mul.outputs[0], frac.inputs[0])
+    r = nodes.new("ShaderNodeValToRGB")
+    r.color_ramp.interpolation = "CONSTANT"
+    els = r.color_ramp.elements
+    els[0].position, els[0].color = 0.0, (*colours[0], 1)
+    els[1].position, els[1].color = 1.0 - 1e-3, (*colours[-1], 1)
+    for i, c in enumerate(colours[1:], start=1):
+        e = els.new(i / len(colours))
+        e.color = (*c, 1)
+    links.new(frac.outputs[0], r.inputs["Fac"])
+    links.new(r.outputs["Color"], bsdf.inputs["Base Color"])
+    return m
+
+
+def emit_strength(mat, strength):
+    """Change an emission material's strength (mat_emit), e.g. to flicker a flame."""
+    for n in mat.node_tree.nodes:
+        if n.type == "EMISSION":
+            n.inputs["Strength"].default_value = strength
+
+
+# ---------------------------------------------------------------------------
 # Tags: what the game needs to know about an object
 # ---------------------------------------------------------------------------
 
@@ -451,8 +576,8 @@ def _cycles(samples, denoise, filter_width):
 def _game_footprint(ob):
     """The object's world-space bounding box on the floor, in game units (X, Z)."""
     pts = [ob.matrix_world @ Vector(c) for c in ob.bound_box]
-    xs = [p.x * 1000 for p in pts]
-    zs = [p.y * 1000 for p in pts]
+    xs = [p.x * UNITS for p in pts]
+    zs = [p.y * UNITS for p in pts]
     return round(min(xs)), round(min(zs)), round(max(xs)), round(max(zs))
 
 
@@ -465,7 +590,7 @@ def _depth_material():
     cam = nodes.new("ShaderNodeCameraData")
     scale = nodes.new("ShaderNodeMath")
     scale.operation = "MULTIPLY"
-    scale.inputs[1].default_value = 1000.0 / 16.0
+    scale.inputs[1].default_value = UNITS / 16.0
     links.new(cam.outputs["View Z Depth"], scale.inputs[0])
     hi = nodes.new("ShaderNodeMath")
     hi.operation = "DIVIDE"
@@ -527,6 +652,10 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
     os.makedirs(out_dir, exist_ok=True)
     scene = bpy.context.scene
     cams = [add_camera(i, c) for i, c in enumerate(cameras)]
+    # RE1_PREVIEW=1: the backgrounds only, quickly, to judge a scene.
+    preview = bool(os.environ.get("RE1_PREVIEW"))
+    if preview:
+        samples = min(samples, 96)
     if anim:
         anim["set"](0)
     meta = {}
@@ -559,6 +688,8 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
             bpy.ops.render.render(write_still=True)
 
     render_all("")
+    if preview:
+        return
     if anim:
         for k in range(1, anim["frames"]):
             anim["set"](k)
