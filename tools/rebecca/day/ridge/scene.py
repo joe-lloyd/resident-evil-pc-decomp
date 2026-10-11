@@ -19,7 +19,7 @@ OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__f
 
 CAMERAS = [
     # 0: from the back of the clearing, out over the edge to the valley.
-    {"from": (7000, -1900, 2600), "to": (7300, 300, 14000), "fov": 260},
+    {"from": (5600, -4300, 2400), "to": (8600, 2600, 20000), "fov": 240},
     # 1: from the cliff edge, back at the rock face and the trail out (east).
     {"from": (5200, -2600, 11200), "to": (8300, -400, 3500), "fov": 250},
 ]
@@ -31,13 +31,16 @@ def ground_height(x, y):
     falls away to the valley."""
     h = 0.0
     if y < 3.0:
-        h += (3.0 - y) ** 1.6 * 0.9
+        h += min(2.0, (3.0 - y) * 0.7)
     if x < 3.0:
         h += (3.0 - x) * 0.35
     if x > 11.0 and not (3.8 < y < 6.8):
         h += (x - 11.0) * 0.3
     if y > 10.0:
-        h -= (y - 10.0) ** 1.35 * 2.2
+        # The mountain falls away below the edge, steep at first, to a valley
+        # floor some 80 m down.
+        d = y - 10.0
+        h -= 80.0 * (1.0 - math.exp(-d / 9.0))
     lumps = noise.noise(Vector((x * 0.4, y * 0.4, 0))) * 0.35 + noise.noise(Vector((x * 1.9, y * 1.9, 5))) * 0.06
     # The clearing floor stays nearly flat: the game's floor is Y = 0 everywhere.
     inside = 3.0 <= x <= 11.0 and 3.0 <= y <= 10.0
@@ -48,20 +51,45 @@ def build():
     rng = random.Random(31)
     reb.clear_scene()
     earth = reb.mat_surface("Earth", [(0.0, (0.03, 0.025, 0.02)), (0.4, (0.09, 0.07, 0.05)), (0.7, (0.06, 0.07, 0.04)), (1.0, (0.13, 0.11, 0.09))], scale=3)
-    rock = reb.mat_surface("Rock", [(0.3, (0.05, 0.05, 0.05)), (0.6, (0.16, 0.15, 0.14)), (0.85, (0.3, 0.28, 0.26))], scale=2.5, bump=0.9)
+    rock = reb.mat_surface("Rock", [(0.25, (0.04, 0.04, 0.04)), (0.5, (0.12, 0.115, 0.11)), (0.7, (0.2, 0.19, 0.18)), (0.9, (0.07, 0.08, 0.05))], scale=1.8, detail=14, bump=1.2)
     needles = reb.mat_cards("Needles", (0.012, 0.03, 0.018), (0.06, 0.12, 0.06))
     grass = reb.mat_cards("Grass", (0.04, 0.05, 0.02), (0.14, 0.15, 0.07))
     bark = reb.mat_wood("Bark", (0.07, 0.05, 0.035))
 
     reb.terrain("Mountain top", earth, (-30, 45), (-25, 60), ground_height, step=0.45)
 
-    # The rock face behind the clearing: a wall of boulders.
+    # The rock face behind the clearing: a cliff, its face displaced into
+    # ledges and cracks, with fallen boulders at its foot.
     verts, faces = [], []
-    for i in range(26):
-        x = rng.uniform(-2, 16)
-        y = rng.uniform(-3.5, -1.2)
-        reb.boulder(rng, (x, y, ground_height(x, y) + rng.uniform(0.2, 1.4)), rng.uniform(1.0, 1.8), verts, faces, squash=1.1)
+    nx, nz = 90, 40
+    for j in range(nz + 1):
+        z = -1.0 + 16.0 * j / nz
+        for i in range(nx + 1):
+            x = -6.0 + 26.0 * i / nx
+            ledge = noise.noise(Vector((x * 0.25, 0, z * 0.6))) * 1.4 + noise.noise(Vector((x * 1.3, 3, z * 1.3))) * 0.35
+            y = 1.6 - 0.12 * z + ledge - max(0.0, (z - 9.0)) * 0.5
+            verts.append((x, y, z))
+    for j in range(nz):
+        for i in range(nx):
+            a = j * (nx + 1) + i
+            faces.append((a, a + 1, a + nx + 2, a + nx + 1))
     reb.wall(reb.mesh_object("Rock face", verts, faces, rock))
+    verts, faces = [], []
+    for i in range(14):
+        x = rng.uniform(-1, 15)
+        y = rng.uniform(2.2, 3.0)
+        reb.boulder(rng, (x, y, ground_height(x, y) + 0.2), rng.uniform(0.35, 0.9), verts, faces)
+    reb.mesh_object("Fallen rocks", verts, faces, rock)
+    # Pines along the top of the rock face, against the sky.
+    tv, tf, tb = [], [], []
+    for i in range(12):
+        x = rng.uniform(-4, 18)
+        base = Vector((x, rng.uniform(-3.5, -1.5), 14.5))
+        h = rng.uniform(7, 11)
+        reb.conifer(rng, base, h, tv, tf)
+        tb.append((base, h))
+    reb.mesh_object("Cliff-top pines", tv, tf, needles, smooth=False)
+    reb.trunks("Cliff-top trunks", bark, tb)
 
     # Boulders in the clearing, two near camera 1 that she can walk behind.
     for name, (x, y, r, in_front) in {
@@ -121,11 +149,11 @@ def build():
     verts, faces = [], []
     for wx in (-9, -4, 3, 8):
         reb.box(verts, faces, (base.x + wx, base.y - 6.1, base.z + 5), (2.0, 0.2, 1.2))
-    reb.mesh_object("Fire", verts, faces, reb.mat_emit("Fire glow", (1.0, 0.35, 0.08), 18), smooth=False)
-    reb.point("Fire light", (base.x, base.y - 9, base.z + 4), 60000, (1.0, 0.45, 0.15), 3.0)
+    reb.mesh_object("Fire", verts, faces, reb.mat_emit("Fire glow", (1.0, 0.35, 0.08), 60), smooth=False)
+    reb.point("Fire light", (base.x, base.y - 9, base.z + 6), 400000, (1.0, 0.42, 0.12), 4.0)
     import bpy  # noqa: E402
 
-    bpy.ops.mesh.primitive_cylinder_add(vertices=24, radius=7, depth=70, location=(base.x - 2, base.y + 2, base.z + 40))
+    bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=4, radius2=22, depth=120, location=(base.x - 4, base.y + 4, base.z + 62))
     smoke = bpy.context.active_object
     smoke.name = "Smoke"
     m = bpy.data.materials.new("Smoke")
@@ -133,17 +161,56 @@ def build():
     nodes = m.node_tree.nodes
     nodes.remove(nodes["Principled BSDF"])
     vol = nodes.new("ShaderNodeVolumePrincipled")
-    vol.inputs["Density"].default_value = 0.35
-    vol.inputs["Color"].default_value = (0.2, 0.18, 0.17, 1)
+    vol.inputs["Color"].default_value = (0.08, 0.075, 0.07, 1)
+    # Billowing: noise drives the density, thinning towards the top.
+    tc = nodes.new("ShaderNodeTexCoord")
+    tex = nodes.new("ShaderNodeTexNoise")
+    tex.inputs["Scale"].default_value = 3.0
+    tex.inputs["Detail"].default_value = 6
+    m.node_tree.links.new(tc.outputs["Generated"], tex.inputs["Vector"])
+    ramp = nodes.new("ShaderNodeValToRGB")
+    ramp.color_ramp.elements[0].position = 0.45
+    ramp.color_ramp.elements[0].color = (0, 0, 0, 1)
+    ramp.color_ramp.elements[1].color = (0.6, 0.6, 0.6, 1)
+    m.node_tree.links.new(tex.outputs["Fac"], ramp.inputs["Fac"])
+    m.node_tree.links.new(ramp.outputs["Color"], vol.inputs["Density"])
     m.node_tree.links.new(vol.outputs["Volume"], nodes["Material Output"].inputs["Volume"])
     smoke.data.materials.append(m)
 
     # Grass about the clearing.
     gv, gf = [], []
-    reb.grass_tufts(rng, 3500, lambda r: (r.uniform(2.5, 11.5), r.uniform(2.6, 10.3)), ground_height, gv, gf)
+    def patchy(r):
+        while True:
+            x, y = r.uniform(2.5, 11.5), r.uniform(2.6, 10.3)
+            if noise.noise(Vector((x * 0.35, y * 0.35, 9))) > -0.1:
+                return x, y
+    reb.grass_tufts(rng, 1800, patchy, ground_height, gv, gf)
+    # Stones scattered over the bare patches.
+    sv, sf = [], []
+    for _ in range(60):
+        x, y = rng.uniform(3.0, 11.0), rng.uniform(3.2, 10.0)
+        r = rng.uniform(0.05, 0.16)
+        reb.boulder(rng, (x, y, ground_height(x, y)), r, sv, sf, squash=0.6)
+    reb.mesh_object("Stones", sv, sf, rock)
     reb.mesh_object("Grass", gv, gf, grass, smooth=False)
 
-    reb.light_for("dawn", mist_box=((10, 70, -20), (160, 160, 30)))
+    # Ridges beyond the valley, one behind another, fading into the mist.
+    for i, (dist, top, col) in enumerate(((180, 60, (0.03, 0.04, 0.05)), (320, 110, (0.06, 0.065, 0.09)), (520, 170, (0.1, 0.1, 0.14)))):
+        verts, faces = [], []
+        n = 80
+        for j in range(n + 1):
+            x = -500 + 1100 * j / n
+            peak = top * (0.55 + 0.45 * noise.noise(Vector((x * 0.004 + i * 7, 0, 0))) + 0.2 * noise.noise(Vector((x * 0.02, i, 0))))
+            verts.append((x, dist, -80))
+            verts.append((x, dist + 30, -80 + peak))
+        for j in range(n):
+            a = 2 * j
+            faces.append((a, a + 2, a + 3, a + 1))
+        reb.mesh_object(f"Ridge {i}", verts, faces, reb.mat_surface(f"Far ridge {i}", [(0.3, tuple(c * 0.5 for c in col)), (0.6, col), (0.8, tuple(c * 1.4 for c in col))], scale=0.08, detail=10, bump=0.0))
+
+    reb.light_for("dawn", mist_box=((10, 140, -70), (500, 300, 40)), mist_density=0.0018)
+    sun_dir = Vector((0.85, 0.35, 0.08)).normalized()
+    reb.gradient_sky((1.0, 0.55, 0.32), (0.12, 0.16, 0.32), below=(0.05, 0.05, 0.07), strength=1.0, sun_dir=sun_dir)
     # A soft key on the clearing, from the cameras' side, for the RE look.
     reb.spot("Key", (7.0, 3.5, 9.0), (7.0, 8.0, 0.0), 2500, (1.0, 0.8, 0.65), 110, 1.0, 2.0)
     reb.spot("Back key", (6.0, 11.0, 8.0), (8.0, 4.0, 0.0), 1800, (0.8, 0.85, 1.0), 110, 1.0, 2.0)

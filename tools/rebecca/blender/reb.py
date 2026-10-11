@@ -300,7 +300,7 @@ TIME_OF_DAY = {
 }
 
 
-def light_for(time, mist_box=None):
+def light_for(time, mist_box=None, mist_density=None):
     """Sky, sun (or moon) and mist for the hour. mist_box: (centre, scale) in metres."""
     sky_rgb, sky_strength, elevation, heading, sun_rgb, sun_energy, mist = TIME_OF_DAY[time]
     scene = bpy.context.scene
@@ -327,10 +327,63 @@ def light_for(time, mist_box=None):
         nodes = m.node_tree.nodes
         nodes.remove(nodes["Principled BSDF"])
         vol = nodes.new("ShaderNodeVolumePrincipled")
-        vol.inputs["Density"].default_value = mist
-        vol.inputs["Color"].default_value = (0.75, 0.78, 0.82, 1)
+        vol.inputs["Density"].default_value = mist if mist_density is None else mist_density
+        vol.inputs["Color"].default_value = (0.62, 0.66, 0.76, 1)
         m.node_tree.links.new(vol.outputs["Volume"], nodes["Material Output"].inputs["Volume"])
         m_ob.data.materials.append(m)
+
+
+def gradient_sky(horizon, zenith, below=(0.02, 0.02, 0.03), strength=1.0, sun_dir=None, sun_glow=(1.0, 0.55, 0.3)):
+    """A sky that runs from `horizon` to `zenith`, with an optional glow around
+    the sun's direction (a unit Vector) for dawn and dusk."""
+    world = bpy.context.scene.world
+    nt = world.node_tree
+    nodes, links = nt.nodes, nt.links
+    bg = nodes["Background"]
+    tc = nodes.new("ShaderNodeTexCoord")
+    sep = nodes.new("ShaderNodeSeparateXYZ")
+    links.new(tc.outputs["Generated"], sep.inputs["Vector"])
+    r = nodes.new("ShaderNodeValToRGB")
+    els = r.color_ramp.elements
+    els[0].position, els[0].color = 0.42, (*below, 1)
+    els[1].position, els[1].color = 0.8, (*zenith, 1)
+    e = els.new(0.5)
+    e.color = (*horizon, 1)
+    e2 = els.new(0.56)
+    e2.color = tuple((h + z) / 2 for h, z in zip(horizon, zenith)) + (1,)
+    # Generated coordinates in a world shader run 0..1 along the view
+    # direction's components; Z = 0.5 is the horizon.
+    links.new(sep.outputs["Z"], r.inputs["Fac"])
+    sky = r.outputs["Color"]
+    if sun_dir is not None:
+        dot = nodes.new("ShaderNodeVectorMath")
+        dot.operation = "DOT_PRODUCT"
+        norm = nodes.new("ShaderNodeVectorMath")
+        norm.operation = "NORMALIZE"
+        links.new(tc.outputs["Generated"], norm.inputs[0])
+        # Generated is 0..1; recentre it on 0.
+        sub = nodes.new("ShaderNodeVectorMath")
+        sub.operation = "SUBTRACT"
+        sub.inputs[1].default_value = (0.5, 0.5, 0.5)
+        links.new(tc.outputs["Generated"], sub.inputs[0])
+        links.new(sub.outputs[0], norm.inputs[0])
+        links.new(norm.outputs[0], dot.inputs[0])
+        dot.inputs[1].default_value = tuple(sun_dir)
+        glow = nodes.new("ShaderNodeMath")
+        glow.operation = "POWER"
+        glow.inputs[1].default_value = 12.0
+        clamp = nodes.new("ShaderNodeClamp")
+        links.new(dot.outputs["Value"], clamp.inputs[0])
+        links.new(clamp.outputs[0], glow.inputs[0])
+        mix = nodes.new("ShaderNodeMix")
+        mix.data_type = "RGBA"
+        mix.blend_type = "ADD"
+        links.new(glow.outputs[0], mix.inputs["Factor"])
+        links.new(sky, mix.inputs["A"])
+        mix.inputs["B"].default_value = (*sun_glow, 1)
+        sky = mix.outputs["Result"]
+    links.new(sky, bg.inputs["Color"])
+    bg.inputs["Strength"].default_value = strength
 
 
 def spot(name, at, aim, energy, rgb=(1, 1, 1), size_deg=90, blend=0.85, soft=0.4):
