@@ -1762,8 +1762,8 @@ DWORD  g_animObjectBuffer[0x680] = {};
 // 0x00c14dc0 - ESP effect data
 BYTE   g_shootDirEspBuffer[73728] = {};
 
-// 0x00c26dc0 - General purpose data buffer (832728 bytes)
-BYTE    g_DataBuffer[832728];
+// 0x00c26dc0 - General purpose data buffer (Globals.h: DATA_BUFFER_SIZE)
+BYTE    g_DataBuffer[DATA_BUFFER_SIZE];
 
 // Display image buffer for TIM slide loading (at 0x00cf22ac in original)
 BYTE    g_TimImageBuffer[187160+20] = {};

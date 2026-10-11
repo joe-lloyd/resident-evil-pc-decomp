@@ -1,6 +1,7 @@
 // Chapter 2 played through: from the save room after the meeting with Chris,
-// up to the 2F corridor where Richard lies poisoned, back down for the serum
-// on the save room shelf, and up again in time to save him.
+// up the 1F left stairs to the 2F corridor where Richard lies poisoned
+// (ROOM2010), back down for the serum on the save room shelf, and up again
+// within three minutes to save him.
 //
 //   OVERLAY=<REB build folder> node tools/harness/tests/chapter2-richard.ts
 // SERUM_FIRST=1 takes the serum before going up, so he is treated on sight.
@@ -20,9 +21,9 @@ const out = process.env.OUT ?? '/tmp/rae-tests';
 const serumFirst = process.env.SERUM_FIRST === '1';
 
 const SERUM = 66;
-const FOUND = 0x80 + 25;
-const TREATED = 0x80 + 26;
-const DEAD = 0x80 + 27;
+const FOUND = 0x80 + 4;
+const TREATED = 0x80 + 5;
+const DEAD = 0x80 + 6;
 /** FG_COMMON (bank 1) flag 202: she saved Richard. Flags count from the top bit of each LE word. */
 const savedFlag = (s: GameState) => {
   const b = s.banks[1];
@@ -34,16 +35,8 @@ type Leg = { stage: number; room: number; door: Door };
 const up: Leg[] = [
   { stage: 0, room: 0x00, door: { x: 2700, z: 500, w: 1700, d: 1800 } },
   { stage: 0, room: 0x01, door: { x: 4700, z: 2500, w: 2605, d: 1300 } },
-  { stage: 1, room: 0x01, door: { x: 17200, z: 900, w: 2000, d: 2000 } },
-  { stage: 1, room: 0x02, door: { x: 31000, z: 6900, w: 2800, d: 3300 } },
-  { stage: 1, room: 0x03, door: { x: 31400, z: 19000, w: 2000, d: 3000 } },
-  { stage: 1, room: 0x04, door: { x: 11400, z: 1100, w: 2100, d: 1600 } },
 ];
 const down: Leg[] = [
-  { stage: 1, room: 0x0d, door: { x: 1300, z: 12900, w: 3400, d: 2000 } },
-  { stage: 1, room: 0x04, door: { x: 900, z: 2900, w: 1900, d: 1600 } },
-  { stage: 1, room: 0x03, door: { x: 1000, z: 15000, w: 1700, d: 3800 } },
-  { stage: 1, room: 0x02, door: { x: 5000, z: 14100, w: 2300, d: 3100 } },
   { stage: 1, room: 0x01, door: { x: 11345, z: 10300, w: 2605, d: 2500 } },
   { stage: 0, room: 0x01, door: { x: 7600, z: 7700, w: 2400, d: 1500 } },
 ];

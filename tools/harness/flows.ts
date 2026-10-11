@@ -197,15 +197,20 @@ export async function useDoor(
   const start = await link.state();
   const cx = zone.x + zone.w / 2;
   const cz = zone.z + zone.d / 2;
-  // Door zones run into walls, so aim for the open spot inside the zone that
-  // is nearest to the player, not its middle; then face the middle (the door).
-  const shapes = loadShapes(roomDataDirs, start.stage, start.room);
+  // Door zones run into walls, so aim for the open spot nearest to the player
+  // inside the zone, or within reach of it: the engine tests a point 600 in
+  // front of her, so a zone that lies wholly inside a wall (the stairs in
+  // ROOM2010) is used from just outside. Then face the middle (the door).
+  const shapes = loadShapes(roomDataDirs, start.stage, start.room, start.player.cf);
   let target = { x: cx, z: cz };
   let bestDist = Infinity;
-  for (let x = zone.x + 150; x < zone.x + zone.w; x += 150) {
-    for (let z = zone.z + 150; z < zone.z + zone.d; z += 150) {
+  const inZone = (x: number, z: number) => x > zone.x && x < zone.x + zone.w && z > zone.z && z < zone.z + zone.d;
+  const reach = 500;
+  for (let x = zone.x - reach; x < zone.x + zone.w + reach; x += 150) {
+    for (let z = zone.z - reach; z < zone.z + zone.d + reach; z += 150) {
       if (blocked(shapes, x, z)) continue;
-      const d = Math.hypot(x - start.player.x, z - start.player.z);
+      // Spots outside the zone count for a little more, so one inside wins when there is one.
+      const d = Math.hypot(x - start.player.x, z - start.player.z) + (inZone(x, z) ? 0 : 2000);
       if (d < bestDist) {
         bestDist = d;
         target = { x, z };
@@ -280,7 +285,7 @@ export async function goTo(
   { radius = 400, log = false }: { radius?: number; log?: boolean } = {},
 ): Promise<GameState> {
   const s = await link.state();
-  const path = planPath(loadShapes(dataDirs, s.stage, s.room), s.player.x, s.player.z, x, z);
+  const path = planPath(loadShapes(dataDirs, s.stage, s.room, s.player.cf), s.player.x, s.player.z, x, z);
   if (!path) throw new StuckError(`no path to (${x}, ${z}) in this room`, s);
   if (log) console.log(`  path ${path.map((p) => `(${Math.round(p.x)},${Math.round(p.z)})`).join(' ')}`);
   let last = s;

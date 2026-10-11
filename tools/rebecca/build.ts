@@ -23,16 +23,12 @@ export const start = { ...trailRoom, ...trailStart };
  * Enemies that are already dead when her game starts: enemy() skips a spawn
  * whose kill flag (its third argument) is set. Chris's route is thinned for a
  * medic with a Beretta and one spare clip. In Chapter 1 the Cerberus in 11A
- * and one zombie in 10A stay as her fights; in Chapter 2 one zombie each in
- * ROOM2020 and ROOM2040.
+ * and one zombie in 10A stay as her fights.
  */
 export const killedAtStart = [
   48, 49, 50, // ROOM3000 courtyard garden: all three Cerberus
   113, // ROOM10A0 back passage: one of its two zombies
   9, 10, 11, // ROOM1010 1F left stairs: all three zombies
-  29, 30, 31, // ROOM2010, at the top of the 1F left stairs: all three zombies (Chapter 2)
-  33, // ROOM2020: one of its two zombies
-  168, // ROOM2040 2F hallway: one of its two zombies
 ];
 
 /** BioCardLayout offsets (src/game/BioCard.h). */

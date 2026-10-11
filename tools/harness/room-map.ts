@@ -27,8 +27,16 @@ export function roomFile(dirs: string[], stage: number, room: number): string {
   throw new Error(`${name} not found in ${dirs.join(', ')}`);
 }
 
-/** The blocking shapes of a room: the push shapes 1, 3 and 5. */
-export function collisionShapes(rdt: Uint8Array): Shape[] {
+/** A new game gives the player 0x10 (PlayerEntity +0xDC, GameStart.cpp). */
+export const NEW_GAME_COLLISION_FLAGS = 0x10;
+
+/**
+ * The shapes that block a character with these collision flags, the way
+ * check_room_collision (RoomCollision.cpp) treats them: the push shapes 1, 3
+ * and 5, except shape 5 while flag 0x10 is set, and except records without
+ * flag 0x100 while flag 0x04 is set (they are floor zones then).
+ */
+export function collisionShapes(rdt: Uint8Array, collisionFlags = NEW_GAME_COLLISION_FLAGS): Shape[] {
   const view = new DataView(rdt.buffer, rdt.byteOffset, rdt.byteLength);
   const at = view.getUint32(0x4c, true);
   let count = 0;
@@ -44,9 +52,10 @@ export function collisionShapes(rdt: Uint8Array): Shape[] {
     const xMin = view.getUint16(r + 4, true);
     const zMin = view.getUint16(r + 6, true);
     const shape = view.getUint16(r + 8, true) & 0xff;
-    // Every push shape blocks the player; flag bit 8 (0x100) only marks some
-    // walls, and many carry just bit 9.
+    const flags = view.getUint16(r + 10, true);
     if (![1, 3, 5].includes(shape)) continue;
+    if (shape === 5 && (collisionFlags & 0x10) !== 0) continue;
+    if ((collisionFlags & 0x04) !== 0 && (flags & 0x100) === 0) continue;
     const key = `${xMin},${zMin},${xMax},${zMax},${shape}`;
     if (seen.has(key)) continue; // records crossing a quadrant split are repeated
     seen.add(key);
@@ -157,6 +166,6 @@ export function planPath(shapes: Shape[], fromX: number, fromZ: number, toX: num
   return points;
 }
 
-export function loadShapes(dirs: string[], stage: number, room: number): Shape[] {
-  return collisionShapes(new Uint8Array(readFileSync(roomFile(dirs, stage, room))));
+export function loadShapes(dirs: string[], stage: number, room: number, collisionFlags = NEW_GAME_COLLISION_FLAGS): Shape[] {
+  return collisionShapes(new Uint8Array(readFileSync(roomFile(dirs, stage, room))), collisionFlags);
 }

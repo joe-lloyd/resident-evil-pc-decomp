@@ -38,14 +38,23 @@ at this point in his game, and finds him in the save room.
 
 ## Chapter 2: Bravo's medic
 
-Chris leaves to search the mansion. She hears a shot upstairs and finds
-Richard in the 2F pillar passage (20D0), poisoned by the giant snake.
+At the end of the meeting a shot rings out upstairs. Chris tells her to wait
+and goes to search the house; he is gone from the save room afterwards. She
+goes up the 1F left stairs and finds Richard collapsed in the 2F corridor at
+the top (2010), poisoned by the giant snake.
 
-- **Her challenge:** a medic's errand against the clock. The Serum is in the
-  save room (1000), where Chris's game also keeps it, as hidden items 6 and 7.
-  Treating Richard in time sets the canon "serum given" flag (SF 0x7F).
-  Too late, and "Richard is dead." (SF2 0x64).
-- **Rooms:** 1000, 1010, the 2F rooms between them and 20D0.
+- **Her challenge:** a medic's errand against the clock. The Serum is on the
+  medicine shelf in the save room (1000). Finding Richard starts a
+  three-minute clock (state word 4, the game's seconds counter, which Chris's
+  scene in 20D0 uses with a seven-minute limit). Back in time with the serum,
+  she treats him. Too late, and "Richard is dead."
+- **Flags:** FG_COMMON 200 (found him), 201 (his fate is settled), 202 (saved).
+- **Rooms:** 1000, 1010 and 2010. Chris's game has Richard in 20D0, but the
+  left stairs come up into the south half of 2010, which the stairwell walls
+  off from the rest of the 2F. The other way up, through the main hall, runs
+  through Chris's opening scenes.
+- **Test:** `tools/harness/tests/chapter2-richard.ts` plays the errand;
+  `SERUM_FIRST=1` takes the serum before going up.
 
 ## Chapter 3: Moonlight
 
