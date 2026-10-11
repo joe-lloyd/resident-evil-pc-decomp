@@ -1,0 +1,23 @@
+0: \s{0}\n \s{1}\d{130}
+1: \s{0}\n \s{1}\p{100}\s{0}\n \s{1}\d{80}
+2: \s{0}\n \s{1}\d{40}
+3: \s{0}\n \s{1}\d{160}
+4: \s{0}\n \s{1}\p{140}\s{0}\n \s{1}\p{100}\s{0}\n \s{1}\d{80}
+5: \s{0}\n \s{1}\p{120}\s{0}\n \s{1}\p{105}\s{0}\n \s{1}\d{100}
+6: \s{0}\n \s{1}\p{90}\s{0}\n \s{1}\d{100}
+7: \s{0}\n \s{1}\p{85}\s{0}\n \s{1}\d{45}
+8: \s{0}\n \s{1}\d{70}
+9: \s{0}\n \s{1}\p{40}\s{0}\n \s{1}\d{80}
+10: \s{0}\n \s{1}\d{65}
+11: \s{0}\n \s{1}\d{55}
+12: \s{0}\n \s{1}\p{40}\s{0}\n \s{1}\p{90}\s{0}\n \s{1}\p{70}\s{0}\n \s{1}\p{150}\s{0}\n \s{1}\p{95}\s{0}\n \s{1}\p{100}\s{0}\n \s{1}\d{100}
+13: \s{0}\n \s{1}\p{70}\s{0}\n \s{1}\d{70}
+14: \s{0}\n \s{1}\p{60}\s{0}\n \s{1}\d{45}
+15: \s{0}\n \s{1}\p{65}\s{0}\n \s{1}\d{90}
+16: \s{0}\n \s{1}\d{50}
+17: \s{0}\n \s{1}\d{130}
+18: \s{0}\n \s{1}\d{50}
+19: \s{0}\n \s{1}\d{70}
+20: \s{0}\n \s{1}\d{190}
+21: \s{0}  \xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF                                                                                                                      \x03       \s{0}  \t{0}  \m{0}  \r   \c   \x09                                                       \q   \x0B   0       
+22: \oCaptain Wesker...?"\p{0}\oRebecca. You made it this\nfar. I'm impressed."\p{0}\oWhat is this place? What\nare you doing down here?"\p{0}\oCleaning up. You were\nnever meant to see it."\p{0}\nWesker raises his gun.\p{0}\nThe lights cut out. An\nalarm howls.\p{0}\nRebecca runs for the door.

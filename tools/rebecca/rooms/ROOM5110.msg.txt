@@ -1,0 +1,10 @@
+0: \s{2}\oTriggering System\nActivation Admitted"\p{0}\o1st Degree Emergency\nIssued"\p{0}\n\oUnlock All Blocks"\p{0}\oTriggering System\nDeactivation Impossible"\s{2}
+1: \s{2}It's a triggering system\nactivator.\p{0}It's quite big.\s{2}
+2: \s{2}\nWhat a miserable death...\s{2}
+3: \s{2}A power connection switch.\nThe elevator power is off.\p{0}Will you connect it?\c \d{1}
+4: \s{2}The power isn't supplied\nto the elevator.\s{2}
+5: \s{2}I've got to get power to\nthe elevator.\s{2}
+6: \s{2}The power for the elevator\nis activated as the power\p{0}supply and the circuit\nhave been connected.\s{2}
+7: \s{2}Rebecca is activating the\ntriggering device.\s{2}
+8: \nChapter 5: Underground
+9: \nThe elevator has power.

@@ -1,0 +1,8 @@
+0: \s{0}\n\s{1}\p{48}\s{0}\n\s{1}\d{58}
+1: \s{0}\n\s{1}\p{54}\s{0}\n\s{1}\d{91}
+2: \s{2}There's no need to go\ndownstairs now.
+3: \s{2}\n
+4: \s{2}It's welded and does not\nopen.
+5: \s{2}\n
+6: \s{0}\t{1}\n\t{0}\s{1}\d{108}
+7: \nEpilogue\p{0}\oRebecca! You made it!"\p{0}\oChris! Wesker... he's\nbehind all of this."\p{0}\oI know. Brad's on his way.\nWe're getting out of here."\p{0}\nThe sound of rotor blades\ncomes over the trees.
