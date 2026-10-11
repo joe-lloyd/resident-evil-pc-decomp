@@ -156,6 +156,14 @@ static void on_command(const char* line)
     } else if (strcmp(cmd, "room") == 0 && a >= 0 && b >= 0) {
         s_pendingStage = a;
         s_pendingRoom = b;
+    } else if (strcmp(cmd, "pos") == 0 && a >= 0 && a < 0x10000 && b >= 0 && b < 0x10000) {
+        // Stand the player at (x = a, z = b) on the floor, facing c when given,
+        // the way a door's arrival record places her (DoorSystem.cpp).
+        g_playerEntity.scaMatrixData.localMatrix.t[0] = a;
+        g_playerEntity.scaMatrixData.localMatrix.t[2] = b;
+        g_playerEntity.position.x = (short)a;
+        g_playerEntity.position.z = (short)b;
+        if (c >= 0) g_playerEntity.directionAngle = (short)c;
     } else if (strcmp(cmd, "flag") == 0 && a >= 0 && b >= 0 && b < 256 && (c == 0 || c == 1)) {
         FlagBank fb = flag_bank(a);
         int byteAt = (b >> 5) * 4;

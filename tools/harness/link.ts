@@ -195,6 +195,11 @@ export class GameLink {
     return this.waitFor((s) => s.stage === stage && s.room === room && !(s.msf & 0x04000080), `room ${stage}:${room}`, 30_000);
   }
 
+  /** Stand the player at (x, z) on the floor of the current room, facing `angle` when given. */
+  place(x: number, z: number, angle?: number): Promise<void> {
+    return this.command(`pos ${x} ${z}${angle === undefined ? '' : ` ${angle}`}`, 'pos');
+  }
+
   setFlag(bank: number, index: number, on: boolean): Promise<void> {
     return this.command(`flag ${bank} ${index} ${on ? 1 : 0}`, 'flag');
   }
