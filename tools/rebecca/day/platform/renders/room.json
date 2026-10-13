@@ -1,0 +1,358 @@
+{
+ "cameras": [
+  {
+   "from": [
+    5440,
+    -6460,
+    1360
+   ],
+   "to": [
+    17850,
+    -340,
+    17000
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    28220,
+    -5440,
+    21420
+   ],
+   "to": [
+    13600,
+    -1360,
+    7650
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    22440,
+    -5100,
+    10540
+   ],
+   "to": [
+    10200,
+    -1020,
+    21080
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    4250,
+    -5780,
+    6800
+   ],
+   "to": [
+    21250,
+    -1020,
+    16150
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 21250,
+   "z0": 4250,
+   "x1": 26690,
+   "z1": 4454,
+   "name": "Booth wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 21250,
+   "z0": 8466,
+   "x1": 23970,
+   "z1": 8670,
+   "name": "Booth wall s"
+  },
+  {
+   "shape": "box",
+   "x0": 23970,
+   "z0": 8466,
+   "x1": 25500,
+   "z1": 8670,
+   "name": "Booth wall s.001"
+  },
+  {
+   "shape": "box",
+   "x0": 25500,
+   "z0": 8466,
+   "x1": 26690,
+   "z1": 8670,
+   "name": "Booth wall s.002"
+  },
+  {
+   "shape": "box",
+   "x0": 21250,
+   "z0": 4250,
+   "x1": 21454,
+   "z1": 5015,
+   "name": "Booth wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 21250,
+   "z0": 5015,
+   "x1": 21454,
+   "z1": 8075,
+   "name": "Booth wall w.001"
+  },
+  {
+   "shape": "box",
+   "x0": 21250,
+   "z0": 5015,
+   "x1": 21454,
+   "z1": 8075,
+   "name": "Booth wall w.002"
+  },
+  {
+   "shape": "box",
+   "x0": 21250,
+   "z0": 8075,
+   "x1": 21454,
+   "z1": 8670,
+   "name": "Booth wall w.003"
+  },
+  {
+   "shape": "box",
+   "x0": 26486,
+   "z0": 4250,
+   "x1": 26690,
+   "z1": 8670,
+   "name": "Booth wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 4097,
+   "z0": 15147,
+   "x1": 4403,
+   "z1": 15453,
+   "name": "Wheel house post"
+  },
+  {
+   "shape": "box",
+   "x0": 4097,
+   "z0": 21267,
+   "x1": 4403,
+   "z1": 21573,
+   "name": "Wheel house post.001"
+  },
+  {
+   "shape": "box",
+   "x0": 10047,
+   "z0": 15147,
+   "x1": 10353,
+   "z1": 15453,
+   "name": "Wheel house post.002"
+  },
+  {
+   "shape": "box",
+   "x0": 10047,
+   "z0": 21267,
+   "x1": 10353,
+   "z1": 21573,
+   "name": "Wheel house post.003"
+  },
+  {
+   "shape": "box",
+   "x0": 5865,
+   "z0": 18360,
+   "x1": 8585,
+   "z1": 20400,
+   "name": "Gearbox"
+  },
+  {
+   "shape": "box",
+   "x0": 11900,
+   "z0": 18700,
+   "x1": 16320,
+   "z1": 21420,
+   "name": "Car footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 3145,
+   "z0": 10115,
+   "x1": 3315,
+   "z1": 10285,
+   "name": "Gate post"
+  },
+  {
+   "shape": "box",
+   "x0": 3145,
+   "z0": 13515,
+   "x1": 3315,
+   "z1": 13685,
+   "name": "Gate post.001"
+  },
+  {
+   "shape": "box",
+   "x0": 18190,
+   "z0": 5058,
+   "x1": 21250,
+   "z1": 5822,
+   "name": "Bench"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 3400,
+  "z0": 3400,
+  "x1": 28900,
+  "z1": 22100
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "bridge",
+   "zone": {
+    "x0": 5100,
+    "z0": 3400,
+    "x1": 10200,
+    "z1": 4420
+   },
+   "arrive": {
+    "x": 7820,
+    "z": 5780,
+    "angle": 3072
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "booth",
+   "zone": {
+    "x0": 23970,
+    "z0": 8670,
+    "x1": 25500,
+    "z1": 9520
+   },
+   "arrive": {
+    "x": 24735,
+    "z": 10710,
+    "angle": 3072
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "east-path",
+   "zone": {
+    "x0": 27880,
+    "z0": 13600,
+    "x1": 28900,
+    "z1": 17000
+   },
+   "arrive": {
+    "x": 26520,
+    "z": 15300,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "line-track",
+   "zone": {
+    "x0": 3400,
+    "z0": 10200,
+    "x1": 4420,
+    "z1": 13600
+   },
+   "arrive": {
+    "x": 5780,
+    "z": 11900,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "car",
+   "zone": {
+    "x0": 12920,
+    "z0": 17680,
+    "x1": 14620,
+    "z1": 18700
+   },
+   "arrive": {
+    "x": 14110,
+    "z": 16830,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 26860,
+    "z0": 18020,
+    "x1": 28900,
+    "z1": 20400
+   },
+   "text": "The smear ends at the rail. The crows are at something caught on it.\nA strip of plaid shirt."
+  },
+  {
+   "zone": {
+    "x0": 11900,
+    "z0": 17510,
+    "x1": 16320,
+    "z1": 18700
+   },
+   "text": "Car 4. The door has been forced from inside. The glass is smeared red."
+  },
+  {
+   "zone": {
+    "x0": 5270,
+    "z0": 15980,
+    "x1": 9520,
+    "z1": 19380
+   },
+   "text": "The drive's gearbox, open. The big cog has sheared: four teeth gone.\nA spanner lies in the oil where it was dropped."
+  },
+  {
+   "zone": {
+    "x0": 18020,
+    "z0": 11390,
+    "x1": 21080,
+    "z1": 13430
+   },
+   "text": "A hiker's pack, split open. Clothes, a water bottle, a trail map."
+  },
+  {
+   "zone": {
+    "x0": 14450,
+    "z0": 3400,
+    "x1": 19550,
+    "z1": 5440
+   },
+   "text": "ARKLAY SKYWAY. UPPER STATION. ELEV 1840."
+  },
+  {
+   "zone": {
+    "x0": 12240,
+    "z0": 9860,
+    "x1": 15980,
+    "z1": 11560
+   },
+   "text": "OUT OF SERVICE."
+  }
+ ],
+ "entry": "A gondola station. Down the mountain, into the valley.\nIf it ran.",
+ "notes": [
+  "from the trail's mouth: the platform, the car at the edge, the smear to the rail",
+  "from the south-east corner by the drop: the booth, the pack, the trail in",
+  "from in front of the booth: the car, the wheel house, the valley beyond",
+  "from the line track's gate: the length of the platform to the east path"
+ ]
+}

@@ -1,0 +1,9 @@
+0: \nThe heater's still on. He\ncan't have gone long.
+1: \nThe duty board, in chalk.\nPOWER OFF 4.50. DRIVE COG\nSHEARED. F3 BLOWN.\p{0}\nAt the bottom, underlined\ntwice: HAL HAS KEY.
+2: \nThe key switch for the\ndrive. It's empty.\p{0}\nNo key, no gondola.
+3: \nHis coffee went over. A\nphoto of a girl with a\p{0}\nfish, propped against the\nglass.
+4: \nGauze, soaked through. He\ndressed something in a\nhurry.\p{0}\nA bite, by the look of the\nfirst aid box. Everything\nin it is gone.
+5: \nFuse F3 is burnt black.\nThe wall above it is\nsooty.
+6: \nThe handset is hanging off\nthe hook. The line's dead.
+7: \nARKLAY SKYWAY. See the\nvalley the way the eagles\ndo.\p{0}\nSomeone has scratched out\nthe family's eyes.
+8: \nA handprint in blood on\nthe door frame. It's still\ntacky.

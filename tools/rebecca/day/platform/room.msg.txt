@@ -1,0 +1,7 @@
+0: \nA gondola station. Down\nthe mountain, into the\nvalley.\p{0}\nIf it ran.
+1: \nThe smear ends at the\nrail. The crows are at\nsomething caught on it.\p{0}\nA strip of plaid shirt.
+2: \nCar 4. The door has been\nforced from inside. The\nglass is smeared red.
+3: \nThe drive's gearbox, open.\nThe big cog has sheared:\nfour teeth gone.\p{0}\nA spanner lies in the oil\nwhere it was dropped.
+4: \nA hiker's pack, split\nopen. Clothes, a water\nbottle, a trail map.
+5: \nARKLAY SKYWAY. UPPER\nSTATION. ELEV 1840.
+6: \nOUT OF SERVICE.

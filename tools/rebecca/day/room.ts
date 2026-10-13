@@ -25,15 +25,25 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 
 type Rect = { readonly x0: number; readonly z0: number; readonly x1: number; readonly z1: number };
 
-export interface DayRoom {
+export type Hour = 'dawn' | 'morning' | 'noon' | 'afternoon' | 'dusk' | 'night';
+
+/**
+ * How the game lights her in the room: given outright, or worked out from the
+ * hour and whether she is indoors (lightingFor), placed round the floor.
+ */
+export type Lighting =
+  | { readonly ambient: readonly [number, number, number]; readonly lights: readonly [PointLight, PointLight, PointLight] }
+  | { readonly hour: Hour; readonly inside: boolean };
+
+export type DayRoom = DayRoomBase & Lighting;
+
+interface DayRoomBase {
   readonly slug: string;
   /** Stage counted from 0 (the room's files are under Stage<stage + 1>/), room id. */
   readonly stage: number;
   readonly room: number;
   /** The base-game room whose sound bank, effects and player animations it uses. */
   readonly donor: string;
-  readonly ambient: readonly [number, number, number];
-  readonly lights: readonly [PointLight, PointLight, PointLight];
   /**
    * The part of the floor each camera shows, one or more rectangles that do
    * not overlap another camera's; walking into one cuts to it. 'auto' works
@@ -62,6 +72,43 @@ interface RoomJson {
   anim?: { frames: number; ticks: number };
   /** Changes of state: cam<N>.s-<name>.png, shown while the flag is set. */
   states?: { name: string; bank: 0 | 1; bit: number }[];
+}
+
+/** The sun or the room's lamps, the sky, and light thrown back off the ground, for the hour. */
+const HOURS: Record<Hour, { ambient: [number, number, number]; key: [number, number, number]; sky: [number, number, number]; bounce: [number, number, number] }> = {
+  dawn: { ambient: [1050, 950, 960], key: [85, 60, 50], sky: [45, 45, 60], bounce: [30, 28, 28] },
+  morning: { ambient: [1150, 1100, 1050], key: [95, 85, 70], sky: [55, 62, 75], bounce: [30, 32, 30] },
+  noon: { ambient: [1150, 1140, 1120], key: [85, 85, 82], sky: [55, 58, 66], bounce: [32, 32, 30] },
+  afternoon: { ambient: [1120, 1060, 1000], key: [95, 78, 58], sky: [50, 54, 66], bounce: [32, 28, 24] },
+  dusk: { ambient: [950, 800, 760], key: [95, 50, 30], sky: [35, 30, 50], bounce: [24, 18, 18] },
+  night: { ambient: [700, 720, 840], key: [40, 48, 70], sky: [20, 24, 40], bounce: [14, 14, 18] },
+};
+
+export function lightingFor(hour: Hour, inside: boolean, b: Rect): { ambient: [number, number, number]; lights: [PointLight, PointLight, PointLight] } {
+  const h = HOURS[hour];
+  const cx = Math.round((b.x0 + b.x1) / 2);
+  const cz = Math.round((b.z0 + b.z1) / 2);
+  const span = Math.max(b.x1 - b.x0, b.z1 - b.z0, 3400);
+  const shade = (c: readonly number[], k: number) => c.map((v) => Math.round(v * k)) as [number, number, number];
+  if (inside) {
+    // A lamp overhead, daylight from a window, a dim fill.
+    return {
+      ambient: shade(h.ambient, 0.8),
+      lights: [
+        { x: cx, y: -2400, z: cz, rgb: [110, 80, 50], radius: Math.round(span * 1.4) },
+        { x: b.x1, y: -2200, z: b.z0, rgb: shade(h.key, 0.7), radius: Math.round(span * 1.6) },
+        { x: cx, y: -3200, z: b.z1, rgb: [32, 34, 40], radius: Math.round(span * 2) },
+      ],
+    };
+  }
+  return {
+    ambient: h.ambient,
+    lights: [
+      { x: b.x1 + span, y: -span, z: b.z0 - span / 2, rgb: h.key, radius: span * 4 },
+      { x: cx, y: -span, z: cz, rgb: h.sky, radius: span * 4 },
+      { x: cx, y: 1700, z: cz, rgb: h.bounce, radius: span * 2 },
+    ],
+  };
 }
 
 export const fileStem = (r: Pick<DayRoom, 'stage' | 'room'>) =>
@@ -255,8 +302,7 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
   const rdt = composeRoom(donor, {
     cameras,
     itemModels: spec.itemModels?.map((m) => itemModel(baseRoom(m.from), m.index)),
-    ambient: spec.ambient,
-    lights: spec.lights,
+    ...('hour' in spec ? lightingFor(spec.hour, spec.inside, json.bounds) : { ambient: spec.ambient, lights: spec.lights }),
     sections: {
       [SLOT.switchZones]: switchZones(floors, json.bounds),
       [SLOT.collision]: collision(json),

@@ -97,8 +97,14 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
     written.push(`sound/${name}`);
   }
 
-  // New rooms: the rooms of her day (day/rooms.ts).
-  for (const room of dayRooms) written.push(...buildDayRoom(room, baseDir, outDir, raeCli));
+  // New rooms: the rooms of her day (day/rooms.ts), those rendered so far.
+  for (const room of dayRooms) {
+    if (!existsSync(path.join(here, 'day', room.slug, 'renders', 'room.json'))) {
+      console.warn(`${room.slug}: not rendered yet, left out`);
+      continue;
+    }
+    written.push(...buildDayRoom(room, baseDir, outDir, raeCli));
+  }
 
   // Room scripts: rooms/ROOMsrrv.c replaces that room's init and main scripts.
   const scripts = readdirSync(roomsDir).filter((f) => /^ROOM[1-7][0-9A-F]{2}[01]\.c$/i.test(f));

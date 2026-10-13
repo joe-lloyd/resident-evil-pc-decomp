@@ -32,7 +32,7 @@ for (const slug of slugs) {
   const work = `${root}\\${slug}`;
   const out = `${work}\\renders`;
   ssh(`powershell -NoProfile -Command "if (Test-Path '${out}') { Remove-Item -Recurse -Force '${out}' }; New-Item -ItemType Directory -Force '${out}' | Out-Null"`);
-  execFileSync('scp', ['-q', '-o', 'BatchMode=yes', path.join(dir, 'scene.py'), path.join(here, '..', 'blender', 'reb.py'), `${host}:${remote(work)}/`]);
+  execFileSync('scp', ['-q', '-o', 'BatchMode=yes', path.join(dir, 'scene.py'), path.join(here, '..', 'blender', 'reb.py'), path.join(here, '..', 'blender', 'kit.py'), `${host}:${remote(work)}/`]);
   const started = Date.now();
   try {
     ssh(`cmd /c "set RE1_OUT=${out}&& set RE1_PREVIEW=${preview ? '1' : ''}&& "${exe}" -b --factory-startup --python-exit-code 1 --python "${work}\\scene.py" > "${work}\\render.log" 2>&1"`);

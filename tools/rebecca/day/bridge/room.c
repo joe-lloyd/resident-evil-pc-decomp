@@ -13,7 +13,10 @@
 // Z 6120, well clear of it: a touch door fires when the spot 600 ahead of her
 // is inside, and the walk planner backs up to get round things.
 door_aot_set(0, 8500, 3400, 3400, 680, 0, 15, 48, 4, 0, ROOM_315, 26690, 0, 18530, 1024, UNLOCKED, 1);
-aot_set(1, 5950, 28900, 8500, 1360, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);   // the valley trail sign
+aot_set(1, 5950, 27880, 8500, 1020, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);   // the valley trail sign
+// On down to the gondola station, on touch at the far bank's south edge
+// (platform/scene.py's door back, at the station's north edge).
+door_aot_set(5, 6800, 29580, 6800, 1020, 0, 15, 48, 4, 0, ROOM_318, 7820, 0, 5780, 3072, UNLOCKED, 1);
 aot_set(2, 8500, 10540, 3400, 1360, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);   // the bridge's near end
 aot_set(3, 3400, 10880, 5100, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);   // the drop, west of it
 aot_set(4, 11900, 10880, 5100, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);  // the drop, east of it
