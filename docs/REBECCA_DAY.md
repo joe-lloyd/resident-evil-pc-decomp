@@ -3,8 +3,8 @@
 Rebecca's scenario is a game of its own that runs on this engine in front of
 Resident Evil. It covers the day nobody saw: from the morning she says
 goodbye to Billy to the night Chris finds her in the mansion's save room. It
-should take as long to play as the mansion does the first time: about fifty
-rooms, two to three hours.
+should be as big as the mansion: 58 rooms (the mansion's two floors are 58
+rooms with 295 camera angles, counted from the game's room files).
 
 This plan replaces the chapter-by-chapter remix of Chris's game. That work is
 shelved on the `chapters-2-6` branch. The engine fixes and the test harness
@@ -17,19 +17,19 @@ ridge above the burning training facility. Alpha Team reaches the mansion
 that night, and Chris finds Rebecca in the 1F save room. In between, she has
 a whole day alone on the mountain, and nothing in canon says what she did.
 
-Her way down is one Chris and Jill never see. It runs down the mountain
-through a ranger station and a logging camp, under the valley through
-Umbrella's water works, and into a forgotten cellar beneath the mansion. She
-climbs up through the floor into the save room. Spent, she sits down against
-the wall and falls asleep. Footsteps wake her, and Chris walks in.
+Her way down is the gondola from the ranger station to the valley. It is
+dead, and getting it running is most of the game. From the ranger station's
+yard she goes out three ways for what it needs, and the gondola takes her
+down the mountain to the Spencer estate, in through the cellar and up into
+the save room. Spent, she sits down against the wall and falls asleep.
+Footsteps wake her, and Chris walks in.
 
-| Act | Time | Hub | What it is about |
+| Act | Time | Rooms | What happens |
 | --- | --- | --- | --- |
-| 1 | Dawn to morning | Ranger Station 3 | Alone for the first time; finding her feet |
-| 2 | Midday | The logging camp | The infection has reached the mountain |
-| 3 | Afternoon | The pump house | Umbrella built under the whole valley |
-| 4 | Dusk | The aqueduct | Someone else survived down here |
-| 5 | Night | The save room | Sleep, waking, Chris; her credits |
+| 1 | Dawn to morning | 8 | The ridge, the ranger station, the winch and the pine, the gorge, and the dead gondola |
+| 2 | Late morning to afternoon | 34 | From the yard: power to the west, the drive cog at the logging camp to the north, the operator's key in the mine to the east |
+| 3 | Dusk | 12 | The gondola stops at a pylon; the valley; Bravo's helicopter; the gardener's lodge; the estate wall |
+| 4 | Night | 4 | The cellar, under the floor, the save room: sleep, Chris, her credits |
 
 ## How the levels work
 
@@ -51,113 +51,20 @@ the wall and falls asleep. Footsteps wake her, and Chris walks in.
 - **Places tell their own story** through what was left in them.
 - **The light tells the time.** Each act is rendered for its hour.
 
-## Planning an act
+## The plan
 
-Each act is planned in a data file before it is built:
-`tools/rebecca/plan/act1.ts` lists the places, the ways between them and
-what locks them, and the steps, each with the steps it needs.
-`node tools/rebecca/plan/page.ts <dir>` checks the plan and draws it as a
-puzzle dependency chart, a count of how many steps are open at each point,
-a lock and key map, a beat chart and a storyboard of the built cameras. The
-check fails a plan with a step that can't be reached, a step whose needs
-don't get her to its place, or a find nothing uses
-(`plan.test.ts` runs it).
+The plan is data: `tools/rebecca/plan/day.ts` has every room, the ways
+between them and what locks them, and every step she takes, each with the
+steps it needs. `node tools/rebecca/plan/page.ts <dir>` checks it and draws
+it as one page: for each act a puzzle dependency chart, a lock and key map
+and a beat chart, then a count of how many steps are open at each point of
+the day, and a storyboard of the built cameras. The check fails a plan with
+a step that can't be reached, a step whose needs don't get her to its room,
+or a find nothing uses (`plan.test.ts` runs it). The page is published at
+https://home.arpa/research/rebecca-plan/.
 
-## Places
-
-Each place is one or more new rooms: our own backgrounds, cameras, collision
-and scripts. Room ids come from the free slots in stages 3, 4 and 5 (14, 14
-and 10 slots); a room's stage only decides its file name and id.
-
-### Act 1: the mountain, dawn to morning
-
-Hub: **Ranger Station 3**, a yard with the ranger's cabin, his tool shed and
-his truck. Three ways lead out of it.
-
-| Room | Built | What is there |
-| --- | --- | --- |
-| The ridge | yes | Where the game opens; the training facility burning below |
-| The mountain trail | yes | Down through the spruces to the station |
-| The station yard | yes | The hub: the pine across the trail down, the truck and its winch, his rifle in the grass |
-| The cabin | yes | He left in a hurry; the radio; the logbook; the shed key |
-| The tool shed | yes | The winch's crank; spare fuses he had no use for |
-| The woods behind the cabin | | Where the drag marks lead: the ranger, dead, his truck keys in his jacket; dogs |
-| The forestry road | | West out of the yard to a chained gate |
-| The generator hut | | Powers the station and the gorge ferry; out of fuel |
-| The fire lookout tower, foot and top | | The ferry's control key; the valley seen from above, and smoke where Bravo's helicopter came down |
-| The gorge, near bank | yes, as the bridge | The footbridge is out in the middle; the cable ferry's station |
-| The gorge, far bank | | The valley trail on down; the lever that lowers the bridge's missing section |
-
-How it chains:
-
-1. The trail down is blocked by a fallen pine. The truck's winch can drag
-   it, but its crank is in the shed, the shed is padlocked, and the key is in
-   the cabin. Taking the key brings a dog out of the trees. *(Built.)*
-2. Past the pine the gorge bridge is out. The cable ferry across needs power
-   and its control key.
-3. The power is the generator up the forestry road, past the woods. The
-   woods open once the dog has come out of them. The road's gate is
-   chained; bolt cutters are in the truck's toolbox, which is locked; the
-   truck keys are on the ranger's body in the woods, where the dogs are.
-4. The generator is dry. The empty jerrycan in the shed and the hose from
-   the pump in the woods siphon the truck's tank. The station's lights come
-   on, and a gate behind the generator unbolts down to the yard.
-5. The ferry key is at the top of the fire lookout tower, further along the
-   forestry road.
-6. Across on the ferry, the far bank's lever lowers the bridge's missing
-   section: the shortcut back to the station. Act 2 sends her back up it for
-   the fuses in the shed.
-
-### Act 2: the logging camp, midday
-
-Hub: **the camp yard**, stacked timber and trucks. About twelve rooms: the
-yard; the bunkhouse, where the loggers have turned; the mess hall; the
-foreman's office and its safe; the sawmill; the mill pond; the log flume; the
-cable car's upper station; the fuel depot; the radio shed; the lower camp.
-
-- The cable car down to the valley needs power at the sawmill, a fuse (the
-  ones left in the ranger's shed: back up over the Act 1 shortcut), and the
-  operator's key from the foreman's safe, its combination on the bunkhouse
-  calendar.
-- The sawmill's power needs the belt refitted and the mill race opened from
-  the pond.
-- The log flume is a one-way ride from the mill down to the lower camp, and
-  once ridden, the lower camp's gate opens back to the yard.
-
-### Act 3: the water works, afternoon
-
-Hub: **the pump house** by the reservoir, Umbrella's water works built to
-look like a municipal plant. About ten rooms: the dam walkway, the pump
-house, its control room, the valve gallery, the filter beds, the service
-tunnel's mouth, the tunnel junction, the maintenance office, the Web
-Spinners' storeroom, Umbrella's lift.
-
-- The pumps' pressure has to be set, valve by valve, from readings around
-  the plant, to drain the tunnel.
-- The lift down needs power and a keycard; once down, the lift is the
-  shortcut back up.
-
-### Act 4: the aqueduct, dusk
-
-Hub: **the aqueduct**, an old brick watercourse that predates Umbrella,
-partly flooded. About ten rooms: the channel, the sluice room, the
-scientist's cache, the brick gallery, the Neptune pool, the old cellar, the
-cistern and its control room, the gate under the mansion.
-
-- A researcher who fled the lab is hiding in the cache, hurt and frightened.
-  He tells her what the T-virus is doing to the valley and that the tunnels
-  come up under the mansion, and gives her the key to the cistern gate. When
-  she comes back past, he is gone, or worse.
-- Draining the aqueduct at the sluice opens a dry way back to the cache.
-- The cistern under the mansion's foundations is a Black Tiger's nest: her
-  first real boss fight.
-
-### Act 5: night
-
-The crawlspace, the passage under the floorboards, and the save room. She
-climbs up through the floor of ROOM1000. Too tired to go on, she sits against
-the wall. The screen fades, and time passes. Footsteps wake her, and Chris
-walks in: the meeting we already built. Then her own credits.
+Change the plan there first, then build to it. Rooms, steps and camera
+counts in this document are a summary of that file.
 
 ## Her voice
 
@@ -176,24 +83,25 @@ lines of the message box at most.
 ## People
 
 - **Billy** is never seen. The game opens just after he has gone.
-- **The scientist** reuses an RE1 model with a new texture: a lab coat on an
-  existing NPC body. He stands or sits; he does not move around.
+- **The dead tell the rest:** the ranger, the cook, the operator in the
+  mine, Kevin in Bravo's helicopter. Their notes and diaries are messages.
 - **Chris** appears at the end, as he does now.
 - **Voices** on the ranger's radio: S.T.A.R.S. chatter, in text.
 
 ## Enemies
 
-All of them are RE1's own. Crows, Adders and a Cerberus on the mountain;
-zombies at the camp; Web Spinners in the tunnel; a Neptune in the aqueduct;
-a Black Tiger in the cistern. Ammunition stays short: she is a medic with a
+All of them are RE1's own. Crows, Adders and Cerberus on the mountain;
+zombie loggers at the camp; Web Spinners in the mine; a pack of Cerberus at
+the estate's kennels. Ammunition stays short: she is a medic with a
 Beretta, and running is often the answer.
 
 ## Items and puzzles
 
 New key items reuse existing item ids and models where they can: the
-ranger's key, a fuse, a valve handle, the cistern key. The puzzles are small
-and physical: power for the cable car, pressure in the pump house, a gate key
-from the scientist. Notes are messages, read where she finds them.
+ranger's keys, bolt cutters, a jerrycan, a drive cog, fuses, the operator's
+key, a crowbar. The puzzles are small and physical: fuel for the generator,
+a sluice to run the sawmill, dynamite for a rockfall, a pump to drain the
+mine. Notes are messages, read where she finds them.
 
 ## Scale
 
@@ -205,7 +113,12 @@ with her as tall as its door.
 ## What the engine and tools need
 
 The trail proved that a new room can be built from a Blender scene. Making
-some 25 of them needs that to become a production line.
+the other 51 needs that to become a production line.
+
+Room ids are not the limit. The stages have 38 free slots, fewer than her
+rooms, but in her mode the REB tree is authoritative for stage files
+(`src/system/AssetPath.cpp`), so any slot but the save room's can be one of
+hers without touching Chris's and Jill's game.
 
 1. **Room specs.** One file per new room: its id, its Blender scene, its
    cameras, the walkable floor, its doors and the scripts and messages. The
@@ -227,8 +140,8 @@ some 25 of them needs that to become a production line.
    meeting.
 9. **Her credits.** A text credits screen after the meeting, in place of the
    ending movies.
-10. **The scientist.** An NPC with a swapped texture, loaded from the
-    overlay.
+10. **Rides.** The flume, the mine lift and the gondola play as sequences,
+    the way the walks between outdoor rooms do.
 
 Built so far, beyond the list above:
 
@@ -274,8 +187,10 @@ recording on the research page.
    floors and collision from the scene. *(Done.)*
 2. **Act 1's first loop.** The ridge, the trail, the station yard, the cabin,
    the shed, the winch and the gorge. *(Done.)*
-3. **Act 1 complete.** The woods, the forestry road, the generator, the
-   lookout tower, the ferry and the far bank's shortcut.
-4. **Acts 2 to 4,** one at a time, each a hub with its spokes and shortcuts.
-5. **Act 5,** with the sleep, the meeting and her credits.
+3. **Act 1 complete.** The gondola station and the operator's booth.
+4. **Act 2,** one spoke at a time: the woods and the logging camp, the
+   forestry road and the generator, the quarry and the mine, then the
+   gondola running.
+5. **Acts 3 and 4,** with the ride down, the estate, the sleep, the meeting
+   and her credits.
 6. **Polish:** sound, music choices, balance, and her lines read aloud.
