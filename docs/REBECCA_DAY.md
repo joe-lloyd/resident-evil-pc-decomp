@@ -51,6 +51,18 @@ the wall and falls asleep. Footsteps wake her, and Chris walks in.
 - **Places tell their own story** through what was left in them.
 - **The light tells the time.** Each act is rendered for its hour.
 
+## Planning an act
+
+Each act is planned in a data file before it is built:
+`tools/rebecca/plan/act1.ts` lists the places, the ways between them and
+what locks them, and the steps, each with the steps it needs.
+`node tools/rebecca/plan/page.ts <dir>` checks the plan and draws it as a
+puzzle dependency chart, a count of how many steps are open at each point,
+a lock and key map, a beat chart and a storyboard of the built cameras. The
+check fails a plan with a step that can't be reached, a step whose needs
+don't get her to its place, or a find nothing uses
+(`plan.test.ts` runs it).
+
 ## Places
 
 Each place is one or more new rooms: our own backgrounds, cameras, collision
@@ -83,11 +95,13 @@ How it chains:
    the cabin. Taking the key brings a dog out of the trees. *(Built.)*
 2. Past the pine the gorge bridge is out. The cable ferry across needs power
    and its control key.
-3. The power is the generator up the forestry road. The road's gate is
+3. The power is the generator up the forestry road, past the woods. The
+   woods open once the dog has come out of them. The road's gate is
    chained; bolt cutters are in the truck's toolbox, which is locked; the
    truck keys are on the ranger's body in the woods, where the dogs are.
-4. The generator is dry. The jerrycan in the truck's bed, there from the
-   start, fills it. The station's lights come on.
+4. The generator is dry. The empty jerrycan in the shed and the hose from
+   the pump in the woods siphon the truck's tank. The station's lights come
+   on, and a gate behind the generator unbolts down to the yard.
 5. The ferry key is at the top of the fire lookout tower, further along the
    forestry road.
 6. Across on the ferry, the far bank's lever lowers the bridge's missing
