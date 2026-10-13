@@ -39,6 +39,10 @@ aot_set(10, 27540, 9860, 2380, 2040, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);   
 if (ck(FG_ITEM, 242, 1)) {
     enemy(2 /* Cerberus */, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);
 }
+// KIT DOORS (day/scripts.ts writes these)
+// To road: not built yet.
+// To woods: not built yet.
+// END KIT DOORS
 return;
 
 // main procedure 0

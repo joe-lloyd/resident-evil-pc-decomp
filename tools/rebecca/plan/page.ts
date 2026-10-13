@@ -7,13 +7,15 @@
 //
 // The out dir gets index.html and the camera renders it shows. The page
 // refuses to draw a plan that check() finds errors in.
-import { copyFileSync, existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { day, MANSION } from './day.ts';
 import { check, type ActInfo, type Place, type Plan, type Report, type Step, type StepKind } from './plan.ts';
 
-const DAY = join(dirname(fileURLToPath(import.meta.url)), '..', 'day');
+const HERE = dirname(fileURLToPath(import.meta.url));
+const DAY = join(HERE, '..', 'day');
 
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -199,19 +201,54 @@ ${bars.join('\n')}
 </svg>`;
 }
 
-/** The built rooms' camera renders, copied next to the page. */
-function storyboard(plan: Plan, out: string): string {
-  return plan.places
-    .filter((p) => p.room)
-    .map((p) => {
-      const dir = join(DAY, p.room!, 'renders');
-      const shots = existsSync(dir) ? readdirSync(dir).filter((f) => /^cam\d+\.png$/.test(f)).sort() : [];
-      const imgs = shots.map((f) => {
-        const name = `${p.room}-${f}`;
-        copyFileSync(join(dir, f), join(out, name));
-        return `<figure><img src="${name}" width="320" height="240" alt="${esc(`${p.name}, camera ${f.slice(3, -4)}`)}" loading="lazy"><figcaption>camera ${f.slice(3, -4)}</figcaption></figure>`;
+interface SceneFacts {
+  title: string;
+  tells: string[];
+  moves: string;
+  cameras: { file: string; note: string; loop?: string }[];
+}
+
+/** What a built room's scene says about itself (its docstring) and its cameras, copied next to the page. */
+function sceneFacts(p: Place, out: string): SceneFacts | undefined {
+  const slug = p.room ?? p.id;
+  const dir = join(DAY, slug, 'renders');
+  const jsonFile = join(dir, 'room.json');
+  if (!existsSync(join(dir, 'cam0.png')) || !existsSync(jsonFile)) return undefined;
+  const json = JSON.parse(readFileSync(jsonFile, 'utf8')) as { notes?: string[]; anim?: { frames: number; ticks: number } };
+  const doc = /"""([\s\S]*?)"""/.exec(readFileSync(join(DAY, slug, 'scene.py'), 'utf8'))?.[1] ?? '';
+  const paras = doc.split(/\n\s*\n/).map((t) => t.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  const loops = new Set<string>();
+  if (json.anim && json.anim.frames > 1) {
+    const made = execFileSync('python3', [join(HERE, 'loops.py'), dir, out, slug, String(json.anim.frames), String(json.anim.ticks)], { encoding: 'utf8' });
+    for (const name of made.split('\n').filter(Boolean)) loops.add(name);
+  }
+  const shots = readdirSync(dir).filter((f) => /^cam\d+\.png$/.test(f)).sort((a, b) => Number(a.slice(3, -4)) - Number(b.slice(3, -4)));
+  return {
+    title: paras[0] ?? p.name,
+    tells: paras.slice(1).filter((t) => !/^(Metres|Moving)/.test(t)),
+    moves: paras.find((t) => t.startsWith('Moving')) ?? '',
+    cameras: shots.map((f, i) => {
+      const file = `${slug}-${f}`;
+      copyFileSync(join(dir, f), join(out, file));
+      const loop = `${slug}-${f.replace('.png', '.webp')}`;
+      return { file, note: json.notes?.[i] ?? '', loop: loops.has(loop) ? loop : undefined };
+    }),
+  };
+}
+
+/** Every room, act by act: its story, its cameras moving as they do in the game. */
+function scenes(plan: Plan, out: string): string {
+  return plan.acts
+    .map((a) => {
+      const rooms = plan.places.filter((p) => p.act === a.n).map((p) => {
+        const f = sceneFacts(p, out);
+        if (!f) return `<section class="scene todo"><h3>${esc(p.name)}</h3><p>Not built yet.</p></section>`;
+        const figs = f.cameras.map((c, i) => `<figure><img src="${c.loop ?? c.file}" width="320" height="240" alt="${esc(`${p.name}, camera ${i}`)}" loading="lazy"><figcaption>camera ${i}${c.note ? `: ${esc(c.note)}` : ''}</figcaption></figure>`);
+        return `<section class="scene"><h3>${esc(p.name)} <span class="time">${f.cameras.length} cameras</span></h3>
+${f.tells.map((t) => `<p>${esc(t)}</p>`).join('')}${f.moves ? `<p class="moves">${esc(f.moves)}</p>` : ''}
+<div class="shots">${figs.join('')}</div></section>`;
       });
-      return `<section class="board"><h3>${esc(p.name)}</h3><div class="shots">${imgs.join('') || '<p>No renders yet.</p>'}</div></section>`;
+      return `<h2 id="scenes${a.n}">Act ${a.n} scenes: ${esc(a.title)} <span class="time">${esc(a.time)}</span></h2>\n${rooms.join('\n')}`;
     })
     .join('\n');
 }
@@ -292,6 +329,8 @@ tr.planned td:first-child { color: var(--soft); font-style: italic; }
 .shots { display: flex; flex-wrap: wrap; gap: 10px; }
 figure { margin: 0; } figure img { display: block; border-radius: 4px; image-rendering: pixelated; }
 figcaption { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.scene { margin: 28px 0 40px; } .scene.todo { margin: 8px 0; } .scene.todo h3 { display: inline; font-size: 14px; color: var(--soft); } .scene.todo p { display: inline; margin-left: 8px; color: var(--muted); }
+.scene .moves { color: var(--muted); font-size: 13px; } figure { max-width: 320px; } figcaption { max-width: 320px; }
 .methods dt { color: var(--text); font-weight: 600; margin-top: 14px; } .methods dd { margin: 2px 0 0; color: var(--soft); max-width: 78ch; }
 </style></head>
 <body><main>
@@ -308,7 +347,7 @@ ${overview(plan, report)}
 <dt>Beat chart</dt>
 <dd>One row per room: what is there, what moves, what attacks and what it tells. Read down a column to see the pacing. Scott Rogers lays one out in <a href="https://oreilly.com/library/view/level-up-the/9781118877197">Level Up!</a>.</dd>
 <dt>Storyboard</dt>
-<dd>For a fixed-camera game the storyboard is the set of camera shots. The built rooms' shots are at the bottom. A planned room gets quick preview renders first, before it is dressed and lit.</dd>
+<dd>For a fixed-camera game the storyboard is the set of camera shots. Every built room is at the bottom, act by act: what it tells, and each camera moving as it does in the game.</dd>
 </dl>
 <div class="key">${Object.values(KIND).map((k) => `<span style="--c:${k.colour}">${k.word}</span>`).join('')}</div>
 <p>Everything here comes from <code>tools/rebecca/plan/day.ts</code>. A script checks that file before drawing it. It confirms every step can be reached, that each step's needs really get her to its room, and that every find is used somewhere.</p>
@@ -319,8 +358,7 @@ ${overview(plan, report)}
 
 ${acts.join('\n')}
 
-<h2>Storyboard of the built rooms</h2>
-${storyboard(plan, out)}
+${scenes(plan, out)}
 </main>
 <script>
 for (const svg of document.querySelectorAll('svg.chart')) {

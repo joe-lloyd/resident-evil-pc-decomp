@@ -14,9 +14,6 @@
 // is inside, and the walk planner backs up to get round things.
 door_aot_set(0, 8500, 3400, 3400, 680, 0, 15, 48, 4, 0, ROOM_315, 26690, 0, 18530, 1024, UNLOCKED, 1);
 aot_set(1, 5950, 27880, 8500, 1020, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);   // the valley trail sign
-// On down to the gondola station, on touch at the far bank's south edge
-// (platform/scene.py's door back, at the station's north edge).
-door_aot_set(5, 6800, 29580, 6800, 1020, 0, 15, 48, 4, 0, ROOM_318, 7820, 0, 5780, 3072, UNLOCKED, 1);
 aot_set(2, 8500, 10540, 3400, 1360, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);   // the bridge's near end
 aot_set(3, 3400, 10880, 5100, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);   // the drop, west of it
 aot_set(4, 11900, 10880, 5100, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);  // the drop, east of it
@@ -24,6 +21,10 @@ aot_set(4, 11900, 10880, 5100, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);  /
 enemy(10 /* Adder */, 1, 255, 1, 1, 0, 0, 1024, 0, 0, 5100, 0, 8500, 0, 0, 0, 0);
 enemy(10 /* Adder */, 1, 255, 1, 1, 0, 0, 3072, 0, 0, 14450, 0, 6800, 1, 0, 0, 0);
 enemy(10 /* Adder */, 1, 255, 1, 1, 0, 0, 2048, 0, 0, 13600, 0, 10200, 2, 0, 0, 0);
+// KIT DOORS (day/scripts.ts writes these)
+// On down to the gondola station, from the far bank's south edge.
+door_aot_set(5, 6800, 29580, 6800, 1020, 0, 15, 48, 4, 0, ROOM_318, 7820, 0, 5780, 3072, UNLOCKED, 1);
+// END KIT DOORS
 return;
 
 // main procedure 0

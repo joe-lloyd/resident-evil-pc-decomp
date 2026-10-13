@@ -46,6 +46,27 @@ const BUILT_ARRIVALS: Record<string, Record<string, Arrive>> = {
   },
 };
 
+/** Rooms of the original game a kit room leads into, and where she stands on arriving. */
+const GAME_ROOMS: Record<string, { stage: number; room: number; arrive: Arrive }> = {
+  // The mansion's 1F save room, up through a hatch in its floor: by the typewriter, facing the door.
+  save: { stage: 0, room: 0, arrive: { x: 3800, z: 6000, angle: 1024 } },
+};
+
+/**
+ * The hand-written rooms' doors into kit rooms: written into their room.c
+ * between the KIT DOORS markers, with the kit room's arrival. Aot ids above
+ * the room's own.
+ */
+const BUILT_DOORS: Record<string, { to: string; id: number; zone: Zone; note: string }[]> = {
+  yard: [
+    { to: 'road', id: 11, zone: { x0: 3400, z0: 16320, x1: 4420, z1: 20400 }, note: 'West along the tyre tracks to the forestry road.' },
+    { to: 'woods', id: 12, zone: { x0: 29580, z0: 7650, x1: 30600, z1: 12750 }, note: 'East after the drag marks into the woods.' },
+  ],
+  bridge: [
+    { to: 'platform', id: 5, zone: { x0: 6800, z0: 29580, x1: 13600, z1: 30600 }, note: "On down to the gondola station, from the far bank's south edge." },
+  ],
+};
+
 /** Common flags for "she has been here", one per kit room with a first thought; the built rooms use 200-206. */
 const FIRST_FLAG = 207;
 const LAST_FLAG = 255;
@@ -114,15 +135,16 @@ function main(): void {
     ];
     let id = 0;
     for (const d of kit.doors ?? []) {
-      const target = bySlug.get(d.to);
-      const back = kits.get(d.to)?.doors?.find((b) => b.to === slug)?.arrive ?? BUILT_ARRIVALS[d.to]?.[slug];
+      const game = GAME_ROOMS[d.to];
+      const target = bySlug.get(d.to) ?? (game && { slug: d.to, stage: game.stage, room: game.room });
+      const back = kits.get(d.to)?.doors?.find((b) => b.to === slug)?.arrive ?? BUILT_ARRIVALS[d.to]?.[slug] ?? game?.arrive;
       if (!target || !back) {
         lines.push(`// To ${d.to}: not built yet.`);
         continue;
       }
       // Between two outdoor rooms she walks the dark path and leaves on touch;
       // into or out of a building a door opens, with the action button.
-      const walk = !isInside(spec) && !isInside(target);
+      const walk = !isInside(spec) && !game && !isInside(target as DayRoom);
       const [variant, sfx, type] = walk ? [0, 15, 48] : [0, 0, 0];
       lines.push(`// To ${d.to}.`);
       lines.push(`door_aot_set(${id++}, ${size(d.zone)}, ${variant}, ${sfx}, ${type}, 4, 0, ${roomName(target)}, ${back.x}, 0, ${back.z}, ${back.angle}, UNLOCKED, ${walk ? 1 : 129});`);
@@ -141,6 +163,31 @@ function main(): void {
     writeFileSync(path.join(here, slug, 'room.c'), lines.join('\n'));
     writeFileSync(path.join(here, slug, 'room.msg.txt'), msgs.map((m, i) => message(i, m)).join('\n') + '\n');
     console.log(`${slug}: ${kit.doors?.length ?? 0} doors, ${kit.checks?.length ?? 0} checks`);
+  }
+  // The hand-written rooms' ways into the kit rooms.
+  for (const [slug, doors] of Object.entries(BUILT_DOORS)) {
+    const file = path.join(here, slug, 'room.c');
+    const text = readFileSync(file, 'utf8');
+    const begin = '// KIT DOORS (day/scripts.ts writes these)';
+    const end = '// END KIT DOORS';
+    const lines = [begin];
+    for (const d of doors) {
+      const target = bySlug.get(d.to)!;
+      const arrive = kits.get(d.to)?.doors?.find((b) => b.to === slug)?.arrive;
+      if (!arrive) {
+        lines.push(`// To ${d.to}: not built yet.`);
+        continue;
+      }
+      const walk = !isInside(bySlug.get(slug)!) && !isInside(target);
+      const [variant, sfx, type] = walk ? [0, 15, 48] : [0, 0, 0];
+      lines.push(`// ${d.note}`);
+      lines.push(`door_aot_set(${d.id}, ${size(d.zone)}, ${variant}, ${sfx}, ${type}, 4, 0, ${roomName(target)}, ${arrive.x}, 0, ${arrive.z}, ${arrive.angle}, UNLOCKED, ${walk ? 1 : 129});`);
+    }
+    lines.push(end);
+    const at = text.indexOf(begin);
+    const next = at >= 0 ? text.slice(0, at) + lines.join('\n') + text.slice(text.indexOf(end) + end.length) : text.replace('\nreturn;\n', `\n${lines.join('\n')}\nreturn;\n`);
+    writeFileSync(file, next);
+    console.log(`${slug}: ways into the kit rooms written`);
   }
 }
 
