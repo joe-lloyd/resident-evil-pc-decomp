@@ -443,25 +443,39 @@ static void DebugRoomChange_Trigger(void)
 
 // Does the room file LoadRoomRdt would open for this stage and room resolve,
 // overlay included? Same name template as LoadRoomRdt (RoomInit.cpp).
-static int DebugRoomFileExists(int stage, int room)
+// The room file LoadRoomRdt opens for a stage and room, as an asset-rooted path.
+static void DebugRoomPath(int stage, int room, char* path)
 {
     static const char hexDigits[] = "0123456789abcdef";
     int variant = (g_main_state_flags & MSF_CHAR_VARIANT) ? 1 : 0;
-    char path[64];
     sprintf(path, GAME_DATA_ROOT "stage%c\\room%c%c%c%c.rdt",
             hexDigits[stage + 1], hexDigits[stage + 1],
             hexDigits[room >> 4], hexDigits[room & 0xF], hexDigits[variant]);
+}
+
+static int DebugRoomFileExists(int stage, int room)
+{
+    char path[64];
+    DebugRoomPath(stage, room, path);
     return AssetFileExists(path);
 }
 
 // Dev boot (TestMode.cpp): whether a stage and room have a room file to load.
-// The menu's own list decides for the rooms it names. A room past the list
+// A room in the active mode's overlay always counts. Otherwise the menu's own
+// list decides for the rooms it names. A room past the list
 // (a room a mode overlay adds, like the REB mountain trail) counts when its
 // file resolves. A door record keeps the room in five bits, so 0x1f is the top.
 int DebugRoomChange_IsSelectable(int stage, int room)
 {
     if (stage < 0 || stage > DebugStageMax()) return 0;
     if (room < 0 || room >= 0x20) return 0;
+    // A room the active mode's overlay ships is that mode's, whatever the base
+    // game has in the slot: Rebecca's day fills slots where the base game
+    // ships only a 4-byte stub, which the list below rules out.
+    const char* mode = GetAssetModeName();
+    char path[64];
+    DebugRoomPath(stage, room, path);
+    if (mode[0] != '\0' && ModeHasAsset(mode, path)) return 1;
     if (room < s_dbgStageRooms[stage].count) return DebugRoomSelectable(stage, room);
     return DebugRoomFileExists(stage, room);
 }

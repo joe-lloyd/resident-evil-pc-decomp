@@ -20,6 +20,9 @@ type Rect = { x0: number; z0: number; x1: number; z1: number };
 interface Json {
   bounds: Rect;
   doors?: { to: string; zone: Rect }[];
+  walls?: Rect[];
+  voids?: Rect[];
+  checks?: { zone: Rect }[];
 }
 const read = (slug: string): Json | undefined => {
   const f = path.join(day, slug, 'renders', 'room.json');
@@ -32,6 +35,45 @@ const rooms = (wanted.length ? wanted.map((s) => bySlug.get(s)!) : kitRooms).fil
 if (!rooms.length) throw new Error('no rendered kit rooms to tour');
 // A door only exists once both its rooms are built (day/scripts.ts leaves the rest out).
 const built = (slug: string) => bySlug.has(slug) && (!kitRooms.some((k) => k.slug === slug) || read(slug)?.doors !== undefined);
+
+/** Her body's reach round the point she stands on, in game units. */
+const BODY = 450;
+const inside = (r: Rect, x: number, z: number, pad = 0) => x > r.x0 - pad && x < r.x1 + pad && z > r.z0 - pad && z < r.z1 + pad;
+
+/**
+ * Where to stand to walk into a door: a step short of it, with a straight
+ * walk to it that crosses no wall, drop or thing to examine (pressing action
+ * on one of those opens it instead of the door). Tries the way toward the
+ * middle of the floor first, then straight in from each side.
+ */
+function approach(json: Json, zone: Rect): [number, number] {
+  const cx = (zone.x0 + zone.x1) / 2;
+  const cz = (zone.z0 + zone.z1) / 2;
+  const b = json.bounds;
+  const mx = (b.x0 + b.x1) / 2;
+  const mz = (b.z0 + b.z1) / 2;
+  const blockers = [...(json.walls ?? []), ...(json.voids ?? [])];
+  const checks = (json.checks ?? []).map((c) => c.zone);
+  const len = Math.hypot(mx - cx, mz - cz) || 1;
+  const dirs: [number, number][] = [[(mx - cx) / len, (mz - cz) / len], [0, 1], [0, -1], [1, 0], [-1, 0]];
+  for (const back of [1500, 1100, 800]) {
+    for (const [dx, dz] of dirs) {
+      const x = cx + dx * back;
+      const z = cz + dz * back;
+      if (!inside(b, x, z, -BODY) || inside(zone, x, z)) continue;
+      let clear = true;
+      for (let t = 0; t <= 1 && clear; t += 0.05) {
+        const px = x + (cx - x) * t;
+        const pz = z + (cz - z) * t;
+        if (inside(zone, px, pz)) break;
+        if (blockers.some((r) => inside(r, px, pz, BODY)) || checks.some((r) => inside(r, px, pz))) clear = false;
+      }
+      if (clear) return [Math.round(x), Math.round(z)];
+    }
+  }
+  const len2 = Math.min(1500, len * 0.8);
+  return [Math.round(cx + ((mx - cx) / len) * len2), Math.round(cz + ((mz - cz) / len) * len2)];
+}
 
 const first = rooms[0]!;
 const session = await open(Number(process.env.PORT ?? 7801), `--mode REB --boot rebecca:${first.stage}:${first.room}`);
@@ -49,14 +91,10 @@ try {
         let s = await link.state();
         if (s.stage !== r.stage || s.room !== r.room) s = await link.room(r.stage, r.room);
         await settle(link);
-        // A step short of the door, toward the middle of the floor.
         const cx = (d.zone.x0 + d.zone.x1) / 2;
         const cz = (d.zone.z0 + d.zone.z1) / 2;
-        const mx = (json.bounds.x0 + json.bounds.x1) / 2;
-        const mz = (json.bounds.z0 + json.bounds.z1) / 2;
-        const len = Math.hypot(mx - cx, mz - cz) || 1;
-        const back = Math.min(1500, len * 0.8);
-        await link.place(Math.round(cx + ((mx - cx) / len) * back), Math.round(cz + ((mz - cz) / len) * back));
+        const [sx, sz] = approach(json, d.zone);
+        await link.place(sx, sz);
         await link.frames(4);
         await faceTowards(link, cx, cz);
         const deadline = Date.now() + 20_000;
