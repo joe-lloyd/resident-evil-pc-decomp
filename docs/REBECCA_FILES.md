@@ -32,6 +32,19 @@ Checked on 2026-10-14 against `src/game/MainMenu.cpp` and the USA game's own
   `g_itemMaxCounts` (`0x004d2620`) by file index: 4, 6, 11, 4, 2, 6, 7, 7, 10,
   5, 5, 4, 3, 3, 3, 4. The first page of every RE1 file is its title on black.
 
+- **The reader shows a page's top 256x192 only**, at (24, 24) of the
+  320x240 screen (`DAT_004d2888` in `MainMenu.cpp`). The bottom 64 rows of a
+  256x256 page never show. RE1's own pages keep their text above row 192.
+- **A file's name is its item name**, `message_item_name_lookup(0x5F +
+  slot)`, in the FILE tab and in "... has been filed". The tab centres it on
+  the scroll arrows at x `0x67`, using the offsets in `DAT_004d2630`.
+- **The books are `g_keyItemListInit`** (`0x004d2a08`): per character, two
+  books of eight file slots in a fixed order. A slot shows once its
+  collected flag is set.
+- **A file in a room is an `item_aot_set` with item `0x5F + slot`.** The
+  command gives ids past the maps room action `0x0D`, which opens the reader
+  on the spot (`set_room_event_flag`, then `menu_update_status_screen`).
+
 ## What is built
 
 - `tools/rebecca/files/documents.ts` holds the ten documents, every word, page
@@ -60,23 +73,33 @@ Checked on 2026-10-14 against `src/game/MainMenu.cpp` and the USA game's own
 | 12 | The bunkhouse calendar | bunkhouse | 3 |
 | 13 | The mine map | mine-office | 3 |
 
+## How her mode uses it
+
+- `src/game/RebFiles.cpp` is generated from `documents.ts` by
+  `tools/rebecca/files/engine.ts` (`--check` fails when it is stale). It
+  holds her names, her title positions and her books (`BOOKS` in
+  `documents.ts`). Three hooks read it, each behind `g_bRebMode`:
+  `pickup_screen_init_table`, the title draw in the book selector and
+  `message_item_name_lookup`. Chris's and Jill's games keep RE1's tables.
+- `tools/rebecca/build.ts` writes her pages to the overlay as
+  `item_m2/filem_*.pix`, named by slot.
+- `tools/rebecca/day/scripts.ts` turns the check a document names (its
+  `check` field) into a file pickup with room-item flag `230 + its place in
+  BOOKS`. The pickup sits on an empty item model slot, which
+  `tools/rebecca/day/room.ts` adds to the end of every room's table. The
+  cabin's logbook is written by hand the same way in `lookout/room.c`.
+- `tools/harness/tests/files.ts` picks up all ten files in their rooms. It
+  reads every page, compares each with the page the tools drew, and finds
+  each file in the FILE tab. Screenshots:
+  https://home.arpa/research/rebecca-files/game/.
+
 ## What is left
 
-1. **The owner's review.** Rate the texts and the pages, and choose paper
+1. **The bottom quarter of every page.** The reader cuts each page at row
+   192, so the last lines of most text pages, the calendar's last week, its
+   "17 31 8", and the mine map's notes do not show. The fix waits on the
+   owner's review of the texts and the paper. Either the pages are laid out
+   for 256x192 with fewer lines each, and more pages where a slot allows,
+   or her mode gets its own page counts.
+2. **The owner's review.** Rate the texts and the pages, and choose paper
    or RE1 black for the text pages.
-2. **Her file names and descriptions.** Find where the FILE tab gets a
-   file's name, from data or from a table, and give her mode its own.
-3. **The pages in the REB overlay.** The tools build `item_m2/filem_*.pix`
-   into the overlay. A mode's overlay is searched before the base tree, and
-   `item_m2/filem_` falls back to the base files without a warning
-   (`kBaseFallbackPrefixes` in `src/system/AssetPath.cpp`). Her copies win
-   in her mode only, and a slot she does not fill keeps RE1's page.
-4. **The pickups.** `tools/rebecca/day/scripts.ts` gives a file item for a
-   check that `documents.ts` names, in place of `SCE_MESSAGE`. The cabin's
-   logbook is hand-written in `lookout/room.c`. Each room needs a place to
-   pick the file up. Where a scene needs a change for that, it goes to the
-   room-art session.
-5. **In the game.** Confirm the semi-transparency choice on paper pages
-   against what the reader really draws.
-6. **A harness test**, `tools/harness/tests/files.ts`. It picks each file up,
-   reads it, finds it in the FILE tab and saves screenshots.
