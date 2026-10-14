@@ -58,6 +58,7 @@ writeFileSync(outPath, `<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>${esc(title)}</title>
+<script src="/research/rebecca-day/nav.js" defer></script>
 <style>
   body { margin: 0; background: #111; color: #ddd; font: 15px/1.45 system-ui, sans-serif; }
   main { max-width: 1100px; margin: 0 auto; padding: 16px; display: grid; gap: 16px; grid-template-columns: minmax(0, 3fr) minmax(260px, 2fr); }

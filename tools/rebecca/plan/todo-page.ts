@@ -58,6 +58,7 @@ function page(): string {
   const doing = count('doing');
   return `<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rebecca's day: what's left</title>
+<script src="/research/rebecca-day/nav.js" defer></script>
 <style>
 :root{--bg:#121110;--fg:#ddd6c8;--dim:#8b8478;--line:#2a2724;--done:#7d9a5a;--doing:#c8963c;--todo:#5a5550;--mine:#5f8fb0}
 body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,sans-serif;max-width:980px;margin:2em auto;padding:0 1em}
