@@ -41,7 +41,7 @@ export function project(cam: FloorScene['cameras'][number], p: V3): { x: number;
   const d = sub(p, cam.from);
   const z = dot(d, fwd);
   if (z <= 1) return undefined;
-  return { x: 160 - (dot(d, right) * cam.fov) / z, y: 120 - (dot(d, up) * cam.fov) / z, z };
+  return { x: 160 + (dot(d, right) * cam.fov) / z, y: 120 - (dot(d, up) * cam.fov) / z, z };
 }
 
 /** Foreground depth from cam<N>.depth.png: view Z / 16 as R * 256 + G, Infinity where nothing is in front. */

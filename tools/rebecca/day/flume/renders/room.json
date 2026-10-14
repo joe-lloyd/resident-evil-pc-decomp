@@ -1,0 +1,245 @@
+{
+ "cameras": [
+  {
+   "from": [
+    5100,
+    -5780,
+    21420
+   ],
+   "to": [
+    18020,
+    0,
+    7820
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    23120,
+    -5100,
+    9520
+   ],
+   "to": [
+    10880,
+    -680,
+    18700
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    21760,
+    -7140,
+    24820
+   ],
+   "to": [
+    15300,
+    3400,
+    -1700
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 8500,
+   "z0": 8483,
+   "x1": 13600,
+   "z1": 8687,
+   "name": "West rail footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 17000,
+   "z0": 8483,
+   "x1": 23800,
+   "z1": 8687,
+   "name": "East rail footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 13600,
+   "z0": 3400,
+   "x1": 13770,
+   "z1": 8500,
+   "name": "Catwalk rail footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 15181,
+   "z0": 3400,
+   "x1": 17119,
+   "z1": 19720,
+   "name": "Trough footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 14110,
+   "z0": 19550,
+   "x1": 15300,
+   "z1": 19720,
+   "name": "Headbox n"
+  },
+  {
+   "shape": "box",
+   "x0": 15300,
+   "z0": 19550,
+   "x1": 17000,
+   "z1": 19720,
+   "name": "Headbox n.001"
+  },
+  {
+   "shape": "box",
+   "x0": 17000,
+   "z0": 19550,
+   "x1": 18190,
+   "z1": 19720,
+   "name": "Headbox n.002"
+  },
+  {
+   "shape": "box",
+   "x0": 14110,
+   "z0": 22780,
+   "x1": 18190,
+   "z1": 22950,
+   "name": "Headbox s"
+  },
+  {
+   "shape": "box",
+   "x0": 14110,
+   "z0": 19550,
+   "x1": 14280,
+   "z1": 22950,
+   "name": "Headbox w"
+  },
+  {
+   "shape": "box",
+   "x0": 18020,
+   "z0": 19550,
+   "x1": 18190,
+   "z1": 22950,
+   "name": "Headbox e"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 3400,
+  "z0": 3400,
+  "x1": 25500,
+  "z1": 21080
+ },
+ "voids": [
+  {
+   "x0": 3400,
+   "z0": 3400,
+   "x1": 13600,
+   "z1": 8500
+  },
+  {
+   "x0": 17170,
+   "z0": 3400,
+   "x1": 25500,
+   "z1": 8500
+  }
+ ],
+ "doors": [
+  {
+   "to": "pond",
+   "zone": {
+    "x0": 9180,
+    "z0": 20060,
+    "x1": 12920,
+    "z1": 21080
+   },
+   "arrive": {
+    "x": 10880,
+    "z": 18530,
+    "angle": 1024
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "bridge",
+   "zone": {
+    "x0": 13430,
+    "z0": 12580,
+    "x1": 15215,
+    "z1": 14620
+   },
+   "arrive": {
+    "x": 11220,
+    "z": 13600,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 13600,
+    "z0": 16660,
+    "x1": 15300,
+    "z1": 18360
+   },
+   "text": "A cleat with a rope cut through. Blood all round it.\nSomebody took a boat down hurt."
+  },
+  {
+   "zone": {
+    "x0": 17000,
+    "z0": 10030,
+    "x1": 18360,
+    "z1": 11730
+   },
+   "text": "A cap, caught in the water against the side."
+  },
+  {
+   "zone": {
+    "x0": 13600,
+    "z0": 8500,
+    "x1": 15300,
+    "z1": 10200
+   },
+   "text": "A mitten, snagged on a nail. The water's freezing."
+  },
+  {
+   "zone": {
+    "x0": 11900,
+    "z0": 18700,
+    "x1": 13940,
+    "z1": 20060
+   },
+   "text": "CAMP 4 FLUME. NO RIDING.\nSomebody didn't listen."
+  },
+  {
+   "zone": {
+    "x0": 13600,
+    "z0": 3400,
+    "x1": 15300,
+    "z1": 5100
+   },
+   "text": "It goes all the way down. The trestles get taller and taller.\nI can't see the bottom for the mist."
+  },
+  {
+   "zone": {
+    "x0": 9520,
+    "z0": 15300,
+    "x1": 11560,
+    "z1": 16660
+   },
+   "text": "A duffel bag, packed and dropped."
+  }
+ ],
+ "entry": "The flume. It runs all the way down the mountain.",
+ "notes": [
+  "from the path in: the headbox, the deck, the boat, the trough running off the edge into the valley",
+  "from the north-east corner of the deck: the boat close, the cut rope, the blood, the headbox",
+  "from behind the headbox: down the flume and the trestles into the valley"
+ ]
+}

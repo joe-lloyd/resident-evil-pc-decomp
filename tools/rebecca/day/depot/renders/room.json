@@ -1,0 +1,295 @@
+{
+ "cameras": [
+  {
+   "from": [
+    15810,
+    -5610,
+    2125
+   ],
+   "to": [
+    7140,
+    -510,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    15810,
+    -5440,
+    11220
+   ],
+   "to": [
+    10200,
+    -510,
+    2550
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2210,
+    -5440,
+    2210
+   ],
+   "to": [
+    12920,
+    -510,
+    8840
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "circle",
+   "x0": 9435,
+   "z0": 1615,
+   "x1": 9605,
+   "z1": 1785,
+   "name": "Gate post"
+  },
+  {
+   "shape": "circle",
+   "x0": 12495,
+   "z0": 1615,
+   "x1": 12665,
+   "z1": 1785,
+   "name": "Gate post.001"
+  },
+  {
+   "shape": "box",
+   "x0": 6630,
+   "z0": 7607,
+   "x1": 12410,
+   "z1": 10072,
+   "name": "Tank footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 12920,
+   "z0": 8500,
+   "x1": 13430,
+   "z1": 9010,
+   "name": "Hand pump"
+  },
+  {
+   "shape": "circle",
+   "x0": 12707,
+   "z0": 6970,
+   "x1": 14152,
+   "z1": 7820,
+   "name": "Reel footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 4753,
+   "z0": 3053,
+   "x1": 6127,
+   "z1": 4427,
+   "name": "Drum 0"
+  },
+  {
+   "shape": "circle",
+   "x0": 5852,
+   "z0": 3217,
+   "x1": 7238,
+   "z1": 4603,
+   "name": "Drum 1"
+  },
+  {
+   "shape": "circle",
+   "x0": 5256,
+   "z0": 4236,
+   "x1": 6644,
+   "z1": 5624,
+   "name": "Drum 2"
+  },
+  {
+   "shape": "circle",
+   "x0": 2054,
+   "z0": 4519,
+   "x1": 3216,
+   "z1": 5681,
+   "name": "Drum 3"
+  },
+  {
+   "shape": "circle",
+   "x0": 1957,
+   "z0": 5527,
+   "x1": 3313,
+   "z1": 6883,
+   "name": "Drum 4"
+  },
+  {
+   "shape": "circle",
+   "x0": 2694,
+   "z0": 6494,
+   "x1": 4446,
+   "z1": 7956,
+   "name": "Drum 5"
+  },
+  {
+   "shape": "circle",
+   "x0": 14037,
+   "z0": 8597,
+   "x1": 15203,
+   "z1": 9763,
+   "name": "Drum 6"
+  },
+  {
+   "shape": "circle",
+   "x0": 12734,
+   "z0": 10184,
+   "x1": 13956,
+   "z1": 11406,
+   "name": "Drum 7"
+  },
+  {
+   "shape": "circle",
+   "x0": 14690,
+   "z0": 9845,
+   "x1": 16080,
+   "z1": 11235,
+   "name": "Drum 8"
+  },
+  {
+   "shape": "circle",
+   "x0": 13659,
+   "z0": 10004,
+   "x1": 14901,
+   "z1": 11246,
+   "name": "Drum 9"
+  },
+  {
+   "shape": "circle",
+   "x0": 1615,
+   "z0": 8415,
+   "x1": 1785,
+   "z1": 8585,
+   "name": "Lean-to post"
+  },
+  {
+   "shape": "circle",
+   "x0": 4335,
+   "z0": 8415,
+   "x1": 4505,
+   "z1": 8585,
+   "name": "Lean-to post.001"
+  },
+  {
+   "shape": "circle",
+   "x0": 1615,
+   "z0": 11475,
+   "x1": 1785,
+   "z1": 11645,
+   "name": "Lean-to post.002"
+  },
+  {
+   "shape": "circle",
+   "x0": 4335,
+   "z0": 11475,
+   "x1": 4505,
+   "z1": 11645,
+   "name": "Lean-to post.003"
+  },
+  {
+   "shape": "box",
+   "x0": 1845,
+   "z0": 10922,
+   "x1": 4275,
+   "z1": 11518,
+   "name": "Oil shelves"
+  },
+  {
+   "shape": "box",
+   "x0": 14535,
+   "z0": 4590,
+   "x1": 15725,
+   "z1": 6630,
+   "name": "Dog footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 16320,
+  "z1": 11560
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "camp-yard",
+   "zone": {
+    "x0": 9520,
+    "z0": 1700,
+    "x1": 12580,
+    "z1": 2720
+   },
+   "arrive": {
+    "x": 11050,
+    "z": 4250,
+    "angle": 3072
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 12920,
+    "z0": 6460,
+    "x1": 14620,
+    "z1": 7480
+   },
+   "text": "Diesel, dripping from the nozzle. The hose reel is chained, and padlocked.\nThey didn't want anyone running off with the fuel."
+  },
+  {
+   "zone": {
+    "x0": 10710,
+    "z0": 6630,
+    "x1": 12410,
+    "z1": 7565
+   },
+   "text": "The fuel ledger. Gallons in, gallons out, signed every day.\nThe last entries are a mess. Then they stop."
+  },
+  {
+   "zone": {
+    "x0": 13770,
+    "z0": 4420,
+    "x1": 14450,
+    "z1": 6800
+   },
+   "text": "A dog. Not a camp dog: a big one, its hide torn open in strips.\nIt dug in under the wire. Somebody shot it."
+  },
+  {
+   "zone": {
+    "x0": 6630,
+    "z0": 3400,
+    "x1": 8160,
+    "z1": 4760
+   },
+   "text": "A snake's skin, shed. Another by the tank.\nAdders. They like the warm drums."
+  },
+  {
+   "zone": {
+    "x0": 2040,
+    "z0": 7820,
+    "x1": 4420,
+    "z1": 8500
+   },
+   "text": "The lean-to. Oil, grease, rags."
+  }
+ ],
+ "entry": "Diesel. The whole place reeks of it.",
+ "notes": [
+  "from the north-east corner by the gate: the tank, the nozzle dripping, the lean-to",
+  "from the south-east drums: the dog against the wire, the gate out to the yard",
+  "from the north-west drums: the pump and the padlocked reel, the drums in the corner"
+ ]
+}
