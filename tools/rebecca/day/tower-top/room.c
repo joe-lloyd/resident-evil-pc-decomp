@@ -1,7 +1,7 @@
 // tower-top (41E), written by day/scripts.ts from day/tower-top/scene.py: edit the scene, not this file.
 // init procedure 0
 // To tower-stairs.
-door_aot_set(0, 6375, 8500, 1020, 1530, 0, 15, 48, 4, 0, ROOM_41D, 12240, 0, 5270, 1024, UNLOCKED, 1);
+door_aot_set(0, 6375, 7650, 4590, 3230, 0, 0, 0, 4, 0, ROOM_41D, 12240, 0, 5270, 1024, UNLOCKED, 193);
 aot_set(1, 10200, 10200, 2720, 2720, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 10540, 6290, 1700, 1530, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 12240, 6290, 1870, 1530, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

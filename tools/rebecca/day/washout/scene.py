@@ -645,7 +645,7 @@ def build():
     room.void((GULLY[0], EDGE, GULLY[1], Y1))
     room.door("road", (X1 - 0.6, ROAD[0], X1, ROAD[1]), arrive=(17.4, 6.5), face=(-1, 0))
     room.door("tower-foot", (X0, 4.6, X0 + 0.6, 7.6), arrive=(2.6, 6.1), face=(1, 0))
-    room.door("generator", (HUT_DOOR[0] - 0.1, hy0 - 0.6, HUT_DOOR[1] + 0.1, hy0), arrive=(3.8, 11.2), face=(0, -1), walk=False, touch=False)
+    room.door("generator", (HUT_DOOR[0] - 0.1, Y1 - 0.8, HUT_DOOR[1] + 0.1, Y1), arrive=(3.8, 11.2), face=(0, -1), walk=False, touch=False)
     room.check((10.4, EDGE - 0.6, 12.6, EDGE), "A pickup, nose-down in the gully. ARKLAY TIMBER CO., CAMP 4.\nHe drove straight through the barrier in the dark.")
     room.check((7.6, EDGE - 0.6, 10.4, EDGE), "Down in the pool, face down. A logger, in his orange vest.\nHe got out of the truck, and no further.")
     room.check((8.8, Y0, 11.2, 4.0), "The culvert's choked with branches. The creek's coming over the road instead.")

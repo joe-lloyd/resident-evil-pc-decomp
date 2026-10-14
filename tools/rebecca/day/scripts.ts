@@ -22,6 +22,8 @@ interface KitDoor {
   to: string;
   zone: Zone;
   arrive: Arrive;
+  /** False when the scene asks for a door that opens, such as stairs between two outdoor rooms. */
+  walk?: boolean;
 }
 interface KitJson {
   doors?: KitDoor[];
@@ -150,9 +152,10 @@ function main(): void {
         lines.push(`// To ${d.to}: not built yet.`);
         continue;
       }
-      // Between two outdoor rooms she walks the dark path and leaves on touch;
-      // into or out of a building a door opens, with the action button.
-      const walk = !isInside(spec) && !game && !isInside(target as DayRoom);
+      // Between two outdoor rooms she walks the dark path and leaves on touch,
+      // unless the scene asks for a door that opens; into or out of a
+      // building a door opens, with the action button.
+      const walk = d.walk !== false && !isInside(spec) && !game && !isInside(target as DayRoom);
       const [variant, sfx, type] = walk ? [0, 15, 48] : [0, 0, 0];
       lines.push(`// To ${d.to}.`);
       lines.push(`door_aot_set(${id++}, ${size(d.zone)}, ${variant}, ${sfx}, ${type}, 4, 0, ${roomName(target)}, ${back.x}, 0, ${back.z}, ${back.angle}, UNLOCKED, ${walk ? TOUCH : OPEN});`);

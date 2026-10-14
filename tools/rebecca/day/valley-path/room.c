@@ -1,7 +1,7 @@
 // valley-path (218), written by day/scripts.ts from day/valley-path/scene.py: edit the scene, not this file.
 // init procedure 0
 // To pylon.
-door_aot_set(0, 15300, 3230, 1700, 1190, 0, 15, 48, 4, 0, ROOM_217, 11900, 0, 9520, 1024, UNLOCKED, 1);
+door_aot_set(0, 15300, 3230, 1700, 1190, 0, 0, 0, 4, 0, ROOM_217, 11900, 0, 9520, 1024, UNLOCKED, 193);
 // To crash.
 door_aot_set(1, 1700, 13260, 1020, 4080, 0, 15, 48, 4, 0, ROOM_21B, 26520, 0, 13600, 2048, UNLOCKED, 1);
 // To lower-yard.
