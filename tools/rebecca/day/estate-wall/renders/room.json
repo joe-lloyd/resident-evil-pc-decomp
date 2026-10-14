@@ -4,12 +4,12 @@
    "from": [
     20910,
     -6630,
-    680
+    11900
    ],
    "to": [
     16660,
     -2380,
-    21250
+    32470
    ],
    "fov": 200
   },
@@ -17,12 +17,12 @@
    "from": [
     4420,
     -5100,
-    18700
+    29920
    ],
    "to": [
     21250,
     -2380,
-    16660
+    27880
    ],
    "fov": 200
   },
@@ -30,12 +30,12 @@
    "from": [
     28220,
     -5440,
-    18360
+    29580
    ],
    "to": [
     10200,
     -2040,
-    17340
+    28560
    ],
    "fov": 200
   },
@@ -43,12 +43,12 @@
    "from": [
     12580,
     -4590,
-    14280
+    25500
    ],
    "to": [
     17000,
     -3400,
-    21250
+    32470
    ],
    "fov": 195
   },
@@ -56,12 +56,38 @@
    "from": [
     2380,
     -6630,
-    2720
+    13940
    ],
    "to": [
     17850,
     -680,
-    20400
+    31620
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    18530,
+    -5610,
+    15640
+   ],
+   "to": [
+    22440,
+    -1190,
+    1020
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    18190,
+    -5780,
+    340
+   ],
+   "to": [
+    21420,
+    -1020,
+    13770
    ],
    "fov": 200
   }
@@ -70,105 +96,137 @@
   {
    "shape": "box",
    "x0": -37400,
-   "z0": 21250,
+   "z0": 32470,
    "x1": 14280,
-   "z1": 22270,
+   "z1": 33490,
    "name": "Wall"
   },
   {
    "shape": "box",
    "x0": 19720,
-   "z0": 21250,
+   "z0": 32470,
    "x1": 71400,
-   "z1": 22270,
+   "z1": 33490,
    "name": "Wall.001"
   },
   {
    "shape": "box",
    "x0": -5610,
-   "z0": 20570,
+   "z0": 31790,
    "x1": -4590,
-   "z1": 21250,
+   "z1": 32470,
    "name": "Buttress"
   },
   {
    "shape": "box",
    "x0": 2890,
-   "z0": 20570,
+   "z0": 31790,
    "x1": 3910,
-   "z1": 21250,
+   "z1": 32470,
    "name": "Buttress.001"
   },
   {
    "shape": "box",
    "x0": 9690,
-   "z0": 20570,
+   "z0": 31790,
    "x1": 10710,
-   "z1": 21250,
+   "z1": 32470,
    "name": "Buttress.002"
   },
   {
    "shape": "box",
    "x0": 23290,
-   "z0": 20570,
+   "z0": 31790,
    "x1": 24310,
-   "z1": 21250,
+   "z1": 32470,
    "name": "Buttress.003"
   },
   {
    "shape": "box",
    "x0": 30090,
-   "z0": 20570,
+   "z0": 31790,
    "x1": 31110,
-   "z1": 21250,
+   "z1": 32470,
    "name": "Buttress.004"
   },
   {
    "shape": "box",
    "x0": 38590,
-   "z0": 20570,
+   "z0": 31790,
    "x1": 39610,
-   "z1": 21250,
+   "z1": 32470,
    "name": "Buttress.005"
   },
   {
    "shape": "box",
    "x0": 14280,
-   "z0": 20867,
+   "z0": 32088,
    "x1": 15640,
-   "z1": 22312,
+   "z1": 33532,
    "name": "Gate pier"
   },
   {
    "shape": "box",
    "x0": 18360,
-   "z0": 20867,
+   "z0": 32088,
    "x1": 19720,
-   "z1": 22312,
+   "z1": 33532,
    "name": "Gate pier.001"
   },
   {
    "shape": "box",
    "x0": 15640,
-   "z0": 21420,
+   "z0": 32640,
    "x1": 18360,
-   "z1": 21760,
+   "z1": 32980,
    "name": "Gate footprint"
   },
   {
    "shape": "box",
+   "x0": 23120,
+   "z0": 5100,
+   "x1": 24140,
+   "z1": 13940,
+   "name": "Park wall"
+  },
+  {
+   "shape": "box",
+   "x0": 24140,
+   "z0": -56780,
+   "x1": 25160,
+   "z1": 5100,
+   "name": "Park wall.001"
+  },
+  {
+   "shape": "box",
+   "x0": 23035,
+   "z0": 4505,
+   "x1": 25245,
+   "z1": 5695,
+   "name": "Park wall pier"
+  },
+  {
+   "shape": "box",
+   "x0": 23120,
+   "z0": 13940,
+   "x1": 24140,
+   "z1": 14960,
+   "name": "Park wall stump"
+  },
+  {
+   "shape": "box",
    "x0": 1700,
-   "z0": 1700,
+   "z0": 12920,
    "x1": 7310,
-   "z1": 8840,
+   "z1": 20060,
    "name": "Thicket footprint"
   },
   {
    "shape": "box",
    "x0": 25160,
-   "z0": 1700,
+   "z0": 12920,
    "x1": 30600,
-   "z1": 7820,
+   "z1": 19040,
    "name": "Thicket footprint.001"
   }
  ],
@@ -178,23 +236,60 @@
  },
  "bounds": {
   "x0": 3400,
-  "z0": 3400,
+  "z0": 1105,
   "x1": 28900,
-  "z1": 21080
+  "z1": 32300
  },
- "voids": [],
+ "voids": [
+  {
+   "x0": 3400,
+   "z0": 9520,
+   "x1": 18360,
+   "z1": 14620
+  },
+  {
+   "x0": 23120,
+   "z0": 9520,
+   "x1": 28900,
+   "z1": 14620
+  },
+  {
+   "x0": 3400,
+   "z0": 5100,
+   "x1": 17340,
+   "z1": 9520
+  },
+  {
+   "x0": 23120,
+   "z0": 5100,
+   "x1": 28900,
+   "z1": 9520
+  },
+  {
+   "x0": 3400,
+   "z0": 1105,
+   "x1": 19380,
+   "z1": 5100
+  },
+  {
+   "x0": 24140,
+   "z0": 1105,
+   "x1": 28900,
+   "z1": 5100
+  }
+ ],
  "doors": [
   {
    "to": "creek",
    "zone": {
-    "x0": 18700,
-    "z0": 3400,
-    "x1": 22950,
-    "z1": 4420
+    "x0": 19380,
+    "z0": 1105,
+    "x1": 24140,
+    "z1": 2125
    },
    "arrive": {
-    "x": 20740,
-    "z": 5780,
+    "x": 21760,
+    "z": 3910,
     "angle": 3072
    },
    "walk": true,
@@ -204,13 +299,13 @@
    "to": "kennels",
    "zone": {
     "x0": 15810,
-    "z0": 20060,
+    "z0": 31280,
     "x1": 18190,
-    "z1": 21080
+    "z1": 32300
    },
    "arrive": {
     "x": 17000,
-    "z": 18530,
+    "z": 29750,
     "angle": 1024
    },
    "walk": true,
@@ -221,47 +316,65 @@
   {
    "zone": {
     "x0": 15810,
-    "z0": 19550,
+    "z0": 30770,
     "x1": 18190,
-    "z1": 21080
+    "z1": 32300
    },
    "text": "The estate's back gate. A chain and a padlock.\nI'll need the key."
   },
   {
    "zone": {
     "x0": 13940,
-    "z0": 19890,
+    "z0": 31110,
     "x1": 15640,
-    "z1": 21080
+    "z1": 32300
    },
    "text": "NO TRESPASSING. UMBRELLA CORP.\nUmbrella. Out here?"
   },
   {
    "zone": {
     "x0": 15300,
-    "z0": 18360,
+    "z0": 29580,
     "x1": 18020,
-    "z1": 19550
+    "z1": 30770
    },
    "text": "He tried to climb out over the gate.\nSomething on the other side got his leg first."
   },
   {
    "zone": {
     "x0": 13770,
-    "z0": 17170,
+    "z0": 28390,
     "x1": 15470,
-    "z1": 18870
+    "z1": 30090
    },
    "text": "His torch. It's still on.\nThe batteries are nearly gone."
   },
   {
    "zone": {
     "x0": 11050,
-    "z0": 15300,
+    "z0": 26520,
     "x1": 14620,
-    "z1": 17000
+    "z1": 28220
    },
    "text": "A grey uniform cap. Estate security?"
+  },
+  {
+   "zone": {
+    "x0": 22780,
+    "z0": 2210,
+    "x1": 24140,
+    "z1": 3740
+   },
+   "text": "Claw marks, from the glass right down to the ground.\nSomething came over this wall. From the inside."
+  },
+  {
+   "zone": {
+    "x0": 21760,
+    "z0": 6120,
+    "x1": 23120,
+    "z1": 7820
+   },
+   "text": "A shirt, torn on the glass. There's blood on it.\nSomeone tried to get over. Or something dragged them."
   }
  ],
  "entry": "The Spencer estate.\nThere's a light on, up at the house.",
@@ -270,6 +383,8 @@
   "along the wall from the west: the ivy, the piers, the man on the gate",
   "along the wall from the east: the plaque, the gate, the crows on the coping",
   "close at the gate: the hanging man, the chain and padlock, the plaque",
-  "from the woods' edge, north-west: the whole wall and the gate"
+  "from the woods' edge, north-west: the whole wall and the gate",
+  "up the wall path north: the park wall and its glass on the left, the drop and the last of the sun on the right",
+  "down the wall path from its north end: the claw marks, the shirt on the glass, the clearing beyond"
  ]
 }

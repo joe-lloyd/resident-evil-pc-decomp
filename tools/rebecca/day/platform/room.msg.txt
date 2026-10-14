@@ -5,3 +5,4 @@
 4: \nA hiker's pack, split\nopen. Clothes, a water\nbottle, a trail map.
 5: \nARKLAY SKYWAY. UPPER\nSTATION. ELEV 1840.
 6: \nOUT OF SERVICE.
+7: \nA stake's been pulled out\nof the rock. The rope\nhangs down over the edge.\p{0}\nHis cap. Scrape marks,\nright to the lip.

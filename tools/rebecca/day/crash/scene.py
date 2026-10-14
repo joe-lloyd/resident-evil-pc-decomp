@@ -18,8 +18,20 @@ the open cargo door are on the south side. The broken tail lies from
 (13.8, 6.4) to (16.2, 3.8). A fallen spruce lies along the north-west edge.
 The valley path leaves through the east edge at y 7-9.
 
+The burnt swath: the floor runs on east from the clearing's east edge,
+x 17-20.4, 2.0-2.2 m wide (y 7-9 to x 18.7, then y 7.6-9.8). Before she
+came down she spun, and the torn tail boom swung through the spruce here,
+snapping them and spraying burning fuel: the way east runs through a black
+swath of snapped, charred trunks, the fallen tops lying all one way, the
+ground ash. The rotor blade that went missing is here, sunk a foot deep in
+a trunk north of the path at x 19.5, y 6.6. A fallen trunk south of the
+path still smoulders. Bravo's boot prints go on through the ash. At the far
+end, x 19.8-20.4, the valley path goes on east. The room is shifted 1.4 m
+west at export to fit the floor in the game's 0.6-19 m.
+
 Moving: one rotor blade swinging in the wind, smoke rising from the engine,
-the engine's embers and the flare flickering, the grass.
+the engine's embers and the flare flickering, the grass; smoke off the
+smouldering trunk and its embers glowing.
 """
 import math
 import os
@@ -36,12 +48,20 @@ from mathutils import Vector, noise  # noqa: E402
 X0, X1, Y0, Y1 = 2.0, 17.0, 2.0, 14.0
 C = Vector((9.5, 7.5, 0.0))      # the helicopter's middle; its nose points -x
 PATH = (7.0, 9.0)                # the valley path, east edge
+X_END = 20.4
+SHIFT = (-1.4, 0.0)
+WALK = [(X1, 7.0, 18.7, 9.0), (18.7, 7.6, X_END, 9.8)]   # x0, y0, x1, y1: the swath
+TRUNK = (19.5, 6.6)              # the trunk with the blade in it
 
 
 def height(x, y):
     """Flat in the clearing, rising into the forest on every side."""
     h = 0.05 * noise.noise(Vector((x * 0.4, y * 0.4, 3)))
     dx = max(0.0, X0 - 0.5 - x, x - X1 - 0.5)
+    if x > X1:
+        # The swath east stays level where she walks, rising only away from it.
+        off = max(0.0, 6.6 - y, y - 10.2)
+        dx = min(dx, max(0.0, x - X_END - 1.0) + off)
     dy = max(0.0, Y0 - 0.5 - y, y - Y1 - 0.5)
     d = math.hypot(dx, dy)
     return h + 0.07 * d + 0.4 * noise.noise(Vector((x * 0.15, y * 0.15, 1))) * min(1.0, d / 3)
@@ -83,7 +103,7 @@ def smoke_mat():
     return m
 
 
-def smoke(anim, base, count=12, rise=5.0, drift=(1.2, -0.5), seed=3):
+def smoke(anim, base, count=12, rise=5.0, drift=(1.2, -0.5), seed=3, size=1.0):
     """Puffs climbing from `base`, swelling and thinning, round once a loop."""
     rng = random.Random(seed)
     m = smoke_mat()
@@ -96,22 +116,95 @@ def smoke(anim, base, count=12, rise=5.0, drift=(1.2, -0.5), seed=3):
         for p, off, wob, sc in puffs:
             t = (k / anim.frames + off) % 1.0
             p.location = (base[0] + drift[0] * t + wob, base[1] + drift[1] * t, base[2] + rise * t)
-            s = (0.5 + 1.8 * t) * sc
+            s = (0.5 + 1.8 * t) * sc * size
             p.scale = (s, s * 0.9, s * 0.8)
             p.color = (1, 1, 1, 0.6 * min(1.0, t * 6) * (1 - t))
     anim.custom(f)
 
 
+def burnt_swath(rng, splinter, navy):
+    """East of the clearing: the swath the tail cut and the fuel burnt, its
+    snapped black trunks and fallen tops, the blade sunk in a trunk, a log
+    still smouldering, the boot prints through the ash. Returns the
+    smoulder's light."""
+    char = reb.mat_surface("Charred bark", [(0.0, (0.008, 0.008, 0.008)), (0.65, (0.035, 0.03, 0.026)), (0.85, (0.08, 0.06, 0.045)), (1.0, (0.16, 0.07, 0.03))], scale=7, rough=0.85, bump=0.9)
+    ash = reb.mat_surface("Ash", [(0.0, (0.03, 0.03, 0.03)), (0.5, (0.1, 0.095, 0.09)), (0.85, (0.24, 0.23, 0.22)), (1.0, (0.32, 0.31, 0.3))], scale=1.6, rough=0.95, bump=0.4)
+    def burnt(x, y):
+        """Ash over the swath, its ragged edge dipping under the grass."""
+        mid = 8.1 + 0.6 * min(1.0, max(0.0, (x - 18.4) / 1.2)) + max(0.0, x - 21.0) * 0.12
+        reach = 2.4 + 0.9 * noise.noise(Vector((x * 0.6, 4.0, 0.0))) - max(0.0, 16.8 - x) * 1.5
+        return height(x, y) + (0.012 if abs(y - mid) < reach else -0.2)
+    reb.terrain("Burnt ground", ash, (15.0, 28.0), (4.0, 13.0), burnt, step=0.25)
+    for k in range(10):
+        x, y = rng.uniform(17.0, 24.0), rng.uniform(6.0, 11.4)
+        kit.splat(f"Scorch {k}", mat("black"), (x, y, height(x, y) + 0.009), rng.uniform(0.3, 0.8), seed=60 + k, stretch=(1.6, 0.8), lumps=0.5)
+    # Snapped trunks either side, charred, splintered tops; their tops fallen east.
+    snags = [(17.4, 5.9, 2.6), (18.3, 5.2, 1.4), (19.8, 12.0, 2.6), (18.9, 11.2, 1.8), (20.6, 6.2, 2.2), (21.4, 11.0, 3.0), (20.2, 10.8, 1.2),
+             (21.0, 4.6, 4.0), (23.8, 12.2, 2.4), (25.0, 6.2, 1.6), (25.2, 11.2, 3.2), (16.8, 4.4, 4.2), (22.8, 4.2, 3.4), (19.0, 4.4, 2.0)]
+    for x, y, h in snags:
+        z = height(x, y)
+        r = rng.uniform(0.16, 0.26)
+        lean = (rng.uniform(-0.15, 0.25), rng.uniform(-0.1, 0.1))
+        top = (x + lean[0] * h, y + lean[1] * h, z + h)
+        reb.wall(kit.rod("Snapped trunk", char, (x, y, z - 0.2), top, r, 9), "circle")
+        reb.prim("cone", "Splintered top", splinter, (top[0], top[1], top[2] + 0.18), (r * 2.2, r * 2.2, 0.4), rot=(0, 0.2, rng.uniform(0, 3)), segments=7, top=0.1)
+        if h < 3.0 and rng.random() < 0.8:
+            a = rng.uniform(-0.5, 0.5)
+            ln = rng.uniform(3.0, 6.0)
+            bx, by = top[0] + 0.3, top[1]
+            ex, ey = bx + math.cos(a) * ln, by + math.sin(a) * ln * 0.6
+            if (y < 7.0 and ey > 6.6) or (y > 9.5 and ey < 10.2):
+                ey = by
+            kit.rod("Fallen top", char, (bx, by, height(bx, by) + 0.25), (ex, ey, height(ex, ey) + 0.12), r * 0.8, 8)
+    # The blade, sunk in a big trunk north of the path, its yellow tip out over the ash.
+    tx, ty = TRUNK
+    tz = height(tx, ty)
+    reb.wall(kit.rod("Trunk with the blade", char, (tx, ty, tz - 0.2), (tx + 0.1, ty, tz + 4.4), 0.34, 12), "circle")
+    reb.prim("cone", "Splintered top", splinter, (tx + 0.1, ty, tz + 4.6), (0.75, 0.75, 0.5), rot=(0, 0.1, 0.5), segments=8, top=0.1)
+    a = math.radians(196)
+    ln = 2.7
+    c = Vector((tx + math.cos(a) * (ln / 2 - 0.25), ty + math.sin(a) * (ln / 2 - 0.25), tz + 1.75))
+    reb.prim("cube", "Blade in the trunk", navy, tuple(c), (ln, 0.32, 0.05), rot=(0.25, 0.12, a))
+    tip = Vector((tx + math.cos(a) * (ln - 0.5), ty + math.sin(a) * (ln - 0.5), tz + 1.75 - 0.12 * (ln - 0.5) / 2))
+    reb.prim("cube", "Blade tip", mat("yellow paint"), tuple(tip), (0.5, 0.33, 0.055), rot=(0.25, 0.12, a))
+    kit.splat("Split bark", splinter, (tx - 0.33, ty + 0.03, tz + 1.75), 0.2, rot=(0, -math.pi / 2, 0), seed=12, stretch=(0.6, 1.4))
+    for k in range(5):
+        reb.prim("cube", "Bark chip", char, (tx - 0.6 - rng.uniform(0, 0.8), ty + rng.uniform(-0.3, 0.3), tz + 0.02), (0.12, 0.06, 0.02), rot=(0, 0, rng.uniform(0, 3)))
+    # The smouldering trunk south of the path: embers in its split, smoke off it.
+    reb.wall(kit.rod("Smouldering trunk", char, (17.3, 10.6, height(17.3, 10.6) + 0.3), (20.2, 11.1, height(20.2, 11.1) + 0.3), 0.32, 12))
+    ember_m = reb.mat_emit("Smoulder", (1.0, 0.28, 0.05), 6)
+    for k in range(9):
+        t = rng.uniform(0.2, 0.8)
+        x, y = 17.3 + 2.9 * t, 10.6 + 0.5 * t - 0.28
+        reb.prim("sphere", f"Ember in the trunk {k}", ember_m, (x, y, height(x, y) + 0.32 + rng.uniform(-0.1, 0.1)), (0.14, 0.05, 0.05), rot=(0, 0, rng.uniform(-0.3, 0.3)), segments=6)
+    glow = reb.point("Smoulder light", (18.5, 10.5, 0.6), 30, (1.0, 0.35, 0.08), 0.2)
+    reb.spot("Last light down the swath", (9.0, 9.4, 7.0), (20.6, 8.6, 0.0), 3200, (1.0, 0.45, 0.25), 32, 0.8, 1.0)
+    # Their boot prints on east through the ash.
+    for i in range(8):
+        t = i / 7
+        x = X1 - 0.2 + (X_END + 0.3 - X1) * t
+        y = 8.1 + 0.6 * max(0.0, min(1.0, (x - 18.4) / 1.2)) + (0.13 if i % 2 else -0.13)
+        kit.splat(f"Boot print in the ash {i}", reb.mat_plain("Trodden ash", (0.13, 0.125, 0.12), 0.95), (x, y, height(x, y) + 0.012), 0.07, rot=(0, 0, -0.1), seed=80 + i, stretch=(1.5, 0.6), lumps=0.2)
+    dv, dc = [], []
+    for _ in range(300):
+        x, y = rng.uniform(16.5, 26.0), rng.uniform(5.5, 12.0)
+        reb.card(dv, dc, Vector((x, y, height(x, y) + 0.015)), Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)).normalized(), Vector((0, 0, 1)), 0.03, rng.uniform(0.3, 0.9), 0.0)
+    reb.mesh_object("Charred twigs", dv, dc, char)
+    return glow
+
+
 def build():
     rng = random.Random(23)
     reb.clear_scene()
-    room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room = kit.Room(bounds=(X0, Y0, X_END, Y1), shift=SHIFT)
     room.camera((16.3, 10.2, 3.1), (8.6, 7.2, 0.9), 200, "from the valley path: the cabin's open side, the tail, the boot prints going out")
     room.camera((1.0, 1.3, 3.9), (10.5, 10.0, 0.0), 195, "from the snapped spruces: the furrow, the nose, the kit scattered beyond")
     room.camera((3.0, 13.4, 3.0), (10.2, 6.8, 0.9), 200, "from the south-west: the open pilot's door, Kevin in his seat, the medkit")
     room.camera((6.3, 10.6, 2.5), (8.3, 7.4, 1.2), 200, "close on the cockpit: Kevin belted in, the starred windshield")
     room.camera((15.6, 13.6, 3.4), (8.5, 6.5, 0.3), 200, "from the south-east: the cargo bay, the cases, the flare, the smoke")
     room.camera((13.8, 2.5, 3.6), (6.5, 11.0, 0.0), 200, "from the north-east by the tail: the bent rotor, the north side and the clearing south")
+    room.camera((15.2, 12.8, 3.8), (20.6, 8.0, 0.0), 200, "from the clearing's south-east: into the burnt swath, the snapped trunks, the blade sunk in one")
+    room.camera((23.4, 8.6, 3.4), (16.4, 9.2, 0.3), 200, "from the swath's far end: back through the burnt trunks to the helicopter in the clearing")
 
     navy = reb.mat_surface("Bravo navy", [(0.0, (0.02, 0.026, 0.045)), (0.75, (0.045, 0.055, 0.085)), (1.0, (0.09, 0.08, 0.07))], scale=3, rough=0.4, bump=0.1)
     scorched = reb.mat_surface("Scorched paint", [(0.0, (0.01, 0.01, 0.01)), (0.7, (0.04, 0.035, 0.03)), (1.0, (0.1, 0.06, 0.03))], scale=6, rough=0.8, bump=0.4)
@@ -132,7 +225,7 @@ def build():
     kit.path_strip("Skid scar", mat("dirt"), [(1.5, 4.4), (4.0, 5.7), (6.6, 7.9)], height, width=0.25, lift=0.01)
     kit.splat("Scorched earth", mat("black"), (11.2, 7.1, height(11.2, 7.1)), 1.3, seed=5, stretch=(1.4, 1.0), lumps=0.5)
     kit.splat("Fuel pool", fuel, (10.4, 8.9, height(10.4, 8.9)), 0.55, seed=6, stretch=(1.6, 0.8))
-    kit.path_strip("Valley path", mat("dirt"), [(X1 - 1.5, 8.0), (X1 + 2.0, 8.2), (X1 + 8.0, 9.5), (X1 + 15.0, 9.0)], height, width=0.65)
+    kit.path_strip("Valley path", mat("dirt"), [(X1 - 1.5, 8.0), (18.7, 8.0), (19.3, 8.7), (X_END, 8.7), (25.0, 9.4), (X1 + 15.0, 9.0)], height, width=0.65)
 
     # ---- The helicopter, built level round C and then tipped as it lies.
     root = bpy.data.objects.new("Helicopter", None)
@@ -342,7 +435,7 @@ def build():
     cams = ((16.3, 10.2), (1.0, 1.3), (3.0, 13.4), (6.3, 10.6), (15.6, 13.6), (13.8, 2.5))
 
     def keep_out(x, y):
-        return (X0 - 1.0 < x < X1 + 1.0 and Y0 - 1.0 < y < Y1 + 1.0) or (x > X1 - 1 and 6.5 < y < 10.5) or (x < 4 and y < 4.5) or any((x - cx) ** 2 + (y - cy) ** 2 < 6 for cx, cy in cams)
+        return (X0 - 1.0 < x < X1 + 1.0 and Y0 - 1.0 < y < Y1 + 1.0) or (x > X1 - 1 and 6.5 < y < 10.5) or (x < 4 and y < 4.5) or any((x - cx) ** 2 + (y - cy) ** 2 < 6 for cx, cy in cams) or (15.5 < x < 25.5 and 3.8 < y < 13.0) or any((x - cx) ** 2 + (y - cy) ** 2 < 16 for cx, cy in ((15.2, 12.8), (23.4, 8.6)))
     kit.forest(rng, height, keep_out, (-10, -9, 29, 25), count=95, ferns=30, needles=500, dead=0.08)
     kit.forest(rng, height, lambda x, y: -6 < x < 25 and -5 < y < 21, (-26, -24, 45, 40), count=70, spacing=3.0, tall=(15, 22), ferns=0, needles=0)
 
@@ -372,9 +465,15 @@ def build():
     anim.flicker(flare, flare_m, depth=0.4, dropouts=1)
     anim.flicker(dome, dome_m, depth=0.5, dropouts=3)
     anim.sway(grass, amount=0.05)
+    smoulder = burnt_swath(rng, splinter, navy)
+    smoke(anim, Vector((19.0, 11.0, 0.5)), count=6, rise=3.0, drift=(0.6, -0.2), seed=9, size=0.45)
+    anim.flicker(smoulder, None, depth=0.45, dropouts=2)
 
     # ---- What the game needs.
-    room.door("valley-path", (X1 - 0.6, PATH[0], X1, PATH[1]), arrive=(15.6, 8.0), face=(-1, 0))
+    room.door("valley-path", (X_END - 0.6, WALK[1][1], X_END, WALK[1][3]), arrive=(18.9, 8.7), face=(-1, 0))
+    for (ax0, ay0, ax1, ay1) in WALK:
+        room.void((ax0, Y0, ax1, ay0))      # snapped trunks, deadfall
+        room.void((ax0, ay1, ax1, Y1))
     room.check((7.6, 8.4, 9.0, 9.4), "Kevin. He's still belted into his seat.\nHe flew us out here. He stayed with it.")
     room.check((9.8, 8.4, 11.4, 9.2), "The cargo bay. Rope, a box of flares...\nA crowbar on the floor.")
     room.check((8.2, 9.9, 9.8, 10.9), "Someone patched themselves up here.\nThe medkit's empty. The gauze is soaked.")
@@ -383,6 +482,8 @@ def build():
     room.check((13.5, 4.0, 16.5, 6.6), "The tail broke clean off when she came down.")
     room.check((12.4, 11.1, 13.4, 12.1), "A flare, burnt down to nothing.\nThey were signalling. Nobody came.")
     room.check((14.5, 7.3, 16.4, 9.3), "Boot prints in the mud, heading east.\nThe others walked out.")
+    room.check((18.9, WALK[1][1], 20.0, WALK[1][1] + 0.6), "A rotor blade, buried in that trunk.\nIf anyone had been standing here...")
+    room.check((X1 + 0.2, WALK[0][3] - 0.6, 18.6, WALK[0][3]), "The trees are snapped off and burnt black, all the way along.\nShe spun before she came down.")
     room.entry = "The helicopter.\nThis is where we came down."
     room.export(anim, samples=128)
 

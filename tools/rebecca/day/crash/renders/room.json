@@ -2,12 +2,12 @@
  "cameras": [
   {
    "from": [
-    27710,
+    25330,
     -5270,
     17340
    ],
    "to": [
-    14620,
+    12240,
     -1530,
     12240
    ],
@@ -15,12 +15,12 @@
   },
   {
    "from": [
-    1700,
+    -680,
     -6630,
     2210
    ],
    "to": [
-    17850,
+    15470,
     0,
     17000
    ],
@@ -28,12 +28,12 @@
   },
   {
    "from": [
-    5100,
+    2720,
     -5100,
     22780
    ],
    "to": [
-    17340,
+    14960,
     -1530,
     11560
    ],
@@ -41,12 +41,12 @@
   },
   {
    "from": [
-    10710,
+    8330,
     -4250,
     18020
    ],
    "to": [
-    14110,
+    11730,
     -2040,
     12580
    ],
@@ -54,12 +54,12 @@
   },
   {
    "from": [
-    26520,
+    24140,
     -5780,
     23120
    ],
    "to": [
-    14450,
+    12070,
     -510,
     11050
    ],
@@ -67,14 +67,40 @@
   },
   {
    "from": [
-    23460,
+    21080,
     -6120,
     4250
    ],
    "to": [
-    11050,
+    8670,
     0,
     18700
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    23460,
+    -6460,
+    21760
+   ],
+   "to": [
+    32640,
+    0,
+    13600
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    37400,
+    -5780,
+    14620
+   ],
+   "to": [
+    25500,
+    -510,
+    15640
    ],
    "fov": 200
   }
@@ -82,51 +108,179 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 12255,
+   "x0": 9875,
    "z0": 10763,
-   "x1": 20385,
+   "x1": 18005,
    "z1": 14737,
    "name": "Cabin footprint"
   },
   {
    "shape": "box",
-   "x0": 19659,
+   "x0": 17279,
    "z0": 12591,
-   "x1": 22501,
+   "x1": 20121,
    "z1": 14099,
    "name": "Boom footprint"
   },
   {
    "shape": "box",
-   "x0": 23358,
+   "x0": 20978,
    "z0": 9401,
-   "x1": 24888,
+   "x1": 22508,
    "z1": 10931,
    "name": "Tail footprint"
   },
   {
    "shape": "box",
-   "x0": 24905,
+   "x0": 22525,
    "z0": 7735,
-   "x1": 26435,
+   "x1": 24055,
    "z1": 9265,
    "name": "Tail footprint.001"
   },
   {
    "shape": "box",
-   "x0": 26452,
+   "x0": 24072,
    "z0": 6069,
-   "x1": 27982,
+   "x1": 25602,
    "z1": 7599,
    "name": "Tail footprint.002"
   },
   {
    "shape": "box",
-   "x0": 4344,
+   "x0": 1964,
    "z0": 2240,
-   "x1": 13336,
+   "x1": 10956,
    "z1": 4560,
    "name": "Fallen spruce"
+  },
+  {
+   "shape": "circle",
+   "x0": 26827,
+   "z0": 9522,
+   "x1": 28312,
+   "z1": 10402,
+   "name": "Snapped trunk.004"
+  },
+  {
+   "shape": "circle",
+   "x0": 28316,
+   "z0": 8346,
+   "x1": 29624,
+   "z1": 9254,
+   "name": "Snapped trunk.005"
+  },
+  {
+   "shape": "circle",
+   "x0": 30777,
+   "z0": 19494,
+   "x1": 32594,
+   "z1": 20904,
+   "name": "Snapped trunk.006"
+  },
+  {
+   "shape": "circle",
+   "x0": 29170,
+   "z0": 18462,
+   "x1": 30534,
+   "z1": 19738,
+   "name": "Snapped trunk.007"
+  },
+  {
+   "shape": "circle",
+   "x0": 32249,
+   "z0": 9814,
+   "x1": 33518,
+   "z1": 10930,
+   "name": "Snapped trunk.008"
+  },
+  {
+   "shape": "circle",
+   "x0": 33515,
+   "z0": 18217,
+   "x1": 35084,
+   "z1": 19402,
+   "name": "Snapped trunk.009"
+  },
+  {
+   "shape": "circle",
+   "x0": 31427,
+   "z0": 17874,
+   "x1": 32443,
+   "z1": 19024,
+   "name": "Snapped trunk.010"
+  },
+  {
+   "shape": "circle",
+   "x0": 32061,
+   "z0": 7331,
+   "x1": 33702,
+   "z1": 8200,
+   "name": "Snapped trunk.011"
+  },
+  {
+   "shape": "circle",
+   "x0": 37611,
+   "z0": 20269,
+   "x1": 38693,
+   "z1": 21487,
+   "name": "Snapped trunk.012"
+  },
+  {
+   "shape": "circle",
+   "x0": 39376,
+   "z0": 9984,
+   "x1": 40521,
+   "z1": 10940,
+   "name": "Snapped trunk.013"
+  },
+  {
+   "shape": "circle",
+   "x0": 39293,
+   "z0": 18253,
+   "x1": 40865,
+   "z1": 19445,
+   "name": "Snapped trunk.014"
+  },
+  {
+   "shape": "circle",
+   "x0": 25009,
+   "z0": 6975,
+   "x1": 26686,
+   "z1": 8381,
+   "name": "Snapped trunk.015"
+  },
+  {
+   "shape": "circle",
+   "x0": 36013,
+   "z0": 6450,
+   "x1": 37815,
+   "z1": 7507,
+   "name": "Snapped trunk.016"
+  },
+  {
+   "shape": "circle",
+   "x0": 29606,
+   "z0": 7165,
+   "x1": 30918,
+   "z1": 7812,
+   "name": "Snapped trunk.017"
+  },
+  {
+   "shape": "circle",
+   "x0": 30192,
+   "z0": 10642,
+   "x1": 31518,
+   "z1": 11798,
+   "name": "Trunk with the blade"
+  },
+  {
+   "shape": "box",
+   "x0": 26918,
+   "z0": 17480,
+   "x1": 32072,
+   "z1": 19410,
+   "name": "Smouldering trunk"
   }
  ],
  "anim": {
@@ -134,24 +288,49 @@
   "ticks": 3
  },
  "bounds": {
-  "x0": 3400,
+  "x0": 1020,
   "z0": 3400,
-  "x1": 28900,
+  "x1": 32300,
   "z1": 23800
  },
- "voids": [],
+ "voids": [
+  {
+   "x0": 26520,
+   "z0": 3400,
+   "x1": 29410,
+   "z1": 11900
+  },
+  {
+   "x0": 26520,
+   "z0": 15300,
+   "x1": 29410,
+   "z1": 23800
+  },
+  {
+   "x0": 29410,
+   "z0": 3400,
+   "x1": 32300,
+   "z1": 12920
+  },
+  {
+   "x0": 29410,
+   "z0": 16660,
+   "x1": 32300,
+   "z1": 23800
+  }
+ ],
  "doors": [
   {
    "to": "valley-path",
    "zone": {
-    "x0": 27880,
-    "z0": 11900,
-    "x1": 28900,
-    "z1": 15300
+    "x0": 31280,
+    "z0": 12920,
+    "x1": 32300,
+    "z1": 16660
    },
    "arrive": {
-    "x": 26520,
-    "z": 13600,
+    "x": 29750,
+    "z": 14790,
     "angle": 2048
    },
    "walk": true,
@@ -161,75 +340,93 @@
  "checks": [
   {
    "zone": {
-    "x0": 12920,
+    "x0": 10540,
     "z0": 14280,
-    "x1": 15300,
+    "x1": 12920,
     "z1": 15980
    },
    "text": "Kevin. He's still belted into his seat.\nHe flew us out here. He stayed with it."
   },
   {
    "zone": {
-    "x0": 16660,
+    "x0": 14280,
     "z0": 14280,
-    "x1": 19380,
+    "x1": 17000,
     "z1": 15640
    },
    "text": "The cargo bay. Rope, a box of flares...\nA crowbar on the floor."
   },
   {
    "zone": {
-    "x0": 13940,
+    "x0": 11560,
     "z0": 16830,
-    "x1": 16660,
+    "x1": 14280,
     "z1": 18530
    },
    "text": "Someone patched themselves up here.\nThe medkit's empty. The gauze is soaked."
   },
   {
    "zone": {
-    "x0": 17170,
+    "x0": 14790,
     "z0": 15640,
-    "x1": 21930,
+    "x1": 19550,
     "z1": 18530
    },
    "text": "Our cases. Somebody took what they could carry."
   },
   {
    "zone": {
-    "x0": 11900,
+    "x0": 9520,
     "z0": 15300,
-    "x1": 13940,
+    "x1": 11560,
     "z1": 16830
    },
    "text": "The field radio. Someone's smashed it.\nOr dropped it, trying."
   },
   {
    "zone": {
-    "x0": 22950,
+    "x0": 20570,
     "z0": 6800,
-    "x1": 28050,
+    "x1": 25670,
     "z1": 11220
    },
    "text": "The tail broke clean off when she came down."
   },
   {
    "zone": {
-    "x0": 21080,
+    "x0": 18700,
     "z0": 18870,
-    "x1": 22780,
+    "x1": 20400,
     "z1": 20570
    },
    "text": "A flare, burnt down to nothing.\nThey were signalling. Nobody came."
   },
   {
    "zone": {
-    "x0": 24650,
+    "x0": 22270,
     "z0": 12410,
-    "x1": 27880,
+    "x1": 25500,
     "z1": 15810
    },
    "text": "Boot prints in the mud, heading east.\nThe others walked out."
+  },
+  {
+   "zone": {
+    "x0": 29750,
+    "z0": 12920,
+    "x1": 31620,
+    "z1": 13940
+   },
+   "text": "A rotor blade, buried in that trunk.\nIf anyone had been standing here..."
+  },
+  {
+   "zone": {
+    "x0": 26860,
+    "z0": 14280,
+    "x1": 29240,
+    "z1": 15300
+   },
+   "text": "The trees are snapped off and burnt black, all the way along.\nShe spun before she came down."
   }
  ],
  "entry": "The helicopter.\nThis is where we came down.",
@@ -239,6 +436,8 @@
   "from the south-west: the open pilot's door, Kevin in his seat, the medkit",
   "close on the cockpit: Kevin belted in, the starred windshield",
   "from the south-east: the cargo bay, the cases, the flare, the smoke",
-  "from the north-east by the tail: the bent rotor, the north side and the clearing south"
+  "from the north-east by the tail: the bent rotor, the north side and the clearing south",
+  "from the clearing's south-east: into the burnt swath, the snapped trunks, the blade sunk in one",
+  "from the swath's far end: back through the burnt trunks to the helicopter in the clearing"
  ]
 }

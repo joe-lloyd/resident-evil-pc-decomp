@@ -20,8 +20,25 @@ at the west edge at y 7.2 and curve north-east under the fall. The
 plunger box is at x 12.2, y 8.9 behind a boulder. The quarry is off the
 west edge at y 6.0-8.4.
 
+The ore track: the way west to the quarry is part of the room now. West of
+the yard a ravine cuts down through the hill, nine metres deep, a stream
+in the bottom of it, and the rails cross it on a timber trestle, the deck
+2.4 m wide and about 4.4 m of it hers before the far rim. A rope rail runs
+along its north side on posts, one post leaning out. Halfway over, a
+second ore cart lies on its side on the deck's south edge, half over the
+drop, its ore spilled down into the ravine, and web is strung from it in a
+sheet that hangs down over the edge to the bents below: whatever spins
+those has been out this way. She has to squeeze past it on the north
+side. A loose deck plank hangs under the south edge by one nail.
+
+Metres: the scene is built in its own coordinates and shifted x +4.0 at
+export. The floor is x -3.35-15, y 2.5-11; west of x 1 only the trestle's
+deck is floor, y 6.0-8.4. The ravine's lips are at x 0.6 and -4.4. The
+tipped cart lies at x -1.0-0.2, y 7.4-8.4.
+
 Moving: dust settling over the fall, grit trickling from the cap beam, the
-wrapped bundle turning slowly on its thread.
+wrapped bundle turning slowly on its thread, the web sheet stirring in the
+draught up the ravine, the loose plank swinging, the stream.
 """
 import math
 import os
@@ -40,14 +57,40 @@ FACE_Y = 2.2
 PORTAL = (8.0, 10.0, 2.7)   # x0, x1 of the opening, its height
 GAP = (8.0, 8.85, 1.2)
 PLUNGER = (12.2, 8.9)
-RAIL_PATH = [(-6.0, 7.0), (X0, 7.2), (4.0, 7.0), (6.5, 6.0), (8.2, 4.4), (9.0, 2.6), (9.0, -4.0)]
+RAIL_PATH = [(-12.0, 7.0), (X0, 7.2), (4.0, 7.0), (6.5, 6.0), (8.2, 4.4), (9.0, 2.6), (9.0, -4.0)]
+SHIFT = (4.0, 0.0)
+X_W = -3.35   # the floor's west end, the trestle's far end on the floor (0.65 m in the game)
+DECK = (-4.9, 0.9, 6.0, 8.4)   # the trestle's deck x0, x1, y0, y1; walkable from X_W to X0
+RAVINE = (-4.4, 0.6, -9.0)   # its west lip, east lip, depth
+TIPPED = (-0.4, 7.5, 0.15)   # the tipped cart on the deck: x, y, heading
+TRESTLE_CAMS = [(-4.0, 12.2, 3.2), (2.2, 3.3, 3.6)]
 
 
 def height(x, y):
-    """The yard flat; a cliff then the hillside north; the slope falling away south and east."""
+    """The ravine west of the yard cut into the ground either side of it: steep walls off
+    each lip, a stream bed nine metres down, shallowing as it climbs into the hill."""
+    w, e, depth = RAVINE
+    w += 0.3 * noise.noise(Vector((0.0, y * 0.35, 5)))
+    e -= 0.25 * (1 + noise.noise(Vector((1.0, y * 0.4, 5))))
+    if not w < x < e:
+        return ground(x, y)
+    t = (x - w) / (e - w)
+    edge = min(1.0, min(t, 1 - t) / 0.3) ** 0.7
+    base = ground(w - 0.01, y) * (1 - t) + ground(e + 0.01, y) * t
+    bed = min(-2.5, depth + max(0.0, FACE_Y - y) * 0.3)
+    return base + (bed + 0.4 * noise.noise(Vector((x * 0.9, y * 0.5, 2)))) * edge
+
+
+def ground(x, y):
+    """The yard flat; a cliff then the hillside north; the slope falling away south and east;
+    the quarry's side west of the ravine."""
     n = noise.noise(Vector((x * 0.3, y * 0.3, 4)))
     if X0 - 0.4 < x < X1 + 0.4 and FACE_Y < y < Y1 + 0.4:
         return -0.03
+    if x <= RAVINE[0] and y > FACE_Y:
+        if 5.6 < y < 8.8:
+            return 0.03 * n - 0.03
+        return 0.4 * n + max(0.0, RAVINE[0] - 1.5 - x) * 0.4 + max(0.0, y - Y1 - 0.4) * -0.6
     z = 0.0
     if y <= FACE_Y:
         d = FACE_Y - y
@@ -58,9 +101,21 @@ def height(x, y):
         z = min(z, -(y - Y1 - 0.4) * 0.9) + 0.4 * n
     if x > X1 + 0.4 and y > FACE_Y:
         z = max(z, (x - X1 - 0.4) * 1.1 + 0.4 * n)
-    if x < X0 - 0.4 and y > FACE_Y and not (5.8 < y < 8.6):
-        z = max(z, (X0 - 0.4 - x) * 0.8 + 0.4 * n)
     return z
+
+
+def beam(verts, faces, a, b, r):
+    """A square timber from a to b, into the given lists."""
+    a, b = Vector(a), Vector(b)
+    q = (b - a).to_track_quat("Z", "Y")
+    k = len(verts)
+    for end in (a, b):
+        for s in range(4):
+            t = math.pi / 2 * s + math.pi / 4
+            verts.append(tuple(end + q @ Vector((math.cos(t) * r, math.sin(t) * r, 0))))
+    for s in range(4):
+        faces.append((k + s, k + (s + 1) % 4, k + 4 + (s + 1) % 4, k + 4 + s))
+    faces += [(k, k + 1, k + 2, k + 3), (k + 7, k + 6, k + 5, k + 4)]
 
 
 def terrain_with_hole(name, m, xr, yr, hole, step=0.25):
@@ -185,11 +240,13 @@ def ore_cart(name, m, at, yaw, tipped=False):
 def build():
     rng = random.Random(29)
     reb.clear_scene()
-    room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room = kit.Room(bounds=(X_W, Y0, X1, Y1), shift=SHIFT)
     room.camera((1.6, 10.4, 3.5), (9.2, 3.0, 1.2), 200, "from the west edge: the rails running in under the fall, the carts, the portal")
     room.camera((14.7, 6.4, 3.6), (6.0, 9.2, 0.6), 200, "from the east side: the plunger box behind its boulder, the wire, the carts, the yard to the track out west")
     room.camera((8.0, 10.9, 2.9), (8.9, 2.5, 1.5), 205, "from the south, straight at the portal: SEALED, the gap into the dark")
     room.camera((8.6, 3.4, 3.6), (10.6, 10.8, 0.0), 200, "from beside the portal looking out: the yard, the rails curving off west, the plunger, the valley")
+    room.camera(TRESTLE_CAMS[0], (0.0, 7.0, -2.8), 200, "back over the trestle from the quarry side: the tipped cart and its web, the ravine, the yard and the portal beyond")
+    room.camera(TRESTLE_CAMS[1], (-3.2, 9.6, -3.5), 200, "out over the trestle from the yard: the rope rail, the tipped cart, the ravine falling away, the quarry track beyond")
 
     timber = reb.mat_wood("Mine timber", (0.13, 0.09, 0.055))
     old_timber = kit.dirtied(timber, 0.8, scale=3)
@@ -214,7 +271,8 @@ def build():
     # The gap's dark: the adit black behind the rocks, low on the west side.
     reb.prim("cube", "Dark of the gap", mat("black"), ((GAP[0] + GAP[1]) / 2, FACE_Y - 0.15, GAP[2] / 2), (GAP[1] - GAP[0] + 0.1, 0.05, GAP[2]))
     reb.prim("cube", "Yard", yard, ((X0 + X1) / 2, (FACE_Y + Y1) / 2 + 0.1, -0.04), (X1 - X0 + 0.8, Y1 - FACE_Y + 0.6, 0.08))
-    kit.path_strip("Track in", mat("dirt"), [(-6.0, 7.2), (X0, 7.2), (4.0, 7.0), (6.5, 6.0)], lambda x, y: max(0.0, height(x, y)), width=1.0, lift=0.004)
+    kit.path_strip("Track in", mat("dirt"), [(0.62, 7.2), (X0, 7.2), (4.0, 7.0), (6.5, 6.0)], lambda x, y: max(0.0, height(x, y)), width=1.0, lift=0.004)
+    kit.path_strip("Track on to the quarry", mat("dirt"), [(-30.0, 6.4), (-12.0, 7.0), (-4.45, 7.1)], height, width=1.0, lift=0.006)
     # The adit behind: rock all round, its floor, timber sets, black beyond.
     kit.tunnel("Adit", mat("wet rock"), [(9.0, FACE_Y + 0.25), (9.0, -2.0), (8.6, -7.0), (7.4, -12.0)], width=2.5, height=2.75, rough=0.12, seed=3, floor_m=mat("mud"))
     for y in (1.2, -0.8, -2.8):
@@ -311,7 +369,7 @@ def build():
     reb.prim("sphere", "Dropped hard hat", mat("white paint"), (px + 0.5, py + 0.45, 0.1), (0.28, 0.25, 0.2), rot=(0.5, -0.2, 0))
     rv, rf = [], []
     reb.boulder(rng, (px - 0.2, py - 0.75, 0.0), 0.7, rv, rf)
-    for (x, y, r) in ((0.4, 3.4, 0.9), (14.9, 3.4, 1.1), (15.6, 6.6, 0.8), (0.5, 10.8, 0.7), (6.0, 11.4, 0.6)):
+    for (x, y, r) in ((1.0, 3.2, 0.8), (14.9, 3.4, 1.1), (15.6, 6.6, 0.8), (1.1, 11.3, 0.6), (6.0, 11.4, 0.6)):
         reb.boulder(rng, (x, y, height(x, y)), r, rv, rf)
     reb.mesh_object("Boulders", rv, rf, mat("rock"))
     reb.wall(reb.prim("cube", "Shelter boulder footprint", None, (px - 0.2, py - 0.75, 0.5), (1.5, 1.2, 1.0))).hide_render = True
@@ -323,9 +381,131 @@ def build():
     drips("Hal's drops", mat("old blood"), [(X0 + 0.2 + k * 0.55 + rng.uniform(-0.1, 0.1), 7.7 - k * 0.32 + rng.uniform(-0.08, 0.08)) for k in range(14)], rng, r=(0.015, 0.035))
     kit.splat("Where he knelt", mat("old blood"), (8.45, FACE_Y + 0.55, 0.0), 0.12, seed=8, lumps=0.5)
 
+    # ---- The trestle over the ravine: deck, stringers, bents down to the stream, a rope rail
+    # on the north side; the tipped cart on the south edge, its web hanging over; a loose plank.
+    dx0, dx1, dy0, dy1 = DECK
+    tv, tf = [], []
+    x = dx0
+    while x < dx1:
+        w = rng.choice((0.2, 0.22, 0.24))
+        y0 = dy0 - 0.15 - (rng.uniform(0.0, 0.25) if rng.random() < 0.3 else 0.0)
+        y1 = dy1 + 0.15 - (rng.uniform(0.0, 0.3) if rng.random() < 0.3 else 0.0)
+        reb.box(tv, tf, (x + w / 2, (y0 + y1) / 2, -0.04), (w - 0.015, y1 - y0, 0.07), rng.uniform(-0.01, 0.01))
+        x += w
+    reb.mesh_object("Trestle deck", tv, tf, kit.dirtied(mat("planks"), 0.6, scale=2), smooth=False)
+    bv, bf = [], []
+    for y in (dy0 + 0.15, (dy0 + dy1) / 2, dy1 - 0.15):
+        reb.box(bv, bf, ((dx0 + dx1) / 2, y, -0.22), (dx1 - dx0 + 0.6, 0.22, 0.3))
+    for bx in (-4.1, -2.5, -0.9, 0.5):
+        reb.box(bv, bf, (bx, (dy0 + dy1) / 2, -0.47), (0.3, dy1 - dy0 + 1.0, 0.28))
+        feet = []
+        for y, lean in ((dy0 - 0.3, -0.6), (dy0 + 0.6, 0.0), (dy1 - 0.6, 0.0), (dy1 + 0.3, 0.6)):
+            foot = (bx, y + lean, height(bx, y + lean) - 0.3)
+            beam(bv, bf, (bx, y, -0.5), foot, 0.12)
+            feet.append(foot)
+        for z in (-2.6, -5.0, -7.4):
+            beam(bv, bf, (bx, dy0 - 0.4, z), (bx, dy1 + 0.4, z), 0.07)
+        beam(bv, bf, (bx, dy0 - 0.2, -0.7), (bx, dy1 + 0.2, -4.6), 0.06)
+        beam(bv, bf, (bx, dy1 + 0.2, -0.7), (bx, dy0 - 0.2, -4.6), 0.06)
+    for y in (dy0 - 0.3, dy1 + 0.3):
+        beam(bv, bf, (-4.1, y, -3.8), (-2.5, y, -1.2), 0.06)
+        beam(bv, bf, (-0.9, y, -1.2), (0.5, y, -3.8), 0.06)
+    reb.mesh_object("Trestle timbers", bv, bf, kit.dirtied(timber, 0.7, scale=3), smooth=False)
+    # The rope rail on the north side: posts on the deck's edge, one leaning out over the drop.
+    rope_pts = []
+    for i, px_ in enumerate((-4.6, -3.1, -1.6, -0.1, 0.8)):
+        lean_ = -0.35 if i == 2 else 0.0
+        top = (px_, dy0 - 0.08 + lean_, 1.05 + lean_ * 0.3)
+        kit.rod("Rail post", old_timber, (px_, dy0 - 0.08, -0.1), top, 0.05, 6)
+        rope_pts.append(top)
+    rope = reb.mat_plain("Rope", (0.22, 0.18, 0.12), 0.9)
+    for a, b in zip(rope_pts, rope_pts[1:]):
+        prev = Vector(a)
+        for j in range(1, 7):
+            t = j / 6
+            p = Vector(a).lerp(Vector(b), t) + Vector((0, 0, -0.18 * math.sin(math.pi * t)))
+            kit.rod("Rope rail", rope, prev, p, 0.012, 4)
+            prev = p
+    # The loose plank, hanging under the south edge by one nail.
+    plank_pivot = reb.prim("sphere", "Loose plank nail", mat("iron"), (-2.0, dy1 + 0.12, -0.08), (0.02, 0.02, 0.02), segments=6)
+    plank = reb.prim("cube", "Loose plank", kit.dirtied(mat("planks"), 0.6, scale=2), (0, 0, -0.6), (0.2, 0.05, 1.2), rot=(0, 0, 0))
+    plank.parent = plank_pivot
+    plank_pivot.rotation_euler = (0.25, 0.1, 0)
+    # The tipped cart, its spilled ore down the ravine side, and its web.
+    cx, cy, ch = TIPPED
+    ore_cart("Cart on the trestle", rust, (cx, cy, 0), ch, tipped=True)
+    reb.wall(reb.prim("cube", "Trestle cart footprint", None, (cx, cy + 0.45, 0.5), (1.3, 1.0, 1.0), rot=(0, 0, ch))).hide_render = True
+    ov, of = [], []
+    for _ in range(26):
+        y = rng.uniform(dy1 - 0.1, dy1 + 2.0)
+        x = cx + rng.uniform(-1.0, 1.2)
+        reb.boulder(rng, (x, y, max(height(x, y), -0.02) if y < dy1 + 0.2 else height(x, y)), rng.uniform(0.06, 0.16), ov, of, squash=0.6)
+    reb.mesh_object("Ore spilled into the ravine", ov, of, reb.mat_surface("Ore", [(0.0, (0.05, 0.05, 0.06)), (0.6, (0.14, 0.14, 0.16)), (1.0, (0.4, 0.4, 0.42))], scale=12, rough=0.4, bump=0.8))
+    wv, wf = [], []
+    cols, rows = 8, 7
+    for j in range(rows + 1):
+        for i in range(cols + 1):
+            u, v = i / cols, j / rows
+            wv.append((cx - 0.75 + 1.4 * u + 0.15 * math.sin(v * 3 + u * 5), dy1 + 0.05 + 0.5 * v * v, 0.75 - 2.9 * v - 0.25 * math.sin(math.pi * u)))
+    for j in range(rows):
+        for i in range(cols):
+            if rng.random() < 0.12:
+                continue
+            a = j * (cols + 1) + i
+            wf.append((a, a + 1, a + cols + 2, a + cols + 1))
+    veil, nodes, links, vb = reb.nodes_material("Sheet web")
+    vb.inputs["Base Color"].default_value = (0.72, 0.72, 0.7, 1)
+    vb.inputs["Roughness"].default_value = 0.7
+    # Hanging threads: streaks down the sheet, thick at the top, thinning to wisps.
+    gen = nodes.new("ShaderNodeTexCoord")
+    wave = nodes.new("ShaderNodeTexWave")
+    wave.bands_direction = "X"
+    wave.inputs["Scale"].default_value = 9.0
+    wave.inputs["Distortion"].default_value = 6.0
+    wave.inputs["Detail"].default_value = 3.0
+    links.new(gen.outputs["Generated"], wave.inputs["Vector"])
+    threads = reb.ramp(nodes, links, wave.outputs["Fac"], [(0.55, (0.0, 0.0, 0.0)), (0.85, (0.9, 0.9, 0.9))])
+    sep = nodes.new("ShaderNodeSeparateXYZ")
+    links.new(gen.outputs["Generated"], sep.inputs["Vector"])
+    fade = nodes.new("ShaderNodeMath")
+    fade.operation = "MULTIPLY"
+    fade.use_clamp = True
+    links.new(threads.outputs["Color"], fade.inputs[0])
+    links.new(sep.outputs["Z"], fade.inputs[1])
+    mix = nodes.new("ShaderNodeMixShader")
+    clear = nodes.new("ShaderNodeBsdfTransparent")
+    links.new(fade.outputs[0], mix.inputs["Fac"])
+    links.new(clear.outputs[0], mix.inputs[1])
+    links.new(vb.outputs[0], mix.inputs[2])
+    links.new(mix.outputs[0], nodes["Material Output"].inputs["Surface"])
+    web_sheet = reb.mesh_object("Web over the edge", wv, wf, veil, smooth=True)
+    web_sheet.visible_shadow = False
+    web_rest = [Vector(v.co) for v in web_sheet.data.vertices]
+    kit.web("Web in the cart", (cx - 0.5, cy + 0.9, 0.78), 0.55, (1, -1))
+    for k in range(9):
+        a = Vector((cx + rng.uniform(-0.6, 0.6), cy + rng.uniform(0.5, 0.95), rng.uniform(0.2, 0.8)))
+        b = Vector((rng.choice((-0.9, 0.5)) + rng.uniform(-0.1, 0.1), dy1 + 0.3, rng.uniform(-4.5, -1.0)))
+        kit.rod("Web strand", silk, a, b, 0.004, 3)
+    # The stream in the ravine's bed, rocks along it.
+    water = mat("water")
+    kit.path_strip("Stream", water, [(-1.8, y) for y in (-8.0, -2.0, 2.0, 5.0, 8.0, 12.0, 18.0, 26.0)], lambda x, y: height(x, y) + 0.12, width=0.55, wobble=0.3)
+    sv, sf = [], []
+    for _ in range(40):
+        y = rng.uniform(-4.0, 22.0)
+        x = -1.8 + rng.uniform(-1.3, 1.3)
+        reb.boulder(rng, (x, y, height(x, y)), rng.uniform(0.2, 0.6), sv, sf)
+    for _ in range(50):
+        y = rng.uniform(-2.0, 18.0)
+        side = rng.choice((0, 1))
+        x = RAVINE[side] + (rng.uniform(0.3, 1.4) if side == 0 else -rng.uniform(0.4, 1.4))
+        reb.boulder(rng, (x, y, height(x, y)), rng.uniform(0.25, 0.7), sv, sf)
+    reb.mesh_object("Ravine rocks", sv, sf, kit.dirtied(mat("wet rock"), 0.4))
+
     # ---- Round it: spruces on the hill and down the slope, dead grass at the yard's edge.
     def keep_out(x, y):
-        return (X0 - 2 < x < X1 + 1.5 and FACE_Y - 2.5 < y < Y1 + 1.5) or (-7.0 < x < X0 and 5.5 < y < 9.0) or (-6.0 < x < X1 + 0.6 and y > Y1 - 1.0)
+        if any(math.hypot(x - c[0], y - c[1]) < 4.0 for c in TRESTLE_CAMS) or (RAVINE[0] - 0.5 < x < RAVINE[1] + 0.3 and 0.5 < y < 14.0):
+            return True
+        return (X0 - 2 < x < X1 + 1.5 and FACE_Y - 2.5 < y < Y1 + 1.5) or (-14.0 < x < X0 and 4.6 < y < 9.8) or (-6.0 < x < X1 + 0.6 and y > Y1 - 1.0)
     kit.forest(rng, height, keep_out, (-24, -16, 30, 26), count=90, ferns=20, needles=500)
     edge = kit.meadow(rng, 700, lambda r: (r.uniform(X0 - 1, X1 + 1), r.choice((r.uniform(Y1 - 0.6, Y1 + 0.6), r.uniform(FACE_Y + 0.05, FACE_Y + 0.4)))), height, mat("dead grass"))
     kit.meadow(rng, 350, lambda r: (r.uniform(X0, X1), r.uniform(4.5, Y1)), height, mat("dead grass"))
@@ -370,15 +550,29 @@ def build():
     anim.custom(settle_dust)
     anim.custom(lambda k: setattr(bundle_pivot, "rotation_euler", (math.radians(2) * math.sin(anim.phase(k)), 0, 0.5 * math.sin(anim.phase(k)))))
     anim.sway(edge, amount=0.04)
+    anim.swing(plank_pivot, axis=0, degrees=10)
+    anim.ripple(water)
+
+    def billow(k):
+        ph = anim.phase(k)
+        for v, rest in zip(web_sheet.data.vertices, web_rest):
+            d = max(0.0, 0.75 - rest.z) / 2.9
+            v.co = (rest.x + 0.05 * d * math.sin(ph + rest.z), rest.y + 0.22 * d * (0.6 + math.sin(ph + rest.x * 2.0)), rest.z)
+        web_sheet.data.update()
+    anim.custom(billow)
 
     # ---- What the game needs.
-    room.door("quarry", (X0, 6.0, X0 + 0.6, 8.4), arrive=(2.5, 7.4), face=(1, 0))
+    room.void((X_W, Y0, X0, DECK[2]))
+    room.void((X_W, DECK[3], X0, Y1))
+    room.door("quarry", (X_W, DECK[2], X_W + 0.6, DECK[3]), arrive=(-1.9, 6.9), face=(1, 0))
     room.door("tunnel", (p0 - 0.1, Y0, GAP[1] + 0.05, Y0 + 0.8), arrive=(8.4, 4.6), face=(0, 1), walk=False)
     room.check((p0 - 1.0, Y0, p0 - 0.2, Y0 + 0.9), "A gap under the rocks, into the dark. Webs over it.\nThere's blood on the post. Someone squeezed through.")
     room.check((GAP[1], Y0, p1 + 1.0, 4.6), "The roof's been brought down across the mouth. On purpose:\nthere's a blasting wire running out of the rocks.")
     room.check((px - 0.7, py - 0.2, px + 0.8, Y1), "A blasting plunger, pushed home. Whoever fired it\ndropped their hard hat and ran.")
     room.check((11.0, Y0, 12.2, 3.3), "SEALED. DO NOT ENTER.\nWhat were they keeping in?")
     room.check((11.0, 5.6, 12.8, 7.6), "An ore cart, tipped over. Silver ore, dull and grey.")
+    room.check((cx - 0.9, DECK[2] + 0.6, cx + 0.7, cy - 0.05), "Another cart, on its side on the trestle.\nThe web runs from it right down into the ravine.")
+    room.check((X_W + 0.7, DECK[2], -1.6, DECK[2] + 0.6), "The trestle creaks. It's a long way down.")
     room.entry = "Webs. Thick ones."
     room.export(anim)
 

@@ -38,23 +38,49 @@
     10880
    ],
    "fov": 200
+  },
+  {
+   "from": [
+    15130,
+    -5100,
+    36040
+   ],
+   "to": [
+    14960,
+    -680,
+    22100
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    3060,
+    -7820,
+    30260
+   ],
+   "to": [
+    15980,
+    3060,
+    26860
+   ],
+   "fov": 200
   }
  ],
  "walls": [
   {
    "shape": "circle",
-   "x0": 22254,
-   "z0": 13539,
-   "x1": 26032,
-   "z1": 16339,
+   "x0": 22301,
+   "z0": 13459,
+   "x1": 25965,
+   "z1": 16395,
    "name": "Outcrop"
   },
   {
    "shape": "circle",
-   "x0": 4582,
-   "z0": 17257,
-   "x1": 6971,
-   "z1": 19621,
+   "x0": 4296,
+   "z0": 17255,
+   "x1": 7203,
+   "z1": 19513,
    "name": "Outcrop.001"
   },
   {
@@ -160,6 +186,38 @@
    "x1": 9690,
    "z1": 13430,
    "name": "Stores footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 11966,
+   "z0": 23185,
+   "x1": 13269,
+   "z1": 24255,
+   "name": "Cairn 0"
+  },
+  {
+   "shape": "circle",
+   "x0": 12857,
+   "z0": 26066,
+   "x1": 14191,
+   "z1": 27165,
+   "name": "Cairn 1"
+  },
+  {
+   "shape": "circle",
+   "x0": 16254,
+   "z0": 28122,
+   "x1": 17665,
+   "z1": 29270,
+   "name": "Cairn 2"
+  },
+  {
+   "shape": "circle",
+   "x0": 11925,
+   "z0": 30481,
+   "x1": 13409,
+   "z1": 31587,
+   "name": "Cairn 3"
   }
  ],
  "anim": {
@@ -170,7 +228,7 @@
   "x0": 1700,
   "z0": 1700,
   "x1": 28900,
-  "z1": 22100
+  "z1": 32300
  },
  "voids": [
   {
@@ -178,20 +236,68 @@
    "z0": 1700,
    "x1": 28900,
    "z1": 22100
+  },
+  {
+   "x0": 1700,
+   "z0": 22100,
+   "x1": 12240,
+   "z1": 32300
+  },
+  {
+   "x0": 16660,
+   "z0": 22100,
+   "x1": 28900,
+   "z1": 32300
+  },
+  {
+   "x0": 1700,
+   "z0": 22100,
+   "x1": 12240,
+   "z1": 25500
+  },
+  {
+   "x0": 16660,
+   "z0": 22100,
+   "x1": 28900,
+   "z1": 25500
+  },
+  {
+   "x0": 1700,
+   "z0": 25500,
+   "x1": 13260,
+   "z1": 28900
+  },
+  {
+   "x0": 17340,
+   "z0": 25500,
+   "x1": 28900,
+   "z1": 28900
+  },
+  {
+   "x0": 1700,
+   "z0": 28900,
+   "x1": 12240,
+   "z1": 32300
+  },
+  {
+   "x0": 16320,
+   "z0": 28900,
+   "x1": 28900,
+   "z1": 32300
   }
  ],
  "doors": [
   {
    "to": "summit-trail",
    "zone": {
-    "x0": 11900,
-    "z0": 21080,
-    "x1": 17000,
-    "z1": 22100
+    "x0": 12240,
+    "z0": 31280,
+    "x1": 16320,
+    "z1": 32300
    },
    "arrive": {
-    "x": 14620,
-    "z": 19210,
+    "x": 14280,
+    "z": 29580,
     "angle": 1024
    },
    "walk": true,
@@ -252,12 +358,32 @@
     "z1": 8160
    },
    "text": "ARKLAY TELECOM. AUTHORISED STAFF.\nPadlocked."
+  },
+  {
+   "zone": {
+    "x0": 14110,
+    "z0": 26010,
+    "x1": 15130,
+    "z1": 27370
+   },
+   "text": "A cairn. There's a hand on it, in blood.\nHe came along here, holding himself up."
+  },
+  {
+   "zone": {
+    "x0": 15300,
+    "z0": 29240,
+    "x1": 16320,
+    "z1": 30940
+   },
+   "text": "Straight down, both sides. The crows just hang there in the wind, watching me."
   }
  ],
  "entry": "The mast. Its light's still blinking.",
  "notes": [
   "from the trail in, south-west: the mast in its fence, the cabin, the crow on the wire",
   "from the south-east by the brink: the cabin and the forced crates, the mast's foot",
-  "across to the east brink: his glove, the ledge below with him on it, the valley beyond"
+  "across to the east brink: his glove, the ledge below with him on it, the valley beyond",
+  "from the ridge's south end: the knife-edge walk to the mast, cairns, crows either side",
+  "from over the west drop: the ridge in profile, the crows on the wind, the valley east"
  ]
 }

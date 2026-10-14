@@ -25,8 +25,22 @@ The board stack is at x 8.2-12.2, y 7.8-8.6. The wheel's shaft comes in at
 y 4.6, 2.8 m up, its pulley at x 12.8. The crane track runs along y 4.6 at
 5.3 m.
 
+The mill race, out the back door: the floor runs on east from the back door
+to the pond gate, x 14.0-19.0, a plank walk 2.2-2.4 m wide (y 9.2-11.6 to
+x 16.2, then y 8.6-10.8) along the south bank of the race. The race comes
+out of the pond through a sluice at x 20.6, y 7.6, runs west along y 7.6-7.8
+a metre below the bank, and turns north under the water wheel, which
+stands against the east wall at y 4.6 and still turns. The water runs dark,
+and something turns in it: the tailer, the man who took the boards off the
+saw, face down in the eddy above the trash rack, turning slowly round. The
+sawyer's blood runs along the planks to the gate. South of the walk the
+bank drops into a bramble ditch, slabwood dumped in it by the mill, spruce
+beyond. The gate in the split
+rail fence at x 19.0, y 8.7-10.6 is the way to the pond.
+
 Moving: the wheel's shaft and its pulley turning, the crane's tongs and one
-lamp swaying, flies on the arm, dust in the light.
+lamp swaying, flies on the arm, dust in the light; out back, the water
+wheel turning, the race's water, the tailer turning in the eddy.
 """
 import math
 import os
@@ -38,7 +52,7 @@ import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Vector  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 
 X0, X1, Y0, Y1, H = 1.0, 14.0, 2.6, 12.2, 6.0
 BIG_DOOR = (6.0, 9.0)
@@ -49,6 +63,47 @@ BLADE = (8.6, 5.6, 1.05)     # the head saw's centre
 SHAFT_Y, SHAFT_Z = 4.6, 2.8
 STACK = (8.2, 12.2, 7.8, 8.6)
 HIGH = (3.8, 4.8)            # the high windows' sill and head
+X_END = 19.0                 # the floor's east end: the plank walk to the pond gate
+WALK_A = (X1, 16.2, 9.2, 11.6)    # the walk's two reaches (x0, x1, y0, y1)
+WALK_B = (16.2, X_END, 8.6, 10.8)
+WALK = [(13.9, 10.1), (15.2, 10.35), (16.4, 9.9), (17.6, 9.65), (19.6, 9.7)]
+RACE = [(45.0, 7.6), (21.0, 7.6), (17.4, 7.8), (15.7, 7.4), (14.95, 6.2), (14.95, 2.0), (14.95, -16.0)]
+RACE_HALF = 0.65
+RACE_WATER = -0.5
+WHEEL_X, WHEEL_R = 14.95, 3.35
+GATE_Y = (8.7, 10.6)
+POND_X = 20.6
+
+
+def race_d(x, y):
+    """How far (x, y) is from the race's centre line."""
+    p = Vector((x, y))
+    best = 1e9
+    for a, b in zip(RACE, RACE[1:]):
+        a, b = Vector(a), Vector(b)
+        d = b - a
+        t = max(0.0, min(1.0, (p - a).dot(d) / d.length_squared))
+        best = min(best, (p - a.lerp(b, t)).length)
+    return best
+
+
+def ground(x, y):
+    """Outside the mill: mud along the walk, the race sunk a metre, the pond
+    deep beyond its bank, rising gently into the spruce."""
+    n = noise.noise(Vector((x * 0.3, y * 0.3, 4.0)))
+    d = race_d(x, y)
+    if d < RACE_HALF + 0.08:
+        return -1.0
+    h = -0.08 + 0.08 * n
+    edge = POND_X - 0.3 + 0.5 * noise.noise(Vector((y * 0.15, 2.0, 0.0)))
+    if x > edge:
+        return max(-1.4, h - (x - edge) * 1.2)
+    south = WALK_B[3] if x > WALK_A[1] else WALK_A[3]
+    if X1 + 0.3 < x < edge and y > south + 0.2:
+        # The ditch south of the walk: a bank down into brambles.
+        h -= min(1.1, (y - south - 0.2) * 1.4) * max(0.0, 1.0 - max(0.0, y - 13.4) / 1.6)
+    out = max(0.0, abs(y - 10.0) - 3.5, 13.0 - x)
+    return h + min(1.2, 0.06 * out) + 0.25 * n * min(1.0, out / 4.0)
 
 
 def settle(ob, at, rot):
@@ -62,16 +117,202 @@ def settle(ob, at, rot):
     return ob
 
 
+def race_walk(rng, timber, logs_m, end_m, iron):
+    """Out the back door: the plank walk along the race to the pond gate, the
+    wheel, the race and the tailer in it, the pond, the spruce round it all.
+    Returns the wheel and the tailer's pivot, which move."""
+    mud = kit.dirtied(reb.mat_surface("Race bank mud", [(0.0, (0.035, 0.03, 0.02)), (0.5, (0.08, 0.065, 0.045)), (1.0, (0.12, 0.1, 0.07))], scale=1.2, rough=0.7, bump=0.6), 0.5, scale=0.6)
+    reb.terrain("Race bank", mud, (0.5, 34.0), (-16.0, 30.0), ground, step=0.3)
+    planks = reb.mat_wood("Walk planks", (0.16, 0.12, 0.08))
+    slimy = reb.mat_surface("Race boards", [(0.0, (0.02, 0.03, 0.015)), (0.5, (0.06, 0.07, 0.04)), (1.0, (0.12, 0.09, 0.06))], scale=3, rough=0.6, bump=0.5)
+
+    # ---- The race: plank-lined, a metre deep, the water dark and slow.
+    kit.path_strip("Race water", mat("water"), RACE, lambda x, y: RACE_WATER, width=RACE_HALF + 0.05, wobble=0.0, lift=0.0)
+    lv, lf = [], []
+    for a, b in zip(RACE, RACE[1:]):
+        a, b = Vector(a), Vector(b)
+        d = b - a
+        side = Vector((-d.y, d.x)).normalized()
+        for s_ in (-1, 1):
+            c = (a + b) / 2 + side * s_ * (RACE_HALF + 0.05)
+            reb.box(lv, lf, (c.x, c.y, -0.47), (d.length + 0.12, 0.08, 1.06), math.atan2(d.y, d.x))
+        for k in range(int(d.length / 1.6) + 1):
+            p = a.lerp(b, (k + 0.5) / (int(d.length / 1.6) + 1))
+            for s_ in (-1, 1):
+                q = p + side * s_ * (RACE_HALF + 0.1)
+                reb.box(lv, lf, (q.x, q.y, -0.4), (0.12, 0.12, 1.2), 0.0)
+    reb.mesh_object("Race lining", lv, lf, slimy, smooth=False)
+    # The trash rack across the race, choked with slabwood, above the wheel.
+    a, b = Vector(RACE[3]), Vector(RACE[4])
+    mid = a.lerp(b, 0.25)
+    d = (b - a).normalized()
+    side = Vector((-d.y, d.x))
+    for k in range(9):
+        q = mid + side * (-RACE_HALF + k * RACE_HALF * 2 / 8)
+        kit.rod("Rack bar", mat("rust"), (q.x, q.y, -0.8), (q.x - d.x * 0.3, q.y - d.y * 0.3, 0.25), 0.02, 5)
+    for k in range(4):
+        q = mid - d * rng.uniform(0.2, 0.7) + side * rng.uniform(-0.4, 0.4)
+        reb.prim("cube", "Slab in the race", logs_m, (q.x, q.y, RACE_WATER + 0.03), (1.1, 0.18, 0.06), rot=(0.1, 0, math.atan2(side.y, side.x) + rng.uniform(-0.4, 0.4)))
+
+    # ---- The tailer, face down in the eddy above the rack, turning.
+    tp = Vector((17.9, 7.7, -0.67))
+    pivot = reb.prim("sphere", "Tailer pivot", None, tuple(tp), (0.02, 0.02, 0.02))
+    pivot.hide_render = True
+    heading = math.pi - 0.15
+    tailer = kit.body("The tailer", (0.0, 0.0, 0.0), heading=0.0, pose="front", top=reb.mat_stripes("Tailer's shirt", [(0.3, 0.28, 0.24), (0.2, 0.04, 0.03)], across=30), legs=mat("denim"), seed=12)
+    tailer.location = (-1.05, 0.0, 0.0)
+    tailer.parent = pivot
+    pivot.rotation_euler = (0, 0, heading)
+    for k in range(3):
+        reb.prim("sphere", f"Dead fish {k}", reb.mat_plain("Fish belly", (0.5, 0.48, 0.42), 0.4), (17.6 + k * 0.55, 7.55 + rng.uniform(-0.3, 0.3), RACE_WATER + 0.02), (0.28, 0.08, 0.05), rot=(0, 0, rng.uniform(0, 3)), segments=8)
+    kit.splat("Blood in the eddy", mat("old blood"), (17.5, 7.75, RACE_WATER + 0.004), 0.35, seed=51, stretch=(1.5, 0.8))
+
+    # ---- The water wheel against the east wall, turning in the race.
+    wv, wf = [], []
+    parts = []
+    for s_ in (-0.32, 0.32):
+        for k in range(32):
+            a0, a1 = 2 * math.pi * k / 32, 2 * math.pi * (k + 1) / 32
+            p0 = Vector((s_, math.cos(a0) * WHEEL_R, math.sin(a0) * WHEEL_R))
+            p1 = Vector((s_, math.cos(a1) * WHEEL_R, math.sin(a1) * WHEEL_R))
+            m = (p0 + p1) / 2
+            reb.box(wv, wf, tuple(m), (0.09, (p1 - p0).length + 0.02, 0.22), 0.0)
+            # turn the rim board to the circle
+            for i in range(-8, 0):
+                vx, vy, vz = wv[i]
+                dy, dz = vy - m.y, vz - m.z
+                ang = (a0 + a1) / 2 + math.pi / 2
+                ry = dy * math.cos(ang) - dz * math.sin(ang)
+                rz = dy * math.sin(ang) + dz * math.cos(ang)
+                wv[i] = (vx, m.y + ry, m.z + rz)
+        for k in range(8):
+            a0 = 2 * math.pi * k / 8 + 0.2
+            parts.append(kit.rod("Wheel spoke", timber, (s_, 0, 0), (s_, math.cos(a0) * WHEEL_R, math.sin(a0) * WHEEL_R), 0.06, 6))
+    for k in range(16):
+        a0 = 2 * math.pi * k / 16
+        r = WHEEL_R - 0.25
+        c = Vector((0.0, math.cos(a0) * r, math.sin(a0) * r))
+        reb.box(wv, wf, tuple(c), (0.74, 0.05, 0.5), 0.0)
+        t = a0 - math.pi / 2
+        for i in range(-8, 0):
+            vx, vy, vz = wv[i]
+            dy, dz = vy - c.y, vz - c.z
+            ry = dy * math.cos(t) - dz * math.sin(t)
+            rz = dy * math.sin(t) + dz * math.cos(t)
+            wv[i] = (vx, c.y + ry, c.z + rz)
+    parts.append(reb.mesh_object("Wheel boards", wv, wf, kit.dirtied(timber, 0.6), smooth=False))
+    parts.append(reb.prim("cyl", "Wheel hub", iron, (0, 0, 0), (0.5, 0.5, 0.8), rot=(0, math.pi / 2, 0), segments=12))
+    wheel = kit.join("Water wheel", parts, origin=(0, 0, 0))
+    wheel.location = (WHEEL_X, SHAFT_Y, SHAFT_Z)
+    for x in (WHEEL_X - 0.55, WHEEL_X + 0.55):
+        kit.rod("Wheel frame post", timber, (x, SHAFT_Y, -1.0), (x, SHAFT_Y, SHAFT_Z - 0.1), 0.12)
+        reb.prim("cube", "Wheel bearing", iron, (x, SHAFT_Y, SHAFT_Z - 0.12), (0.22, 0.4, 0.2))
+
+    # ---- The plank walk on its stringers, the sawyer's blood along it.
+    pv, pf = [], []
+    pts = [Vector(p) for p in WALK]
+    for a, b in zip(pts, pts[1:]):
+        d = b - a
+        yaw = math.atan2(d.y, d.x)
+        n = int(d.length / 0.24)
+        side = Vector((-d.y, d.x)).normalized()
+        for s_ in (-0.5, 0.5):
+            c = (a + b) / 2 + side * s_
+            reb.box(pv, pf, (c.x, c.y, -0.08), (d.length + 0.1, 0.14, 0.14), yaw)
+        for i in range(n):
+            if rng.random() < 0.05:
+                continue
+            c = a.lerp(b, (i + 0.5) / n)
+            reb.box(pv, pf, (c.x, c.y, 0.0 + rng.uniform(-0.01, 0.01)), (0.2, 1.3 + rng.uniform(-0.1, 0.1), 0.04), yaw + rng.uniform(-0.04, 0.04))
+    reb.mesh_object("Plank walk", pv, pf, planks, smooth=False)
+    kit.drag_trail("His blood along the planks", mat("old blood"), [(14.0, 10.1), (15.2, 10.3), (16.4, 9.95), (17.6, 9.7), (19.4, 9.75)], width=0.22, seed=42, z=0.025)
+    kit.drag_trail("His blood along the planks, fresher", mat("blood"), [(14.0, 10.15), (15.2, 10.4), (16.3, 10.0)], width=0.12, seed=43, z=0.03)
+    kit.splat("Where he leant on the rail", mat("blood"), (18.95, 10.75, 1.05), 0.08, rot=(0, math.pi / 2, 0), seed=44)
+
+    # ---- The walk's south side: slabwood heaped against the mill, the log deck, spruce beyond.
+    sv, sf = [], []
+    for k in range(14):
+        x, y = rng.uniform(14.4, 16.0), rng.uniform(11.75, 12.8)
+        reb.box(sv, sf, (x, y, ground(x, y) + 0.1 + 0.12 * (k % 4)), (1.8, 0.22, 0.08), rng.uniform(-0.5, 0.5))
+    reb.mesh_object("Slabwood pile", sv, sf, logs_m, smooth=False)
+    dv, df = [], []
+    for k in range(9):
+        x, y = rng.uniform(14.8, 20.0), rng.uniform(12.0, 13.6)
+        reb.boulder(rng, (x, y, ground(x, y)), rng.uniform(0.15, 0.4), dv, df, squash=0.6)
+    reb.mesh_object("Stones in the ditch", dv, df, mat("rock"))
+    for k, (x, y) in enumerate(((16.6, 12.9), (18.4, 13.3))):
+        kit.rod("Stump", mat("bark"), (x, y, ground(x, y) - 0.1), (x, y, ground(x, y) + 0.5), 0.25, 9)
+        reb.prim("cyl", "Stump top", end_m, (x, y, ground(x, y) + 0.505), (0.5, 0.5, 0.01), segments=9)
+    kit.meadow(rng, 700, lambda r: (r.uniform(14.4, 20.2), r.uniform(11.2, 14.0)), ground, mat("dead grass"))
+
+    # ---- The pond gate in the split-rail fence, standing open; the pond beyond, the sluice.
+    fence_m = reb.mat_wood("Fence rails", (0.14, 0.11, 0.08))
+    gx = X_END + 0.15
+    fv, ff = [], []
+    for y0, y1 in ((GATE_Y[1], 15.0), (15.0, 22.0)):
+        for z in (0.45, 0.95):
+            reb.box(fv, ff, (gx, (y0 + y1) / 2, z), (0.08, y1 - y0 + 0.2, 0.1), 0.0)
+    reb.mesh_object("Split rail fence", fv, ff, fence_m, smooth=False)
+    for y in (GATE_Y[0], GATE_Y[1], 13.0, 15.0, 18.0):
+        kit.rod("Fence post", fence_m, (gx, y, -0.3), (gx, y, 1.25), 0.07, 7)
+    gate_parts = [reb.prim("cube", "rail", fence_m, (0.0, -0.95 + 0.0 * k, 0.25 + k * 0.4), (0.06, 1.9, 0.1)) for k in range(3)]
+    gate_parts.append(kit.rod("brace", fence_m, (0.0, -1.8, 0.25), (0.0, -0.1, 1.05), 0.04, 5))
+    for y in (-0.05, -1.85):
+        gate_parts.append(reb.prim("cube", "stile", fence_m, (0.0, y, 0.6), (0.08, 0.08, 1.15)))
+    gate = kit.join("Pond gate", gate_parts, origin=(0, 0, 0))
+    gate.location = (gx, GATE_Y[1], 0.0)
+    gate.rotation_euler = (0, 0, 1.15)
+    reb.prim("cube", "Gate sign", mat("white paint"), (gx - 0.05, 12.0, 1.0), (0.03, 0.7, 0.3))
+    kit.text("Gate sign words", "MILL POND\nKEEP OUT", mat("black"), (gx - 0.07, 12.0, 1.0), size=0.08, rot=(math.pi / 2, 0, -math.pi / 2))
+    reb.prim("cube", "Mill pond", mat("water"), (POND_X + 8.0, 6.0, -0.32), (16.0, 90.0, 0.04))
+    dam = reb.mat_wood("Dam timber", (0.1, 0.08, 0.06))
+    for y0, y1 in ((-24.0, RACE[1][1] - RACE_HALF - 0.1), (RACE[1][1] + RACE_HALF + 0.1, 36.0)):
+        reb.prim("cube", "Pond crib", dam, (POND_X - 0.1, (y0 + y1) / 2, -0.35), (0.3, y1 - y0, 0.7))
+    sy = RACE[1][1]
+    for dy in (-RACE_HALF - 0.1, RACE_HALF + 0.1):
+        kit.rod("Sluice post", dam, (POND_X, sy + dy, -1.0), (POND_X, sy + dy, 1.9), 0.12)
+    reb.prim("cube", "Sluice beam", dam, (POND_X, sy, 1.85), (0.3, 1.9, 0.2))
+    reb.prim("cube", "Sluice gate, raised", dam, (POND_X + 0.05, sy, 0.8), (0.1, 1.3, 0.9))
+    kit.rod("Sluice rack", iron, (POND_X - 0.1, sy, 1.25), (POND_X - 0.1, sy, 2.6), 0.03, 6)
+    reb.prim("cyl", "Sluice crank", iron, (POND_X - 0.2, sy + 0.4, 2.1), (0.5, 0.5, 0.04), rot=(0, math.pi / 2, 0), segments=16)
+    rv, rf = [], []
+    for _ in range(40):
+        y = rng.uniform(-16, 28)
+        x = POND_X + rng.uniform(-0.6, 0.6)
+        if abs(y - sy) < 1.5 or 8.0 < y < 12.0:
+            continue
+        reb.boulder(rng, (x, y, ground(x, y)), rng.uniform(0.2, 0.5), rv, rf)
+    reb.mesh_object("Bank stones", rv, rf, mat("rock"))
+    reb.terrain("Far shore", mud, (33.0, 96.0), (-40.0, 50.0), lambda x, y: (x - 35.0) * 0.12 + 0.4 * noise.noise(Vector((x * 0.1, y * 0.1, 7.0))), step=1.0)
+    kit.forest(rng, lambda x, y: (x - 35.0) * 0.12, lambda x, y: x < 36.5, (36.5, -40.0, 96.0, 50.0), count=90, spacing=2.6, tall=(14, 22), ferns=0, needles=0)
+    kit.vista(rng, (30.0, 8.0), (1.0, 0.0), below=-30.0, far=(170, 400), haze=(0.5, 0.53, 0.56))
+
+    # ---- The spruce round it, ferns and reeds by the water.
+    cams = ((19.7, 12.9), (15.9, 6.0))
+
+    def keep_out(x, y):
+        return ((x < 14.6 and 1.6 < y < 13.2) or race_d(x, y) < 1.4 or x > POND_X - 0.4
+                or (13.8 < x < 20.5 and 7.8 < y < 14.6) or abs(x - WHEEL_X) < 2.0 and abs(y - SHAFT_Y) < 2.5
+                or any((x - cx) ** 2 + (y - cy) ** 2 < 20.0 for cx, cy in cams) or x < 1.5)
+    kit.forest(rng, ground, keep_out, (1.5, -16, POND_X, 30), count=55, spacing=1.8, ferns=24, needles=500, dead=0.05)
+    reeds = kit.meadow(rng, 500, lambda r: (POND_X + r.uniform(-0.8, 0.6), r.uniform(-14, 26)), lambda x, y: max(ground(x, y), -0.32), mat("dead grass"))
+    kit.meadow(rng, 500, lambda r: (r.uniform(14.2, 20.4), r.uniform(10.6, 13.6)) if r.random() < 0.5 else (r.uniform(15.0, 20.4), r.uniform(8.45, 8.75)), ground)
+    reb.spot("Day on the walk", (24.0, 16.0, 12.0), (16.5, 9.5, 0.0), 2200, (0.82, 0.86, 0.9), 45, 0.9, 3.0)
+    return wheel, pivot, reeds
+
+
 def build():
     rng = random.Random(1972)
     reb.clear_scene()
-    room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room = kit.Room(bounds=(X0, Y0, X_END, Y1), inside=True)
     room.camera((1.4, 3.0, 3.2), (9.0, 8.4, 0.6), 200, "high in the north-west corner: the log on the carriage, the blade, the blood on the boards")
     room.camera((13.6, 11.8, 3.2), (6.0, 5.4, 0.8), 200, "high in the south-east corner: the board stack's bloody face, the saw, the big doors far off")
     room.camera((13.6, 3.0, 3.3), (5.0, 9.2, 0.6), 200, "high in the north-east corner: the turning pulley, the slack belt, the crane, the mill's length")
     room.camera((1.4, 11.8, 3.2), (10.0, 4.4, 0.8), 200, "high in the south-west corner: the big doors, the edger, the back door far off")
     room.camera((11.2, 7.2, 2.4), (8.4, 5.6, 0.5), 200, "close on the head saw: the blade, the arm in the sawdust")
     room.camera((13.6, 7.6, 2.9), (2.0, 7.6, 0.8), 200, "from by the back door: down the mill to the big doors and the yard")
+    room.camera((19.7, 12.9, 3.6), (14.6, 9.0, 0.2), 200, "from past the pond gate, back along the walk: the race, the tailer turning in it, the wheel, the back door")
+    room.camera((15.9, 6.0, 3.6), (18.6, 10.6, 0.0), 200, "from over the race by the wheel: the tailer below, the plank walk, the pond gate")
 
     walls_m = kit.boards("Mill boards", (0.2, 0.15, 0.1), width=0.22, grime=0.8)
     sawdust = reb.mat_surface("Sawdust", [(0.0, (0.22, 0.15, 0.08)), (0.5, (0.36, 0.26, 0.15)), (0.8, (0.42, 0.32, 0.19)), (1.0, (0.28, 0.2, 0.11))], scale=3.5, bump=0.5)
@@ -129,8 +370,6 @@ def build():
     # ---- Outside: the yard through the big doors, the pond's light through the back door.
     yard = reb.mat_surface("Yard mud", [(0.0, (0.04, 0.03, 0.02)), (0.5, (0.1, 0.075, 0.05)), (1.0, (0.14, 0.11, 0.075))], scale=1.4, rough=0.7, bump=0.6)
     reb.prim("cube", "Yard outside", yard, (X0 - 15.0, 7.5, -0.06), (30.0, 40.0, 0.1))
-    reb.prim("cube", "Pond bank outside", reb.mat_surface("Bank", [(0.0, (0.05, 0.06, 0.03)), (1.0, (0.12, 0.12, 0.06))], scale=1.5, bump=0.5), (X1 + 10.0, 7.5, -0.06), (20.0, 40.0, 0.1))
-    reb.prim("cube", "Pond outside", mat("water"), (X1 + 9.0, 12.0, -0.03), (10.0, 14.0, 0.02))
     boards_m = kit.boards("Bunkhouse boards", (0.2, 0.13, 0.08), width=0.2)
     reb.prim("cube", "Mess hall across the yard", reb.mat_surface("Whitewash", [(0.0, (0.45, 0.44, 0.4)), (1.0, (0.6, 0.58, 0.53))], scale=4, bump=0.1), (X0 - 17.0, 8.0, 1.5), (0.4, 9.0, 3.0))
     reb.prim("cube", "Bunkhouse across the yard", boards_m, (X0 - 9.0, -1.0, 1.4), (11.0, 5.0, 2.8))
@@ -142,8 +381,8 @@ def build():
     for i, y in enumerate((BIG_DOOR[0] - 1.45, BIG_DOOR[1] + 1.45)):
         reb.prim("cube", f"Big door {i}", walls_m, (X0 - 0.2, y, 1.7), (0.08, 1.5, 3.4))
     reb.prim("cube", "Door rail", mat("rust"), (X0 - 0.22, 7.5, 3.5), (0.08, 9.0, 0.08))
-    # The back door, ajar, its frame and his hand on it.
-    reb.prim("cube", "Back door", walls_m, (X1 + 0.45, BACK_DOOR[0] - 0.05, 1.05), (0.9, 0.05, 2.1), rot=(0, 0, 0.35))
+    # The back door, flung back against the wall, its frame and his hand on it.
+    reb.prim("cube", "Back door", walls_m, (X1 + 0.2, BACK_DOOR[0] - 0.47, 1.05), (0.05, 0.9, 2.1), rot=(0, 0, 0.12))
     for y in BACK_DOOR:
         reb.prim("cube", "Back door frame", timber, (X1 - 0.02, y + (0.04 if y > 10 else -0.04), 1.05), (0.12, 0.08, 2.1))
     reb.prim("cube", "Back door head", timber, (X1 - 0.02, sum(BACK_DOOR) / 2, 2.14), (0.12, 1.2, 0.08))
@@ -254,7 +493,7 @@ def build():
     kit.drag_trail("His way out, fresher", mat("blood"), [(ax + 0.3, ay + 0.2), (11.4, 7.6), (12.6, 9.2), (13.6, 10.0)], width=0.16, seed=41)
 
     # ---- The wheel's shaft through the east wall, its pulley turning; the belt thrown off and hanging.
-    kit.rod("Wheel shaft", iron, (X1 + 0.6, SHAFT_Y, SHAFT_Z), (11.8, SHAFT_Y, SHAFT_Z), 0.11, 16)
+    kit.rod("Wheel shaft", iron, (WHEEL_X + 0.5, SHAFT_Y, SHAFT_Z), (11.8, SHAFT_Y, SHAFT_Z), 0.11, 16)
     reb.prim("cube", "Shaft bearing", iron, (X1 - 0.25, SHAFT_Y, SHAFT_Z - 0.18), (0.4, 0.35, 0.3))
     reb.prim("cube", "Bearing post", timber, (X1 - 0.25, SHAFT_Y, (SHAFT_Z - 0.33) / 2), (0.3, 0.3, SHAFT_Z - 0.33))
     pulley = reb.prim("cyl", "Big pulley", iron, (12.8, SHAFT_Y, SHAFT_Z), (1.7, 1.7, 0.32), rot=(0, math.pi / 2, 0), segments=32)
@@ -344,7 +583,14 @@ def build():
     reb.spot("Day through the back door", (X1 + 4.0, 10.1, 2.0), (X1 - 3.0, 9.6, 0.0), 500, (0.75, 0.8, 0.85), 35, 0.8, 0.8)
     reb.point("Fill", ((X0 + X1) / 2, 8.0, 4.5), 120, (0.7, 0.72, 0.75), 3.0)
 
+    wheel, tailer, reeds = race_walk(rng, timber, logs_m, end_m, iron)
+
     anim = kit.Anim(16)
+    anim.spin(wheel, axis=0, turns=1, symmetry=8)
+    anim.ripple()
+    anim.sway(reeds, amount=0.05)
+    rest = tailer.rotation_euler.copy()
+    anim.custom(lambda k: setattr(tailer, "rotation_euler", (rest[0], rest[1], rest[2] + 0.45 * math.sin(anim.phase(k)))))
     pulley.rotation_mode = "ZYX"   # spin about its own axis first, then lie it along x
     anim.spin(pulley, axis=2, turns=1, symmetry=6)
     anim.swing(tong_pivot, axis=0, degrees=3)
@@ -354,7 +600,14 @@ def build():
 
     # ---- What the game needs.
     room.door("camp-yard", (X0, BIG_DOOR[0], X0 + 0.7, BIG_DOOR[1]), arrive=(2.4, 7.5), face=(1, 0))
-    room.door("pond", (X1 - 0.6, BACK_DOOR[0], X1, BACK_DOOR[1]), arrive=(12.7, 10.1), face=(-1, 0))
+    room.door("pond", (X_END - 0.6, GATE_Y[0] + 0.1, X_END, GATE_Y[1]), arrive=(17.4, 9.7), face=(-1, 0))
+    wa, wb = WALK_A, WALK_B
+    room.void((X1, Y0, wa[1], wa[2]))             # the race, the wheel pit
+    room.void((wb[0], Y0, X_END, wb[2]))
+    room.void((X1, wa[3], wa[1], Y1))             # the slabwood pile in the ditch
+    room.void((wb[0], wb[3], X_END, Y1))          # the ditch
+    room.void((X1, wa[2], X1 + 0.3, BACK_DOOR[0]))    # the wall either side of the back door
+    room.void((X1, BACK_DOOR[1], X1 + 0.3, wa[3]))
     room.check((bx - 1.0, by + 1.4, bx + 1.6, by + 2.2), "An arm, in a plaid sleeve. Torn off at the elbow.\nThe sawdust round it is soaked through.")
     room.check((sx0, sy0 - 0.7, sx1, sy0), "Blood, thrown across the boards in a long fan.\nThe saw was running when it happened.")
     room.check((bx - 1.6, by + 1.0, bx - 0.6, by + 1.6), "The head saw. There's still a log on the carriage, half cut.\nSomeone threw the belt off to stop the blade.")
@@ -362,6 +615,9 @@ def build():
     room.check((tx - 0.9, RAIL_Y[1], tx + 0.9, RAIL_Y[1] + 0.8), "The log crane, on its track. 5 TON.\nIt could lift anything in this camp, if it had power.")
     room.check((X1 - 1.0, BACK_DOOR[0] - 0.5, X1, BACK_DOOR[0]), "A bloody hand on the back door's frame.\nHe went out this way.")
     room.check((6.4, Y1 - 0.6, 7.6, Y1), "Board feet cut: Monday 4100. Tuesday 3850. Wednesday 1200.\nThen nothing.")
+    room.check((17.0, wb[2], 18.6, wb[2] + 0.6), "Somebody's in the race. Face down, going round and round in the eddy.\nThe tailer. He worked the boards off the saw.")
+    room.check((WHEEL_X - 0.4, wa[2], 16.0, wa[2] + 0.6), "The water wheel. The race still runs, so it still turns.")
+    room.check((17.8, wb[3] - 0.6, X_END - 0.6, wb[3]), "The sawyer's blood, all along the planks.\nHe was going for the pond.")
     room.entry = "Sawdust, and the smell of blood."
     room.export(anim)
 

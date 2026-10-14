@@ -5,3 +5,5 @@
 4: \nA crow, caught in the guy\nwire. It flew straight\ninto it.
 5: \nThe gate's open. The\npadlock chain's been cut.\p{0}\nDANGER. HIGH VOLTAGE.
 6: \nARKLAY TELECOM. AUTHORISED\nSTAFF.\p{0}\nPadlocked.
+7: \nA cairn. There's a hand on\nit, in blood.\p{0}\nHe came along here,\nholding himself up.
+8: \nStraight down, both sides.\nThe crows just hang there\nin the wind, watching me.

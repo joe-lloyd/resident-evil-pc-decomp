@@ -6,3 +6,5 @@
 5: \nA dog's leash, chewed\nthrough.
 6: \nThe office window's been\nbroken in. From outside.
 7: \nThe flag's still up.\nNobody took it down for\nthe night.
+8: \nA child's shoe, set on the\npost.\p{0}\nSomeone found it in the\nlane and left it where\nit'd be seen.
+9: \nThe fence is broken\nthrough.\p{0}\nSomething big went through\nit, low down.

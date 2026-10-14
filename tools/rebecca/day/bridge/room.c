@@ -23,7 +23,7 @@ enemy(10 /* Adder */, 1, 255, 1, 1, 0, 0, 3072, 0, 0, 14450, 0, 6800, 1, 0, 0, 0
 enemy(10 /* Adder */, 1, 255, 1, 1, 0, 0, 2048, 0, 0, 13600, 0, 10200, 2, 0, 0, 0);
 // KIT DOORS (day/scripts.ts writes these)
 // On down to the gondola station, from the far bank's south edge.
-door_aot_set(5, 6800, 29580, 6800, 1020, 0, 15, 48, 4, 0, ROOM_318, 7820, 0, 5780, 3072, UNLOCKED, 1);
+door_aot_set(5, 6800, 29580, 6800, 1020, 0, 15, 48, 4, 0, ROOM_318, 5440, 0, 5780, 3072, UNLOCKED, 1);
 // END KIT DOORS
 return;
 

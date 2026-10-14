@@ -1,7 +1,7 @@
 // kennels (21F), written by day/scripts.ts from day/kennels/scene.py: edit the scene, not this file.
 // init procedure 0
 // To estate-wall.
-door_aot_set(0, 15810, 3400, 2380, 1020, 0, 15, 48, 4, 0, ROOM_21E, 17000, 0, 18530, 1024, UNLOCKED, 1);
+door_aot_set(0, 15810, 3400, 2380, 1020, 0, 15, 48, 4, 0, ROOM_21E, 17000, 0, 29750, 1024, UNLOCKED, 1);
 // To back-garden.
 door_aot_set(1, 15300, 22780, 3400, 1020, 0, 15, 48, 4, 0, ROOM_110, 17000, 0, 5780, 3072, UNLOCKED, 1);
 aot_set(2, 11050, 14450, 1360, 3400, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);

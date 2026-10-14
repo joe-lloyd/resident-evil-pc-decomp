@@ -1,7 +1,7 @@
 // east-path (517), written by day/scripts.ts from day/east-path/scene.py: edit the scene, not this file.
 // init procedure 0
 // To platform.
-door_aot_set(0, 1700, 11050, 1020, 3400, 0, 15, 48, 4, 0, ROOM_318, 26520, 0, 15300, 2048, UNLOCKED, 1);
+door_aot_set(0, 1700, 11050, 1020, 3400, 0, 15, 48, 4, 0, ROOM_318, 29750, 0, 16490, 2048, UNLOCKED, 1);
 // To cottage.
 door_aot_set(1, 14620, 7055, 1530, 1020, 0, 0, 0, 4, 0, ROOM_518, 5185, 0, 5950, 1024, UNLOCKED, 193);
 // To quarry.

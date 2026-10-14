@@ -4,3 +4,5 @@
 3: \nA blasting plunger, pushed\nhome. Whoever fired it\p{0}\ndropped their hard hat and\nran.
 4: \nSEALED. DO NOT ENTER.\p{0}\nWhat were they keeping in?
 5: \nAn ore cart, tipped over.\nSilver ore, dull and grey.
+6: \nAnother cart, on its side\non the trestle.\p{0}\nThe web runs from it right\ndown into the ravine.
+7: \nThe trestle creaks. It's a\nlong way down.

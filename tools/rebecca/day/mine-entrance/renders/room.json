@@ -2,12 +2,12 @@
  "cameras": [
   {
    "from": [
-    2720,
+    9520,
     -5950,
     17680
    ],
    "to": [
-    15640,
+    22440,
     -2040,
     5100
    ],
@@ -15,12 +15,12 @@
   },
   {
    "from": [
-    24990,
+    31790,
     -6120,
     10880
    ],
    "to": [
-    10200,
+    17000,
     -1020,
     15640
    ],
@@ -28,12 +28,12 @@
   },
   {
    "from": [
-    13600,
+    20400,
     -4930,
     18530
    ],
    "to": [
-    15130,
+    21930,
     -2550,
     4250
    ],
@@ -41,14 +41,40 @@
   },
   {
    "from": [
-    14620,
+    21420,
     -6120,
     5780
    ],
    "to": [
-    18020,
+    24820,
     0,
     18360
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    0,
+    -5440,
+    20740
+   ],
+   "to": [
+    6800,
+    4760,
+    11900
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    10540,
+    -6120,
+    5610
+   ],
+   "to": [
+    1360,
+    5950,
+    16320
    ],
    "fov": 200
   }
@@ -56,67 +82,75 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 13039,
+   "x0": 19839,
    "z0": 3859,
-   "x1": 13651,
+   "x1": 20451,
    "z1": 4471,
    "name": "Post footprint"
   },
   {
    "shape": "box",
-   "x0": 16949,
+   "x0": 23749,
    "z0": 3859,
-   "x1": 17561,
+   "x1": 24361,
    "z1": 4471,
    "name": "Post footprint.001"
   },
   {
    "shape": "box",
-   "x0": 15045,
+   "x0": 21845,
    "z0": 3740,
-   "x1": 18700,
+   "x1": 25500,
    "z1": 7310,
    "name": "Rockfall footprint"
   },
   {
    "shape": "box",
-   "x0": 6479,
+   "x0": 13279,
    "z0": 10616,
-   "x1": 9161,
+   "x1": 15961,
    "z1": 13014,
    "name": "Cart footprint"
   },
   {
    "shape": "box",
-   "x0": 18601,
+   "x0": 25401,
    "z0": 9795,
-   "x1": 21519,
+   "x1": 28319,
    "z1": 12645,
    "name": "Tipped cart footprint"
   },
   {
    "shape": "box",
-   "x0": 20315,
+   "x0": 27115,
    "z0": 14747,
-   "x1": 21165,
+   "x1": 27965,
    "z1": 15512,
    "name": "Plunger footprint"
   },
   {
    "shape": "box",
-   "x0": 19125,
+   "x0": 25925,
    "z0": 12835,
-   "x1": 21675,
+   "x1": 28475,
    "z1": 14875,
    "name": "Shelter boulder footprint"
   },
   {
    "shape": "box",
-   "x0": 19890,
+   "x0": 26690,
    "z0": 6970,
-   "x1": 24310,
+   "x1": 31110,
    "z1": 9180,
    "name": "Props footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 4900,
+   "z0": 12509,
+   "x1": 7340,
+   "z1": 14521,
+   "name": "Trestle cart footprint"
   }
  ],
  "anim": {
@@ -124,24 +158,37 @@
   "ticks": 3
  },
  "bounds": {
-  "x0": 1700,
+  "x0": 1105,
   "z0": 4250,
-  "x1": 25500,
+  "x1": 32300,
   "z1": 18700
  },
- "voids": [],
+ "voids": [
+  {
+   "x0": 1105,
+   "z0": 4250,
+   "x1": 8500,
+   "z1": 10200
+  },
+  {
+   "x0": 1105,
+   "z0": 14280,
+   "x1": 8500,
+   "z1": 18700
+  }
+ ],
  "doors": [
   {
    "to": "quarry",
    "zone": {
-    "x0": 1700,
+    "x0": 1105,
     "z0": 10200,
-    "x1": 2720,
+    "x1": 2125,
     "z1": 14280
    },
    "arrive": {
-    "x": 4250,
-    "z": 12580,
+    "x": 3570,
+    "z": 11730,
     "angle": 0
    },
    "walk": true,
@@ -150,13 +197,13 @@
   {
    "to": "tunnel",
    "zone": {
-    "x0": 13430,
+    "x0": 20230,
     "z0": 4250,
-    "x1": 15130,
+    "x1": 21930,
     "z1": 5610
    },
    "arrive": {
-    "x": 14280,
+    "x": 21080,
     "z": 7820,
     "angle": 3072
    },
@@ -167,48 +214,66 @@
  "checks": [
   {
    "zone": {
-    "x0": 11900,
+    "x0": 18700,
     "z0": 4250,
-    "x1": 13260,
+    "x1": 20060,
     "z1": 5780
    },
    "text": "A gap under the rocks, into the dark. Webs over it.\nThere's blood on the post. Someone squeezed through."
   },
   {
    "zone": {
-    "x0": 15045,
+    "x0": 21845,
     "z0": 4250,
-    "x1": 18700,
+    "x1": 25500,
     "z1": 7820
    },
    "text": "The roof's been brought down across the mouth. On purpose:\nthere's a blasting wire running out of the rocks."
   },
   {
    "zone": {
-    "x0": 19550,
+    "x0": 26350,
     "z0": 14790,
-    "x1": 22100,
+    "x1": 28900,
     "z1": 18700
    },
    "text": "A blasting plunger, pushed home. Whoever fired it\ndropped their hard hat and ran."
   },
   {
    "zone": {
-    "x0": 18700,
+    "x0": 25500,
     "z0": 4250,
-    "x1": 20740,
+    "x1": 27540,
     "z1": 5610
    },
    "text": "SEALED. DO NOT ENTER.\nWhat were they keeping in?"
   },
   {
    "zone": {
-    "x0": 18700,
+    "x0": 25500,
     "z0": 9520,
-    "x1": 21760,
+    "x1": 28560,
     "z1": 12920
    },
    "text": "An ore cart, tipped over. Silver ore, dull and grey."
+  },
+  {
+   "zone": {
+    "x0": 4590,
+    "z0": 11220,
+    "x1": 7310,
+    "z1": 12665
+   },
+   "text": "Another cart, on its side on the trestle.\nThe web runs from it right down into the ravine."
+  },
+  {
+   "zone": {
+    "x0": 2295,
+    "z0": 10200,
+    "x1": 4080,
+    "z1": 11220
+   },
+   "text": "The trestle creaks. It's a long way down."
   }
  ],
  "entry": "Webs. Thick ones.",
@@ -216,6 +281,8 @@
   "from the west edge: the rails running in under the fall, the carts, the portal",
   "from the east side: the plunger box behind its boulder, the wire, the carts, the yard to the track out west",
   "from the south, straight at the portal: SEALED, the gap into the dark",
-  "from beside the portal looking out: the yard, the rails curving off west, the plunger, the valley"
+  "from beside the portal looking out: the yard, the rails curving off west, the plunger, the valley",
+  "back over the trestle from the quarry side: the tipped cart and its web, the ravine, the yard and the portal beyond",
+  "out over the trestle from the yard: the rope rail, the tipped cart, the ravine falling away, the quarry track beyond"
  ]
 }

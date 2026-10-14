@@ -77,6 +77,32 @@
     12920
    ],
    "fov": 200
+  },
+  {
+   "from": [
+    33490,
+    -6120,
+    21930
+   ],
+   "to": [
+    24820,
+    -340,
+    15300
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    27030,
+    -6120,
+    10200
+   ],
+   "to": [
+    31620,
+    0,
+    18020
+   ],
+   "fov": 200
   }
  ],
  "walls": [
@@ -168,10 +194,47 @@
  "bounds": {
   "x0": 1700,
   "z0": 4420,
-  "x1": 23800,
+  "x1": 32300,
   "z1": 20740
  },
- "voids": [],
+ "voids": [
+  {
+   "x0": 23800,
+   "z0": 4420,
+   "x1": 27540,
+   "z1": 15640
+  },
+  {
+   "x0": 27540,
+   "z0": 4420,
+   "x1": 32300,
+   "z1": 14620
+  },
+  {
+   "x0": 23800,
+   "z0": 19720,
+   "x1": 27540,
+   "z1": 20740
+  },
+  {
+   "x0": 27540,
+   "z0": 18360,
+   "x1": 32300,
+   "z1": 20740
+  },
+  {
+   "x0": 23800,
+   "z0": 15640,
+   "x1": 24310,
+   "z1": 16320
+  },
+  {
+   "x0": 23800,
+   "z0": 18020,
+   "x1": 24310,
+   "z1": 19720
+  }
+ ],
  "doors": [
   {
    "to": "camp-yard",
@@ -192,14 +255,14 @@
   {
    "to": "pond",
    "zone": {
-    "x0": 22780,
-    "z0": 16320,
-    "x1": 23800,
+    "x0": 31280,
+    "z0": 14960,
+    "x1": 32300,
     "z1": 18020
    },
    "arrive": {
-    "x": 21590,
-    "z": 17170,
+    "x": 29580,
+    "z": 16490,
     "angle": 2048
    },
    "walk": false,
@@ -269,6 +332,33 @@
     "z1": 20740
    },
    "text": "Board feet cut: Monday 4100. Tuesday 3850. Wednesday 1200.\nThen nothing."
+  },
+  {
+   "zone": {
+    "x0": 28900,
+    "z0": 14620,
+    "x1": 31620,
+    "z1": 15640
+   },
+   "text": "Somebody's in the race. Face down, going round and round in the eddy.\nThe tailer. He worked the boards off the saw."
+  },
+  {
+   "zone": {
+    "x0": 24735,
+    "z0": 15640,
+    "x1": 27200,
+    "z1": 16660
+   },
+   "text": "The water wheel. The race still runs, so it still turns."
+  },
+  {
+   "zone": {
+    "x0": 30260,
+    "z0": 17340,
+    "x1": 31280,
+    "z1": 18360
+   },
+   "text": "The sawyer's blood, all along the planks.\nHe was going for the pond."
   }
  ],
  "entry": "Sawdust, and the smell of blood.",
@@ -278,6 +368,8 @@
   "high in the north-east corner: the turning pulley, the slack belt, the crane, the mill's length",
   "high in the south-west corner: the big doors, the edger, the back door far off",
   "close on the head saw: the blade, the arm in the sawdust",
-  "from by the back door: down the mill to the big doors and the yard"
+  "from by the back door: down the mill to the big doors and the yard",
+  "from past the pond gate, back along the walk: the race, the tailer turning in it, the wheel, the back door",
+  "from over the race by the wheel: the tailer below, the plank walk, the pond gate"
  ]
 }

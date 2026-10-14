@@ -2,12 +2,12 @@
  "cameras": [
   {
    "from": [
-    5440,
+    3060,
     -6460,
     1360
    ],
    "to": [
-    17850,
+    15470,
     -340,
     17000
    ],
@@ -15,12 +15,12 @@
   },
   {
    "from": [
-    28220,
+    25840,
     -5440,
     21420
    ],
    "to": [
-    13600,
+    11220,
     -1360,
     7650
    ],
@@ -28,12 +28,12 @@
   },
   {
    "from": [
-    22440,
+    20060,
     -5100,
     10540
    ],
    "to": [
-    10200,
+    7820,
     -1020,
     21080
    ],
@@ -41,14 +41,40 @@
   },
   {
    "from": [
-    4250,
+    1870,
     -5780,
     6800
    ],
    "to": [
-    21250,
+    18870,
     -1020,
     16150
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    23800,
+    -6120,
+    21420
+   ],
+   "to": [
+    34000,
+    -340,
+    15300
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    37060,
+    -5100,
+    15980
+   ],
+   "to": [
+    26520,
+    510,
+    16660
    ],
    "fov": 200
   }
@@ -56,145 +82,145 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 21250,
+   "x0": 18870,
    "z0": 4250,
-   "x1": 26690,
+   "x1": 24310,
    "z1": 4454,
    "name": "Booth wall n"
   },
   {
    "shape": "box",
-   "x0": 21250,
+   "x0": 18870,
    "z0": 8466,
-   "x1": 23970,
+   "x1": 21590,
    "z1": 8670,
    "name": "Booth wall s"
   },
   {
    "shape": "box",
-   "x0": 23970,
+   "x0": 21590,
    "z0": 8466,
-   "x1": 25500,
+   "x1": 23120,
    "z1": 8670,
    "name": "Booth wall s.001"
   },
   {
    "shape": "box",
-   "x0": 25500,
+   "x0": 23120,
    "z0": 8466,
-   "x1": 26690,
+   "x1": 24310,
    "z1": 8670,
    "name": "Booth wall s.002"
   },
   {
    "shape": "box",
-   "x0": 21250,
+   "x0": 18870,
    "z0": 4250,
-   "x1": 21454,
+   "x1": 19074,
    "z1": 5015,
    "name": "Booth wall w"
   },
   {
    "shape": "box",
-   "x0": 21250,
+   "x0": 18870,
    "z0": 5015,
-   "x1": 21454,
+   "x1": 19074,
    "z1": 8075,
    "name": "Booth wall w.001"
   },
   {
    "shape": "box",
-   "x0": 21250,
+   "x0": 18870,
    "z0": 5015,
-   "x1": 21454,
+   "x1": 19074,
    "z1": 8075,
    "name": "Booth wall w.002"
   },
   {
    "shape": "box",
-   "x0": 21250,
+   "x0": 18870,
    "z0": 8075,
-   "x1": 21454,
+   "x1": 19074,
    "z1": 8670,
    "name": "Booth wall w.003"
   },
   {
    "shape": "box",
-   "x0": 26486,
+   "x0": 24106,
    "z0": 4250,
-   "x1": 26690,
+   "x1": 24310,
    "z1": 8670,
    "name": "Booth wall e"
   },
   {
    "shape": "box",
-   "x0": 4097,
+   "x0": 1717,
    "z0": 15147,
-   "x1": 4403,
+   "x1": 2023,
    "z1": 15453,
    "name": "Wheel house post"
   },
   {
    "shape": "box",
-   "x0": 4097,
+   "x0": 1717,
    "z0": 21267,
-   "x1": 4403,
+   "x1": 2023,
    "z1": 21573,
    "name": "Wheel house post.001"
   },
   {
    "shape": "box",
-   "x0": 10047,
+   "x0": 7667,
    "z0": 15147,
-   "x1": 10353,
+   "x1": 7973,
    "z1": 15453,
    "name": "Wheel house post.002"
   },
   {
    "shape": "box",
-   "x0": 10047,
+   "x0": 7667,
    "z0": 21267,
-   "x1": 10353,
+   "x1": 7973,
    "z1": 21573,
    "name": "Wheel house post.003"
   },
   {
    "shape": "box",
-   "x0": 5865,
+   "x0": 3485,
    "z0": 18360,
-   "x1": 8585,
+   "x1": 6205,
    "z1": 20400,
    "name": "Gearbox"
   },
   {
    "shape": "box",
-   "x0": 11900,
+   "x0": 9520,
    "z0": 18700,
-   "x1": 16320,
+   "x1": 13940,
    "z1": 21420,
    "name": "Car footprint"
   },
   {
    "shape": "box",
-   "x0": 3145,
+   "x0": 765,
    "z0": 10115,
-   "x1": 3315,
+   "x1": 935,
    "z1": 10285,
    "name": "Gate post"
   },
   {
    "shape": "box",
-   "x0": 3145,
+   "x0": 765,
    "z0": 13515,
-   "x1": 3315,
+   "x1": 935,
    "z1": 13685,
    "name": "Gate post.001"
   },
   {
    "shape": "box",
-   "x0": 18190,
+   "x0": 15810,
    "z0": 5058,
-   "x1": 21250,
+   "x1": 18870,
    "z1": 5822,
    "name": "Bench"
   }
@@ -204,23 +230,48 @@
   "ticks": 3
  },
  "bounds": {
-  "x0": 3400,
+  "x0": 1020,
   "z0": 3400,
-  "x1": 28900,
+  "x1": 32300,
   "z1": 22100
  },
- "voids": [],
+ "voids": [
+  {
+   "x0": 26520,
+   "z0": 3400,
+   "x1": 29410,
+   "z1": 13600
+  },
+  {
+   "x0": 26520,
+   "z0": 17000,
+   "x1": 29410,
+   "z1": 22100
+  },
+  {
+   "x0": 29410,
+   "z0": 3400,
+   "x1": 32300,
+   "z1": 14620
+  },
+  {
+   "x0": 29410,
+   "z0": 18360,
+   "x1": 32300,
+   "z1": 22100
+  }
+ ],
  "doors": [
   {
    "to": "bridge",
    "zone": {
-    "x0": 5100,
+    "x0": 2720,
     "z0": 3400,
-    "x1": 10200,
+    "x1": 7820,
     "z1": 4420
    },
    "arrive": {
-    "x": 7820,
+    "x": 5440,
     "z": 5780,
     "angle": 3072
    },
@@ -230,13 +281,13 @@
   {
    "to": "booth",
    "zone": {
-    "x0": 23970,
+    "x0": 21590,
     "z0": 8670,
-    "x1": 25500,
+    "x1": 23120,
     "z1": 9520
    },
    "arrive": {
-    "x": 24735,
+    "x": 22355,
     "z": 10710,
     "angle": 3072
    },
@@ -246,14 +297,14 @@
   {
    "to": "east-path",
    "zone": {
-    "x0": 27880,
-    "z0": 13600,
-    "x1": 28900,
-    "z1": 17000
+    "x0": 31280,
+    "z0": 14620,
+    "x1": 32300,
+    "z1": 18360
    },
    "arrive": {
-    "x": 26520,
-    "z": 15300,
+    "x": 29750,
+    "z": 16490,
     "angle": 2048
    },
    "walk": true,
@@ -262,13 +313,13 @@
   {
    "to": "line-track",
    "zone": {
-    "x0": 3400,
+    "x0": 1020,
     "z0": 10200,
-    "x1": 4420,
+    "x1": 2040,
     "z1": 13600
    },
    "arrive": {
-    "x": 5780,
+    "x": 3400,
     "z": 11900,
     "angle": 0
    },
@@ -278,13 +329,13 @@
   {
    "to": "car",
    "zone": {
-    "x0": 12920,
+    "x0": 10540,
     "z0": 17680,
-    "x1": 14620,
+    "x1": 12240,
     "z1": 18700
    },
    "arrive": {
-    "x": 14110,
+    "x": 11730,
     "z": 16830,
     "angle": 1024
    },
@@ -295,57 +346,66 @@
  "checks": [
   {
    "zone": {
-    "x0": 26860,
+    "x0": 24480,
     "z0": 18020,
-    "x1": 28900,
+    "x1": 26520,
     "z1": 20400
    },
    "text": "The smear ends at the rail. The crows are at something caught on it.\nA strip of plaid shirt."
   },
   {
    "zone": {
-    "x0": 11900,
+    "x0": 9520,
     "z0": 17510,
-    "x1": 16320,
+    "x1": 13940,
     "z1": 18700
    },
    "text": "Car 4. The door has been forced from inside. The glass is smeared red."
   },
   {
    "zone": {
-    "x0": 5270,
+    "x0": 2890,
     "z0": 15980,
-    "x1": 9520,
+    "x1": 7140,
     "z1": 19380
    },
    "text": "The drive's gearbox, open. The big cog has sheared: four teeth gone.\nA spanner lies in the oil where it was dropped."
   },
   {
    "zone": {
-    "x0": 18020,
+    "x0": 15640,
     "z0": 11390,
-    "x1": 21080,
+    "x1": 18700,
     "z1": 13430
    },
    "text": "A hiker's pack, split open. Clothes, a water bottle, a trail map."
   },
   {
    "zone": {
-    "x0": 14450,
+    "x0": 12070,
     "z0": 3400,
-    "x1": 19550,
+    "x1": 17170,
     "z1": 5440
    },
    "text": "ARKLAY SKYWAY. UPPER STATION. ELEV 1840."
   },
   {
    "zone": {
-    "x0": 12240,
+    "x0": 9860,
     "z0": 9860,
-    "x1": 15980,
+    "x1": 13600,
     "z1": 11560
    },
    "text": "OUT OF SERVICE."
+  },
+  {
+   "zone": {
+    "x0": 30600,
+    "z0": 17340,
+    "x1": 31280,
+    "z1": 18360
+   },
+   "text": "A stake's been pulled out of the rock. The rope hangs down over the edge.\nHis cap. Scrape marks, right to the lip."
   }
  ],
  "entry": "A gondola station. Down the mountain, into the valley.\nIf it ran.",
@@ -353,6 +413,8 @@
   "from the trail's mouth: the platform, the car at the edge, the smear to the rail",
   "from the south-east corner by the drop: the booth, the pack, the trail in",
   "from in front of the booth: the car, the wheel house, the valley beyond",
-  "from the line track's gate: the length of the platform to the east path"
+  "from the line track's gate: the length of the platform to the east path",
+  "from the platform's south-east corner: the ledge east along the gorge, the rope hanging over the drop",
+  "from along the ledge east: back to the platform, the slack rope over the drop, the cliff over it"
  ]
 }

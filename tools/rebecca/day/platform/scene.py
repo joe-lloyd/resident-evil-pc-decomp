@@ -19,8 +19,19 @@ wheel house is in the south-west, x 2.5-6.0, y 9.0-12.6. South of y 13 the
 mountain drops away. The east path leaves at x 17, y 8-10; the power line
 track's gate is in the west edge at y 6-8.
 
+The cliff path: the floor runs on east from the platform's east gap along a
+ledge cut in the gorge's side, x 17-20.4, 2.0-2.2 m wide (y 8-10 to x 18.7,
+then y 8.6-10.8). Rock rises on its north side; on its south the mountain
+drops into the gorge, with a rope rail on iron stakes along the lip. The
+operator ran this way. Where the ledge jinks he grabbed the rope, the
+third stake pulled out of the rock, and he went over: the empty stake
+hole, his boots' scrape to the lip, his cap, and the rope hanging slack
+in a loop over the drop with the stake swinging on the end of it. At the
+far end, x 19.8-20.4, the path goes on east. The room is shifted 1.4 m
+west at export to fit the floor in the game's 0.6-19 m.
+
 Moving: the board on its one chain, the car rocking on the cable, a crow
-pecking, grass in the wind.
+pecking, grass in the wind, the rope and its stake swinging over the drop.
 """
 import math
 import os
@@ -38,13 +49,39 @@ BOOTH = (12.5, 15.7, 2.5, 5.1)
 BOOTH_DOOR = (14.1, 15.0)
 CAR = (7.0, 9.6, 11.0, 12.6)
 WHEEL = (2.5, 6.0, 9.0, 12.6)
+X_END = 20.4
+SHIFT = (-1.4, 0.0)
+WALK = [(X1, 8.0, 18.7, 10.0), (18.7, 8.6, X_END, 10.8)]   # x0, y0, x1, y1
+LEDGE = [(X1, 9.0), (18.5, 9.0), (18.9, 9.7), (X_END, 9.7), (24.0, 10.3), (30.0, 10.0), (40.0, 9.0)]
+LEDGE_HALF = 1.4
+NEAR = (12.0, -2.0, 36.0, 22.0)
+
+
+def ledge_y(x):
+    """The middle of the ledge at x."""
+    for (xa, ya), (xb, yb) in zip(LEDGE, LEDGE[1:]):
+        if x <= xb:
+            return ya + (yb - ya) * max(0.0, (x - xa) / (xb - xa))
+    return LEDGE[-1][1]
 
 
 def height(x, y):
-    """The platform flat; the mountain rising north and west, falling away south."""
+    """The platform flat; the mountain rising north and west, falling away south;
+    east, the ledge along the gorge: rock rising north of it, the drop south."""
     if X0 - 0.3 < x < X1 + 0.3 and Y0 - 0.3 < y < Y1 + 0.4:
         return -0.4
-    h = 0.3 * noise.noise(Vector((x * 0.2, y * 0.2, 1)))
+    n = noise.noise(Vector((x * 0.2, y * 0.2, 1)))
+    if x >= X1 + 0.3:
+        d = y - ledge_y(x)
+        if abs(d) <= LEDGE_HALF:
+            return 0.02 * n
+        if d > 0:
+            e = d - LEDGE_HALF
+            return -min(88.0, e * 3.2 + e * e * 0.5) + 0.4 * n * min(1.0, e)
+        e = -d - LEDGE_HALF
+        grow = min(1.0, (x - X1 - 0.3) / 3.0)
+        return grow * min(6.5, e * 2.6) + 0.5 * n * min(1.0, e / 2.0)
+    h = 0.3 * n
     if y > Y1 + 0.4:
         h -= (y - Y1 - 0.4) * 1.6
     if y < Y0 - 0.3:
@@ -56,14 +93,120 @@ def height(x, y):
     return h
 
 
+def steep(base, name):
+    """`base` on the level, bare dark rock where the ground falls steeply:
+    the gorge's side, the cliff over the ledge."""
+    m = base.copy()
+    m.name = name
+    nodes, links = m.node_tree.nodes, m.node_tree.links
+    out = nodes["Material Output"]
+    surf = out.inputs["Surface"].links[0].from_socket
+    rock = nodes.new("ShaderNodeBsdfPrincipled")
+    rock.inputs["Roughness"].default_value = 0.9
+    streaks = reb.noise_tex(nodes, links, 2.0, 6, 0.7)
+    tone = reb.ramp(nodes, links, streaks.outputs["Fac"], [(0.3, (0.025, 0.026, 0.024)), (0.55, (0.07, 0.07, 0.065)), (0.75, (0.13, 0.125, 0.115))])
+    links.new(tone.outputs["Color"], rock.inputs["Base Color"])
+    geo = nodes.new("ShaderNodeNewGeometry")
+    sep = nodes.new("ShaderNodeSeparateXYZ")
+    links.new(geo.outputs["Normal"], sep.inputs[0])
+    n = reb.noise_tex(nodes, links, 0.6, 4, 0.6)
+    wob = nodes.new("ShaderNodeMath")
+    wob.operation = "MULTIPLY_ADD"
+    wob.inputs[1].default_value = 0.25
+    links.new(n.outputs["Fac"], wob.inputs[0])
+    links.new(sep.outputs["Z"], wob.inputs[2])
+    mr = nodes.new("ShaderNodeMapRange")
+    mr.inputs["From Min"].default_value = 0.75
+    mr.inputs["From Max"].default_value = 0.95
+    links.new(wob.outputs[0], mr.inputs["Value"])
+    mix = nodes.new("ShaderNodeMixShader")
+    links.new(mr.outputs["Result"], mix.inputs["Fac"])
+    links.new(rock.outputs[0], mix.inputs[1])
+    links.new(surf, mix.inputs[2])
+    links.new(mix.outputs[0], out.inputs["Surface"])
+    return m
+
+
+def cliff_path(rng):
+    """The ledge east: the rope rail on its stakes along the lip, the stake
+    pulled out and the rope hanging in a loop over the drop, his cap and
+    the scrape to the edge. Returns the hanging rope and its pivot."""
+    rope_m = reb.mat_plain("Rope", (0.48, 0.4, 0.25), 0.9)
+    lip = lambda x: ledge_y(x) + LEDGE_HALF - 0.15
+    stakes = [17.6, 18.9, 20.3, 21.7, 23.1, 24.5, 25.9, 27.3, 28.7]
+    pulled = 20.3
+    tops = {}
+    for x in stakes:
+        y = lip(x)
+        top = Vector((x + 0.05, y + 0.12, 0.95))
+        tops[x] = top
+        if x != pulled:
+            kit.rod("Rail stake", mat("rust"), (x, y, height(x, y) - 0.2), tuple(top), 0.025, 6)
+            kit.rod("Stake eye", mat("rust"), tuple(top), tuple(top + Vector((0, 0, 0.08))), 0.04, 6)
+    good = [x for x in stakes if x != pulled]
+    for a, b in zip(good, good[1:]):
+        if a < pulled < b:
+            continue
+        pa, pb = tops[a], tops[b]
+        for k in range(6):
+            t0, t1 = k / 6, (k + 1) / 6
+            q0 = pa.lerp(pb, t0) - Vector((0, 0, 0.12 * math.sin(math.pi * t0)))
+            q1 = pa.lerp(pb, t1) - Vector((0, 0, 0.12 * math.sin(math.pi * t1)))
+            kit.rod("Rope rail", rope_m, tuple(q0), tuple(q1), 0.02, 5)
+    # The loop over the drop, the stake on the end of it: one swinging piece.
+    a, b = tops[18.9], tops[21.7]
+    mid = (a + b) / 2
+    pivot = reb.prim("sphere", "Rope pivot", None, tuple(mid), (0.02, 0.02, 0.02))
+    pivot.hide_render = True
+    bottom = Vector((pulled, lip(pulled) + 1.1, -1.9))
+    pts = []
+    for k in range(11):
+        t = k / 10
+        p = a.lerp(b, t)
+        sag = math.sin(math.pi * t)
+        pts.append(Vector((p.x, p.y + (bottom.y - mid.y) * sag ** 0.8, p.z - (mid.z - bottom.z) * sag ** 0.7)))
+    loop = [kit.rod("Hanging rope", rope_m, tuple(p - mid), tuple(q - mid), 0.026, 6) for p, q in zip(pts, pts[1:])]
+    lo = min(pts, key=lambda v: v.z)
+    loop.append(kit.rod("Pulled stake", mat("rust"), tuple(lo - mid + Vector((0, 0, 0.05))), tuple(lo - mid + Vector((0.25, 0.1, -0.85))), 0.025, 6))
+    loop.append(kit.rod("Pulled stake eye", mat("rust"), tuple(lo - mid), tuple(lo - mid + Vector((0, 0, 0.08))), 0.04, 6))
+    rope = kit.join("Hanging rope", loop, origin=(0, 0, 0))
+    rope.parent = pivot
+    # The hole the stake came out of, his scrape to the lip, his cap.
+    y = lip(pulled)
+    kit.splat("Stake hole", mat("black"), (pulled, y, height(pulled, y) + 0.003), 0.05, seed=3)
+    kit.splat("Broken rock at the hole", reb.mat_plain("Fresh rock", (0.3, 0.29, 0.26), 0.9), (pulled + 0.1, y + 0.05, height(pulled, y) + 0.002), 0.16, seed=4, stretch=(1.4, 0.7))
+    for k in range(3):
+        x0 = pulled - 1.4 + k * 0.25
+        kit.drag_trail(f"Scrape {k}", reb.mat_plain("Scraped dirt", (0.2, 0.15, 0.1), 0.95), [(x0, ledge_y(x0) - 0.2), (x0 + 0.7, ledge_y(x0) + 0.5), (x0 + 1.2, lip(x0 + 1.2) + 0.1)], width=0.1, seed=20 + k, height=height)
+    cap = reb.mat_plain("Cap navy", (0.04, 0.05, 0.1), 0.8)
+    cx, cy = pulled - 0.6, ledge_y(pulled) + 0.4
+    reb.prim("sphere", "Operator's cap", cap, (cx, cy, height(cx, cy) + 0.04), (0.22, 0.2, 0.12), rot=(0, 0, 0.7), segments=12)
+    reb.prim("cube", "Cap peak", cap, (cx + 0.12, cy + 0.1, height(cx, cy) + 0.012), (0.14, 0.16, 0.012), rot=(0, 0, 0.7))
+    kit.splat("Blood on the lip", mat("blood"), (pulled + 0.3, lip(pulled) + 0.05, height(pulled + 0.3, lip(pulled)) + 0.004), 0.1, seed=6, stretch=(1.6, 0.6))
+    # Rock fallen on the ledge from the cliff; the cliff's foot.
+    rv, rf = [], []
+    for _ in range(26):
+        x = rng.uniform(17.4, 32.0)
+        if 20.8 < x < 25.0:
+            continue
+        y = ledge_y(x) - LEDGE_HALF - rng.uniform(-0.2, 0.6)
+        reb.boulder(rng, (x, y, height(x, y)), rng.uniform(0.2, 0.7), rv, rf)
+    for (x, y, r) in ((17.9, 7.2, 0.6), (18.4, 7.6, 0.45)):
+        reb.boulder(rng, (x, y, height(x, y)), r, rv, rf)
+    reb.mesh_object("Rock at the cliff's foot", rv, rf, mat("rock"))
+    return rope, pivot
+
+
 def build():
     rng = random.Random(77)
     reb.clear_scene()
-    room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room = kit.Room(bounds=(X0, Y0, X_END, Y1), shift=SHIFT)
     room.camera((3.2, 0.8, 3.8), (10.5, 10.0, 0.2), 200, "from the trail's mouth: the platform, the car at the edge, the smear to the rail")
     room.camera((16.6, 12.6, 3.2), (8.0, 4.5, 0.8), 200, "from the south-east corner by the drop: the booth, the pack, the trail in")
     room.camera((13.2, 6.2, 3.0), (6.0, 12.4, 0.6), 200, "from in front of the booth: the car, the wheel house, the valley beyond")
     room.camera((2.5, 4.0, 3.4), (12.5, 9.5, 0.6), 200, "from the line track's gate: the length of the platform to the east path")
+    room.camera((15.4, 12.6, 3.6), (21.4, 9.0, 0.2), 200, "from the platform's south-east corner: the ledge east along the gorge, the rope hanging over the drop")
+    room.camera((23.2, 9.4, 3.0), (17.0, 9.8, -0.3), 200, "from along the ledge east: back to the platform, the slack rope over the drop, the cliff over it")
 
     concrete = kit.dirtied(mat("concrete"), 0.7, scale=1.2)
     paint = mat("green paint")
@@ -72,7 +215,11 @@ def build():
     panel = kit.boards("Booth boards", (0.2, 0.22, 0.17), width=0.16, grime=0.7)
 
     # ---- Ground: the slab, the mountain round it, cracks with grass in them.
-    reb.terrain("Mountainside", mat("grass"), (-14, 34), (-12, 40), height, step=0.6)
+    side = steep(mat("grass"), "Grass, steep")
+    nx0, ny0, nx1, ny1 = NEAR
+    reb.terrain("Mountainside near", side, (nx0, nx1), (ny0, ny1), height, step=0.25)
+    reb.terrain("Mountainside", side, (-14, 50), (-12, 40), lambda x, y: height(x, y) - (3.0 if nx0 + 1 < x < nx1 - 1 and ny0 + 1 < y < ny1 - 1 else 0.0), step=0.6)
+    reb.prim("cube", "Slab edge east", mat("concrete"), (X1 + 0.32, (10.4 + Y1 + 0.5) / 2, -1.2), (0.3, Y1 + 0.5 - 10.4, 2.4))
     reb.prim("cube", "Platform slab", concrete, ((X0 + X1) / 2, (Y0 + Y1) / 2, -0.15), (X1 - X0 + 0.6, Y1 - Y0 + 0.8, 0.3))
     reb.prim("cube", "Slab edge", mat("concrete"), ((X0 + X1) / 2, Y1 + 0.42, -1.2), (X1 - X0 + 0.6, 0.3, 2.4))
     kit.cracks("Cracks", mat("black"), (X0, Y0, X1, Y1), count=16, seed=1)
@@ -224,7 +371,7 @@ def build():
     kit.rod("Trail sign post", mat("dark wood"), (X1 + 0.3, 10.4, 0), (X1 + 0.3, 10.4, 1.7), 0.05)
     reb.prim("cube", "Trail sign", mat("dark wood"), (X1 + 0.3, 10.1, 1.5), (0.04, 0.8, 0.2))
     kit.text("Trail sign words", "QUARRY TRAIL >", mat("white paint"), (X1 + 0.27, 10.1, 1.5), size=0.09, rot=(math.pi / 2, 0, -math.pi / 2))
-    kit.path_strip("East trail", mat("dirt"), [(X1 - 0.5, 9.0), (X1 + 3.0, 9.2), (X1 + 9.0, 10.5)], height, width=0.7)
+    kit.path_strip("East trail", mat("dirt"), [(X1 - 0.5, 9.0)] + [(x, ledge_y(x)) for x in (18.4, 19.0, 20.4, 24.0, 30.0, 40.0)], height, width=0.6)
     # A bench by the booth, the bin kicked over, rubbish blown about, rain in the hollows.
     reb.wall(kit.table("Bench", reb.mat_wood("Bench slats", (0.2, 0.14, 0.08)), (11.6, 3.2, 0.0), size=(1.8, 0.45, 0.45)))
     reb.prim("cyl", "Bin", mat("green paint"), (10.3, 4.2, 0.25), (0.45, 0.45, 0.7), rot=(math.pi / 2, 0, 2.4), segments=16)
@@ -241,13 +388,13 @@ def build():
 
     # ---- The mountain round it: spruces up the slope, grass in the cracks and the verge.
     def keep_out(x, y):
-        return (X0 - 1.5 < x < X1 + 1.5 and Y0 - 1.5 < y < Y1 + 1.0) or y > Y1 + 1.0 or (3.0 < x < 6.5 and y < Y0) or (x < X0 and 6.0 < y < 8.6) or (x > X1 and 8.0 < y < 11.0) or any((x - cx) ** 2 + (y - cy) ** 2 < 9 for cx, cy in ((3.2, 0.8), (16.6, 12.6), (13.2, 6.2), (2.5, 4.0)))
-    kit.forest(rng, height, keep_out, (-14, -12, 34, 16), count=60, ferns=20, needles=600)
+        return (X0 - 1.5 < x < X1 + 1.5 and Y0 - 1.5 < y < Y1 + 1.0) or y > Y1 + 1.0 or (x > X1 - 0.5 and y > ledge_y(x) - LEDGE_HALF - 1.2) or (3.0 < x < 6.5 and y < Y0) or (x < X0 and 6.0 < y < 8.6) or (x > X1 and 8.0 < y < 11.0) or any((x - cx) ** 2 + (y - cy) ** 2 < 9 for cx, cy in ((3.2, 0.8), (16.6, 12.6), (13.2, 6.2), (2.5, 4.0)))
+    kit.forest(rng, height, keep_out, (-14, -12, 44, 16), count=75, ferns=20, needles=600)
 
     def verge(r):
         while True:
             x, y = r.uniform(X0 - 3, X1 + 3), r.uniform(Y0 - 3, Y1 + 0.5)
-            if not (X0 + 0.2 < x < X1 - 0.2 and Y0 + 0.2 < y < Y1 - 0.2):
+            if not (X0 + 0.2 < x < X1 - 0.2 and Y0 + 0.2 < y < Y1 - 0.2) and not (x > X1 + 0.3 and y > ledge_y(x) + LEDGE_HALF):
                 return x, y
     grass = kit.meadow(rng, 1600, verge, height)
     cracks = kit.meadow(rng, 140, lambda r: (r.uniform(X0 + 1, X1 - 1), r.uniform(Y0 + 1, Y1 - 1)), height, mat("dead grass"))
@@ -259,6 +406,7 @@ def build():
     # ---- Light: the morning sun low in the east, the valley in mist below.
     kit.time_light("morning", sun_heading=110, sun_energy=5.0)
     kit.vista(rng, (9.0, Y1), (0.0, 1.0), below=-90.0)
+    rope, rope_pivot = cliff_path(rng)
 
     anim = kit.Anim(16)
     anim.swing(hook, axis=0, degrees=7)
@@ -266,11 +414,15 @@ def build():
     anim.bob(crows[0], height=0.05, speed=2)
     anim.sway(grass, amount=0.06)
     anim.flicker(glow, None, depth=0.35, dropouts=2)
+    anim.swing(rope_pivot, axis=0, degrees=9)
 
     # ---- What the game needs.
     room.door("bridge", (3.0, Y0, 6.0, Y0 + 0.6), arrive=(4.6, 3.4), face=(0, 1))
     room.door("booth", (BOOTH_DOOR[0], by1, BOOTH_DOOR[1], by1 + 0.5), arrive=(14.55, 6.3), face=(0, 1))
-    room.door("east-path", (X1 - 0.6, 8.0, X1, 10.0), arrive=(15.6, 9.0), face=(-1, 0))
+    room.door("east-path", (X_END - 0.6, WALK[1][1], X_END, WALK[1][3]), arrive=(18.9, 9.7), face=(-1, 0))
+    for (ax0, ay0, ax1, ay1) in WALK:
+        room.void((ax0, Y0, ax1, ay0))      # the rock north of the ledge
+        room.void((ax0, ay1, ax1, Y1))      # the drop into the gorge
     room.door("line-track", (X0, 6.0, X0 + 0.6, 8.0), arrive=(3.4, 7.0), face=(1, 0))
     room.door("car", (cx0 + 0.6, cy0 - 0.6, cx0 + 1.6, cy0), arrive=(8.3, 9.9), face=(0, -1), walk=False, touch=False)
     room.check((15.8, 10.6, X1, 12.0), "The smear ends at the rail. The crows are at something caught on it.\nA strip of plaid shirt.")
@@ -279,6 +431,7 @@ def build():
     room.check((10.6, 6.7, 12.4, 7.9), "A hiker's pack, split open. Clothes, a water bottle, a trail map.")
     room.check((8.5, Y0, 11.5, 3.2), "ARKLAY SKYWAY. UPPER STATION. ELEV 1840.")
     room.check((7.2, 5.8, 9.4, 6.8), "OUT OF SERVICE.")
+    room.check((19.4, WALK[1][3] - 0.6, X_END - 0.6, WALK[1][3]), "A stake's been pulled out of the rock. The rope hangs down over the edge.\nHis cap. Scrape marks, right to the lip.")
     room.entry = "A gondola station. Down the mountain, into the valley.\nIf it ran."
     room.export(anim)
 

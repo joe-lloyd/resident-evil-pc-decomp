@@ -1,7 +1,7 @@
 // tunnel (51C), written by day/scripts.ts from day/tunnel/scene.py: edit the scene, not this file.
 // init procedure 0
 // To mine-entrance.
-door_aot_set(0, 6800, 31280, 3400, 1020, 0, 0, 0, 4, 0, ROOM_51B, 14280, 0, 7820, 3072, UNLOCKED, 193);
+door_aot_set(0, 6800, 31280, 3400, 1020, 0, 0, 0, 4, 0, ROOM_51B, 21080, 0, 7820, 3072, UNLOCKED, 193);
 // To mine-office.
 door_aot_set(1, 20570, 12206, 1530, 1020, 0, 0, 0, 4, 0, ROOM_51D, 4845, 0, 5100, 1024, UNLOCKED, 193);
 // To junction.

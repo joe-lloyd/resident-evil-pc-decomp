@@ -19,9 +19,17 @@ end, x 5.9-7.6, y 1.6-4.4. Guy wires run to anchors at the west
 of x 17 the mountain drops away; the ledge is at x 18.5-22, 6 m down. The
 trail back to the summit leaves south off the floor at x 7-10.
 
+The ridge walk: the floor runs on south from the trail's mouth, along the
+knife-edge the observer came in by, x 7.2-10.2, y 13-19: a bare crest 2.4
+m wide that jinks east at y 15-17 and back west, the mountain falling away
+steeply on both sides. Cairns stand along its edges; his blood drops run
+up the middle and he left a red hand on one cairn. Crows ride the wind
+either side of it, level with her, wings out and barely moving. At its far
+end, y 18.4-19, the trail goes on south to the summit.
+
 Moving: the red warning lights blinking, the dead crow turning on the
 wire, the tarp's loose corner lifting, a crow on the body below pecking,
-dead grass in the wind.
+dead grass in the wind, the crows hanging on the wind over the ridge.
 """
 import math
 import os
@@ -43,10 +51,40 @@ CABIN = (1.5, 5.5, 1.5, 4.2)
 TALL = 34.0
 LEDGE = (19.0, 22.5, 3.5, 10.5, -3.5)
 STORES_SHIFT = (-1.9, 3.5, 0.0)
+Y_END = 19.0
+WALK = [(7.2, 13.0, 9.8, 15.0), (7.8, 15.0, 10.2, 17.0), (7.2, 17.0, 9.6, Y_END)]   # x0, y0, x1, y1
+RIDGE = [(8.6, 12.0), (8.5, 13.6), (9.1, 16.0), (8.4, 19.0), (8.6, 22.0), (8.6, 90.0)]   # the crest's centre (x, y)
+NEAR = (-12.0, -10.0, 30.0, 34.0)    # the fine ground patch round the floor and the ridge
+
+
+def ridge_x(y):
+    for (xa, ya), (xb, yb) in zip(RIDGE, RIDGE[1:]):
+        if y <= yb:
+            return xa + (xb - xa) * max(0.0, (y - ya) / (yb - ya))
+    return RIDGE[-1][0]
+
+
+def ridge_half(y):
+    return 1.3 if y < 22.0 else 1.3 + (y - 22.0) * 0.9
 
 
 def height(x, y):
-    """Flat where she walks; the cliff east to the ledge and beyond; falls west and north; the ridge on south."""
+    """Flat where she walks; the cliff east to the ledge and beyond; falls west
+    and north; south, the knife-edge ridge, widening to the summit."""
+    amp = 1.2 * min(1.0, max(0.0, (abs(x - 8.5) - 1.6) / 1.5))
+    rim = Y1 + 0.4 + amp * (0.5 + 0.6 * noise.noise(Vector((x * 0.35, 9.0, 0.0))))
+    if y <= rim:
+        return plateau(x, y)
+    n = noise.noise(Vector((x * 0.15, y * 0.15, 5.0)))
+    d = abs(x - ridge_x(y)) - ridge_half(y)
+    off = abs(x - ridge_x(y)) / ridge_half(y)
+    crest = 0.03 * n - 0.03 - 0.1 * min(1.0, off) ** 2 + max(0.0, y - 24.0) * 0.12
+    ridge = crest if d <= 0 else crest - min(240.0, d * 4.0 + d * d * 0.6) + 0.5 * n * min(1.0, d / 2.0)
+    t = min(1.0, (y - rim) / 0.6)
+    return plateau(x, y) * (1 - t) + ridge * t if t < 1 else ridge
+
+
+def plateau(x, y):
     n = noise.noise(Vector((x * 0.15, y * 0.15, 5.0)))
     if X0 - 0.4 < x < X1 + 0.3 and Y0 - 0.4 < y < Y1 + 0.4:
         return 0.03 * n - 0.03
@@ -99,13 +137,94 @@ def first_aid(name, at, rot=0.0, open_=False):
     return box
 
 
+def steep(base, name):
+    """`base` on the level, dark wet rock where the ground falls steeply: so a
+    drop reads as a drop."""
+    m = base.copy()
+    m.name = name
+    nodes, links = m.node_tree.nodes, m.node_tree.links
+    out = nodes["Material Output"]
+    surf = out.inputs["Surface"].links[0].from_socket
+    dark = nodes.new("ShaderNodeBsdfPrincipled")
+    dark.inputs["Roughness"].default_value = 0.9
+    streaks = reb.noise_tex(nodes, links, 2.5, 6, 0.7)
+    tone = reb.ramp(nodes, links, streaks.outputs["Fac"], [(0.3, (0.018, 0.018, 0.02)), (0.55, (0.05, 0.048, 0.045)), (0.75, (0.09, 0.085, 0.078))])
+    links.new(tone.outputs["Color"], dark.inputs["Base Color"])
+    geo = nodes.new("ShaderNodeNewGeometry")
+    sep = nodes.new("ShaderNodeSeparateXYZ")
+    links.new(geo.outputs["Normal"], sep.inputs[0])
+    n = reb.noise_tex(nodes, links, 0.6, 4, 0.6)
+    wob = nodes.new("ShaderNodeMath")
+    wob.operation = "MULTIPLY_ADD"
+    wob.inputs[1].default_value = 0.25
+    links.new(n.outputs["Fac"], wob.inputs[0])
+    links.new(sep.outputs["Z"], wob.inputs[2])
+    mr = nodes.new("ShaderNodeMapRange")
+    mr.inputs["From Min"].default_value = 0.75
+    mr.inputs["From Max"].default_value = 0.95
+    links.new(wob.outputs[0], mr.inputs["Value"])
+    mix = nodes.new("ShaderNodeMixShader")
+    links.new(mr.outputs["Result"], mix.inputs["Fac"])
+    links.new(dark.outputs[0], mix.inputs[1])
+    links.new(surf, mix.inputs[2])
+    links.new(mix.outputs[0], out.inputs["Surface"])
+    return m
+
+
+def cairn(rng, name, at, tall, verts, faces, r=0.42):
+    """A pile of stones, broad at the foot, a slab or two on top."""
+    x, y = at
+    z = height(x, y)
+    while r > 0.12 and z < height(x, y) + tall:
+        reb.boulder(rng, (x + rng.uniform(-0.05, 0.05), y + rng.uniform(-0.05, 0.05), z + r * 0.5), r, verts, faces, squash=0.55)
+        z += r * 0.75
+        r *= 0.8
+
+
+def ridge_walk(rng, rock):
+    """The knife-edge south to the summit: cairns, his blood up the crest, his
+    hand on a cairn, and the crows hanging on the wind. Returns the crows."""
+    stone = kit.dirtied(rock, 0.4, name="Cairn stone")
+    for k, (x, y, tall) in enumerate(((7.45, 13.9, 0.8), (7.95, 15.7, 1.0), (10.0, 16.9, 0.8), (7.4, 18.3, 0.9), (7.6, 21.0, 1.1), (9.6, 24.0, 1.3), (7.4, 27.0, 1.2))):
+        cv, cf = [], []
+        cairn(rng, f"Cairn {k}", (x, y), tall, cv, cf, r=0.3 if y < Y_END else 0.42)
+        c = reb.mesh_object(f"Cairn {k}", cv, cf, stone)
+        if y < Y_END:
+            reb.wall(c, "circle")
+    kit.splat("Hand on the cairn", mat("old blood"), (8.2, 15.7, height(7.95, 15.7) + 0.5), 0.07, rot=(0, math.pi / 2, 0), seed=31)
+    for k in range(18):
+        y = 13.2 + k * 0.33
+        x = ridge_x(y) + rng.uniform(-0.35, 0.35)
+        kit.splat(f"Drop on the ridge {k}", mat("blood"), (x, y, height(x, y)), rng.uniform(0.02, 0.05), seed=90 + k, lumps=0.4)
+    # Loose scree along the crest's lips; the crest itself bare.
+    sv, sf = [], []
+    for _ in range(70):
+        y = rng.uniform(13.2, 26.0)
+        side = rng.choice((-1, 1))
+        x = ridge_x(y) + side * (ridge_half(y) + rng.uniform(-0.3, 0.05))
+        reb.boulder(rng, (x, y, height(x, y)), rng.uniform(0.05, 0.14), sv, sf)
+    reb.mesh_object("Scree on the lips", sv, sf, mat("rock"))
+    reb.prim("cube", "Dropped torch", mat("black"), (8.9, 17.9, height(8.9, 17.9) + 0.03), (0.25, 0.05, 0.05), rot=(0, 0, 0.9))
+    reb.prim("cube", "Torch lens", mat("white paint"), (9.0, 18.0, height(8.9, 17.9) + 0.03), (0.012, 0.06, 0.06), rot=(0, 0, 0.9))
+    # Crows on the wind, level with her, either side of the crest.
+    gliders = []
+    for i, (x, y, z, hd) in enumerate(((5.6, 15.2, 1.3, 1.1), (12.0, 17.4, 0.9, 2.3), (5.9, 18.6, 2.1, 0.9), (11.4, 14.2, 1.8, 2.0))):
+        b, w = kit.crow(f"Crow on the wind {i}", (x, y, z), heading=hd, perched=False)
+        b.scale = (1.7, 1.7, 1.7)
+        b.rotation_euler = (0.15 if x < 8 else -0.15, -0.08, hd)
+        gliders.append((b, w))
+    return gliders
+
+
 def build():
     rng = random.Random(3402)
     reb.clear_scene()
-    room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room = kit.Room(bounds=(X0, Y0, X1, Y_END))
     room.camera((1.0, 15.2, 3.8), (10.0, 4.5, 0.6), 195, "from the trail in, south-west: the mast in its fence, the cabin, the crow on the wire")
     room.camera((17.0, 15.2, 3.6), (5.5, 4.5, 0.4), 200, "from the south-east by the brink: the cabin and the forced crates, the mast's foot")
     room.camera((15.4, 11.9, 4.0), (20.5, 6.4, -2.0), 200, "across to the east brink: his glove, the ledge below with him on it, the valley beyond")
+    room.camera((8.9, 21.2, 3.0), (8.8, 13.0, 0.4), 200, "from the ridge's south end: the knife-edge walk to the mast, cairns, crows either side")
+    room.camera((1.8, 17.8, 4.6), (9.4, 15.8, -1.8), 200, "from over the west drop: the ridge in profile, the crows on the wind, the valley east")
 
     gravel = kit.dirtied(mat("gravel"), 0.5, scale=0.5)
     rock = kit.dirtied(reb.mat_surface("Summit granite", [(0.0, (0.07, 0.07, 0.065)), (0.45, (0.17, 0.165, 0.15)), (0.7, (0.22, 0.2, 0.18)), (1.0, (0.13, 0.12, 0.11))], scale=1.2, bump=0.8), 0.6, scale=0.35)
@@ -124,19 +243,22 @@ def build():
     orange = reb.mat_plain("Flare orange", (0.6, 0.18, 0.02), 0.5)
 
     # ---- Ground: rock round a gravelled pad, the ledge below the brink.
-    reb.terrain("Mountain", rock, (-60, 90), (-70, 80), height, step=0.7)
+    nx0, ny0, nx1, ny1 = NEAR
+    cliff = steep(rock, "Summit granite, steep")
+    reb.terrain("Mountain near", cliff, (nx0, nx1), (ny0, ny1), height, step=0.35)
+    reb.terrain("Mountain", cliff, (-60, 90), (-70, 80), lambda x, y: height(x, y) - (4.0 if nx0 + 1 < x < nx1 - 1 and ny0 + 1 < y < ny1 - 1 else 0.0), step=0.7)
     reb.prim("cube", "Gravel pad", gravel, (8.0, 5.5, -0.04), (14.0, 9.0, 0.06))
     kit.cracks("Seams", mat("black"), (X0, Y0, X1, Y1), count=14, seed=4, length=2.0)
-    kit.path_strip("Trail from the summit", reb.mat_plain("Worn rock", (0.15, 0.14, 0.13), 0.9), [(8.5, 50.0), (8.5, 20.0), (8.6, 13.5), (9.2, 10.0), (10.0, 7.6)], height, width=0.55, lift=0.004)
+    kit.path_strip("Trail from the summit", reb.mat_plain("Worn rock", (0.15, 0.14, 0.13), 0.9), [(8.6, 50.0), (8.6, 22.0), (8.4, 19.0), (9.1, 16.0), (8.5, 13.4), (9.2, 10.0), (10.0, 7.6)], height, width=0.55, lift=0.004)
     rv, rf = [], []
     for _ in range(150):
         x, y = rng.uniform(-40, 50), rng.uniform(-50, 60)
-        if X0 - 0.5 < x < X1 + 1 and Y0 - 0.5 < y < Y1 + 0.5:
+        if X0 - 0.5 < x < X1 + 1 and Y0 - 0.5 < y < Y1 + 0.5 or (y > Y1 and abs(x - ridge_x(y)) < ridge_half(y) + 0.6):
             continue
         reb.boulder(rng, (x, y, height(x, y)), rng.uniform(0.3, 1.8), rv, rf)
     for _ in range(40):
         x, y = rng.uniform(X0, X1), rng.uniform(Y0, Y1)
-        if 1.0 < x < 16.4 and 1.0 < y < 12.4:
+        if 1.0 < x < 16.4 and 1.0 < y < 12.4 or 6.8 < x < 10.6:
             continue
         reb.boulder(rng, (x, y, height(x, y)), rng.uniform(0.08, 0.3), rv, rf)
     reb.mesh_object("Boulders", rv, rf, mat("rock"))
@@ -342,7 +464,12 @@ def build():
                         el.color = (el.color[0] * 0.45, el.color[1] * 0.45, el.color[2] * 0.5, 1)
     reb.spot("Sun on the ledge", (26.0, 14.0, 6.0), (20.4, 7.4, lz), 700, (1.0, 0.85, 0.65), 25, 0.6, 0.3)
 
+    gliders = ridge_walk(rng, rock)
+
     anim = kit.Anim(16)
+    for i, (b, w) in enumerate(gliders):
+        anim.flap(w, degrees=14)
+        anim.bob(b, height=0.18, speed=1 + i % 2)
     anim.blink(beacons[0], beacon_m, on=(0, 6))
     anim.blink(beacons[1], None, on=(0, 6))
     anim.custom(lambda k: setattr(crow_pivot, "rotation_euler", (0.15 * math.sin(anim.phase(k)), 0.1 * math.cos(anim.phase(k)), 0.8 * math.sin(anim.phase(k)))))
@@ -352,13 +479,21 @@ def build():
 
     # ---- What the game needs.
     room.void((X1 - 0.25, Y0, X1, Y1))
-    room.door("summit-trail", (7.0, Y1 - 0.6, 10.0, Y1), arrive=(8.6, 11.3), face=(0, -1))
+    room.door("summit-trail", (WALK[2][0], Y_END - 0.6, WALK[2][2], Y_END), arrive=(8.4, 17.4), face=(0, -1))
+    edge = [(X0, Y1, WALK[0][0], Y_END), (WALK[0][2], Y1, X1, Y_END)]
+    for (ax0, ay0, ax1, ay1) in WALK:
+        edge += [(X0, ay0, ax0, ay1), (ax1, ay0, X1, ay1)]
+    for r in edge:
+        if r[2] > r[0] and r[3] > r[1]:
+            room.void(r)
     room.check((3.4, 6.2, 6.0, 8.0), "Engineers' stores. One crate's been forced with a tyre iron.\nTwo first aid boxes, ripped open. The flare case is missing one.")
     room.check((4.0, 8.0, 5.8, 9.2), "Gauze, wrappers, blood. Somebody patched himself up here, on his knees.")
     room.check((15.9, 6.6, X1 - 0.25, 8.4), "A glove, right at the edge.\nHe's down there on the ledge. Not moving. The crows are on him.")
     room.check((2.4, 6.4, 4.2, 8.0), "A crow, caught in the guy wire. It flew straight into it.")
     room.check((GATE[0], FENCE[3], GATE[1], FENCE[3] + 0.7), "The gate's open. The padlock chain's been cut.\nDANGER. HIGH VOLTAGE.")
     room.check((CABIN[0] + 0.6, CABIN[3], CABIN[0] + 3.2, CABIN[3] + 0.6), "ARKLAY TELECOM. AUTHORISED STAFF.\nPadlocked.")
+    room.check((8.3, 15.3, 8.9, 16.1), "A cairn. There's a hand on it, in blood.\nHe came along here, holding himself up.")
+    room.check((9.0, 17.2, 9.6, 18.2), "Straight down, both sides. The crows just hang there in the wind, watching me.")
     room.entry = "The mast. Its light's still blinking."
     room.export(anim)
 
