@@ -1,0 +1,275 @@
+{
+ "cameras": [
+  {
+   "from": [
+    20910,
+    -6630,
+    680
+   ],
+   "to": [
+    16660,
+    -2380,
+    21250
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    4420,
+    -5100,
+    18700
+   ],
+   "to": [
+    21250,
+    -2380,
+    16660
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    28220,
+    -5440,
+    18360
+   ],
+   "to": [
+    10200,
+    -2040,
+    17340
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    12580,
+    -4590,
+    14280
+   ],
+   "to": [
+    17000,
+    -3400,
+    21250
+   ],
+   "fov": 195
+  },
+  {
+   "from": [
+    2380,
+    -6630,
+    2720
+   ],
+   "to": [
+    17850,
+    -680,
+    20400
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": -37400,
+   "z0": 21250,
+   "x1": 14280,
+   "z1": 22270,
+   "name": "Wall"
+  },
+  {
+   "shape": "box",
+   "x0": 19720,
+   "z0": 21250,
+   "x1": 71400,
+   "z1": 22270,
+   "name": "Wall.001"
+  },
+  {
+   "shape": "box",
+   "x0": -5610,
+   "z0": 20570,
+   "x1": -4590,
+   "z1": 21250,
+   "name": "Buttress"
+  },
+  {
+   "shape": "box",
+   "x0": 2890,
+   "z0": 20570,
+   "x1": 3910,
+   "z1": 21250,
+   "name": "Buttress.001"
+  },
+  {
+   "shape": "box",
+   "x0": 9690,
+   "z0": 20570,
+   "x1": 10710,
+   "z1": 21250,
+   "name": "Buttress.002"
+  },
+  {
+   "shape": "box",
+   "x0": 23290,
+   "z0": 20570,
+   "x1": 24310,
+   "z1": 21250,
+   "name": "Buttress.003"
+  },
+  {
+   "shape": "box",
+   "x0": 30090,
+   "z0": 20570,
+   "x1": 31110,
+   "z1": 21250,
+   "name": "Buttress.004"
+  },
+  {
+   "shape": "box",
+   "x0": 38590,
+   "z0": 20570,
+   "x1": 39610,
+   "z1": 21250,
+   "name": "Buttress.005"
+  },
+  {
+   "shape": "box",
+   "x0": 14280,
+   "z0": 20867,
+   "x1": 15640,
+   "z1": 22312,
+   "name": "Gate pier"
+  },
+  {
+   "shape": "box",
+   "x0": 18360,
+   "z0": 20867,
+   "x1": 19720,
+   "z1": 22312,
+   "name": "Gate pier.001"
+  },
+  {
+   "shape": "box",
+   "x0": 15640,
+   "z0": 21420,
+   "x1": 18360,
+   "z1": 21760,
+   "name": "Gate footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 1700,
+   "z0": 1700,
+   "x1": 7310,
+   "z1": 8840,
+   "name": "Thicket footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 25160,
+   "z0": 1700,
+   "x1": 30600,
+   "z1": 7820,
+   "name": "Thicket footprint.001"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 3400,
+  "z0": 3400,
+  "x1": 28900,
+  "z1": 21080
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "creek",
+   "zone": {
+    "x0": 18700,
+    "z0": 3400,
+    "x1": 22950,
+    "z1": 4420
+   },
+   "arrive": {
+    "x": 20740,
+    "z": 5780,
+    "angle": 3072
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "kennels",
+   "zone": {
+    "x0": 15810,
+    "z0": 20060,
+    "x1": 18190,
+    "z1": 21080
+   },
+   "arrive": {
+    "x": 17000,
+    "z": 18530,
+    "angle": 1024
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 15810,
+    "z0": 19550,
+    "x1": 18190,
+    "z1": 21080
+   },
+   "text": "The estate's back gate. A chain and a padlock.\nI'll need the key."
+  },
+  {
+   "zone": {
+    "x0": 13940,
+    "z0": 19890,
+    "x1": 15640,
+    "z1": 21080
+   },
+   "text": "NO TRESPASSING. UMBRELLA CORP.\nUmbrella. Out here?"
+  },
+  {
+   "zone": {
+    "x0": 15300,
+    "z0": 18360,
+    "x1": 18020,
+    "z1": 19550
+   },
+   "text": "He tried to climb out over the gate.\nSomething on the other side got his leg first."
+  },
+  {
+   "zone": {
+    "x0": 13770,
+    "z0": 17170,
+    "x1": 15470,
+    "z1": 18870
+   },
+   "text": "His torch. It's still on.\nThe batteries are nearly gone."
+  },
+  {
+   "zone": {
+    "x0": 11050,
+    "z0": 15300,
+    "x1": 14620,
+    "z1": 17000
+   },
+   "text": "A grey uniform cap. Estate security?"
+  }
+ ],
+ "entry": "The Spencer estate.\nThere's a light on, up at the house.",
+ "notes": [
+  "from the track in: the gate, the wall, the mansion's roof over it",
+  "along the wall from the west: the ivy, the piers, the man on the gate",
+  "along the wall from the east: the plaque, the gate, the crows on the coping",
+  "close at the gate: the hanging man, the chain and padlock, the plaque",
+  "from the woods' edge, north-west: the whole wall and the gate"
+ ]
+}

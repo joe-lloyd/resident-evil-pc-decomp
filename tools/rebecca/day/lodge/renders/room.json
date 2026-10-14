@@ -1,0 +1,208 @@
+{
+ "cameras": [
+  {
+   "from": [
+    8925,
+    -3910,
+    1955
+   ],
+   "to": [
+    3400,
+    -850,
+    6630
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    3145,
+    -3910,
+    7565
+   ],
+   "to": [
+    8330,
+    -1020,
+    2720
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -3910,
+    1955
+   ],
+   "to": [
+    7990,
+    -850,
+    6970
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    8925,
+    -3910,
+    7565
+   ],
+   "to": [
+    3400,
+    -1190,
+    2550
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 1700,
+   "z0": 5695,
+   "x1": 2890,
+   "z1": 7735,
+   "name": "Chimney breast"
+  },
+  {
+   "shape": "box",
+   "x0": 5440,
+   "z0": 6205,
+   "x1": 8925,
+   "z1": 7735,
+   "name": "Bed footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 3370,
+   "z0": 3393,
+   "x1": 5470,
+   "z1": 4767,
+   "name": "Table"
+  },
+  {
+   "shape": "box",
+   "x0": 1870,
+   "z0": 1785,
+   "x1": 4420,
+   "z1": 2635,
+   "name": "Potting bench"
+  },
+  {
+   "shape": "box",
+   "x0": 7565,
+   "z0": 1793,
+   "x1": 8585,
+   "z1": 2558,
+   "name": "Washstand"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 9180,
+  "z1": 7820
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "creek",
+   "zone": {
+    "x0": 8330,
+    "z0": 2890,
+    "x1": 9180,
+    "z1": 4420
+   },
+   "arrive": {
+    "x": 7820,
+    "z": 3655,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 3400,
+    "z0": 3400,
+    "x1": 4590,
+    "z1": 4760
+   },
+   "text": "His diary. Day after day: the itching.\nThe last entry: itchy. itchy. scott came. ugly face so i killed him. tasty"
+  },
+  {
+   "zone": {
+    "x0": 4590,
+    "z0": 3400,
+    "x1": 5610,
+    "z1": 4760
+   },
+   "text": "The lamp's still lit. On the plate, a bone. Gnawed."
+  },
+  {
+   "zone": {
+    "x0": 5440,
+    "z0": 5355,
+    "x1": 8925,
+    "z1": 6205
+   },
+   "text": "The sheets are soaked. Flakes of skin, everywhere.\nHe scratched himself raw."
+  },
+  {
+   "zone": {
+    "x0": 7480,
+    "z0": 1700,
+    "x1": 9180,
+    "z1": 2890
+   },
+   "text": "The water in the basin is pink."
+  },
+  {
+   "zone": {
+    "x0": 8160,
+    "z0": 4930,
+    "x1": 9180,
+    "z1": 5780
+   },
+   "text": "A key on the hook. The tag says BACK GATE."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 2380,
+    "x1": 2720,
+    "z1": 5100
+   },
+   "text": "His tools. Kept clean, oiled. Before."
+  },
+  {
+   "zone": {
+    "x0": 1870,
+    "z0": 1700,
+    "x1": 4420,
+    "z1": 2890
+   },
+   "text": "Seed trays. Everything in them has died."
+  },
+  {
+   "zone": {
+    "x0": 6630,
+    "z0": 3060,
+    "x1": 8330,
+    "z1": 4420
+   },
+   "text": "This is where it happened. Someone called Scott."
+  }
+ ],
+ "entry": "Someone left the lamp burning.",
+ "notes": [
+  "high over the washstand: the table and its lamp, the bed, the fireplace, the tools",
+  "high by the fireplace: the table, the pink basin, the door, the key on its hook",
+  "high by the window: the bed, ITCHY on the wall, the pool by the door",
+  "high over the bed: the window, the seed trays, the diary, the tools"
+ ]
+}

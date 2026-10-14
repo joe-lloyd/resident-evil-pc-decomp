@@ -1,0 +1,419 @@
+{
+ "cameras": [
+  {
+   "from": [
+    17000,
+    -6460,
+    2720
+   ],
+   "to": [
+    17000,
+    -2720,
+    20400
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    4080,
+    -6120,
+    4080
+   ],
+   "to": [
+    21250,
+    -1020,
+    18700
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    28220,
+    -5780,
+    22780
+   ],
+   "to": [
+    13600,
+    -680,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    4420,
+    -5440,
+    22780
+   ],
+   "to": [
+    19550,
+    -510,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    17340,
+    -4590,
+    17340
+   ],
+   "to": [
+    22100,
+    -850,
+    23460
+   ],
+   "fov": 195
+  },
+  {
+   "from": [
+    7140,
+    -4250,
+    22440
+   ],
+   "to": [
+    6800,
+    -170,
+    16320
+   ],
+   "fov": 195
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": -22100,
+   "z0": 23800,
+   "x1": 52700,
+   "z1": 44200,
+   "name": "House"
+  },
+  {
+   "shape": "box",
+   "x0": 9860,
+   "z0": 22610,
+   "x1": 13260,
+   "z1": 23800,
+   "name": "Back step"
+  },
+  {
+   "shape": "box",
+   "x0": 20145,
+   "z0": 21420,
+   "x1": 23375,
+   "z1": 23800,
+   "name": "Bulkhead curb"
+  },
+  {
+   "shape": "box",
+   "x0": 2210,
+   "z0": 3400,
+   "x1": 5270,
+   "z1": 23460,
+   "name": "West hedge"
+  },
+  {
+   "shape": "box",
+   "x0": -10200,
+   "z0": 340,
+   "x1": 15300,
+   "z1": 3060,
+   "name": "North yews west"
+  },
+  {
+   "shape": "box",
+   "x0": 18700,
+   "z0": 340,
+   "x1": 34000,
+   "z1": 3060,
+   "name": "North yews east"
+  },
+  {
+   "shape": "box",
+   "x0": 29240,
+   "z0": 12240,
+   "x1": 32300,
+   "z1": 23460,
+   "name": "East hedge"
+  },
+  {
+   "shape": "box",
+   "x0": 8500,
+   "z0": 6120,
+   "x1": 13940,
+   "z1": 11220,
+   "name": "Bed footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 20060,
+   "z0": 6120,
+   "x1": 22780,
+   "z1": 11220,
+   "name": "Bed footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 8500,
+   "z0": 15980,
+   "x1": 13940,
+   "z1": 18700,
+   "name": "Bed footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 20060,
+   "z0": 15980,
+   "x1": 25500,
+   "z1": 18700,
+   "name": "Bed footprint.003"
+  },
+  {
+   "shape": "circle",
+   "x0": 14450,
+   "z0": 11050,
+   "x1": 19550,
+   "z1": 16150,
+   "name": "Basin"
+  },
+  {
+   "shape": "box",
+   "x0": 25738,
+   "z0": 5848,
+   "x1": 31042,
+   "z1": 6052,
+   "name": "Shed wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 25738,
+   "z0": 10948,
+   "x1": 31042,
+   "z1": 11152,
+   "name": "Shed wall s"
+  },
+  {
+   "shape": "box",
+   "x0": 25738,
+   "z0": 5848,
+   "x1": 25942,
+   "z1": 7820,
+   "name": "Shed wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 25738,
+   "z0": 7820,
+   "x1": 25942,
+   "z1": 9180,
+   "name": "Shed wall w.001"
+  },
+  {
+   "shape": "box",
+   "x0": 25738,
+   "z0": 9180,
+   "x1": 25942,
+   "z1": 9860,
+   "name": "Shed wall w.002"
+  },
+  {
+   "shape": "box",
+   "x0": 25738,
+   "z0": 9860,
+   "x1": 25942,
+   "z1": 10540,
+   "name": "Shed wall w.003"
+  },
+  {
+   "shape": "box",
+   "x0": 25738,
+   "z0": 9860,
+   "x1": 25942,
+   "z1": 10540,
+   "name": "Shed wall w.004"
+  },
+  {
+   "shape": "box",
+   "x0": 25738,
+   "z0": 10540,
+   "x1": 25942,
+   "z1": 11152,
+   "name": "Shed wall w.005"
+  },
+  {
+   "shape": "box",
+   "x0": 30838,
+   "z0": 5848,
+   "x1": 31042,
+   "z1": 11152,
+   "name": "Shed wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 24778,
+   "z0": 10072,
+   "x1": 25712,
+   "z1": 11007,
+   "name": "Water butt"
+  },
+  {
+   "shape": "box",
+   "x0": 20910,
+   "z0": 12070,
+   "x1": 22610,
+   "z1": 13770,
+   "name": "Barrow footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 9860,
+   "z0": 4208,
+   "x1": 12580,
+   "z1": 4972,
+   "name": "Bench seat"
+  },
+  {
+   "shape": "box",
+   "x0": 22695,
+   "z0": 4165,
+   "x1": 23545,
+   "z1": 5015,
+   "name": "Urn plinth"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 3400,
+  "z0": 3400,
+  "x1": 28900,
+  "z1": 23460
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "kennels",
+   "zone": {
+    "x0": 15300,
+    "z0": 3400,
+    "x1": 18700,
+    "z1": 4420
+   },
+   "arrive": {
+    "x": 17000,
+    "z": 5780,
+    "angle": 3072
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "garden-shed",
+   "zone": {
+    "x0": 24820,
+    "z0": 7820,
+    "x1": 25840,
+    "z1": 9180
+   },
+   "arrive": {
+    "x": 23800,
+    "z": 8500,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "cellar",
+   "zone": {
+    "x0": 20400,
+    "z0": 20400,
+    "x1": 23120,
+    "z1": 21420
+   },
+   "arrive": {
+    "x": 21760,
+    "z": 19550,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 20400,
+    "z0": 20230,
+    "x1": 23120,
+    "z1": 21420
+   },
+   "text": "Cellar doors. Padlocked.\nThere's blood on the handle."
+  },
+  {
+   "zone": {
+    "x0": 10540,
+    "z0": 22100,
+    "x1": 12580,
+    "z1": 23460
+   },
+   "text": "The back door's been boarded over. From out here.\nKEEP OUT."
+  },
+  {
+   "zone": {
+    "x0": 5270,
+    "z0": 15980,
+    "x1": 9520,
+    "z1": 18530
+   },
+   "text": "One of the maids. Something dragged her into the hedge.\nShe came from the cellar doors. She was running."
+  },
+  {
+   "zone": {
+    "x0": 19040,
+    "z0": 20060,
+    "x1": 20400,
+    "z1": 21420
+   },
+   "text": "A shoe. Hers, I think."
+  },
+  {
+   "zone": {
+    "x0": 13430,
+    "z0": 10030,
+    "x1": 20570,
+    "z1": 17170
+   },
+   "text": "The fountain's still running. There's no one left to turn it off."
+  },
+  {
+   "zone": {
+    "x0": 20400,
+    "z0": 11900,
+    "x1": 24140,
+    "z1": 15810
+   },
+   "text": "The gardener's barrow, tipped over. Seedlings, spilled.\nHe never finished."
+  },
+  {
+   "zone": {
+    "x0": 18360,
+    "z0": 21420,
+    "x1": 20400,
+    "z1": 23460
+   },
+   "text": "The lamp's lit. The moths found it."
+  }
+ ],
+ "entry": "The back of the mansion.\nThe house is dark.",
+ "notes": [
+  "from the yews at the north: the fountain, the house's back, the lit window",
+  "from the north-west: the beds, the fountain, the bulkhead under its lamp",
+  "from under the house, east: the shed, the tipped barrow, the beds",
+  "from under the house, west: the maid in the hedge, the fountain, the yews",
+  "close at the bulkhead: the cellar doors, the lamp and its moths, her shoe",
+  "close by the west bed: the maid dragged into the hedge, her cap, the trail from the bulkhead"
+ ]
+}

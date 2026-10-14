@@ -1,0 +1,146 @@
+{
+ "cameras": [
+  {
+   "from": [
+    7480,
+    -3485,
+    6120
+   ],
+   "to": [
+    3740,
+    -1360,
+    2210
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2040,
+    -3485,
+    2040
+   ],
+   "to": [
+    6630,
+    -680,
+    5780
+   ],
+   "fov": 205
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 3485,
+   "z0": 1785,
+   "x1": 5865,
+   "z1": 2975,
+   "name": "Desk"
+  },
+  {
+   "shape": "box",
+   "x0": 1828,
+   "z0": 2890,
+   "x1": 3103,
+   "z1": 6120,
+   "name": "Cot"
+  },
+  {
+   "shape": "box",
+   "x0": 6783,
+   "z0": 2142,
+   "x1": 7667,
+   "z1": 2788,
+   "name": "Powder box 0"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 7820,
+  "z1": 6460
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "tunnel",
+   "zone": {
+    "x0": 4080,
+    "z0": 5610,
+    "x1": 5610,
+    "z1": 6460
+   },
+   "arrive": {
+    "x": 4845,
+    "z": 5100,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 3485,
+    "z0": 1700,
+    "x1": 5865,
+    "z1": 3145
+   },
+   "text": "A map of the workings. The adit, the junction with the pump,\nthe lift up to the top. The old gallery is marked FLOODED.\nThere's a bloody thumbprint on it."
+  },
+  {
+   "zone": {
+    "x0": 5100,
+    "z0": 1700,
+    "x1": 6120,
+    "z1": 3145
+   },
+   "text": "An old miner's helmet with a carbide lamp on it."
+  },
+  {
+   "zone": {
+    "x0": 3740,
+    "z0": 3145,
+    "x1": 5270,
+    "z1": 4420
+   },
+   "text": "A jacket over the chair. ARKLAY SKYWAY on the patch.\nHal's."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 2890,
+    "x1": 3400,
+    "z1": 6120
+   },
+   "text": "A cot, pulled out. A bandage soaked through on the blanket.\nHe rested here, then went on down."
+  },
+  {
+   "zone": {
+    "x0": 6460,
+    "z0": 2040,
+    "x1": 7820,
+    "z1": 4930
+   },
+   "text": "The candles are new. GIANT POWDER on the boxes. Empty."
+  },
+  {
+   "zone": {
+    "x0": 5015,
+    "z0": 3655,
+    "x1": 6375,
+    "z1": 5015
+   },
+   "text": "Water's coming through the roof. The bucket ran over long ago."
+  }
+ ],
+ "entry": "Candles. Someone lit these today.",
+ "notes": [
+  "high by the door: the desk under the mine map, the candles, the helmet, his jacket on the chair",
+  "high over the cot: the plank front and its door, the candle ledge and the powder boxes, the bucket under the drip"
+ ]
+}

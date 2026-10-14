@@ -1,0 +1,244 @@
+{
+ "cameras": [
+  {
+   "from": [
+    27710,
+    -5270,
+    17340
+   ],
+   "to": [
+    14620,
+    -1530,
+    12240
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1700,
+    -6630,
+    2210
+   ],
+   "to": [
+    17850,
+    0,
+    17000
+   ],
+   "fov": 195
+  },
+  {
+   "from": [
+    5100,
+    -5100,
+    22780
+   ],
+   "to": [
+    17340,
+    -1530,
+    11560
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    10710,
+    -4250,
+    18020
+   ],
+   "to": [
+    14110,
+    -2040,
+    12580
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    26520,
+    -5780,
+    23120
+   ],
+   "to": [
+    14450,
+    -510,
+    11050
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    23460,
+    -6120,
+    4250
+   ],
+   "to": [
+    11050,
+    0,
+    18700
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 12255,
+   "z0": 10763,
+   "x1": 20385,
+   "z1": 14737,
+   "name": "Cabin footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 19659,
+   "z0": 12591,
+   "x1": 22501,
+   "z1": 14099,
+   "name": "Boom footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 23358,
+   "z0": 9401,
+   "x1": 24888,
+   "z1": 10931,
+   "name": "Tail footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 24905,
+   "z0": 7735,
+   "x1": 26435,
+   "z1": 9265,
+   "name": "Tail footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 26452,
+   "z0": 6069,
+   "x1": 27982,
+   "z1": 7599,
+   "name": "Tail footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 4344,
+   "z0": 2240,
+   "x1": 13336,
+   "z1": 4560,
+   "name": "Fallen spruce"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 3400,
+  "z0": 3400,
+  "x1": 28900,
+  "z1": 23800
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "valley-path",
+   "zone": {
+    "x0": 27880,
+    "z0": 11900,
+    "x1": 28900,
+    "z1": 15300
+   },
+   "arrive": {
+    "x": 26520,
+    "z": 13600,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 12920,
+    "z0": 14280,
+    "x1": 15300,
+    "z1": 15980
+   },
+   "text": "Kevin. He's still belted into his seat.\nHe flew us out here. He stayed with it."
+  },
+  {
+   "zone": {
+    "x0": 16660,
+    "z0": 14280,
+    "x1": 19380,
+    "z1": 15640
+   },
+   "text": "The cargo bay. Rope, a box of flares...\nA crowbar on the floor."
+  },
+  {
+   "zone": {
+    "x0": 13940,
+    "z0": 16830,
+    "x1": 16660,
+    "z1": 18530
+   },
+   "text": "Someone patched themselves up here.\nThe medkit's empty. The gauze is soaked."
+  },
+  {
+   "zone": {
+    "x0": 17170,
+    "z0": 15640,
+    "x1": 21930,
+    "z1": 18530
+   },
+   "text": "Our cases. Somebody took what they could carry."
+  },
+  {
+   "zone": {
+    "x0": 11900,
+    "z0": 15300,
+    "x1": 13940,
+    "z1": 16830
+   },
+   "text": "The field radio. Someone's smashed it.\nOr dropped it, trying."
+  },
+  {
+   "zone": {
+    "x0": 22950,
+    "z0": 6800,
+    "x1": 28050,
+    "z1": 11220
+   },
+   "text": "The tail broke clean off when she came down."
+  },
+  {
+   "zone": {
+    "x0": 21080,
+    "z0": 18870,
+    "x1": 22780,
+    "z1": 20570
+   },
+   "text": "A flare, burnt down to nothing.\nThey were signalling. Nobody came."
+  },
+  {
+   "zone": {
+    "x0": 24650,
+    "z0": 12410,
+    "x1": 27880,
+    "z1": 15810
+   },
+   "text": "Boot prints in the mud, heading east.\nThe others walked out."
+  }
+ ],
+ "entry": "The helicopter.\nThis is where we came down.",
+ "notes": [
+  "from the valley path: the cabin's open side, the tail, the boot prints going out",
+  "from the snapped spruces: the furrow, the nose, the kit scattered beyond",
+  "from the south-west: the open pilot's door, Kevin in his seat, the medkit",
+  "close on the cockpit: Kevin belted in, the starred windshield",
+  "from the south-east: the cargo bay, the cases, the flare, the smoke",
+  "from the north-east by the tail: the bent rotor, the north side and the clearing south"
+ ]
+}

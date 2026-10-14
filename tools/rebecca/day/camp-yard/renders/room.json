@@ -1,0 +1,497 @@
+{
+ "cameras": [
+  {
+   "from": [
+    17680,
+    -6630,
+    35020
+   ],
+   "to": [
+    17340,
+    -340,
+    19550
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    8840,
+    -5610,
+    10880
+   ],
+   "to": [
+    25500,
+    -510,
+    24820
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    20400,
+    -6120,
+    21420
+   ],
+   "to": [
+    28220,
+    -680,
+    7480
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    8500,
+    -5780,
+    14280
+   ],
+   "to": [
+    21250,
+    -1020,
+    3400
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    15980,
+    -5780,
+    18020
+   ],
+   "to": [
+    4080,
+    -850,
+    6120
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    14280,
+    -5610,
+    17000
+   ],
+   "to": [
+    3400,
+    -1020,
+    16660
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    21080,
+    -5780,
+    30260
+   ],
+   "to": [
+    5950,
+    -510,
+    23120
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    18700,
+    -6120,
+    16320
+   ],
+   "to": [
+    28900,
+    -680,
+    23120
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 9996,
+   "z0": -5984,
+   "x1": 29104,
+   "z1": 2924,
+   "name": "Bunkhouse footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 1496,
+   "z0": 816,
+   "x1": 8024,
+   "z1": 6324,
+   "name": "Office footprint"
+  },
+  {
+   "shape": "box",
+   "x0": -5984,
+   "z0": 8296,
+   "x1": 3604,
+   "z1": 24004,
+   "name": "Mess footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 22576,
+   "z0": 23256,
+   "x1": 32844,
+   "z1": 33184,
+   "name": "Workshop footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 31450,
+   "z0": 4165,
+   "x1": 54400,
+   "z1": 20995,
+   "name": "Sawmill footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 4335,
+   "z0": 25755,
+   "x1": 4505,
+   "z1": 25925,
+   "name": "Depot gate post"
+  },
+  {
+   "shape": "circle",
+   "x0": 7395,
+   "z0": 25755,
+   "x1": 7565,
+   "z1": 25925,
+   "name": "Depot gate post.001"
+  },
+  {
+   "shape": "circle",
+   "x0": 13940,
+   "z0": 31790,
+   "x1": 14620,
+   "z1": 32470,
+   "name": "Gate post footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 19720,
+   "z0": 31790,
+   "x1": 20400,
+   "z1": 32470,
+   "name": "Gate post footprint.001"
+  },
+  {
+   "shape": "circle",
+   "x0": 11985,
+   "z0": 28560,
+   "x1": 12155,
+   "z1": 28730,
+   "name": "Board post"
+  },
+  {
+   "shape": "circle",
+   "x0": 14365,
+   "z0": 28560,
+   "x1": 14535,
+   "z1": 28730,
+   "name": "Board post.001"
+  },
+  {
+   "shape": "circle",
+   "x0": 13345,
+   "z0": 12155,
+   "x1": 17255,
+   "z1": 16065,
+   "name": "Fire pit footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 5321,
+   "z0": 12291,
+   "x1": 5559,
+   "z1": 12529,
+   "name": "Bell post"
+  },
+  {
+   "shape": "circle",
+   "x0": 9452,
+   "z0": 4352,
+   "x1": 9588,
+   "z1": 4488,
+   "name": "Line pole"
+  },
+  {
+   "shape": "circle",
+   "x0": 16592,
+   "z0": 5712,
+   "x1": 16728,
+   "z1": 5848,
+   "name": "Line pole.001"
+  },
+  {
+   "shape": "box",
+   "x0": 20948,
+   "z0": 4189,
+   "x1": 30423,
+   "z1": 9484,
+   "name": "Log deck"
+  },
+  {
+   "shape": "box",
+   "x0": 10073,
+   "z0": 19890,
+   "x1": 17816,
+   "z1": 24310,
+   "name": "Skidder"
+  },
+  {
+   "shape": "box",
+   "x0": 3060,
+   "z0": 21080,
+   "x1": 9520,
+   "z1": 23120,
+   "name": "Choked logs footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 7352,
+   "z0": 8712,
+   "x1": 8288,
+   "z1": 9648,
+   "name": "Chopping block"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 31280,
+  "z1": 31620
+ },
+ "voids": [
+  {
+   "x0": 1700,
+   "z0": 25840,
+   "x1": 11220,
+   "z1": 31620
+  }
+ ],
+ "doors": [
+  {
+   "to": "camp-gate",
+   "zone": {
+    "x0": 14620,
+    "z0": 30600,
+    "x1": 19720,
+    "z1": 31620
+   },
+   "arrive": {
+    "x": 17170,
+    "z": 28730,
+    "angle": 1024
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "bunkhouse",
+   "zone": {
+    "x0": 18700,
+    "z0": 2924,
+    "x1": 20230,
+    "z1": 4114
+   },
+   "arrive": {
+    "x": 19465,
+    "z": 5780,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "office",
+   "zone": {
+    "x0": 4250,
+    "z0": 6324,
+    "x1": 5780,
+    "z1": 7514
+   },
+   "arrive": {
+    "x": 5015,
+    "z": 7990,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "mess",
+   "zone": {
+    "x0": 3604,
+    "z0": 15300,
+    "x1": 4794,
+    "z1": 16830
+   },
+   "arrive": {
+    "x": 6290,
+    "z": 16065,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "depot",
+   "zone": {
+    "x0": 4420,
+    "z0": 24820,
+    "x1": 7480,
+    "z1": 25840
+   },
+   "arrive": {
+    "x": 5950,
+    "z": 23290,
+    "angle": 1024
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "workshop",
+   "zone": {
+    "x0": 24820,
+    "z0": 22066,
+    "x1": 26860,
+    "z1": 23256
+   },
+   "arrive": {
+    "x": 25840,
+    "z": 20740,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "sawmill",
+   "zone": {
+    "x0": 30260,
+    "z0": 10200,
+    "x1": 31280,
+    "z1": 15300
+   },
+   "arrive": {
+    "x": 28730,
+    "z": 12750,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 11560,
+    "z0": 28900,
+    "x1": 14960,
+    "z1": 30600
+   },
+   "text": "CAMP 4. QUARANTINE. BY ORDER.\nPainted by hand. The paint ran before it dried."
+  },
+  {
+   "zone": {
+    "x0": 17000,
+    "z0": 24480,
+    "x1": 21760,
+    "z1": 27540
+   },
+   "text": "A logger, face down in the mud. A peavey is driven into his back.\nThat wasn't done by anything sick."
+  },
+  {
+   "zone": {
+    "x0": 12920,
+    "z0": 11900,
+    "x1": 17680,
+    "z1": 16320
+   },
+   "text": "They burned something here. Mattress springs. And bones.\nOne log is still smoking."
+  },
+  {
+   "zone": {
+    "x0": 17680,
+    "z0": 2890,
+    "x1": 18700,
+    "z1": 4420
+   },
+   "text": "A fire axe, buried in the door. Someone was holding it shut from inside."
+  },
+  {
+   "zone": {
+    "x0": 23120,
+    "z0": 9520,
+    "x1": 26860,
+    "z1": 12240
+   },
+   "text": "He sat down against the logs with a shotgun and fired until it was empty.\nShells everywhere."
+  },
+  {
+   "zone": {
+    "x0": 4420,
+    "z0": 17680,
+    "x1": 8160,
+    "z1": 21760
+   },
+   "text": "Two men under canvas, laid out straight. Someone still cared, at first."
+  },
+  {
+   "zone": {
+    "x0": 4420,
+    "z0": 11560,
+    "x1": 6460,
+    "z1": 13600
+   },
+   "text": "The cookhouse bell. The rope's been cut short."
+  },
+  {
+   "zone": {
+    "x0": 17680,
+    "z0": 20060,
+    "x1": 19040,
+    "z1": 24140
+   },
+   "text": "The skidder. Its blade is down in the mud, the chokers still on the logs.\nThe key's gone."
+  },
+  {
+   "zone": {
+    "x0": 9520,
+    "z0": 4420,
+    "x1": 16660,
+    "z1": 6800
+   },
+   "text": "Laundry on the line. Nobody's coming for it."
+  },
+  {
+   "zone": {
+    "x0": 26860,
+    "z0": 19720,
+    "x1": 30600,
+    "z1": 23120
+   },
+   "text": "Diesel, leaking from a drum into the mud."
+  }
+ ],
+ "entry": "Camp 4. The gate was shut from inside.",
+ "notes": [
+  "from the gate: the body in the mud, the skidder, the fire pit, the bunkhouse beyond",
+  "from by the office: the fire pit, the skidder's blade, the workshop door",
+  "from the ruts: the sawmill's open doors, the log deck, the dead man against it",
+  "from the bell post: the laundry, the bunkhouse door with the axe in it",
+  "from the fire pit: the office door in the corner, the bell post, the laundry",
+  "from the ruts: the mess door, the bell, the two under canvas",
+  "from inside the gate: the depot gate, the choked logs, the board",
+  "from the fire pit: the workshop door, the leaking drums, the mill doors"
+ ]
+}

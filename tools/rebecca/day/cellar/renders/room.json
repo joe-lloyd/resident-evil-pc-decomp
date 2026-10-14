@@ -1,0 +1,239 @@
+{
+ "cameras": [
+  {
+   "from": [
+    14875,
+    -3485,
+    9775
+   ],
+   "to": [
+    5100,
+    -510,
+    3740
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2125,
+    -3485,
+    2125
+   ],
+   "to": [
+    12240,
+    -510,
+    8840
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    14875,
+    -3485,
+    2125
+   ],
+   "to": [
+    3740,
+    -680,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2125,
+    -3485,
+    9775
+   ],
+   "to": [
+    12920,
+    -1020,
+    3060
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 1700,
+   "z0": 4420,
+   "x1": 2720,
+   "z1": 8330,
+   "name": "Rack footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 3740,
+   "z0": 8500,
+   "x1": 11900,
+   "z1": 10200,
+   "name": "Barrels footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 12920,
+   "z0": 8840,
+   "x1": 13940,
+   "z1": 9860,
+   "name": "Cask footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 13600,
+   "z0": 1700,
+   "x1": 15300,
+   "z1": 3400,
+   "name": "Coal footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 2890,
+   "z0": 2253,
+   "x1": 4590,
+   "z1": 3188,
+   "name": "Old chest"
+  },
+  {
+   "shape": "box",
+   "x0": 8075,
+   "z0": 1870,
+   "x1": 10795,
+   "z1": 2720,
+   "name": "Sacks footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 15300,
+  "z1": 10200
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "back-garden",
+   "zone": {
+    "x0": 11220,
+    "z0": 1700,
+    "x1": 13600,
+    "z1": 2720
+   },
+   "arrive": {
+    "x": 12410,
+    "z": 3230,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "wine",
+   "zone": {
+    "x0": 14280,
+    "z0": 3400,
+    "x1": 15300,
+    "z1": 5440
+   },
+   "arrive": {
+    "x": 13770,
+    "z": 4420,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "crawl",
+   "zone": {
+    "x0": 1700,
+    "z0": 8500,
+    "x1": 2720,
+    "z1": 9860
+   },
+   "arrive": {
+    "x": 3570,
+    "z": 9180,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 7197,
+    "z0": 5401,
+    "x1": 10257,
+    "z1": 8121
+   },
+   "text": "One of the footmen. Something's been... eating him.\nIt's not long gone."
+  },
+  {
+   "zone": {
+    "x0": 5100,
+    "z0": 7140,
+    "x1": 7140,
+    "z1": 8840
+   },
+   "text": "A silver tray. Broken glasses. He was bringing something down."
+  },
+  {
+   "zone": {
+    "x0": 11220,
+    "z0": 3740,
+    "x1": 14280,
+    "z1": 5610
+   },
+   "text": "Footprints in his blood. Going that way."
+  },
+  {
+   "zone": {
+    "x0": 2720,
+    "z0": 4420,
+    "x1": 3740,
+    "z1": 8330
+   },
+   "text": "A heavy rack of preserves. There are scrape marks on the floor by its end.\nIt's been moved."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 8500,
+    "x1": 3060,
+    "z1": 9860
+   },
+   "text": "A low passage behind the rack. It goes under the house."
+  },
+  {
+   "zone": {
+    "x0": 12920,
+    "z0": 1700,
+    "x1": 15300,
+    "z1": 3740
+   },
+   "text": "Coal, under the chute."
+  },
+  {
+   "zone": {
+    "x0": 3400,
+    "z0": 8330,
+    "x1": 11900,
+    "z1": 10200
+   },
+   "text": "Barrels. Someone's lit a candle on one of them."
+  }
+ ],
+ "entry": "Candles. Someone's down here.",
+ "notes": [
+  "under the vault, south-east: the footman on the flags, the rack, the garden stairs",
+  "under the vault, north-west: the body, the barrels, the red prints to the wine arch",
+  "under the vault, north-east: the rack and the crawl passage past its end, the coal",
+  "under the vault, south-west: the stairs down from the garden, the wine arch"
+ ]
+}

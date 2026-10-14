@@ -1,0 +1,189 @@
+{
+ "cameras": [
+  {
+   "from": [
+    7820,
+    -4080,
+    12155
+   ],
+   "to": [
+    4420,
+    1190,
+    6630
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    11900,
+    -4080,
+    4930
+   ],
+   "to": [
+    7480,
+    680,
+    12070
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    4845,
+    -3910,
+    5270
+   ],
+   "to": [
+    11900,
+    0,
+    11220
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 3584,
+   "z0": 3584,
+   "x1": 4349,
+   "z1": 4349,
+   "name": "Leg footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 3584,
+   "z0": 12651,
+   "x1": 4349,
+   "z1": 13416,
+   "name": "Leg footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 12651,
+   "z0": 3584,
+   "x1": 13416,
+   "z1": 4349,
+   "name": "Leg footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 12651,
+   "z0": 12651,
+   "x1": 13416,
+   "z1": 13416,
+   "name": "Leg footprint.003"
+  },
+  {
+   "shape": "box",
+   "x0": 5950,
+   "z0": 6715,
+   "x1": 10540,
+   "z1": 8415,
+   "name": "Last flight footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 4930,
+   "z0": 4420,
+   "x1": 5610,
+   "z1": 5100,
+   "name": "Water can footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 3627,
+  "z0": 3627,
+  "x1": 13373,
+  "z1": 13373
+ },
+ "voids": [
+  {
+   "x0": 7650,
+   "z0": 8670,
+   "x1": 11050,
+   "z1": 10200
+  }
+ ],
+ "doors": [
+  {
+   "to": "tower-foot",
+   "zone": {
+    "x0": 11050,
+    "z0": 8670,
+    "x1": 12240,
+    "z1": 10200
+   },
+   "arrive": {
+    "x": 12240,
+    "z": 11730,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "tower-top",
+   "zone": {
+    "x0": 11050,
+    "z0": 6800,
+    "x1": 12240,
+    "z1": 8330
+   },
+   "arrive": {
+    "x": 12240,
+    "z": 5270,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 5780,
+    "z0": 4590,
+    "x1": 7990,
+    "z1": 6630
+   },
+   "text": "A handheld radio, smashed to bits. Dropped on the way up, and stamped on.\nThe battery's burst out of it."
+  },
+  {
+   "zone": {
+    "x0": 3627,
+    "z0": 7480,
+    "x1": 4817,
+    "z1": 9350
+   },
+   "text": "The outside stair. It's torn off at the top and hanging over the drop.\nCLOSED. No kidding."
+  },
+  {
+   "zone": {
+    "x0": 12183,
+    "z0": 10200,
+    "x1": 13373,
+    "z1": 12920
+   },
+   "text": "Down on the rocks at the foot, a man lying very still.\nThat's a long way down."
+  },
+  {
+   "zone": {
+    "x0": 3627,
+    "z0": 3627,
+    "x1": 13373,
+    "z1": 4647
+   },
+   "text": "Crows on the rail. They don't fly off. They're waiting."
+  }
+ ],
+ "entry": "The wind's stronger up here. The whole tower sways.",
+ "notes": [
+  "under the cab at the south rail, looking north: the deck, the broken flight over the drop, the valley west",
+  "under the cab in the north-east corner, looking south-west: the smashed radio, the flights, Walt far below on the rocks",
+  "under the cab in the north-west corner, looking south-east: the crows on the north rail, the last flight up to the hatch"
+ ]
+}
