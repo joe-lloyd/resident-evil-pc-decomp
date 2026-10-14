@@ -1,6 +1,6 @@
 // Her day's two people in the game: boot her into the ranger's cabin, where
-// tools/rebecca/day/lookout/room.c places Hal (entity 34) and the ranger's
-// partner (entity 35), check both are there, save screenshots from each of
+// tools/rebecca/day/lookout/room.c places Hal (entity 34) and Dana, the
+// ranger's partner (entity 33), check both are there, save screenshots from each of
 // the room's cameras, and check each is moving: their idle changes the
 // pixels where the camera shows them.
 //
@@ -18,7 +18,7 @@ import { snapshot } from '../snapshot.ts';
 const outDir = process.argv[2] ?? '/tmp/rebecca-people-game';
 const expected = [
   { name: 'hal', type: 34, x: 10710, z: 5610 },
-  { name: 'partner', type: 35, x: 5780, z: 6290 },
+  { name: 'dana', type: 33, x: 5780, z: 6290 },
 ];
 // Spots on the cabin floor to stand her on, one per camera with luck: by the
 // door looking in, and in the north-east corner looking back.

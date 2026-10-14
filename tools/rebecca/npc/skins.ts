@@ -115,7 +115,7 @@ function face(t: Texel, f: Face): Rgb {
   // Nose: a lit ridge, shaded sides, the nostrils.
   if (y > f.nose - 8 && y < f.eyes - f.eyeH && ax < f.eyeX * 0.25) c = scale(c, 1.06);
   if (Math.hypot(ax - f.eyeX * 0.28, (y - (f.nose - 8)) * 1.6) < f.eyeX * 0.12) return scale(c, 0.55);
-  if (y > f.nose - 12 && y < f.nose + 30 && ax > f.eyeX * 0.27 && ax < f.eyeX * 0.42) c = scale(c, 0.88);
+  if (y > f.nose - 12 && y < f.nose + 30 && ax > f.eyeX * 0.27 && ax < f.eyeX * 0.42) c = scale(c, 1 - 0.12 * Math.max(f.age, 0.4));
   // Mouth: the parting line and the lips around it.
   const lipW = f.eyeX * 0.85;
   if (ax < lipW) {
@@ -307,58 +307,81 @@ export function hal(t: Texel): Rgb {
 }
 
 // ---------------------------------------------------------------------------
-// The ranger's partner: Forest Service uniform, a khaki shirt under a green
-// jacket, a ranger's hat, boots. Dark blonde, weathered, freckled.
+// Dana Whitlock, the ranger's partner: Forest Service uniform, a khaki shirt
+// under a green jacket, a campaign hat, boots. Jill's body, taller and slimmer
+// than Rebecca's. Dark blonde hair cut short at the sides and pinned in a low
+// bun, weathered, freckled. Her heights are Jill's model's (docs/REBECCA_NPC.md).
 
 const FOREST: Rgb = [58, 74, 50];
 const KHAKI: Rgb = [176, 162, 120];
 const HER_SKIN: Rgb = [210, 158, 125];
-const HER_HAIR: Rgb = [150, 115, 70];
+const HER_HAIR: Rgb = [160, 125, 78];
 const FELT: Rgb = [150, 120, 80];
 
 const herFace: Face = {
-  chin: 2295, mouth: 2346, nose: 2392, eyes: 2436, brows: 2460, eyeX: 48,
-  skin: HER_SKIN, lips: [175, 100, 95], iris: [90, 110, 70], brow: [95, 70, 45],
-  eyeH: 6, eyeW: 15, browThick: 6, age: 0.35,
+  chin: 2350, mouth: 2384, nose: 2432, eyes: 2487, brows: 2506, eyeX: 55,
+  skin: HER_SKIN, lips: [175, 100, 95], iris: [90, 110, 70], brow: [100, 75, 48],
+  eyeH: 6.5, eyeW: 17, browThick: 6, age: 0.1,
 };
 
-/** The hat: the head's vertical axis, the brim's height and reach (game units, body axes). */
-const HAT = { axisZ: -20, brim: 2528, band: 2546, reach: 210 };
+/**
+ * Her head: where its joint stands, and the hat. Heights are game units from
+ * the floor; the hat's axis sits `axis` forward of the joint.
+ */
+const HEAD = { joint: 2232, axis: -10, brim: 2560, brimReach: 215, crownBase: 2572, crownTop: 2680, crownR: 115, top: 2700 };
+/** The bun: where the back of her hair is gathered, and how tight. */
+const BUN = { forward: -150, up: 2390, pull: 0.55 };
 
 /**
- * The partner's campaign hat from Rebecca's head: the ring of vertices where
- * her bob flares at the back is pushed out level into a brim. In the head's
- * own space (game axes: x forward, y down, z left), where the head joint
- * stands 2243 units up.
+ * Dana's head from Jill's, vertices moved and nothing added, in the head's own
+ * space (game axes: x forward, y down, z left):
+ * - a felt hat: the ring of vertices round her hairline is laid out level
+ *   as the brim's edge, the beret's lower ring drawn in as the crown's base
+ *   just above it (so the brim lies flat), its upper ring stood straight
+ *   above that as the crown's top, and its middle as the top's centre;
+ * - the hair hanging beside her face is tucked up against her head to ear
+ *   level, a short cut;
+ * - the hair at the back is drawn in to a low bun at the nape.
  */
-export function campaignHat([x, y, z]: Vec3): Vec3 {
-  const up = 2243 - y;
-  if (up < 2495 || up > 2560) return [x, y, z];
-  const dx = x - HAT.axisZ;
-  const r = Math.hypot(dx, z) || 1;
-  const k = Math.max(1, HAT.reach / r);
-  return [HAT.axisZ + dx * k, 2243 - HAT.brim, z * k];
+export function danaHead([x, y, z]: Vec3): Vec3 {
+  const up = HEAD.joint - y;
+  const at = (u: number) => HEAD.joint - u;
+  const fx = x - HEAD.axis;
+  const r = Math.hypot(fx, z);
+  const ring = (reach: number, height: number): Vec3 => [HEAD.axis + (fx * reach) / r, at(height), (z * reach) / r];
+  if (up >= 2595 && r < 30) return [x, at(HEAD.top), z];
+  if (up >= 2595) return ring(HEAD.crownR, HEAD.crownTop);
+  if (up >= 2545 && r > 100) return ring(HEAD.crownR, HEAD.crownBase);
+  if (up >= 2495 && r > 100) return ring(HEAD.brimReach, HEAD.brim);
+  if (up < 2440 && x < -95) {
+    return [BUN.forward + (x - BUN.forward) * BUN.pull, at(BUN.up + (up - BUN.up) * BUN.pull), z * BUN.pull];
+  }
+  if (up < 2440 && Math.abs(z) > 95 && x > -95) return [x, at(Math.max(up, 2400)), Math.sign(z) * 100];
+  return [x, y, z];
 }
 
 function herHead(t: Texel): Rgb {
   const [x, y, z] = t.at;
   const ax = Math.abs(x);
-  const r = Math.hypot(x, z - HAT.axisZ);
-  // The hat: a felt crown, a dark band, the brim lit on
-  // top and shaded underneath, and its shadow across her brow.
-  if (y > HAT.band) return scale(FELT, lit(t) * (0.9 + 0.15 * grain(t.at, 30)));
-  if (r > 150 && y > 2470) return scale(FELT, (t.normal[1] > 0 ? lit(t) : 0.55) * (0.9 + 0.12 * grain(t.at, 25)));
-  if (y > HAT.brim - 4) return scale([60, 40, 25], lit(t));
-  // Her hair: the sides and back of the bob, under the hat.
-  const hair = (z < 30 && y > 2300) || (ax > 92 && y > 2330);
+  const r = Math.hypot(x, z - HEAD.axis);
+  // The hat: a felt crown above the brim, the brim lit on top and shaded
+  // underneath, a dark band where it sits on her head, its shadow on her brow.
+  if (y > HEAD.crownBase + 18) return scale(FELT, lit(t) * (0.95 + 0.07 * grain(t.at, 70)));
+  if (y > HEAD.brim + 4 && r < HEAD.crownR + 15) return scale([60, 40, 25], lit(t));
+  if (r > HEAD.crownR + 15 && y > 2520) return scale(FELT, (t.normal[1] > 0 ? lit(t) : 0.55) * (0.95 + 0.07 * grain(t.at, 70)));
+  // Her hair: short at the sides above the ears, the back and the bun.
+  const bunAt = Math.hypot(z - BUN.forward, y - BUN.up, x * 1.3);
+  if (bunAt < 70 && Math.abs(bunAt - 38) < 5) return [40, 30, 22];
+  const bun = bunAt < 70;
+  const hair = bun || (z < -40 && y > 2300) || (ax > 92 && y > 2405 && z < 70);
   if (hair) {
-    const strand = noise([x * 4, y * 0.6, z * 4], 12);
-    return scale(mix(HER_HAIR, [105, 78, 45], strand), lit(t));
+    const strand = noise(bun ? [x * 2, y * 2, z * 2] : [x * 4, y * 0.6, z * 4], 12);
+    return scale(mix(HER_HAIR, [110, 82, 48], strand), lit(t) * (bun ? 0.95 : 1));
   }
   let c = face(t, herFace);
-  if (y > HAT.brim - 70 && z > 0) c = scale(c, 0.8);
+  if (y > 2530 && z > 0) c = scale(c, 0.8);
   // Freckles over the nose and cheeks.
-  if (front(t) && y > herFace.nose - 15 && y < herFace.eyes - 10 && ax < 80 && hash(Math.round(x / 3), Math.round(y / 3), 7) < 0.05) {
+  if (front(t) && y > herFace.nose - 15 && y < herFace.eyes - 10 && ax < 85 && hash(Math.round(x / 3), Math.round(y / 3), 7) < 0.05) {
     c = scale(c, 0.88);
   }
   if (y < herFace.chin && z < 60) c = scale(c, 0.88);
@@ -369,43 +392,43 @@ function herJacket(t: Texel): Rgb {
   const [x, y, z] = t.at;
   const ax = Math.abs(x);
   // The shirt shows in the open front, its collar at the neck.
-  const opening = 26 + (y - 1700) * 0.07;
-  if (z > 40 && ax < opening && y > 1700) {
+  const opening = 26 + (y - 1620) * 0.065;
+  if (z > 40 && ax < opening && y > 1620) {
     let c = cloth(t, KHAKI, 60, 0.12);
     if (ax < 3) c = scale(c, 0.8);
-    if (ax < 4 && Math.abs(((y - 1720) % 70) - 35) < 4) return [220, 215, 200];
+    if (ax < 4 && Math.abs(((y - 1640) % 70) - 35) < 4) return [220, 215, 200];
     return c;
   }
-  if (y > 2215) return cloth(t, z > 0 && ax < 70 ? KHAKI : FOREST, 50, 0.1);
+  if (y > 2260) return cloth(t, z > 0 && ax < 70 ? KHAKI : FOREST, 50, 0.1);
   let c = cloth(t, FOREST);
   // The jacket's edge beside the shirt.
   if (z > 40 && ax < opening + 6) c = scale(c, 0.7);
   if (z > 40) {
     // The gold shield on her left chest, the name plate on her right.
-    if (x < 0 && Math.hypot((x + 95) * 1.1, (y - 2110) * (y > 2110 ? 1 : 1.5)) < 30) return scale([205, 165, 70], lit(t) * 1.1);
-    if (x > 0 && Math.abs(x - 95) < 34 && Math.abs(y - 2125) < 8) return [30, 30, 28];
+    if (x < 0 && Math.hypot((x + 100) * 1.1, (y - 2140) * (y > 2140 ? 1 : 1.5)) < 30) return scale([205, 165, 70], lit(t) * 1.1);
+    if (x > 0 && Math.abs(x - 100) < 34 && Math.abs(y - 2155) < 8) return [30, 30, 28];
     // Pocket flaps.
-    if (Math.abs(ax - 95) < 40 && (Math.abs(y - 2070) < 3 || (y < 2070 && y > 1990 && Math.abs(ax - 95) > 37))) c = scale(c, 0.72);
+    if (Math.abs(ax - 100) < 40 && (Math.abs(y - 2100) < 3 || (y < 2100 && y > 2020 && Math.abs(ax - 100) > 37))) c = scale(c, 0.72);
   }
-  if (y < 1720) c = scale(c, 0.85);
+  if (y < 1640) c = scale(c, 0.85);
   return c;
 }
 
 function herSleeve(t: Texel): Rgb {
   const [x, y] = t.at;
   // The Forest Service shield on each shoulder: a brown shield, gold edge, a green tree.
-  const out = Math.abs(x) - 300;
-  if (t.part !== 10 && t.part !== 13 && t.normal[0] * Math.sign(x) > 0.3 && Math.abs(out) < 34 && y > 2040 && y < 2140) {
-    const sy = (y - 2040) / 100;
+  const out = Math.abs(x) - 320;
+  if (t.part !== 10 && t.part !== 13 && t.normal[0] * Math.sign(x) > 0.3 && Math.abs(out) < 34 && y > 2060 && y < 2160) {
+    const sy = (y - 2060) / 100;
     const half = 30 * (sy > 0.35 ? 1 : 0.5 + sy * 1.4);
     if (Math.abs(out) < half) {
-      if (Math.abs(out) > half - 5 || y > 2132) return [210, 175, 80];
+      if (Math.abs(out) > half - 5 || y > 2152) return [210, 175, 80];
       if (Math.abs(out) < (sy - 0.2) * 22 && sy < 0.85) return [60, 110, 55];
       return [110, 75, 40];
     }
   }
   let c = cloth(t, FOREST);
-  if ((t.part === 10 || t.part === 13) && y < 1470) c = scale(c, 0.78);
+  if ((t.part === 10 || t.part === 13) && y < 1440) c = scale(c, 0.78);
   return c;
 }
 
@@ -415,7 +438,7 @@ function herHand(t: Texel): Rgb {
 
 function herTrousers(t: Texel): Rgb {
   const [x, y, z] = t.at;
-  if (t.part === 2 && y > 1660) {
+  if (t.part === 2 && y > 1640) {
     if (z > 100 && Math.abs(x) < 24) return [200, 170, 90];
     return scale([95, 62, 35], lit(t));
   }
@@ -423,7 +446,7 @@ function herTrousers(t: Texel): Rgb {
   // A cargo pocket on the outside of each thigh.
   if (t.part === 3 || t.part === 6) {
     const side = Math.abs(t.normal[0]) > 0.6;
-    if (side && y > 1000 && y < 1250 && (Math.abs(y - 1240) < 4 || Math.abs(z) > 60 && Math.abs(Math.abs(z) - 64) < 4)) c = scale(c, 0.7);
+    if (side && y > 1050 && y < 1300 && (Math.abs(y - 1290) < 4 || (Math.abs(z) > 60 && Math.abs(Math.abs(z) - 64) < 4))) c = scale(c, 0.7);
   }
   if (y < 320) c = mix(c, scale([80, 65, 45], lit(t)), smooth(320, 120, y) * 0.5);
   return c;
@@ -431,13 +454,13 @@ function herTrousers(t: Texel): Rgb {
 
 function herBoot(t: Texel): Rgb {
   const [x, y, z] = t.at;
-  if (y < 35) return [35, 28, 22];
+  if (y < -65) return [35, 28, 22];
   let c = scale([110, 72, 40], lit(t) * (0.9 + 0.2 * grain(t.at, 20)));
-  if (z > 60 && y > 50 && Math.abs(Math.abs(x) - 150) < 25 && Math.sin(y * 0.35) > 0.6) c = [60, 45, 30];
+  if (z > 60 && y > -45 && Math.abs(Math.abs(x) - 150) < 25 && Math.sin(y * 0.35) > 0.6) c = [60, 45, 30];
   return c;
 }
 
-export function partner(t: Texel): Rgb {
+export function dana(t: Texel): Rgb {
   switch (t.part) {
     case 1:
       return herHead(t);

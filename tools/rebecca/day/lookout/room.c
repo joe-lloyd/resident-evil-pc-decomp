@@ -48,13 +48,13 @@ aot_set(14, 10455, 3400, 850, 1020, SCE_TYPEWRITER, 129, 0, 0, 0, 0, 0, 0);
 aot_set(15, 10285, 5525, 1530, 1615, SCE_ITEMBOX, 129, 0, 0, 0, 0, 0, 0);
 obj(0, 17, 255, 11050, -936, 7106, 1024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 // The proof for her day's two people (tools/rebecca/npc/people.ts): Hal in
-// Barry's model (id 34), in the open floor north-east, and the ranger's
-// partner in Rebecca's NPC model (id 35) by the desk, both facing the
+// Barry's model (id 34), in the open floor north-east, and Dana, the
+// ranger's partner, in Jill's NPC model (id 33) by the desk, both facing the
 // south-west camera. enemy operands: id, weapon (0: none), kill flag (255:
 // none), 1, 2, 0, 0, angle (0 faces +X, 0x800 -X, 0xC00 +Z), 0, 0, X, Y, Z,
 // enemy slot, animation, frame, 0: the shape every shipped NPC spawn has.
 enemy(34 /* Barry (Stars) */, 0, 255, 1, 2, 0, 0, 2656, 0, 0, 10710, 0, 5610, 0, 0, 0, 0);
-enemy(35 /* Rebecca (Stars) */, 0, 255, 1, 2, 0, 0, 2944, 0, 0, 5780, 0, 6290, 1, 0, 0, 0);
+enemy(33 /* Jill (Stars) */, 0, 255, 1, 2, 0, 0, 2944, 0, 0, 5780, 0, 6290, 1, 0, 0, 0);
 return;
 
 // main procedure 0
