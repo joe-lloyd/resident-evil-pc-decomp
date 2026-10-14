@@ -65,6 +65,7 @@ ${notes}
 const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Rebecca's files: review</title>
+<script src="/research/rebecca-day/nav.js" defer></script>
 <style>
 :root{--bg:#121110;--fg:#ddd6c8;--dim:#8b8478;--line:#2a2724;--gold:#c8963c;--good:#7d9a5a}
 body{background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,sans-serif;max-width:1400px;margin:1.5em auto;padding:0 1em}
