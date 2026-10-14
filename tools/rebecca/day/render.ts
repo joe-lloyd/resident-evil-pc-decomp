@@ -12,12 +12,12 @@
 // RE1_WEAR          strength of kit.wear's texture on every surface, 0 for none (default: 1.3)
 // RE1_BLENDER_SLOTS renders at once across every caller on this machine (default: 3)
 //
-// One GPU serves every caller. Seventeen renders at once filled its 24 GB and
-// froze them all, so each render takes one of a few slots (a folder under
-// /tmp/reb-render-slots holding its pid) and waits while they are all taken.
-// A render that runs past its time limit is stopped on the Blender machine.
+// One GPU serves every caller, so each render takes one of the shared slots
+// (slots.ts) and waits while they are all taken. A render that runs past its
+// time limit is stopped on the Blender machine.
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { mkdirSync, rmSync } from 'node:fs';
+import { takeSlot } from './slots.ts';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -29,47 +29,6 @@ const root = process.env.RE1_BLENDER_DIR ?? 'C:\\Users\\joell\\Documents\\Blende
 const ssh = (cmd: string) =>
   execFileSync('ssh', ['-o', 'BatchMode=yes', host, cmd], { encoding: 'utf8', maxBuffer: 64 << 20, stdio: ['ignore', 'pipe', 'pipe'] });
 const remote = (p: string) => p.replace(/\\/g, '/');
-
-const slotsDir = '/tmp/reb-render-slots';
-const slots = Number(process.env.RE1_BLENDER_SLOTS ?? 3);
-const alive = (pid: number) => {
-  try {
-    process.kill(pid, 0);
-    return true;
-  } catch {
-    return false;
-  }
-};
-const sleep = (ms: number) => Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, ms);
-
-/** Wait for a free render slot and take it; returns the slot's folder. */
-function takeSlot(slug: string): string {
-  mkdirSync(slotsDir, { recursive: true });
-  for (let waited = false; ; waited = true) {
-    for (let i = 0; i < slots; i++) {
-      const slot = path.join(slotsDir, String(i));
-      try {
-        mkdirSync(slot);
-      } catch {
-        // Taken: free it if whoever holds it has gone. A slot just taken may
-        // not have its pid written yet; give it a minute.
-        let pid = 0;
-        try {
-          pid = Number(readFileSync(path.join(slot, 'pid'), 'utf8').split('\n')[0]);
-        } catch {
-          if (Date.now() - statSync(slot).mtimeMs < 60_000) continue;
-        }
-        if (pid && alive(pid)) continue;
-        rmSync(slot, { recursive: true, force: true });
-        continue;
-      }
-      writeFileSync(path.join(slot, 'pid'), `${process.pid}\n${slug}\n`);
-      return slot;
-    }
-    if (!waited) console.log(`${slug}: waiting for a render slot`);
-    sleep(5000);
-  }
-}
 
 /** Stop the Blender rendering this scene on the Blender machine. */
 function stopRemote(scene: string) {
