@@ -70,7 +70,10 @@ const STATUS: Record<string, Status> = {
   'save-mine-office': 'done',
   'save-lodge': 'done',
   'saves-test': 'done',
-  // Written and drawn, under the owner's review; not in the game yet.
+  // Picked up, read and kept in her FILE tab in the game (tools/harness/tests/files.ts).
+  'files-viewer': 'done',
+  // In the game, but the reader shows only each page's top 192 rows, and the
+  // owner is reviewing the texts and the paper.
   'files-art': 'doing',
   'file-logbook': 'doing',
   'file-calendar': 'doing',

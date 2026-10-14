@@ -55,8 +55,13 @@ function pageDifference(shot: Image, ours: Image): number {
       for (let c = 0; c < 3; c++) sum += Math.abs(shot.rgb[((PAGE_Y + y) * shot.width + PAGE_X + x) * 3 + c]! - ours.rgb[(y * ours.width + x) * 3 + c]!);
   return sum / (SHOWN_W * SHOWN_H * 3);
 }
-/** The game's 5 bit colour and its filtering keep a drawn page a few levels off ours; a wrong or shifted page is far more. */
-const SAME_PAGE = 12;
+/**
+ * The game's 5 bit colour keeps a drawn page a few levels off ours: 3.9 to
+ * 6.1 for each of the ten files on 2026-10-14. Another page on the same
+ * paper was 13.9 or more (the quarry's day and night rosters), so the line
+ * is halfway.
+ */
+const SAME_PAGE = 9;
 
 /** The file's pickup zone, from the item_aot_set its room script carries. */
 function pickupZone(doc: Doc): { x: number; z: number; w: number; d: number } {
@@ -65,6 +70,24 @@ function pickupZone(doc: Doc): { x: number; z: number; w: number; d: number } {
   if (!m) fail(`${doc.room}/room.c has no pickup for ${doc.id} (run day/scripts.ts)`);
   const [x, z, w, d] = m.slice(1).map(Number) as [number, number, number, number];
   return { x, z, w, d };
+}
+
+/** A spot `step` units from the zone's middle toward the middle of the room's floor (renders/room.json). */
+function nearSpot(doc: Doc, zone: { x: number; z: number; w: number; d: number }, step: number): { x: number; z: number } | undefined {
+  let json: { bounds: { x0: number; z0: number; x1: number; z1: number } };
+  try {
+    json = JSON.parse(readFileSync(path.join(dayDir, doc.room, 'renders', 'room.json'), 'utf8'));
+  } catch {
+    return undefined;
+  }
+  const b = json.bounds;
+  const cx = zone.x + zone.w / 2;
+  const cz = zone.z + zone.d / 2;
+  const mx = (b.x0 + b.x1) / 2 - cx;
+  const mz = (b.z0 + b.z1) / 2 - cz;
+  const len = Math.hypot(mx, mz) || 1;
+  const clamp = (v: number, lo: number, hi: number) => Math.round(Math.min(hi - 300, Math.max(lo + 300, v)));
+  return { x: clamp(cx + (mx / len) * step, b.x0, b.x1), z: clamp(cz + (mz / len) * step, b.z0, b.z1) };
 }
 
 interface Result {
@@ -108,11 +131,26 @@ try {
       let s = await link.state();
       if (s.stage !== room.stage || s.room !== room.room) await link.room(room.stage, room.room);
       await settle(link);
-      await approach(link, pickupZone(r.doc));
+      // Stand her a step from the pickup first, so the walk to it is short
+      // and never crosses one of the room's touch doors.
+      // Furniture can stop her on the way; then try again from nearer.
+      const zone = pickupZone(r.doc);
+      for (const step of [900, 450]) {
+        const near = nearSpot(r.doc, zone, step);
+        if (near) await link.place(near.x, near.z);
+        await link.frames(4);
+        try {
+          await approach(link, zone);
+          break;
+        } catch (err) {
+          if (step === 450) throw err;
+        }
+      }
       await shoot(link, r, 'room', `In ${r.doc.room}, at the ${r.doc.title.toLowerCase()}`);
       await link.tap(Key.action, 3);
       s = await link.waitFor((st) => (st.msf & PICKUP_SCREEN) !== 0, 'the file reader', 10_000);
       await read(link, r, 'p');
+      await link.frames(60); // the message types itself out
       await shoot(link, r, 'filed', 'Filed');
       s = await settle(link);
       if (!flagOn(s, FILE_FLAGS, FILE_FLAG_BASE + r.doc.slot)) r.problems.push('not marked collected');
