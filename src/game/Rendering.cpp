@@ -1,6 +1,7 @@
 // Rendering.cpp - Frame rendering, present, sprite drawing
 // All functions decompiled from Ghidra with original addresses
 #include "../Globals.h"
+#include "RebFiles.h"
 #include "../platform/platform.h"
 #include "../DebugPrint.h"
 #include "../marni/MarniSystem.h"
@@ -1188,6 +1189,12 @@ static const unsigned char** dc_usa_item_names(void)
 
 unsigned char* message_item_name_lookup(unsigned char itemId)
 {
+    // Port addition: in her mode the file slots she fills carry her names.
+    if (g_bRebMode) {
+        const unsigned char* reb = reb_file_name(itemId);
+        if (reb) return (unsigned char*)reb;
+    }
+
     // The Japanese release has its own pair of tables (0x004cd388/0x004cd548,
     // read by its message_item_name_lookup at 0x00491440) holding the names in
     // FONT.TIM's encoding. The USA strings would still draw - the two fonts

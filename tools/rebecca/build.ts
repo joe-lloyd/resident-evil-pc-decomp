@@ -16,6 +16,7 @@ import { buildDayRoom } from './day/room.ts';
 import { buildCardSheet } from './card.ts';
 import { footstepFiles } from './footsteps.ts';
 import { buildArms } from './arms.ts';
+import { filePages } from './files/pages.ts';
 import { buildWalk, walkFileName } from './walks.ts';
 import { readPng } from '../harness/image.ts';
 import { dayRooms, dayStart, walks } from './day/rooms.ts';
@@ -126,6 +127,13 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   for (const person of people) {
     writeFileSync(path.join(reb, 'enemy', person.model), personModel(readFileSync(findFile(enemyDir, person.model)), person));
     written.push(`enemy/${person.model}`);
+  }
+
+  // Her files' pages (files/documents.ts), in place of RE1's in her mode only.
+  mkdirSync(path.join(reb, 'item_m2'), { recursive: true });
+  for (const { name, bytes } of filePages()) {
+    writeFileSync(path.join(reb, 'item_m2', name), bytes);
+    written.push(`item_m2/${name}`);
   }
 
   // New rooms: the rooms of her day (day/rooms.ts), those rendered so far.

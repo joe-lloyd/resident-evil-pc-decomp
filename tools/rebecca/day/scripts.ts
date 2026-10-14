@@ -13,6 +13,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dayRooms } from './rooms.ts';
 import type { DayRoom } from './room.ts';
+import { BOOKS, DOCUMENTS, ITEM_FLAG_BASE } from '../files/documents.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -174,6 +175,18 @@ function main(): void {
     }
     const msgs = [kit.entry ?? '...'];
     for (const c of kit.checks ?? []) {
+      const doc = DOCUMENTS.find((d) => d.room === slug && c.text.startsWith(d.check));
+      if (doc) {
+        // A document is a file she picks up and reads (files/documents.ts):
+        // item 0x5F + its slot, on the room's empty model slot, kept taken by
+        // its room-item flag.
+        const flag = ITEM_FLAG_BASE + BOOKS.indexOf(doc.id as (typeof BOOKS)[number]);
+        lines.push(`// ${doc.title}, a file.`);
+        lines.push(`if (ck(FG_ITEM, ${flag}, 0)) {`);
+        lines.push(`    item_aot_set(${id++}, ${size(c.zone)}, ${0x5f + doc.slot}, 1, ${spec.itemModels?.length ?? 0}, 255, 0, 0, 0, 0, 0, 0, 0, 0, ${flag}, 129, 0, 0);`);
+        lines.push('}');
+        continue;
+      }
       lines.push(`aot_set(${id++}, ${size(c.zone)}, SCE_MESSAGE, 129, ${128 + msgs.length}, 0, 255, 0, 0, 0);`);
       msgs.push(c.text);
     }

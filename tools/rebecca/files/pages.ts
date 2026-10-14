@@ -12,7 +12,7 @@
 import { lzwPack, to555 } from '../pak.ts';
 import type { Image } from '../harness/image.ts';
 import { ADVANCE, GLYPH_H, glyph } from './font.ts';
-import type { Calendar, Doc, MineMap, Notice, Page, Paper, Roster } from './documents.ts';
+import { DOCUMENTS, type Calendar, type Doc, type MineMap, type Notice, type Page, type Paper, type Roster } from './documents.ts';
 
 export const PAGE = 256;
 const LINE = 16;
@@ -626,4 +626,12 @@ export function toImage(d: Drawn, zoom = 2): Image {
       rgb.set(s, (y * w + x) * 3);
     }
   return { width: w, height: w, rgb };
+}
+
+/** The page file of each file slot, from g_filemPixNames (0x004d2350). */
+export const PIX_NAMES = ['l0', 'm0', 'n0', 'o0', 'p0', 'q0', 'r0', 's0', 't0', 'u0', 'v0', 'w0', 'x0', 'y0', 'z0', '00'].map((n) => `filem_${n}.pix`);
+
+/** Her pages for the REB overlay's item_m2 folder: one .pix per document, named for its slot. */
+export function filePages(): { name: string; bytes: Uint8Array }[] {
+  return DOCUMENTS.map((doc) => ({ name: PIX_NAMES[doc.slot]!, bytes: packPix(doc.pages.map((_, i) => drawPage(doc, i))) }));
 }

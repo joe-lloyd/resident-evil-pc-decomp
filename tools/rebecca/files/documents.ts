@@ -86,6 +86,8 @@ export interface Doc {
   act: number;
   /** The file slot, 0 to 15: the item is 0x5F + slot. */
   slot: number;
+  /** How the scene's check for it starts (renders/room.json): that check becomes the pickup. */
+  check: string;
   paper: Paper;
   pages: Page[];
   /** Things the owner should decide. */
@@ -94,6 +96,16 @@ export interface Doc {
 
 /** Pages per file slot, from g_itemMaxCounts (0x004d2620). */
 export const SLOT_PAGES = [4, 6, 11, 4, 2, 6, 7, 7, 10, 5, 5, 4, 3, 3, 3, 4] as const;
+
+/**
+ * Her FILE tab: two books of eight, in the order she comes to them. A file's
+ * place here also gives its room-item flag, ITEM_FLAG_BASE + place, which
+ * keeps it taken once she has it.
+ */
+export const BOOKS = ['logbook', 'quarantine', 'calendar', 'foreman-letters', 'walt-log', 'diary', 'rosters', 'mine-map', 'keeper-log', 'gardener-diary'] as const;
+
+/** Room-item flags 230 to 239: free in her rooms (the cabin and the shed use 241 to 243). */
+export const ITEM_FLAG_BASE = 230;
 
 const title = { kind: 'title' } as const;
 
@@ -107,6 +119,7 @@ export const DOCUMENTS: Doc[] = [
     where: 'The cabin, act 1: open on the desk. It tells her the winch crank is in the shed.',
     act: 1,
     slot: 0,
+    check: "The ranger's logbook.",
     paper: 'ledger',
     pages: [
       title,
@@ -149,6 +162,7 @@ export const DOCUMENTS: Doc[] = [
     where: "The bunkhouse, act 2: on the wall by the stove. The numbers open the foreman's safe.",
     act: 2,
     slot: 12,
+    check: 'A calendar from a supply company.',
     paper: 'letter',
     pages: [
       title,
@@ -187,6 +201,7 @@ Don't tell him.
     where: "The operator's cottage, act 2: open on the table. He went to hide in the mine.",
     act: 2,
     slot: 1,
+    check: 'His diary, open.',
     paper: 'notebook',
     pages: [
       title,
@@ -258,6 +273,7 @@ it itches. hide in the mine till they come.
     where: 'The mine office, act 2: pinned over the desk. It shows the pump and the lift.',
     act: 2,
     slot: 13,
+    check: 'A map of the workings.',
     paper: 'notebook',
     pages: [
       title,
@@ -309,6 +325,7 @@ The winze stays roped.
     where: 'The lower station, act 3: on his desk. The estate gardener came up the day before.',
     act: 3,
     slot: 9,
+    check: "The keeper's log.",
     paper: 'ledger',
     pages: [
       title,
@@ -359,6 +376,7 @@ The winze stays roped.
     where: "The gardener's lodge, act 3: on the table by the lamp. The itching, day by day.",
     act: 3,
     slot: 5,
+    check: 'His diary. Day after day',
     paper: 'notebook',
     notes: [
       "The last line is the scene's own (lodge/scene.py), and it all but quotes RE1's Keeper's Diary. Keep the nod or reword it in both places.",
@@ -434,6 +452,7 @@ itchy. itchy. scott came. ugly face so i killed him. tasty
     where: "The foreman's office, act 2: on his desk. Umbrella paid for the gondola.",
     act: 2,
     slot: 6,
+    check: 'Letters on Umbrella letterhead.',
     paper: 'letter',
     notes: [
       "The last letter makes Umbrella's split crate the start of the camp's sickness. That is a story call: keep it, or cut it back to the foreman's suspicion.",
@@ -531,6 +550,7 @@ I never told the county. I'm telling whoever reads this.
     where: "The lookout tower's top, act 2: on the desk. The night Bravo came down.",
     act: 2,
     slot: 10,
+    check: 'The log. 01.20',
     paper: 'ledger',
     pages: [
       title,
@@ -584,6 +604,7 @@ THEY'RE ON THE STAIRS.
     where: 'The logging road, act 2: torn on a tree by the verge. Whatever was in the camp got out.',
     act: 2,
     slot: 4,
+    check: 'QUARANTINE.',
     paper: 'letter',
     pages: [
       title,
@@ -603,6 +624,7 @@ THEY'RE ON THE STAIRS.
     where: 'The quarry office, act 2: on the board over the desk. The week going red.',
     act: 2,
     slot: 3,
+    check: 'The shift rosters.',
     paper: 'ledger',
     pages: [
       title,
