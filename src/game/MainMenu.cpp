@@ -12,6 +12,7 @@
 // Menu mode: DAT_00ae9f10 determines initial submenu on open
 // ============================================================================
 #include "../Globals.h"
+#include "RebFiles.h"
 #include "../platform/platform.h"
 #include "../system/AssetPath.h"
 #include "../DebugPrint.h"
@@ -3938,6 +3939,8 @@ static unsigned char DAT_004d2860[0x24] = {
 static void pickup_screen_init_table(void)
 {
     for (int i = 0; i < 32; i++) g_pickupKeyItemList[i] = g_keyItemListInit[i];
+    // Port addition: her mode has her own books (RebFiles.cpp).
+    if (g_bRebMode) reb_file_books(g_pickupKeyItemList);
 }
 
 // 0x00488680 - has this file been collected? The entry is a file index into the
@@ -5131,6 +5134,7 @@ static void FUN_00481d00(unsigned char* state)
             unsigned char entry = g_pickupKeyItemList[((int)state[4] + state[7] * 2) * 8 + state[5]];
             short titleX = (GetAssetVersion() != 0)
                                ? (short)g_jpnFileTitleX[entry]
+                               : g_bRebMode ? reb_file_title_x(entry)   // port addition: her titles
                                : (short)g_itemMaxCounts[entry + 0x10];
             short titleY = (GetAssetVersion() != 0) ? (short)0xc0 : (short)0xc1;
             FUN_00454fd0(entry + 0x5f, 0x80,

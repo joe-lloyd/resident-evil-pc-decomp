@@ -4,8 +4,14 @@ import { test } from 'node:test';
 import { unpackPak } from '../../harness/background.ts';
 import { day } from '../plan/day.ts';
 import { sections } from '../plan/todo.ts';
-import { DOCUMENTS, SLOT_PAGES } from './documents.ts';
-import { PAGE, TIM_SIZE, drawPage, layoutText, packPix, readTim, wrap } from './pages.ts';
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { BOOKS, DOCUMENTS, SLOT_PAGES } from './documents.ts';
+import { ENGINE_FILE, engineSource } from './engine.ts';
+import { PAGE, TIM_SIZE, drawPage, filePages, layoutText, packPix, readTim, wrap } from './pages.ts';
+
+const dayDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'day');
 
 test('wrap breaks between words at the column', () => {
   assert.deepEqual(wrap('Crank is in the shed.', 11), ['Crank is in', 'the shed.']);
@@ -51,4 +57,25 @@ test('a packed .pix reads back to the pages that were drawn', () => {
       assert.deepEqual(back.pixels, page.pixels, `${doc.id} page ${i}`);
     });
   }
+});
+
+test('every document is in her books once', () => {
+  assert.deepEqual([...BOOKS].sort(), DOCUMENTS.map((d) => d.id).sort());
+});
+
+test("every document's room has the check that becomes its pickup", () => {
+  for (const d of DOCUMENTS.filter((x) => x.room !== 'lookout')) {
+    const json = JSON.parse(readFileSync(path.join(dayDir, d.room, 'renders', 'room.json'), 'utf8')) as { checks: { text: string }[] };
+    assert.equal(json.checks.filter((c) => c.text.startsWith(d.check)).length, 1, d.id);
+  }
+});
+
+test('every page file fits the buffer the reader loads it into (g_bgPakLoadBuffer, 0x20000)', () => {
+  const files = filePages();
+  assert.equal(new Set(files.map((f) => f.name)).size, DOCUMENTS.length);
+  for (const f of files) assert.ok(f.bytes.length < 0x20000, `${f.name}: ${f.bytes.length}`);
+});
+
+test('src/game/RebFiles.cpp is generated from documents.ts and up to date', () => {
+  assert.equal(readFileSync(ENGINE_FILE, 'utf8'), engineSource());
 });

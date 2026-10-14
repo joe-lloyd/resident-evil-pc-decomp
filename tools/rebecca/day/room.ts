@@ -308,7 +308,8 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
   };
   const rdt = composeRoom(donor, {
     cameras,
-    itemModels: spec.itemModels?.map((m) => model(baseRoom(m.from), 'item', m.index)),
+    // The room's item models, then one empty slot: a file pickup sits on it and draws nothing.
+    itemModels: [...(spec.itemModels ?? []).map((m) => model(baseRoom(m.from), 'item', m.index)), {}],
     // A save room's item box: RE1's own lid, object model 0 of the mansion's save room.
     objectModels: json.saves ? [scaleModel(model(baseRoom(ITEM_BOX_LID.from), 'object', ITEM_BOX_LID.index), json.saves.lid.scale ?? 1)] : undefined,
     ...('hour' in spec ? lightingFor(spec.hour, spec.inside, json.bounds) : { ambient: spec.ambient, lights: spec.lights }),
