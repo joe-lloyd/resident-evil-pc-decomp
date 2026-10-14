@@ -84,6 +84,7 @@ nav a{color:var(--dim);margin-right:.8em}
 <h1>Rebecca's files</h1>
 <p class="lede">The ten papers she reads on her day, drawn as RE1 file pages: 256 by 256 pixels, 16 colours, packed in the game's own format. Each page is shown at twice its size, with its words beside it. Rate the writing and the pages of each file, then press Copy my ratings and paste the result back. Ratings stay in this browser until you copy them.</p>
 <p class="lede">The first page of each file is its title on black, as in RE1. The text pages come in two looks: on paper (a notebook, a ledger, a typed letter), or RE1's own light type on black. Switch between them below, and say which you want.</p>
+<p class="decide">In the game, the reader shows only the top 192 of each page's 256 rows, so the bottom quarter of these pages is cut off. Screenshots of every file picked up and read in the game are on <a href="game/" style="color:var(--gold)">the in-game page</a>.</p>
 <p class="lede">Everything still to do for her day is on the tracker: <a href="https://home.arpa/research/rebecca-todo/" style="color:var(--fg)">home.arpa/research/rebecca-todo</a>.</p>
 <nav>${DOCUMENTS.map((d) => `<a href="#${d.id}">${esc(d.title)}</a>`).join('')}</nav>
 <div class="tools">
