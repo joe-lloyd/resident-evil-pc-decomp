@@ -1,7 +1,7 @@
 // pond (417), written by day/scripts.ts from day/pond/scene.py: edit the scene, not this file.
 // init procedure 0
 // To sawmill.
-door_aot_set(0, 1700, 16320, 1190, 1700, 0, 0, 0, 4, 0, ROOM_416, 21590, 0, 17170, 2048, UNLOCKED, 129);
+door_aot_set(0, 1700, 16320, 1190, 1700, 0, 0, 0, 4, 0, ROOM_416, 21590, 0, 17170, 2048, UNLOCKED, 193);
 // To flume.
 door_aot_set(1, 5780, 3400, 2040, 1020, 0, 15, 48, 4, 0, ROOM_418, 10880, 0, 18530, 1024, UNLOCKED, 1);
 aot_set(2, 13260, 15980, 4080, 1360, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);

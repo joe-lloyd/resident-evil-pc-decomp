@@ -99,15 +99,25 @@ try {
         await link.place(sx, sz);
         await link.frames(4);
         await faceTowards(link, cx, cz);
+        // As a player would: walk at it until she leaves or stops, and only
+        // then, if she is still here, press action.
         const deadline = Date.now() + 20_000;
         await link.down(Key.up);
-        for (;;) {
+        let last = s.player;
+        for (let still = 0; still < 3; ) {
           s = await link.frames(6);
           if (s.stage !== r.stage || s.room !== r.room) break;
-          if (Date.now() > deadline) throw new Error(`still in ${r.slug} at (${s.player.x}, ${s.player.z})`);
-          await link.tap(Key.action, 2);
+          if (Date.now() > deadline) throw new Error(`walked at it for 20 s and still in ${r.slug} at (${s.player.x}, ${s.player.z})`);
+          still = Math.hypot(s.player.x - last.x, s.player.z - last.z) < 8 ? still + 1 : 0;
+          last = s.player;
         }
         await link.release();
+        if (s.stage === r.stage && s.room === r.room) {
+          await link.frames(4);
+          await link.tap(Key.action, 2);
+          s = await link.frames(20);
+          if (s.stage === r.stage && s.room === r.room) throw new Error(`stopped at (${s.player.x}, ${s.player.z}) and action did nothing`);
+        }
         s = await settle(link, (st) => st.stage !== r.stage || st.room !== r.room);
         if (s.stage !== target.stage || s.room !== target.room) throw new Error(`came out in ${s.stage}:${s.room.toString(16)}, not ${d.to}`);
         s = await link.frames(60);

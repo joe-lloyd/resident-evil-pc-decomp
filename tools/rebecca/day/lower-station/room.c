@@ -1,7 +1,7 @@
 // lower-station (21A), written by day/scripts.ts from day/lower-station/scene.py: edit the scene, not this file.
 // init procedure 0
 // To lower-yard.
-door_aot_set(0, 1700, 4420, 765, 1700, 0, 0, 0, 4, 0, ROOM_219, 20230, 0, 9350, 2048, UNLOCKED, 129);
+door_aot_set(0, 1700, 4420, 765, 1700, 0, 0, 0, 4, 0, ROOM_219, 20230, 0, 9350, 2048, UNLOCKED, 193);
 aot_set(1, 6800, 5865, 1190, 1020, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 8755, 5865, 765, 1020, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 3060, 3400, 3740, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

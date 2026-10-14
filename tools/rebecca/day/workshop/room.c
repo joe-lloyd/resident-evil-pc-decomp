@@ -1,7 +1,7 @@
 // workshop (415), written by day/scripts.ts from day/workshop/scene.py: edit the scene, not this file.
 // init procedure 0
 // To camp-yard.
-door_aot_set(0, 3740, 1700, 2040, 850, 0, 0, 0, 4, 0, ROOM_31E, 25840, 0, 20740, 1024, UNLOCKED, 129);
+door_aot_set(0, 3740, 1700, 2040, 850, 0, 0, 0, 4, 0, ROOM_31E, 25840, 0, 20740, 1024, UNLOCKED, 193);
 aot_set(1, 8755, 7905, 2380, 1105, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 3060, 8670, 3060, 1020, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 6460, 3230, 1700, 1360, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

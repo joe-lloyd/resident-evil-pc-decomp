@@ -70,6 +70,14 @@ const BUILT_DOORS: Record<string, { to: string; id: number; zone: Zone; note: st
 /** Common flags for "she has been here", one per kit room with a first thought; the built rooms use 200-206. */
 const FIRST_FLAG = 207;
 const LAST_FLAG = 255;
+/**
+ * How a door fires: a walk on touch; a door that opens on the action button
+ * while she stands in its zone (0x40). Without 0x40 the engine tests the
+ * point 600 units in front of her, which is past a zone against a wall when
+ * she walks right up to the door (check_action_object).
+ */
+const TOUCH = 1;
+const OPEN = 0x80 | 0x40 | 1;
 /** Message text: lines this many characters at most, three lines to a page. */
 const LINE = 26;
 const PAGE_LINES = 3;
@@ -147,7 +155,7 @@ function main(): void {
       const walk = !isInside(spec) && !game && !isInside(target as DayRoom);
       const [variant, sfx, type] = walk ? [0, 15, 48] : [0, 0, 0];
       lines.push(`// To ${d.to}.`);
-      lines.push(`door_aot_set(${id++}, ${size(d.zone)}, ${variant}, ${sfx}, ${type}, 4, 0, ${roomName(target)}, ${back.x}, 0, ${back.z}, ${back.angle}, UNLOCKED, ${walk ? 1 : 129});`);
+      lines.push(`door_aot_set(${id++}, ${size(d.zone)}, ${variant}, ${sfx}, ${type}, 4, 0, ${roomName(target)}, ${back.x}, 0, ${back.z}, ${back.angle}, UNLOCKED, ${walk ? TOUCH : OPEN});`);
     }
     const msgs = [kit.entry ?? '...'];
     for (const c of kit.checks ?? []) {
@@ -181,7 +189,7 @@ function main(): void {
       const walk = !isInside(bySlug.get(slug)!) && !isInside(target);
       const [variant, sfx, type] = walk ? [0, 15, 48] : [0, 0, 0];
       lines.push(`// ${d.note}`);
-      lines.push(`door_aot_set(${d.id}, ${size(d.zone)}, ${variant}, ${sfx}, ${type}, 4, 0, ${roomName(target)}, ${arrive.x}, 0, ${arrive.z}, ${arrive.angle}, UNLOCKED, ${walk ? 1 : 129});`);
+      lines.push(`door_aot_set(${d.id}, ${size(d.zone)}, ${variant}, ${sfx}, ${type}, 4, 0, ${roomName(target)}, ${arrive.x}, 0, ${arrive.z}, ${arrive.angle}, UNLOCKED, ${walk ? TOUCH : OPEN});`);
     }
     lines.push(end);
     const at = text.indexOf(begin);

@@ -1,7 +1,7 @@
 // garden-shed (119), written by day/scripts.ts from day/garden-shed/scene.py: edit the scene, not this file.
 // init procedure 0
 // To back-garden.
-door_aot_set(0, 1700, 3570, 850, 1360, 0, 0, 0, 4, 0, ROOM_110, 23800, 0, 8500, 2048, UNLOCKED, 129);
+door_aot_set(0, 1700, 3570, 850, 1360, 0, 0, 0, 4, 0, ROOM_110, 23800, 0, 8500, 2048, UNLOCKED, 193);
 aot_set(1, 2210, 1700, 1530, 1020, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 4250, 1700, 850, 1020, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 5270, 2380, 1190, 1360, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

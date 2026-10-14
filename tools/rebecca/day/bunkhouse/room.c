@@ -1,7 +1,7 @@
 // bunkhouse (31F), written by day/scripts.ts from day/bunkhouse/scene.py: edit the scene, not this file.
 // init procedure 0
 // To camp-yard.
-door_aot_set(0, 10200, 9350, 1530, 850, 0, 0, 0, 4, 0, ROOM_31E, 19465, 0, 5780, 3072, UNLOCKED, 129);
+door_aot_set(0, 10200, 9350, 1530, 850, 0, 0, 0, 4, 0, ROOM_31E, 19465, 0, 5780, 3072, UNLOCKED, 193);
 aot_set(1, 11475, 1700, 1360, 2210, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 12920, 3910, 3230, 850, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 15640, 6970, 3060, 935, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

@@ -1,7 +1,7 @@
 // mine-office (51D), written by day/scripts.ts from day/mine-office/scene.py: edit the scene, not this file.
 // init procedure 0
 // To tunnel.
-door_aot_set(0, 4080, 5610, 1530, 850, 0, 0, 0, 4, 0, ROOM_51C, 21335, 0, 15980, 3072, UNLOCKED, 129);
+door_aot_set(0, 4080, 5610, 1530, 850, 0, 0, 0, 4, 0, ROOM_51C, 21335, 0, 15980, 3072, UNLOCKED, 193);
 aot_set(1, 3485, 1700, 2380, 1445, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 5100, 1700, 1020, 1445, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 3740, 3145, 1530, 1275, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

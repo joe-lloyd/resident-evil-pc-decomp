@@ -1,7 +1,7 @@
 // mess (413), written by day/scripts.ts from day/mess/scene.py: edit the scene, not this file.
 // init procedure 0
 // To camp-yard.
-door_aot_set(0, 10030, 8500, 850, 1530, 0, 0, 0, 4, 0, ROOM_31E, 6290, 0, 16065, 0, UNLOCKED, 129);
+door_aot_set(0, 10030, 8500, 850, 1530, 0, 0, 0, 4, 0, ROOM_31E, 6290, 0, 16065, 0, UNLOCKED, 193);
 aot_set(1, 3910, 7429, 2380, 1020, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 5780, 7259, 1020, 850, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 4760, 3145, 3060, 765, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

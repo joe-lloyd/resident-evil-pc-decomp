@@ -3,7 +3,7 @@
 // To east-path.
 door_aot_set(0, 1700, 14620, 1020, 3060, 0, 15, 48, 4, 0, ROOM_517, 28900, 0, 13600, 2048, UNLOCKED, 1);
 // To quarry-office.
-door_aot_set(1, 5610, 20060, 1530, 1020, 0, 0, 0, 4, 0, ROOM_51A, 4675, 0, 3230, 3072, UNLOCKED, 129);
+door_aot_set(1, 5610, 20060, 1530, 1020, 0, 0, 0, 4, 0, ROOM_51A, 4675, 0, 3230, 3072, UNLOCKED, 193);
 // To mine-entrance.
 door_aot_set(2, 31280, 9350, 1020, 4250, 0, 15, 48, 4, 0, ROOM_51B, 4250, 0, 12580, 0, UNLOCKED, 1);
 aot_set(3, 17000, 17510, 3910, 2890, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);

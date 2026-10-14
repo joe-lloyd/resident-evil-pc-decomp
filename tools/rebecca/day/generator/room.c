@@ -1,9 +1,9 @@
 // generator (41B), written by day/scripts.ts from day/generator/scene.py: edit the scene, not this file.
 // init procedure 0
 // To washout.
-door_aot_set(0, 4420, 1700, 1700, 1020, 0, 0, 0, 4, 0, ROOM_41A, 6460, 0, 19040, 1024, UNLOCKED, 129);
+door_aot_set(0, 4420, 1700, 1700, 1020, 0, 0, 0, 4, 0, ROOM_41A, 6460, 0, 19040, 1024, UNLOCKED, 193);
 // To switch.
-door_aot_set(1, 6460, 7140, 1360, 1020, 0, 0, 0, 4, 0, ROOM_41F, 3740, 0, 3570, 3072, UNLOCKED, 129);
+door_aot_set(1, 6460, 7140, 1360, 1020, 0, 0, 0, 4, 0, ROOM_41F, 3740, 0, 3570, 3072, UNLOCKED, 193);
 aot_set(2, 3995, 3230, 1020, 1190, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(3, 2040, 1700, 2040, 1020, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(4, 4080, 3060, 1360, 1360, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

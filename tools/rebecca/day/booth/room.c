@@ -1,7 +1,7 @@
 // booth (319), written by day/scripts.ts from day/booth/scene.py: edit the scene, not this file.
 // init procedure 0
 // To platform.
-door_aot_set(0, 4420, 5440, 1530, 680, 0, 0, 0, 4, 0, ROOM_318, 24735, 0, 10710, 3072, UNLOCKED, 129);
+door_aot_set(0, 4420, 5440, 1530, 680, 0, 0, 0, 4, 0, ROOM_318, 24735, 0, 10710, 3072, UNLOCKED, 193);
 aot_set(1, 5100, 1700, 1870, 1190, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 1700, 1870, 1530, 850, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 1700, 4080, 1530, 850, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

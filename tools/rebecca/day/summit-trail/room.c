@@ -1,9 +1,9 @@
 // summit-trail (213), written by day/scripts.ts from day/summit-trail/scene.py: edit the scene, not this file.
 // init procedure 0
 // To mine-lift.
-door_aot_set(0, 25330, 17680, 1700, 1020, 0, 0, 0, 4, 0, ROOM_509, 3315, 0, 3230, 3072, UNLOCKED, 129);
+door_aot_set(0, 25330, 17680, 1700, 1020, 0, 0, 0, 4, 0, ROOM_509, 3315, 0, 3230, 3072, UNLOCKED, 193);
 // To weather.
-door_aot_set(1, 5440, 9520, 1530, 1020, 0, 0, 0, 4, 0, ROOM_214, 5015, 0, 5610, 1024, UNLOCKED, 129);
+door_aot_set(1, 5440, 9520, 1530, 1020, 0, 0, 0, 4, 0, ROOM_214, 5015, 0, 5610, 1024, UNLOCKED, 193);
 // To mast.
 door_aot_set(2, 13600, 1700, 6800, 1020, 0, 15, 48, 4, 0, ROOM_215, 14620, 0, 19210, 1024, UNLOCKED, 1);
 aot_set(3, 18020, 11220, 3740, 3060, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);

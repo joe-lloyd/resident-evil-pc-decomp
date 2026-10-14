@@ -1,7 +1,7 @@
 // lodge (21D), written by day/scripts.ts from day/lodge/scene.py: edit the scene, not this file.
 // init procedure 0
 // To creek.
-door_aot_set(0, 8330, 2890, 850, 1530, 0, 0, 0, 4, 0, ROOM_21C, 12750, 0, 20485, 0, UNLOCKED, 129);
+door_aot_set(0, 8330, 2890, 850, 1530, 0, 0, 0, 4, 0, ROOM_21C, 12750, 0, 20485, 0, UNLOCKED, 193);
 aot_set(1, 3400, 3400, 1190, 1360, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 4590, 3400, 1020, 1360, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 5440, 5355, 3485, 850, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

@@ -1,7 +1,7 @@
 // wine (11E), written by day/scripts.ts from day/wine/scene.py: edit the scene, not this file.
 // init procedure 0
 // To cellar.
-door_aot_set(0, 1700, 3400, 1020, 2040, 0, 0, 0, 4, 0, ROOM_11D, 13770, 0, 4420, 2048, UNLOCKED, 129);
+door_aot_set(0, 1700, 3400, 1020, 2040, 0, 0, 0, 4, 0, ROOM_11D, 13770, 0, 4420, 2048, UNLOCKED, 193);
 aot_set(1, 2813, 2312, 2721, 1853, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 3570, 2312, 1530, 918, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 5695, 4590, 1530, 1360, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

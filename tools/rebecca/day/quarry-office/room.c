@@ -1,7 +1,7 @@
 // quarry-office (51A), written by day/scripts.ts from day/quarry-office/scene.py: edit the scene, not this file.
 // init procedure 0
 // To quarry.
-door_aot_set(0, 3910, 1700, 1530, 850, 0, 0, 0, 4, 0, ROOM_519, 6375, 0, 19040, 1024, UNLOCKED, 129);
+door_aot_set(0, 3910, 1700, 1530, 850, 0, 0, 0, 4, 0, ROOM_519, 6375, 0, 19040, 1024, UNLOCKED, 193);
 aot_set(1, 1700, 4250, 1360, 1700, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 1700, 2550, 1360, 1530, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 2040, 1700, 1785, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

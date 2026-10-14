@@ -1,7 +1,7 @@
 // cottage (518), written by day/scripts.ts from day/cottage/scene.py: edit the scene, not this file.
 // init procedure 0
 // To east-path.
-door_aot_set(0, 4420, 6630, 1530, 850, 0, 0, 0, 4, 0, ROOM_517, 15385, 0, 9690, 3072, UNLOCKED, 129);
+door_aot_set(0, 4420, 6630, 1530, 850, 0, 0, 0, 4, 0, ROOM_517, 15385, 0, 9690, 3072, UNLOCKED, 193);
 aot_set(1, 4080, 3570, 1530, 1445, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(2, 5610, 3570, 510, 1445, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(3, 3145, 6630, 1275, 850, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);

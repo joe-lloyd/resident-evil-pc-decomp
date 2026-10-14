@@ -1,9 +1,9 @@
 // sawmill (416), written by day/scripts.ts from day/sawmill/scene.py: edit the scene, not this file.
 // init procedure 0
 // To camp-yard.
-door_aot_set(0, 1700, 10200, 1190, 5100, 0, 0, 0, 4, 0, ROOM_31E, 28730, 0, 12750, 2048, UNLOCKED, 129);
+door_aot_set(0, 1700, 10200, 1190, 5100, 0, 0, 0, 4, 0, ROOM_31E, 28730, 0, 12750, 2048, UNLOCKED, 193);
 // To pond.
-door_aot_set(1, 22780, 16320, 1020, 1700, 0, 0, 0, 4, 0, ROOM_417, 4420, 0, 17170, 0, UNLOCKED, 129);
+door_aot_set(1, 22780, 16320, 1020, 1700, 0, 0, 0, 4, 0, ROOM_417, 4420, 0, 17170, 0, UNLOCKED, 193);
 aot_set(2, 12920, 11900, 4420, 1360, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(3, 13940, 12070, 6800, 1190, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(4, 11900, 11220, 1700, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
