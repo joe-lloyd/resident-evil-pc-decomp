@@ -1,0 +1,110 @@
+{
+ "cameras": [
+  {
+   "from": [
+    4335,
+    -4080,
+    7650
+   ],
+   "to": [
+    3145,
+    -850,
+    2380
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2295,
+    -4165,
+    -1275
+   ],
+   "to": [
+    3655,
+    -680,
+    3910
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 4930,
+  "z1": 4335
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "junction",
+   "zone": {
+    "x0": 1870,
+    "z0": 3570,
+    "x1": 4760,
+    "z1": 4335
+   },
+   "arrive": {
+    "x": 3315,
+    "z": 2805,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "summit-trail",
+   "zone": {
+    "x0": 1870,
+    "z0": 1700,
+    "x1": 4760,
+    "z1": 2465
+   },
+   "arrive": {
+    "x": 3315,
+    "z": 3230,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 3910,
+    "z0": 2499,
+    "x1": 4930,
+    "z1": 3536
+   },
+   "text": "The cage controls. UP and DOWN.\nThe lever's dead without power up top."
+  },
+  {
+   "zone": {
+    "x0": 2380,
+    "z0": 2499,
+    "x1": 3910,
+    "z1": 3536
+   },
+   "text": "A miner's cap lamp, dead. The strap's snapped.\nThere's an old smear of blood across the plates."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 2499,
+    "x1": 2380,
+    "z1": 3536
+   },
+   "text": "MAX 6 MEN."
+  }
+ ],
+ "entry": "The cage creaks under me.",
+ "notes": [
+  "from the junction, through the south gate: the dead lamp, the smear, the controls, the counterweight cable running in the shaft",
+  "from the shaft behind the cage, through the north gate: the controls, the bell pull, the junction's lamps beyond"
+ ]
+}

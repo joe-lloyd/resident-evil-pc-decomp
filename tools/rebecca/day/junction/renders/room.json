@@ -1,0 +1,275 @@
+{
+ "cameras": [
+  {
+   "from": [
+    2550,
+    -4420,
+    2550
+   ],
+   "to": [
+    14450,
+    -340,
+    11900
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    21250,
+    -4420,
+    16150
+   ],
+   "to": [
+    9350,
+    -1530,
+    5100
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    16320,
+    -4420,
+    2380
+   ],
+   "to": [
+    8160,
+    0,
+    14620
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2550,
+    -4420,
+    15980
+   ],
+   "to": [
+    16150,
+    -1530,
+    5950
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    12920,
+    -3910,
+    12920
+   ],
+   "to": [
+    11900,
+    -2210,
+    1700
+   ],
+   "fov": 195
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 18190,
+   "z0": 3740,
+   "x1": 21930,
+   "z1": 11900,
+   "name": "Pump footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 16915,
+   "z0": 11305,
+   "x1": 18105,
+   "z1": 11985,
+   "name": "Pipe footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 15555,
+   "z0": 11985,
+   "x1": 16745,
+   "z1": 12665,
+   "name": "Pipe footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 14025,
+   "z0": 12750,
+   "x1": 15215,
+   "z1": 13430,
+   "name": "Pipe footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 16958,
+   "z0": 2168,
+   "x1": 18062,
+   "z1": 3272,
+   "name": "Drum footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 5058,
+   "z0": 2040,
+   "x1": 6503,
+   "z1": 3230,
+   "name": "Crate footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 17299,
+   "z0": 6517,
+   "x1": 18571,
+   "z1": 8443,
+   "name": "Wrapped dog"
+  },
+  {
+   "shape": "box",
+   "x0": 2635,
+   "z0": 2890,
+   "x1": 4165,
+   "z1": 3910,
+   "name": "Reel footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 6885,
+   "z0": 1870,
+   "x1": 9945,
+   "z1": 3570,
+   "name": "Timber footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 22100,
+  "z1": 17000
+ },
+ "voids": [
+  {
+   "x0": 6290,
+   "z0": 14110,
+   "x1": 14110,
+   "z1": 17000
+  }
+ ],
+ "doors": [
+  {
+   "to": "tunnel",
+   "zone": {
+    "x0": 1700,
+    "z0": 8160,
+    "x1": 2720,
+    "z1": 11560
+   },
+   "arrive": {
+    "x": 4080,
+    "z": 9860,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "mine-lift",
+   "zone": {
+    "x0": 10625,
+    "z0": 1955,
+    "x1": 13855,
+    "z1": 2975
+   },
+   "arrive": {
+    "x": 12240,
+    "z": 6120,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "gallery",
+   "zone": {
+    "x0": 7140,
+    "z0": 13090,
+    "x1": 13260,
+    "z1": 14110
+   },
+   "arrive": {
+    "x": 10200,
+    "z": 11560,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 14450,
+    "z0": 1700,
+    "x1": 16150,
+    "z1": 3060
+   },
+   "text": "The lift cage. LIFT TO SURFACE. The cable goes up into the dark."
+  },
+  {
+   "zone": {
+    "x0": 17680,
+    "z0": 8840,
+    "x1": 22100,
+    "z1": 11730
+   },
+   "text": "The mine's pump. The motor's cold.\nIts pipe runs down into the flooded way."
+  },
+  {
+   "zone": {
+    "x0": 20740,
+    "z0": 12580,
+    "x1": 22100,
+    "z1": 14280
+   },
+   "text": "The pump's switch. It's thrown off."
+  },
+  {
+   "zone": {
+    "x0": 7140,
+    "z0": 12070,
+    "x1": 13260,
+    "z1": 13090
+   },
+   "text": "The way down goes under the water. It's black.\nHis blood goes right to the edge. He went in."
+  },
+  {
+   "zone": {
+    "x0": 16830,
+    "z0": 6120,
+    "x1": 17680,
+    "z1": 8840
+   },
+   "text": "A dog, one of the big ones, wrapped up in web.\nSomething down here eats them."
+  },
+  {
+   "zone": {
+    "x0": 9180,
+    "z0": 9520,
+    "x1": 12580,
+    "z1": 11560
+   },
+   "text": "Egg sacs, all over the roof. That one's split open."
+  }
+ ],
+ "entry": "The roof is covered in egg sacs.",
+ "notes": [
+  "high in the north-west corner: the pump house, the water coming up the flooded way",
+  "high in the south-east corner: the lift cage in its shaft, the adit coming in, the egg sacs",
+  "high on the north wall west of the pump: the flooded way down, Hal's drops into the water",
+  "high in the south-west corner: the pump machinery along the east wall, the wrapped dog",
+  "from the water's edge: the cage, its gate, the cable up into the dark"
+ ]
+}

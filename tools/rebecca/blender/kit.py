@@ -28,7 +28,7 @@ import os
 import random
 
 import bpy
-from mathutils import Vector, noise
+from mathutils import Matrix, Vector, noise
 
 import reb
 
@@ -268,11 +268,15 @@ def boards(name, rgb, width=0.15, seam=0.08, grime=0.5):
 # ---------------------------------------------------------------------------
 
 
-def join(name, parts, material=None):
-    """Join objects into one (keeping their materials)."""
+def join(name, parts, material=None, origin=None):
+    """Join objects into one (keeping their materials). The result has no
+    turn or scale of its own and its origin at `origin`, or at the first
+    part's location if None. Build a prop's parts around (0, 0, 0), join with
+    origin=(0, 0, 0), then set its location and turn to place it."""
     parts = [p for p in parts if p is not None]
     if not parts:
         return None
+    pivot = Vector(origin if origin is not None else parts[0].location)
     bpy.ops.object.select_all(action="DESELECT")
     for p in parts:
         p.select_set(True)
@@ -280,6 +284,12 @@ def join(name, parts, material=None):
     if len(parts) > 1:
         bpy.ops.object.join()
     ob = bpy.context.active_object
+    # The join keeps the first part's own transform; put the mesh in world
+    # space instead, so setting the result's location or turn later moves
+    # the whole thing as built.
+    bpy.context.view_layer.update()
+    ob.data.transform(Matrix.Translation(-pivot) @ ob.matrix_world)
+    ob.matrix_world = Matrix.Translation(pivot)
     ob.name = name
     if material is not None:
         ob.data.materials.clear()
@@ -446,7 +456,7 @@ def chair(name, m, at, rot=0.0, tipped=False):
     for dx in (-0.18, 0.18):
         for dy in (-0.18, 0.18):
             parts.append(reb.prim("cube", "leg", m, (dx, dy, 0.22), (0.04, 0.04, 0.45)))
-    ob = join(name, parts)
+    ob = join(name, parts, origin=(0, 0, 0))
     if tipped:
         ob.rotation_euler = (0, -math.pi / 2, rot)
         ob.location = (at[0], at[1], at[2] + 0.21)
@@ -472,7 +482,7 @@ def bunk(name, frame_m, at, rot=0.0, levels=2, mattress=True, slept_in=True, see
             parts.append(reb.prim("cube", "rail", frame_m, (0, dy, h), (L, 0.03, 0.04)))
         for dx in (-L / 2, L / 2):
             parts.append(reb.prim("cube", "rail", frame_m, (dx, 0, h), (0.03, W, 0.04)))
-    ob = join(name, parts)
+    ob = join(name, parts, origin=(0, 0, 0))
     ob.location = at
     ob.rotation_euler = (0, 0, rot)
     out = [ob]
@@ -496,7 +506,7 @@ def shelves(name, m, at, size=(1.0, 0.3, 1.8), rows=4, rot=0.0, clutter=0.7, see
         parts.append(reb.prim("cube", "side", m, (side, 0, sz / 2), (0.03, sy, sz)))
     for r in range(rows):
         parts.append(reb.prim("cube", "shelf", m, (0, 0, 0.1 + r * (sz - 0.15) / (rows - 1)), (sx, sy, 0.025)))
-    ob = join(name, parts)
+    ob = join(name, parts, origin=(0, 0, 0))
     ob.location = at
     ob.rotation_euler = (0, 0, rot)
     for r in range(rows):
@@ -523,7 +533,7 @@ def crate(name, m, at, size=(0.6, 0.5, 0.5), rot=0.0, open_=False):
     parts = [reb.prim("cube", "body", m, (0, 0, size[2] / 2), size, bevel=0.01)]
     for dz in (0.08, size[2] - 0.08):
         parts.append(reb.prim("cube", "slat", m, (0, 0, dz), (size[0] + 0.02, size[1] + 0.02, 0.06)))
-    ob = join(name, parts)
+    ob = join(name, parts, origin=(0, 0, 0))
     ob.location = at
     ob.rotation_euler = (0, 0, rot)
     if open_:
@@ -703,9 +713,10 @@ def body(name, at, heading=0.0, pose="back", top=None, legs=None, bloody=0.0, se
     for foot in ("l_foot", "r_foot"):
         if foot not in missing:
             parts.append(reb.prim("cube", f"{name} boot", mat("rubber"), j[foot] + Vector((-0.02, 0, 0.02)), (0.12, 0.1, 0.12), bevel=0.02))
-    ob = join(name, parts)
+    ob = join(name, parts, origin=(0, 0, 0))
     ob.location = at
     ob.rotation_euler = (0, 0, heading)
+    bpy.context.view_layer.update()
     if bloody:
         c = ob.matrix_world @ ((j["chest"] + j["pelvis"]) / 2)
         splat(f"{name} pool", mat("blood"), (c.x, c.y, at[2]), 0.45 * bloody + 0.25, rot=(0, 0, rng.uniform(0, 6)), seed=seed, stretch=(1.4, 1.0))
@@ -745,7 +756,7 @@ def crow(name, at, heading=0.0, perched=True):
     if perched:
         for dy in (-0.03, 0.03):
             parts.append(reb.prim("cyl", "leg", mat("black"), (0.0, dy, 0.03), (0.01, 0.01, 0.07)))
-    b = join(name, parts)
+    b = join(name, parts, origin=(0, 0, 0))
     b.location = at
     b.rotation_euler = (0, 0, heading)
     wings = []

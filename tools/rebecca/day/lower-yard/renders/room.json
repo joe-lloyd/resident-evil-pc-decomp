@@ -1,0 +1,295 @@
+{
+ "cameras": [
+  {
+   "from": [
+    1870,
+    -6120,
+    2040
+   ],
+   "to": [
+    17850,
+    -1020,
+    15300
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    680,
+    -5950,
+    27370
+   ],
+   "to": [
+    19550,
+    -2040,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    21930,
+    -6120,
+    1700
+   ],
+   "to": [
+    7650,
+    -340,
+    19550
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    22100,
+    -5610,
+    25840
+   ],
+   "to": [
+    8500,
+    -1360,
+    7650
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 23120,
+   "z0": 1700,
+   "x1": 34000,
+   "z1": 17850,
+   "name": "Station"
+  },
+  {
+   "shape": "box",
+   "x0": 21675,
+   "z0": 13600,
+   "x1": 23035,
+   "z1": 15130,
+   "name": "Drinks machine"
+  },
+  {
+   "shape": "box",
+   "x0": 5677,
+   "z0": 17577,
+   "x1": 14043,
+   "z1": 23053,
+   "name": "Sedan footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 16320,
+   "z0": 14110,
+   "x1": 19040,
+   "z1": 14212,
+   "name": "Booth wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 16320,
+   "z0": 16388,
+   "x1": 19040,
+   "z1": 16490,
+   "name": "Booth wall s"
+  },
+  {
+   "shape": "box",
+   "x0": 16320,
+   "z0": 14110,
+   "x1": 16422,
+   "z1": 14535,
+   "name": "Booth wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 16320,
+   "z0": 14535,
+   "x1": 16422,
+   "z1": 16065,
+   "name": "Booth wall w.001"
+  },
+  {
+   "shape": "box",
+   "x0": 16320,
+   "z0": 14535,
+   "x1": 16422,
+   "z1": 16065,
+   "name": "Booth wall w.002"
+  },
+  {
+   "shape": "box",
+   "x0": 16320,
+   "z0": 16065,
+   "x1": 16422,
+   "z1": 16490,
+   "name": "Booth wall w.003"
+  },
+  {
+   "shape": "box",
+   "x0": 18938,
+   "z0": 14110,
+   "x1": 19040,
+   "z1": 16490,
+   "name": "Booth wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 16532,
+   "z0": 14323,
+   "x1": 18827,
+   "z1": 16277,
+   "name": "Booth inside"
+  },
+  {
+   "shape": "box",
+   "x0": 13021,
+   "z0": 9940,
+   "x1": 15539,
+   "z1": 11820,
+   "name": "Handcart bed"
+  },
+  {
+   "shape": "circle",
+   "x0": 16235,
+   "z0": 3995,
+   "x1": 16405,
+   "z1": 4165,
+   "name": "Flagpole"
+  },
+  {
+   "shape": "circle",
+   "x0": 11101,
+   "z0": 9061,
+   "x1": 11339,
+   "z1": 9299,
+   "name": "Lamp post"
+  },
+  {
+   "shape": "circle",
+   "x0": 2295,
+   "z0": 12495,
+   "x1": 2465,
+   "z1": 12665,
+   "name": "Trail sign post"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 22950,
+  "z1": 25500
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "valley-path",
+   "zone": {
+    "x0": 1700,
+    "z0": 12750,
+    "x1": 2720,
+    "z1": 17000
+   },
+   "arrive": {
+    "x": 4420,
+    "z": 14790,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "lower-station",
+   "zone": {
+    "x0": 21930,
+    "z0": 8500,
+    "x1": 22950,
+    "z1": 10200
+   },
+   "arrive": {
+    "x": 20230,
+    "z": 9350,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 7473,
+    "z0": 21764,
+    "x1": 10703,
+    "z1": 23974
+   },
+   "text": "A burgundy sedan. The driver's door is wide open, the light's still on.\nBlood on the seat. The keys are in the ignition.\nHer other shoe."
+  },
+  {
+   "zone": {
+    "x0": 15130,
+    "z0": 14110,
+    "x1": 16320,
+    "z1": 16490
+   },
+   "text": "TICKETS. The window's smashed in. Claw marks on the boards."
+  },
+  {
+   "zone": {
+    "x0": 12580,
+    "z0": 9860,
+    "x1": 15640,
+    "z1": 11900
+   },
+   "text": "A handcart of sacks. SPENCER ESTATE.\nFertiliser, rat poison, chain."
+  },
+  {
+   "zone": {
+    "x0": 21590,
+    "z0": 13430,
+    "x1": 22950,
+    "z1": 15300
+   },
+   "text": "ICE COLD. It still works, after all this."
+  },
+  {
+   "zone": {
+    "x0": 3400,
+    "z0": 11050,
+    "x1": 6120,
+    "z1": 12410
+   },
+   "text": "A dog's leash, chewed through."
+  },
+  {
+   "zone": {
+    "x0": 21590,
+    "z0": 6120,
+    "x1": 22950,
+    "z1": 8160
+   },
+   "text": "The office window's been broken in. From outside."
+  },
+  {
+   "zone": {
+    "x0": 15300,
+    "z0": 3060,
+    "x1": 17340,
+    "z1": 5100
+   },
+   "text": "The flag's still up. Nobody took it down for the night."
+  }
+ ],
+ "entry": "The bottom of the gondola. Someone left their car door open.",
+ "notes": [
+  "from the north-west corner: the yard, the booth, the station door and the drinks machine, the sedan",
+  "from the south-west, over the car park: the sedan's open door, the station front, the flag",
+  "from the station's north corner: the car park and the sedan, the trail head west",
+  "from the south-east: the booth, the flagpole, the trail into the trees"
+ ]
+}

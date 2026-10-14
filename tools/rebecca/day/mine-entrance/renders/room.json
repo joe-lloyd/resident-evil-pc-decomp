@@ -1,0 +1,221 @@
+{
+ "cameras": [
+  {
+   "from": [
+    2720,
+    -5950,
+    17680
+   ],
+   "to": [
+    15640,
+    -2040,
+    5100
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    24990,
+    -6120,
+    10880
+   ],
+   "to": [
+    10200,
+    -1020,
+    15640
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    13600,
+    -4930,
+    18530
+   ],
+   "to": [
+    15130,
+    -2550,
+    4250
+   ],
+   "fov": 205
+  },
+  {
+   "from": [
+    14620,
+    -6120,
+    5780
+   ],
+   "to": [
+    18020,
+    0,
+    18360
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 13039,
+   "z0": 3859,
+   "x1": 13651,
+   "z1": 4471,
+   "name": "Post footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 16949,
+   "z0": 3859,
+   "x1": 17561,
+   "z1": 4471,
+   "name": "Post footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 15045,
+   "z0": 3740,
+   "x1": 18700,
+   "z1": 7310,
+   "name": "Rockfall footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 6479,
+   "z0": 10616,
+   "x1": 9161,
+   "z1": 13014,
+   "name": "Cart footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 18601,
+   "z0": 9795,
+   "x1": 21519,
+   "z1": 12645,
+   "name": "Tipped cart footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 20315,
+   "z0": 14747,
+   "x1": 21165,
+   "z1": 15512,
+   "name": "Plunger footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 19125,
+   "z0": 12835,
+   "x1": 21675,
+   "z1": 14875,
+   "name": "Shelter boulder footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 19890,
+   "z0": 6970,
+   "x1": 24310,
+   "z1": 9180,
+   "name": "Props footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 4250,
+  "x1": 25500,
+  "z1": 18700
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "quarry",
+   "zone": {
+    "x0": 1700,
+    "z0": 10200,
+    "x1": 2720,
+    "z1": 14280
+   },
+   "arrive": {
+    "x": 4250,
+    "z": 12580,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "tunnel",
+   "zone": {
+    "x0": 13430,
+    "z0": 4250,
+    "x1": 15130,
+    "z1": 5610
+   },
+   "arrive": {
+    "x": 14280,
+    "z": 7820,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 11900,
+    "z0": 4250,
+    "x1": 13260,
+    "z1": 5780
+   },
+   "text": "A gap under the rocks, into the dark. Webs over it.\nThere's blood on the post. Someone squeezed through."
+  },
+  {
+   "zone": {
+    "x0": 15045,
+    "z0": 4250,
+    "x1": 18700,
+    "z1": 7820
+   },
+   "text": "The roof's been brought down across the mouth. On purpose:\nthere's a blasting wire running out of the rocks."
+  },
+  {
+   "zone": {
+    "x0": 19550,
+    "z0": 14790,
+    "x1": 22100,
+    "z1": 18700
+   },
+   "text": "A blasting plunger, pushed home. Whoever fired it\ndropped their hard hat and ran."
+  },
+  {
+   "zone": {
+    "x0": 18700,
+    "z0": 4250,
+    "x1": 20740,
+    "z1": 5610
+   },
+   "text": "SEALED. DO NOT ENTER.\nWhat were they keeping in?"
+  },
+  {
+   "zone": {
+    "x0": 18700,
+    "z0": 9520,
+    "x1": 21760,
+    "z1": 12920
+   },
+   "text": "An ore cart, tipped over. Silver ore, dull and grey."
+  }
+ ],
+ "entry": "Webs. Thick ones.",
+ "notes": [
+  "from the west edge: the rails running in under the fall, the carts, the portal",
+  "from the east side: the plunger box behind its boulder, the wire, the carts, the yard to the track out west",
+  "from the south, straight at the portal: SEALED, the gap into the dark",
+  "from beside the portal looking out: the yard, the rails curving off west, the plunger, the valley"
+ ]
+}

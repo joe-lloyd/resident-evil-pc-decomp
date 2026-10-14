@@ -1,0 +1,262 @@
+{
+ "cameras": [
+  {
+   "from": [
+    6715,
+    -3655,
+    6715
+   ],
+   "to": [
+    12750,
+    -850,
+    12920
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    13685,
+    -3655,
+    13685
+   ],
+   "to": [
+    7820,
+    -680,
+    7820
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2380,
+    -3910,
+    17680
+   ],
+   "to": [
+    16150,
+    1700,
+    13260
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    3060,
+    -3910,
+    3570
+   ],
+   "to": [
+    23800,
+    4760,
+    -1700
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 6290,
+   "z0": 6188,
+   "x1": 14110,
+   "z1": 6392,
+   "name": "Cab wall footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 6188,
+   "z0": 6290,
+   "x1": 6392,
+   "z1": 14110,
+   "name": "Cab wall footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 14008,
+   "z0": 6290,
+   "x1": 14212,
+   "z1": 14110,
+   "name": "Cab wall footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 6290,
+   "z0": 14008,
+   "x1": 10710,
+   "z1": 14212,
+   "name": "Cab wall footprint.003"
+  },
+  {
+   "shape": "box",
+   "x0": 12070,
+   "z0": 14008,
+   "x1": 14110,
+   "z1": 14212,
+   "name": "Cab wall footprint.004"
+  },
+  {
+   "shape": "box",
+   "x0": 5780,
+   "z0": 5780,
+   "x1": 6460,
+   "z1": 6460,
+   "name": "Leg footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 5780,
+   "z0": 13940,
+   "x1": 6460,
+   "z1": 14620,
+   "name": "Leg footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 13940,
+   "z0": 5780,
+   "x1": 14620,
+   "z1": 6460,
+   "name": "Leg footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 13940,
+   "z0": 13940,
+   "x1": 14620,
+   "z1": 14620,
+   "name": "Leg footprint.003"
+  },
+  {
+   "shape": "box",
+   "x0": 10753,
+   "z0": 10753,
+   "x1": 12368,
+   "z1": 12368,
+   "name": "Finder footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 10030,
+   "z0": 6332,
+   "x1": 13770,
+   "z1": 7268,
+   "name": "Desk"
+  },
+  {
+   "shape": "box",
+   "x0": 12878,
+   "z0": 7480,
+   "x1": 13983,
+   "z1": 10710,
+   "name": "Cot footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 4590,
+  "z0": 4590,
+  "x1": 15810,
+  "z1": 15810
+ },
+ "voids": [
+  {
+   "x0": 7395,
+   "z0": 8500,
+   "x1": 10965,
+   "z1": 10030
+  }
+ ],
+ "doors": [
+  {
+   "to": "tower-stairs",
+   "zone": {
+    "x0": 6375,
+    "z0": 8500,
+    "x1": 7395,
+    "z1": 10030
+   },
+   "arrive": {
+    "x": 6970,
+    "z": 11475,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 10200,
+    "z0": 10200,
+    "x1": 12920,
+    "z1": 12920
+   },
+   "text": "The fire finder. Its sights are still set on a bearing: 047.\nNorth-east, down in the valley. Where the smoke is."
+  },
+  {
+   "zone": {
+    "x0": 10540,
+    "z0": 6290,
+    "x1": 12240,
+    "z1": 7820
+   },
+   "text": "The log. 01.20, SMOKE SIGHTED, NE, BRG 047. AIRCRAFT? RADIOED, NO ANSWER.\n03.00, DOGS AT THE FOOT OF THE TOWER. 04.40, BURNING UP. CANT STOP SCRATCHING.\nThe last line just says: THEY'RE ON THE STAIRS."
+  },
+  {
+   "zone": {
+    "x0": 12240,
+    "z0": 6290,
+    "x1": 14110,
+    "z1": 7820
+   },
+   "text": "The radio set's dead. The handset hangs on its cord."
+  },
+  {
+   "zone": {
+    "x0": 11900,
+    "z0": 12920,
+    "x1": 13260,
+    "z1": 14110
+   },
+   "text": "A board of keys by the door. One tag says SWITCH HOUSE."
+  },
+  {
+   "zone": {
+    "x0": 12410,
+    "z0": 7480,
+    "x1": 12920,
+    "z1": 10710
+   },
+   "text": "His cot. Blood on the canvas, and scratch marks in the wall.\nHe tore at himself."
+  },
+  {
+   "zone": {
+    "x0": 14620,
+    "z0": 11560,
+    "x1": 15810,
+    "z1": 13940
+   },
+   "text": "The top rail's broken. Blood on the post.\nThis is where he went over."
+  },
+  {
+   "zone": {
+    "x0": 14450,
+    "z0": 4590,
+    "x1": 15810,
+    "z1": 8500
+   },
+   "text": "Smoke, rising out of the trees in the valley. Something came down there.\nBravo's helicopter. And far off, a big house among the trees."
+  }
+ ],
+ "entry": "The lookout. You can see half the mountain from here.",
+ "notes": [
+  "inside, high in the north-west corner: the fire finder, the cot, the door, the valley through the glass",
+  "inside, high in the south-east corner: the hatch, the desk and the log, the west windows",
+  "out past the south-west corner: the catwalk to the open door, the broken east rail",
+  "out past the north-west corner, along the north catwalk: the smoke in the valley, the mansion far off"
+ ]
+}

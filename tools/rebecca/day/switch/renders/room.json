@@ -1,0 +1,145 @@
+{
+ "cameras": [
+  {
+   "from": [
+    7565,
+    -4250,
+    1955
+   ],
+   "to": [
+    2380,
+    -1190,
+    5610
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2125,
+    -4250,
+    6545
+   ],
+   "to": [
+    6630,
+    -1020,
+    2040
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 4930,
+   "z0": 5780,
+   "x1": 6290,
+   "z1": 6800,
+   "name": "Isolator footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 6800,
+   "z0": 5908,
+   "x1": 7650,
+   "z1": 6503,
+   "name": "Tool bag footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 7820,
+  "z1": 6800
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "generator",
+   "zone": {
+    "x0": 3060,
+    "z0": 1700,
+    "x1": 4420,
+    "z1": 2720
+   },
+   "arrive": {
+    "x": 3740,
+    "z": 3570,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "line-track",
+   "zone": {
+    "x0": 6800,
+    "z0": 3740,
+    "x1": 7820,
+    "z1": 5270
+   },
+   "arrive": {
+    "x": 5780,
+    "z": 4505,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 2040,
+    "x1": 3060,
+    "z1": 3910
+   },
+   "text": "The breakers. SKYWAY LINE, STATION 3, MINE. Every one of them is down. OFF."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 3910,
+    "x1": 3060,
+    "z1": 4760
+   },
+   "text": "A contactor, burnt black. It's still sparking off the batteries.\nThere's a scorched handprint beside it."
+  },
+  {
+   "zone": {
+    "x0": 2380,
+    "z0": 4250,
+    "x1": 3400,
+    "z1": 5270
+   },
+   "text": "A lineman's rubber glove. It's melted."
+  },
+  {
+   "zone": {
+    "x0": 4930,
+    "z0": 5270,
+    "x1": 6630,
+    "z1": 6800
+   },
+   "text": "MAIN ISOLATOR, SKYWAY LINE. The lever's down, and padlocked.\nNo power reaches the gondola until this goes up."
+  },
+  {
+   "zone": {
+    "x0": 6800,
+    "z0": 3060,
+    "x1": 7820,
+    "z1": 3740
+   },
+   "text": "Blood on the door frame. He went out to the line track."
+  }
+ ],
+ "entry": "It smells of burnt rubber.",
+ "notes": [
+  "high in the north-east corner: the breaker board, the sparking contactor, the glove, the isolator lever",
+  "high in the south-west corner: the door from the generator, the open door to the line track"
+ ]
+}

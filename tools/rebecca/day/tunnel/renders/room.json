@@ -1,0 +1,251 @@
+{
+ "cameras": [
+  {
+   "from": [
+    9350,
+    -3570,
+    31280
+   ],
+   "to": [
+    8500,
+    -850,
+    20400
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    9520,
+    -3570,
+    20060
+   ],
+   "to": [
+    8500,
+    -680,
+    30600
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    11050,
+    -3570,
+    14110
+   ],
+   "to": [
+    24650,
+    -680,
+    14960
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    26520,
+    -3570,
+    15470
+   ],
+   "to": [
+    13940,
+    -680,
+    15130
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    17340,
+    -3570,
+    13940
+   ],
+   "to": [
+    31960,
+    -850,
+    14960
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 15300,
+   "z0": 17510,
+   "x1": 32300,
+   "z1": 32300,
+   "name": "Rock round the bend"
+  },
+  {
+   "shape": "box",
+   "x0": 11390,
+   "z0": 21420,
+   "x1": 15300,
+   "z1": 32300,
+   "name": "Rock round the bend.001"
+  },
+  {
+   "shape": "box",
+   "x0": 12750,
+   "z0": 18870,
+   "x1": 15300,
+   "z1": 21420,
+   "name": "Rock round the bend.002"
+  },
+  {
+   "shape": "box",
+   "x0": 5610,
+   "z0": 11730,
+   "x1": 8500,
+   "z1": 14620,
+   "name": "Rock round the bend.003"
+  },
+  {
+   "shape": "box",
+   "x0": 5610,
+   "z0": 14620,
+   "x1": 6800,
+   "z1": 17340,
+   "name": "Rock round the bend.004"
+  },
+  {
+   "shape": "box",
+   "x0": 8500,
+   "z0": 11730,
+   "x1": 11220,
+   "z1": 12750,
+   "name": "Rock round the bend.005"
+  },
+  {
+   "shape": "box",
+   "x0": 8415,
+   "z0": 14620,
+   "x1": 9605,
+   "z1": 15810,
+   "name": "Wrapped man footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 22185,
+   "z0": 13940,
+   "x1": 24055,
+   "z1": 15300,
+   "name": "Cart in the tunnel"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 5610,
+  "z0": 11730,
+  "x1": 32300,
+  "z1": 32300
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "mine-entrance",
+   "zone": {
+    "x0": 6800,
+    "z0": 31280,
+    "x1": 10200,
+    "z1": 32300
+   },
+   "arrive": {
+    "x": 8500,
+    "z": 29920,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "mine-office",
+   "zone": {
+    "x0": 20570,
+    "z0": 12206,
+    "x1": 22100,
+    "z1": 13226
+   },
+   "arrive": {
+    "x": 21335,
+    "z": 15980,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "junction",
+   "zone": {
+    "x0": 31280,
+    "z0": 12920,
+    "x1": 32300,
+    "z1": 16320
+   },
+   "arrive": {
+    "x": 29920,
+    "z": 13600,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 8500,
+    "z0": 15725,
+    "x1": 10710,
+    "z1": 17425
+   },
+   "text": "Someone, wrapped up tight in web against the rock.\nOne boot sticks out. I'm not cutting it open."
+  },
+  {
+   "zone": {
+    "x0": 22270,
+    "z0": 12206,
+    "x1": 23630,
+    "z1": 13396
+   },
+   "text": "OFFICE, painted on the planks. There's candlelight under the door."
+  },
+  {
+   "zone": {
+    "x0": 7480,
+    "z0": 22440,
+    "x1": 10710,
+    "z1": 26860
+   },
+   "text": "A pick and a shovel, dropped. Whoever worked here ran."
+  },
+  {
+   "zone": {
+    "x0": 28560,
+    "z0": 12920,
+    "x1": 31110,
+    "z1": 16320
+   },
+   "text": "Drops of blood along the rails, on toward the workings.\nHal came this way."
+  },
+  {
+   "zone": {
+    "x0": 21930,
+    "z0": 12920,
+    "x1": 24480,
+    "z1": 16320
+   },
+   "text": "An ore cart, half full. It's been here years."
+  }
+ ],
+ "entry": "The lamps are lit. Someone's been down here.",
+ "notes": [
+  "inside the fall, looking up the adit: the lamps on the cable, the bend, the wrapped man",
+  "at the bend, looking back south: the rails, the tools, the daylight through the gap",
+  "round the bend, looking east: the webs over the timber sets, the office door",
+  "along the east leg looking back west: the office door, the bend, the wrapped man",
+  "from by the office looking east: the cart, the drops along the rails to the junction"
+ ]
+}

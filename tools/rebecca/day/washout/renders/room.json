@@ -1,0 +1,300 @@
+{
+ "cameras": [
+  {
+   "from": [
+    31280,
+    -5780,
+    20400
+   ],
+   "to": [
+    13600,
+    1020,
+    10200
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    10200,
+    -6290,
+    8840
+   ],
+   "to": [
+    18700,
+    4930,
+    17680
+   ],
+   "fov": 205
+  },
+  {
+   "from": [
+    2720,
+    -5780,
+    5780
+   ],
+   "to": [
+    15300,
+    1360,
+    17000
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    21420,
+    -5950,
+    5440
+   ],
+   "to": [
+    33150,
+    340,
+    14620
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    11900,
+    -5440,
+    20740
+   ],
+   "to": [
+    -1700,
+    -2040,
+    8500
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 2278,
+   "z0": 16422,
+   "x1": 4522,
+   "z1": 18258,
+   "name": "Rock footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 1538,
+   "z0": 18691,
+   "x1": 3221,
+   "z1": 20068,
+   "name": "Rock footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 9511,
+   "z0": 15819,
+   "x1": 11568,
+   "z1": 17502,
+   "name": "Rock footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 2720,
+   "z0": 21930,
+   "x1": 5610,
+   "z1": 22134,
+   "name": "Hut wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 5610,
+   "z0": 21930,
+   "x1": 7310,
+   "z1": 22134,
+   "name": "Hut wall n.001"
+  },
+  {
+   "shape": "box",
+   "x0": 7310,
+   "z0": 21930,
+   "x1": 10200,
+   "z1": 22134,
+   "name": "Hut wall n.002"
+  },
+  {
+   "shape": "box",
+   "x0": 2720,
+   "z0": 28526,
+   "x1": 10200,
+   "z1": 28730,
+   "name": "Hut wall s"
+  },
+  {
+   "shape": "box",
+   "x0": 2720,
+   "z0": 21930,
+   "x1": 2924,
+   "z1": 28730,
+   "name": "Hut wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 9996,
+   "z0": 21930,
+   "x1": 10200,
+   "z1": 28730,
+   "name": "Hut wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 7310,
+   "z0": 19720,
+   "x1": 10710,
+   "z1": 21420,
+   "name": "Fuel tank"
+  },
+  {
+   "shape": "box",
+   "x0": 2380,
+   "z0": 13770,
+   "x1": 2720,
+   "z1": 14110,
+   "name": "Sign footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 5100,
+  "x1": 32300,
+  "z1": 21250
+ },
+ "voids": [
+  {
+   "x0": 11900,
+   "z0": 10710,
+   "x1": 22100,
+   "z1": 21250
+  }
+ ],
+ "doors": [
+  {
+   "to": "road",
+   "zone": {
+    "x0": 31280,
+    "z0": 7650,
+    "x1": 32300,
+    "z1": 14450
+   },
+   "arrive": {
+    "x": 29580,
+    "z": 11050,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "tower-foot",
+   "zone": {
+    "x0": 1700,
+    "z0": 7820,
+    "x1": 2720,
+    "z1": 12920
+   },
+   "arrive": {
+    "x": 4420,
+    "z": 10370,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "generator",
+   "zone": {
+    "x0": 5440,
+    "z0": 20910,
+    "x1": 7480,
+    "z1": 21930
+   },
+   "arrive": {
+    "x": 6460,
+    "z": 19040,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 17680,
+    "z0": 9690,
+    "x1": 21420,
+    "z1": 10710
+   },
+   "text": "A pickup, nose-down in the gully. ARKLAY TIMBER CO., CAMP 4.\nHe drove straight through the barrier in the dark."
+  },
+  {
+   "zone": {
+    "x0": 12920,
+    "z0": 9690,
+    "x1": 17680,
+    "z1": 10710
+   },
+   "text": "Down in the pool, face down. A logger, in his orange vest.\nHe got out of the truck, and no further."
+  },
+  {
+   "zone": {
+    "x0": 14960,
+    "z0": 5100,
+    "x1": 19040,
+    "z1": 6800
+   },
+   "text": "The culvert's choked with branches. The creek's coming over the road instead."
+  },
+  {
+   "zone": {
+    "x0": 22440,
+    "z0": 8500,
+    "x1": 27880,
+    "z1": 13600
+   },
+   "text": "A ROAD CLOSED barrier, smashed to pieces."
+  },
+  {
+   "zone": {
+    "x0": 7140,
+    "z0": 19040,
+    "x1": 10880,
+    "z1": 19890
+   },
+   "text": "The generator's fuel tank. The gauge reads empty.\nI knock on it. Hollow."
+  },
+  {
+   "zone": {
+    "x0": 3060,
+    "z0": 15470,
+    "x1": 5780,
+    "z1": 17170
+   },
+   "text": "A snake's shed skin, on the warm stone.\nAdders. I'll keep out of the long grass."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 13090,
+    "x1": 3740,
+    "z1": 14790
+   },
+   "text": "FIRE LOOKOUT. The track climbs west, to the tower."
+  }
+ ],
+ "entry": "Half the road's gone.",
+ "notes": [
+  "from the south-east corner: the road coming in, the barrier, the gully and the pickup, the tower over the trees",
+  "from the west lip: down into the gully, the pickup nose-down with its door open, the body in the pool",
+  "from the north-west: the path to the generator hut, the adders' rocks, the gully's west bank",
+  "from the north lip, east: the road coming in, the smashed barrier, the tracks",
+  "from in front of the hut: the track west to the tower, the road east"
+ ]
+}
