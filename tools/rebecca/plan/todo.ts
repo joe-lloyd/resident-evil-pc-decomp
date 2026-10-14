@@ -42,6 +42,8 @@ const STATUS: Record<string, Status> = {
   'look-filter-sample': 'done',
   'look-reviewed-builders': 'done',
   'doors-tour-tool': 'done',
+  // 101 of 102 doors pass the tour; the bunkhouse's waits for its re-render.
+  'doors-wired': 'doing',
   'enemies-plan': 'done',
   'items-plan': 'done',
 };
