@@ -47,9 +47,29 @@ if (ck(FG_ITEM, 244, 0)) {
 aot_set(14, 10455, 3400, 850, 1020, SCE_TYPEWRITER, 129, 0, 0, 0, 0, 0, 0);
 aot_set(15, 10285, 5525, 1530, 1615, SCE_ITEMBOX, 129, 0, 0, 0, 0, 0, 0);
 obj(0, 17, 255, 11050, -936, 7106, 1024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+// The proof for her day's two people (tools/rebecca/npc/people.ts): Hal in
+// Barry's model (id 34), in the open floor north-east, and the ranger's
+// partner in Rebecca's NPC model (id 35) by the desk, both facing the
+// south-west camera. enemy operands: id, weapon (0: none), kill flag (255:
+// none), 1, 2, 0, 0, angle (0 faces +X, 0x800 -X, 0xC00 +Z), 0, 0, X, Y, Z,
+// enemy slot, animation, frame, 0: the shape every shipped NPC spawn has.
+enemy(34 /* Barry (Stars) */, 0, 255, 1, 2, 0, 0, 2656, 0, 0, 10710, 0, 5610, 0, 0, 0, 0);
+enemy(35 /* Rebecca (Stars) */, 0, 255, 1, 2, 0, 0, 2944, 0, 0, 5780, 0, 6290, 1, 0, 0, 0);
 return;
 
 // main procedure 0
+// The people idle. A character's first update clears its idle behaviour
+// (npc_state0_init), so on the second frame in the room each is given idle 9,
+// which loops its animation 0 (npc_idle_play_anim). FG_ROOM bits clear on
+// every room entry: 20 marks the first frame, 21 that it is done.
+if (ck(FG_ROOM, 21, 1)) {
+    if (ck(FG_ROOM, 20, 0)) {
+        eml_state(0, 0, 2, 9, 0);
+        eml_state(0, 1, 2, 9, 0);
+        set(FG_ROOM, 21, 0);
+    }
+    set(FG_ROOM, 20, 0);
+}
 if (ck(FG_COMMON, 201, 1)) {
     set(FG_COMMON, 201, 0);
     message(128, 255, 0);

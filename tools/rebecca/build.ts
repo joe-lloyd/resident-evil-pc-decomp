@@ -5,7 +5,7 @@
 //   node tools/rebecca/build.ts <USA dir> <out dir>
 //
 // <USA dir> holds the original Stage1..Stage7 room files, DATA/BIO_CARD.DAT,
-// enemy/CHAR11.EMD and CHAR13.EMD, and players/W31 to W34.EMW.
+// the character models in enemy/ and players/W31 to W34.EMW.
 // RAE_CLI points at retro-archive-explorer's scripts/cli.mjs, which assembles
 // the room scripts (`rae asm`).
 import { execFileSync } from 'node:child_process';
@@ -19,6 +19,7 @@ import { buildArms } from './arms.ts';
 import { buildWalk, walkFileName } from './walks.ts';
 import { readPng } from '../harness/image.ts';
 import { dayRooms, dayStart, walks } from './day/rooms.ts';
+import { people, personModel } from './npc/people.ts';
 
 /**
  * Where a new game in REB mode starts (stage counts from 0, as in the debug
@@ -117,6 +118,14 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   for (const { name, bytes } of footstepFiles()) {
     writeFileSync(path.join(reb, 'sound', name), bytes);
     written.push(`sound/${name}`);
+  }
+
+  // The people of her day: the player's own character models with our skins (npc/people.ts).
+  const enemyDir = findFile(baseDir, 'enemy');
+  mkdirSync(path.join(reb, 'enemy'), { recursive: true });
+  for (const person of people) {
+    writeFileSync(path.join(reb, 'enemy', person.model), personModel(readFileSync(findFile(enemyDir, person.model)), person));
+    written.push(`enemy/${person.model}`);
   }
 
   // New rooms: the rooms of her day (day/rooms.ts), those rendered so far.
