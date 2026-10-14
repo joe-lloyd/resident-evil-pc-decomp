@@ -306,6 +306,7 @@ ${beats(places)}
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Planning Rebecca's day</title>
+<script src="/research/rebecca-day/nav.js" defer></script>
 <style>
 :root { color-scheme: dark; --bg: #1a1a19; --panel: #232321; --text: #ffffff; --soft: #c3c2b7; --muted: #8d8c84; --line: #4a4945; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.5 system-ui, sans-serif; }
