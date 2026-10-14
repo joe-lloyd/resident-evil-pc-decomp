@@ -4,6 +4,7 @@
 // listed here. A row's status is worked out from the repository where it can
 // be (a room is built when its renders exist); elsewhere it is set in STATUS
 // below. Drawn by todo-page.ts.
+import { AREAS, MAP_ITEMS } from './maps.ts';
 import type { Link, Place, Plan, Step } from './plan.ts';
 
 export type Status = 'done' | 'doing' | 'todo';
@@ -46,6 +47,8 @@ const STATUS: Record<string, Status> = {
   'doors-wired': 'doing',
   'enemies-plan': 'done',
   'items-plan': 'done',
+  'maps-plan': 'done',
+  'maps-research': 'doing',
 };
 
 const status = (id: string, fallback: Status = 'todo'): Status => STATUS[id] ?? fallback;
@@ -200,6 +203,24 @@ export function sections(plan: Plan, facts: Facts): Section[] {
       ],
     },
     {
+      id: 'maps',
+      title: 'Maps',
+      blurb: "Her map screen as good as RE1's: an overview of the mountain, a floor plan for each area, the rooms she has been in lit, and a map to find for each area that shows the rest.",
+      items: [
+        row('maps-plan', 'Areas and map pickups planned, and checked against the plan (maps.ts)'),
+        row('maps-research', "How RE1's map screen works, written up", 'Images per area, a palette block per room, the visited and map-owned flags, the area tables'),
+        row('maps-overview', 'The overview: the mountain rendered from above, unlocking as she goes', 'Four stages, like RE1: the station; the mountain; the skyway and valley; the estate'),
+        ...AREAS.map((a) => row(`map-area-${a.id}`, `Floor plan: ${a.name}`, `${a.places.length} rooms`)),
+        row('maps-engine', "Her mode reads its own area tables and map images, and Chris's and Jill's stay as they are"),
+        row('maps-states', 'Rooms lit once visited, dim once the map is owned, hers blinking'),
+        ...MAP_ITEMS.map((m) => {
+          const s = plan.steps.find((x) => x.id === m.step);
+          return row(`map-item-${m.id}`, `Pickup: the ${m.name}`, s ? `${name(s.at)}, act ${s.act}` : undefined);
+        }),
+        row('maps-test', 'A test that opens each map in the game and screenshots it'),
+      ],
+    },
+    {
       id: 'puzzles',
       title: 'Puzzles',
       blurb: 'Each job of the plan working in the game: the right item opens it, nothing else does, and it stays done.',
@@ -260,7 +281,6 @@ export function sections(plan: Plan, facts: Facts): Section[] {
         row('balance-saves', 'Typewriters, ink ribbons and item boxes'),
         row('balance-enemies', 'Enemy health, damage and numbers'),
         row('balance-route', "The route reads: she can always tell where she hasn't been"),
-        row('balance-maps', 'Map screens for the new areas'),
         row('balance-time', 'A first playthrough at about two hours'),
       ],
     },

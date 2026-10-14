@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { day } from './day.ts';
 import { check, type Plan } from './plan.ts';
+import { checkMaps } from './maps.ts';
 
 test("Rebecca's day can be played through to her credits", () => {
   const r = check(day);
@@ -57,4 +58,8 @@ test('a find nothing uses is flagged', () => {
   assert.deepEqual(r.errors, []);
   assert.deepEqual(r.warnings, ['nothing needs spare: mark it optional or use it']);
   assert.deepEqual(r.open, [2, 2, 1]);
+});
+
+test('every room is on one map, and each map is a step she can take', () => {
+  assert.deepEqual(checkMaps(day), []);
 });
