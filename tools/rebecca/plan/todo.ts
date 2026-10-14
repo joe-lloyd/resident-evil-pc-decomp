@@ -70,6 +70,18 @@ const STATUS: Record<string, Status> = {
   'save-mine-office': 'done',
   'save-lodge': 'done',
   'saves-test': 'done',
+  // Written and drawn, under the owner's review; not in the game yet.
+  'files-art': 'doing',
+  'file-logbook': 'doing',
+  'file-calendar': 'doing',
+  'file-diary': 'doing',
+  'file-mine-map': 'doing',
+  'file-keeper-log': 'doing',
+  'file-gardener-diary': 'doing',
+  'file-foreman-letters': 'doing',
+  'file-walt-log': 'doing',
+  'file-quarantine': 'doing',
+  'file-rosters': 'doing',
 };
 
 const status = (id: string, fallback: Status = 'todo'): Status => STATUS[id] ?? fallback;
