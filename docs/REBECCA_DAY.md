@@ -83,10 +83,33 @@ lines of the message box at most.
 ## People
 
 - **Billy** is never seen. The game opens just after he has gone.
-- **The dead tell the rest:** the ranger, the cook, the operator in the
-  mine, Kevin in Bravo's helicopter. Their notes and diaries are messages.
+- **The ranger's partner** is out on the mountain looking for him. She is
+  tracking the same drag marks when Rebecca meets her in the woods. At the
+  hollow they find him together, and she gives Rebecca his truck keys.
+  After that she keeps turning up:
+  - at the camp's barricade, where she takes the camp and sends Rebecca up
+    the road;
+  - on the lookout tower's radio, with news that the dogs came from the
+    estate's kennels;
+  - in the valley, where she has come down the old trail, and they head for
+    the estate together.
+
+  How her day ends is still to decide.
+- **Hal**, the gondola operator, was bitten before dawn and went to hide in
+  the mine with the drive key.
+  - At the end of act 1 the booth's phone is off the hook. When Rebecca
+    picks it up, it's Hal on the mine's field phone. He tells her what the
+    gondola needs: the line powered, a new drive cog and a fuse. He has the
+    key; she should come and find him.
+  - She finds him in the flooded gallery, alive on the ore cart, once she
+    has drained it. He gives her the key, and then the bite takes him.
+- **The dead tell the rest:** the ranger, the cook, the line workers, Walt
+  in the lookout, Kevin in Bravo's helicopter. Their notes and diaries are
+  files.
 - **Chris** appears at the end, as he does now.
-- **Voices** on the ranger's radio: S.T.A.R.S. chatter, in text.
+
+The partner and Hal are RE1 character models with skins of our own:
+`docs/handoffs/2026-10-14-reb-npc.md`.
 
 ## Enemies
 

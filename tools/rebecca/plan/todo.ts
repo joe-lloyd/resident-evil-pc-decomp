@@ -48,6 +48,7 @@ const STATUS: Record<string, Status> = {
   'enemies-plan': 'done',
   'items-plan': 'done',
   'maps-plan': 'done',
+  'people-pipeline': 'doing',
   'maps-research': 'doing',
 };
 
@@ -93,10 +94,13 @@ const MOVING: Record<string, string> = {
 
 const CUTSCENES: readonly [string, string][] = [
   ['cut-opening', 'Opening: dawn on the ridge, after Billy'],
+  ['cut-phone', "The booth's phone: Hal on the line, telling her what the gondola needs"],
+  ['cut-partner', "Meeting the ranger's partner in the woods"],
+  ['cut-den', 'The hollow: the partner finds him, and gives Rebecca his keys'],
   ['cut-dog', 'The first dog comes for her in the station yard'],
   ['cut-gondola', 'The gondola starts: the bullwheel, the car leaving'],
   ['cut-tower', 'From the tower: Bravo\'s smoke and the mansion\'s roof'],
-  ['cut-hal', 'Finding Hal in the flooded gallery'],
+  ['cut-hal', "Hal's last minutes on the ore cart: the key, then the bite takes him"],
   ['cut-mine-collapse', 'The mine floor gives way: she loses her gear'],
   ['cut-mine-chase', 'Chased through the mine, unarmed, to the lift'],
   ['cut-pylon', 'The car stops at the pylon, something on the roof'],
@@ -240,6 +244,20 @@ export function sections(plan: Plan, facts: Facts): Section[] {
       title: 'Cutscenes',
       blurb: 'The moments the camera takes over.',
       items: CUTSCENES.map(([id, title]) => row(id, title)),
+    },
+    {
+      id: 'people',
+      title: 'People',
+      blurb: "Two people she meets: the ranger's partner, out looking for him, who keeps turning up; and Hal, the gondola operator, who tells her how to get it running and dies once she has his key.",
+      items: [
+        row('people-pipeline', "Read and write RE1's character models, view them in Blender, put a new skin in the game"),
+        row('people-partner-model', "The ranger's partner: a woman in Forest Service uniform, on a female RE1 skeleton"),
+        row('people-hal-model', 'Hal: heavyset, fifties, Skyway work jacket, his bitten arm bandaged, on a male RE1 skeleton'),
+        row('people-hal-voice', "Hal's lines: the phone call and his last words"),
+        row('people-partner-voice', "The partner's lines: the woods, the hollow, the camp, the radio, the valley"),
+        row('people-partner-fate', "The partner's end: decided"),
+        row('people-gallery', 'The gallery re-rendered without Hal floating in it, for the living Hal'),
+      ],
     },
     {
       id: 'enemies',
