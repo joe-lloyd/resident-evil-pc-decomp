@@ -7,7 +7,7 @@ import { moveVertices, readEmd, readTexture, section, withSection, writeEmd, wri
 import { ownIsland, type Island } from './island.ts';
 import { paint, surfaceMap, type Rgb, type Texel } from './paint.ts';
 import { fitSkin } from './skin.ts';
-import { campaignHat, hal, partner } from './skins.ts';
+import { dana, danaHead, hal } from './skins.ts';
 
 export interface Person {
   readonly slug: string;
@@ -35,10 +35,11 @@ export const people: readonly Person[] = [
   // and so does his left forearm, so the bandage is on the right only. The
   // larger move goes first.
   { slug: 'hal', entity: 34, model: 'EM1022.EMD', idle: 42, ownIslands: [{ part: 1, apart: 120 }, { part: 10 }], reshape: [], skin: hal },
-  // Rebecca's own NPC model: stand 0, walk 1, kneel 9, falls 4 and 59,
-  // sitting 61 and 62, a kneeling loop 63; 42 is a 20-frame standing loop.
-  // The flare of the bob at the back of her head becomes a hat's brim.
-  { slug: 'partner', entity: 35, model: 'EM1023.EMD', idle: 42, ownIslands: [], reshape: [{ part: 1, move: campaignHat }], skin: partner },
+  // Dana Whitlock, the ranger's partner, on Jill's model: taller and slimmer
+  // than Rebecca's. Stand 0, walk 1, falls 4 and 9 (to her knees); 42 is a
+  // 20-frame standing loop. Her beret becomes a campaign hat and her hair a
+  // short cut with a bun (danaHead).
+  { slug: 'dana', entity: 33, model: 'EM1021.EMD', idle: 42, ownIslands: [{ part: 1, apart: 60 }], reshape: [{ part: 1, move: danaHead }], skin: dana },
 ];
 
 /**

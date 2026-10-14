@@ -3,7 +3,7 @@
 Two people share her day:
 
 - Hal, the gondola operator.
-- The ranger's partner, a Forest Service woman.
+- Dana Whitlock, the ranger's partner, a Forest Service woman.
 
 Each is an RE1 character model with its skeleton and animations kept and a
 skin we paint. This file records how the models work, which ones we use and
@@ -72,7 +72,7 @@ write back as the same bytes.
 | Person | Entity id | File | Why |
 | --- | --- | --- | --- |
 | Hal | 34 | `EM1022.EMD` (Barry) | the heavy man's frame; no room of hers places Barry |
-| the ranger's partner | 35 | `EM1023.EMD` (Rebecca as an NPC) | a woman's frame; she is the player, so the NPC model is free |
+| Dana, the ranger's partner | 33 | `EM1021.EMD` (Jill as an NPC) | a woman's frame, taller and slimmer than Rebecca's; no room of hers places Jill |
 
 Her rooms place only an adder (10) and a Cerberus (2) so far:
 
@@ -84,9 +84,9 @@ The model files with the same mesh and texture:
 
 - Barry's cutscene variants `EM102B` and `EM102D`, and his player model
   `CHAR12`.
-- Rebecca's `EM102C` and her player model `CHAR13`.
+- Jill's player model `CHAR11`. Jill's other NPC files, `EM1031` and `EM1033`, are her other outfits.
 
-So a skin painted for one fits all of them. For Hal, a variant also needs the same UV moves, because his skin relies on them; `personModel` applies both. `EM102A`, Barry dying, has its own
+So a skin painted for one fits all of them. A variant also needs the same UV and vertex changes, because the skins rely on them; `personModel` applies both. `EM102A`, Barry dying, has its own
 mesh and texture.
 
 ### Their animations
@@ -97,27 +97,26 @@ These numbers are measured from the keyframes, not guessed from names.
   https://home.arpa/research/rebecca-npc/anims.html.
 - "Head" is the head joint's height above the floor, in game units.
 
-| Animation | Barry, `EM1022` | Rebecca NPC, `EM1023` |
+| Animation | Barry, `EM1022` | Jill NPC, `EM1021` |
 | --- | --- | --- |
 | 0 | stand, still (3 frames) | stand, still |
 | 1 | walk (20 frames) | walk |
 | 4 | fall to the floor, ends lying (30 frames) | fall, ends lying |
 | 9 | drops to his knees, head back (25 frames) | drops to her knees |
 | 42 | standing loop, weight shift (20 frames) | standing loop (20 frames) |
-| 54 | a second fall, ends lying (31 frames) | lying on the floor (90 frames) |
-| 59 | none | a second fall (30 frames) |
-| 61, 62 | none | sitting on the floor (30, 40 frames) |
-| 63 | none | kneeling loop (18 frames) |
+| 54 | a second fall, ends lying (31 frames) | none |
+| 6 | a near-still loop (16 frames) | a near-still loop (25 frames) |
 
 - **Hal.** He needs an idle or a sit, and a death. That gives 42 to idle, 9
   to drop to his knees, and 4 or 54 to die.
-- **The partner.** She gets 42 or 63 to idle, 61 or 62 to sit, and 4 or 59
-  to fall.
+- **Dana.** She gets 42 to idle, 9 to drop to her knees, and 4 to fall.
+  Rebecca's NPC model, the first choice, also had sitting (61, 62) and a
+  second fall (59). Jill's was chosen for a build unlike Rebecca's own.
 
 ## How they reach the game
 
 `npc/people.ts` names the two people. `build.ts` writes their models into the
-REB overlay as `enemy/EM1022.EMD` and `enemy/EM1023.EMD`. Chris's and Jill's
+REB overlay as `enemy/EM1022.EMD` and `enemy/EM1021.EMD`. Chris's and Jill's
 games never read REB, so they are unchanged.
 
 Each model is the player's own file with these changes:
@@ -135,9 +134,17 @@ Each model is the player's own file with these changes:
   A moved piece goes to free texels in its own half of the sheet, or else
   the other half with that half's page and palette row. Only the texture
   fields of those triangles change.
-- **The partner's hat** (`campaignHat` in `skins.ts`). The ring of
-  vertices where Rebecca's bob flares at the back of her head is pushed out
-  level into a brim. Vertices move; nothing is added.
+- **Dana's head** (`danaHead` in `skins.ts`). Jill's head is reshaped;
+  vertices move and nothing is added:
+  - **The hat.** The ring of vertices round her hairline goes out level
+    as the brim's edge. The beret's lower ring is drawn in as the crown's
+    base just above it, so the brim lies flat. The beret's upper ring
+    stands straight above that as the crown's top.
+  - **The hair.** The long hair beside her face is tucked up to ear level,
+    a short cut. The back is drawn in to a low bun.
+  - **Texels.** Triangles of her head that share texels with one at least
+    60 units higher get texels of their own (`island.ts`), so the hat's
+    crown and its band don't share paint.
 - **The idle is swapped into animation 0.** The NPC code's looping idle,
   behaviour 9 (`npc_idle_play_anim`, `src/game/entities/CharacterNpc.cpp:370`),
   always plays animation 0, which in these models is a still pose. Swapping
@@ -150,7 +157,7 @@ Each model is the player's own file with these changes:
 
 - the size is the same;
 - the skeleton and keyframes are unchanged;
-- the vertices are unchanged except the hat;
+- the vertices are unchanged except Dana's head;
 - the UVs are unchanged except the moved pieces, and no moved piece shares
   a texel;
 - every polygon samples the half its palette row is for.
@@ -190,17 +197,17 @@ enemy(34 /* Barry (Stars) */, 0, 255, 1, 2, 0, 0, angle, 0, 0, x, 0, z, slot, 0,
 
 ## Things to know
 
-- **The partner-alive flag.** If `FG_COMMON` 192 (`SCENARIO2_FLAG_PARTNER_ALIVE`,
-  `src/game/BioCard.h:204`) is ever set, id 35's init (`CharacterNpc.cpp:237`)
-  overrides the spawn: it darkens three joint groups and poses her in
-  animation 51. Keep that flag clear in her day.
+- **Why not id 35.** Rebecca as an NPC, the first choice for Dana, has a
+  trap: if `FG_COMMON` 192 (`SCENARIO2_FLAG_PARTNER_ALIVE`,
+  `src/game/BioCard.h:204`) is ever set, id 35's init
+  (`CharacterNpc.cpp:237`) darkens her and poses her in animation 51. Jill's
+  init (id 33) has no such branch.
 - **A weapon.** The second operand loads a weapon model onto joint 14, the
   right hand: `LoadCharacterWeaponTmd` (`:147`) reads `g_charWeaponTmdTable`
   (`:107`).
   - Id 34 uses `ws224.tmd`, or `ws225.tmd` for values 5 and 6.
-  - Id 35 uses `ws232.tmd`, or `ws236.tmd` for value 6.
-  - A rifle for the partner would be a TMD of ours under one of those names
-    in REB.
+  - Id 33 uses `ws212.tmd`.
+  - A rifle for Dana would be a TMD of ours under that name in REB.
 - **The proof.** `tools/harness/tests/people.ts` boots her into the cabin. It
   checks:
   - both people are placed where the script puts them;
@@ -215,7 +222,7 @@ enemy(34 /* Barry (Stars) */, 0, 255, 1, 2, 0, 0, angle, 0, 0, x, 0, z, slot, 0,
 | `npc/emd.test.ts` | round trip of every model, a texture written and read back, the people's models |
 | `npc/skin.ts` | fits a 256x256 RGB skin to the texture's two palettes |
 | `npc/paint.ts` | paints a skin from what each texel covers on the body |
-| `npc/skins.ts` | Hal's and the partner's skins, and the partner's hat |
+| `npc/skins.ts` | Hal's and Dana's skins, and Dana's head |
 | `npc/island.ts` | gives triangles texels of their own |
 | `npc/people.ts` | the two people and how their models are built |
 | `npc/turnaround.ts` | builds each person, renders them in Blender on jellybingus in a render slot, fetches the renders |
