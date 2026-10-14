@@ -91,6 +91,7 @@ class Room:
 
     def export(self, anim=None, samples=256, states=()):
         print(f"[kit] {len(bpy.data.objects)} objects", flush=True)
+        wear(float(os.environ.get("RE1_WEAR", "1.3")))
         x0, y0, x1, y1 = self.bounds
         extra = {
             "bounds": {"x0": reb.g(x0), "z0": reb.g(y0), "x1": reb.g(x1), "z1": reb.g(y1)},
@@ -169,6 +170,84 @@ def mat(name):
     }[name]()
     _mats[name] = m
     return m
+
+
+# Materials that keep their look: see-through, glowing, wet, or too small to carry a texture.
+_UNWORN = ("Water", "Blood", "Glass", "Bottle glass", "Web", "Crow feathers")
+
+
+def wear(strength=1.0, texel=0.012):
+    """Give every surface in the scene the same worn, low-resolution texture,
+    as RE1's backgrounds have: water stains with hard edges, streaks run
+    down, fine speckle in blocky texels `texel` metres across, grime dark in
+    the corners and where things touch, and the colour muddied a little.
+    Runs once, before the render, over every material with a Principled BSDF."""
+    if strength <= 0:
+        return
+    worn = 0
+    for m in bpy.data.materials:
+        if not m.use_nodes or m.name.split(".")[0] in _UNWORN or m.get("worn"):
+            continue
+        nodes, links = m.node_tree.nodes, m.node_tree.links
+        bsdf = next((n for n in nodes if n.type == "BSDF_PRINCIPLED"), None)
+        if bsdf is None or bsdf.inputs["Transmission Weight"].default_value > 0.5:
+            continue
+        base = bsdf.inputs["Base Color"]
+        if base.is_linked and base.links[0].from_node.type == "NEW_GEOMETRY" or any(n.type == "NEW_GEOMETRY" for n in nodes):
+            continue  # leaf and grass cards
+        if base.is_linked:
+            src = base.links[0].from_socket
+        else:
+            rgb = nodes.new("ShaderNodeRGB")
+            rgb.outputs[0].default_value = base.default_value
+            src = rgb.outputs[0]
+        # Object space, shifted per object so neighbours don't share a stain, then snapped to texels.
+        tc = nodes.new("ShaderNodeTexCoord")
+        info = nodes.new("ShaderNodeObjectInfo")
+        shift = nodes.new("ShaderNodeVectorMath"); shift.operation = "MULTIPLY_ADD"  # a * b + c
+        shift.inputs[0].default_value = (97, 61, 43)
+        links.new(info.outputs["Random"], shift.inputs[1])
+        links.new(tc.outputs["Object"], shift.inputs[2])
+        snap = nodes.new("ShaderNodeVectorMath"); snap.operation = "SNAP"
+        snap.inputs[1].default_value = (texel, texel, texel)
+        links.new(shift.outputs[0], snap.inputs[0])
+
+        def layer(scale, detail, stops, stretch=(1, 1, 1), distortion=0.0):
+            vec = snap.outputs[0]
+            if stretch != (1, 1, 1):
+                mp = nodes.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = stretch
+                links.new(vec, mp.inputs["Vector"]); vec = mp.outputs[0]
+            n = nodes.new("ShaderNodeTexNoise")
+            n.inputs["Scale"].default_value = scale
+            n.inputs["Detail"].default_value = detail
+            n.inputs["Roughness"].default_value = 0.65
+            n.inputs["Distortion"].default_value = distortion
+            links.new(vec, n.inputs["Vector"])
+            return reb.ramp(nodes, links, n.outputs["Fac"], stops).outputs["Color"]
+
+        k = strength
+        # A stain dries with a dark tide line round a paler middle.
+        rim, inside = (1 - 0.42 * k, 1 - 0.44 * k, 1 - 0.5 * k), (1 - 0.16 * k, 1 - 0.17 * k, 1 - 0.2 * k)
+        stains = layer(0.9, 5, [(0.56, (1, 1, 1)), (0.57, rim), (0.6, inside), (0.75, inside), (0.85, rim)], distortion=0.8)
+        streaks = layer(9, 4, [(0.35, (1 - 0.2 * k,) * 3), (0.65, (1 + 0.05 * k,) * 3)], stretch=(6, 6, 0.35))
+        speckle = layer(70, 2, [(0.3, (1 - 0.25 * k,) * 3), (0.7, (1 + 0.12 * k,) * 3)])
+        ao = nodes.new("ShaderNodeAmbientOcclusion")
+        ao.inputs["Distance"].default_value = 0.3
+        ao.samples = 8
+        corners = reb.ramp(nodes, links, ao.outputs["AO"], [(0.0, (1 - 0.6 * k,) * 3), (1.0, (1, 1, 1))]).outputs["Color"]
+        out = src
+        for f in (stains, streaks, speckle, corners):
+            mix = nodes.new("ShaderNodeMix"); mix.data_type = "RGBA"; mix.blend_type = "MULTIPLY"
+            mix.inputs["Factor"].default_value = 1.0
+            links.new(out, mix.inputs["A"]); links.new(f, mix.inputs["B"])
+            out = mix.outputs["Result"]
+        mud = nodes.new("ShaderNodeHueSaturation")
+        mud.inputs["Saturation"].default_value = 1 - 0.18 * k
+        links.new(out, mud.inputs["Color"])
+        links.new(mud.outputs["Color"], base)
+        m["worn"] = True
+        worn += 1
+    print(f"[kit] wear {strength}: {worn} materials", flush=True)
 
 
 def _glossy(name, rgb, rough):

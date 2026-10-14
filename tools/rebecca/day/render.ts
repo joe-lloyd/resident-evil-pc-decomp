@@ -9,6 +9,7 @@
 // RE1_BLENDER_HOST  ssh host with Blender and an NVIDIA GPU (default: jellybingus)
 // RE1_BLENDER_EXE   Blender on that host (default: Blender 5.1's install path)
 // RE1_BLENDER_DIR   working folder there (default: Documents\Blender\re1-rebecca\day)
+// RE1_WEAR          strength of kit.wear's texture on every surface, 0 for none (default: 1.3)
 // RE1_BLENDER_SLOTS renders at once across every caller on this machine (default: 3)
 //
 // One GPU serves every caller. Seventeen renders at once filled its 24 GB and
@@ -90,7 +91,7 @@ for (const slug of slugs) {
   const started = Date.now();
   const limit = (preview ? 5 : 30) * 60_000;
   try {
-    execFileSync('ssh', ['-o', 'BatchMode=yes', host, `cmd /c "set RE1_OUT=${out}&& set RE1_PREVIEW=${preview ? '1' : ''}&& "${exe}" -b --factory-startup --python-exit-code 1 --python "${work}\\scene.py" > "${work}\\render.log" 2>&1"`], { stdio: 'ignore', timeout: limit });
+    execFileSync('ssh', ['-o', 'BatchMode=yes', host, `cmd /c "set RE1_OUT=${out}&& set RE1_PREVIEW=${preview ? '1' : ''}&& set RE1_WEAR=${process.env.RE1_WEAR ?? '1.3'}&& "${exe}" -b --factory-startup --python-exit-code 1 --python "${work}\\scene.py" > "${work}\\render.log" 2>&1"`], { stdio: 'ignore', timeout: limit });
   } catch (err) {
     const late = Date.now() - started >= limit;
     if (late) stopRemote(`${work}\\scene.py`);
