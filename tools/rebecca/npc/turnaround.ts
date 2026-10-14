@@ -44,7 +44,8 @@ for (const person of people.filter((p) => !slugs.length || slugs.includes(p.slug
   writeFileSync(path.join(local, 'texture.png'), png);
 
   const work = `${remote}\\${person.slug}`;
-  execFileSync('ssh', ['-o', 'BatchMode=yes', host, `cmd /c if not exist "${work}\\out" mkdir "${work}\\out"`]);
+  // A fresh out folder, so no render from an earlier run comes back.
+  execFileSync('ssh', ['-o', 'BatchMode=yes', host, `cmd /c (if exist "${work}\\out" rmdir /s /q "${work}\\out") & mkdir "${work}\\out"`]);
   execFileSync('scp', ['-q', path.join(local, 'model.json'), path.join(local, 'texture.png'), path.join(here, 'view.py'), `${host}:${fwd(work)}/`]);
   for (const pose of poses) {
     const flags = `${head ? '--head ' : ''}--size ${size}`;

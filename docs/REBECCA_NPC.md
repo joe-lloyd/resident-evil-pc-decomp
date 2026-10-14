@@ -86,7 +86,7 @@ The model files with the same mesh and texture:
   `CHAR12`.
 - Rebecca's `EM102C` and her player model `CHAR13`.
 
-So a skin painted for one fits all of them. `EM102A`, Barry dying, has its own
+So a skin painted for one fits all of them. For Hal, a variant also needs the same UV moves, because his skin relies on them; `personModel` applies both. `EM102A`, Barry dying, has its own
 mesh and texture.
 
 ### Their animations
@@ -102,7 +102,7 @@ These numbers are measured from the keyframes, not guessed from names.
 | 0 | stand, still (3 frames) | stand, still |
 | 1 | walk (20 frames) | walk |
 | 4 | fall to the floor, ends lying (30 frames) | fall, ends lying |
-| 9 | kneel down, ends kneeling (25 frames) | kneel down |
+| 9 | drops to his knees, head back (25 frames) | drops to her knees |
 | 42 | standing loop, weight shift (20 frames) | standing loop (20 frames) |
 | 54 | a second fall, ends lying (31 frames) | lying on the floor (90 frames) |
 | 59 | none | a second fall (30 frames) |
@@ -110,7 +110,7 @@ These numbers are measured from the keyframes, not guessed from names.
 | 63 | none | kneeling loop (18 frames) |
 
 - **Hal.** He needs an idle or a sit, and a death. That gives 42 to idle, 9
-  to kneel, and 4 or 54 to die.
+  to drop to his knees, and 4 or 54 to die.
 - **The partner.** She gets 42 or 63 to idle, 61 or 62 to sit, and 4 or 59
   to fall.
 
@@ -120,16 +120,40 @@ These numbers are measured from the keyframes, not guessed from names.
 REB overlay as `enemy/EM1022.EMD` and `enemy/EM1023.EMD`. Chris's and Jill's
 games never read REB, so they are unchanged.
 
-Each model is the player's own file with two changes:
+Each model is the player's own file with these changes:
 
-- **The texture is our skin.** `paint.ts` paints it from what each texel
-  covers on the body: the part, the point and the surface's facing.
-  `skin.ts` fits it to the two palettes.
+- **The texture is our skin.** `skins.ts` paints each person from what each
+  texel covers on the body, using `paint.ts` for the part, the point and the
+  surface's facing. `skin.ts` fits the result to the two palettes. The
+  landmark heights for faces and clothes come from each model's own shape.
+- **Some triangles get texels of their own** (`island.ts`):
+  - **Hal's left forearm.** Both forearms sample one island, so this keeps
+    the bandage on his bitten right arm only.
+  - **Hal's cheeks.** Barry's head reuses texels between its crown and its
+    cheeks, so the cheeks move away from the cap.
+
+  A moved piece goes to free texels in its own half of the sheet, or else
+  the other half with that half's page and palette row. Only the texture
+  fields of those triangles change.
+- **The partner's hat** (`campaignHat` in `skins.ts`). The ring of
+  vertices where Rebecca's bob flares at the back of her head is pushed out
+  level into a brim. Vertices move; nothing is added.
 - **The idle is swapped into animation 0.** The NPC code's looping idle,
   behaviour 9 (`npc_idle_play_anim`, `src/game/entities/CharacterNpc.cpp:370`),
   always plays animation 0, which in these models is a still pose. Swapping
   the two entries of the animation list keeps every animation and the list's
   length.
+  - In the built models the idle is therefore animation 0 and the still pose
+    is 42.
+
+`emd.test.ts` builds both people and checks:
+
+- the size is the same;
+- the skeleton and keyframes are unchanged;
+- the vertices are unchanged except the hat;
+- the UVs are unchanged except the moved pieces, and no moved piece shares
+  a texel;
+- every polygon samples the half its palette row is for.
 
 The file size never changes, so a model fits the room buffer exactly as the
 original did.
@@ -191,14 +215,20 @@ enemy(34 /* Barry (Stars) */, 0, 255, 1, 2, 0, 0, angle, 0, 0, x, 0, z, slot, 0,
 | `npc/emd.test.ts` | round trip of every model, a texture written and read back, the people's models |
 | `npc/skin.ts` | fits a 256x256 RGB skin to the texture's two palettes |
 | `npc/paint.ts` | paints a skin from what each texel covers on the body |
-| `npc/people.ts` | the two people and their models |
+| `npc/skins.ts` | Hal's and the partner's skins, and the partner's hat |
+| `npc/island.ts` | gives triangles texels of their own |
+| `npc/people.ts` | the two people and how their models are built |
+| `npc/turnaround.ts` | builds each person, renders them in Blender on jellybingus in a render slot, fetches the renders |
 | `npc/export.ts` | writes a model out for Blender: `model.json` and `texture.png` |
 | `npc/view.py` | Blender: the model on its skeleton, posed, front, side and back |
 | `npc/anims.ts` | every animation drawn as a moving skeleton, on one page |
 
-Run each Blender render on jellybingus, inside a render slot:
+Render the people as the game gets them; each Blender run takes a render
+slot (`tools/rebecca/day/slots.ts`):
 
 ```
-node tools/rebecca/day/slots.ts npc -- ssh -o BatchMode=yes jellybingus \
-  'cmd /c ""C:\Program Files\Blender Foundation\Blender 5.1\blender.exe" -b --factory-startup --python <dir>\view.py -- <model dir> <out dir> rest --size 512"'
+node tools/rebecca/npc/turnaround.ts /tmp/npc --poses rest,0:10,4:29 --head
 ```
+
+The renders and the in-game screenshots are at
+https://home.arpa/research/rebecca-npc/.
