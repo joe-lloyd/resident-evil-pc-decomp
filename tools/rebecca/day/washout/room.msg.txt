@@ -1,0 +1,8 @@
+0: \nHalf the road's gone.
+1: \nA pickup, nose-down in the\ngully. ARKLAY TIMBER CO.,\nCAMP 4.\p{0}\nHe drove straight through\nthe barrier in the dark.
+2: \nDown in the pool, face\ndown. A logger, in his\norange vest.\p{0}\nHe got out of the truck,\nand no further.
+3: \nThe culvert's choked with\nbranches. The creek's\p{0}\ncoming over the road\ninstead.
+4: \nA ROAD CLOSED barrier,\nsmashed to pieces.
+5: \nThe generator's fuel tank.\nThe gauge reads empty.\p{0}\nI knock on it. Hollow.
+6: \nA snake's shed skin, on\nthe warm stone.\p{0}\nAdders. I'll keep out of\nthe long grass.
+7: \nFIRE LOOKOUT. The track\nclimbs west, to the tower.

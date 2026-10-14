@@ -1,0 +1,9 @@
+0: \nSomeone left the lamp\nburning.
+1: \nHis diary. Day after day:\nthe itching.\p{0}\nThe last entry: itchy.\nitchy. scott came. ugly\p{0}\nface so i killed him.\ntasty
+2: \nThe lamp's still lit. On\nthe plate, a bone. Gnawed.
+3: \nThe sheets are soaked.\nFlakes of skin,\neverywhere.\p{0}\nHe scratched himself raw.
+4: \nThe water in the basin is\npink.
+5: \nA key on the hook. The tag\nsays BACK GATE.
+6: \nHis tools. Kept clean,\noiled. Before.
+7: \nSeed trays. Everything in\nthem has died.
+8: \nThis is where it happened.\nSomeone called Scott.

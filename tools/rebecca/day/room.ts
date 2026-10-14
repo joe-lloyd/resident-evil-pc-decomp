@@ -144,7 +144,9 @@ class Writer {
   }
 }
 
-const clampRect = (r: Rect): Rect => ({ x0: Math.max(0, r.x0), z0: Math.max(0, r.z0), x1: Math.max(0, r.x1), z1: Math.max(0, r.z1) });
+/** A rect cut to what the file can hold: a wall reaching past it still blocks everything beyond the floor. */
+const clamp16 = (v: number) => Math.min(0xffff, Math.max(0, v));
+const clampRect = (r: Rect): Rect => ({ x0: clamp16(r.x0), z0: clamp16(r.z0), x1: clamp16(r.x1), z1: clamp16(r.z1) });
 
 /** Switch-zone record: camTo, camFrom, then corners (low X, low Z), (low X, high Z), (high X, high Z), (high X, low Z). */
 function zoneRecord(w: Writer, camTo: number, camFrom: number, r: Rect): void {

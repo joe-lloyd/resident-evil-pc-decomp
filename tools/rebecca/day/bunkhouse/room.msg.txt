@@ -1,0 +1,9 @@
+0: \nIt stinks of sickness in\nhere.
+1: \nA calendar from a supply\ncompany. July 1998.\p{0}\nSomeone circled three days\nin red: the 17th, the\n31st, the 8th.\p{0}\nAnd wrote them again at\nthe bottom. 17 31 8.
+2: \nHe died in his bed. Nobody\neven pulled the blanket\nover his face.
+3: \nThey tied him to the bunk\nwith their belts.\p{0}\nWrists and ankles. Then\nsomething with a hammer.
+4: \nA diary, left open on the\nbunk.\p{0}\n"Mike's fever broke at 3.\nHe doesn't know us."
+5: \nA card game nobody\nfinished. Bottles, all\nempty.
+6: \nA footlocker and a chair,\nshoved back from the door.\p{0}\nThey were holding it shut.
+7: \nThe stove's cold.
+8: \nHis footlocker, open.\nLetters from home. A photo\nof a woman.

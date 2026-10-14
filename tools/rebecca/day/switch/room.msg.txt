@@ -1,0 +1,6 @@
+0: \nIt smells of burnt rubber.
+1: \nThe breakers. SKYWAY LINE,\nSTATION 3, MINE. Every one\nof them is down. OFF.
+2: \nA contactor, burnt black.\nIt's still sparking off\nthe batteries.\p{0}\nThere's a scorched\nhandprint beside it.
+3: \nA lineman's rubber glove.\nIt's melted.
+4: \nMAIN ISOLATOR, SKYWAY\nLINE. The lever's down,\nand padlocked.\p{0}\nNo power reaches the\ngondola until this goes\nup.
+5: \nBlood on the door frame.\nHe went out to the line\ntrack.

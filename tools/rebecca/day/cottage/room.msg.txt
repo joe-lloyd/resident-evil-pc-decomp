@@ -1,0 +1,11 @@
+0: \nThe radio's still on.
+1: \nHis diary, open. The last\nentry is shaky:\p{0}\n"it itches. hide in the\nmine till they come."
+2: \nThe first aid tin,\nemptied. Bandage wrappers\neverywhere.\p{0}\nHe did what he could with\nit.
+3: \nA key on a hook by the\ndoor. The tag says QUARRY\nOFFICE.
+4: \nThe sink is full of\ntowels. They're soaked\nthrough.\p{0}\nThe water's pink.
+5: \nA girl holding up a fish,\ngrinning. The same photo\nwas in the booth.\p{0}\nA drawing under it, in\ncrayon: DAD.
+6: \nThe radio's on, hissing.\nNothing on any channel.
+7: \nHe dragged the chair to\nthe window and sat\nwatching the path.\p{0}\nBinoculars. Cold coffee.
+8: \nThe bed's been slept in,\nor tried. Blood on the\npillow.
+9: \nFishing rods, a creel,\nwaders. A man who liked\nquiet.
+10: \nThe bolt's drawn and the\nbar's off the door.\p{0}\nHe locked himself in, then\nthought better of it.

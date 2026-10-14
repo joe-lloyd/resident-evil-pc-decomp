@@ -147,8 +147,9 @@ def build():
     # ---- The gallery: a broad arch of rock east-west, its mud floor, the black water over it.
     kit.tunnel("Gallery", rock, [(-4.0, 5.0), (19.0, 5.0)], width=7.6, height=4.0, rough=0.12, seed=21, floor_m=mat("mud"))
     reb.prim("cube", "The dark east", mat("black"), (18.5, 5.0, 1.5), (0.2, 8.0, 4.0))
-    sheet = reb.prim("cube", "Black water", water, ((X0 + X1) / 2 + 1.0, 5.0, WATER), (X1 - X0 + 6.0, 7.4, 0.01))
-    reb.mask(sheet)
+    # Not a mask: from the camera over Hal the water fills more than half the
+    # frame, more than a camera's mask texture holds, so her legs show over it.
+    reb.prim("cube", "Black water", water, ((X0 + X1) / 2 + 1.0, 5.0, WATER), (X1 - X0 + 6.0, 7.4, 0.01))
     # The way back up: the decline's floor climbing out of the water at the west end.
     reb.prim("cube", "Decline floor", kit.dirtied(mat("mud"), 0.5), (-1.2, 5.0, 0.2), (5.0, 3.6, 0.2), rot=(0, -0.26, 0))
     reb.prim("cube", "Decline wet edge", reb.mat_plain("Wet mud", (0.015, 0.012, 0.01), 0.1), (0.6, 5.0, WATER + 0.004), (0.7, 3.4, 0.004))

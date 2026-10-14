@@ -1,0 +1,8 @@
+0: \nFlies. Hundreds of them.
+1: \nThe cook, in his apron. He\ndied holding the counter.\p{0}\nThere's a ring of keys on\nhis belt. One is tagged\nOFFICE.
+2: \nA meat cleaver. He didn't\ngo down without a fight.
+3: \nStew, still simmering on\nthe range. Someone kept\nthe fire going.\p{0}\nIt doesn't smell like food\nany more.
+4: \nA fork, driven into the\ntable. Blood across the\nboards.\p{0}\nThey turned on each other\nover dinner.
+5: \nPlates of stew, half\neaten. Flies.
+6: \nTHURS 23. STEW. BREAD. NO\nSECONDS.\p{0}\nYesterday.
+7: \nThe serving hatch. The\nkitchen's through there.

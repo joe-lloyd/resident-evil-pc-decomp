@@ -1,0 +1,5 @@
+0: \nThe wind's stronger up\nhere. The whole tower\nsways.
+1: \nA handheld radio, smashed\nto bits. Dropped on the\nway up, and stamped on.\p{0}\nThe battery's burst out of\nit.
+2: \nThe outside stair. It's\ntorn off at the top and\nhanging over the drop.\p{0}\nCLOSED. No kidding.
+3: \nDown on the rocks at the\nfoot, a man lying very\nstill.\p{0}\nThat's a long way down.
+4: \nCrows on the rail. They\ndon't fly off. They're\nwaiting.

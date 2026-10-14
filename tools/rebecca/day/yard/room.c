@@ -40,8 +40,10 @@ if (ck(FG_ITEM, 242, 1)) {
     enemy(2 /* Cerberus */, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);
 }
 // KIT DOORS (day/scripts.ts writes these)
-// To road: not built yet.
-// To woods: not built yet.
+// West along the tyre tracks to the forestry road.
+door_aot_set(11, 3400, 16320, 1020, 4080, 0, 15, 48, 4, 0, ROOM_419, 29580, 0, 11900, 2048, UNLOCKED, 1);
+// East after the drag marks into the woods.
+door_aot_set(12, 29580, 7650, 1020, 5100, 0, 15, 48, 4, 0, ROOM_31A, 6120, 0, 13770, 0, UNLOCKED, 1);
 // END KIT DOORS
 return;
 

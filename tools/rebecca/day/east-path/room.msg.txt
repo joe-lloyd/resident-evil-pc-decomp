@@ -1,0 +1,9 @@
+0: \nBlood on the path. He came\nthis way.
+1: \nA thermos, dropped on the\npath. The coffee's long\ndried.\p{0}\nThe cup rolled off into\nthe grass.
+2: \nBlood, drop after drop,\nfrom the station. He was\nbleeding as he walked.
+3: \nA bloody hand on the door\nframe. He went in.
+4: \nA rag soaked in blood. The\ndrips go on, east.\p{0}\nHe came out again and kept\ngoing.
+5: \nSKYWAY back the way I\ncame. QUARRY and OLD MINE\non ahead.\p{0}\nThere's blood on the post.
+6: \nA bench with a view of the\nwhole valley. A little\nplaque:\p{0}\nFOR THE ONES WHO BUILT THE\nSKYWAY.
+7: \nThe station's windsock.\nIt's blowing hard off the\nvalley.
+8: \nThe axe is still in the\nblock. Somebody's\p{0}\nwoodpile, somebody's\nwashing.

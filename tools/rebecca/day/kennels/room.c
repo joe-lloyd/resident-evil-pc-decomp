@@ -1,0 +1,21 @@
+// kennels (21F), written by day/scripts.ts from day/kennels/scene.py: edit the scene, not this file.
+// init procedure 0
+// To estate-wall.
+door_aot_set(0, 15810, 3400, 2380, 1020, 0, 15, 48, 4, 0, ROOM_21E, 17000, 0, 18530, 1024, UNLOCKED, 1);
+// To back-garden.
+door_aot_set(1, 15300, 22780, 3400, 1020, 0, 15, 48, 4, 0, ROOM_110, 17000, 0, 5780, 3072, UNLOCKED, 1);
+aot_set(2, 11050, 14450, 1360, 3400, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
+aot_set(3, 5100, 14450, 5100, 3400, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
+aot_set(4, 9010, 6290, 2040, 3400, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
+aot_set(5, 11050, 5950, 1020, 16320, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
+aot_set(6, 20740, 8330, 1360, 2550, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
+aot_set(7, 19210, 18020, 3060, 1360, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
+aot_set(8, 12750, 9350, 3400, 5100, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
+return;
+
+// main procedure 0
+if (ck(FG_COMMON, 252, 1)) {
+    set(FG_COMMON, 252, 0);
+    message(128, 255, 0);
+}
+return;

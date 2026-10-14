@@ -1,0 +1,7 @@
+0: \nCandles. Someone lit these\ntoday.
+1: \nA map of the workings. The\nadit, the junction with\nthe pump,\p{0}\nthe lift up to the top.\nThe old gallery is marked\nFLOODED.\p{0}\nThere's a bloody\nthumbprint on it.
+2: \nAn old miner's helmet with\na carbide lamp on it.
+3: \nA jacket over the chair.\nARKLAY SKYWAY on the\npatch.\p{0}\nHal's.
+4: \nA cot, pulled out. A\nbandage soaked through on\nthe blanket.\p{0}\nHe rested here, then went\non down.
+5: \nThe candles are new. GIANT\nPOWDER on the boxes.\nEmpty.
+6: \nWater's coming through the\nroof. The bucket ran over\nlong ago.

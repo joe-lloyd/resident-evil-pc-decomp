@@ -1,0 +1,7 @@
+0: \nThey shut themselves in.\nIt didn't help.
+1: \nSICK - KEEP OUT. Painted\nin a hurry, the paint\nstill running.
+2: \nLOGGING CAMP 4. Someone's\nclawed the sign.\p{0}\nThe gate's hanging open.
+3: \nThe outside of the gate is\nclawed to splinters.\p{0}\nSomething wanted in.
+4: \nA logger, dead over the\nlogs they piled up. The\ncrows have had his eyes.
+5: \nThe camp truck, shoved out\nof the gate.\p{0}\nBloody hands all over the\ninside of the door.\nSomeone wanted out.
+6: \nThe barricade. Logs,\nsandbags, spikes. Pulled\ndown, or pushed.

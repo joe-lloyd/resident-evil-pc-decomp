@@ -1,0 +1,6 @@
+0: \nWebs. Thick ones.
+1: \nA gap under the rocks,\ninto the dark. Webs over\nit.\p{0}\nThere's blood on the post.\nSomeone squeezed through.
+2: \nThe roof's been brought\ndown across the mouth. On\npurpose:\p{0}\nthere's a blasting wire\nrunning out of the rocks.
+3: \nA blasting plunger, pushed\nhome. Whoever fired it\p{0}\ndropped their hard hat and\nran.
+4: \nSEALED. DO NOT ENTER.\p{0}\nWhat were they keeping in?
+5: \nAn ore cart, tipped over.\nSilver ore, dull and grey.

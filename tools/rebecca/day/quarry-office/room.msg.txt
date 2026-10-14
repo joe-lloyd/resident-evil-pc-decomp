@@ -1,0 +1,8 @@
+0: \nBurnt coffee. The hot\nplate's still on.
+1: \nA steel locker, stencilled\nEXPLOSIVES. KEEP LOCKED.\p{0}\nIt's padlocked.
+2: \nA box marked CAPS, and\ncoils of wire. Blasting\ncaps.\p{0}\nKept well away from the\nlocker.
+3: \nThe time clock is still\nticking. The second hand's\nstuck,\p{0}\njumping on the same mark\nover and over.
+4: \nThe foreman's report, half\nwritten. The last line\njust stops.
+5: \nThe shift rosters. Name\nafter name crossed out in\nred. SICK.\p{0}\nBy the last one there's\nhardly anyone left.
+6: \nThe coffee's been on the\nhot plate for days. It's\nburnt to tar.
+7: \nDAYS WITHOUT AN ACCIDENT.\nSomeone wiped the number\noff\p{0}\nand wrote a 0.

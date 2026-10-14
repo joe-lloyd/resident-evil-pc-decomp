@@ -1,0 +1,6 @@
+0: \nThe lamps are lit.\nSomeone's been down here.
+1: \nSomeone, wrapped up tight\nin web against the rock.\p{0}\nOne boot sticks out. I'm\nnot cutting it open.
+2: \nOFFICE, painted on the\nplanks. There's\p{0}\ncandlelight under the\ndoor.
+3: \nA pick and a shovel,\ndropped. Whoever worked\nhere ran.
+4: \nDrops of blood along the\nrails, on toward the\nworkings.\p{0}\nHal came this way.
+5: \nAn ore cart, half full.\nIt's been here years.

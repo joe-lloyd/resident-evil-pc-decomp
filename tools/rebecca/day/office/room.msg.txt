@@ -1,0 +1,8 @@
+0: \nThe smell hits first.
+1: \nThe foreman. He sat at his\ndesk and put the shotgun\nunder his chin.\p{0}\nThe wall behind him is\ncovered in it.
+2: \nLetters on Umbrella\nletterhead. "The gondola\p{0}\ncontract is approved in\nfull."\p{0}\n"The samples are to be\nkept cold and are not to\nbe opened."\p{0}\n"Discretion is a condition\nof the contract."
+3: \nThe payroll ledger.\nTwenty-one names.\p{0}\nHe crossed them out, one\nby one. The last ones\p{0}\naren't crossed out. There\nwas nobody left to do it.
+4: \nA safe. It's locked.\p{0}\nA combination dial: three\nnumbers.
+5: \nA map of the camp, drawn\nby hand. Somebody marked a\nred X by the workshop.
+6: \nA gun rack. Every peg is\nempty.
+7: \nA desk fan, still running.\nThe power's still on\nsomewhere.

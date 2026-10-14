@@ -1,0 +1,6 @@
+0: \nUnder the house.\p{0}\nI can hear someone walking\naround up there.
+1: \nA hatch, up into the\nhouse. There's light round\nits edges.\p{0}\nIt's quiet up there.
+2: \nA blanket, a candle stub,\nan empty biscuit tin.\p{0}\nSomeone hid down here.
+3: \nRat poison. The rats ate\nit all anyway.
+4: \nFootsteps, overhead. Slow\nones.\p{0}\nKeep going.
+5: \nPipes. Cobwebs. Rat\ndroppings. Lovely.

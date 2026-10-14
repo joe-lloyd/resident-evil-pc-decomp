@@ -1,0 +1,8 @@
+0: \nThe back of the mansion.\p{0}\nThe house is dark.
+1: \nCellar doors. Padlocked.\p{0}\nThere's blood on the\nhandle.
+2: \nThe back door's been\nboarded over. From out\nhere.\p{0}\nKEEP OUT.
+3: \nOne of the maids.\nSomething dragged her into\nthe hedge.\p{0}\nShe came from the cellar\ndoors. She was running.
+4: \nA shoe. Hers, I think.
+5: \nThe fountain's still\nrunning. There's no one\nleft to turn it off.
+6: \nThe gardener's barrow,\ntipped over. Seedlings,\nspilled.\p{0}\nHe never finished.
+7: \nThe lamp's lit. The moths\nfound it.

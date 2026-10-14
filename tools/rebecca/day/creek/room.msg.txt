@@ -1,0 +1,8 @@
+0: \nRunning water. And a\nlight, across the creek.
+1: \nThe door's padlocked. From\nthe outside.\p{0}\nThere's light inside.\nGouges in the wood, low\ndown.
+2: \nA lamp's burning in there.\nThere's a smear on the\nglass.
+3: \nA dog, drowned against the\nlog. A Doberman.\p{0}\nIts coat's come away in\npatches. It has a collar\ntag: SPENCER KENNELS.
+4: \nWashing on the line. One\nshirt is stiff with blood.
+5: \nAn adder, cut in two. A\nspade beside it.
+6: \nPRIVATE. SPENCER ESTATE.
+7: \nSomething was dragged down\nto the water.\p{0}\nOne boot, in the reeds.
