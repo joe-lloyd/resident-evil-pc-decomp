@@ -4,7 +4,8 @@
 //
 //   node tools/rebecca/build.ts <USA dir> <out dir>
 //
-// <USA dir> holds the original Stage1..Stage7 room files and DATA/BIO_CARD.DAT.
+// <USA dir> holds the original Stage1..Stage7 room files, DATA/BIO_CARD.DAT,
+// enemy/CHAR11.EMD and CHAR13.EMD, and players/W31 to W34.EMW.
 // RAE_CLI points at retro-archive-explorer's scripts/cli.mjs, which assembles
 // the room scripts (`rae asm`).
 import { execFileSync } from 'node:child_process';
@@ -14,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { buildDayRoom } from './day/room.ts';
 import { buildCardSheet } from './card.ts';
 import { footstepFiles } from './footsteps.ts';
+import { buildArms } from './arms.ts';
 import { buildWalk, walkFileName } from './walks.ts';
 import { readPng } from '../harness/image.ts';
 import { dayRooms, dayStart, walks } from './day/rooms.ts';
@@ -84,6 +86,26 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   );
   writeFileSync(path.join(reb, 'DATA', 'Select_b.tim'), sheet);
   written.push('DATA/Select_b.tim');
+
+  // Her knife, shotgun and Magnum: her own unused files, textured from the
+  // player's Jill (arms.ts), saved under the names her weapon table loads
+  // (g_weaponPathTable, 0x004c1ca8: knife w11, shotgun w13, Magnum w14).
+  const players = findFile(baseDir, 'players');
+  const enemy = findFile(baseDir, 'enemy');
+  const arms = buildArms(
+    readFileSync(findFile(enemy, 'CHAR11.EMD')),
+    readFileSync(findFile(enemy, 'CHAR13.EMD')),
+    ['W31.EMW', 'W33.EMW', 'W34.EMW'].map((name) => ({ file: readFileSync(findFile(players, name)) })),
+    [readFileSync(findFile(players, 'W32.EMW'))],
+  );
+  mkdirSync(path.join(reb, 'enemy'), { recursive: true });
+  mkdirSync(path.join(reb, 'players'), { recursive: true });
+  writeFileSync(path.join(reb, 'enemy', 'CHAR13.EMD'), arms.rebecca);
+  written.push('enemy/CHAR13.EMD');
+  ['W11.EMW', 'W13.EMW', 'W14.EMW'].forEach((name, i) => {
+    writeFileSync(path.join(reb, 'players', name), arms.weapons[i]!);
+    written.push(`players/${name}`);
+  });
 
   // The walks between her outdoor rooms, and her footsteps on the path.
   mkdirSync(path.join(reb, 'objspr'), { recursive: true });
