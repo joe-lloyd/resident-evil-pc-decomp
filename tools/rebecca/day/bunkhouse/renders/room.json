@@ -1,0 +1,312 @@
+{
+ "cameras": [
+  {
+   "from": [
+    20145,
+    -3825,
+    5780
+   ],
+   "to": [
+    7820,
+    -510,
+    6290
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -3825,
+    5950
+   ],
+   "to": [
+    13600,
+    -510,
+    5440
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    10965,
+    -3740,
+    9860
+   ],
+   "to": [
+    15980,
+    -680,
+    3740
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    12495,
+    -3825,
+    1955
+   ],
+   "to": [
+    17340,
+    -510,
+    8840
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 12027,
+   "z0": 6630,
+   "x1": 13473,
+   "z1": 7820,
+   "name": "Footlocker footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 1793,
+   "z0": 1742,
+   "x1": 5177,
+   "z1": 3255,
+   "name": "Bunk 00"
+  },
+  {
+   "shape": "box",
+   "x0": 5364,
+   "z0": 1742,
+   "x1": 8746,
+   "z1": 3255,
+   "name": "Bunk 01"
+  },
+  {
+   "shape": "box",
+   "x0": 12844,
+   "z0": 1742,
+   "x1": 16227,
+   "z1": 3255,
+   "name": "Bunk 02"
+  },
+  {
+   "shape": "box",
+   "x0": 16413,
+   "z0": 1742,
+   "x1": 19796,
+   "z1": 3255,
+   "name": "Bunk 03"
+  },
+  {
+   "shape": "box",
+   "x0": 1793,
+   "z0": 8645,
+   "x1": 5177,
+   "z1": 10158,
+   "name": "Bunk 10"
+  },
+  {
+   "shape": "box",
+   "x0": 5364,
+   "z0": 8645,
+   "x1": 8746,
+   "z1": 10158,
+   "name": "Bunk 11"
+  },
+  {
+   "shape": "box",
+   "x0": 11909,
+   "z0": 8645,
+   "x1": 15291,
+   "z1": 10158,
+   "name": "Bunk 12"
+  },
+  {
+   "shape": "box",
+   "x0": 15479,
+   "z0": 8645,
+   "x1": 18862,
+   "z1": 10158,
+   "name": "Bunk 13"
+  },
+  {
+   "shape": "box",
+   "x0": 2307,
+   "z0": 3277,
+   "x1": 3705,
+   "z1": 4033,
+   "name": "Footlocker 00"
+  },
+  {
+   "shape": "box",
+   "x0": 6278,
+   "z0": 3243,
+   "x1": 7711,
+   "z1": 4067,
+   "name": "Footlocker 01"
+  },
+  {
+   "shape": "box",
+   "x0": 13849,
+   "z0": 3265,
+   "x1": 15260,
+   "z1": 4045,
+   "name": "Footlocker 02"
+  },
+  {
+   "shape": "box",
+   "x0": 17398,
+   "z0": 3263,
+   "x1": 18811,
+   "z1": 4047,
+   "name": "Footlocker 03"
+  },
+  {
+   "shape": "box",
+   "x0": 2732,
+   "z0": 7847,
+   "x1": 4151,
+   "z1": 8643,
+   "name": "Footlocker 10"
+  },
+  {
+   "shape": "box",
+   "x0": 6838,
+   "z0": 7817,
+   "x1": 8287,
+   "z1": 8673,
+   "name": "Footlocker 11"
+  },
+  {
+   "shape": "box",
+   "x0": 16808,
+   "z0": 7848,
+   "x1": 18226,
+   "z1": 8642,
+   "name": "Footlocker 13"
+  },
+  {
+   "shape": "circle",
+   "x0": 10370,
+   "z0": 2040,
+   "x1": 11390,
+   "z1": 3060,
+   "name": "Pot-belly stove"
+  },
+  {
+   "shape": "box",
+   "x0": 7735,
+   "z0": 5355,
+   "x1": 9605,
+   "z1": 6715,
+   "name": "Card table"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 20400,
+  "z1": 10200
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "camp-yard",
+   "zone": {
+    "x0": 10200,
+    "z0": 9350,
+    "x1": 11730,
+    "z1": 10200
+   },
+   "arrive": {
+    "x": 10965,
+    "z": 7820,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 11475,
+    "z0": 1700,
+    "x1": 12835,
+    "z1": 3910
+   },
+   "text": "A calendar from a supply company. July 1998.\nSomeone circled three days in red: the 17th, the 31st, the 8th.\nAnd wrote them again at the bottom. 17 31 8."
+  },
+  {
+   "zone": {
+    "x0": 12920,
+    "z0": 3910,
+    "x1": 16150,
+    "z1": 4760
+   },
+   "text": "He died in his bed. Nobody even pulled the blanket over his face."
+  },
+  {
+   "zone": {
+    "x0": 15640,
+    "z0": 6970,
+    "x1": 18700,
+    "z1": 7905
+   },
+   "text": "They tied him to the bunk with their belts.\nWrists and ankles. Then something with a hammer."
+  },
+  {
+   "zone": {
+    "x0": 12920,
+    "z0": 7565,
+    "x1": 14620,
+    "z1": 8670
+   },
+   "text": "A diary, left open on the bunk.\n\"Mike's fever broke at 3. He doesn't know us.\""
+  },
+  {
+   "zone": {
+    "x0": 7480,
+    "z0": 5100,
+    "x1": 9860,
+    "z1": 6970
+   },
+   "text": "A card game nobody finished. Bottles, all empty."
+  },
+  {
+   "zone": {
+    "x0": 11730,
+    "z0": 6290,
+    "x1": 13940,
+    "z1": 8160
+   },
+   "text": "A footlocker and a chair, shoved back from the door.\nThey were holding it shut."
+  },
+  {
+   "zone": {
+    "x0": 9860,
+    "z0": 3145,
+    "x1": 11900,
+    "z1": 4080
+   },
+   "text": "The stove's cold."
+  },
+  {
+   "zone": {
+    "x0": 2210,
+    "z0": 3910,
+    "x1": 4760,
+    "z1": 4760
+   },
+   "text": "His footlocker, open. Letters from home. A photo of a woman."
+  }
+ ],
+ "entry": "It stinks of sickness in here.",
+ "notes": [
+  "high on the east wall over the aisle: the length of the room, the table, the drag to the door",
+  "high on the west wall over the aisle: both rows of bunks, the card table, the stove",
+  "high over the door: the man dead in his bunk, the calendar by the stove",
+  "high over the calendar: Mike tied to his bunk, the diary, the footlocker shoved from the door"
+ ]
+}

@@ -1,0 +1,253 @@
+{
+ "cameras": [
+  {
+   "from": [
+    31620,
+    -5780,
+    16320
+   ],
+   "to": [
+    14450,
+    -1020,
+    10880
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2720,
+    -5610,
+    6800
+   ],
+   "to": [
+    18700,
+    -850,
+    13940
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    17340,
+    -5100,
+    6630
+   ],
+   "to": [
+    11050,
+    -340,
+    13940
+   ],
+   "fov": 205
+  },
+  {
+   "from": [
+    24140,
+    -4930,
+    17510
+   ],
+   "to": [
+    13600,
+    -1020,
+    7820
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    11220,
+    -5610,
+    7820
+   ],
+   "to": [
+    850,
+    -510,
+    14280
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "circle",
+   "x0": 13481,
+   "z0": 7191,
+   "x1": 13719,
+   "z1": 7429,
+   "name": "Latch post"
+  },
+  {
+   "shape": "circle",
+   "x0": 13481,
+   "z0": 16371,
+   "x1": 13719,
+   "z1": 16609,
+   "name": "Hinge post"
+  },
+  {
+   "shape": "box",
+   "x0": 4760,
+   "z0": 16617,
+   "x1": 13600,
+   "z1": 17042,
+   "name": "Gate leaf footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 13430,
+   "z0": 4250,
+   "x1": 13770,
+   "z1": 7310,
+   "name": "North fence"
+  },
+  {
+   "shape": "box",
+   "x0": 13430,
+   "z0": 16490,
+   "x1": 13770,
+   "z1": 19550,
+   "name": "South fence"
+  },
+  {
+   "shape": "circle",
+   "x0": 18581,
+   "z0": 3876,
+   "x1": 18819,
+   "z1": 4114,
+   "name": "Sign post"
+  },
+  {
+   "shape": "circle",
+   "x0": 18581,
+   "z0": 7106,
+   "x1": 18819,
+   "z1": 7344,
+   "name": "Sign post.001"
+  },
+  {
+   "shape": "box",
+   "x0": 20740,
+   "z0": 17680,
+   "x1": 26180,
+   "z1": 19788,
+   "name": "Log stack"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 5950,
+  "x1": 32300,
+  "z1": 17850
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "yard",
+   "zone": {
+    "x0": 31280,
+    "z0": 8500,
+    "x1": 32300,
+    "z1": 15300
+   },
+   "arrive": {
+    "x": 29580,
+    "z": 11900,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "washout",
+   "zone": {
+    "x0": 1700,
+    "z0": 8500,
+    "x1": 2720,
+    "z1": 15300
+   },
+   "arrive": {
+    "x": 4420,
+    "z": 11900,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 13260,
+    "z0": 7310,
+    "x1": 15130,
+    "z1": 9010
+   },
+   "text": "The chain's been cut. Bolt cutters, clean through.\nThe padlock is still locked on the end of it."
+  },
+  {
+   "zone": {
+    "x0": 14450,
+    "z0": 9350,
+    "x1": 16150,
+    "z1": 11050
+   },
+   "text": "A ranger's clipboard. The check sheet: GATE 7, CHAINED AND LOCKED, 23 JUL, 18.00.\nHe never came back for it."
+  },
+  {
+   "zone": {
+    "x0": 12410,
+    "z0": 7310,
+    "x1": 13600,
+    "z1": 8500
+   },
+   "text": "A county notice, torn half away.\n...ARKLAY AREA CLOSED UNTIL FURTHER... ...HIKERS... ...DO NOT APPROACH..."
+  },
+  {
+   "zone": {
+    "x0": 18700,
+    "z0": 5950,
+    "x1": 20230,
+    "z1": 7650
+   },
+   "text": "ARKLAY NATIONAL FOREST. FOREST ROAD 7.\nSomeone's used it for target practice."
+  },
+  {
+   "zone": {
+    "x0": 5100,
+    "z0": 11560,
+    "x1": 7820,
+    "z1": 13600
+   },
+   "text": "Glass from a headlamp, and blood. Grey fur.\nSomething big ran out in front of whoever drove through here."
+  },
+  {
+   "zone": {
+    "x0": 21760,
+    "z0": 5950,
+    "x1": 26520,
+    "z1": 17850
+   },
+   "text": "Paw prints, crossing the road. Big ones.\nThe dogs came down this way."
+  },
+  {
+   "zone": {
+    "x0": 7820,
+    "z0": 16490,
+    "x1": 9860,
+    "z1": 17850
+   },
+   "text": "A ranger's hat, in the ditch."
+  }
+ ],
+ "entry": "The forestry road. The gate's open.",
+ "notes": [
+  "from the east end, the way she comes: the road west, the sign, the open gate",
+  "from beyond the gate in the west: the gate's back, the torn notice, the road east",
+  "from the north verge by the sign: the latch post, the cut chain, the clipboard",
+  "from the south verge east of the gate: the sign with its crows, the latch post",
+  "from just west of the latch post: the road on west toward the washout, the skid and the blood"
+ ]
+}

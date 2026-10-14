@@ -1,0 +1,242 @@
+{
+ "cameras": [
+  {
+   "from": [
+    8925,
+    -3655,
+    7225
+   ],
+   "to": [
+    3400,
+    -340,
+    3060
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -3655,
+    1955
+   ],
+   "to": [
+    7140,
+    -510,
+    6460
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    8925,
+    -3655,
+    2805
+   ],
+   "to": [
+    3400,
+    -340,
+    6120
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -3655,
+    7225
+   ],
+   "to": [
+    7820,
+    -510,
+    2720
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 1700,
+   "z0": 1700,
+   "x1": 3315,
+   "z1": 5100,
+   "name": "Bed frame"
+  },
+  {
+   "shape": "box",
+   "x0": 3995,
+   "z0": 1717,
+   "x1": 5695,
+   "z1": 2533,
+   "name": "Drawers"
+  },
+  {
+   "shape": "box",
+   "x0": 6630,
+   "z0": 1717,
+   "x1": 8840,
+   "z1": 2703,
+   "name": "Sink cupboard"
+  },
+  {
+   "shape": "box",
+   "x0": 8118,
+   "z0": 5185,
+   "x1": 9053,
+   "z1": 6205,
+   "name": "Stove"
+  },
+  {
+   "shape": "box",
+   "x0": 8143,
+   "z0": 4522,
+   "x1": 9027,
+   "z1": 5168,
+   "name": "Woodbox"
+  },
+  {
+   "shape": "box",
+   "x0": 4165,
+   "z0": 3697,
+   "x1": 6035,
+   "z1": 4972,
+   "name": "Table"
+  },
+  {
+   "shape": "box",
+   "x0": 2824,
+   "z0": 6139,
+   "x1": 3636,
+   "z1": 6951,
+   "name": "Chair at the window"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 9180,
+  "z1": 7480
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "east-path",
+   "zone": {
+    "x0": 4420,
+    "z0": 6630,
+    "x1": 5950,
+    "z1": 7480
+   },
+   "arrive": {
+    "x": 5185,
+    "z": 5950,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 4080,
+    "z0": 3570,
+    "x1": 5610,
+    "z1": 5015
+   },
+   "text": "His diary, open. The last entry is shaky:\n\"it itches. hide in the mine till they come.\""
+  },
+  {
+   "zone": {
+    "x0": 5610,
+    "z0": 3570,
+    "x1": 6120,
+    "z1": 5015
+   },
+   "text": "The first aid tin, emptied. Bandage wrappers everywhere.\nHe did what he could with it."
+  },
+  {
+   "zone": {
+    "x0": 3145,
+    "z0": 6630,
+    "x1": 4420,
+    "z1": 7480
+   },
+   "text": "A key on a hook by the door. The tag says QUARRY OFFICE."
+  },
+  {
+   "zone": {
+    "x0": 6545,
+    "z0": 1700,
+    "x1": 8330,
+    "z1": 3400
+   },
+   "text": "The sink is full of towels. They're soaked through.\nThe water's pink."
+  },
+  {
+   "zone": {
+    "x0": 3995,
+    "z0": 1700,
+    "x1": 5695,
+    "z1": 3230
+   },
+   "text": "A girl holding up a fish, grinning. The same photo was in the booth.\nA drawing under it, in crayon: DAD."
+  },
+  {
+   "zone": {
+    "x0": 3400,
+    "z0": 1700,
+    "x1": 3995,
+    "z1": 3230
+   },
+   "text": "The radio's on, hissing. Nothing on any channel."
+  },
+  {
+   "zone": {
+    "x0": 2380,
+    "z0": 5780,
+    "x1": 4080,
+    "z1": 7480
+   },
+   "text": "He dragged the chair to the window and sat watching the path.\nBinoculars. Cold coffee."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 1700,
+    "x1": 3740,
+    "z1": 5270
+   },
+   "text": "The bed's been slept in, or tried. Blood on the pillow."
+  },
+  {
+   "zone": {
+    "x0": 5950,
+    "z0": 6460,
+    "x1": 9180,
+    "z1": 7480
+   },
+   "text": "Fishing rods, a creel, waders. A man who liked quiet."
+  },
+  {
+   "zone": {
+    "x0": 4080,
+    "z0": 6800,
+    "x1": 4930,
+    "z1": 7480
+   },
+   "text": "The bolt's drawn and the bar's off the door.\nHe locked himself in, then thought better of it."
+  }
+ ],
+ "entry": "The radio's still on.",
+ "notes": [
+  "high over the stove: the table and the diary, the bed, the photos of his daughter",
+  "high over the bed: the door, its bar lifted off, the key hook, the rods in the corner",
+  "high over the sink: the chair dragged to the window, the scrapes, the first aid tin",
+  "high by the west window: the sink full of towels, the radio, the stove"
+ ]
+}

@@ -1,0 +1,406 @@
+{
+ "cameras": [
+  {
+   "from": [
+    4590,
+    -5780,
+    22780
+   ],
+   "to": [
+    15300,
+    -340,
+    10200
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    16660,
+    -5440,
+    4420
+   ],
+   "to": [
+    12580,
+    -340,
+    17850
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    29750,
+    -5100,
+    5780
+   ],
+   "to": [
+    17850,
+    -510,
+    14450
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    21420,
+    -6120,
+    10880
+   ],
+   "to": [
+    30600,
+    0,
+    19720
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    4420,
+    -6120,
+    4420
+   ],
+   "to": [
+    18700,
+    -340,
+    17850
+   ],
+   "fov": 210
+  }
+ ],
+ "walls": [
+  {
+   "shape": "circle",
+   "x0": 10423,
+   "z0": 21850,
+   "x1": 12017,
+   "z1": 23419,
+   "name": "Old spruce"
+  },
+  {
+   "shape": "circle",
+   "x0": 18536,
+   "z0": 4975,
+   "x1": 20224,
+   "z1": 6637,
+   "name": "Old spruce.001"
+  },
+  {
+   "shape": "circle",
+   "x0": 24070,
+   "z0": 3194,
+   "x1": 25570,
+   "z1": 4672,
+   "name": "Old spruce.002"
+  },
+  {
+   "shape": "circle",
+   "x0": 19263,
+   "z0": 20660,
+   "x1": 20857,
+   "z1": 22229,
+   "name": "Old spruce.003"
+  },
+  {
+   "shape": "circle",
+   "x0": 7844,
+   "z0": 1924,
+   "x1": 9156,
+   "z1": 3216,
+   "name": "Old spruce.004"
+  },
+  {
+   "shape": "box",
+   "x0": 16091,
+   "z0": 16882,
+   "x1": 18283,
+   "z1": 18614,
+   "name": "Blowdown 0 footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 18165,
+   "z0": 16338,
+   "x1": 20357,
+   "z1": 18070,
+   "name": "Blowdown 0 footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 20239,
+   "z0": 15794,
+   "x1": 22431,
+   "z1": 17526,
+   "name": "Blowdown 0 footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 22313,
+   "z0": 15250,
+   "x1": 24505,
+   "z1": 16982,
+   "name": "Blowdown 0 footprint.003"
+  },
+  {
+   "shape": "box",
+   "x0": 24387,
+   "z0": 14706,
+   "x1": 26579,
+   "z1": 16438,
+   "name": "Blowdown 0 footprint.004"
+  },
+  {
+   "shape": "box",
+   "x0": 14554,
+   "z0": 16047,
+   "x1": 16881,
+   "z1": 20228,
+   "name": "Root plate 0"
+  },
+  {
+   "shape": "box",
+   "x0": 5107,
+   "z0": 6570,
+   "x1": 7247,
+   "z1": 7936,
+   "name": "Blowdown 1 footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 7260,
+   "z0": 6117,
+   "x1": 9400,
+   "z1": 7483,
+   "name": "Blowdown 1 footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 9413,
+   "z0": 5664,
+   "x1": 11553,
+   "z1": 7030,
+   "name": "Blowdown 1 footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 3863,
+   "z0": 6095,
+   "x1": 5390,
+   "z1": 9246,
+   "name": "Root plate 1"
+  },
+  {
+   "shape": "box",
+   "x0": 20409,
+   "z0": 7775,
+   "x1": 23791,
+   "z1": 10925,
+   "name": "Doe footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 22950,
+   "z0": 21709,
+   "x1": 25330,
+   "z1": 23851,
+   "name": "Rock footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 6630,
+   "z0": 3655,
+   "x1": 8330,
+   "z1": 5185,
+   "name": "Rock footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 29155,
+   "z0": 10191,
+   "x1": 30685,
+   "z1": 11569,
+   "name": "Rock footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 17765,
+   "z0": 12384,
+   "x1": 18955,
+   "z1": 13455,
+   "name": "Rock footprint.003"
+  },
+  {
+   "shape": "circle",
+   "x0": 25501,
+   "z0": 21046,
+   "x1": 26859,
+   "z1": 22474,
+   "name": "Stump 0"
+  },
+  {
+   "shape": "circle",
+   "x0": 22538,
+   "z0": 12988,
+   "x1": 23702,
+   "z1": 14212,
+   "name": "Stump 1"
+  },
+  {
+   "shape": "circle",
+   "x0": 28593,
+   "z0": 11220,
+   "x1": 29887,
+   "z1": 12580,
+   "name": "Stump 2"
+  },
+  {
+   "shape": "circle",
+   "x0": 28740,
+   "z0": 20441,
+   "x1": 30080,
+   "z1": 21760,
+   "name": "Blazed spruce"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 3400,
+  "z0": 3400,
+  "x1": 30600,
+  "z1": 23800
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "yard",
+   "zone": {
+    "x0": 3400,
+    "z0": 11900,
+    "x1": 4420,
+    "z1": 15300
+   },
+   "arrive": {
+    "x": 6120,
+    "z": 13770,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "den",
+   "zone": {
+    "x0": 12750,
+    "z0": 3400,
+    "x1": 17000,
+    "z1": 4420
+   },
+   "arrive": {
+    "x": 15130,
+    "z": 6120,
+    "angle": 3072
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "logging-road",
+   "zone": {
+    "x0": 29580,
+    "z0": 15300,
+    "x1": 30600,
+    "z1": 19550
+   },
+   "arrive": {
+    "x": 27880,
+    "z": 17340,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 4930,
+    "z0": 15300,
+    "x1": 6970,
+    "z1": 17510
+   },
+   "text": "Rifle brass, a handful of it. He stood here and kept shooting."
+  },
+  {
+   "zone": {
+    "x0": 4420,
+    "z0": 13260,
+    "x1": 6630,
+    "z1": 15300
+   },
+   "text": "The needles are soaked here. This is where they got him down."
+  },
+  {
+   "zone": {
+    "x0": 10030,
+    "z0": 10370,
+    "x1": 11900,
+    "z1": 12070
+   },
+   "text": "His flashlight. It's still on, just. The battery's nearly gone."
+  },
+  {
+   "zone": {
+    "x0": 12750,
+    "z0": 9180,
+    "x1": 14620,
+    "z1": 10880
+   },
+   "text": "One of his boots, the laces still done up.\nHe caught his heel on the root, and they pulled him out of it."
+  },
+  {
+   "zone": {
+    "x0": 11560,
+    "z0": 6800,
+    "x1": 13430,
+    "z1": 8330
+   },
+   "text": "A strip of khaki on a dead branch, the same as his shirt."
+  },
+  {
+   "zone": {
+    "x0": 13260,
+    "z0": 5100,
+    "x1": 16320,
+    "z1": 7820
+   },
+   "text": "Paw prints either side of the smear. Big ones.\nThey dragged him north, into the hollow."
+  },
+  {
+   "zone": {
+    "x0": 20400,
+    "z0": 7820,
+    "x1": 23970,
+    "z1": 11050
+   },
+   "text": "A deer. They ate her soft parts first.\nShe's been here longer than he has."
+  },
+  {
+   "zone": {
+    "x0": 28220,
+    "z0": 19890,
+    "x1": 30600,
+    "z1": 22440
+   },
+   "text": "Orange paint on the bark, and a 4. A tree marked for felling.\nThe logging camp must be that way."
+  }
+ ],
+ "entry": "The drag marks go on into the trees. So does the blood.",
+ "notes": [
+  "from the south-west: the drag in from the yard, the flashlight, the way north",
+  "from the north edge looking back: the boot, the smear swinging round the blowdown",
+  "from the north-east: the doe and her flies, the blowdown, the drag beyond",
+  "from by the doe, south-east: over the blowdown to the ruts and the way out east",
+  "from the north-west over the old blowdown: the casings, the drag in, the doe far off"
+ ]
+}
