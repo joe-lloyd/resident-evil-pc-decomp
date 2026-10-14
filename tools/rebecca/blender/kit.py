@@ -52,9 +52,13 @@ def angle(face):
 
 
 class Room:
-    def __init__(self, bounds, inside=False):
+    def __init__(self, bounds, inside=False, shift=(0.0, 0.0)):
+        """`shift` (metres, x and y) moves the whole scene at export, to make
+        room on one side: the game's floor must stay within 0.6-19 m. The
+        scene is still written in its own coordinates."""
         self.bounds = bounds
         self.inside = inside
+        self.shift = shift
         self.cameras = []
         self.notes = []
         self.doors = []
@@ -89,7 +93,40 @@ class Room:
         x0, y0, x1, y1 = rect
         self.voids.append({"x0": reb.g(x0), "z0": reb.g(y0), "x1": reb.g(x1), "z1": reb.g(y1)})
 
+    def _apply_shift(self):
+        """Move everything by self.shift: the scene's objects under one parent
+        (so animated objects keep their keyframes), and every record."""
+        dx, dy = self.shift
+        if not dx and not dy:
+            return
+        root = bpy.data.objects.new("Scene shift", None)
+        bpy.context.scene.collection.objects.link(root)
+        root.location = (dx, dy, 0.0)
+        for ob in list(bpy.data.objects):
+            if ob is not root and ob.parent is None:
+                ob.parent = root
+        bpy.context.view_layer.update()
+        gx, gz = reb.g(dx), reb.g(dy)
+        x0, y0, x1, y1 = self.bounds
+        self.bounds = (x0 + dx, y0 + dy, x1 + dx, y1 + dy)
+        for c in self.cameras:
+            c["from"] = (c["from"][0] + gx, c["from"][1], c["from"][2] + gz)
+            c["to"] = (c["to"][0] + gx, c["to"][1], c["to"][2] + gz)
+        rects = [d["zone"] for d in self.doors] + [c["zone"] for c in self.checks] + self.voids
+        for r in rects:
+            r["x0"] += gx
+            r["x1"] += gx
+            r["z0"] += gz
+            r["z1"] += gz
+        for d in self.doors:
+            d["arrive"]["x"] += gx
+            d["arrive"]["z"] += gz
+
     def export(self, anim=None, samples=256, states=()):
+        self._apply_shift()
+        x0, y0, x1, y1 = self.bounds
+        if min(x0, y0) < 0.6 or max(x1, y1) > 19.0:
+            raise ValueError(f"the floor {self.bounds} is outside 0.6-19 m: shift the room or shrink it")
         print(f"[kit] {len(bpy.data.objects)} objects", flush=True)
         wear(float(os.environ.get("RE1_WEAR", "1.3")))
         x0, y0, x1, y1 = self.bounds
