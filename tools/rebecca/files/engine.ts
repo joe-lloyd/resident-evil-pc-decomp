@@ -13,8 +13,12 @@ import { BOOKS, DOCUMENTS } from './documents.ts';
 const here = path.dirname(fileURLToPath(import.meta.url));
 export const ENGINE_FILE = path.join(here, '..', '..', '..', 'src', 'game', 'RebFiles.cpp');
 
-/** The FILE tab draws a title in the 8 pixel game font with its left edge at x + 0x1E; this centres it on the screen. */
-const TITLE_CENTRE = 160;
+/**
+ * The FILE tab draws a title in the 8 pixel game font with its left edge at
+ * x + 0x1E. RE1 centres its titles under the book, on the scroll arrows at
+ * x 0x67 (8 wide): BOTANY BOOK's 32 puts it at 62..150.
+ */
+const TITLE_CENTRE = 0x67 + 4;
 const titleX = (name: string) => TITLE_CENTRE - 0x1e - [...name].length * 4;
 
 /** A file's name in the FILE tab and the "picked up" message: its title, in capitals as RE1's are. */
