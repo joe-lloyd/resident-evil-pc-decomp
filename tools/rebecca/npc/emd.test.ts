@@ -102,7 +102,23 @@ test("each person's model: our skin, their idle swapped into animation 0, and no
     assert.deepEqual(anims[1]![0], anims[0]![person.idle], `${person.slug}: animation 0 plays ${person.idle}`);
     assert.deepEqual(anims[1]![person.idle], anims[0]![0], `${person.slug}: the still pose moves to ${person.idle}`);
     assert.deepEqual(anims[1]!.filter((_, a) => a !== 0 && a !== person.idle), anims[0]!.filter((_, a) => a !== 0 && a !== person.idle), `${person.slug}: the other animations`);
-    for (const name of ['emr', 'tmd'] as const) assert.deepEqual(section(after!, name), section(before!, name), `${person.slug}: ${name}`);
+    assert.deepEqual(section(after!, 'emr'), section(before!, 'emr'), `${person.slug}: the skeleton and keyframes`);
+    // The mesh: the same vertices and triangles; only the moved parts sample elsewhere.
+    const [was, now] = [before, after].map((e) => readMesh(section(e!, 'tmd')));
+    now!.forEach((o, part) => {
+      if (!person.reshape.some((r) => r.part === part)) assert.deepEqual(o.vertices, was![part]!.vertices, `${person.slug}: part ${part} keeps its shape`);
+      o.triangles.forEach((t, k) => {
+        const old = was![part]!.triangles[k]!;
+        assert.deepEqual([t.vertices, t.normals], [old.vertices, old.normals]);
+        assert.ok(t.uv.every(([u]) => (u < 128 ? 0 : 1) === t.row), `${person.slug}: part ${part} samples the half its palette row is for`);
+        if (!person.ownIslands.some((i) => i.part === part)) assert.deepEqual(t.uv, old.uv, `${person.slug}: part ${part} keeps its UVs`);
+      });
+    });
+    for (const { part } of person.ownIslands.filter((i) => i.apart === undefined)) {
+      const mine = new Set(now![part]!.triangles.flatMap((t) => t.uv.map(([u, v]) => v * 256 + u)));
+      const others = now!.flatMap((o, p) => (p === part ? [] : o.triangles.flatMap((t) => t.uv.map(([u, v]) => v * 256 + u))));
+      assert.ok(!others.some((i) => mine.has(i)), `${person.slug}: part ${part} shares no UV corner with another part`);
+    }
     assert.notDeepEqual(readTexture(section(after!, 'tim')).pixels, readTexture(section(before!, 'tim')).pixels, `${person.slug}: the texture is ours`);
   }
 });

@@ -342,3 +342,17 @@ export function textureImage(t: Texture): Image {
   for (let i = 0; i < SIDE * SIDE; i++) out.set(rgb(t.palettes[Math.min(rowAt(i % SIDE), t.palettes.length - 1)]![t.pixels[i]!]!), i * 3);
   return { width: SIDE, height: SIDE, rgb: out };
 }
+
+/** The TMD with one object's vertices moved by `move` (in the object's own space); nothing else changes. */
+export function moveVertices(tmd: Uint8Array, object: number, move: (v: Vec3) => Vec3): Uint8Array {
+  const out = tmd.slice();
+  const v = view(out);
+  const entry = 12 + object * 28;
+  const at = 12 + v.getUint32(entry, true);
+  for (let i = v.getUint32(entry + 4, true) - 1; i >= 0; i--) {
+    const p = at + i * 8;
+    const moved = move([v.getInt16(p, true), v.getInt16(p + 2, true), v.getInt16(p + 4, true)]);
+    moved.forEach((c, k) => v.setInt16(p + k * 2, Math.round(c), true));
+  }
+  return out;
+}

@@ -55,12 +55,12 @@ export function surfaceMap(file: Uint8Array): (Texel | null)[] {
           // triangle's edges touch take the edge's value.
           const px = x + 0.5;
           const py = y + 0.5;
-          let w1 = ((px - a![0]) * (c![1] - a![1]) - (c![0] - a![0]) * (py - a![1])) / area;
-          let w2 = ((b![0] - a![0]) * (py - a![1]) - (px - a![0]) * (b![1] - a![1])) / area;
-          let w0 = 1 - w1 - w2;
-          const inside = Math.min(w0, w1, w2) >= -0.5 / Math.sqrt(Math.abs(area));
+          const e1 = ((px - a![0]) * (c![1] - a![1]) - (c![0] - a![0]) * (py - a![1])) / area;
+          const e2 = ((b![0] - a![0]) * (py - a![1]) - (px - a![0]) * (b![1] - a![1])) / area;
+          const e0 = 1 - e1 - e2;
+          const inside = Math.min(e0, e1, e2) >= -0.5 / Math.sqrt(Math.abs(area));
           if (!inside) continue;
-          [w0, w1, w2] = [w0, w1, w2].map((w) => Math.max(0, w));
+          const [w0, w1, w2] = [Math.max(0, e0), Math.max(0, e1), Math.max(0, e2)];
           const sum = w0 + w1 + w2;
           const axis = (q: readonly Vec3[], k: number) => (w0 * q[0]![k]! + w1 * q[1]![k]! + w2 * q[2]![k]!) / sum;
           const mix = (q: readonly Vec3[]): Vec3 => [axis(q, 0), axis(q, 1), axis(q, 2)];
@@ -68,7 +68,7 @@ export function surfaceMap(file: Uint8Array): (Texel | null)[] {
           const nl = mix(n);
           const nw = apply(joint.m, nl);
           const len = Math.hypot(...nw) || 1;
-          const strict = Math.min(w0, w1, w2) >= 0;
+          const strict = Math.min(e0, e1, e2) >= 0;
           const i = y * SIDE + x;
           // A texel inside a triangle beats one only near an edge.
           if (out[i] && !strict) continue;

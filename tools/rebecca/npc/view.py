@@ -2,11 +2,12 @@
 # its skeleton with its texture: front, side and back, and optionally the
 # texture's UV layout as a painting guide.
 #
-#   blender -b --factory-startup --python view.py -- <model dir> <out dir> <pose> [--bones] [--uv] [--size N]
+#   blender -b --factory-startup --python view.py -- <model dir> <out dir> <pose> [--bones] [--uv] [--head] [--size N]
 #
 # <model dir> holds model.json and texture.png. <pose> is one of the poses the
 # export wrote: rest, or anim:frame. Writes <out dir>/<pose>-front.png,
-# -side.png and -back.png (and uv.png with --uv). The game's axes are X
+# -side.png and -back.png (uv.png with --uv; -head-front.png and
+# -head-side.png, close on the head, with --head). The game's axes are X
 # forward, Y down and Z to the character's left; here they become Blender's
 # -Y forward, Z up and X across, at 1700 game units to the metre, as the
 # rooms are built.
@@ -22,6 +23,7 @@ args = sys.argv[sys.argv.index("--") + 1:]
 model_dir, out_dir, pose_name = args[0], args[1], args[2]
 show_bones = "--bones" in args
 want_uv = "--uv" in args
+want_head = "--head" in args
 size = int(args[args.index("--size") + 1]) if "--size" in args else 512
 os.makedirs(out_dir, exist_ok=True)
 
@@ -99,12 +101,17 @@ if show_bones:
     rig.show_in_front = True
     arm.display_type = "STICK"
 
-# Frame the model: its bounds in Blender space.
-pts = [ob.matrix_world @ Vector(c) for ob in objs for c in ob.bound_box]
-lo = Vector([min(p[k] for p in pts) for k in range(3)])
-hi = Vector([max(p[k] for p in pts) for k in range(3)])
-centre = (lo + hi) / 2
-extent = max(hi.x - lo.x, hi.y - lo.y, hi.z - lo.z) * 1.1
+
+
+def bounds(obs):
+    """The centre and the largest side of the objects' world bounds."""
+    pts = [ob.matrix_world @ Vector(c) for ob in obs for c in ob.bound_box]
+    lo = Vector([min(p[k] for p in pts) for k in range(3)])
+    hi = Vector([max(p[k] for p in pts) for k in range(3)])
+    return (lo + hi) / 2, max(hi.x - lo.x, hi.y - lo.y, hi.z - lo.z) * 1.1
+
+
+centre, extent = bounds(objs)
 
 for name in ("BLENDER_EEVEE_NEXT", "BLENDER_EEVEE"):
     try:
@@ -134,18 +141,29 @@ scene.collection.objects.link(fill)
 
 cam = bpy.data.objects.new("camera", bpy.data.cameras.new("camera"))
 cam.data.type = "ORTHO"
-cam.data.ortho_scale = extent
 scene.collection.objects.link(cam)
 scene.camera = cam
 
 # The model faces Blender's -Y. Each camera stands level and looks back at it:
 # its position, then its turn about Z (a camera at 90 degrees about X looks along +Y).
-views = {"front": ((0, -1), 0), "side": ((1, 0), 90), "back": ((0, 1), 180)}
-for view, ((dx, dy), turn) in views.items():
-    cam.location = centre + Vector((dx, dy, 0)) * 10
-    cam.rotation_euler = (math.radians(90), 0, math.radians(turn))
-    scene.render.filepath = os.path.join(out_dir, f"{pose_name.replace(':', '-')}-{view}.png")
-    bpy.ops.render.render(write_still=True)
+VIEWS = {"front": ((0, -1), 0), "side": ((1, 0), 90), "back": ((0, 1), 180)}
+
+
+def shoot(name, views, middle, size_):
+    cam.data.ortho_scale = size_
+    for view in views:
+        (dx, dy), turn = VIEWS[view]
+        cam.location = middle + Vector((dx, dy, 0)) * 10
+        cam.rotation_euler = (math.radians(90), 0, math.radians(turn))
+        scene.render.filepath = os.path.join(out_dir, f"{pose_name.replace(':', '-')}-{name}{view}.png")
+        bpy.ops.render.render(write_still=True)
+
+
+shoot("", ("front", "side", "back"), centre, extent)
+if want_head:
+    head = [ob for ob in objs if ob.name == "object1"]
+    middle, size_head = bounds(head)
+    shoot("head-", ("front", "side"), middle, size_head * 1.15)
 
 if want_uv:
     # The texture's UV islands drawn over the sheet: the guide a skin is painted to.
