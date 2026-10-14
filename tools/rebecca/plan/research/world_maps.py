@@ -18,8 +18,10 @@ import random
 import sys
 import zlib
 
-from PIL import Image, ImageDraw, ImageFilter
+from PIL import Image, ImageChops, ImageDraw, ImageFilter
 
+# Places draw larger than life against the trails, as a map does.
+K = 1.5
 # Rooms underground: rough rock outlines, not walls.
 CAVES = {"tunnel", "junction", "gallery", "crawl"}
 SX, SY = 1.0, 1.0  # positions are already in metres (layout.ts)
@@ -46,6 +48,20 @@ def blob(cx, cy, w, h, key, rough=0.22, points=40):
         t = 2 * math.pi * i / points
         r = 1 + rough * f(t)
         out.append((cx + math.cos(t) * w / 2 * r, cy + math.sin(t) * h / 2 * r))
+    return out
+
+
+def ragged_box(cx, cy, w, h, key, rough=0.12, points=56, n=4.0):
+    """A squarish outline with ragged edges: a superellipse with noise, so a
+    floor clipped by it keeps its shape but loses its straight sides."""
+    rng = rng_for(key + "/ragged")
+    f = wobble(rng, 4)
+    out = []
+    for i in range(points):
+        t = 2 * math.pi * i / points
+        c, s_ = math.cos(t), math.sin(t)
+        r = 1 / ((abs(c) ** n + abs(s_) ** n) ** (1 / n)) * (1 + rough * f(t) - rough * 0.6)
+        out.append((cx + c * w / 2 * r, cy + s_ * h / 2 * r))
     return out
 
 
@@ -90,13 +106,27 @@ class World:
         self.paths = data["paths"]
         self.shapes = {}
         self.centre = {}
+        self.cells = {}  # place -> [(x0, y0, x1, y1)] in world metres
+        self.door_at = {}  # (place, neighbour) -> (x, y) in world metres
         for p in data["places"]:
             x, y = p["at"][0] * SX, p["at"][1] * SY
             w, h = p["floor"]
             # Places draw larger than life against the trails, as a map does.
-            k = 1.5
-            w, h = max(4.0, w * k), max(3.5, h * k)
+            w, h = max(4.0, w * K), max(3.5, h * K)
             self.centre[p["id"]] = (x, y)
+            wk = p.get("walkable")
+            if wk:
+                c, (ox_, oy_) = wk["cell"], wk["origin"]
+                rects = []
+                for k_, row in enumerate(wk["rows"]):
+                    for i_, ch in enumerate(row):
+                        if ch == "1":
+                            ax = x + (ox_ + i_ * c) * K
+                            ay = y + (oy_ + k_ * c) * K
+                            rects.append((ax, ay, ax + c * K, ay + c * K))
+                self.cells[p["id"]] = rects
+                for dd in wk["doors"]:
+                    self.door_at[(p["id"], dd["to"])] = (x + dd["at"][0] * K, y + dd["at"][1] * K)
             if p["id"] in CAVES:
                 self.shapes[p["id"]] = blob(x, y, w, h, p["id"], rough=0.38, points=26)
             elif p["inside"]:
@@ -164,12 +194,38 @@ def render(world, style, box, size, visited=None, here=None, area=None):
     img = Image.new("RGB", (size, size), s["bg"])
     if s["terrain"]:
         terrain(img, px, max(1.0, size / 128), "mountain")
-    d = ImageDraw.Draw(img)
     seen = (lambda i: True) if visited is None else (lambda i: i in visited)
     shown = (lambda i: True) if area is None else (lambda i: world.places[i]["area"] == area)
+    inside = lambda i: world.places[i]["inside"]
     doors = []
+    grow = max(3, int(round(scale * 1.0)) | 1)
 
-    def stroke(points, width_m, colour):
+    def colours(lit, current=False):
+        if current:
+            return s["edge"], s["here"]
+        return (s["edge"], s["fill"]) if lit else (s["dim_edge"], s["dim"])
+
+    def mask_of(pid):
+        """The place's floor as a mask: softened outdoors, crisp indoors."""
+        m = Image.new("L", (size, size), 0)
+        md = ImageDraw.Draw(m)
+        if pid in world.cells:
+            for (ax, ay, bx, by) in world.cells[pid]:
+                (qx, qy), (rx, ry) = px((ax, ay)), px((bx, by))
+                md.rectangle((qx, qy, rx, ry), fill=255)
+        else:
+            md.polygon([px(p) for p in world.shapes[pid]], fill=255)
+        if not inside(pid) or pid in CAVES:
+            # Outdoors: clip the floor by a ragged outline, then soften it.
+            cx, cy = world.centre[pid]
+            fw, fh = world.places[pid]["floor"]
+            clip = Image.new("L", (size, size), 0)
+            ImageDraw.Draw(clip).polygon([px(p) for p in ragged_box(cx, cy, fw * K, fh * K, pid)], fill=255)
+            m = ImageChops.multiply(m, clip)
+            m = m.filter(ImageFilter.GaussianBlur(max(1.0, scale * 1.4))).point(lambda v: 255 if v > 120 else 0)
+        return m
+
+    def stroke(d, points, width_m, colour):
         r = max(1.0, width_m * scale / 2)
         pts = [px(p) for p in points]
         for (ax, ay), (bx, by) in zip(pts, pts[1:]):
@@ -178,68 +234,60 @@ def render(world, style, box, size, visited=None, here=None, area=None):
                 x, y = ax + (bx - ax) * k / n, ay + (by - ay) * k / n
                 d.ellipse((x - r, y - r, x + r, y + r), fill=colour)
 
-    # The outdoor ground is one shape: clearings, trails and path places drawn
-    # outline first, then filled, so they join with no seams. Buildings and
-    # their doors go on top.
-    inside = lambda i: world.places[i]["inside"]
-    ground = []  # (kind, data, lit)
+    def end(a, b):
+        return world.door_at.get((a, b)) or edge_point(world.shapes[a], world.centre[b])
+
+    trails, cables, connectors = [], [], []
     for a, b, kind, key in world.links:
         if not (shown(a) or shown(b)):
             continue
-        pa = edge_point(world.shapes[a], world.centre[b])
-        pb = edge_point(world.shapes[b], world.centre[a])
+        pa, pb = end(a, b), end(b, a)
         lit = seen(a) or seen(b)
         if kind in ("ride", "lift"):
-            ground.append(("cable", (pa, pb), lit))
+            cables.append((pa, pb, lit))
         elif inside(a) or inside(b):
-            ground.append(("door", (pa, pb), lit))
+            connectors.append((pa, pb, lit))
+            doors.append(pa if inside(b) else pb)
         else:
-            ground.append(("trail", trail(pa, pb, key), lit))
-        # A way off this map gets a mark where it leaves.
-        if area is not None and (shown(a) != shown(b)):
+            trails.append((trail(pa, pb, key), lit))
+        if area is not None and shown(a) != shown(b):
             doors.append(pa if shown(a) else pb)
-    for pid, band, width, a in world.bands:
-        if area is not None and a != area:
-            continue
-        ground.append(("band", (band, width), visited is None or pid in visited))
+
+    d = ImageDraw.Draw(img)
     outdoor = [pid for pid in world.shapes if shown(pid) and not inside(pid)]
-    for layer in ("edge", "fill"):
-        for kind, data, lit in ground:
-            if kind == "trail":
-                stroke(data, 2.2 + (1.4 if layer == "edge" else 0), (s["edge"] if lit else s["dim_edge"]) if layer == "edge" else (s["fill"] if lit else s["dim"]))
-            elif kind == "band":
-                band, width = data
-                stroke(band, width + (1.4 if layer == "edge" else 0), (s["edge"] if lit else s["dim_edge"]) if layer == "edge" else (s["fill"] if lit else s["dim"]))
-        for pid in outdoor:
-            poly = [px(p) for p in world.shapes[pid]]
-            lit = seen(pid)
-            if layer == "edge":
-                d.polygon(poly, fill=s["edge"] if lit else s["dim_edge"])
-                d.line(poly + [poly[0]], fill=s["edge"] if lit else s["dim_edge"], width=3)
-            else:
-                d.polygon(poly, fill=s["here"] if pid == here else (s["fill"] if lit else s["dim"]))
-    for kind, data, lit in ground:
-        if kind == "cable":
-            pts = [px(data[0]), px(data[1])]
-            n = int(math.hypot(pts[1][0] - pts[0][0], pts[1][1] - pts[0][1]) / 4) or 1
-            for k in range(0, n, 2):
-                q0 = (pts[0][0] + (pts[1][0] - pts[0][0]) * k / n, pts[0][1] + (pts[1][1] - pts[0][1]) * k / n)
-                q1 = (pts[0][0] + (pts[1][0] - pts[0][0]) * (k + 1) / n, pts[0][1] + (pts[1][1] - pts[0][1]) * (k + 1) / n)
-                d.line((q0, q1), fill=s["trail"] if lit else s["dim_trail"], width=1)
-        elif kind == "door":
-            stroke(list(data), 1.2, s["fill"] if lit else s["dim"])
-            doors.append(data[0] if any(inside(i) and world.shapes[i] and data[0] in world.shapes[i] for i in world.shapes) else data[1])
-    for pid, poly in world.shapes.items():
-        if not shown(pid) or not inside(pid):
-            continue
-        lit = seen(pid)
-        fill = s["here"] if pid == here else (s["fill"] if lit else s["dim"])
-        d.polygon([px(p) for p in poly], fill=fill, outline=s["edge"] if lit else s["dim_edge"])
+    indoor = [pid for pid in world.shapes if shown(pid) and inside(pid)]
+    masks = {pid: mask_of(pid) for pid in outdoor + indoor}
+    # Edges first, then fills, so the outdoor ground joins with no seams.
+    for pts, lit in trails:
+        stroke(d, pts, 2.6, colours(lit)[0])
+    for pid in outdoor:
+        img.paste(colours(seen(pid))[0], mask=masks[pid].filter(ImageFilter.MaxFilter(grow)))
+    d = ImageDraw.Draw(img)
+    for pts, lit in trails:
+        stroke(d, pts, 1.6, colours(lit)[1])
+    for pid in outdoor:
+        img.paste(colours(seen(pid), pid == here)[1], mask=masks[pid])
+    d = ImageDraw.Draw(img)
+    for pa, pb, lit in connectors:
+        stroke(d, [pa, pb], 1.2, colours(lit)[1])
+    for pid in indoor:
+        edge, fill = colours(seen(pid), pid == here)
+        img.paste(edge, mask=masks[pid].filter(ImageFilter.MaxFilter(3)))
+        img.paste(fill, mask=masks[pid])
         if s["ink"] and pid not in CAVES:
-            xs = [px(p)[0] for p in poly]
-            ys = [px(p)[1] for p in poly]
-            for x in range(int(min(xs)) + 2, int(max(xs)) - 1, 3):
-                d.line(((x, min(ys) + 2), (x + 2, max(ys) - 2)), fill=s["dim_edge"])
+            hatch = Image.new("L", (size, size), 0)
+            hd = ImageDraw.Draw(hatch)
+            for x in range(0, size, 3):
+                hd.line(((x, 0), (x + size, size)), fill=255)
+            img.paste(s["dim_edge"], mask=Image.composite(hatch, Image.new("L", (size, size), 0), masks[pid]))
+    d = ImageDraw.Draw(img)
+    for pa, pb, lit in cables:
+        q0, q1 = px(pa), px(pb)
+        n = int(math.hypot(q1[0] - q0[0], q1[1] - q0[1]) / 4) or 1
+        for k in range(0, n, 2):
+            a0 = (q0[0] + (q1[0] - q0[0]) * k / n, q0[1] + (q1[1] - q0[1]) * k / n)
+            a1 = (q0[0] + (q1[0] - q0[0]) * (k + 1) / n, q0[1] + (q1[1] - q0[1]) * (k + 1) / n)
+            d.line((a0, a1), fill=s["trail"] if lit else s["dim_trail"], width=1)
     r = max(1.0, scale * 0.9)
     for p in doors:
         x, y = px(p)
