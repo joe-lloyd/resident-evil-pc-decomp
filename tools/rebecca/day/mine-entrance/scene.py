@@ -32,7 +32,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector, noise  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 import bpy  # noqa: E402
 
 X0, X1, Y0, Y1 = 1.0, 15.0, 2.5, 11.0
@@ -41,29 +41,6 @@ PORTAL = (8.0, 10.0, 2.7)   # x0, x1 of the opening, its height
 GAP = (8.0, 8.85, 1.2)
 PLUNGER = (12.2, 8.9)
 RAIL_PATH = [(-6.0, 7.0), (X0, 7.2), (4.0, 7.0), (6.5, 6.0), (8.2, 4.4), (9.0, 2.6), (9.0, -4.0)]
-
-
-def settle(ob, at, offset, turn=0.0, tilt=None):
-    """Put a kit piece where it was meant to go. kit.join keeps the first
-    part's origin and turn, so kit.chair, crate, shelves, crow and body come
-    out shifted by that part's offset (a body stands on end): undo it."""
-    local = Matrix.Translation(Vector(offset))
-    if tilt is not None:
-        local = local @ tilt.to_matrix().to_4x4()
-    ob.matrix_world = Matrix.Translation(Vector(at)) @ Matrix.Rotation(turn, 4, "Z") @ local
-    for c in ob.children:
-        c.matrix_parent_inverse = local.inverted()
-    return ob
-
-
-def crow(name, at, heading=0.0, perched=True):
-    b, w = kit.crow(name, at, heading=heading, perched=perched)
-    settle(b, at, (0, 0, 0.12), heading)
-    return b, w
-
-
-def crate(name, m, at, size=(0.6, 0.5, 0.5), rot=0.0, open_=False):
-    return settle(kit.crate(name, m, at, size=size, rot=rot, open_=open_), at, (0, 0, size[2] / 2), rot)
 
 
 def height(x, y):
@@ -325,7 +302,7 @@ def build():
             wp.append(kit.rod("Blasting wire", reb.mat_plain("Wire red", (0.35, 0.04, 0.02), 0.5), (a[0] + o, a[1], a[2]), (b[0] + o, b[1], b[2]), 0.008, 4))
     kit.join("Blasting wire", wp)
     px, py = PLUNGER
-    box = crate("Plunger box", reb.mat_wood("Plunger box", (0.18, 0.1, 0.05)), (px, py, 0.0), size=(0.32, 0.26, 0.3), rot=0.3)
+    box = kit.crate("Plunger box", reb.mat_wood("Plunger box", (0.18, 0.1, 0.05)), (px, py, 0.0), size=(0.32, 0.26, 0.3), rot=0.3)
     reb.wall(reb.prim("cube", "Plunger footprint", None, (px, py, 0.5), (0.5, 0.45, 1.0))).hide_render = True
     kit.rod("Plunger rod", mat("steel"), (px, py, 0.3), (px, py, 0.36), 0.015, 6)
     kit.rod("T-handle", mat("black"), (px - 0.15 * math.cos(0.3), py - 0.15 * math.sin(0.3), 0.37), (px + 0.15 * math.cos(0.3), py + 0.15 * math.sin(0.3), 0.37), 0.02, 6)
@@ -359,7 +336,7 @@ def build():
             continue
         reb.boulder(rng, (x, y, 0.0), rng.uniform(0.08, 0.22), rv, rf, squash=0.6)
     reb.mesh_object("Stones", rv, rf, mat("rock"))
-    crow("Crow on the cap", (8.5, FACE_Y + 0.1, ph + 0.47), heading=-1.6)
+    kit.crow("Crow on the cap", (8.5, FACE_Y + 0.1, ph + 0.47), heading=-1.6)
 
     # ---- Dust settling over the fall.
     dust = []

@@ -35,7 +35,7 @@ import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector  # noqa: E402
+from mathutils import Vector  # noqa: E402
 
 X0, X1, Y0, Y1, H = 1.0, 12.0, 1.0, 6.0, 2.4
 DOOR = (6.0, 6.9)
@@ -44,38 +44,6 @@ WZ = (1.0, 1.7)
 NORTH_BUNKS = [2.05, 4.15, 8.55, 10.65]
 SOUTH_BUNKS = [2.05, 4.15, 8.0, 10.1]
 NY, SY = Y0 + 0.47, Y1 - 0.47   # bunk centre lines
-
-
-def settle(ob, offset, rot=None):
-    """kit.join keeps its first part's frame, and kit.body, bunk, chair,
-    crate, shelves and crow then place the result as if it had none: bodies
-    stand on end, bunks sink a metre. Move the mesh back into the prop's
-    own frame (children are placed in that frame already)."""
-    m = Matrix.Translation(offset)
-    if rot is not None:
-        m = m @ rot.to_matrix().to_4x4()
-    ob.data.transform(m)
-    return ob
-
-
-def body(name, at, heading=0.0, pose="back", **kw):
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    j, missing = kit._POSES[pose], kw.get("missing", ())
-    a, b = next((Vector(j[p]), Vector(j[q])) for p, q, _, _ in kit._BONES if p not in missing and q not in missing)
-    return settle(ob, (a + b) / 2, (b - a).to_track_quat("Z", "Y"))
-
-
-def bunk(name, frame_m, at, rot=0.0, levels=2, **kw):
-    ob = kit.bunk(name, frame_m, at, rot=rot, levels=levels, **kw)[0]
-    return settle(ob, (-1.95 / 2, -0.85 / 2, (0.75 + (levels - 1) * 1.25) / 2))
-
-
-def chair(name, m, at, rot=0.0, tipped=False):
-    return settle(kit.chair(name, m, at, rot=rot, tipped=tipped), (0, 0, 0.45))
-
-
-def crate(name, m, at, size=(0.6, 0.5, 0.5), rot=0.0, open_=False):
-    return settle(kit.crate(name, m, at, size=size, rot=rot, open_=open_), (0, 0, size[2] / 2))
 
 
 def local(at, heading, p):
@@ -157,8 +125,8 @@ def build():
     kit.scratches("Gouges on the frame", mat("black"), (DOOR[1] + 0.09, Y1 - 0.01, 1.4), (0, -1), count=4, length=0.5, seed=4)
     kit.splat("Hand on the frame", mat("old blood"), (DOOR[0] - 0.09, Y1 - 0.005, 1.1), 0.07, rot=(math.pi / 2, 0, 0), seed=6)
     # The barricade, shoved back into the room: a footlocker, a chair, the scrape marks.
-    crate("Footlocker shoved back", locker, (7.5, 4.25, 0.0), size=(0.8, 0.45, 0.42), rot=0.5)
-    chair("Chair from the barricade", mat("pine"), (5.35, 4.85, 0.0), rot=2.2, tipped=True)
+    kit.crate("Footlocker shoved back", locker, (7.5, 4.25, 0.0), size=(0.8, 0.45, 0.42), rot=0.5)
+    kit.chair("Chair from the barricade", mat("pine"), (5.35, 4.85, 0.0), rot=2.2, tipped=True)
     for i in range(4):
         reb.prim("cube", f"Scrape {i}", reb.mat_plain("Scrape", (0.25, 0.2, 0.13), 0.9), (6.9 + i * 0.12, 5.0 - i * 0.05, 0.002), (0.02, 1.2, 0.002), rot=(0, 0, 0.55))
     reb.mask(reb.wall(reb.prim("cube", "Footlocker footprint", None, (7.5, 4.25, 0.2), (0.85, 0.7, 0.4)))).hide_render = True
@@ -188,7 +156,7 @@ def build():
     bunks = {}
     for row, (y, xs) in enumerate(((NY, NORTH_BUNKS), (SY, SOUTH_BUNKS))):
         for i, x in enumerate(xs):
-            b = bunk(f"Bunk {row}{i}", iron, (x, y, 0.0), rot=0.0, levels=1 if (row, i) in ((0, 2), (1, 3)) else 2, slept_in=(row, i) not in ((0, 2), (1, 3)), seed=row * 10 + i + 1)
+            b = kit.bunk(f"Bunk {row}{i}", iron, (x, y, 0.0), rot=0.0, levels=1 if (row, i) in ((0, 2), (1, 3)) else 2, slept_in=(row, i) not in ((0, 2), (1, 3)), seed=row * 10 + i + 1)[0]
             reb.wall(b)
             bunks[(row, i)] = b
     # Soaked mattresses: dark stains on the lower ones.
@@ -202,7 +170,7 @@ def build():
         for i, x in enumerate(xs):
             if (row, i) in ((1, 2),):
                 continue
-            ob = crate(f"Footlocker {row}{i}", locker, (x + rng.uniform(-0.3, 0.3), y, 0.0), size=(0.8, 0.42, 0.4), rot=rng.uniform(-0.08, 0.08), open_=(row, i) == (0, 0))
+            ob = kit.crate(f"Footlocker {row}{i}", locker, (x + rng.uniform(-0.3, 0.3), y, 0.0), size=(0.8, 0.42, 0.4), rot=rng.uniform(-0.08, 0.08), open_=(row, i) == (0, 0))
             reb.mask(reb.wall(ob))
     # Clothes on the bunk ends, boots under them, a bucket by each sick man.
     for i, (x, y) in enumerate(((2.05 - 0.97, NY), (8.55 - 0.97, NY), (4.15 - 0.97, SY), (10.1 - 0.97, SY))):
@@ -217,7 +185,7 @@ def build():
 
     # ---- The man who died in his bunk, under his blanket. The flies have him.
     dead_at = (8.55 - 0.85, NY, 0.5)
-    body("Dead in his bunk", dead_at, heading=0.0, pose="back", top=wool, legs=mat("denim"), seed=4)
+    kit.body("Dead in his bunk", dead_at, heading=0.0, pose="back", top=wool, legs=mat("denim"), seed=4)
     reb.cloth("His blanket", wool, (8.3, NY + 0.05, 0.74), (1.3, 0.95), lumps=0.06, seed=4)
     kit.splat("Dripped under his bunk", mat("old blood"), (8.6, NY + 0.4, 0.0), 0.25, seed=41)
 
@@ -225,7 +193,7 @@ def build():
     mx = SOUTH_BUNKS[3]
     mike_at = (mx + 0.85, SY, 0.5)
     mh = math.pi
-    body("Mike", mike_at, heading=mh, pose="back", top=reb.mat_plain("Vest", (0.45, 0.42, 0.36), 0.9), legs=mat("denim"), seed=8)
+    kit.body("Mike", mike_at, heading=mh, pose="back", top=reb.mat_plain("Vest", (0.45, 0.42, 0.36), 0.9), legs=mat("denim"), seed=8)
     posts = [Vector((mx + dx, SY + dy, 0.55)) for dx in (-0.975, 0.975) for dy in (-0.425, 0.425)]
     for name, joint in (("Belt, left wrist", "l_hand"), ("Belt, right wrist", "r_hand"), ("Belt, left ankle", "l_foot"), ("Belt, right ankle", "r_foot")):
         at = local(mike_at, mh, kit._POSES["back"][joint])
@@ -291,8 +259,8 @@ def build():
     # ---- The card table in the aisle: the last hand, bottles, an ashtray, the chairs.
     tbl = kit.table("Card table", mat("pine"), (5.1, 3.55, 0.0), size=(1.1, 0.8, 0.74))
     reb.mask(reb.wall(tbl))
-    chair("Card chair", mat("pine"), (4.35, 3.5, 0.0), rot=0.1)
-    chair("Card chair", mat("pine"), (5.9, 3.0, 0.0), rot=math.pi - 0.3)
+    kit.chair("Card chair", mat("pine"), (4.35, 3.5, 0.0), rot=0.1)
+    kit.chair("Card chair", mat("pine"), (5.9, 3.0, 0.0), rot=math.pi - 0.3)
     cards = []
     for i in range(14):
         cards.append(reb.prim("cube", "Card", mat("white paint"), (5.1 + rng.gauss(0, 0.2), 3.55 + rng.gauss(0, 0.15), 0.742 + i * 0.0008), (0.06, 0.09, 0.002), rot=(0, 0, rng.uniform(0, 3))))

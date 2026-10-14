@@ -28,32 +28,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector, noise  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 
 X0, X1, Y0, Y1, H = 1.0, 4.6, 1.0, 3.8, 2.4
 DOOR = (2.4, 3.3)
 DRIP = (3.35, 2.55)
-
-
-def settle(ob, at, offset, turn=0.0, tilt=None):
-    """Put a kit piece where it was meant to go. kit.join keeps the first
-    part's origin and turn, so kit.chair, crate, shelves, crow and body come
-    out shifted by that part's offset (a body stands on end): undo it."""
-    local = Matrix.Translation(Vector(offset))
-    if tilt is not None:
-        local = local @ tilt.to_matrix().to_4x4()
-    ob.matrix_world = Matrix.Translation(Vector(at)) @ Matrix.Rotation(turn, 4, "Z") @ local
-    for c in ob.children:
-        c.matrix_parent_inverse = local.inverted()
-    return ob
-
-
-def chair(name, m, at, rot=0.0):
-    return settle(kit.chair(name, m, at, rot=rot), at, (0, 0, 0.45), rot)
-
-
-def crate(name, m, at, size=(0.6, 0.5, 0.5), rot=0.0, open_=False):
-    return settle(kit.crate(name, m, at, size=size, rot=rot, open_=open_), at, (0, 0, size[2] / 2), rot)
 
 
 def rock_face(name, m, origin, u, v, nu, nv, out, depth=0.18, seed=0):
@@ -141,7 +120,7 @@ def build():
         stick, light, flame = kit.candle(f"Desk candle {k}", (x, y, z), energy=4.5, height=h)
         flames.append((light, flame))
     chair_m = reb.mat_wood("Chair", (0.17, 0.11, 0.06))
-    chair("Desk chair", chair_m, (2.6, Y0 + 1.15, 0.0), rot=-math.pi / 2 + 0.25)
+    kit.chair("Desk chair", chair_m, (2.6, Y0 + 1.15, 0.0), rot=-math.pi / 2 + 0.25)
     reb.cloth("Hal's jacket", reb.mat_surface("Skyway jacket", [(0.0, (0.03, 0.05, 0.1)), (1.0, (0.06, 0.09, 0.16))], scale=30, bump=0.2), (2.65, Y0 + 1.33, 0.82), (0.5, 0.6), rot=(math.pi / 2 - 0.15, 0, 0), cuts=10, lumps=0.05, seed=5)
     reb.prim("cube", "Jacket patch", reb.mat_plain("Patch red", (0.35, 0.06, 0.03), 0.6), (2.55, Y0 + 1.39, 0.9), (0.08, 0.01, 0.05))
 
@@ -161,7 +140,7 @@ def build():
         stick, light, flame = kit.candle(f"Ledge candle {k}", (X1 - 0.18, y, 1.21), energy=3.5, height=h)
         flames.append((light, flame))
     for k in range(3):
-        b = crate(f"Powder box {k}", reb.mat_wood("Powder box", (0.3, 0.22, 0.12)), (X1 - 0.35, 1.45 + k * 0.05, 0.36 * k), size=(0.5, 0.36, 0.34), rot=0.05 * k)
+        b = kit.crate(f"Powder box {k}", reb.mat_wood("Powder box", (0.3, 0.22, 0.12)), (X1 - 0.35, 1.45 + k * 0.05, 0.36 * k), size=(0.5, 0.36, 0.34), rot=0.05 * k)
         if k == 0:
             reb.wall(b)
         kit.text(f"Powder words {k}", "GIANT POWDER", mat("red paint"), (X1 - 0.607, 1.45 + k * 0.05, 0.36 * k + 0.17), size=0.045, rot=(math.pi / 2, 0, -math.pi / 2))

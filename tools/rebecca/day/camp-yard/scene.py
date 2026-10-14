@@ -52,7 +52,7 @@ import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector, noise  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 
 X0, X1, Y0, Y1 = 1.0, 18.4, 1.0, 18.6
 T = 0.12  # wall thickness
@@ -92,36 +92,6 @@ def height(x, y):
 # ---------------------------------------------------------------------------
 # Helpers this scene needs
 # ---------------------------------------------------------------------------
-
-
-def settle(ob, offset, rot=None):
-    """kit.join keeps its first part's frame, and kit.body, bunk, chair,
-    crate, shelves and crow then place the result as if it had none: bodies
-    stand on end, bunks sink a metre. Move the mesh back into the prop's
-    own frame (children are placed in that frame already)."""
-    m = Matrix.Translation(offset)
-    if rot is not None:
-        m = m @ rot.to_matrix().to_4x4()
-    ob.data.transform(m)
-    return ob
-
-
-def body(name, at, heading=0.0, pose="back", **kw):
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    j, missing = kit._POSES[pose], kw.get("missing", ())
-    a, b = next((Vector(j[p]), Vector(j[q])) for p, q, _, _ in kit._BONES if p not in missing and q not in missing)
-    return settle(ob, (a + b) / 2, (b - a).to_track_quat("Z", "Y"))
-
-
-def bunk(name, frame_m, at, rot=0.0, levels=2, **kw):
-    ob = kit.bunk(name, frame_m, at, rot=rot, levels=levels, **kw)[0]
-    return settle(ob, (-1.95 / 2, -0.85 / 2, (0.75 + (levels - 1) * 1.25) / 2))
-
-
-def crow(name, at, heading=0.0, perched=True):
-    b, wings = kit.crow(name, at, heading=heading, perched=perched)
-    settle(b, (0, 0, 0.12))
-    return b, wings
 
 
 def corrugated(name, rgb, rust=(0.3, 0.13, 0.05), pitch=0.076):
@@ -446,8 +416,8 @@ def build():
     kit.splat("Handprint by the bunkhouse door", mat("old blood"), (BUNK_DOOR[1] + 0.12, BUNK[3] + T + 0.005, 1.15), 0.07, rot=(math.pi / 2, 0, 0), seed=5)
     # Inside, through the door: bunk ends, and the bulb that fails.
     for x in (8.0, 10.2, 13.0, 15.2):
-        bunk(f"Bunk inside {x}", mat("iron"), (x, -2.4, 0.0), seed=int(x))
-    bunk("Bunk inside, south", mat("iron"), (12.6, 0.6, 0.0), seed=31)
+        kit.bunk(f"Bunk inside {x}", mat("iron"), (x, -2.4, 0.0), seed=int(x))
+    kit.bunk("Bunk inside, south", mat("iron"), (12.6, 0.6, 0.0), seed=31)
     bcord, bglass, blight, bglow = kit.bulb("Bunkhouse bulb", (11.45, -0.6, 2.4), energy=35, rgb=(1.0, 0.75, 0.45), flex=0.4)
 
     # The foreman's office in the north-west corner: green boards, a stovepipe.
@@ -484,7 +454,7 @@ def build():
     # Laid out under canvas along the mess wall, early on.
     canvas = reb.mat_surface("Tarp", [(0.0, (0.1, 0.11, 0.07)), (1.0, (0.2, 0.2, 0.13))], scale=6, bump=0.3)
     for i, x in enumerate((2.95, 3.95)):
-        body(f"Laid out {i}", (x, 10.55, 0.0), heading=math.pi / 2, seed=60 + i)
+        kit.body(f"Laid out {i}", (x, 10.55, 0.0), heading=math.pi / 2, seed=60 + i)
         reb.cloth(f"Canvas over {i}", canvas, (x, 11.65, 0.24), (0.95, 1.45), rot=(0, 0, rng.uniform(-0.08, 0.08)), cuts=14, lumps=0.07, seed=60 + i)
     kit.splat("Stain through the canvas", mat("old blood"), (3.0, 11.3, 0.31), 0.14, seed=61)
 
@@ -647,7 +617,7 @@ def build():
     reb.mask(reb.wall(deck))
     for x in (12.4, 17.6):
         kit.rod("Deck stake", mat("dark wood"), (x, 5.95, 0), (x, 5.95, 1.5), 0.06)
-    body("Dead against the logs", (14.6, 5.72, 0.0), heading=math.pi / 2, pose="slumped", top=mat("flannel"), legs=mat("denim"), seed=21)
+    kit.body("Dead against the logs", (14.6, 5.72, 0.0), heading=math.pi / 2, pose="slumped", top=mat("flannel"), legs=mat("denim"), seed=21)
     kit.splat("His blood", mat("blood"), (14.55, 6.35, 0.0), 0.5, seed=21, stretch=(1.3, 1.0))
     kit.splat("Spray on the logs", mat("old blood"), (14.6, 4.62, 1.0), 0.35, rot=(math.pi / 2, 0, 0), seed=22, stretch=(1.4, 0.8), lumps=0.6)
     reb.prim("cube", "His shotgun", mat("iron"), (15.5, 6.6, 0.04), (0.95, 0.06, 0.06), rot=(0, 0, 0.5))
@@ -702,7 +672,7 @@ def build():
     reb.mask(reb.wall(room_wall_logs))
 
     # ---- The logger in the mud by the skidder, a peavey in his back, his hat in the puddle.
-    body("Logger in the mud", (11.0, 15.2, 0.0), heading=0.25, pose="front", top=reb.mat_stripes("Green check", [(0.05, 0.15, 0.06), (0.02, 0.03, 0.02)], across=20), legs=mat("denim"), seed=33)
+    kit.body("Logger in the mud", (11.0, 15.2, 0.0), heading=0.25, pose="front", top=reb.mat_stripes("Green check", [(0.05, 0.15, 0.06), (0.02, 0.03, 0.02)], across=20), legs=mat("denim"), seed=33)
     kit.splat("His blood", mat("blood"), (11.9, 15.45, 0.0), 0.6, seed=33, stretch=(1.4, 0.9))
     kit.rod("Peavey handle", reb.mat_wood("Peavey", (0.35, 0.24, 0.12)), (12.2, 15.5, 0.25), (12.6, 16.3, 1.45), 0.025)
     reb.prim("cube", "Peavey hook", mat("iron"), (12.2, 15.5, 0.25), (0.06, 0.25, 0.06), rot=(0.4, 0, 0))
@@ -727,9 +697,9 @@ def build():
     kit.splat("Diesel from the tipped drum", reb.mat_plain("Oil", (0.015, 0.013, 0.012), 0.12), (17.0, 12.0, 0.0), 0.45, seed=19)
     kit.papers("Papers blown into the yard", (6.4, 9.2, 0.0), spread=2.0, count=7, seed=6)
     kit.bottles("Bottles by the step", (12.6, 2.6, 0.0), count=5, spread=0.5, seed=4, tipped=0.8)
-    crow_a, wings_a = crow("Crow on the mess roof", (2.3, 9.0, 3.05), heading=0.2)
-    crow("Crow on the board", (8.3, 16.9, 1.97), heading=4.5)
-    crow("Crow at the man", (11.9, 14.7, 0.0), heading=2.6)
+    crow_a, wings_a = kit.crow("Crow on the mess roof", (2.3, 9.0, 3.05), heading=0.2)
+    kit.crow("Crow on the board", (8.3, 16.9, 1.97), heading=4.5)
+    kit.crow("Crow at the man", (11.9, 14.7, 0.0), heading=2.6)
 
     # ---- The mountain round the camp: spruces, grass at the fence feet.
     def keep_out(x, y):

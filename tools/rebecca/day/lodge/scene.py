@@ -28,7 +28,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector  # noqa: E402
+from mathutils import Vector  # noqa: E402
 
 X0, X1, Y0, Y1, H = 1.0, 5.4, 1.0, 4.6, 2.5
 DOOR = (1.7, 2.6)           # y, east wall
@@ -61,36 +61,6 @@ def ashlar(name, light, dark, mortar=(0.05, 0.05, 0.045), size=(0.5, 0.26)):
     links.new(brick.outputs["Color"], bsdf.inputs["Base Color"])
     reb.bumped(nodes, links, bsdf, brick.outputs["Fac"], -0.5, 0.02)
     return m
-
-
-def settle(ob, offset, rot=None):
-    """kit.join keeps its first part's frame, and kit.body, chair, crate,
-    shelves, bunk and crow then place the result as if it had none: bodies
-    stand on end, chairs sink. Move the mesh back into the prop's own frame
-    (children are placed in that frame already)."""
-    m = Matrix.Translation(offset)
-    if rot is not None:
-        m = m @ rot.to_matrix().to_4x4()
-    ob.data.transform(m)
-    return ob
-
-
-def body(name, at, heading=0.0, pose="back", **kw):
-    """kit.body lying as it should. No `bloody` or `sheet`: their pool lands wrong."""
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    j, missing = kit._POSES[pose], kw.get("missing", ())
-    a, b = next((Vector(j[p]), Vector(j[q])) for p, q, _, _ in kit._BONES if p not in missing and q not in missing)
-    return settle(ob, (a + b) / 2, (b - a).to_track_quat("Z", "Y"))
-
-
-def chair(name, m, at, rot=0.0, tipped=False):
-    return settle(kit.chair(name, m, at, rot=rot, tipped=tipped), (0, 0, 0.45))
-
-
-def crow(name, at, heading=0.0, perched=True):
-    b, wings = kit.crow(name, at, heading=heading, perched=perched)
-    settle(b, (0, 0, 0.12))
-    return b, wings
 
 
 def build():
@@ -217,8 +187,8 @@ def build():
     reb.prim("sphere", "Knuckle", mat("bone"), (tx + 0.37, ty + 0.25, 0.8), (0.05, 0.045, 0.04), segments=8)
     kit.splat("Juice on the plate", mat("old blood"), (tx + 0.25, ty + 0.18, 0.784), 0.08, seed=6)
     reb.prim("cyl", "Mug", china, (tx - 0.4, ty - 0.22, 0.8), (0.08, 0.08, 0.09), segments=12)
-    chair("Chair, tipped", mat("pine"), (tx - 0.2, ty + 0.7, 0.0), rot=math.pi / 2 + 0.3, tipped=True)
-    chair("Chair", mat("pine"), (tx + 0.85, ty - 0.1, 0.0), rot=math.pi + 0.2)
+    kit.chair("Chair, tipped", mat("pine"), (tx - 0.2, ty + 0.7, 0.0), rot=math.pi / 2 + 0.3, tipped=True)
+    kit.chair("Chair", mat("pine"), (tx + 0.85, ty - 0.1, 0.0), rot=math.pi + 0.2)
 
     # ---- Under the window: the potting bench, seed trays gone to rot; the tools on the west wall.
     reb.wall(kit.table("Potting bench", mat("planks"), (1.85, Y0 + 0.3, 0.0), size=(1.5, 0.5, 0.82)))

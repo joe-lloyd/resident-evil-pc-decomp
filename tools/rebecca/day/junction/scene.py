@@ -32,7 +32,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector, noise  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 
 X0, X1, Y0, Y1, H = 1.0, 13.0, 1.0, 10.0, 4.0
 ADIT = (4.6, 7.0, 2.9)          # y0, y1 in the west wall, height
@@ -40,23 +40,6 @@ CAGE = (6.0, 8.4, Y0 - 1.7, Y0 + 0.05)   # x0, x1, y0, y1 of the cage, set into 
 DECLINE = (4.2, 7.8)            # x0, x1 of the flooded way in the south wall
 EDGE = 8.3                      # where the water starts
 WATER_Z = -0.32
-
-
-def settle(ob, at, offset, turn=0.0, tilt=None):
-    """Put a kit piece where it was meant to go. kit.join keeps the first
-    part's origin and turn, so kit.chair, crate, shelves, crow and body come
-    out shifted by that part's offset (a body stands on end): undo it."""
-    local = Matrix.Translation(Vector(offset))
-    if tilt is not None:
-        local = local @ tilt.to_matrix().to_4x4()
-    ob.matrix_world = Matrix.Translation(Vector(at)) @ Matrix.Rotation(turn, 4, "Z") @ local
-    for c in ob.children:
-        c.matrix_parent_inverse = local.inverted()
-    return ob
-
-
-def crate(name, m, at, size=(0.6, 0.5, 0.5), rot=0.0, open_=False):
-    return settle(kit.crate(name, m, at, size=size, rot=rot, open_=open_), at, (0, 0, size[2] / 2), rot)
 
 
 def rock_face(name, m, origin, u, v, nu, nv, out, depth=0.25, seed=0):
@@ -308,7 +291,7 @@ def build():
     kit.rod("Cable to the switch", mat("black"), (X1 - 0.1, 7.9, 1.85), (X1 - 0.1, 7.9, H), 0.015, 4)
     kit.drum("Oil drum", rust, (10.3, 1.6, 0.0))
     reb.wall(reb.prim("cube", "Drum footprint", None, (10.3, 1.6, 0.5), (0.65, 0.65, 1.0))).hide_render = True
-    crate("Spares crate", mat("planks"), (3.4, 1.55, 0.0), size=(0.8, 0.6, 0.5), rot=0.1)
+    kit.crate("Spares crate", mat("planks"), (3.4, 1.55, 0.0), size=(0.8, 0.6, 0.5), rot=0.1)
     reb.wall(reb.prim("cube", "Crate footprint", None, (3.4, 1.55, 0.5), (0.85, 0.7, 1.0))).hide_render = True
     # The dog, wrapped against the pump bed.
     dog = reb.prim("sphere", "Wrapped dog", reb.mat_surface("Dog cocoon", [(0.0, (0.4, 0.39, 0.35)), (0.6, (0.58, 0.57, 0.52)), (0.85, (0.2, 0.12, 0.08)), (1.0, (0.3, 0.05, 0.03))], scale=14, bump=0.9), (10.55, 4.4, 0.32), (1.0, 0.5, 0.55), rot=(0, 0.2, 1.3), segments=14)

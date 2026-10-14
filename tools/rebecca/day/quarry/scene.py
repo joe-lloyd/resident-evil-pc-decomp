@@ -35,7 +35,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector, noise  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 import bpy  # noqa: E402
 
 X0, X1, Y0, Y1 = 1.0, 19.0, 1.0, 16.0
@@ -47,50 +47,6 @@ BODY = (10.5, 10.4)
 ENTRY = (8.2, 10.8)
 CUT = (5.2, 8.3)
 
-
-
-def settle(ob, at, offset, turn=0.0, tilt=None):
-    """Put a kit piece where it was meant to go. kit.join keeps the first
-    part's origin and turn, so kit.chair, crate, shelves, crow and body come
-    out shifted by that part's offset (a body stands on end): undo it."""
-    local = Matrix.Translation(Vector(offset))
-    if tilt is not None:
-        local = local @ tilt.to_matrix().to_4x4()
-    ob.matrix_world = Matrix.Translation(Vector(at)) @ Matrix.Rotation(turn, 4, "Z") @ local
-    for c in ob.children:
-        c.matrix_parent_inverse = local.inverted()
-    return ob
-
-
-def chair(name, m, at, rot=0.0):
-    return settle(kit.chair(name, m, at, rot=rot), at, (0, 0, 0.45), rot)
-
-
-def crate(name, m, at, size=(0.6, 0.5, 0.5), rot=0.0, open_=False):
-    return settle(kit.crate(name, m, at, size=size, rot=rot, open_=open_), at, (0, 0, size[2] / 2), rot)
-
-
-def shelves(name, m, at, size=(1.0, 0.3, 1.8), rows=4, rot=0.0, clutter=0.7, seed=0):
-    ob = kit.shelves(name, m, at, size=size, rows=rows, rot=rot, clutter=clutter, seed=seed)
-    return settle(ob, at, (-size[0] / 2, 0, size[2] / 2), rot)
-
-
-def crow(name, at, heading=0.0, perched=True):
-    b, w = kit.crow(name, at, heading=heading, perched=perched)
-    settle(b, at, (0, 0, 0.12), heading)
-    return b, w
-
-
-def corpse(name, at, heading=0.0, pose="back", **kw):
-    """kit.body lying the way it should (no `bloody`: its pool lands in the wrong place)."""
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    if kw.get("sheet"):
-        return ob
-    j = kit._POSES[pose]
-    missing = kw.get("missing", ())
-    a, b = next((a, b) for a, b, _, _ in kit._BONES if a not in missing and b not in missing)
-    pa, pb = Vector(j[a]), Vector(j[b])
-    return settle(ob, at, (pa + pb) / 2, heading, (pb - pa).to_track_quat("Z", "Y"))
 
 
 def height(x, y):
@@ -383,7 +339,7 @@ def build():
     # ---- The dogs' kill: dragged from the blocks to the open floor, gnawed.
     bxy = BODY
     kit.drag_trail("Drag from the blocks", mat("old blood"), [(12.6, 9.1), (12.3, 9.7), (11.9, 10.4), (11.4, 10.9)], width=0.5, seed=4)
-    corpse("Quarryman", (bxy[0], bxy[1], 0.0), heading=0.8, pose="back", top=hivis, legs=mat("denim"), seed=7, missing=("l_hand", "r_knee"))
+    kit.body("Quarryman", (bxy[0], bxy[1], 0.0), heading=0.8, pose="back", top=hivis, legs=mat("denim"), seed=7, missing=("l_hand", "r_knee"))
     reb.prim("cube", "Opened belly", reb.mat_surface("Gore", [(0.0, (0.15, 0.01, 0.01)), (0.6, (0.3, 0.04, 0.03)), (1.0, (0.4, 0.15, 0.12))], scale=20, rough=0.3, bump=0.6), (bxy[0] + 0.75, bxy[1] + 0.7, 0.2), (0.4, 0.3, 0.08), rot=(0, 0, 0.8), bevel=0.04)
     kit.bones("Gnawed bones", (bxy[0] - 0.6, bxy[1] + 1.0, 0.0), spread=0.6, seed=3, skull=False)
     kit.splat("Blood pool spread", mat("blood"), (bxy[0] + 0.5, bxy[1] + 0.6, 0.0), 0.8, seed=12, stretch=(1.5, 1.0))
@@ -433,7 +389,7 @@ def build():
     # A siren pole by the hut.
     reb.wall(kit.rod("Siren pole", mat("dark wood"), (1.6, 12.2, 0), (1.6, 12.2, 5.0), 0.1), "circle")
     reb.prim("cone", "Siren horn", mat("steel"), (1.85, 12.2, 4.7), (0.3, 0.3, 0.5), rot=(0, math.pi / 2, 0), segments=12, top=0.4)
-    crow("Crow on the siren", (1.6, 12.2, 5.02), heading=2.0)
+    kit.crow("Crow on the siren", (1.6, 12.2, 5.02), heading=2.0)
 
     # ---- The dead truck by the spoil lip.
     tm = reb.mat_surface("Truck paint", [(0.0, (0.1, 0.12, 0.08)), (0.6, (0.16, 0.18, 0.12)), (1.0, (0.25, 0.12, 0.05))], scale=5, rough=0.6, bump=0.15)

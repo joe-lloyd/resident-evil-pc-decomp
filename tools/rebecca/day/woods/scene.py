@@ -157,8 +157,7 @@ def casings(name, rng, at, count, spread):
 
 def settle(ob, at, rot):
     """Bake a joined object's parts where they were built (about the origin),
-    then put it at `at`, turned by `rot`. kit.join keeps the first part's
-    transform, so setting location straight after a join shifts the lot."""
+    then put it at `at`, turned by `rot`."""
     bpy.ops.object.select_all(action="DESELECT")
     ob.select_set(True)
     bpy.context.view_layer.objects.active = ob

@@ -42,25 +42,6 @@ CRAWL = (5.0, 5.8)
 RACK = (1.0, 1.6, 2.6, 4.9)
 
 
-def settle(ob, offset, rot=None):
-    """kit.join keeps its first part's frame, and kit.body, shelves, chair
-    and crate then place the result as if it had none. Move the mesh back
-    into the prop's own frame."""
-    m = Matrix.Translation(offset)
-    if rot is not None:
-        m = m @ rot.to_matrix().to_4x4()
-    ob.data.transform(m)
-    return ob
-
-
-def body(name, at, heading=0.0, pose="back", **kw):
-    """kit.body lying as it should. No `bloody` or `sheet`: their pool lands wrong."""
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    j, missing = kit._POSES[pose], kw.get("missing", ())
-    a, b = next((Vector(j[p]), Vector(j[q])) for p, q, _, _ in kit._BONES if p not in missing and q not in missing)
-    return settle(ob, (a + b) / 2, (b - a).to_track_quat("Z", "Y"))
-
-
 def courses(name, light, dark, mortar, size, floor=False, rough=0.85):
     """Bricks or flags in courses: on walls along x or y (x + y along, z up), or a floor (x, y)."""
     m, nodes, links, bsdf = reb.nodes_material(name)
@@ -217,7 +198,7 @@ def build():
 
     # ---- The footman, on his back on the flags, opened; his tray and glasses round him.
     bx, by = 4.2, 3.6
-    body("Footman", (bx, by, 0.0), heading=0.35, pose="back", top=livery, legs=livery, seed=11, missing=("l_hand",))
+    kit.body("Footman", (bx, by, 0.0), heading=0.35, pose="back", top=livery, legs=livery, seed=11, missing=("l_hand",))
     chest = Vector((bx, by, 0)) + Matrix.Rotation(0.35, 3, "Z") @ Vector((1.1, 0, 0))
     reb.prim("sphere", "Opened chest", gore, (chest.x, chest.y, 0.2), (0.35, 0.28, 0.08), segments=12)
     for i in range(6):

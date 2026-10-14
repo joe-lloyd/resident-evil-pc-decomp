@@ -54,29 +54,6 @@ def height(x, y):
     return 0.03 * noise.noise(Vector((x * 0.4, y * 0.4, 5)))
 
 
-def settle(ob, offset, rot=None):
-    """kit.join keeps its first part's frame, and kit.body, chair, crate and
-    crow then place the result as if it had none: bodies stand on end,
-    chairs sink. Move the mesh back into the prop's own frame."""
-    m = Matrix.Translation(offset)
-    if rot is not None:
-        m = m @ rot.to_matrix().to_4x4()
-    ob.data.transform(m)
-    return ob
-
-
-def body(name, at, heading=0.0, pose="back", **kw):
-    """kit.body lying as it should. No `bloody` or `sheet`: their pool lands wrong."""
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    j, missing = kit._POSES[pose], kw.get("missing", ())
-    a, b = next((Vector(j[p]), Vector(j[q])) for p, q, _, _ in kit._BONES if p not in missing and q not in missing)
-    return settle(ob, (a + b) / 2, (b - a).to_track_quat("Z", "Y"))
-
-
-def chair(name, m, at, rot=0.0, tipped=False):
-    return settle(kit.chair(name, m, at, rot=rot, tipped=tipped), (0, 0, 0.45))
-
-
 def chainlink():
     """Diamond wire mesh you can see through: the wire from a brick
     pattern turned 45 degrees, the holes cut out with alpha."""
@@ -226,7 +203,7 @@ def build():
         g = reb.prim("cube", f"Run gate {i}", link_m, (0, RUN_DOOR / 2, 0.9), (0.01, RUN_DOOR, 1.8))
         frame = [kit.rod("Gate frame", mat("steel"), (0, 0, z), (0, RUN_DOOR, z), 0.018, 6) for z in (0.05, 1.8)]
         frame += [kit.rod("Gate frame", mat("steel"), (0, y, 0.05), (0, y, 1.8), 0.018, 6) for y in (0.0, RUN_DOOR)]
-        leaf = settle(kit.join(f"Run gate {i}", [g] + frame), (0, RUN_DOOR / 2, 0.9))
+        leaf = kit.join(f"Run gate {i}", [g] + frame, origin=(0, 0, 0))
         if i == 0:
             leaf.location, leaf.rotation_euler = (x1 + 0.02, d1, 0), (0, 0, math.pi / 2 + 1.2)
         elif i == 1:
@@ -252,7 +229,7 @@ def build():
 
     # ---- The handler, in the third run, in his grey uniform; his catch-pole snapped.
     hx, hy = 3.9, (RUN_Y[2] + RUN_Y[3]) / 2
-    body("Handler", (hx, hy - 0.4, 0.02), heading=0.5, pose="back", top=uniform, legs=uniform, seed=7, missing=("l_hand", "r_foot"))
+    kit.body("Handler", (hx, hy - 0.4, 0.02), heading=0.5, pose="back", top=uniform, legs=uniform, seed=7, missing=("l_hand", "r_foot"))
     kit.splat("Handler's blood", mat("blood"), (hx + 0.9, hy - 0.1, 0.0), 0.75, seed=31, stretch=(1.4, 1.0))
     kit.drag_trail("Pulled about", mat("old blood"), [(hx + 1.0, hy), (5.3, hy + 0.6), (x1 - 0.1, hy + 0.2)], width=0.3, seed=32)
     kit.rod("Catch-pole", mat("steel"), (hx + 0.6, hy + 0.8, 0.03), (hx + 1.9, hy + 0.55, 0.03), 0.02, 6)
@@ -283,7 +260,7 @@ def build():
     reb.wall(kit.table("Hut desk", mat("pine"), (hx0 + 0.6, 6.6, 0.0), size=(0.7, 1.2, 0.76)))
     lamp, lamp_light, flame = kit.lantern("Desk lamp", (hx0 + 0.6, 6.4, 0.76), energy=25)
     kit.papers("Logbook", (hx0 + 0.6, 6.85, 0.76), spread=0.15, count=3, seed=3)
-    chair("Hut chair", mat("pine"), (hx0 + 1.2, 6.2, 0.0), rot=math.pi + 0.5, tipped=True)
+    kit.chair("Hut chair", mat("pine"), (hx0 + 1.2, 6.2, 0.0), rot=math.pi + 0.5, tipped=True)
     reb.prim("cube", "Feed chart", mat("paper"), (hx1 - 0.08, 5.5, 1.5), (0.01, 0.7, 0.5))
     for k in range(5):
         reb.prim("cube", "Chart line", mat("black"), (hx1 - 0.09, 5.5, 1.66 - k * 0.08), (0.003, 0.6, 0.012))

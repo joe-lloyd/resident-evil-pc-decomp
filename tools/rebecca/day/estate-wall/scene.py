@@ -30,7 +30,7 @@ import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector, noise  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 
 X0, X1, Y0, Y1 = 2.0, 17.0, 2.0, 12.4
 WALL_Y, WALL_H, WALL_T = 12.5, 4.5, 0.6
@@ -142,36 +142,6 @@ def umbrella_mark(name, centre, r, facing_rot):
     return out
 
 
-def settle(ob, offset, rot=None):
-    """kit.join keeps its first part's frame, and kit.body, chair, crate,
-    shelves, bunk and crow then place the result as if it had none: bodies
-    stand on end, chairs sink. Move the mesh back into the prop's own frame
-    (children are placed in that frame already)."""
-    m = Matrix.Translation(offset)
-    if rot is not None:
-        m = m @ rot.to_matrix().to_4x4()
-    ob.data.transform(m)
-    return ob
-
-
-def body(name, at, heading=0.0, pose="back", **kw):
-    """kit.body lying as it should. No `bloody` or `sheet`: their pool lands wrong."""
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    j, missing = kit._POSES[pose], kw.get("missing", ())
-    a, b = next((Vector(j[p]), Vector(j[q])) for p, q, _, _ in kit._BONES if p not in missing and q not in missing)
-    return settle(ob, (a + b) / 2, (b - a).to_track_quat("Z", "Y"))
-
-
-def chair(name, m, at, rot=0.0, tipped=False):
-    return settle(kit.chair(name, m, at, rot=rot, tipped=tipped), (0, 0, 0.45))
-
-
-def crow(name, at, heading=0.0, perched=True):
-    b, wings = kit.crow(name, at, heading=heading, perched=perched)
-    settle(b, (0, 0, 0.12))
-    return b, wings
-
-
 def build():
     rng = random.Random(61)
     reb.clear_scene()
@@ -250,7 +220,7 @@ def build():
     reb.prim("cube", "Padlock", brass, (mid, gy - 0.08, 1.2), (0.09, 0.04, 0.11), bevel=0.01)
 
     # ---- The man on the gate: head down, caught on the spikes, one leg gone; blood down the bars.
-    hang = body("Hanging man", (mid - 0.35, gy - 0.32, 3.3), pose="front", top=uniform, legs=uniform, seed=6, missing=("r_foot",))
+    hang = kit.body("Hanging man", (mid - 0.35, gy - 0.32, 3.3), pose="front", top=uniform, legs=uniform, seed=6, missing=("r_foot",))
     hang.rotation_euler = (0.08, math.pi / 2, math.pi / 2)
     reb.cloth("Torn trouser on a spike", uniform, (mid - 0.42, gy - 0.05, 3.3), (0.12, 0.35), rot=(math.pi / 2, 0, 0.1), cuts=6, lumps=0.02, seed=4)
     for i in range(5):
@@ -283,9 +253,9 @@ def build():
         kit.rod("Ivy stem", reb.mat_plain("Ivy stem", (0.06, 0.05, 0.03), 0.9), (x, WALL_Y - 0.03, WALL_H), (x + rng.uniform(-0.3, 0.3), WALL_Y - 0.04, WALL_H - rng.uniform(0.8, 2.5)), 0.01, 4)
     crows = []
     for i, (x, hd) in enumerate(((5.0, 0.3), (6.3, 3.0), (13.2, 2.2), (15.0, 0.6))):
-        crows.append(crow(f"Crow {i}", (x, WALL_Y + 0.25, WALL_H + 0.16), heading=hd))
-    pecker, _ = crow("Crow on him", (mid - 0.55, gy - 0.3, 3.36), heading=0.4)
-    flapper, flap_wings = crow("Crow taking off", (GATE[1] + 0.4, WALL_Y + 0.2, 5.95), heading=2.6, perched=False)
+        crows.append(kit.crow(f"Crow {i}", (x, WALL_Y + 0.25, WALL_H + 0.16), heading=hd))
+    pecker, _ = kit.crow("Crow on him", (mid - 0.55, gy - 0.3, 3.36), heading=0.4)
+    flapper, flap_wings = kit.crow("Crow taking off", (GATE[1] + 0.4, WALL_Y + 0.2, 5.95), heading=2.6, perched=False)
 
     # ---- Over the wall: the grounds' trees, chain-link runs through the gate, the mansion far off.
     def beyond(x, y):

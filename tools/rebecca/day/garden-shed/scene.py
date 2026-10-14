@@ -28,26 +28,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector  # noqa: E402
+from mathutils import Vector  # noqa: E402
 
 X0, X1, Y0, Y1, H = 1.0, 3.8, 1.0, 3.8, 2.2
 DOOR = (2.1, 2.9)
 WINDOW = (3.25, 3.65, 1.1, 1.6)
-
-
-def settle(ob, offset, rot=None):
-    """kit.join keeps its first part's frame, and kit.shelves, chair and
-    crate then place the result as if it had none. Move the mesh back into
-    the prop's own frame (children are placed in that frame already)."""
-    m = Matrix.Translation(offset)
-    if rot is not None:
-        m = m @ rot.to_matrix().to_4x4()
-    ob.data.transform(m)
-    return ob
-
-
-def shelves(name, m, at, size=(1.0, 0.3, 1.8), rows=4, rot=0.0, clutter=0.7, seed=0):
-    return settle(kit.shelves(name, m, at, size=size, rows=rows, rot=rot, clutter=clutter, seed=seed), (-size[0] / 2, 0, size[2] / 2))
 
 
 def web(name, corner, size, facing, sag=0.25, rings=4, spokes=7):
@@ -199,8 +184,7 @@ def build():
         kit.rod("leg", rat_skin, (0.05, -0.03, 0.08), (0.07, -0.06, 0.14), 0.008, 4),
         kit.rod("leg", rat_skin, (-0.06, 0.03, 0.08), (-0.08, 0.06, 0.13), 0.008, 4),
         kit.rod("leg", rat_skin, (-0.06, -0.03, 0.08), (-0.08, -0.06, 0.13), 0.008, 4),
-    ])
-    settle(rat, (0, 0, 0.05))
+    ], origin=(0, 0, 0))
     rat.location = (rx, ry, 0.0)
     rat.rotation_euler = (0, 0, 0.7)
     kit.splat("Under the rat", mat("old blood"), (rx, ry, 0.0), 0.08, seed=4)
@@ -212,7 +196,7 @@ def build():
         kit.splat(f"Mud {i}", mat("mud"), (X0 + 0.3 + i * 0.22, 2.4 + (0.1 if i % 2 else -0.1), 0.0), 0.06, seed=30 + i, stretch=(1.5, 0.6))
     reb.prim("cube", "Boot", mat("rubber"), (X0 + 0.3, 3.55, 0.17), (0.3, 0.13, 0.34), bevel=0.03)
     reb.prim("cube", "Boot, fallen", mat("rubber"), (X0 + 0.55, 3.5, 0.07), (0.34, 0.13, 0.13), rot=(0, 0, 0.4), bevel=0.03)
-    reb.wall(shelves("Shelves", mat("planks"), (2.2, Y0 + 0.17, 0.0), size=(0.6, 0.28, 1.0), rows=3, clutter=0.8, seed=5))
+    reb.wall(kit.shelves("Shelves", mat("planks"), (2.2, Y0 + 0.17, 0.0), size=(0.6, 0.28, 1.0), rows=3, clutter=0.8, seed=5))
 
     # ---- Light: the lantern, moonlight through the window.
     kit.time_light("night", sun_heading=250, sun_energy=0.3)

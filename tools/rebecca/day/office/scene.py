@@ -34,7 +34,7 @@ import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector  # noqa: E402
+from mathutils import Vector  # noqa: E402
 
 X0, X1, Y0, Y1, H = 1.0, 4.6, 1.0, 4.0, 2.5
 DOOR = (2.5, 3.4)
@@ -42,29 +42,6 @@ SWIN = (3.75, 4.35)
 EWIN = (1.6, 2.7)
 WZ = (1.0, 1.8)
 DESK = (3.2, 2.35)
-
-
-def settle(ob, offset, rot=None):
-    """kit.join keeps its first part's frame, and kit.body, bunk, chair,
-    crate, shelves and crow then place the result as if it had none: bodies
-    stand on end, chairs sink half a metre. Move the mesh back into the
-    prop's own frame (children are placed in that frame already)."""
-    m = Matrix.Translation(offset)
-    if rot is not None:
-        m = m @ rot.to_matrix().to_4x4()
-    ob.data.transform(m)
-    return ob
-
-
-def body(name, at, heading=0.0, pose="back", **kw):
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    j, missing = kit._POSES[pose], kw.get("missing", ())
-    a, b = next((Vector(j[p]), Vector(j[q])) for p, q, _, _ in kit._BONES if p not in missing and q not in missing)
-    return settle(ob, (a + b) / 2, (b - a).to_track_quat("Z", "Y"))
-
-
-def chair(name, m, at, rot=0.0, tipped=False):
-    return settle(kit.chair(name, m, at, rot=rot, tipped=tipped), (0, 0, 0.45))
 
 
 def umbrella(name, centre, r, facing_up=True):
@@ -173,9 +150,9 @@ def build():
 
     # ---- The foreman: he went over backwards with the chair and slid down the wall.
     fx = DESK[0] - 0.1
-    body("The foreman", (fx, Y0 + 0.02, 0.0), heading=math.pi / 2, pose="slumped", top=reb.mat_plain("Foreman's shirt", (0.32, 0.3, 0.26), 0.9), legs=reb.mat_plain("Work trousers", (0.12, 0.11, 0.08), 0.9), seed=9)
+    kit.body("The foreman", (fx, Y0 + 0.02, 0.0), heading=math.pi / 2, pose="slumped", top=reb.mat_plain("Foreman's shirt", (0.32, 0.3, 0.26), 0.9), legs=reb.mat_plain("Work trousers", (0.12, 0.11, 0.08), 0.9), seed=9)
     kit.splat("Blood down his shirt", mat("blood"), (fx - 0.06, Y0 + 0.17, 0.62), 0.12, rot=(math.pi / 2 - 0.2, 0, 0), seed=10, stretch=(1.0, 1.8))
-    chair("His chair, over", desk_m, (fx + 0.6, Y0 + 0.62, 0.0), rot=-math.pi / 2 + 0.3, tipped=True)
+    kit.chair("His chair, over", desk_m, (fx + 0.6, Y0 + 0.62, 0.0), rot=-math.pi / 2 + 0.3, tipped=True)
     reb.wall(reb.prim("cube", "Where he lies", None, (3.37, 1.45, 0.4), (1.25, 0.9, 0.8))).hide_render = True
     kit.splat("Spray on the wall", spray, (fx + 0.05, Y0 + 0.006, 1.35), 0.42, rot=(math.pi / 2, 0, 0), seed=5, stretch=(1.3, 1.0), lumps=0.7, points=36)
     for i in range(14):

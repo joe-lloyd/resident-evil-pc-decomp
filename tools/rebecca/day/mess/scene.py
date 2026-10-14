@@ -47,34 +47,6 @@ RANGE = (3.5, 4.5)
 POT = (3.75, 1.45)
 
 
-def settle(ob, offset, rot=None):
-    """kit.join keeps its first part's frame, and kit.body, bunk, chair,
-    crate, shelves and crow then place the result as if it had none: bodies
-    stand on end, shelves sink a metre. Move the mesh back into the prop's
-    own frame (children are placed in that frame already)."""
-    m = Matrix.Translation(offset)
-    if rot is not None:
-        m = m @ rot.to_matrix().to_4x4()
-    ob.data.transform(m)
-    return ob
-
-
-def body(name, at, heading=0.0, pose="back", **kw):
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    j, missing = kit._POSES[pose], kw.get("missing", ())
-    a, b = next((Vector(j[p]), Vector(j[q])) for p, q, _, _ in kit._BONES if p not in missing and q not in missing)
-    return settle(ob, (a + b) / 2, (b - a).to_track_quat("Z", "Y"))
-
-
-def shelves(name, m, at, size=(1.0, 0.3, 1.8), rows=4, rot=0.0, clutter=0.7, seed=0):
-    ob = kit.shelves(name, m, at, size=size, rows=rows, rot=rot, clutter=clutter, seed=seed)
-    return settle(ob, (-size[0] / 2, 0, size[2] / 2))
-
-
-def chair(name, m, at, rot=0.0, tipped=False):
-    return settle(kit.chair(name, m, at, rot=rot, tipped=tipped), (0, 0, 0.45))
-
-
 def cyl(verts, faces, centre, r, h, seg=12, tilt=None):
     """A closed cylinder (a plate, a cup, a bowl) added to one mesh's lists."""
     c = Vector(centre)
@@ -237,7 +209,7 @@ def build():
     kit.splat("Meat juice", mat("old blood"), (1.65, 2.7, 0.851), 0.2, seed=4)
     for i in range(3):
         reb.prim("cube", f"Onion {i}", reb.mat_plain("Onion", (0.5, 0.38, 0.2), 0.6), (1.5 + i * 0.12, 3.0, 0.9), (0.08, 0.08, 0.08))
-    reb.mask(reb.wall(shelves("Kitchen shelves", frame_m, (1.75, Y0 + 0.18, 0.0), size=(1.2, 0.3, 1.9), rows=5, clutter=0.85, seed=6)))
+    reb.mask(reb.wall(kit.shelves("Kitchen shelves", frame_m, (1.75, Y0 + 0.18, 0.0), size=(1.2, 0.3, 1.9), rows=5, clutter=0.85, seed=6)))
     for i, (x, y) in enumerate(((5.4, 1.4), (5.8, 1.35), (5.6, 1.8))):
         reb.prim("cube", f"Flour sack {i}", mat("canvas"), (x, y, 0.3), (0.45, 0.35, 0.6), rot=(0, 0, rng.uniform(-0.3, 0.3)), bevel=0.1)
     reb.wall(reb.prim("cube", "Sacks footprint", None, (5.6, 1.6, 0.3), (0.95, 0.9, 0.6))).hide_render = True
@@ -248,7 +220,7 @@ def build():
 
     # ---- The counter: the cook, dead against it in his apron, keys on his belt, the cleaver by his hand.
     ck = (3.0, PART + 0.27, 0.0)
-    body("The cook", ck, heading=math.pi / 2, pose="slumped", top=apron, legs=reb.mat_plain("Cook's trousers", (0.25, 0.24, 0.22), 0.9), seed=12)
+    kit.body("The cook", ck, heading=math.pi / 2, pose="slumped", top=apron, legs=reb.mat_plain("Cook's trousers", (0.25, 0.24, 0.22), 0.9), seed=12)
     reb.prim("cube", "Apron bib", apron, (ck[0], ck[1] + 0.2, 0.55), (0.36, 0.02, 0.5), rot=(0.25, 0, 0))
     hip = Vector((ck[0] - 0.2, ck[1] + 0.25, 0.2))
     kit.rod("Key ring", mat("steel"), hip, hip + Vector((0.0, 0.0, -0.08)), 0.03, 10)
@@ -276,8 +248,7 @@ def build():
         for dy in (-1.4, 1.4):
             legs.append(reb.prim("cube", "bench leg", table_m, (0, dy, 0.22), (0.3, 0.06, 0.44)))
         legs.append(reb.prim("cube", "bench seat", table_m, (0, 0, 0.45), (0.32, 3.2, 0.05)))
-        b = kit.join(f"Bench {i}", legs)
-        settle(b, (0, -1.4, 0.22))
+        b = kit.join(f"Bench {i}", legs, origin=(0, 0, 0))
         if tipped:
             b.location = (bx + 0.25, by, 0.16)
             b.rotation_euler = (0, math.pi / 2 * (1 if bx > sum(TABLES) / 2 else -1), yaw)
@@ -285,7 +256,7 @@ def build():
             b.location = (bx, by, 0.0)
             b.rotation_euler = (0, 0, yaw)
         reb.mask(reb.wall(b))
-    chair("Chair thrown", table_m, (3.5, 5.0, 0.0), rot=1.0, tipped=True)
+    kit.chair("Chair thrown", table_m, (3.5, 5.0, 0.0), rot=1.0, tipped=True)
     pv, pf, sv, sf, cv, cf = [], [], [], [], [], []
     for tx in TABLES:
         for side in (-1, 1):

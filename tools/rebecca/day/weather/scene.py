@@ -124,7 +124,7 @@ def build():
     kit.shards("Glass on the floor", (X1 - 0.6, 2.4, 0.0), spread=0.5, count=14, seed=8)
     dead_crow, dead_wings = kit.crow("Dead crow on the desk", (X1 - 0.25, 2.45, 0.8), heading=2.2, perched=False)
     dead_crow.rotation_euler = (math.pi * 0.9, 0, 2.2)
-    dead_crow.location.z = 0.9
+    dead_crow.location.z = 0.99  # on its back, resting on the desk top
     kit.splat("Crow blood", mat("blood"), (X1 - 0.3, 2.5, 0.765), 0.08, seed=9)
     for i in range(5):
         reb.prim("cube", f"Feather {i}", mat("feathers"), (X1 - 0.3 + rng.uniform(-0.5, 0.2), 2.5 + rng.uniform(-0.4, 0.4), 0.004 if i > 1 else 0.77), (0.12, 0.025, 0.003), rot=(0, 0, rng.uniform(0, 3)))

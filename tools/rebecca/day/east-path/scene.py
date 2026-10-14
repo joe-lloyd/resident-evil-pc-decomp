@@ -34,7 +34,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector, noise  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 
 X0, X1, Y0, Y1 = 1.0, 18.5, 1.5, 12.0
 COT = (7.0, 11.4, 0.6, 4.0)
@@ -43,50 +43,6 @@ WALL_H = 2.4
 PATH = [(-6.0, 7.6), (1.0, 7.5), (4.0, 7.3), (6.5, 6.9), (9.0, 6.6), (11.5, 6.8), (14.0, 7.4), (16.5, 7.9), (18.5, 8.0), (25.0, 8.4)]
 SOCK = (14.6, 10.8)
 
-
-
-def settle(ob, at, offset, turn=0.0, tilt=None):
-    """Put a kit piece where it was meant to go. kit.join keeps the first
-    part's origin and turn, so kit.chair, crate, shelves, crow and body come
-    out shifted by that part's offset (a body stands on end): undo it."""
-    local = Matrix.Translation(Vector(offset))
-    if tilt is not None:
-        local = local @ tilt.to_matrix().to_4x4()
-    ob.matrix_world = Matrix.Translation(Vector(at)) @ Matrix.Rotation(turn, 4, "Z") @ local
-    for c in ob.children:
-        c.matrix_parent_inverse = local.inverted()
-    return ob
-
-
-def chair(name, m, at, rot=0.0):
-    return settle(kit.chair(name, m, at, rot=rot), at, (0, 0, 0.45), rot)
-
-
-def crate(name, m, at, size=(0.6, 0.5, 0.5), rot=0.0, open_=False):
-    return settle(kit.crate(name, m, at, size=size, rot=rot, open_=open_), at, (0, 0, size[2] / 2), rot)
-
-
-def shelves(name, m, at, size=(1.0, 0.3, 1.8), rows=4, rot=0.0, clutter=0.7, seed=0):
-    ob = kit.shelves(name, m, at, size=size, rows=rows, rot=rot, clutter=clutter, seed=seed)
-    return settle(ob, at, (-size[0] / 2, 0, size[2] / 2), rot)
-
-
-def crow(name, at, heading=0.0, perched=True):
-    b, w = kit.crow(name, at, heading=heading, perched=perched)
-    settle(b, at, (0, 0, 0.12), heading)
-    return b, w
-
-
-def corpse(name, at, heading=0.0, pose="back", **kw):
-    """kit.body lying the way it should (no `bloody`: its pool lands in the wrong place)."""
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    if kw.get("sheet"):
-        return ob
-    j = kit._POSES[pose]
-    missing = kw.get("missing", ())
-    a, b = next((a, b) for a, b, _, _ in kit._BONES if a not in missing and b not in missing)
-    pa, pb = Vector(j[a]), Vector(j[b])
-    return settle(ob, at, (pa + pb) / 2, heading, (pb - pa).to_track_quat("Z", "Y"))
 
 
 def height(x, y):
@@ -326,9 +282,9 @@ def build():
     reb.mesh_object("Rocks", rv, rf, mat("rock"))
 
     # ---- Crows on the drips and the fence.
-    pecker, _ = crow("Crow at the drips", (6.9, 6.75, 0.0), heading=2.6)
-    crow("Crow on the fence", (8.6, Y1 + 0.43, 1.03), heading=-1.4)
-    crow("Crow on the roof", (10.2, mid_y, ridge_z + 0.14), heading=0.4)
+    pecker, _ = kit.crow("Crow at the drips", (6.9, 6.75, 0.0), heading=2.6)
+    kit.crow("Crow on the fence", (8.6, Y1 + 0.43, 1.03), heading=-1.4)
+    kit.crow("Crow on the roof", (10.2, mid_y, ridge_z + 0.14), heading=0.4)
 
     # ---- Light: the late sun low in the south-west, hard across the grass; the valley below.
     sun = kit.time_light("afternoon", sun_heading=235, sun_energy=4.2)

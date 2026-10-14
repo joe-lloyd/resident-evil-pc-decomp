@@ -31,7 +31,7 @@ import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector, noise  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 
 X0, X1, Y0, Y1 = 2.0, 17.0, 2.0, 14.0
 C = Vector((9.5, 7.5, 0.0))      # the helicopter's middle; its nose points -x
@@ -45,36 +45,6 @@ def height(x, y):
     dy = max(0.0, Y0 - 0.5 - y, y - Y1 - 0.5)
     d = math.hypot(dx, dy)
     return h + 0.07 * d + 0.4 * noise.noise(Vector((x * 0.15, y * 0.15, 1))) * min(1.0, d / 3)
-
-
-def settle(ob, offset, rot=None):
-    """kit.join keeps its first part's frame, and kit.body, chair, crate,
-    shelves, bunk and crow then place the result as if it had none: bodies
-    stand on end, chairs sink. Move the mesh back into the prop's own frame
-    (children are placed in that frame already)."""
-    m = Matrix.Translation(offset)
-    if rot is not None:
-        m = m @ rot.to_matrix().to_4x4()
-    ob.data.transform(m)
-    return ob
-
-
-def body(name, at, heading=0.0, pose="back", **kw):
-    """kit.body lying as it should. No `bloody` or `sheet`: their pool lands wrong."""
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    j, missing = kit._POSES[pose], kw.get("missing", ())
-    a, b = next((Vector(j[p]), Vector(j[q])) for p, q, _, _ in kit._BONES if p not in missing and q not in missing)
-    return settle(ob, (a + b) / 2, (b - a).to_track_quat("Z", "Y"))
-
-
-def chair(name, m, at, rot=0.0, tipped=False):
-    return settle(kit.chair(name, m, at, rot=rot, tipped=tipped), (0, 0, 0.45))
-
-
-def crow(name, at, heading=0.0, perched=True):
-    b, wings = kit.crow(name, at, heading=heading, perched=perched)
-    settle(b, (0, 0, 0.12))
-    return b, wings
 
 
 def smoke_mat():
@@ -254,7 +224,7 @@ def build():
     P(reb.prim("cube", "Co-pilot seat back", seat_m, H(-0.22, -0.42, 1.25), (0.1, 0.52, 0.85), rot=(0, -0.12, 0)))
     flight = reb.mat_surface("Flight suit", [(0.0, (0.14, 0.15, 0.1)), (0.8, (0.22, 0.23, 0.16)), (1.0, (0.18, 0.04, 0.03))], scale=12, bump=0.2)
     seat = Vector(H(-0.25, 0.42, 0.72))
-    kevin = body("Kevin", tuple(seat), heading=math.pi, pose="slumped", top=flight, legs=flight, seed=4)
+    kevin = kit.body("Kevin", tuple(seat), heading=math.pi, pose="slumped", top=flight, legs=flight, seed=4)
     kevin.rotation_euler = (0.2, 0.0, math.pi)
     P(kevin)
     P(reb.prim("sphere", "Kevin's helmet", mat("white paint"), (seat.x - 0.2, seat.y - 0.05, seat.z + 0.9), (0.24, 0.22, 0.2), segments=14))

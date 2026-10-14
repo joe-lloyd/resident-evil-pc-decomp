@@ -30,33 +30,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector  # noqa: E402
 import bpy  # noqa: E402
 
 X0, X1, Y0, Y1, H = 1.0, 4.4, 1.0, 3.8, 2.4
 DOOR = (2.3, 3.2)
 WINDOW = (3.6, 4.3, 1.15, 1.8)
-
-
-def settle(ob, at, offset, turn=0.0, tilt=None):
-    """Put a kit piece where it was meant to go. kit.join keeps the first
-    part's origin and turn, so kit.chair, crate, shelves, crow and body come
-    out shifted by that part's offset (a body stands on end): undo it."""
-    local = Matrix.Translation(Vector(offset))
-    if tilt is not None:
-        local = local @ tilt.to_matrix().to_4x4()
-    ob.matrix_world = Matrix.Translation(Vector(at)) @ Matrix.Rotation(turn, 4, "Z") @ local
-    for c in ob.children:
-        c.matrix_parent_inverse = local.inverted()
-    return ob
-
-
-def chair(name, m, at, rot=0.0):
-    return settle(kit.chair(name, m, at, rot=rot), at, (0, 0, 0.45), rot)
-
-
-def crate(name, m, at, size=(0.6, 0.5, 0.5), rot=0.0, open_=False):
-    return settle(kit.crate(name, m, at, size=size, rot=rot, open_=open_), at, (0, 0, size[2] / 2), rot)
 
 
 def build():
@@ -126,7 +104,7 @@ def build():
         reb.prim("cube", "Bench leg", mat("planks"), (X0 + 0.25, y, 0.37), (0.45, 0.05, 0.75))
     reb.wall(reb.prim("cube", "Bench footprint", None, (X0 + 0.25, 1.95, 0.4), (0.5, 0.9, 0.8))).hide_render = True
     reb.prim("cube", "Caps shelf", mat("planks"), (X0 + 0.15, 1.95, 1.45), (0.3, 0.9, 0.03))
-    caps = crate("Caps box", mat("pine"), (X0 + 0.16, 1.75, 1.465), size=(0.22, 0.3, 0.14))
+    caps = kit.crate("Caps box", mat("pine"), (X0 + 0.16, 1.75, 1.465), size=(0.22, 0.3, 0.14))
     kit.text("Caps words", "CAPS", mat("red paint"), (X0 + 0.275, 1.75, 1.54), size=0.06, rot=(math.pi / 2, 0, math.pi / 2))
     for k, c in enumerate(((0.45, 0.35, 0.03), (0.08, 0.2, 0.4), (0.4, 0.05, 0.03))):
         reb.prim("cyl", f"Leg wire coil {k}", reb.mat_plain(f"Wire {k}", c, 0.5), (X0 + 0.15, 2.05 + k * 0.12, 1.48), (0.1, 0.1, 0.03), segments=12)
@@ -179,7 +157,7 @@ def build():
     reb.prim("cone", "Desk lamp shade", mat("green paint"), (dx + 0.0, 2.0, top + 0.38), (0.18, 0.18, 0.12), rot=(0.5, -0.4, 0), segments=12, top=0.4)
     reb.prim("sphere", "Desk lamp bulb", lamp_glow, (dx - 0.01, 2.02, top + 0.35), (0.05, 0.05, 0.05))
     desk_light = reb.spot("Desk lamp", (dx - 0.01, 2.02, top + 0.34), (dx - 0.1, 2.4, top), 9, (1.0, 0.75, 0.45), 90, 0.6, 0.05)
-    chair("Desk chair", mat("dark wood"), (dx - 0.62, 2.55, 0.0), rot=0.35)
+    kit.chair("Desk chair", mat("dark wood"), (dx - 0.62, 2.55, 0.0), rot=0.35)
     reb.prim("cyl", "Bin", mat("tin"), (dx - 0.1, 1.45, 0.2), (0.3, 0.3, 0.4), segments=14)
     kit.papers("Screwed-up paper", (dx - 0.4, 1.55, 0.0), spread=0.3, count=4, seed=3)
     # The roster board: four weeks of shifts, names going red.

@@ -31,26 +31,13 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector  # noqa: E402
+from mathutils import Vector  # noqa: E402
 
 X0, X1, Y0, Y1 = 3.3, 19.0, 6.9, 19.0
 PATH = [(5.0, 21.0), (5.0, 12.6)] + [(9.0 + 4.0 * math.cos(math.radians(a)), 12.6 + 4.0 * math.sin(math.radians(a))) for a in range(185, 271, 5)] + [(21.0, 8.6)]
 WIDTH, HEIGHT = 3.4, 3.2
 OFFICE_DOOR = (12.1, 13.0)
 NORTH_WALL = 7.08
-
-
-def settle(ob, at, offset, turn=0.0, tilt=None):
-    """Put a kit piece where it was meant to go. kit.join keeps the first
-    part's origin and turn, so kit.chair, crate, shelves, crow and body come
-    out shifted by that part's offset (a body stands on end): undo it."""
-    local = Matrix.Translation(Vector(offset))
-    if tilt is not None:
-        local = local @ tilt.to_matrix().to_4x4()
-    ob.matrix_world = Matrix.Translation(Vector(at)) @ Matrix.Rotation(turn, 4, "Z") @ local
-    for c in ob.children:
-        c.matrix_parent_inverse = local.inverted()
-    return ob
 
 
 def samples(path, step):

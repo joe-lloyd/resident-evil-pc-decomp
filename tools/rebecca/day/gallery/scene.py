@@ -41,29 +41,6 @@ CART = (7.2, 4.6)
 HAL = (10.0, 5.2)
 
 
-def settle(ob, at, offset, turn=0.0, tilt=None):
-    """Put a kit piece where it was meant to go. kit.join keeps the first
-    part's origin and turn, so kit.chair, crate, shelves, crow and body come
-    out shifted by that part's offset (a body stands on end): undo it."""
-    local = Matrix.Translation(Vector(offset))
-    if tilt is not None:
-        local = local @ tilt.to_matrix().to_4x4()
-    ob.matrix_world = Matrix.Translation(Vector(at)) @ Matrix.Rotation(turn, 4, "Z") @ local
-    for c in ob.children:
-        c.matrix_parent_inverse = local.inverted()
-    return ob
-
-
-def corpse(name, at, heading=0.0, pose="back", **kw):
-    """kit.body lying the way it should (no `bloody`: its pool lands in the wrong place)."""
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    j = kit._POSES[pose]
-    missing = kw.get("missing", ())
-    a, b = next((a, b) for a, b, _, _ in kit._BONES if a not in missing and b not in missing)
-    pa, pb = Vector(j[a]), Vector(j[b])
-    return settle(ob, at, (pa + pb) / 2, heading, (pb - pa).to_track_quat("Z", "Y"))
-
-
 def web_sheet(name, corner, a, b, size, rng, strands=9):
     """A thick web across a corner: fans of silk from `corner` along directions a and b, in one mesh."""
     verts, faces = [], []
@@ -212,7 +189,7 @@ def build():
     hx, hy = HAL
     float_pivot = reb.prim("sphere", "Hal floats", None, (hx, hy, WATER - 0.12), (0.02, 0.02, 0.02))
     float_pivot.hide_render = True
-    hal = corpse("Hal", (0, 0, 0), heading=2.75, pose="front", top=mat("flannel"), legs=reb.mat_plain("Work trousers", (0.08, 0.08, 0.06), 0.9), seed=12)
+    hal = kit.body("Hal", (0, 0, 0), heading=2.75, pose="front", top=mat("flannel"), legs=reb.mat_plain("Work trousers", (0.08, 0.08, 0.06), 0.9), seed=12)
     hal.parent = float_pivot
     hal.matrix_parent_inverse = Matrix.Translation(Vector((-0.0, 0, 0)))
     reb.prim("cube", "Bandaged forearm", reb.mat_surface("Bandage, soaked", [(0.0, (0.45, 0.42, 0.37)), (0.6, (0.25, 0.04, 0.03)), (1.0, (0.12, 0.01, 0.01))], scale=12), Matrix.Rotation(2.75, 4, "Z") @ Vector((1.1, -0.41, 0.07)), (0.24, 0.1, 0.1), rot=(0, 0, 2.75)).parent = float_pivot

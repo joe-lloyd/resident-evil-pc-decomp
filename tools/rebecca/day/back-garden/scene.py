@@ -35,7 +35,7 @@ import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector, noise  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 
 X0, X1, Y0, Y1 = 2.0, 17.0, 2.0, 13.8
 HOUSE_Y = 14.0
@@ -50,25 +50,6 @@ BEDS = ((5.0, 3.6, 8.2, 6.6), (11.8, 3.6, 13.4, 6.6), (5.0, 9.4, 8.2, 11.0), (11
 
 def height(x, y):
     return 0.02 * noise.noise(Vector((x * 0.5, y * 0.5, 5)))
-
-
-def settle(ob, offset, rot=None):
-    """kit.join keeps its first part's frame, and kit.body, chair, crate and
-    crow then place the result as if it had none. Move the mesh back into
-    the prop's own frame."""
-    m = Matrix.Translation(offset)
-    if rot is not None:
-        m = m @ rot.to_matrix().to_4x4()
-    ob.data.transform(m)
-    return ob
-
-
-def body(name, at, heading=0.0, pose="back", **kw):
-    """kit.body lying as it should. No `bloody` or `sheet`: their pool lands wrong."""
-    ob = kit.body(name, at, heading=heading, pose=pose, **kw)
-    j, missing = kit._POSES[pose], kw.get("missing", ())
-    a, b = next((Vector(j[p]), Vector(j[q])) for p, q, _, _ in kit._BONES if p not in missing and q not in missing)
-    return settle(ob, (a + b) / 2, (b - a).to_track_quat("Z", "Y"))
 
 
 def ashlar(name, light, dark, mortar=(0.04, 0.04, 0.038), size=(0.6, 0.32)):
@@ -254,7 +235,7 @@ def build():
     reb.prim("cube", "Her shoe", reb.mat_plain("Patent leather", (0.01, 0.01, 0.01), 0.2), (11.6, 12.2, 0.04), (0.22, 0.08, 0.08), rot=(0, 0.2, 2.6), bevel=0.02)
     kit.drag_trail("Her blood to the hedge", mat("old blood"), [(12.4, 12.4), (10.4, 12.6), (7.8, 12.3), (5.4, 11.2), (4.0, 10.4), (3.4, 10.1)], width=0.3, seed=11, height=height)
     kit.drag_trail("Fresh at the hedge", mat("blood"), [(5.0, 10.9), (3.6, 10.2)], width=0.35, seed=12, height=height)
-    maid = body("Maid", (5.0, 10.15, 0.02), heading=math.pi + 0.1, pose="front", top=dress, legs=dress, seed=9)
+    maid = kit.body("Maid", (5.0, 10.15, 0.02), heading=math.pi + 0.1, pose="front", top=dress, legs=dress, seed=9)
     reb.cloth("Apron, torn", apron, (4.1, 9.65, 0.05), (0.4, 0.5), rot=(0, 0, 0.6), cuts=8, lumps=0.03, seed=4)
     reb.cloth("Apron on the hedge", apron, (3.05, 9.3, 1.1), (0.25, 0.35), rot=(0.3, math.pi / 2, 0), cuts=6, lumps=0.03, seed=5)
     reb.prim("cyl", "Maid's cap", reb.mat_plain("Starched white", (0.6, 0.6, 0.57), 0.6), (5.4, 9.6, 0.03), (0.18, 0.18, 0.04), rot=(0.2, 0, 0), segments=14)
