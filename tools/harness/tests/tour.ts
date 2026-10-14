@@ -52,7 +52,9 @@ function approach(json: Json, zone: Rect): [number, number] {
   const b = json.bounds;
   const mx = (b.x0 + b.x1) / 2;
   const mz = (b.z0 + b.z1) / 2;
-  const blockers = [...(json.walls ?? []), ...(json.voids ?? [])];
+  // Other doors are in the way too: walking through one leaves by it.
+  const others = (json.doors ?? []).map((d) => d.zone).filter((z) => z !== zone);
+  const blockers = [...(json.walls ?? []), ...(json.voids ?? []), ...others];
   const checks = (json.checks ?? []).map((c) => c.zone);
   const len = Math.hypot(mx - cx, mz - cz) || 1;
   const dirs: [number, number][] = [[(mx - cx) / len, (mz - cz) / len], [0, 1], [0, -1], [1, 0], [-1, 0]];

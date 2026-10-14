@@ -377,12 +377,15 @@ static void DebugRoomSkipInvalid(int dir)
     }
 }
 
+int DebugRoomChange_IsSelectable(int stage, int room);
+
 static void DebugRoomChange_Trigger(void)
 {
     int stage = s_dbgStage;
 
     // Defensive: never trigger a transition to a room without a valid RDT.
-    if (!DebugRoomSelectable(stage, s_dbgRoom)) {
+    // The same test the request made, so a mode's own rooms pass here too.
+    if (!DebugRoomChange_IsSelectable(stage, s_dbgRoom)) {
         dbg_printf("[debugmenu] room change blocked: stage %d room %02X has no valid RDT\n",
                    stage, s_dbgRoom);
         return;
