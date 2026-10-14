@@ -61,7 +61,10 @@ return;
 // The people idle. A character's first update clears its idle behaviour
 // (npc_state0_init), so on the second frame in the room each is given idle 9,
 // which loops its animation 0 (npc_idle_play_anim). FG_ROOM bits clear on
-// every room entry: 20 marks the first frame, 21 that it is done.
+// every room entry: 20 marks the first frame, 21 that it is done. A message
+// pauses the characters but not this script, so the room's first message
+// waits for 21: shown on the first frame, it would hold back their first
+// update until after this ran, and that update would clear the idle again.
 if (ck(FG_ROOM, 21, 1)) {
     if (ck(FG_ROOM, 20, 0)) {
         eml_state(0, 0, 2, 9, 0);
@@ -70,7 +73,7 @@ if (ck(FG_ROOM, 21, 1)) {
     }
     set(FG_ROOM, 20, 0);
 }
-if (ck(FG_COMMON, 201, 1)) {
+if (ck(FG_ROOM, 21, 0) && ck(FG_COMMON, 201, 1)) {
     set(FG_COMMON, 201, 0);
     message(128, 255, 0);
 }

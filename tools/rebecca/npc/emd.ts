@@ -152,7 +152,9 @@ export interface Frame {
 /** Every animation in the list, as its frames. */
 export function readAnimations(edd: Uint8Array): Frame[][] {
   const v = view(edd);
-  const count = v.getUint16(2, true) / 4;
+  // The entries run up to the first frame list, wherever that entry is.
+  let count = 0;
+  for (let end = edd.length; count * 4 < end; count++) end = Math.min(end, v.getUint16(count * 4 + 2, true));
   return Array.from({ length: count }, (_, a) => {
     const frames = v.getUint16(a * 4, true);
     const at = v.getUint16(a * 4 + 2, true);
