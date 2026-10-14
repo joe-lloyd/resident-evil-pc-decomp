@@ -1,7 +1,9 @@
-// Walk every door of the rooms built with blender/kit.py: jump into the
-// room, stand her a step short of the door, face it and go through (walking
-// on for a touch door, the action button for a door that opens), and check
-// she comes out in the neighbour the scene says, inside its floor, and stays.
+// Walk every door of the rooms built with blender/kit.py, and check she comes
+// out in the neighbour the scene says, inside its floor, and stays there.
+// First it works out from the scene's walls where she can walk from where
+// she comes into the room; a door she can't reach fails there. Then, in the
+// game: for a door that opens she stands in it and presses action; for a
+// walk-through path she starts a step short and walks on.
 //
 //   node tools/harness/tests/tour.ts [<slug> ...]      (default: every rendered kit room)
 //
@@ -19,7 +21,7 @@ const day = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 
 type Rect = { x0: number; z0: number; x1: number; z1: number };
 interface Json {
   bounds: Rect;
-  doors?: { to: string; zone: Rect }[];
+  doors?: { to: string; zone: Rect; arrive: { x: number; z: number } }[];
   walls?: Rect[];
   voids?: Rect[];
   checks?: { zone: Rect }[];
@@ -40,41 +42,71 @@ const built = (slug: string) => bySlug.has(slug) && (!kitRooms.some((k) => k.slu
 const BODY = 450;
 const inside = (r: Rect, x: number, z: number, pad = 0) => x > r.x0 - pad && x < r.x1 + pad && z > r.z0 - pad && z < r.z1 + pad;
 
+/** Whether the game has this door firing on the action button (it is in the room script as 0x80). */
+function opens(slug: string, zone: Rect): boolean {
+  const c = readFileSync(path.join(day, slug, 'room.c'), 'utf8');
+  for (const m of c.matchAll(/door_aot_set\(\d+, (\d+), (\d+), (\d+), (\d+),.*, (\d+)\);/g)) {
+    if (Number(m[1]) === zone.x0 && Number(m[2]) === zone.z0) return (Number(m[5]) & 0x80) !== 0;
+  }
+  throw new Error(`no door at (${zone.x0}, ${zone.z0}) in ${slug}/room.c`);
+}
+
+/** Grid step for working out where she can walk, in game units. */
+const CELL = 250;
+
 /**
- * Where to stand to walk into a door: a step short of it, with a straight
- * walk to it that crosses no wall, drop or thing to examine (pressing action
- * on one of those opens it instead of the door). Tries the way toward the
- * middle of the floor first, then straight in from each side.
+ * The floor she can reach from where she comes into the room (any door's
+ * arrival), keeping her body clear of walls and drops and out of the room's
+ * walk-through doors, which would take her out. Returns the reachable cell
+ * centres.
  */
-function approach(json: Json, zone: Rect): [number, number] {
-  const cx = (zone.x0 + zone.x1) / 2;
-  const cz = (zone.z0 + zone.z1) / 2;
+function walkable(json: Json, touchZones: Rect[]): [number, number][] {
   const b = json.bounds;
-  const mx = (b.x0 + b.x1) / 2;
-  const mz = (b.z0 + b.z1) / 2;
-  // Other doors are in the way too: walking through one leaves by it.
-  const others = (json.doors ?? []).map((d) => d.zone).filter((z) => z !== zone);
-  const blockers = [...(json.walls ?? []), ...(json.voids ?? []), ...others];
-  const checks = (json.checks ?? []).map((c) => c.zone);
-  const len = Math.hypot(mx - cx, mz - cz) || 1;
-  const dirs: [number, number][] = [[(mx - cx) / len, (mz - cz) / len], [0, 1], [0, -1], [1, 0], [-1, 0]];
-  for (const back of [1500, 1100, 800]) {
-    for (const [dx, dz] of dirs) {
-      const x = cx + dx * back;
-      const z = cz + dz * back;
-      if (!inside(b, x, z, -BODY) || inside(zone, x, z)) continue;
-      let clear = true;
-      for (let t = 0; t <= 1 && clear; t += 0.05) {
-        const px = x + (cx - x) * t;
-        const pz = z + (cz - z) * t;
-        if (inside(zone, px, pz)) break;
-        if (blockers.some((r) => inside(r, px, pz, BODY)) || checks.some((r) => inside(r, px, pz))) clear = false;
+  const blockers = [...(json.walls ?? []), ...(json.voids ?? [])];
+  const free = (x: number, z: number) =>
+    inside(b, x, z, -BODY) && !blockers.some((r) => inside(r, x, z, BODY)) && !touchZones.some((r) => inside(r, x, z));
+  const nx = Math.ceil((b.x1 - b.x0) / CELL);
+  const nz = Math.ceil((b.z1 - b.z0) / CELL);
+  const at = (i: number, k: number): [number, number] => [b.x0 + (i + 0.5) * CELL, b.z0 + (k + 0.5) * CELL];
+  const seen = new Set<number>();
+  const queue: [number, number][] = [];
+  for (const d of json.doors ?? []) {
+    const i = Math.floor((d.arrive.x - b.x0) / CELL);
+    const k = Math.floor((d.arrive.z - b.z0) / CELL);
+    // She may arrive a little inside a wall's reach: start from the nearest free cell.
+    let best: [number, number] | undefined;
+    for (let r = 0; r <= 4 && !best; r++) {
+      for (let di = -r; di <= r && !best; di++) for (let dk = -r; dk <= r && !best; dk++) {
+        const [x, z] = at(i + di, k + dk);
+        if (i + di >= 0 && i + di < nx && k + dk >= 0 && k + dk < nz && free(x, z)) best = [i + di, k + dk];
       }
-      if (clear) return [Math.round(x), Math.round(z)];
+    }
+    if (best && !seen.has(best[0] * 4096 + best[1])) {
+      seen.add(best[0] * 4096 + best[1]);
+      queue.push(best);
     }
   }
-  const len2 = Math.min(1500, len * 0.8);
-  return [Math.round(cx + ((mx - cx) / len) * len2), Math.round(cz + ((mz - cz) / len) * len2)];
+  const out: [number, number][] = [];
+  while (queue.length) {
+    const [i, k] = queue.pop()!;
+    out.push(at(i, k));
+    for (const [di, dk] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
+      const ni = i + di!, nk = k + dk!;
+      if (ni < 0 || nk < 0 || ni >= nx || nk >= nz || seen.has(ni * 4096 + nk)) continue;
+      const [x, z] = at(ni, nk);
+      if (!free(x, z)) continue;
+      seen.add(ni * 4096 + nk);
+      queue.push([ni, nk]);
+    }
+  }
+  return out;
+}
+
+/** The reachable spot nearest `x, z` that passes `ok`. */
+function nearest(cells: [number, number][], x: number, z: number, ok: (c: [number, number]) => boolean): [number, number] | undefined {
+  let best: [number, number] | undefined;
+  for (const c of cells) if (ok(c) && (!best || Math.hypot(c[0] - x, c[1] - z) < Math.hypot(best[0] - x, best[1] - z))) best = c;
+  return best && [Math.round(best[0]), Math.round(best[1])];
 }
 
 const first = rooms[0]!;
@@ -95,28 +127,34 @@ try {
         await settle(link);
         const cx = (d.zone.x0 + d.zone.x1) / 2;
         const cz = (d.zone.z0 + d.zone.z1) / 2;
-        const [sx, sz] = approach(json, d.zone);
-        await link.place(sx, sz);
-        await link.frames(4);
-        await faceTowards(link, cx, cz);
-        // As a player would: walk at it until she leaves or stops, and only
-        // then, if she is still here, press action.
-        const deadline = Date.now() + 20_000;
-        await link.down(Key.up);
-        let last = s.player;
-        for (let still = 0; still < 3; ) {
-          s = await link.frames(6);
-          if (s.stage !== r.stage || s.room !== r.room) break;
-          if (Date.now() > deadline) throw new Error(`walked at it for 20 s and still in ${r.slug} at (${s.player.x}, ${s.player.z})`);
-          still = Math.hypot(s.player.x - last.x, s.player.z - last.z) < 8 ? still + 1 : 0;
-          last = s.player;
-        }
-        await link.release();
-        if (s.stage === r.stage && s.room === r.room) {
-          await link.frames(4);
+        const open = opens(r.slug, d.zone);
+        const touchZones = (json.doors ?? []).filter((o) => o !== d && !opens(r.slug, o.zone)).map((o) => o.zone);
+        const cells = walkable(json, touchZones);
+        if (open) {
+          // A door that opens: she can stand in it, and action there takes her through.
+          const spot = nearest(cells, cx, cz, ([x, z]) => inside(d.zone, x, z));
+          if (!spot) throw new Error('no spot in its zone she can walk to from where she comes in');
+          await link.place(spot[0], spot[1]);
+          await link.frames(6);
+          await faceTowards(link, cx, cz);
           await link.tap(Key.action, 2);
           s = await link.frames(20);
-          if (s.stage === r.stage && s.room === r.room) throw new Error(`stopped at (${s.player.x}, ${s.player.z}) and action did nothing`);
+          if (s.stage === r.stage && s.room === r.room) throw new Error(`stood in it at (${s.player.x}, ${s.player.z}) and action did nothing`);
+        } else {
+          // A walk-through path: she can get a step short of it, and walking on takes her out.
+          const spot = nearest(cells, cx, cz, ([x, z]) => !inside(d.zone, x, z, 600) && inside(d.zone, x, z, 1600));
+          if (!spot) throw new Error('no spot a step short of it she can walk to from where she comes in');
+          await link.place(spot[0], spot[1]);
+          await link.frames(4);
+          const deadline = Date.now() + 15_000;
+          for (;;) {
+            await faceTowards(link, cx, cz);
+            await link.down(Key.up);
+            s = await link.frames(8);
+            if (s.stage !== r.stage || s.room !== r.room) break;
+            if (Date.now() > deadline) throw new Error(`walked at it for 15 s and still in ${r.slug} at (${s.player.x}, ${s.player.z})`);
+          }
+          await link.release();
         }
         s = await settle(link, (st) => st.stage !== r.stage || st.room !== r.room);
         if (s.stage !== target.stage || s.room !== target.room) throw new Error(`came out in ${s.stage}:${s.room.toString(16)}, not ${d.to}`);
@@ -129,6 +167,8 @@ try {
         console.log(`ok    ${label}  (arrived at ${s.player.x}, ${s.player.z})`);
       } catch (err) {
         await link.release().catch(() => undefined);
+        // Close a message she may have opened instead, so the next jump can run.
+        for (let i = 0; i < 4; i++) await link.tap(Key.action, 2).then(() => link.frames(10)).catch(() => undefined);
         failures.push(label);
         console.log(`FAIL  ${label}: ${(err as Error).message}`);
       }
