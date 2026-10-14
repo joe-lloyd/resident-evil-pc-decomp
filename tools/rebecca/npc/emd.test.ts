@@ -90,3 +90,19 @@ test('a skin fits: each half keeps to 256 colours, and an image within them come
   assert.ok(new Set(fitted.pixels.filter((_, i) => i % 256 < 128)).size <= 256);
   assert.ok(!fitted.palettes.some((p, r) => [...fitted.pixels.keys()].some((i) => (i % 256 < 128 ? 0 : 1) === r && p[fitted.pixels[i]!] === 0)), 'no texel is see-through');
 });
+
+test("each person's model: our skin, their idle swapped into animation 0, and nothing else changes", { skip }, async () => {
+  const { people, personModel } = await import('./people.ts');
+  for (const person of people) {
+    const file = read(person.model.toLowerCase());
+    const out = personModel(file, person);
+    assert.equal(out.length, file.length, person.slug);
+    const [before, after] = [file, out].map((f) => readEmd(f));
+    const anims = [before, after].map((e) => readAnimations(section(e!, 'edd')));
+    assert.deepEqual(anims[1]![0], anims[0]![person.idle], `${person.slug}: animation 0 plays ${person.idle}`);
+    assert.deepEqual(anims[1]![person.idle], anims[0]![0], `${person.slug}: the still pose moves to ${person.idle}`);
+    assert.deepEqual(anims[1]!.filter((_, a) => a !== 0 && a !== person.idle), anims[0]!.filter((_, a) => a !== 0 && a !== person.idle), `${person.slug}: the other animations`);
+    for (const name of ['emr', 'tmd'] as const) assert.deepEqual(section(after!, name), section(before!, name), `${person.slug}: ${name}`);
+    assert.notDeepEqual(readTexture(section(after!, 'tim')).pixels, readTexture(section(before!, 'tim')).pixels, `${person.slug}: the texture is ours`);
+  }
+});

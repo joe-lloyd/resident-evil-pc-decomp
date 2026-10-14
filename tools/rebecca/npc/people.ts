@@ -13,20 +13,45 @@ export interface Person {
   readonly entity: number;
   /** The model file g_emdPathTable names for that id (EntityModelLoader.cpp), in enemy/. */
   readonly model: string;
+  /**
+   * The animation they idle in. The NPC code's looping idle (behaviour 9,
+   * npc_idle_play_anim) always plays animation 0, which in these models is a
+   * still pose, so the build swaps this one into place 0.
+   */
+  readonly idle: number;
   readonly skin: (t: Texel) => Rgb;
 }
 
 export const people: readonly Person[] = [
-  // Barry's model: the heavy man. Idle 0, walk 1, kneel 9, falls 4 and 54.
-  { slug: 'hal', entity: 34, model: 'EM1022.EMD', skin: placeholder },
-  // Rebecca's own NPC model: idle 0, walk 1, kneel 9, falls 4 and 59, sitting 61 and 62.
-  { slug: 'partner', entity: 35, model: 'EM1023.EMD', skin: placeholder },
+  // Barry's model: the heavy man. Stand 0, walk 1, kneel 9, falls 4 and 54;
+  // 42 is a 20-frame standing loop that shifts his weight.
+  { slug: 'hal', entity: 34, model: 'EM1022.EMD', idle: 42, skin: placeholder },
+  // Rebecca's own NPC model: stand 0, walk 1, kneel 9, falls 4 and 59,
+  // sitting 61 and 62, a kneeling loop 63; 42 is a 20-frame standing loop.
+  { slug: 'partner', entity: 35, model: 'EM1023.EMD', idle: 42, skin: placeholder },
 ];
 
-/** The player's model with our skin in place of its texture: same size, same everything else. */
+/**
+ * The animation list with animation 0 and `idle` swapped (each entry is a
+ * frame count and the offset of its frames). Swapping rather than copying
+ * keeps the still pose in the list and keeps entry 0's place: the list's
+ * length is the lowest frame offset any entry holds.
+ */
+export function idleFirst(edd: Uint8Array, idle: number): Uint8Array {
+  const out = edd.slice();
+  out.set(edd.subarray(idle * 4, idle * 4 + 4), 0);
+  out.set(edd.subarray(0, 4), idle * 4);
+  return out;
+}
+
+/**
+ * The player's model with our skin in place of its texture and its idle
+ * swapped into animation 0: the same size, and every other byte as it was.
+ */
 export function personModel(file: Uint8Array, person: Person): Uint8Array {
   const emd = readEmd(file);
   const tim = section(emd, 'tim');
   const skin = fitSkin(readTexture(tim), paint(surfaceMap(file), person.skin));
-  return writeEmd(withSection(emd, 'tim', writeTexture(tim, skin)));
+  const skinned = withSection(emd, 'tim', writeTexture(tim, skin));
+  return writeEmd(withSection(skinned, 'edd', idleFirst(section(emd, 'edd'), person.idle)));
 }
