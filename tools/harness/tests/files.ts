@@ -196,6 +196,7 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 writeFileSync(
   path.join(outDir, 'index.html'),
   `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Rebecca's files in the game</title>
+<script src="/research/rebecca-day/nav.js" defer></script>
 <style>body{background:#121110;color:#ddd6c8;font:15px/1.45 system-ui,sans-serif;max-width:1400px;margin:1.5em auto;padding:0 1em}
 h2{margin:1.6em 0 .3em}.bad{color:#d0604c}.ok{color:#7d9a5a}.strip{display:flex;gap:.8em;overflow-x:auto}
 figure{margin:0;flex:0 0 320px}img{width:320px;image-rendering:pixelated;border:1px solid #2a2724}figcaption{color:#8b8478;font-size:.85em}a{color:#ddd6c8}</style></head><body>
