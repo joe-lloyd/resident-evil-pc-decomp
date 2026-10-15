@@ -12,7 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { open } from '../lab.ts';
 import { Key, type GameLink } from '../link.ts';
-import { approach, settle, useRoomData } from '../flows.ts';
+import { approach, fight, settle, useRoomData } from '../flows.ts';
 import { snapshot } from '../snapshot.ts';
 import { readPng, type Image } from '../image.ts';
 import type { GameState } from '../state.ts';
@@ -39,6 +39,12 @@ const PICKUP_SCREEN = 0x100;
 /** Bank 8 is g_RoomFlags; a collected file raises ROOM_FLAG_FILE_BASE + slot (src/game/BioCard.h). */
 const FILE_FLAGS = 8;
 const FILE_FLAG_BASE = 0x82;
+/** Item 0x0B, the Beretta's ammunition. */
+const CLIP = 0x0b;
+/** Enemy types from 32 up are people, not enemies (flows.ts). */
+const FIRST_NPC_TYPE = 32;
+/** Enemy type 5 (flows.ts ENEMY_NAMES). */
+const CROW = 5;
 const flagOn = (s: GameState, bank: number, n: number) => ((s.banks[bank]![(n >> 5) * 4 + 3 - ((n & 31) >> 3)]! >> (7 - (n & 7))) & 1) === 1;
 
 /** The reader draws a page's top 256x192 at (24, 24) of the 320x240 screen (DAT_004d2888); the shot is twice that. */
@@ -136,7 +142,16 @@ try {
     try {
       let s = await link.state();
       if (s.stage !== room.stage || s.room !== room.room) await link.room(room.stage, room.room);
-      await settle(link);
+      s = await settle(link);
+      // Some of her rooms have enemies: one that grabs her stops the pickup
+      // and the menu, so clear the room first, with ammunition to spare.
+      // Crows are left alone: the Beretta takes minutes over them, and they
+      // only peck.
+      if (s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && e.type !== CROW)) {
+        await link.give(CLIP, 30);
+        await fight(link, { ignore: [CROW] });
+        await settle(link);
+      }
       // Stand her a step from the pickup first, so the walk to it is short
       // and never crosses one of the room's touch doors.
       // Furniture can stop her on the way; then try again from nearer.
