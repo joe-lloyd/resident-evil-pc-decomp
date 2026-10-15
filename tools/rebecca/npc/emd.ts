@@ -320,7 +320,7 @@ export function readTexture(tim: Uint8Array): Texture {
 export function writeTexture(tim: Uint8Array, texture: Texture): Uint8Array {
   const l = timLayout(tim);
   if (texture.palettes.length !== l.rows || texture.pixels.length !== SIDE * SIDE) throw new Error('the texture does not fit the TIM');
-  const out = tim.slice();
+  const out = Uint8Array.from(tim);
   const v = view(out);
   texture.palettes.forEach((p, r) => p.forEach((c, i) => v.setUint16(l.clut + (r * 256 + i) * 2, c, true)));
   out.set(texture.pixels, l.pixels);
@@ -345,7 +345,7 @@ export function textureImage(t: Texture): Image {
 
 /** The TMD with one object's vertices moved by `move` (in the object's own space); nothing else changes. */
 export function moveVertices(tmd: Uint8Array, object: number, move: (v: Vec3) => Vec3): Uint8Array {
-  const out = tmd.slice();
+  const out = Uint8Array.from(tmd);
   const v = view(out);
   const entry = 12 + object * 28;
   const at = 12 + v.getUint32(entry, true);

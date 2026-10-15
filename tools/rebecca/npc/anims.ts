@@ -15,8 +15,13 @@ export function animationFrames(file: Uint8Array) {
   const skeleton = readSkeleton(emr);
   return {
     parents: skeleton.parents,
+    // One entry per tick: Joint_move holds a frame for its flags' low byte in
+    // ticks (at least one), so a delay-2 idle plays at half the frame rate.
     animations: readAnimations(section(emd, 'edd')).map((frames) =>
-      frames.map((f) => pose(skeleton, readKeyframe(emr, skeleton, f.keyframe)).flatMap((j) => j.t.map(Math.round))),
+      frames.flatMap((f) => {
+        const joints = pose(skeleton, readKeyframe(emr, skeleton, f.keyframe)).flatMap((j) => j.t.map(Math.round));
+        return Array.from({ length: Math.max(1, f.flags & 0xff) }, () => joints);
+      }),
     ),
   };
 }
@@ -26,7 +31,7 @@ function page(models: { name: string; parents: readonly number[]; animations: nu
 <style>body{background:#121110;color:#ddd6c8;font:14px/1.4 system-ui,sans-serif;margin:1.5em}
 .grid{display:flex;flex-wrap:wrap;gap:6px}figure{margin:0;background:#1a1816;border:1px solid #2a2724}
 figcaption{padding:2px 6px;color:#8b8478}canvas{display:block}</style></head><body>
-<p>Each animation's skeleton, front view on the left and side view on the right, looping at 30 frames a second. The number is the animation's index in the model.</p>
+<p>Each animation's skeleton, front view on the left and side view on the right, at the game's 30 ticks a second, each frame held as long as the game holds it. The number is the animation's index in the model.</p>
 ${models.map((m, i) => `<h2>${m.name}</h2><div class="grid" id="m${i}"></div>`).join('\n')}
 <script>
 const models = ${JSON.stringify(models)};
