@@ -16,6 +16,12 @@
  */
 export const BAG_SLOTS = 6;
 
+/**
+ * The FG_ROOM bit up while the loss happens, in word 0 below the events'
+ * bits (scripts.ts counts those from 12; the engine uses 0 and 29-31).
+ */
+export const LOSS_BIT = 11;
+
 /** The room where the mine takes her gear. */
 export const LOSS_ROOM = 'gallery';
 

@@ -14,511 +14,515 @@ return;
 // main procedure 0
 if (ck(FG_COMMON, 238, 1)) {
     set(FG_COMMON, 238, 0);
+    set(FG_ROOM, 11, 0);
     sys_multi(0);
-    if (item_ck(1)) {
-        remove_item(1);
-    }
-    if (item_ck(1)) {
-        remove_item(1);
-    }
-    if (item_ck(1)) {
-        remove_item(1);
-    }
-    if (item_ck(1)) {
-        remove_item(1);
-    }
-    if (item_ck(1)) {
-        remove_item(1);
-    }
-    if (item_ck(1)) {
-        remove_item(1);
-    }
-    if (item_ck(2)) {
-        remove_item(2);
-    }
-    if (item_ck(2)) {
-        remove_item(2);
-    }
-    if (item_ck(2)) {
-        remove_item(2);
-    }
-    if (item_ck(2)) {
-        remove_item(2);
-    }
-    if (item_ck(2)) {
-        remove_item(2);
-    }
-    if (item_ck(2)) {
-        remove_item(2);
-    }
-    if (item_ck(3)) {
-        remove_item(3);
-    }
-    if (item_ck(3)) {
-        remove_item(3);
-    }
-    if (item_ck(3)) {
-        remove_item(3);
-    }
-    if (item_ck(3)) {
-        remove_item(3);
-    }
-    if (item_ck(3)) {
-        remove_item(3);
-    }
-    if (item_ck(3)) {
-        remove_item(3);
-    }
-    if (item_ck(4)) {
-        remove_item(4);
-    }
-    if (item_ck(4)) {
-        remove_item(4);
-    }
-    if (item_ck(4)) {
-        remove_item(4);
-    }
-    if (item_ck(4)) {
-        remove_item(4);
-    }
-    if (item_ck(4)) {
-        remove_item(4);
-    }
-    if (item_ck(4)) {
-        remove_item(4);
-    }
-    if (item_ck(5)) {
-        remove_item(5);
-    }
-    if (item_ck(5)) {
-        remove_item(5);
-    }
-    if (item_ck(5)) {
-        remove_item(5);
-    }
-    if (item_ck(5)) {
-        remove_item(5);
-    }
-    if (item_ck(5)) {
-        remove_item(5);
-    }
-    if (item_ck(5)) {
-        remove_item(5);
-    }
-    if (item_ck(6)) {
-        remove_item(6);
-    }
-    if (item_ck(6)) {
-        remove_item(6);
-    }
-    if (item_ck(6)) {
-        remove_item(6);
-    }
-    if (item_ck(6)) {
-        remove_item(6);
-    }
-    if (item_ck(6)) {
-        remove_item(6);
-    }
-    if (item_ck(6)) {
-        remove_item(6);
-    }
-    if (item_ck(7)) {
-        remove_item(7);
-    }
-    if (item_ck(7)) {
-        remove_item(7);
-    }
-    if (item_ck(7)) {
-        remove_item(7);
-    }
-    if (item_ck(7)) {
-        remove_item(7);
-    }
-    if (item_ck(7)) {
-        remove_item(7);
-    }
-    if (item_ck(7)) {
-        remove_item(7);
-    }
-    if (item_ck(8)) {
-        remove_item(8);
-    }
-    if (item_ck(8)) {
-        remove_item(8);
-    }
-    if (item_ck(8)) {
-        remove_item(8);
-    }
-    if (item_ck(8)) {
-        remove_item(8);
-    }
-    if (item_ck(8)) {
-        remove_item(8);
-    }
-    if (item_ck(8)) {
-        remove_item(8);
-    }
-    if (item_ck(9)) {
-        remove_item(9);
-    }
-    if (item_ck(9)) {
-        remove_item(9);
-    }
-    if (item_ck(9)) {
-        remove_item(9);
-    }
-    if (item_ck(9)) {
-        remove_item(9);
-    }
-    if (item_ck(9)) {
-        remove_item(9);
-    }
-    if (item_ck(9)) {
-        remove_item(9);
-    }
-    if (item_ck(10)) {
-        remove_item(10);
-    }
-    if (item_ck(10)) {
-        remove_item(10);
-    }
-    if (item_ck(10)) {
-        remove_item(10);
-    }
-    if (item_ck(10)) {
-        remove_item(10);
-    }
-    if (item_ck(10)) {
-        remove_item(10);
-    }
-    if (item_ck(10)) {
-        remove_item(10);
-    }
-    if (item_ck(11)) {
-        remove_item(11);
-    }
-    if (item_ck(11)) {
-        remove_item(11);
-    }
-    if (item_ck(11)) {
-        remove_item(11);
-    }
-    if (item_ck(11)) {
-        remove_item(11);
-    }
-    if (item_ck(11)) {
-        remove_item(11);
-    }
-    if (item_ck(11)) {
-        remove_item(11);
-    }
-    if (item_ck(12)) {
-        remove_item(12);
-    }
-    if (item_ck(12)) {
-        remove_item(12);
-    }
-    if (item_ck(12)) {
-        remove_item(12);
-    }
-    if (item_ck(12)) {
-        remove_item(12);
-    }
-    if (item_ck(12)) {
-        remove_item(12);
-    }
-    if (item_ck(12)) {
-        remove_item(12);
-    }
-    if (item_ck(13)) {
-        remove_item(13);
-    }
-    if (item_ck(13)) {
-        remove_item(13);
-    }
-    if (item_ck(13)) {
-        remove_item(13);
-    }
-    if (item_ck(13)) {
-        remove_item(13);
-    }
-    if (item_ck(13)) {
-        remove_item(13);
-    }
-    if (item_ck(13)) {
-        remove_item(13);
-    }
-    if (item_ck(14)) {
-        remove_item(14);
-    }
-    if (item_ck(14)) {
-        remove_item(14);
-    }
-    if (item_ck(14)) {
-        remove_item(14);
-    }
-    if (item_ck(14)) {
-        remove_item(14);
-    }
-    if (item_ck(14)) {
-        remove_item(14);
-    }
-    if (item_ck(14)) {
-        remove_item(14);
-    }
-    if (item_ck(15)) {
-        remove_item(15);
-    }
-    if (item_ck(15)) {
-        remove_item(15);
-    }
-    if (item_ck(15)) {
-        remove_item(15);
-    }
-    if (item_ck(15)) {
-        remove_item(15);
-    }
-    if (item_ck(15)) {
-        remove_item(15);
-    }
-    if (item_ck(15)) {
-        remove_item(15);
-    }
-    if (item_ck(16)) {
-        remove_item(16);
-    }
-    if (item_ck(16)) {
-        remove_item(16);
-    }
-    if (item_ck(16)) {
-        remove_item(16);
-    }
-    if (item_ck(16)) {
-        remove_item(16);
-    }
-    if (item_ck(16)) {
-        remove_item(16);
-    }
-    if (item_ck(16)) {
-        remove_item(16);
-    }
-    if (item_ck(17)) {
-        remove_item(17);
-    }
-    if (item_ck(17)) {
-        remove_item(17);
-    }
-    if (item_ck(17)) {
-        remove_item(17);
-    }
-    if (item_ck(17)) {
-        remove_item(17);
-    }
-    if (item_ck(17)) {
-        remove_item(17);
-    }
-    if (item_ck(17)) {
-        remove_item(17);
-    }
-    if (item_ck(18)) {
-        remove_item(18);
-    }
-    if (item_ck(18)) {
-        remove_item(18);
-    }
-    if (item_ck(18)) {
-        remove_item(18);
-    }
-    if (item_ck(18)) {
-        remove_item(18);
-    }
-    if (item_ck(18)) {
-        remove_item(18);
-    }
-    if (item_ck(18)) {
-        remove_item(18);
-    }
-    if (item_ck(65)) {
-        remove_item(65);
-    }
-    if (item_ck(65)) {
-        remove_item(65);
-    }
-    if (item_ck(65)) {
-        remove_item(65);
-    }
-    if (item_ck(65)) {
-        remove_item(65);
-    }
-    if (item_ck(65)) {
-        remove_item(65);
-    }
-    if (item_ck(65)) {
-        remove_item(65);
-    }
-    if (item_ck(67)) {
-        remove_item(67);
-    }
-    if (item_ck(67)) {
-        remove_item(67);
-    }
-    if (item_ck(67)) {
-        remove_item(67);
-    }
-    if (item_ck(67)) {
-        remove_item(67);
-    }
-    if (item_ck(67)) {
-        remove_item(67);
-    }
-    if (item_ck(67)) {
-        remove_item(67);
-    }
-    if (item_ck(68)) {
-        remove_item(68);
-    }
-    if (item_ck(68)) {
-        remove_item(68);
-    }
-    if (item_ck(68)) {
-        remove_item(68);
-    }
-    if (item_ck(68)) {
-        remove_item(68);
-    }
-    if (item_ck(68)) {
-        remove_item(68);
-    }
-    if (item_ck(68)) {
-        remove_item(68);
-    }
-    if (item_ck(69)) {
-        remove_item(69);
-    }
-    if (item_ck(69)) {
-        remove_item(69);
-    }
-    if (item_ck(69)) {
-        remove_item(69);
-    }
-    if (item_ck(69)) {
-        remove_item(69);
-    }
-    if (item_ck(69)) {
-        remove_item(69);
-    }
-    if (item_ck(69)) {
-        remove_item(69);
-    }
-    if (item_ck(70)) {
-        remove_item(70);
-    }
-    if (item_ck(70)) {
-        remove_item(70);
-    }
-    if (item_ck(70)) {
-        remove_item(70);
-    }
-    if (item_ck(70)) {
-        remove_item(70);
-    }
-    if (item_ck(70)) {
-        remove_item(70);
-    }
-    if (item_ck(70)) {
-        remove_item(70);
-    }
-    if (item_ck(71)) {
-        remove_item(71);
-    }
-    if (item_ck(71)) {
-        remove_item(71);
-    }
-    if (item_ck(71)) {
-        remove_item(71);
-    }
-    if (item_ck(71)) {
-        remove_item(71);
-    }
-    if (item_ck(71)) {
-        remove_item(71);
-    }
-    if (item_ck(71)) {
-        remove_item(71);
-    }
-    if (item_ck(72)) {
-        remove_item(72);
-    }
-    if (item_ck(72)) {
-        remove_item(72);
-    }
-    if (item_ck(72)) {
-        remove_item(72);
-    }
-    if (item_ck(72)) {
-        remove_item(72);
-    }
-    if (item_ck(72)) {
-        remove_item(72);
-    }
-    if (item_ck(72)) {
-        remove_item(72);
-    }
-    if (item_ck(73)) {
-        remove_item(73);
-    }
-    if (item_ck(73)) {
-        remove_item(73);
-    }
-    if (item_ck(73)) {
-        remove_item(73);
-    }
-    if (item_ck(73)) {
-        remove_item(73);
-    }
-    if (item_ck(73)) {
-        remove_item(73);
-    }
-    if (item_ck(73)) {
-        remove_item(73);
-    }
-    if (item_ck(74)) {
-        remove_item(74);
-    }
-    if (item_ck(74)) {
-        remove_item(74);
-    }
-    if (item_ck(74)) {
-        remove_item(74);
-    }
-    if (item_ck(74)) {
-        remove_item(74);
-    }
-    if (item_ck(74)) {
-        remove_item(74);
-    }
-    if (item_ck(74)) {
-        remove_item(74);
-    }
-    if (item_ck(75)) {
-        remove_item(75);
-    }
-    if (item_ck(75)) {
-        remove_item(75);
-    }
-    if (item_ck(75)) {
-        remove_item(75);
-    }
-    if (item_ck(75)) {
-        remove_item(75);
-    }
-    if (item_ck(75)) {
-        remove_item(75);
-    }
-    if (item_ck(75)) {
-        remove_item(75);
-    }
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(1)) {
+    remove_item(1);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(1)) {
+    remove_item(1);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(1)) {
+    remove_item(1);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(1)) {
+    remove_item(1);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(1)) {
+    remove_item(1);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(1)) {
+    remove_item(1);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(2)) {
+    remove_item(2);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(2)) {
+    remove_item(2);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(2)) {
+    remove_item(2);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(2)) {
+    remove_item(2);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(2)) {
+    remove_item(2);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(2)) {
+    remove_item(2);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(3)) {
+    remove_item(3);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(3)) {
+    remove_item(3);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(3)) {
+    remove_item(3);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(3)) {
+    remove_item(3);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(3)) {
+    remove_item(3);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(3)) {
+    remove_item(3);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(4)) {
+    remove_item(4);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(4)) {
+    remove_item(4);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(4)) {
+    remove_item(4);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(4)) {
+    remove_item(4);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(4)) {
+    remove_item(4);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(4)) {
+    remove_item(4);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(5)) {
+    remove_item(5);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(5)) {
+    remove_item(5);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(5)) {
+    remove_item(5);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(5)) {
+    remove_item(5);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(5)) {
+    remove_item(5);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(5)) {
+    remove_item(5);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(6)) {
+    remove_item(6);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(6)) {
+    remove_item(6);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(6)) {
+    remove_item(6);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(6)) {
+    remove_item(6);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(6)) {
+    remove_item(6);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(6)) {
+    remove_item(6);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(7)) {
+    remove_item(7);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(7)) {
+    remove_item(7);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(7)) {
+    remove_item(7);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(7)) {
+    remove_item(7);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(7)) {
+    remove_item(7);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(7)) {
+    remove_item(7);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(8)) {
+    remove_item(8);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(8)) {
+    remove_item(8);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(8)) {
+    remove_item(8);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(8)) {
+    remove_item(8);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(8)) {
+    remove_item(8);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(8)) {
+    remove_item(8);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(9)) {
+    remove_item(9);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(9)) {
+    remove_item(9);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(9)) {
+    remove_item(9);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(9)) {
+    remove_item(9);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(9)) {
+    remove_item(9);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(9)) {
+    remove_item(9);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(10)) {
+    remove_item(10);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(10)) {
+    remove_item(10);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(10)) {
+    remove_item(10);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(10)) {
+    remove_item(10);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(10)) {
+    remove_item(10);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(10)) {
+    remove_item(10);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(11)) {
+    remove_item(11);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(11)) {
+    remove_item(11);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(11)) {
+    remove_item(11);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(11)) {
+    remove_item(11);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(11)) {
+    remove_item(11);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(11)) {
+    remove_item(11);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(12)) {
+    remove_item(12);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(12)) {
+    remove_item(12);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(12)) {
+    remove_item(12);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(12)) {
+    remove_item(12);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(12)) {
+    remove_item(12);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(12)) {
+    remove_item(12);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(13)) {
+    remove_item(13);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(13)) {
+    remove_item(13);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(13)) {
+    remove_item(13);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(13)) {
+    remove_item(13);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(13)) {
+    remove_item(13);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(13)) {
+    remove_item(13);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(14)) {
+    remove_item(14);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(14)) {
+    remove_item(14);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(14)) {
+    remove_item(14);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(14)) {
+    remove_item(14);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(14)) {
+    remove_item(14);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(14)) {
+    remove_item(14);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(15)) {
+    remove_item(15);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(15)) {
+    remove_item(15);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(15)) {
+    remove_item(15);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(15)) {
+    remove_item(15);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(15)) {
+    remove_item(15);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(15)) {
+    remove_item(15);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(16)) {
+    remove_item(16);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(16)) {
+    remove_item(16);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(16)) {
+    remove_item(16);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(16)) {
+    remove_item(16);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(16)) {
+    remove_item(16);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(16)) {
+    remove_item(16);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(17)) {
+    remove_item(17);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(17)) {
+    remove_item(17);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(17)) {
+    remove_item(17);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(17)) {
+    remove_item(17);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(17)) {
+    remove_item(17);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(17)) {
+    remove_item(17);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(18)) {
+    remove_item(18);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(18)) {
+    remove_item(18);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(18)) {
+    remove_item(18);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(18)) {
+    remove_item(18);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(18)) {
+    remove_item(18);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(18)) {
+    remove_item(18);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(65)) {
+    remove_item(65);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(65)) {
+    remove_item(65);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(65)) {
+    remove_item(65);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(65)) {
+    remove_item(65);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(65)) {
+    remove_item(65);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(65)) {
+    remove_item(65);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(67)) {
+    remove_item(67);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(67)) {
+    remove_item(67);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(67)) {
+    remove_item(67);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(67)) {
+    remove_item(67);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(67)) {
+    remove_item(67);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(67)) {
+    remove_item(67);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(68)) {
+    remove_item(68);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(68)) {
+    remove_item(68);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(68)) {
+    remove_item(68);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(68)) {
+    remove_item(68);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(68)) {
+    remove_item(68);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(68)) {
+    remove_item(68);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(69)) {
+    remove_item(69);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(69)) {
+    remove_item(69);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(69)) {
+    remove_item(69);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(69)) {
+    remove_item(69);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(69)) {
+    remove_item(69);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(69)) {
+    remove_item(69);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(70)) {
+    remove_item(70);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(70)) {
+    remove_item(70);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(70)) {
+    remove_item(70);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(70)) {
+    remove_item(70);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(70)) {
+    remove_item(70);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(70)) {
+    remove_item(70);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(71)) {
+    remove_item(71);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(71)) {
+    remove_item(71);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(71)) {
+    remove_item(71);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(71)) {
+    remove_item(71);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(71)) {
+    remove_item(71);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(71)) {
+    remove_item(71);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(72)) {
+    remove_item(72);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(72)) {
+    remove_item(72);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(72)) {
+    remove_item(72);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(72)) {
+    remove_item(72);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(72)) {
+    remove_item(72);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(72)) {
+    remove_item(72);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(73)) {
+    remove_item(73);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(73)) {
+    remove_item(73);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(73)) {
+    remove_item(73);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(73)) {
+    remove_item(73);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(73)) {
+    remove_item(73);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(73)) {
+    remove_item(73);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(74)) {
+    remove_item(74);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(74)) {
+    remove_item(74);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(74)) {
+    remove_item(74);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(74)) {
+    remove_item(74);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(74)) {
+    remove_item(74);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(74)) {
+    remove_item(74);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(75)) {
+    remove_item(75);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(75)) {
+    remove_item(75);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(75)) {
+    remove_item(75);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(75)) {
+    remove_item(75);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(75)) {
+    remove_item(75);
+}
+if (ck(FG_ROOM, 11, 0) && item_ck(75)) {
+    remove_item(75);
+}
+if (ck(FG_ROOM, 11, 0)) {
+    set(FG_ROOM, 11, 1);
     message(128, 255, 0);
 }
 return;

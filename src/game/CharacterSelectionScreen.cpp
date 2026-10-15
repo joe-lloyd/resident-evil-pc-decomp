@@ -68,6 +68,16 @@ static unsigned char g_selCount = 2;
 static const unsigned char g_idUV[3][2] = { { 0x50, 0x00 }, { 0x00, 0x80 }, { 0x70, 0x80 } };
 static const char* const kRebeccaSheet = GAME_DATA_ROOT "data\\select_b.tim";
 
+void SwitchGameMode(int mode)
+{
+    if (g_GameMode == mode) {
+        return;
+    }
+    g_GameMode = mode;
+    SetAssetMode(mode == GAME_MODE_REB ? "REB" : "");
+    LoadAllItemsTexture();   // the mode's own item sheet: her key items' icons, or the shipped ones
+}
+
 bool RebeccaDayInstalled(void)
 {
     // Her day is in English only (ConfigFile.cpp refuses REB with JPN assets).
@@ -828,9 +838,7 @@ case_6:
                 // Port addition: her day is a mode of its own, with its own
                 // rooms in the REB overlay and its own opening, not the
                 // mansion intro movie.
-                g_GameMode = GAME_MODE_REB;
-                SetAssetMode("REB");
-                LoadAllItemsTexture();   // her overlay's item sheet: her key items' icons
+                SwitchGameMode(GAME_MODE_REB);
                 g_SelectedCharactedId = CHAR_REBECCA;
                 g_main_state_flags &= ~MSF_CHAR_VARIANT;
                 sounds_reset();
@@ -839,9 +847,7 @@ case_6:
             }
             if (g_bRebMode) {
                 // Chris or Jill chosen in a session that was Rebecca's: back to the shipped game.
-                g_GameMode = GAME_MODE_OG;
-                SetAssetMode("");
-                LoadAllItemsTexture();
+                SwitchGameMode(GAME_MODE_OG);
             }
             g_SelectedCharactedId = chosen;
             if (g_SelectedCharactedId != CHAR_CHRIS) {

@@ -484,6 +484,9 @@ extern bool          g_bSkipUnskippableFmv;    // [Game] SkipUnskippableFmv
 // (CharacterSelectionScreen.cpp), and the assets are the English ones. New
 // Game deals her card, and her saves load.
 bool RebeccaDayInstalled(void);
+// Switch the session between her day (GAME_MODE_REB) and the shipped game
+// (GAME_MODE_OG): the mode, its asset overlay and its item sheet together.
+void SwitchGameMode(int mode);
 // Her day's saves (SaveLoadScreen.cpp): mark the card as hers before writing
 // it, switch the session to the save's own game after restoring one, and say
 // whether a save with this mode byte (0x233) is refused here.

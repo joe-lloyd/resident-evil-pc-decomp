@@ -17,7 +17,7 @@ import { BOOKS, DOCUMENTS, ITEM_FLAG_BASE } from '../files/documents.ts';
 import { foeLines, KILL_FLAGS, type Floor } from './foes.ts';
 import { ITEM_FLAGS, SUPPLIES, supplyLines, supplyModels } from './supplies.ts';
 import { KEY_ITEM_FLAGS, KEY_ITEMS, keyItemLines, keyItemModels, sameModel, type ItemSpot } from '../items/items.ts';
-import { BAG_SLOTS, GEAR, LOSS_LINE, LOSS_ROOM } from './gear.ts';
+import { BAG_SLOTS, GEAR, LOSS_BIT, LOSS_LINE, LOSS_ROOM } from './gear.ts';
 import { EVENT_FLAGS, EVENTS, eventsIn, giveModels, GIVE_FLAGS, itemModelSlots, keyItem } from './events.ts';
 import { day } from '../plan/day.ts';
 
@@ -466,7 +466,14 @@ function main(): void {
     if (flag !== undefined && slug === LOSS_ROOM) {
       // The mine takes her gear (gear.ts): the room's thought runs on into the loss.
       msgs[0] = `${msgs[0]}\n${LOSS_LINE}`;
-      lines.push(`if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, '    sys_multi(0);', ...GEAR.flatMap((g) => Array.from({ length: BAG_SLOTS }, () => [`    if (item_ck(${g})) {`, `        remove_item(${g});`, '    }']).flat()), '    message(128, 255, 0);', '}');
+      // An if block holds 255 bytes at most, too few for every try at every
+      // item, so the first visit raises FG_ROOM LOSS_BIT and each try is a
+      // block of its own while it is up (room flags clear when a room loads).
+      lines.push(
+        `if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, `    set(FG_ROOM, ${LOSS_BIT}, 0);`, '    sys_multi(0);', '}',
+        ...GEAR.flatMap((g) => Array.from({ length: BAG_SLOTS }, () => [`if (ck(FG_ROOM, ${LOSS_BIT}, 0) && item_ck(${g})) {`, `    remove_item(${g});`, '}']).flat()),
+        `if (ck(FG_ROOM, ${LOSS_BIT}, 0)) {`, `    set(FG_ROOM, ${LOSS_BIT}, 1);`, '    message(128, 255, 0);', '}',
+      );
     } else if (flag !== undefined) {
       lines.push(`if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, '    message(128, 255, 0);', '}');
     }

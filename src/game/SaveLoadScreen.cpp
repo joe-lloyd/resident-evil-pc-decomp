@@ -590,11 +590,9 @@ void SaveMode_AdoptCard(void)
     // The save's own game, her day or the shipped one, as character select
     // sets it for a new game.
     if (g_DcGameMode & SAVE_MODE_REB) {
-        g_GameMode = GAME_MODE_REB;
-        SetAssetMode("REB");
+        SwitchGameMode(GAME_MODE_REB);
     } else if (g_bRebMode) {
-        g_GameMode = GAME_MODE_OG;
-        SetAssetMode("");
+        SwitchGameMode(GAME_MODE_OG);
     }
 }
 
