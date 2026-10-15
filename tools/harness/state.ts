@@ -24,6 +24,19 @@ export interface Enemy {
   hp: number;
 }
 
+/** One BGM channel (g_SndBank): the WAV it loaded, '' for none; getSndStat (1 playing); getSndVol (hundredths of a dB, 0 loudest). */
+export interface BgmChannel {
+  file: string;
+  playing: boolean;
+  volume: number;
+}
+
+export interface Bgm {
+  /** g_BGM_STATE: bits 0-2 the room row's group, 3-5 the channels on, 6-7 how it starts; 0xFF silence. */
+  state: number;
+  channels: BgmChannel[];
+}
+
 export interface GameState {
   frame: number;
   /** game_loop's inner loop ran this frame: the game is in a room, not a menu screen. */
@@ -54,6 +67,8 @@ export interface GameState {
   /** The character on the front card: 0 Chris, 1 Jill, 2 Rebecca; -1 off the screen. */
   selectFront: number;
   banks: Uint8Array[];
+  /** The music, or null from a game too old to say. */
+  bgm: Bgm | null;
 }
 
 export type Reply =
@@ -138,6 +153,20 @@ function parseGameState(o: Record<string, unknown>): GameState {
     selectState: o.sel === undefined ? -1 : num(obj(o.sel, 'sel'), 'state'),
     selectFront: o.sel === undefined ? -1 : num(obj(o.sel, 'sel'), 'front'),
     banks: o.banks.map((b, i) => hexBytes(b, `banks[${i}]`)),
+    bgm: o.bgm === undefined ? null : parseBgm(obj(o.bgm, 'bgm')),
+  };
+}
+
+function parseBgm(o: Record<string, unknown>): Bgm {
+  if (!Array.isArray(o.ch) || o.ch.length !== 3) throw new ParseError('bgm.ch: expected 3 channels');
+  return {
+    state: num(o, 'state'),
+    channels: o.ch.map((c, i) => {
+      if (!Array.isArray(c) || c.length !== 3 || typeof c[0] !== 'string' || typeof c[1] !== 'number' || typeof c[2] !== 'number') {
+        throw new ParseError(`bgm.ch[${i}]: expected [file, playing, volume]`);
+      }
+      return { file: c[0], playing: c[1] !== 0, volume: c[2] };
+    }),
   };
 }
 
@@ -216,6 +245,12 @@ export function screen(s: GameState): Screen {
   if (s.debugMenu) return 'debug-menu';
   if (s.play) return 'gameplay';
   return 'other';
+}
+
+/** The WAVs playing now, by channel order; empty in silence. */
+export function playingMusic(s: GameState): string[] {
+  if (!s.bgm) throw new Error('this game does not report its music: build a newer one');
+  return s.bgm.channels.filter((c) => c.playing && c.file !== '').map((c) => c.file);
 }
 
 /** Room as the game's file name gives it: stage 0 room 4 is ROOM104. */

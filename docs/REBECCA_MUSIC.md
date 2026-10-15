@@ -48,10 +48,8 @@ The owner's page is <https://home.arpa/research/rebecca-music/>.
   use this.
 - **Her mode.** The overlay is checked first for every file
   (`src/system/AssetPath.cpp:364-376`), so a new WAV in `REB/sound/` works
-  with no engine change. `tools/rebecca/build.ts` already writes her footstep
-  sounds there. The table is the gap: it is compiled in and shared by every
-  mode. Her rooms sit in base slots whose rows are all 0xFF, so her day is
-  silent today.
+  with no engine change. The table was compiled in and shared by every mode,
+  so her mode now reads its own (below).
 
 ## How we make it
 
@@ -78,12 +76,114 @@ The owner's page is <https://home.arpa/research/rebecca-music/>.
 - **The checker.** `tools/rebecca/music/check.ts` evaluates each sketch with
   Strudel's own engine in Node, with no browser. It fails a sketch that
   doesn't parse, plays nothing, or uses a sound outside the list above.
-- **Rendering.** Strudel has had an offline WAV export since December 2025
-  ([PR #1674](https://codeberg.org/uzu/strudel/pulls/1674)). Nobody has shown
-  it running without a person at the browser. The fallback is our own small
-  renderer: query the events as `check.ts` does, play the VCSL samples, and
-  write the WAV, all in Node. It is more work, but it is ours and needs no
-  browser.
+- **Rendering.** `tools/rebecca/music/render.ts` turns a sketch into the
+  WAV the game plays, the same bytes every time. See "The render step" below.
+
+## Her music table
+
+Her mode reads its own table, so Chris's and Jill's games keep RE1's
+compiled one (`g_BgmNameTable`, `g_BgmRoomData`, `SoundTables.cpp`).
+
+- **The data.** `tools/rebecca/music/table.ts` works the table out from the
+  cues in `plan/music.ts`. Each cue is one group, as in RE1, so rooms with
+  the same cue keep the music going through the door. A cue plays:
+  - for `reuse`, RE1's own file under `sound/`, from the player's game;
+  - for `new`, its render, shipped as `sound/Reb_<cue>.wav`;
+  - nothing for `ambience`, or for a `new` cue with no render yet.
+- **The build.** `tools/rebecca/build.ts` writes the table into her overlay
+  as `REB/sound/music.dat` and copies the renders beside it. It also sets
+  each of her rooms' music state in her `BIO_CARD.DAT` (offset 0x33C, one
+  byte per room): 0x08 plays the room's group on channel 0, 0xFF is silence.
+  RE1's own audio never goes into the overlay: the save rooms' `Bgm_31` is
+  only a name in the table.
+- **The engine.** `src/game/RebMusic.cpp` loads `music.dat` and lays her
+  rows over RE1's. Her groups are numbered after RE1's 57, so
+  `bgm_load_and_start` takes their files from her table. A room she doesn't
+  list keeps RE1's row. The mansion's save room is one: its own script sets
+  the state that picks `Bgm_31` from RE1's row. Without the file, her mode
+  plays RE1's table, as before.
+- **Every room of hers has a row.** Some of her slots have music in RE1's
+  table. Before her table, three of her rooms played RE1's tracks by
+  accident: the summit trail and the weather station played `Bgm_09`, and
+  the mine lift played `Bgm_1e`. Now each is silent until its cue has audio.
+- **A stage change.** `init_room` marks the music off without stopping it,
+  so a silent room across a stage line kept the last room's track: the save
+  room's `Bgm_31` went on into the mine lift. In her mode a silent room now
+  fades out whatever is still loaded. RE1's own games keep their behaviour.
+- **Proven in the game** by `tools/harness/tests/music.ts`. Test mode
+  reports each BGM channel's file, whether it plays and its volume
+  (`docs/TEST_MODE.md`). In her mode the test jumps through rooms with the
+  debug room change, which goes through the same door transition as a door:
+  - the yard, the shed and the footbridge play `Reb_station`, and the shed
+    keeps it going through the door;
+  - the five save rooms of her day and the mansion's play `Bgm_31`;
+  - the hollow, the mine lift and the summit trail are silent;
+  - the yard still plays 100 s on, past the end of its 96 s file.
+
+  In Chris's game, RE1's save room plays `Bgm_13` while he meets Rebecca,
+  then `Bgm_31` when he comes back. Every channel plays at full volume (-1).
+  The first run caught a test mode fault: the game paused its sound whenever
+  another game on the test machine took the focus. Test mode now keeps its
+  sound playing.
+
+## The render step
+
+    node tools/rebecca/music/render.ts <@strudel/web 1.2.5 dist> [sketch...]
+
+It writes `tools/rebecca/music/renders/<sketch>.wav`, by default for every
+sketch a cue names. The renders are not in git; the build ships what is
+there. Run it again and the bytes are the same: the script prints each
+file's sha256. The two renders so far are on the LAN to listen to:
+<https://home.arpa/research/rebecca-music/renders/yard.wav> and
+<https://home.arpa/research/rebecca-music/renders/chase.wav>.
+
+- **Strudel itself plays it.** The script runs Strudel's own browser build,
+  the one the owner's page plays, in a headless Chrome. That is the
+  `chrome-headless-shell` Playwright already put on the old Mac, or `CHROME`.
+  It drives Chrome over the DevTools protocol with Node's own WebSocket. There
+  are no new dependencies, and nobody has to be at a browser. Our own
+  renderer would have needed every Strudel effect written again, and it
+  would never sound quite like the page the owner listens on.
+- **Why it's the same every time:**
+  - The audio context is an `OfflineAudioContext`, so nothing depends on the
+    clock.
+  - `Math.random` is seeded, in the page and in the audio worklets, so the
+    noise and the reverb's impulse don't change.
+  - The notes are queried and played in order, one by one, so the graph is
+    built the same way each time.
+  - Chrome mixes a node's inputs in an order that changes from run to run,
+    and float sums of three or more depend on the order. Every input to a
+    node that mixes goes through a small worklet that rounds it to steps of
+    2^-20, about -120 dB, and sums of those are exact in any order.
+  - Nothing changes the graph while it renders. Strudel's clean-up when a
+    voice ends is turned off, and every node is kept from the garbage
+    collector. Both used to land at a different moment each run.
+  - Every sample comes through the script. It pins VCSL to commit
+    `c1ea7bcc` (the sample map points at VCSL's `master`) and keeps a copy
+    in `~/.cache/rebecca-music`, or in `RE1_MUSIC_CACHE`.
+  - Before these, two renders of the yard differed by one float step in
+    about 50,000 samples, and the ADPCM pass spread that further. Now four
+    renders in a row give the same bytes.
+- **The loop.** The script finds the piece's length from its notes: the
+  fewest cycles after which they repeat. The yard repeats every 8 cycles
+  (48 s) and the chase every 4 (6.7 s). It renders three passes. The file
+  holds the first pass, which plays once, and the second, which loops. The
+  second pass already holds the tails of the notes before it, so the join
+  doesn't click. The third pass is there to measure the join: the loop
+  differs from it by at most 1 to 3 steps in 32768.
+- **The PS1 treatment** (`tools/rebecca/music/ps1.ts`):
+  - Strudel renders at 44100 Hz stereo, which is halved to 22050 Hz mono
+    through a 63-tap filter. RE1's own tracks are 22050 Hz mono.
+  - The level is set to RE1's. Its tracks measure -21 to -26 dB RMS, so
+    ours aim at -24, held back so no peak passes -1 dB.
+  - The PS1's 4-bit ADPCM, encoded as the console does and decoded again,
+    gives the grit.
+  - Reverb stays in the pattern.
+- **The file.** It is 16-bit, mono, 22050 Hz, with a `smpl` loop and the
+  `re1p` mark (`AudioFile.cpp`). The game's own loader, `AudioFile_Load`
+  compiled on its own, reports the yard's loop as frames 1058400 to 2116800:
+  48 s of intro, then 48 s that loop. The game's table marks the group as
+  looping, and XAudio2 then loops only that region.
 
 ## RE1's own music as a reference
 
@@ -169,7 +269,9 @@ Both are in `tools/rebecca/music/sketches/` and are checked by `check.ts`.
 | `chase.js` | the mine, unarmed | low ostinato, timpani, anvil, a bowed cluster |
 
 They are a test of the sound, not finished pieces. Nobody has listened to
-them yet.
+them yet. The yard is rendered and plays in the station's five rooms. The
+chase is rendered too, but no room plays it: its cue has no places, and the
+script that switches the mine to it is step 7.
 
 ## The plan
 
@@ -177,23 +279,14 @@ Each step ends in something to check:
 
 1. **Choose the sound.** The owner listens to the sketches and says what is
    right and wrong. Edited links come back through the pad.
-2. **Render one sketch to WAV, then automate it.**
-   - First by hand from Strudel's export.
-   - Then without a person: Playwright driving the export on jellybingus, or
-     our own renderer.
-   - Done when one command renders the same bytes twice.
-3. **Give it the PS1 treatment.**
-   - ffmpeg, which is installed on jellybingus, resamples to 22050 Hz mono.
-   - Bit reduction adds the grit.
-   - Reverb stays in the pattern.
-   - Compare against RE1's own tracks by ear.
-4. **Add loop points.** `tools/rebecca/music/loop.ts` writes the `smpl` and
-   `re1p` chunks. Prove it in the game: the intro plays once and the loop
-   joins without a click.
-5. **Give her mode its own table.** Her mode loads a music table from her
-   overlay in place of `g_BgmRoomData`. Chris's and Jill's games keep the
-   compiled table. Done when a placeholder WAV plays in the yard in her mode
-   and Jill's hall music is unchanged.
+2. **Render a sketch to WAV without a person.** Done: `render.ts`, the same
+   bytes twice.
+3. **Give it the PS1 treatment.** Done in `ps1.ts`. Still to do: compare it
+   with RE1's own tracks by ear.
+4. **Add loop points.** Done: the render writes them, and the game's loader
+   reads them. Still to do: the owner listens for the join.
+5. **Give her mode its own table.** Done: the yard plays our render in her
+   mode, and Chris's save room plays RE1's own track.
 6. **Write the pieces,** in order of how long she hears them:
    1. the station;
    2. the camp, the road and the mine;
@@ -205,8 +298,8 @@ Each step ends in something to check:
    - the generator hum joins once the power is on;
    - the mill joins once the race fills;
    - the mine switches to the chase.
-8. **Test it.** The harness walks the day and checks which files are loaded
-   in each room.
+8. **Test it.** Done: `tools/harness/tests/music.ts` visits rooms of hers
+   and Chris's save room, and checks the file each one plays.
 
 ## Settled
 
@@ -216,6 +309,13 @@ Each step ends in something to check:
   at the player's own `sound/Bgm_31.wav`; nothing is shipped.
 
 ## Open questions
+
+- **The renders aren't in git.** They are rebuilt, the same bytes, with one
+  command. Should they be committed, about 4 MB for the yard, so a build
+  needs no Chrome and no network?
+- **8-bit or 16-bit.** RE1's PC tracks are 8-bit. Ours are 16-bit after the
+  ADPCM pass, so the yard is 4.2 MB. In 8-bit it would be half the size, with
+  more hiss under a quiet piece.
 
 - Is Strudel's sound close enough, or does the owner want a more orchestral
   bank, such as Sonatina (CC Sampling Plus, needs a credit)?

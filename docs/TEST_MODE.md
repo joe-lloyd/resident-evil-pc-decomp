@@ -30,7 +30,7 @@ The game listens on `127.0.0.1:<port>` for one client; a newer connection
 replaces an older one. Test mode also:
 
 - ignores the real keyboard; only keys sent by the client count;
-- keeps running when the window is not in focus;
+- keeps running when the window is not in focus, its sound too;
 - skips the single-instance check, so several games can run side by side;
 - skips every movie, as if its file were missing.
 
@@ -54,6 +54,7 @@ reports raw values; `tools/harness/state.ts` turns them into meanings.
 | `enemies` | `[type, status, x, y, z, hp]` for each occupied slot of `g_EnemiesList` (status not 0) |
 | `msg` | `choice` (`g_menu_choice_id`; 0x80 means a message is open), `id` (the last message shown), `flags` (`g_message_flags`) and `menu` (`g_openMenuFlag`) |
 | `banks` | script flag banks 0-9 as hex bytes, numbered like `cmd_bit_test` |
+| `bgm` | `state` (`g_BGM_STATE`, 255 for silence) and `ch`: for each of the three BGM channels, `[file, playing, volume]`: the WAV it loaded (`""` for none), `getSndStat` (1 while it plays) and `getSndVol` (-1 is full, -9999 silent) |
 
 Flag `n` of a bank is in 32-bit word `n / 32`, counting from the top bit:
 `0x80000000 >> (n % 32)`.

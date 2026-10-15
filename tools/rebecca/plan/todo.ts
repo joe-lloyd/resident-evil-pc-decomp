@@ -93,6 +93,17 @@ const STATUS: Record<string, Status> = {
   'music-plan': 'done',
   'music-sketches': 'doing',
   'music-re1': 'done',
+  // Seen in the game by tests/music.ts: her table plays our render in the
+  // station's rooms and Bgm_31 in every save room, silent rooms stay silent,
+  // and Chris's save room plays RE1's own. render.ts gives the same bytes
+  // each run, and the game's loader reads the loop it writes.
+  'music-engine': 'done',
+  'music-render': 'done',
+  'music-loop': 'done',
+  'music-test': 'done',
+  'music-save': 'done',
+  // Rendered and playing in the game; nobody has listened to it yet.
+  'music-station': 'doing',
   'saves-plan': 'done',
   'saves-mode': 'done',
   'saves-names': 'done',
