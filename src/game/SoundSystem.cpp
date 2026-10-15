@@ -835,7 +835,14 @@ void update_room_bgm(void)
                (unsigned int)g_targetBgmState, (unsigned int)g_prevBgmState);
 
     if (g_targetBgmState == 0xFF) {
-        if ((unsigned char)g_BGM_STATE != 0xFF) {
+        // Port addition, her mode only: a stage change runs init_room, which
+        // marks the music off (g_BGM_STATE = 0xFF) without stopping it, so a
+        // silent room across a stage line kept the last room's track. RE1's
+        // own games keep that behaviour; in hers the room must be silent.
+        const bool stillPlaying = g_bRebMode && (g_SndBank[0].handle != 0 ||
+                                                 g_SndBank[1].handle != 0 ||
+                                                 g_SndBank[2].handle != 0);
+        if ((unsigned char)g_BGM_STATE != 0xFF || stillPlaying) {
             bgm_fade_out_all();
             g_BGM_STATE = 0xFF;
         }
