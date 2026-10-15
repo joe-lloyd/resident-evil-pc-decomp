@@ -5,6 +5,7 @@
 // be (a room is built when its renders exist); elsewhere it is set in STATUS
 // below. Drawn by todo-page.ts.
 import { AREAS, MAP_ITEMS } from './maps.ts';
+import { CUES } from './music.ts';
 import type { Link, Place, Plan, Step } from './plan.ts';
 
 export type Status = 'done' | 'doing' | 'todo';
@@ -50,6 +51,9 @@ const STATUS: Record<string, Status> = {
   'maps-plan': 'done',
   'people-pipeline': 'doing',
   'maps-research': 'doing',
+  'music-research': 'done',
+  'music-plan': 'done',
+  'music-sketches': 'doing',
 };
 
 const status = (id: string, fallback: Status = 'todo'): Status => STATUS[id] ?? fallback;
@@ -92,7 +96,7 @@ const MOVING: Record<string, string> = {
   'open-gate': "The estate's back gate swings open",
 };
 
-const CUTSCENES: readonly [string, string][] = [
+export const CUTSCENES: readonly [string, string][] = [
   ['cut-opening', 'Opening: dawn on the ridge, after Billy'],
   ['cut-phone', "The booth's phone: Hal on the line, telling her what the gondola needs"],
   ['cut-partner', "Meeting the ranger's partner in the woods"],
@@ -287,7 +291,28 @@ export function sections(plan: Plan, facts: Facts): Section[] {
         row('sound-footsteps', 'Footsteps to match each floor: gravel, boards, rock, water'),
         row('sound-ambience', 'Ambience for each area: wind, the forest, the mill, the mine'),
         row('sound-doors', 'Door, gate and hatch sounds'),
-        row('sound-music', 'Music for the acts and the cutscenes'),
+      ],
+    },
+    {
+      id: 'music',
+      title: 'Music',
+      blurb: "Music in the manner of RE1's: written as code, rendered to WAV the same way every time, and played by her mode's own music table. RE1's own tracks only from the player's files.",
+      items: [
+        row('music-research', 'How RE1 plays music, and how we make ours, written up (docs/REBECCA_MUSIC.md)'),
+        row('music-plan', 'A cue for every room and cutscene, checked against the plan (music.ts)'),
+        row('music-sketches', 'Sketches to listen to in Strudel, and the owner\'s verdict on the sound'),
+        row('music-render', 'A render step: a pattern in, a WAV out, with the PS1 treatment, the same every time'),
+        row('music-loop', 'Loop points written into each WAV, so an intro plays once and the rest loops'),
+        row('music-engine', "Her mode reads its own music table, and Chris's and Jill's stay as they are"),
+        row('music-states', 'Room scripts switch channels as she works: the generator hum, the mill, the chase'),
+        ...CUES.map((c) =>
+          row(
+            `music-${c.id}`,
+            c.kind === 'reuse' ? `${c.title}: RE1's ${c.file}, from the player's files` : c.kind === 'ambience' ? `${c.title}: ambience only` : `${c.title}`,
+            c.mood,
+          ),
+        ),
+        row('music-test', 'A test that walks the day and checks which track each room plays'),
       ],
     },
     {

@@ -126,6 +126,13 @@ key, a crowbar. The puzzles are small and physical: fuel for the generator,
 a sluice to run the sawmill, dynamite for a rockfall, a pump to drain the
 mine. Notes are messages, read where she finds them.
 
+## Music
+
+New pieces in the manner of RE1's, written as Strudel code with CC0 samples,
+and RE1's own save room music at the end, from the player's files. Every
+room and cutscene has a cue in `tools/rebecca/plan/music.ts`. The research
+and the plan are in [REBECCA_MUSIC.md](REBECCA_MUSIC.md).
+
 ## Scale
 
 Rebecca stands 2700 game units tall (measured on screen,

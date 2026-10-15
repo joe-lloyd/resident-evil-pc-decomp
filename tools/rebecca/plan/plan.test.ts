@@ -4,6 +4,8 @@ import { test } from 'node:test';
 import { day } from './day.ts';
 import { check, type Plan } from './plan.ts';
 import { checkMaps } from './maps.ts';
+import { checkMusic } from './music.ts';
+import { CUTSCENES } from './todo.ts';
 
 test("Rebecca's day can be played through to her credits", () => {
   const r = check(day);
@@ -62,4 +64,8 @@ test('a find nothing uses is flagged', () => {
 
 test('every room is on one map, and each map is a step she can take', () => {
   assert.deepEqual(checkMaps(day), []);
+});
+
+test('every room and cutscene has its music decided, within RE1\'s three channels', () => {
+  assert.deepEqual(checkMusic(day, CUTSCENES.map(([id]) => id)), []);
 });
