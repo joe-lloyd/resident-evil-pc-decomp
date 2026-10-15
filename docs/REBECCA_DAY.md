@@ -235,6 +235,12 @@ Built so far, beyond the list above:
   her day is installed; her ID is built from the player's own select sheet
   and status faces (`tools/rebecca/card.ts`). Choosing her switches the
   session to her mode and starts her day; her opening and intro come later.
+- **Her map screen** (`tools/rebecca/maps`, `src/game/RebMaps.cpp`): an
+  overview of the mountain that unlocks in four stages, a floor plan for
+  each of her eleven areas drawn from the scenes, and six maps to pick up.
+  The rooms she has been in are lit, the rest dim once she has the map, and
+  hers blinks. [REBECCA_MAPS.md](REBECCA_MAPS.md) has how RE1's works and
+  how hers is built.
 - **Walks between outdoor rooms.** A door of the walk type plays a few
   seconds of a dark forest path at her eye height, with her footsteps
   crunching, where a door would open (`src/game/PathWalk.cpp`,

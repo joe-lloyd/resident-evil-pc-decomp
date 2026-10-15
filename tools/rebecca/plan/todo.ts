@@ -88,7 +88,16 @@ const STATUS: Record<string, Status> = {
   'people-pipeline': 'done',
   'people-partner-model': 'doing',
   'people-hal-model': 'doing',
-  'maps-research': 'doing',
+  // Written up in docs/REBECCA_MAPS.md, and her map screen proved in the game
+  // by tools/harness/tests/maps.ts: each map picked up, each area's plan lit,
+  // dimmed and blinking as RE1's, the overview's four stages, Chris's unchanged.
+  'maps-research': 'done',
+  'maps-overview': 'done',
+  'maps-engine': 'done',
+  'maps-states': 'done',
+  'maps-test': 'done',
+  ...Object.fromEntries(AREAS.map((a): [string, Status] => [`map-area-${a.id}`, 'done'])),
+  ...Object.fromEntries(MAP_ITEMS.flatMap((m): [string, Status][] => [[`map-item-${m.id}`, 'done'], [`find-${m.step}`, 'done']])),
   'music-research': 'done',
   'music-plan': 'done',
   'music-sketches': 'doing',
