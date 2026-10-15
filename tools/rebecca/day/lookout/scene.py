@@ -3,7 +3,9 @@
 The ranger left in a hurry. Breakfast is half eaten, a chair lies where it
 fell, the rifle is gone from its rack, and the east window is smashed in with
 blood on the sill. The stove is still warm and the lamp still burns. The radio
-on the desk hisses with S.T.A.R.S. chatter. His keys hang by the door.
+on the desk hisses with S.T.A.R.S. chatter. His keys hang by the door. His
+typewriter stands on a table in the corner by the window, and the item box
+at the bunk's foot: she saves here.
 
 Metres, real sizes (reb.UNITS turns them into game units): the floor is
 x 2.0-7.0, y 2.0-6.0, the ceiling 2.45 up. The door is in the south wall.
@@ -18,6 +20,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
+import kit  # noqa: E402
 from mathutils import Vector  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))
@@ -325,10 +328,15 @@ def build():
     reb.mask(reb.cloth("Blanket end", wool, (bx0 - 0.08, (by0 + by1) / 2 - 0.1, 0.22), (0.45, 1.1), rot=(0, -1.35, 0), lumps=0.04, seed=2))
     for i, (bxp, byp, rz) in enumerate(((5.75, 5.6, 0.3), (5.62, 5.35, 1.4))):
         reb.prim("cube", "Boot", reb.mat_plain("Leather", (0.08, 0.05, 0.03), 0.6), (bxp, byp, 0.06 if i else 0.15), (0.11, 0.28, 0.12) if i else (0.11, 0.12, 0.3), rot=(0, 0, rz) if not i else (math.pi / 2 * 0.95, 0, rz), bevel=0.02)
-    # The footlocker at the bunk's foot.
-    solid(reb.prim("cube", "Footlocker", reb.mat_plain("Army green", (0.09, 0.11, 0.06), 0.6), (6.5, 3.92, 0.22), (0.7, 0.42, 0.42), bevel=0.01))
-    for x in (6.18, 6.82):
-        reb.prim("cube", "Footlocker strap", brass, (x, 3.92, 0.22), (0.03, 0.44, 0.44))
+    # The item box at the bunk's foot, RE1's own shrunk to a footlocker: the game puts its lid on.
+    box_lid = kit.item_box("Item box", (6.5, 3.905), (0, -1), scale=0.65)
+    # The typing table in the north-east corner, by the broken window: his
+    # typewriter, a report half typed. Where she saves; the game puts the
+    # ink ribbons beside it.
+    # Not masked: it stands in the corner, where she can't get behind it, and
+    # a mask would draw its top over the ribbons the game puts on it.
+    solid(kit.table("Typing table", pine, (6.52, 2.24, 0.0), size=(0.85, 0.42, 0.72)), masked=False)
+    kit.typewriter("Typewriter", (6.42, 2.24, 0.72))
 
     # The stove against the west wall, fire behind its grate, the kettle on top.
     sx, sy = 2.42, 4.7
@@ -433,7 +441,9 @@ def build():
 
     room_box = {"x0": reb.g(X0), "z0": reb.g(Y0), "x1": reb.g(X1), "z1": reb.g(Y1)}
     door_gap = {"x0": reb.g(DOOR[0]), "z0": reb.g(Y1) - 10, "x1": reb.g(DOOR[1]), "z1": reb.g(Y1 + 0.6)}
-    reb.export(CAMERAS, OUT, samples=768, extra={"bounds": room_box, "exit": door_gap}, anim={"frames": FRAMES, "ticks": 3, "set": pose})
+    # Where she saves, for the builder; room.c places the lid and the zones.
+    saves = {"lid": box_lid}
+    reb.export(CAMERAS, OUT, samples=768, extra={"bounds": room_box, "exit": door_gap, "saves": saves}, anim={"frames": FRAMES, "ticks": 3, "set": pose})
 
 
 build()

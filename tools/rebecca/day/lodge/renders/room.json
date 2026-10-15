@@ -88,6 +88,22 @@
   },
   {
    "shape": "box",
+   "x0": 5601,
+   "z0": 1734,
+   "x1": 6706,
+   "z1": 2482,
+   "name": "Typing table"
+  },
+  {
+   "shape": "box",
+   "x0": 3221,
+   "z0": 6342,
+   "x1": 5398,
+   "z1": 7817,
+   "name": "Item box"
+  },
+  {
+   "shape": "box",
    "x0": 7565,
    "z0": 1793,
    "x1": 8585,
@@ -198,6 +214,26 @@
    "text": "This is where it happened. Someone called Scott."
   }
  ],
+ "saves": {
+  "typewriter": {
+   "x0": 5525,
+   "z0": 1700,
+   "x1": 6800,
+   "z1": 2975
+  },
+  "box": {
+   "x0": 3315,
+   "z0": 5865,
+   "x1": 5389,
+   "z1": 7820
+  },
+  "lid": {
+   "x": 4310,
+   "z": 7809,
+   "y": -1440,
+   "angle": 1024
+  }
+ },
  "entry": "Someone left the lamp burning.",
  "notes": [
   "high over the washstand: the table and its lamp, the bed, the fireplace, the tools",

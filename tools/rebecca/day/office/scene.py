@@ -19,7 +19,8 @@ yard; windows in the south wall at x 3.75-4.35 and the east wall at y
 pipe at (1.6, 1.8). The desk at (3.2, 2.35), the foreman against the north
 wall behind it, the safe in the south-west corner, the filing cabinet and
 fan in the north-east, the gun rack on the east wall at y 3.0-3.8, the map
-on the west wall.
+on the west wall. Where she saves: his typewriter on a stand between the
+safe and the door, and the item box along the east wall, under the gun rack.
 
 Moving: the desk fan turning, a letter lifting in its draught, the lamp's
 light wavering as the power sags.
@@ -219,8 +220,16 @@ def build():
         reb.prim("cube", f"Rack notch {i}", mat("black"), (X1 - 0.055, 3.1 + i * 0.2, 1.6), (0.01, 0.05, 0.05))
         kit.rod(f"Rack peg {i}", frame_m, (X1 - 0.03, 3.1 + i * 0.2, 0.98), (X1 - 0.16, 3.1 + i * 0.2, 0.98), 0.012, 6)
     kit.splat("Clean shape on the wall", reb.mat_plain("Unfaded pine", (0.45, 0.33, 0.19), 0.8), (X1 - 0.006, 3.3, 1.28), 0.05, rot=(0, math.pi / 2, 0), stretch=(1.0, 6.0), seed=3, lumps=0.05)
-    reb.prim("sphere", "Hard hat on the floor", reb.mat_plain("Hard hat white", (0.55, 0.53, 0.48), 0.4), (3.75, 3.35, 0.07), (0.3, 0.26, 0.16), rot=(0.4, 0.2, 0))
+    reb.prim("sphere", "Hard hat on the floor", reb.mat_plain("Hard hat white", (0.55, 0.53, 0.48), 0.4), (3.15, 2.95, 0.07), (0.3, 0.26, 0.16), rot=(0.4, 0.2, 0))
     reb.cloth("Jacket over the safe", mat("canvas"), (1.4, 3.6, 0.99), (0.55, 0.7), cuts=8, lumps=0.05, seed=4)
+
+    # ---- Where she saves: his typewriter on a stand by the door, the
+    # payroll half typed in it; the item box along the east wall, under the
+    # empty gun rack.
+    stand = kit.table("Typing stand", desk_m, (2.1, 3.73, 0.0), size=(0.6, 0.42, 0.7))
+    reb.mask(reb.wall(stand))
+    reb.mask(kit.typewriter("His typewriter", (2.1, 3.73, 0.7), rot=math.pi))
+    box_lid = kit.item_box("Item box", (X1 - 0.43, 3.365), (-1, 0))
 
     # ---- The west wall: the map of the camp, drawn by hand; a calendar; notices.
     mapc = Vector((X0 + 0.012, 2.85, 1.5))
@@ -256,7 +265,7 @@ def build():
     room.check((DESK[0] - 0.7, DESK[1] + 0.36, DESK[0] + 0.1, DESK[1] + 0.8), "The payroll ledger. Twenty-one names.\nHe crossed them out, one by one. The last ones aren't crossed out. There was nobody left to do it.")
     room.check((1.1, 2.9, 2.0, 3.25), "A safe. It's locked.\nA combination dial: three numbers.")
     room.check((X0, 2.4, X0 + 0.6, 3.3), "A map of the camp, drawn by hand. Somebody marked a red X by the workshop.")
-    room.check((X1 - 0.6, 3.0, X1, 3.8), "A gun rack. Every peg is empty.")
+    room.save_room(typewriter=(1.8, 3.15, 2.45, Y1), box=(3.45, 2.75, X1, Y1), lid=box_lid)
     room.check((3.6, 1.55, X1, 2.2), "A desk fan, still running. The power's still on somewhere.")
     room.entry = "The smell hits first."
     # Many scenes share the render machine's GPU: keep each frame cheap.

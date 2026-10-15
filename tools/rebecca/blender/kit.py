@@ -64,6 +64,7 @@ class Room:
         self.doors = []
         self.checks = []
         self.voids = []
+        self.saves = {}
         self.entry = None
 
     def camera(self, eye, look, fov=190, note=""):
@@ -87,6 +88,13 @@ class Room:
         """A place she can examine; `text` is up to a few short lines, '\\n' between pages."""
         x0, y0, x1, y1 = zone
         self.checks.append({"zone": {"x0": reb.g(x0), "z0": reb.g(y0), "x1": reb.g(x1), "z1": reb.g(y1)}, "text": text})
+
+    def save_room(self, typewriter, box, lid):
+        """The room's typewriter and item box: the zones she faces to use them,
+        each the furniture's footprint and the strip of floor in front where
+        she stands, as RE1's are; and the box's lid, as item_box() placed it."""
+        rect = lambda r: {"x0": reb.g(r[0]), "z0": reb.g(r[1]), "x1": reb.g(r[2]), "z1": reb.g(r[3])}
+        self.saves = {"typewriter": rect(typewriter), "box": rect(box), "lid": dict(lid)}
 
     def void(self, rect):
         """Floor inside the bounds that is not there: a drop, a pit, deep water."""
@@ -113,6 +121,10 @@ class Room:
             c["from"] = (c["from"][0] + gx, c["from"][1], c["from"][2] + gz)
             c["to"] = (c["to"][0] + gx, c["to"][1], c["to"][2] + gz)
         rects = [d["zone"] for d in self.doors] + [c["zone"] for c in self.checks] + self.voids
+        if self.saves:
+            rects += [self.saves["typewriter"], self.saves["box"]]
+            self.saves["lid"]["x"] += gx
+            self.saves["lid"]["z"] += gz
         for r in rects:
             r["x0"] += gx
             r["x1"] += gx
@@ -135,6 +147,7 @@ class Room:
             "voids": self.voids,
             "doors": self.doors,
             "checks": self.checks,
+            "saves": self.saves or None,
             "entry": self.entry,
             "notes": self.notes,
         }
@@ -656,6 +669,82 @@ def crate(name, m, at, size=(0.6, 0.5, 0.5), rot=0.0, open_=False):
         lid = reb.prim("cube", f"{name} lid", m, (size[0] * 0.7, 0.1, 0.02), (size[0], size[1], 0.03), rot=(0, 0.25, 0.4))
         lid.parent = ob
     return ob
+
+
+def typewriter(name, at, rot=0.0, body_m=None, page=True):
+    """A heavy black office typewriter standing on `at` (its bottom centre),
+    its keys toward +y turned by `rot` about z, a page wound into it. One
+    mesh, about 0.36 x 0.32 m: big shapes that still read at 320 x 240."""
+    body = body_m or reb.mat_metal("Typewriter enamel", (0.018, 0.018, 0.02), 0.25)
+    keys = reb.mat_plain("Typewriter keys", (0.5, 0.48, 0.42), 0.5)
+    platen = mat("rubber")
+    parts = [
+        reb.prim("cube", "frame", body, (0, -0.02, 0.05), (0.34, 0.24, 0.1), bevel=0.012),
+        # The keyboard's slope down toward her.
+        reb.prim("cube", "deck", body, (0, 0.1, 0.04), (0.32, 0.12, 0.05), rot=(-0.35, 0, 0), bevel=0.008),
+        # The type basket's hood and the carriage across the back.
+        reb.prim("cyl", "hood", body, (0, -0.02, 0.1), (0.26, 0.12, 0.08), rot=(0, math.pi / 2, 0), segments=16),
+        reb.prim("cube", "carriage", body, (0, -0.1, 0.15), (0.4, 0.07, 0.05), bevel=0.006),
+        reb.prim("cyl", "platen", platen, (0, -0.1, 0.18), (0.05, 0.05, 0.42), rot=(0, math.pi / 2, 0), segments=14),
+    ]
+    for side in (-1, 1):
+        parts.append(reb.prim("cyl", "knob", platen, (side * 0.225, -0.1, 0.18), (0.045, 0.045, 0.03), rot=(0, math.pi / 2, 0), segments=12))
+        parts.append(reb.prim("cyl", "spool", body, (side * 0.1, -0.02, 0.145), (0.06, 0.06, 0.015), segments=12))
+    parts.append(rod("return lever", mat("steel"), (-0.2, -0.08, 0.2), (-0.27, 0.0, 0.24), 0.006))
+    for row in range(4):
+        for k in range(10 - (row == 3) * 2):
+            x = (k - 4.5 + (row == 3)) * 0.028 + row * 0.006
+            parts.append(reb.prim("cyl", "key", keys, (x, 0.145 - row * 0.03, 0.07 + row * 0.011), (0.02, 0.02, 0.012), segments=8))
+    parts.append(reb.prim("cube", "space bar", keys, (0, 0.17, 0.06), (0.16, 0.018, 0.01)))
+    if page:
+        paper = reb.prim("cube", "page", mat("paper"), (0, -0.13, 0.3), (0.21, 0.004, 0.24), rot=(-0.25, 0, 0))
+        parts.append(paper)
+    ob = join(name, parts, origin=(0, 0, 0))
+    ob.location = at
+    ob.rotation_euler = (0, 0, rot)
+    return ob
+
+
+# RE1's item box: its lid is a 3D object of the game's own, the same in every
+# save room (object model 0 of ROOM1000, 1440 x 2160 units, hinged along one
+# long edge), placed by the room script on a body painted into the background.
+ITEM_BOX_DEPTH = 1440 / reb.UNITS
+ITEM_BOX_WIDTH = 2160 / reb.UNITS
+# The lid sits at game Y -1440 and reaches 51 units below that: the body's top.
+ITEM_BOX_HEIGHT = (1440 - 51) / reb.UNITS
+ITEM_BOX_LID_Y = -1440
+
+
+def item_box(name, at, face, scale=1.0):
+    """The body of RE1's item box on the floor at `at` (x, y: its middle), its
+    front toward `face` (one of the four axis directions), in the look of the
+    game's lid: dark rusted metal in dull embossed trim. `scale` shrinks it
+    and the lid together, for a small room. Not masked: it stands against a
+    wall, and a mask would draw over the lid. Returns the lid's placement for
+    the room script: game x, y, z of its hinge, its angle and its scale."""
+    fx, fy = face
+    w, d, h = ITEM_BOX_WIDTH * scale, ITEM_BOX_DEPTH * scale, ITEM_BOX_HEIGHT * scale
+    rust = reb.mat_surface("Item box rust", [(0.0, (0.06, 0.035, 0.025)), (0.6, (0.12, 0.07, 0.045)), (1.0, (0.24, 0.11, 0.05))], scale=14, rough=0.6, bump=0.35)
+    trim = reb.mat_surface("Item box trim", [(0.0, (0.1, 0.095, 0.09)), (0.5, (0.18, 0.17, 0.16)), (1.0, (0.26, 0.25, 0.23))], scale=40, rough=0.45, bump=0.8)
+    # Built facing +y (south), then turned.
+    parts = [reb.prim("cube", "body", rust, (0, 0, h / 2), (w - 0.02, d - 0.02, h), bevel=0.006)]
+    t = 0.07 * scale
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            parts.append(reb.prim("cube", "corner", trim, (sx * (w / 2 - t / 2), sy * (d / 2 - t / 2), h / 2), (t, t, h), bevel=0.008))
+    parts.append(reb.prim("cube", "rim", trim, (0, 0, h - t / 2), (w, d, t), bevel=0.008))
+    parts.append(reb.prim("cube", "plinth", trim, (0, 0, 0.04 * scale), (w + 0.01, d + 0.01, 0.08 * scale), bevel=0.008))
+    parts.append(reb.prim("cube", "front panel frame", trim, (0, d / 2 - 0.004, h * 0.48), (w * 0.62, 0.012, h * 0.55), bevel=0.004))
+    parts.append(reb.prim("cube", "front panel", rust, (0, d / 2 + 0.002, h * 0.48), (w * 0.56, 0.012, h * 0.47)))
+    parts.append(reb.prim("cube", "lock plate", trim, (0, d / 2 + 0.01, h - 0.11 * scale), (0.12 * scale, 0.012, 0.1 * scale), bevel=0.003))
+    ob = join(name, parts, origin=(0, 0, 0))
+    ob.location = (at[0], at[1], 0.0)
+    # Front +y turned to `face`: +y is angle 3072, the game's south.
+    yaw = math.atan2(fy, fx) - math.pi / 2
+    ob.rotation_euler = (0, 0, yaw)
+    reb.wall(ob)
+    hinge = (at[0] - fx * d / 2, at[1] - fy * d / 2)
+    return {"x": reb.g(hinge[0]), "z": reb.g(hinge[1]), "y": round(ITEM_BOX_LID_Y * scale), "angle": angle(face), "scale": scale}
 
 
 def drum(name, m, at, tipped=False, rot=0.0):

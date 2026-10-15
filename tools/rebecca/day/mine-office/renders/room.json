@@ -51,6 +51,14 @@
    "x1": 7667,
    "z1": 2788,
    "name": "Powder box 0"
+  },
+  {
+   "shape": "box",
+   "x0": 6342,
+   "z0": 3391,
+   "x1": 7817,
+   "z1": 5568,
+   "name": "Item box"
   }
  ],
  "anim": {
@@ -85,9 +93,9 @@
  "checks": [
   {
    "zone": {
-    "x0": 3485,
+    "x0": 4335,
     "z0": 1700,
-    "x1": 5865,
+    "x1": 5100,
     "z1": 3145
    },
    "text": "A map of the workings. The adit, the junction with the pump,\nthe lift up to the top. The old gallery is marked FLOODED.\nThere's a bloody thumbprint on it."
@@ -124,7 +132,7 @@
     "x0": 6460,
     "z0": 2040,
     "x1": 7820,
-    "z1": 4930
+    "z1": 3315
    },
    "text": "The candles are new. GIANT POWDER on the boxes. Empty."
   },
@@ -138,6 +146,27 @@
    "text": "Water's coming through the roof. The bucket ran over long ago."
   }
  ],
+ "saves": {
+  "typewriter": {
+   "x0": 3485,
+   "z0": 1700,
+   "x1": 4335,
+   "z1": 3485
+  },
+  "box": {
+   "x0": 5780,
+   "z0": 3400,
+   "x1": 7820,
+   "z1": 5559
+  },
+  "lid": {
+   "x": 7809,
+   "z": 4480,
+   "y": -1440,
+   "angle": 2048,
+   "scale": 1.0
+  }
+ },
  "entry": "Candles. Someone lit these today.",
  "notes": [
   "high by the door: the desk under the mine map, the candles, the helmet, his jacket on the chair",

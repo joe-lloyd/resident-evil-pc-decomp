@@ -12,7 +12,9 @@ eyes out of the smiling family on it.
 
 Metres: the floor is x 1.0-4.2, y 1.0-3.6, 2.4 high. The door is in the
 south wall at x 2.6-3.5, out onto the platform. The control desk runs under
-the big west window, which looks out over the platform to the car.
+the big west window, which looks out over the platform to the car. Where
+she saves: his typewriter on a stand against the north wall, and the item
+box along the east wall, under the fuse box and the phone.
 
 Moving: the phone's handset turning on its cord; the strip light failing;
 the heater's glow.
@@ -156,8 +158,8 @@ def build():
     # The wall phone, its handset hanging on the cord.
     reb.prim("cube", "Wall phone", mat("black"), (X1 - 0.05, 2.7, 1.45), (0.08, 0.18, 0.25), bevel=0.02)
     pivot = reb.prim("sphere", "Cord pivot", mat("black"), (X1 - 0.1, 2.7, 1.33), (0.02, 0.02, 0.02))
-    handset = reb.prim("cube", "Handset", mat("black"), (0, 0, -0.62), (0.05, 0.05, 0.2), bevel=0.015)
-    cord = kit.rod("Phone cord", mat("black"), (0, 0, 0), (0, 0, -0.52), 0.006, 6)
+    handset = reb.prim("cube", "Handset", mat("black"), (0, 0, -0.4), (0.05, 0.05, 0.2), bevel=0.015)
+    cord = kit.rod("Phone cord", mat("black"), (0, 0, 0), (0, 0, -0.3), 0.006, 6)
     handset.parent = pivot
     cord.parent = pivot
     # The poster: the view he sold, the family with their eyes scratched out.
@@ -176,14 +178,22 @@ def build():
     coil_m = reb.mat_emit("Heater coil", (1.0, 0.3, 0.05), 6)
     for i in range(3):
         reb.prim("cyl", f"Coil {i}", coil_m, (1.55, 3.2, 0.15 + i * 0.12), (0.02, 0.02, 0.28), rot=(0, math.pi / 2, 0), segments=8)
-    reb.prim("cube", "First aid box", mat("white paint"), (X1 - 0.08, 2.15, 1.05), (0.1, 0.3, 0.25))
-    reb.prim("cube", "First aid lid", mat("white paint"), (X1 - 0.2, 2.0, 1.05), (0.02, 0.3, 0.25), rot=(0, 0, 0.9))
-    kit.text("Cross", "+", mat("red paint"), (X1 - 0.135, 2.15, 1.05), size=0.12, rot=(math.pi / 2, 0, -math.pi / 2))
+    reb.prim("cube", "First aid box", mat("white paint"), (X1 - 0.08, 2.15, 1.2), (0.1, 0.3, 0.25))
+    reb.prim("cube", "First aid lid", mat("white paint"), (X1 - 0.2, 2.0, 1.2), (0.02, 0.3, 0.25), rot=(0, 0, 0.9))
+    kit.text("Cross", "+", mat("red paint"), (X1 - 0.135, 2.15, 1.2), size=0.12, rot=(math.pi / 2, 0, -math.pi / 2))
     for i in range(7):
         x = 3.05 + rng.uniform(-0.1, 0.1)
         y = 3.4 - i * 0.32
         kit.splat(f"Bootprint {i}", mat("mud"), (x + (0.12 if i % 2 else -0.12), y, 0.0), 0.06, seed=20 + i, stretch=(0.6, 1.4), lumps=0.2)
     kit.web("Web", (X1 - 0.02, Y0 + 0.02, H - 0.02), 0.3, (-1, 1))
+
+    # ---- Where she saves: his typewriter on a stand against the north wall,
+    # the day's log half typed; the item box along the east wall, under the
+    # fuse box, the first aid box and the phone.
+    stand = kit.table("Typing stand", frame_m, (2.25, 1.26, 0.0), size=(0.6, 0.42, 0.7))
+    reb.mask(reb.wall(stand))
+    reb.mask(kit.typewriter("His typewriter", (2.25, 1.26, 0.7)))
+    box_lid = kit.item_box("Item box", (X1 - 0.43, 2.05), (-1, 0))
 
     # ---- Light: low morning sun through the window and the door, the strip light failing.
     kit.time_light("morning", sun_heading=290, sun_energy=2.5)
@@ -209,10 +219,12 @@ def build():
     room.check((X0, 1.1, X0 + 0.9, 1.6), "The key switch for the drive. It's empty.\nNo key, no gondola.")
     room.check((X0, 2.4, X0 + 0.9, 2.9), "His coffee went over. A photo of a girl with a fish, propped against the glass.")
     room.check((1.9, 2.4, 2.7, 3.0), "Gauze, soaked through. He dressed something in a hurry.\nA bite, by the look of the first aid box. Everything in it is gone.")
-    room.check((X1 - 0.7, 1.3, X1, 1.95), "Fuse F3 is burnt black. The wall above it is sooty.")
-    room.check((X1 - 0.7, 2.45, X1, 2.95), "The handset is hanging off the hook. The line's dead.")
+    # The fuse box and the phone hang over the item box: their zones reach out past its front.
+    room.check((X1 - 1.0, 1.3, X1, 1.95), "Fuse F3 is burnt black. The wall above it is sooty.")
+    room.check((X1 - 1.0, 2.45, X1, 2.95), "The handset is hanging off the hook. The line's dead.")
     room.check((X1 - 0.7, 2.95, X1, 3.45), "ARKLAY SKYWAY. See the valley the way the eagles do.\nSomeone has scratched out the family's eyes.")
     room.check((DOOR[0] - 0.5, Y1 - 0.6, DOOR[0], Y1), "A handprint in blood on the door frame. It's still tacky.")
+    room.save_room(typewriter=(1.95, Y0, 2.55, 1.8), box=(X1 - 1.0, 1.97, X1, 2.43), lid=box_lid)
     room.entry = "The heater's still on. He can't have gone long."
     room.export(anim)
 

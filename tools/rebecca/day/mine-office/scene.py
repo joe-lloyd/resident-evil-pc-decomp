@@ -15,7 +15,8 @@ Metres: the floor is x 1.0-4.6, y 1.0-3.8; the rock roof is about 2.4
 high. The plank front is the south wall, its door at x 2.4-3.3 out into
 the adit. The desk and the map are on the north wall, the cot along the
 west wall, the ledge of candles and the old powder boxes on the east wall,
-the bucket under the drip in the middle.
+the bucket under the drip in the middle. Where she saves: his typewriter
+on the desk, and the item box along the east wall, past the powder boxes.
 
 Moving: the candle flames; drops falling from the roof into the bucket.
 """
@@ -110,7 +111,8 @@ def build():
     for words, (x, z), m_ in (("ADIT", (2.15, 1.3), ink), ("PUMP", (2.95, 1.53), ink), ("LIFT", (3.12, 1.88), ink), ("FLOODED", (3.22, 1.36), red_ink), ("ARKLAY SILVER - WORKINGS", (2.75, 2.0), ink), ("YOU ARE HERE", (2.42, 1.36), red_ink)):
         kit.text(f"Map words {words}", words, m_, (x, Y0 + 0.07, z), size=0.035, rot=(math.pi / 2, 0, math.pi))
     kit.splat("Thumb on the map", mat("old blood"), (3.05, Y0 + 0.067, 1.58), 0.025, rot=(math.pi / 2, 0, 0), seed=2)
-    reb.prim("cube", "Ledger", reb.mat_plain("Ledger", (0.18, 0.05, 0.03), 0.6), (2.25, Y0 + 0.45, top + 0.04), (0.32, 0.42, 0.07), rot=(0, 0, 0.12))
+    # The shift boss's typewriter, for the accident book: where she saves.
+    reb.mask(kit.typewriter("Typewriter", (2.3, Y0 + 0.45, top), rot=0.05))
     kit.papers("Old papers", (2.95, Y0 + 0.45, top), spread=0.35, count=6, seed=4)
     helmet = reb.prim("sphere", "Miner's helmet", reb.mat_plain("Helmet leather", (0.1, 0.075, 0.045), 0.55), (3.25, Y0 + 0.4, top + 0.09), (0.3, 0.27, 0.2), segments=14)
     reb.prim("cyl", "Helmet brim", reb.mat_plain("Helmet leather", (0.1, 0.075, 0.045), 0.55), (3.25, Y0 + 0.4, top + 0.025), (0.38, 0.34, 0.02), segments=16)
@@ -147,7 +149,9 @@ def build():
     for k, x in enumerate((1.45, 1.85)):
         reb.prim("cube", "Peg", timber, (x, Y1 - 0.02, 1.7), (0.03, 0.12, 0.03))
         reb.prim("sphere", f"Old helmet {k}", reb.mat_plain("Helmet leather", (0.1, 0.075, 0.045), 0.55), (x, Y1 - 0.13, 1.72), (0.26, 0.24, 0.18))
-    kit.rod("Coil of fuse", mat("black"), (X1 - 0.2, 3.2, 0.05), (X1 - 0.2, 3.2, 0.12), 0.12, 12)
+    # The item box along the east wall, past the powder boxes.
+    box_lid = kit.item_box("Item box", (X1 - 0.43, 2.635), (-1, 0))
+    kit.rod("Coil of fuse", mat("black"), (X1 - 0.25, 3.55, 0.05), (X1 - 0.25, 3.55, 0.12), 0.12, 12)
 
     # ---- The drip, the bucket run over, Hal's drops in and out; webs high in the corners.
     reb.prim("cyl", "Bucket", mat("rust"), (DRIP[0], DRIP[1], 0.18), (0.32, 0.32, 0.36), segments=14)
@@ -178,11 +182,12 @@ def build():
 
     # ---- What the game needs.
     room.door("tunnel", (d0, Y1 - 0.5, d1, Y1), arrive=(2.85, 3.0), face=(0, -1))
-    room.check((2.05, Y0, 3.45, Y0 + 0.85), "A map of the workings. The adit, the junction with the pump,\nthe lift up to the top. The old gallery is marked FLOODED.\nThere's a bloody thumbprint on it.")
+    room.check((2.55, Y0, 3.0, Y0 + 0.85), "A map of the workings. The adit, the junction with the pump,\nthe lift up to the top. The old gallery is marked FLOODED.\nThere's a bloody thumbprint on it.")
     room.check((3.0, Y0, 3.6, Y0 + 0.85), "An old miner's helmet with a carbide lamp on it.")
     room.check((2.2, Y0 + 0.85, 3.1, Y0 + 1.6), "A jacket over the chair. ARKLAY SKYWAY on the patch.\nHal's.")
     room.check((X0, 1.7, X0 + 1.0, 3.6), "A cot, pulled out. A bandage soaked through on the blanket.\nHe rested here, then went on down.")
-    room.check((X1 - 0.8, 1.2, X1, 2.9), "The candles are new. GIANT POWDER on the boxes. Empty.")
+    room.check((X1 - 0.8, 1.2, X1, 1.95), "The candles are new. GIANT POWDER on the boxes. Empty.")
+    room.save_room(typewriter=(2.05, Y0, 2.55, Y0 + 1.05), box=(3.4, 2.0, X1, 3.27), lid=box_lid)
     room.check((DRIP[0] - 0.4, DRIP[1] - 0.4, DRIP[0] + 0.4, DRIP[1] + 0.4), "Water's coming through the roof. The bucket ran over long ago.")
     room.entry = "Candles. Someone lit these today."
     room.export(anim)

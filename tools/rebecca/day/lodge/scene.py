@@ -15,7 +15,9 @@ estate's back gate key hangs on its hook by the door, tagged.
 Metres: the floor is x 1.0-5.4, y 1.0-4.6, 2.5 high to the beams. The door
 is in the east wall at y 1.7-2.6, out to the creek. The window is in the
 north wall at x 2.2-3.2. The fireplace is in the south-west corner, the bed
-along the south wall, the washstand in the north-east corner.
+along the south wall, the washstand in the north-east corner. Where she
+saves: his typewriter on a table by the window, and the item box against
+the south wall, between the fireplace and the bed.
 
 Moving: the lamp's flame, the flies over the plate, the embers in the grate.
 """
@@ -215,6 +217,13 @@ def build():
     reb.prim("cube", "Shears", mat("steel"), (X0 + 0.06, 3.15, 1.4), (0.02, 0.06, 0.4), rot=(0.3, 0, 0))
     kit.rod("Hose", mat("green paint"), (X0 + 0.1, 3.0, 1.2), (X0 + 0.1, 3.2, 0.2), 0.06, 10)
 
+    # ---- Where she saves: his typewriter for the seed orders on a table
+    # by the window, and the item box against the south wall by the bed.
+    reb.mask(reb.wall(kit.table("Typing table", mat("planks"), (3.62, Y0 + 0.24, 0.0), size=(0.65, 0.44, 0.72))))
+    reb.mask(kit.typewriter("His typewriter", (3.62, Y0 + 0.24, 0.72), rot=-0.06))
+    reb.prim("cube", "Seed order", mat("old paper"), (3.98, Y0 + 0.3, 0.722), (0.15, 0.2, 0.002), rot=(0, 0, 0.3))
+    box_lid = kit.item_box("Item box", (2.535, Y1 - 0.43), (0, -1))
+
     # ---- The washstand in the north-east corner: the basin of pink water, the jug, the towel.
     wx, wy = 4.75, Y0 + 0.28
     reb.wall(kit.table("Washstand", mat("pine"), (wx, wy, 0.0), size=(0.6, 0.45, 0.8)))
@@ -267,6 +276,7 @@ def build():
     room.check((X0, 1.4, X0 + 0.6, 3.0), "His tools. Kept clean, oiled. Before.")
     room.check((1.1, Y0, 2.6, Y0 + 0.7), "Seed trays. Everything in them has died.")
     room.check((3.9, 1.8, 4.9, 2.6), "This is where it happened. Someone called Scott.")
+    room.save_room(typewriter=(3.25, Y0, 4.0, 1.75), box=(1.95, 3.45, 3.17, Y1), lid=box_lid)
     room.entry = "Someone left the lamp burning."
     room.export(anim, samples=128)
 

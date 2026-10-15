@@ -66,6 +66,7 @@ export const lookout: DayRoom = {
   itemModels: [
     { from: 'Stage3/ROOM3090.RDT', index: 0 }, // F-Aid Spray
     { from: 'Stage1/ROOM1130.RDT', index: 0 }, // Small Key, as the shed key
+    { from: 'Stage3/ROOM30E0.RDT', index: 2 }, // Ink Ribbon, by the typewriter
   ],
 };
 

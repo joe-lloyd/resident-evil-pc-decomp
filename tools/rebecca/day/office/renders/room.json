@@ -80,6 +80,22 @@
    "x1": 7650,
    "z1": 2677,
    "name": "Filing cabinet"
+  },
+  {
+   "shape": "box",
+   "x0": 3060,
+   "z0": 5984,
+   "x1": 4080,
+   "z1": 6698,
+   "name": "Typing stand"
+  },
+  {
+   "shape": "box",
+   "x0": 6342,
+   "z0": 4632,
+   "x1": 7817,
+   "z1": 6809,
+   "name": "Item box"
   }
  ],
  "anim": {
@@ -159,15 +175,6 @@
   },
   {
    "zone": {
-    "x0": 6800,
-    "z0": 5100,
-    "x1": 7820,
-    "z1": 6460
-   },
-   "text": "A gun rack. Every peg is empty."
-  },
-  {
-   "zone": {
     "x0": 6120,
     "z0": 2635,
     "x1": 7820,
@@ -176,6 +183,27 @@
    "text": "A desk fan, still running. The power's still on somewhere."
   }
  ],
+ "saves": {
+  "typewriter": {
+   "x0": 3060,
+   "z0": 5355,
+   "x1": 4165,
+   "z1": 6800
+  },
+  "box": {
+   "x0": 5865,
+   "z0": 4675,
+   "x1": 7820,
+   "z1": 6800
+  },
+  "lid": {
+   "x": 7809,
+   "z": 5720,
+   "y": -1440,
+   "angle": 2048,
+   "scale": 1.0
+  }
+ },
  "entry": "The smell hits first.",
  "notes": [
   "high in the south-east corner: the foreman against the wall, the spray, the desk, the stove",

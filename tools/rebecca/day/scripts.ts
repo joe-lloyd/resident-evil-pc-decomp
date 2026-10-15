@@ -28,6 +28,8 @@ interface KitDoor {
 interface KitJson {
   doors?: KitDoor[];
   checks?: { zone: Zone; text: string }[];
+  /** A save room's typewriter and item box, and where the box's lid goes (kit.Room.save_room). */
+  saves?: { typewriter: Zone; box: Zone; lid: { x: number; y: number; z: number; angle: number } } | null;
   entry?: string | null;
 }
 
@@ -160,6 +162,16 @@ function main(): void {
       lines.push(`// To ${d.to}.`);
       lines.push(`door_aot_set(${id++}, ${size(d.zone)}, ${variant}, ${sfx}, ${type}, 4, 0, ${roomName(target)}, ${back.x}, 0, ${back.z}, ${back.angle}, UNLOCKED, ${walk ? TOUCH : OPEN});`);
     }
+    // The typewriter and the item box, as the mansion's save room has them
+    // (ROOM1000): the engine runs both, ink ribbon and all. The box's lid is
+    // object model 0, RE1's own (day/room.ts), which the engine swings open.
+    if (kit.saves) {
+      const { lid } = kit.saves;
+      lines.push('// The typewriter and the item box, its lid on the body the scene paints.');
+      lines.push(`aot_set(${id++}, ${size(kit.saves.typewriter)}, SCE_TYPEWRITER, 129, 0, 0, 0, 0, 0, 0);`);
+      lines.push(`aot_set(${id++}, ${size(kit.saves.box)}, SCE_ITEMBOX, 129, 0, 0, 0, 0, 0, 0);`);
+      lines.push(`obj(0, 17, 255, ${lid.x}, ${lid.y}, ${lid.z}, ${lid.angle}, ${Array(16).fill(0).join(', ')});`);
+    }
     const msgs = [kit.entry ?? '...'];
     for (const c of kit.checks ?? []) {
       lines.push(`aot_set(${id++}, ${size(c.zone)}, SCE_MESSAGE, 129, ${128 + msgs.length}, 0, 255, 0, 0, 0);`);
@@ -173,7 +185,7 @@ function main(): void {
     lines.push('return;', '');
     writeFileSync(path.join(here, slug, 'room.c'), lines.join('\n'));
     writeFileSync(path.join(here, slug, 'room.msg.txt'), msgs.map((m, i) => message(i, m)).join('\n') + '\n');
-    console.log(`${slug}: ${kit.doors?.length ?? 0} doors, ${kit.checks?.length ?? 0} checks`);
+    console.log(`${slug}: ${kit.doors?.length ?? 0} doors, ${kit.checks?.length ?? 0} checks${kit.saves ? ', a typewriter and a box' : ''}`);
   }
   // The hand-written rooms' ways into the kit rooms.
   for (const [slug, doors] of Object.entries(BUILT_DOORS)) {

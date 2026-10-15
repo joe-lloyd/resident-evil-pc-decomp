@@ -88,23 +88,25 @@ export interface RoomPlan {
   readonly keepModels?: boolean;
   /**
    * The room's item models, in slot order (item_aot_set's model index), from
-   * other rooms (itemModel()). Replaces the donor's; implies no omodels.
+   * other rooms (model()). Replaces the donor's models.
    */
-  readonly itemModels?: readonly ItemModel[];
+  readonly itemModels?: readonly Model[];
+  /** The room's object models, in slot order (obj's model index), from other rooms (model()). */
+  readonly objectModels?: readonly Model[];
 }
 
-/** One item model: the TMD (mesh) and TIM (texture) a room's item model pair points at. */
-export interface ItemModel {
+/** One model: the TMD (mesh) and TIM (texture) a room's model pair points at. */
+export interface Model {
   readonly tmd?: Uint8Array;
   readonly tim?: Uint8Array;
 }
 
-/** Item model `index` of room `rdt`, copied out of it. */
-export function itemModel(rdt: Uint8Array, index: number): ItemModel {
+/** Item or object model `index` of room `rdt`, copied out of it. */
+export function model(rdt: Uint8Array, kind: 'item' | 'object', index: number): Model {
   const v = new DataView(rdt.buffer, rdt.byteOffset, rdt.byteLength);
-  const count = rdt[HDR_ITEMS]!;
-  if (index >= count) throw new Error(`the room has ${count} item models, not ${index + 1}`);
-  const table = u32(v, SLOTS_AT + 4 * SLOT.itemModels);
+  const count = rdt[kind === 'item' ? HDR_ITEMS : HDR_OMODELS]!;
+  if (index >= count) throw new Error(`the room has ${count} ${kind} models, not ${index + 1}`);
+  const table = u32(v, SLOTS_AT + 4 * (kind === 'item' ? SLOT.itemModels : SLOT.objectModels));
   const sections = cut(rdt);
   const grab = (p: number) => {
     if (!p) return undefined;
@@ -112,6 +114,31 @@ export function itemModel(rdt: Uint8Array, index: number): ItemModel {
     return rdt.slice(p, s.end);
   };
   return { tmd: grab(u32(v, table + 8 * index)), tim: grab(u32(v, table + 8 * index + 4)) };
+}
+
+/**
+ * A copy of a model's mesh scaled by `s` about its own origin, as when RE1's
+ * item box lid goes on a smaller box: every vertex of every object in the TMD.
+ */
+export function scaleModel(m: Model, s: number): Model {
+  if (!m.tmd || s === 1) return m;
+  // A copy with its own buffer: a Node Buffer's slice is a view into a shared pool.
+  const tmd = new Uint8Array(m.tmd);
+  const v = new DataView(tmd.buffer);
+  // Header: id, flags (0: offsets relative to the object table), object count; then 28-byte objects.
+  if (v.getUint32(4, true) !== 0) throw new Error('the TMD has absolute offsets');
+  const objects = 12;
+  for (let o = 0; o < v.getUint32(8, true); o++) {
+    const top = v.getUint32(objects + 28 * o, true);
+    const count = v.getUint32(objects + 28 * o + 4, true);
+    for (let i = 0; i < count * 4; i++) {
+      // SVECTOR: x, y, z and a pad word, which stays.
+      if (i % 4 === 3) continue;
+      const at = objects + top + 2 * i;
+      v.setInt16(at, Math.round(v.getInt16(at, true) * s), true);
+    }
+  }
+  return { tmd, tim: m.tim };
 }
 
 const u32 = (v: DataView, at: number) => v.getUint32(at, true);
@@ -218,9 +245,13 @@ export function composeRoom(donor: Uint8Array, plan: RoomPlan): Uint8Array {
   for (const s of [...kept].sort((a, b) => a.start - b.start)) moved.set(s, place(donor.subarray(s.start, s.end)));
   const ours = new Map<Slot, number>();
   for (const [s, bytes] of Object.entries(plan.sections) as [string, Uint8Array][]) ours.set(Number(s) as Slot, place(bytes));
-  // Item models from other rooms: each TMD and TIM, then the table of pairs.
-  const models = (plan.itemModels ?? []).map((m) => ({ tmd: m.tmd ? place(m.tmd) : 0, tim: m.tim ? place(m.tim) : 0 }));
-  const modelTable = plan.itemModels ? place(new Uint8Array(Math.max(4, models.length * 8))) : 0;
+  // Models from other rooms: each TMD and TIM, then the table of pairs.
+  const placeModels = (list: readonly Model[] | undefined) => {
+    const pairs = (list ?? []).map((m) => ({ tmd: m.tmd ? place(m.tmd) : 0, tim: m.tim ? place(m.tim) : 0 }));
+    return { pairs, table: list ? place(new Uint8Array(Math.max(4, pairs.length * 8))) : 0 };
+  };
+  const items = placeModels(plan.itemModels);
+  const objects = placeModels(plan.objectModels);
   const masks = plan.cameras.map((c) => place(c.maskBlock ?? new Uint8Array(4)));
   if (vb) moved.set(vb, place(donor.subarray(vb.start, vb.end)));
 
@@ -258,15 +289,15 @@ export function composeRoom(donor: Uint8Array, plan: RoomPlan): Uint8Array {
     const own = ours.get(s);
     ov.setUint32(SLOTS_AT + 4 * s, own ?? map(u32(dv, SLOTS_AT + 4 * s)), true);
   }
-  if (plan.itemModels) {
-    out[HDR_OMODELS] = 0;
-    out[HDR_ITEMS] = models.length;
-    models.forEach((m, i) => {
-      ov.setUint32(modelTable + 8 * i, m.tmd, true);
-      ov.setUint32(modelTable + 8 * i + 4, m.tim, true);
-    });
-    ov.setUint32(SLOTS_AT + 4 * SLOT.objectModels, 0, true);
-    ov.setUint32(SLOTS_AT + 4 * SLOT.itemModels, modelTable, true);
+  if (plan.itemModels || plan.objectModels) {
+    for (const [{ pairs, table }, count, s] of [[items, HDR_ITEMS, SLOT.itemModels], [objects, HDR_OMODELS, SLOT.objectModels]] as const) {
+      out[count] = pairs.length;
+      pairs.forEach((m, i) => {
+        ov.setUint32(table + 8 * i, m.tmd, true);
+        ov.setUint32(table + 8 * i + 4, m.tim, true);
+      });
+      ov.setUint32(SLOTS_AT + 4 * s, table, true);
+    }
     // The icon tiles are a PS1 leftover nothing on PC reads (RDT_FILE_FORMAT.md).
     ov.setUint32(SLOTS_AT + 4 * SLOT.itemIcons, 0, true);
   }

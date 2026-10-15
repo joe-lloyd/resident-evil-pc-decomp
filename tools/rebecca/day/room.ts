@@ -19,7 +19,7 @@ import { animFileName, buildAnim, type AnimLayer } from '../bganim.ts';
 import { buildMasks, maskPakName } from '../masks.ts';
 import { autoFloors, readDepth } from './floors.ts';
 import { makePak } from '../pak.ts';
-import { composeRoom, itemModel, SLOT, type PointLight, type Vec3 } from '../rdt.ts';
+import { composeRoom, model, scaleModel, SLOT, type PointLight, type Vec3 } from '../rdt.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -72,7 +72,12 @@ interface RoomJson {
   anim?: { frames: number; ticks: number };
   /** Changes of state: cam<N>.s-<name>.png, shown while the flag is set. */
   states?: { name: string; bank: 0 | 1; bit: number }[];
+  /** A save room: where kit.item_box put the item box, whose lid is RE1's own (ITEM_BOX_LID). */
+  saves?: { lid: { x: number; y: number; z: number; angle: number; scale?: number } } | null;
 }
+
+/** The item box's lid, the same object in every RE1 save room: model 0 of the mansion's 1F save room. */
+const ITEM_BOX_LID = { from: 'Stage1/ROOM1000.RDT', index: 0 } as const;
 
 /** The sun or the room's lamps, the sky, and light thrown back off the ground, for the hour. */
 const HOURS: Record<Hour, { ambient: [number, number, number]; key: [number, number, number]; sky: [number, number, number]; bounce: [number, number, number] }> = {
@@ -303,7 +308,9 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
   };
   const rdt = composeRoom(donor, {
     cameras,
-    itemModels: spec.itemModels?.map((m) => itemModel(baseRoom(m.from), m.index)),
+    itemModels: spec.itemModels?.map((m) => model(baseRoom(m.from), 'item', m.index)),
+    // A save room's item box: RE1's own lid, object model 0 of the mansion's save room.
+    objectModels: json.saves ? [scaleModel(model(baseRoom(ITEM_BOX_LID.from), 'object', ITEM_BOX_LID.index), json.saves.lid.scale ?? 1)] : undefined,
     ...('hour' in spec ? lightingFor(spec.hour, spec.inside, json.bounds) : { ambient: spec.ambient, lights: spec.lights }),
     sections: {
       [SLOT.switchZones]: switchZones(floors, json.bounds),
