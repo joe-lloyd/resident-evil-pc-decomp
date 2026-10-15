@@ -65,6 +65,10 @@ typedef enum {
 #define OFFSET_SAVES_COUNT   0x228
 #define OFFSET_CHARACTER_ID  0x22B
 #define OFFSET_DC_MODE       0x233   // Director's Cut mode byte (g_DcGameMode)
+// Port addition: a save made in Rebecca's day sets this bit of the mode byte,
+// whose DC difficulty is only its low two bits. Loading the save puts the
+// session in her mode; a save without it loads into the shipped game.
+#define SAVE_MODE_REB        0x80
 #define OFFSET_PAD_REMAP     0x41C   // 32 bytes  (g_padRemapSubTable3)
 #define OFFSET_CONTROLLER_CFG 0x43C  // 1 byte   (g_controllerConfig)
 #define OFFSET_KEY_BINDINGS  0x800   // 32 bytes  (g_keyBindingData)
@@ -114,9 +118,17 @@ static constexpr auto s_pftJillName  = STR_CELL("JILL ");   // DAT_004d4108
 static_assert(s_pftChrisName.len == kUsaNameCells * 2, "USA name must be 5 cells");
 static_assert(s_pftJillName.len  == kUsaNameCells * 2, "USA name must be 5 cells");
 
-// Pointer table at PTR_DAT_004d4118
+// Port addition: Rebecca, for her day. Five cells is all the row has before
+// the separator, so her name is cut short there.
+static constexpr auto s_pftRebeccaName = STR_CELL("REBEC");
+static constexpr auto s_pftNoName      = STR_CELL("     ");
+static_assert(s_pftRebeccaName.len == kUsaNameCells * 2, "USA name must be 5 cells");
+static_assert(s_pftNoName.len      == kUsaNameCells * 2, "USA name must be 5 cells");
+
+// Pointer table at PTR_DAT_004d4118: the original has Chris and Jill only, and
+// read past them for id 3. No character has id 2.
 static const unsigned char* s_pftCharNameTable[] = {
-    s_pftChrisName, s_pftJillName
+    s_pftChrisName, s_pftJillName, s_pftNoName, s_pftRebeccaName
 };
 
 // --- Location names (indexed by GetSaveLocationIndex) ---
@@ -143,6 +155,35 @@ static const unsigned char* s_pftLocNameTable[] = {
     s_pftLocRoom1F, s_pftLocHall1F, s_pftLocCourtyard,
     s_pftLocGuardhouse, s_pftLocLaboratory, s_pftLocStoreroom,
     s_pftLocCourtyard2
+};
+
+// Port addition: where her saves were made, by her save rooms' stage and room
+// (tools/rebecca/day/rooms.ts; tools/rebecca/plan/saves.ts lists the rooms and
+// plan.test.ts checks this table against both). Anywhere else on her day is
+// the mountains.
+struct RebSavePlace {
+    unsigned char stage;
+    unsigned char room;
+    const unsigned char* name;
+};
+static constexpr auto s_rebLocCabin    = STR_CELL("  Ranger Station   ");
+static constexpr auto s_rebLocOffice   = STR_CELL("  Logging Camp     ");
+static constexpr auto s_rebLocBooth    = STR_CELL("  Gondola Station  ");
+static constexpr auto s_rebLocMine     = STR_CELL("  Silver Mine      ");
+static constexpr auto s_rebLocLodge    = STR_CELL("  Gardener's Lodge ");
+static constexpr auto s_rebLocMountain = STR_CELL("  Arklay Mountains ");
+static_assert(s_rebLocCabin.len    == kUsaLocCells * 2, "USA location must be 19 cells");
+static_assert(s_rebLocOffice.len   == kUsaLocCells * 2, "USA location must be 19 cells");
+static_assert(s_rebLocBooth.len    == kUsaLocCells * 2, "USA location must be 19 cells");
+static_assert(s_rebLocMine.len     == kUsaLocCells * 2, "USA location must be 19 cells");
+static_assert(s_rebLocLodge.len    == kUsaLocCells * 2, "USA location must be 19 cells");
+static_assert(s_rebLocMountain.len == kUsaLocCells * 2, "USA location must be 19 cells");
+static const RebSavePlace s_rebSavePlaces[] = {
+    { 2, 0x14, s_rebLocCabin },    // cabin
+    { 3, 0x12, s_rebLocOffice },   // office
+    { 2, 0x19, s_rebLocBooth },    // booth
+    { 4, 0x1D, s_rebLocMine },     // mine-office
+    { 1, 0x1D, s_rebLocLodge },    // lodge
 };
 
 // --- Slot templates ---
@@ -243,9 +284,13 @@ static constexpr auto s_jpnJillName  = STR_JP_CELL(u8"ジル ");    // 0x004b101
 static_assert(s_jpnChrisName.len == kJpnNameCells * 2, "JPN name must be 3 cells");
 static_assert(s_jpnJillName.len  == kJpnNameCells * 2, "JPN name must be 3 cells");
 
-// Pointer table at 0x004b1020
+static constexpr auto s_jpnNoName = STR_JP_CELL(u8"   ");
+static_assert(s_jpnNoName.len == kJpnNameCells * 2, "JPN name must be 3 cells");
+
+// Pointer table at 0x004b1020, with blanks for ids 2 and 3: her day is in
+// English only.
 static const unsigned char* s_jpnCharNameTable[] = {
-    s_jpnChrisName, s_jpnJillName
+    s_jpnChrisName, s_jpnJillName, s_jpnNoName, s_jpnNoName
 };
 
 // --- Location names (indexed by GetSaveLocationIndex) ---
@@ -334,7 +379,7 @@ static constexpr auto s_jpnErrLine2 =               // 0x004b1040, 34 blanks
 typedef struct SaveScreenLayout
 {
     const unsigned char* const* charNames;    // [characterId & 3]
-    const unsigned char* const* locNames;     // [GetSaveLocationIndex(...)]
+    const unsigned char* const* locNames;     // [GetSaveLocationIndex(...)], via SaveLocationName
     const unsigned char* const* exitNames;    // [mode]
     const unsigned char* const* headerNames;  // [mode]
     const unsigned char* filledSlot;
@@ -524,7 +569,15 @@ static unsigned char DcSaveRowColour(unsigned int dcGameMode)
 // ============================================================================
 static int SaveSlotLoadBlocked(const SaveSlotInfo* slot)
 {
-    if (g_bDcMode || !slot->hasData) {
+    if (!slot->hasData) {
+        return 0;
+    }
+    // Port addition: a save from her day needs her day installed, and is not
+    // a Director's Cut game.
+    if (slot->dcGameMode & SAVE_MODE_REB) {
+        return g_bDcMode || !RebeccaDayInstalled();
+    }
+    if (g_bDcMode) {
         return 0;
     }
     return (slot->dcGameMode & 3) != DC_DIFFICULTY_STANDARD;
@@ -543,6 +596,21 @@ int GetSaveLocationIndex(int stageId, int roomId)
     }
     if (locIdx == STAGE_COURTYARD && roomId == ROOM_UNDERGROUND_ENTRY) locIdx = 6;
     return locIdx;
+}
+
+// Port addition: the location a save shows. On her day, in the English
+// screen, her own places; otherwise the mansion's areas, as shipped.
+static const unsigned char* SaveLocationName(const SaveScreenLayout& L, int stageId, int roomId, bool reb)
+{
+    if (reb && GetAssetVersion() == 0) {
+        for (const RebSavePlace& p : s_rebSavePlaces) {
+            if (p.stage == stageId && p.room == roomId) {
+                return p.name;
+            }
+        }
+        return s_rebLocMountain;
+    }
+    return L.locNames[GetSaveLocationIndex(stageId, roomId)];
 }
 
 // ============================================================================
@@ -1026,6 +1094,16 @@ void LoadSaveGameState(int mode, int flags, int useInkRibbon, int sfxBank, int c
                 int fileSize = ReadSaveFile(g_saveFileName, fileBuffer);
                 RestoreSaveBlock(fileBuffer, fileSize);
 
+                // Port addition: the save's own game, her day or the shipped
+                // one, as character select sets it for a new game.
+                if (g_DcGameMode & SAVE_MODE_REB) {
+                    g_GameMode = GAME_MODE_REB;
+                    SetAssetMode("REB");
+                } else if (g_bRebMode) {
+                    g_GameMode = GAME_MODE_OG;
+                    SetAssetMode("");
+                }
+
                 g_main_state_flags |= MSF_CONTINUE_GAME;
                 g_playerEntityPointer.id = g_SelectedCharactedId;
                 if ((g_SelectedCharactedId & 3) == CHAR_JILL) {   // port: was != 0, which gave Rebecca Jill's rooms
@@ -1127,6 +1205,8 @@ void LoadSaveGameState(int mode, int flags, int useInkRibbon, int sfxBank, int c
             // its upper half) — same order as the original. The buffer is
             // zeroed first so the block tail the port does not model
             // (0x43D..0x800) stays deterministic instead of stack garbage.
+            // Port addition: mark a save from her day, so it loads back into it.
+            g_DcGameMode = (unsigned char)((g_DcGameMode & ~SAVE_MODE_REB) | (g_bRebMode ? SAVE_MODE_REB : 0));
             memset(fileBuffer, 0, SAVE_FILE_SIZE);
             memcpy(fileBuffer + 0x000, g_BioCardData, sizeof(BioCardLayout));
             memcpy(fileBuffer + OFFSET_PAD_REMAP, g_padRemapSubTable3,
@@ -1159,8 +1239,7 @@ void LoadSaveGameState(int mode, int flags, int useInkRibbon, int sfxBank, int c
             displayStr[L.nameLen + 5] = (char)0xFB;
             displayStr[L.nameLen + 6] = (char)0x38;
             displayStr[L.nameLen + 7] = (char)0xFB;
-            int locIdx = GetSaveLocationIndex(g_stageId, g_roomId);
-            const unsigned char* locStr = L.locNames[locIdx];
+            const unsigned char* locStr = SaveLocationName(L, g_stageId, g_roomId, g_bRebMode);
             for (int i = 0; i < L.locLen; i++) {
                 displayStr[SAVE_REVEAL_LOC_BASE(L) + i] = (char)locStr[i];
             }
@@ -1299,8 +1378,9 @@ void LoadSaveGameState(int mode, int flags, int useInkRibbon, int sfxBank, int c
                 PrintText8x14(L.countX, (short)y, rowColour, 0);
 
                 // Location name (from PTR_DAT_004d42b8 / the JPN 0x004b1110)
-                int locIdx = GetSaveLocationIndex(save_slots[i].stageId, save_slots[i].roomId);
-                PrintFormattedText(L.locX, (short)y, rowColour, L.locNames[locIdx]);
+                PrintFormattedText(L.locX, (short)y, rowColour,
+                                   SaveLocationName(L, save_slots[i].stageId, save_slots[i].roomId,
+                                                    (save_slots[i].dcGameMode & SAVE_MODE_REB) != 0));
             } else {
                 // Empty slot: full dash template
                 PrintFormattedText(55, (short)y, 0, L.emptySlot);

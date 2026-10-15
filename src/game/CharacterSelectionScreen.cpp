@@ -66,6 +66,11 @@ static unsigned char g_selCount = 2;
 // The ID half of each character's card on the sheet (the badge half is shared).
 static const unsigned char g_idUV[3][2] = { { 0x50, 0x00 }, { 0x00, 0x80 }, { 0x70, 0x80 } };
 static const char* const kRebeccaSheet = GAME_DATA_ROOT "data\\select_b.tim";
+
+bool RebeccaDayInstalled(void)
+{
+    return ModeHasAsset("REB", kRebeccaSheet) != 0;
+}
 static char g_selTimer = 0;                // DAT_00ac93f1
 static unsigned char g_selSwapDir = 0;     // DAT_00ac93f2
 
@@ -398,7 +403,7 @@ void characterSelectionScreen(void)
 
     // Load characters police cards and selection arrow texture. With
     // Rebecca's day installed, its copy of the sheet adds her card.
-    const bool rebeccaInstalled = ModeHasAsset("REB", kRebeccaSheet) != 0;
+    const bool rebeccaInstalled = RebeccaDayInstalled();
     if (rebeccaInstalled) {
         char savedMode[32];
         strncpy(savedMode, GetAssetModeName(), sizeof(savedMode) - 1);
