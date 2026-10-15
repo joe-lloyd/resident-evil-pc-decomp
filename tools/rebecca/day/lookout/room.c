@@ -6,7 +6,7 @@
 //
 // Game units are metres * 1700 (scene.py builds the room in metres).
 // FG_COMMON 201: she has been in before. FG_ITEM 241: the spray is still on
-// the table, 242: the shed key is still on its hook, 244: the ink ribbons are
+// the table, 242: the shed key is still on its hook, 240: the ink ribbons are
 // still by the typewriter (bit set = still there).
 // item_aot_set operands after the model index: 255, the model's position
 // (X, Y, Z as little-endian 16-bit pairs), two rotation bytes, the item flag,
@@ -46,8 +46,8 @@ aot_set(12, 7820, 4080, 2040, 850, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);  // 
 // RE1's own object model 0 (from ROOM1000), shrunk with the box to a
 // footlocker (scene.py, scale 0.65), hinged at its back edge and opening north
 // (angle 1024). The box's zone starts where the broken window's ends.
-if (ck(FG_ITEM, 244, 0)) {
-    item_aot_set(13, 11305, 3400, 595, 1020, 47 /* Ink Ribbon */, 3, 2, 255, 91, 45, 56, 251, 241, 14, 0, 0, 244, 129, 0, 0);
+if (ck(FG_ITEM, 240, 0)) {
+    item_aot_set(13, 11305, 3400, 595, 1020, 47 /* Ink Ribbon */, 3, 2, 255, 91, 45, 56, 251, 241, 14, 0, 0, 240, 129, 0, 0);
 }
 aot_set(14, 10455, 3400, 850, 1020, SCE_TYPEWRITER, 129, 0, 0, 0, 0, 0, 0);
 aot_set(15, 10285, 5525, 1530, 1615, SCE_ITEMBOX, 129, 0, 0, 0, 0, 0, 0);

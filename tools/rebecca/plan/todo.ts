@@ -7,6 +7,7 @@
 import { AREAS, MAP_ITEMS } from './maps.ts';
 import { CUES } from './music.ts';
 import { SAVES } from './saves.ts';
+import { FOES } from '../day/foes.ts';
 import type { Link, Place, Plan, Step } from './plan.ts';
 
 export type Status = 'done' | 'doing' | 'todo';
@@ -96,8 +97,9 @@ const STATUS: Record<string, Status> = {
   'saves-mode': 'done',
   'saves-names': 'done',
   'saves-props': 'done',
-  // The cabin's three; the rest wait for item pick-ups in the kit rooms.
-  'saves-ribbons': 'doing',
+  // By the cabin's typewriter, and in the save rooms plan/saves.ts gives them (day/supplies.ts).
+  'saves-ribbons': 'done',
+  'saves-mansion': 'done',
   'save-cabin': 'done',
   'save-office': 'done',
   'save-booth': 'done',
@@ -353,7 +355,8 @@ export function sections(plan: Plan, facts: Facts): Section[] {
       items: [
         row('enemies-plan', 'Enemies planned room by room'),
         row('enemies-forest', 'More threat in the forest early on'),
-        ...plan.places.filter((p) => p.enemies).map((p) => row(`enemy-${p.id}`, `${p.name}: ${p.enemies}`, `Act ${p.act}`)),
+        // Placed in the room's script (day/foes.ts): under way until they are fought and tuned.
+        ...plan.places.filter((p) => p.enemies).map((p) => row(`enemy-${p.id}`, `${p.name}: ${p.enemies}`, `Act ${p.act}`, FOES[folder(p)]?.length ? 'doing' : undefined)),
       ],
     },
     {

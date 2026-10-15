@@ -5,6 +5,8 @@
 // and then. scripts.ts writes the pickups into the rooms' init scripts and
 // rooms.ts gives each room the models it needs.
 import { freeFloor, type Floor } from './foes.ts';
+import { day } from '../plan/day.ts';
+import { SAVES } from '../plan/saves.ts';
 
 /** Item id, how many, its model (a room of the player's game and the slot in its item model table), and the byte RE1 gives each after 129. */
 const KINDS = {
@@ -14,10 +16,12 @@ const KINDS = {
   spray: { id: 65, qty: 1, model: { from: 'Stage3/ROOM3090.RDT', index: 0 }, act: 0 },
   // Kevin's sidearm, loaded: her gun again after the mine took hers (gear.ts).
   beretta: { id: 2, qty: 15, model: { from: 'Stage1/ROOM1060.RDT', index: 2 }, act: 0 },
+  // A pack of three, as RE1 lays them by its typewriters.
+  ribbons: { id: 47, qty: 3, model: { from: 'Stage3/ROOM30E0.RDT', index: 2 }, act: 0 },
 } as const;
 export type Supply = keyof typeof KINDS;
 
-export const SUPPLIES: Record<string, readonly Supply[]> = {
+const SPREAD: Record<string, readonly Supply[]> = {
   booth: ['greenHerb'],
   bunkhouse: ['clip', 'redHerb'],
   mess: ['greenHerb'],
@@ -38,8 +42,19 @@ export const SUPPLIES: Record<string, readonly Supply[]> = {
 };
 
 /**
+ * The spread, and the ink ribbons each save room has (plan/saves.ts). The
+ * cabin's are in its hand-written script, by its typewriter.
+ */
+export const SUPPLIES: Record<string, readonly Supply[]> = { ...SPREAD };
+for (const s of SAVES) {
+  const slug = day.places.find((p) => p.id === s.place)?.room ?? s.place;
+  if (slug === 'lookout' || !s.ribbons) continue;
+  SUPPLIES[slug] = [...(SUPPLIES[slug] ?? []), ...Array<Supply>(s.ribbons).fill('ribbons')];
+}
+
+/**
  * Room-item flags (FG_ITEM) for the supplies, in order: 180-229. Her other
- * rooms use 230-243 and the save room 22; the rest of RE1's flags belong to
+ * rooms use 230-247 (240 the cabin's ink ribbons) and the save room 22; the rest of RE1's flags belong to
  * mansion rooms she never sees, and a new game sets them all.
  */
 export const ITEM_FLAGS = Array.from({ length: 50 }, (_, i) => 180 + i);

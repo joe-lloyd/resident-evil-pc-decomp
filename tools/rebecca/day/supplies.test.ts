@@ -11,22 +11,25 @@ const floor: Floor = {
 };
 
 test("a room's models: one per kind, in the order its pickups name them", () => {
+  // The lodge's spray and red herb, then the ink ribbons a save room has (plan/saves.ts).
   assert.deepEqual(supplyModels('lodge'), [
     { from: 'Stage3/ROOM3090.RDT', index: 0 },
     { from: 'Stage1/ROOM10C0.RDT', index: 1 },
+    { from: 'Stage3/ROOM30E0.RDT', index: 2 },
   ]);
   assert.deepEqual(supplyModels('nowhere'), []);
 });
 
 test('each pickup has its own flag, kept while the item is there, and the model slot of its kind', () => {
-  const flags = [180, 181];
+  const flags = [180, 181, 182];
   const lines = supplyLines('lodge', floor, flags, 7);
   assert.deepEqual(flags, []);
   assert.equal(lines[0], 'if (ck(FG_ITEM, 180, 0)) {  // spray');
   assert.match(lines[1]!, /^ {4}item_aot_set\(7, \d+, \d+, 1800, 1800, 65, 1, 0, 255, .*, 180, 129, 0, 0\);$/);
   assert.match(lines[4]!, /^ {4}item_aot_set\(8, \d+, \d+, 1800, 1800, 67, 1, 1, 255, .*, 181, 129, 1, 0\);$/);
+  assert.match(lines[7]!, /^ {4}item_aot_set\(9, \d+, \d+, 1800, 1800, 47, 3, 2, 255, .*, 182, 129, 0, 0\);$/);
 });
 
-test('the flags stay clear of the rest of her day: 230-243, and the save room\'s 22', () => {
+test('the flags stay clear of the rest of her day: 230-247, and the save room\'s 22', () => {
   assert.ok(ITEM_FLAGS.every((f) => f < 230 && f !== 22));
 });
