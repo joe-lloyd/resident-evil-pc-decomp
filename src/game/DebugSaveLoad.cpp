@@ -128,6 +128,7 @@ static void DebugAssembleSaveFile(char* fileBuffer)
     memcpy(g_bPadConnected ? g_joyRemapBackupJoy : g_joyRemapBackupKey,
            g_JoyRemapTbl[1], 0x80);
 
+    SaveMode_MarkCard();
     memset(fileBuffer, 0, DBG_SAVE_FILE_SIZE);
     memcpy(fileBuffer + 0x000, g_BioCardData, sizeof(BioCardLayout));
     memcpy(fileBuffer + DBG_OFFSET_PAD_REMAP, g_padRemapSubTable3,
@@ -196,16 +197,17 @@ int DebugQuick_LoadSlot(int slot)
         dbg_printf("[debugmenu] quick load: slot %d has no valid save\n", slot + 1);
         return 0;
     }
-    // Port-only: in OG mode a DC TRAINING/ADVANCED save cannot be loaded (its
-    // rules do not exist here). Refuse before touching any live state; the debug
-    // list greys these out, this is the belt-and-braces backstop.
-    if (!g_bDcMode && (((unsigned char)fileBuffer[0x233] & 3) != DC_DIFFICULTY_STANDARD)) {
-        dbg_printf("[debugmenu] quick load: slot %d is a DC mode-%d save; "
-                   "refused in OG mode\n",
-                   slot + 1, (unsigned char)fileBuffer[0x233] & 3);
+    // Port-only: the save screen's rule (SaveMode_LoadBlocked): in OG mode a DC
+    // TRAINING/ADVANCED save cannot be loaded, and a save from her day needs
+    // her day. Refuse before touching any live state; the debug list greys
+    // these out, this is the belt-and-braces backstop.
+    if (SaveMode_LoadBlocked((unsigned char)fileBuffer[0x233])) {
+        dbg_printf("[debugmenu] quick load: slot %d (mode byte 0x%02x) is refused in this game\n",
+                   slot + 1, (unsigned char)fileBuffer[0x233]);
         return 0;
     }
     DebugRestoreSaveBlock(fileBuffer, fileSize);
+    SaveMode_AdoptCard();
     g_main_state_flags |= MSF_CONTINUE_GAME;   // InitializeGame continue branch
     DebugAdoptLoadedCharacter();
     g_main_state_flags2 &= MSF2_RESET_KEEP_MASK;

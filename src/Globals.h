@@ -481,8 +481,15 @@ extern bool          g_bSkipUnskippableFmv;    // [Game] SkipUnskippableFmv
 // REB overlay, built from the player's own data by tools/rebecca.
 #define g_bRebMode                   (g_GameMode == GAME_MODE_REB)
 // Her day is installed: the REB overlay holds her copy of the select sheet
-// (CharacterSelectionScreen.cpp). New Game deals her card, and her saves load.
+// (CharacterSelectionScreen.cpp), and the assets are the English ones. New
+// Game deals her card, and her saves load.
 bool RebeccaDayInstalled(void);
+// Her day's saves (SaveLoadScreen.cpp): mark the card as hers before writing
+// it, switch the session to the save's own game after restoring one, and say
+// whether a save with this mode byte (0x233) is refused here.
+void SaveMode_MarkCard(void);
+void SaveMode_AdoptCard(void);
+int  SaveMode_LoadBlocked(unsigned char modeByte);
 
 // g_DcDifficulty is the DC title screen's choice (PS1 g_abDcGameMode
 // 0x800c8693); it is also stored in the save block, so a DC save reloads as its

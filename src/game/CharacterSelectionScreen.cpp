@@ -69,7 +69,8 @@ static const char* const kRebeccaSheet = GAME_DATA_ROOT "data\\select_b.tim";
 
 bool RebeccaDayInstalled(void)
 {
-    return ModeHasAsset("REB", kRebeccaSheet) != 0;
+    // Her day is in English only (ConfigFile.cpp refuses REB with JPN assets).
+    return GetAssetVersion() == 0 && ModeHasAsset("REB", kRebeccaSheet) != 0;
 }
 static char g_selTimer = 0;                // DAT_00ac93f1
 static unsigned char g_selSwapDir = 0;     // DAT_00ac93f2

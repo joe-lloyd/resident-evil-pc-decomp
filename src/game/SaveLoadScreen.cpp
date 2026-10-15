@@ -567,20 +567,40 @@ static unsigned char DcSaveRowColour(unsigned int dcGameMode)
 // and overwritten - only the load side is gated. An OG save and a DC STANDARD
 // save both carry mode 0, so they keep loading. DC mode loads everything.
 // ============================================================================
-static int SaveSlotLoadBlocked(const SaveSlotInfo* slot)
+int SaveMode_LoadBlocked(unsigned char modeByte)
 {
-    if (!slot->hasData) {
-        return 0;
-    }
     // Port addition: a save from her day needs her day installed, and is not
     // a Director's Cut game.
-    if (slot->dcGameMode & SAVE_MODE_REB) {
+    if (modeByte & SAVE_MODE_REB) {
         return g_bDcMode || !RebeccaDayInstalled();
     }
     if (g_bDcMode) {
         return 0;
     }
-    return (slot->dcGameMode & 3) != DC_DIFFICULTY_STANDARD;
+    return (modeByte & 3) != DC_DIFFICULTY_STANDARD;
+}
+
+void SaveMode_MarkCard(void)
+{
+    g_DcGameMode = (unsigned char)((g_DcGameMode & ~SAVE_MODE_REB) | (g_bRebMode ? SAVE_MODE_REB : 0));
+}
+
+void SaveMode_AdoptCard(void)
+{
+    // The save's own game, her day or the shipped one, as character select
+    // sets it for a new game.
+    if (g_DcGameMode & SAVE_MODE_REB) {
+        g_GameMode = GAME_MODE_REB;
+        SetAssetMode("REB");
+    } else if (g_bRebMode) {
+        g_GameMode = GAME_MODE_OG;
+        SetAssetMode("");
+    }
+}
+
+static int SaveSlotLoadBlocked(const SaveSlotInfo* slot)
+{
+    return slot->hasData && SaveMode_LoadBlocked((unsigned char)slot->dcGameMode);
 }
 
 // ============================================================================
@@ -1093,16 +1113,7 @@ void LoadSaveGameState(int mode, int flags, int useInkRibbon, int sfxBank, int c
                 EnsureDirectoryExists(GetSaveRoot());
                 int fileSize = ReadSaveFile(g_saveFileName, fileBuffer);
                 RestoreSaveBlock(fileBuffer, fileSize);
-
-                // Port addition: the save's own game, her day or the shipped
-                // one, as character select sets it for a new game.
-                if (g_DcGameMode & SAVE_MODE_REB) {
-                    g_GameMode = GAME_MODE_REB;
-                    SetAssetMode("REB");
-                } else if (g_bRebMode) {
-                    g_GameMode = GAME_MODE_OG;
-                    SetAssetMode("");
-                }
+                SaveMode_AdoptCard();
 
                 g_main_state_flags |= MSF_CONTINUE_GAME;
                 g_playerEntityPointer.id = g_SelectedCharactedId;
@@ -1206,7 +1217,7 @@ void LoadSaveGameState(int mode, int flags, int useInkRibbon, int sfxBank, int c
             // zeroed first so the block tail the port does not model
             // (0x43D..0x800) stays deterministic instead of stack garbage.
             // Port addition: mark a save from her day, so it loads back into it.
-            g_DcGameMode = (unsigned char)((g_DcGameMode & ~SAVE_MODE_REB) | (g_bRebMode ? SAVE_MODE_REB : 0));
+            SaveMode_MarkCard();
             memset(fileBuffer, 0, SAVE_FILE_SIZE);
             memcpy(fileBuffer + 0x000, g_BioCardData, sizeof(BioCardLayout));
             memcpy(fileBuffer + OFFSET_PAD_REMAP, g_padRemapSubTable3,
@@ -1498,6 +1509,7 @@ void DebugSaveMenu(void)
 
     char path[260];
     sprintf(path, "%ssavedat%d.dat", GetSaveRoot(), selected + 1);
+    SaveMode_MarkCard();
     int written = FileWrite(path, g_BioCardData, 0x800);
     {
         char dbg[320];

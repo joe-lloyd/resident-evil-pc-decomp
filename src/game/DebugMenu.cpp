@@ -1293,16 +1293,13 @@ struct DebugQuickSlotInfo {
 };
 static DebugQuickSlotInfo s_dbgQuickSlotInfo[8];
 
-// mirror of SaveLoadScreen.cpp's SaveSlotLoadBlocked. In OG mode a
-// DC TRAINING/ADVANCED/ADVANCED* save cannot be loaded (its rules exist only in
-// DC mode); the row is dimmed and the quick load is refused. Overwriting stays
-// allowed through the save list.
+// The save screen's rule (SaveMode_LoadBlocked): in OG mode a DC
+// TRAINING/ADVANCED/ADVANCED* save cannot be loaded, and a save from her day
+// needs her day. The row is dimmed and the quick load is refused. Overwriting
+// stays allowed through the save list.
 static int DebugQuickSlotLoadBlocked(const DebugQuickSlotInfo* info)
 {
-    if (g_bDcMode || !info->hasData) {
-        return 0;
-    }
-    return (info->dcGameMode & 3) != DC_DIFFICULTY_STANDARD;
+    return info->hasData && SaveMode_LoadBlocked((unsigned char)info->dcGameMode);
 }
 
 static void DebugQuick_ScanSlots(void)
