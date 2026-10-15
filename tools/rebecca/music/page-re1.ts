@@ -59,6 +59,7 @@ textarea{width:100%;box-sizing:border-box;background:#1b1917;color:var(--fg);bor
 <p>Each track plays two ways. <b>On the game's samples</b> is as close to the game as Strudel gets. <b>On free sounds</b> plays the same notes on sounds we are allowed to use: VCSL, a CC0 sample library, and Strudel's own synths. A script picked each free sound by measuring the game's sample it replaces: its harmonics, how noisy and how bright it is, how it fades. Its low-pass filter is set to match how muffled the game's sample is. Nobody picked them by ear yet, so some will be wrong. Say which and they get fixed.</p>
 <p>Open the code, change anything and press Play again. One bar is one cycle, so a track's code lines up bar by bar with the others, and with ours.</p>
 <p class="dim">Made from your own disc and shown only on the home network. It is Capcom's music, so none of it goes in the public repositories. Rebuild it with <code>pnpm rae music</code> and <code>tools/rebecca/music/re1.ts</code>.</p>
+<p>To open them elsewhere, <a href="re1-music-strudel.zip">download them all</a>. That zip holds every track in both versions and the game's samples, with a README that lists each track's rooms. Or open any track's own file: <code>SEP0F-0.js</code> is on the game's samples, and <code>SEP0F-0.free.js</code> is on free sounds.</p>
 <div id="status">Loading Strudel…</div>
 <h2>Music</h2>
 ${cards(music)}
