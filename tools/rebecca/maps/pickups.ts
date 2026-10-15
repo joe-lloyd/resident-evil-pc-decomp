@@ -11,8 +11,8 @@ import type { PickupModel } from '../items/items.ts';
 import { day } from '../plan/day.ts';
 import { AREAS, FIRST_MAP_ITEM, MAP_ITEMS } from '../plan/maps.ts';
 
-/** RE1's map of the mansion's first floor, lying in ROOM107: the model every map of hers uses. */
-export const MAP_MODEL: PickupModel = { from: 'Stage1/ROOM1070.RDT', index: 2 };
+/** RE1's map of the mansion's first floor, item model 0 of ROOM107: the model every map of hers uses. */
+export const MAP_MODEL: PickupModel = { from: 'Stage1/ROOM1070.RDT', index: 0 };
 
 /**
  * FG_ITEM flags for the maps, one each in MAP_ITEMS order: 248-253, past
