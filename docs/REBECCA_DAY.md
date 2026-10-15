@@ -129,30 +129,48 @@ mine. Notes are messages, read where she finds them.
 ## Saving
 
 She saves the way Chris and Jill do: at a typewriter, with an ink ribbon,
-in a quiet room with an item box and RE1's own save room music, played
-from the player's game files. There is one in
-every area: the cabin, the foreman's office, the generator hut, Hal's
-cottage, the weather station, the lower station and the garden shed. The
-mansion's save room keeps its own typewriter and box. RE1 has seven
-typewriter rooms in about 110 rooms; her day is shorter and its spokes are
-one-way trips, so it has one per area and the ribbons ration the saves.
+in a quiet room with an item box and RE1's own save room music, played from
+the player's game files. The save rooms are placed the way RE1 places its
+own. `tools/rebecca/plan/re1-saves.ts` measures that from the PC room files:
+7 typewriter rooms in 107 rooms, a room 2.7 doors from one on average and 6
+at the most, most of them dead-end side rooms off a corridor or a hub she
+keeps passing.
 
-All the item boxes share one store, as in RE1. What she leaves in the
-cabin's footlocker is waiting in the cottage, and after the mine takes her
-gear. The rooms, what the typewriter and box are in each, and the ribbons
-are in `tools/rebecca/plan/saves.ts`. `plan.test.ts` checks that every save
-room is quiet, plays her theme, and that no room is more than five doors
-from one.
+Her day has five, plus the mansion's at the end. Each is a side room off a
+hub:
 
-The engine already runs typewriters and item boxes from a room's script
-(`SCE_TYPEWRITER` and `SCE_ITEMBOX`, `src/game/PlayerAnimations.cpp:7024` and
-`:7217`), and Rebecca spends ribbons as Chris does. One gap: her mode is set
-only at character select (`src/game/CharacterSelectionScreen.cpp:824`) and
-the save doesn't record it, so a save from her day would load into Chris's
-and Jill's game. The fix follows the port's own Director's Cut difficulty,
-which each save already stores (`dcGameMode`, `SaveLoadScreen.cpp:525`). The
-save screen also names each slot by the mansion's areas
-(`GetSaveLocationIndex`), so hers needs her own place names.
+- the ranger's cabin, off the station yard;
+- the foreman's office, off the camp yard, behind the key on the dead cook;
+- the operator's booth, off the gondola station, the last save before the
+  ride down;
+- the mine office, the one quiet room in the mine;
+- the gardener's lodge, across the creek, before the kennels.
+
+A room in her day is 2.7 doors from a save room on average, and none is
+farther than 6. `plan.test.ts` holds the plan to those numbers, to no more
+than one save room in ten rooms, and to quiet rooms that play the save
+music.
+
+Each room has a typewriter, modelled in its scene (`kit.typewriter`), and
+RE1's own item box. In RE1 the box's lid is a 3D object, the same in every
+save room, and the body under it is painted into the background. Her rooms
+do the same: the builder copies the lid, object model 0 of the mansion's
+save room, from the player's files, the room script places it with `obj`,
+and `kit.item_box` paints a body to fit under it, in the lid's rusted metal
+and embossed trim. Pressing action swings the lid open with the game's own
+sound, then the box screen opens. A box can be scaled with its lid; the
+cabin's is 0.65, a footlocker at the bunk's foot. The scripts set both up as
+the mansion's save room does (`SCE_TYPEWRITER`, `SCE_ITEMBOX`). All the
+boxes share one store, as in RE1. The ink ribbons are RE1's own item, beside
+the cabin's typewriter.
+
+A save made on her day records it (bit 0x80 of the save's mode byte, 0x233),
+and loading it puts the game back in her mode, from the shipped game's
+title screen too. The save screen calls her REBEC, five letters being all a
+row has, and names her saves by her places: Ranger Station, Logging Camp,
+Gondola Station, Silver Mine, Gardener's Lodge. `tools/harness/tests/reb-save.ts`
+saves in the cabin and loads it back from the shipped game's title;
+`reb-save-rooms.ts` opens the box and the typewriter in the other four.
 
 ## Music
 

@@ -9,9 +9,9 @@
 // farther than RE1's farthest.
 //
 // Each is a quiet room with no enemies that plays RE1's own save room music
-// from the player's files (music.ts, cue "save"). The item boxes are one
-// shared store, as in RE1, so what she leaves in the cabin's footlocker is in
-// the booth's locker too.
+// from the player's files (music.ts, cue "save"). The item box is RE1's own,
+// its lid from the player's files, and all of them share one store, as in
+// RE1: what she leaves in the cabin's is in the booth's too.
 import { CUES } from './music.ts';
 import type { Plan } from './plan.ts';
 
@@ -30,27 +30,27 @@ export const RE1 = { rooms: 107, saves: 7, maxDoors: 6, meanDoors: 2.74 } as con
 export const SAVES: readonly SaveRoom[] = [
   {
     place: 'cabin', ribbons: 1,
-    props: "The ranger's typewriter on a side table under the broken window. His footlocker at the bunk's foot is the item box.",
+    props: "The ranger's typewriter on a table in the corner by the broken window, the ink ribbons beside it. The item box, shrunk to a footlocker, at the bunk's foot.",
     why: 'The first save, minutes in, off the hub she keeps coming back to. The shed, the woods, the road and the gorge are a door or two away.',
   },
   {
     place: 'office', ribbons: 1,
-    props: "The foreman's typewriter, the payroll half typed. A tin trunk under the window is the box.",
+    props: "The foreman's typewriter on a stand by the door, the payroll half typed. The item box along the east wall, under the empty gun rack.",
     why: 'Off the camp yard, behind the key on the dead cook: the reward for getting into the camp. The mill, the pond and the flume are within four doors.',
   },
   {
     place: 'booth', ribbons: 0,
-    props: "Hal's typewriter on the control desk, a duty log in it. A parts locker is the box.",
+    props: "Hal's typewriter on a stand against the north wall, the day's log in it. The item box along the east wall, under the fuse box and the phone.",
     why: "Off the gondola station, where the east path, the line track's shortcut and the ride down all meet. The last save before the gondola, which only goes down.",
   },
   {
     place: 'mine-office', ribbons: 1,
-    props: "The shift boss's typewriter for the accident book. An empty powder chest is the box.",
+    props: "The shift boss's typewriter on his desk, for the accident book. The item box along the east wall, past the powder boxes.",
     why: 'The one quiet room in the mine, off the tunnel. The pump, the gallery and the lift are two or three doors on.',
   },
   {
     place: 'lodge', ribbons: 1,
-    props: "The gardener's typewriter for seed orders on the kitchen table. A blanket chest is the box.",
+    props: "The gardener's typewriter for seed orders, on a table by the window. The item box against the south wall, between the fireplace and the bed.",
     why: "Across the creek, behind the door she prises open: the valley's only save, three doors before the kennels' pack.",
   },
 ];

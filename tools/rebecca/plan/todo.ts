@@ -57,6 +57,17 @@ const STATUS: Record<string, Status> = {
   'music-sketches': 'doing',
   'music-re1': 'done',
   'saves-plan': 'done',
+  'saves-mode': 'done',
+  'saves-names': 'done',
+  'saves-props': 'done',
+  // The cabin's three; the rest wait for item pick-ups in the kit rooms.
+  'saves-ribbons': 'doing',
+  'save-cabin': 'done',
+  'save-office': 'done',
+  'save-booth': 'done',
+  'save-mine-office': 'done',
+  'save-lodge': 'done',
+  'saves-test': 'done',
 };
 
 const status = (id: string, fallback: Status = 'todo'): Status => STATUS[id] ?? fallback;
@@ -207,11 +218,11 @@ export function sections(plan: Plan, facts: Facts): Section[] {
         row('saves-plan', "Save rooms placed to RE1's spacing, checked against the plan (saves.ts, re1-saves.ts)", `${SAVES.length} rooms, one for every ${Math.round(plan.places.length / SAVES.length)}; none farther than RE1's farthest`),
         row('saves-mode', 'A save made in her day loads back into her day', 'Her mode is set only at character select today. Store it in the save, as the port already stores the DC difficulty (dcGameMode)'),
         row('saves-names', 'Her place names on the save screen', "The slot list names a save by the mansion's areas (GetSaveLocationIndex); hers needs the station, the camp, the mine, the valley"),
-        row('saves-props', 'A typewriter and an item box modelled in each save room, worn like the rest'),
+        row('saves-props', "A typewriter in each save room, and RE1's own item box: its lid from the player's files on a body painted to fit"),
         row('saves-ribbons', 'Ink ribbons to pick up, with their model in her rooms'),
         ...SAVES.map((v) => row(`save-${v.place}`, `${name(v.place)}: typewriter and item box`, v.props)),
         row('saves-mansion', "The mansion's save room keeps its typewriter and box", 'Already in her ROOM1000 script'),
-        row('saves-test', 'A test that saves at a typewriter, loads the save, and is back in her day with the box as she left it'),
+        row('saves-test', 'A test that saves at a typewriter, loads the save, and is back in her day with the box as she left it', 'tools/harness/tests/reb-save.ts and reb-save-rooms.ts'),
       ],
     },
     {
