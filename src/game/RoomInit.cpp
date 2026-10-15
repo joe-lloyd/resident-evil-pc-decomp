@@ -6,6 +6,7 @@
 #include "SpriteRenderer.h"
 #include "dc/ItemDescriptions.h"
 #include "RebItems.h"
+#include "RebMaps.h"
 #include "dc/EntityModels.h"    // the arrange wardrobe's two outfit flags
 #include "../system/AssetPath.h"
 #include "TestMode.h"
@@ -296,6 +297,13 @@ void room_action_table_reset(void) {
 // Uses g_StageRoomFlagOffset[stageId % 5] + roomId as the bit index.
 // ============================================================================
 void room_set_visited_flag(unsigned char stageId, unsigned char roomId) {
+    // Port addition: in her mode a room's visit is her own bit (RebMaps.h).
+    // Her room ids run past each stage's own, and RE1's bit for stage 4 room
+    // 0x1E is the first file's "collected" bit (0x82).
+    if (g_bRebMode) {
+        if (const RebMapRoom* r = reb_map_room(stageId % 5, roomId)) Flg_on((int)g_RoomFlags, r->bit);
+        return;
+    }
     Flg_on((int)g_RoomFlags, (unsigned int)g_StageRoomFlagOffset[stageId % 5] + roomId);
 }
 

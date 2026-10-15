@@ -84,6 +84,7 @@ set(RE1_SOURCES
     src/game/BgAnim.cpp
     src/game/PathWalk.cpp
     src/game/RebFiles.cpp
+    src/game/RebMaps.cpp
     src/game/RoomCollision.cpp
     src/game/RoomEvents.cpp
     src/game/RoomInit.cpp

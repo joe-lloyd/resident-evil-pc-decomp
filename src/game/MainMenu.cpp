@@ -13,6 +13,7 @@
 // ============================================================================
 #include "../Globals.h"
 #include "RebFiles.h"
+#include "RebMaps.h"
 #include "../platform/platform.h"
 #include "../system/AssetPath.h"
 #include "../DebugPrint.h"
@@ -2842,6 +2843,48 @@ static TextureDesc g_MapLabelDesc = {
 // 0x004d3494 - "you are here" dot blink phase (rewritten every frame)
 static unsigned char g_MapDotBlink;
 
+// Port addition: her browser sprites (RebMaps.h). RE1's, with her overview's
+// stage cut-outs for the four markers, her area's name in place of the
+// building's name and floor, and the arrows over and under its middle.
+static TextureDesc g_RebMapSprites[8];
+
+static void map_reb_sprites(void)
+{
+    for (int i = 0; i < 8; i++) g_RebMapSprites[i] = g_MapSprites[i];
+    for (int i = 0; i < 4; i++) {
+        const RebMapRect& m = g_RebMaps.markers[i];
+        g_RebMapSprites[i].screenX = m.x;
+        g_RebMapSprites[i].screenY = m.y;
+        g_RebMapSprites[i].width = m.w;
+        g_RebMapSprites[i].height = m.h;
+        g_RebMapSprites[i].texU = m.u;
+        g_RebMapSprites[i].texV = m.v;
+    }
+    const RebMapRect& l = g_RebMaps.labels[0];
+    g_RebMapSprites[4].screenX = l.x;
+    g_RebMapSprites[4].screenY = l.y;
+    g_RebMapSprites[4].width = l.w;
+    g_RebMapSprites[4].height = l.h;
+    g_RebMapSprites[6].screenX = g_RebMaps.arrowX;
+    g_RebMapSprites[7].screenX = g_RebMaps.arrowX;
+}
+
+static TextureDesc* map_sprites(void)
+{
+    return g_bRebMode ? g_RebMapSprites : g_MapSprites;
+}
+
+// Port addition: has she been in room `room` of map group `group`? In her
+// mode the group is her area and the room its palette block (RebMaps.h).
+static int map_room_visited(unsigned int group, unsigned int room)
+{
+    if (g_bRebMode) {
+        int bit = reb_map_visited_bit((int)group, (int)room);
+        return bit >= 0 && Flg_ck((int)g_RoomFlags, bit) != 0;
+    }
+    return Flg_ck((int)g_RoomFlags, g_StageRoomFlagOffset[group] + room) != 0;
+}
+
 // (0x004885c0) - Is the map area known (visited/cleared)?
 // Area flag mapping: 0,1->0x7c; 3->0x7e; 4->0x7f; 5,6->0x80; 8,9->0x81.
 // Areas 2, 7, 10 and out-of-range values (the 0xFF "no room" table entries)
@@ -2854,6 +2897,11 @@ static int map_area_known(unsigned char area)
     // port had as 0x7c (a copy of area 0's). Verified target by target:
     //   0 -> 0   1 -> 1   2 -> ret 0   3 -> 2   4 -> 3   5 -> 4
     //   6 -> 4   7 -> ret 0   8 -> 5   9 -> 5   10 -> ret 0
+    if (g_bRebMode) {
+        // Her areas are shown by her maps (RebMaps.h); the mansion's by none.
+        if (area >= 11 || g_RebMaps.areaItem[area] == 0xff) return 0;
+        return Flg_ck((int)g_RoomFlags, g_RebMaps.areaItem[area] + ROOM_FLAG_MAP_BASE);
+    }
     int idx;
     switch (area) {
     case 0: idx = MAP_INDEX_MANSION_1F; break;
@@ -2874,28 +2922,37 @@ static int map_area_known(unsigned char area)
 // (0x00487540) - Map tab: draw the base map, markers, dot and floor glyph
 static void map_draw_browser(unsigned char* state)
 {
+    TextureDesc* spr = map_sprites();
     display_texture(&g_MapBaseDesc, 0x32, 0xc, 1);
     for (int i = 0; i < 4; i++) {
         if ((state[0xd] & (1 << i)) != 0) {
-            display_texture(&g_MapSprites[i], 0x2d, 0xc, 1);
+            display_texture(&spr[i], 0x2d, 0xc, 1);
         }
     }
-    g_MapSprites[4].texV = (unsigned char)(state[4] * 0x10 + 0x48);
-    display_texture(&g_MapSprites[4], 0x2d, 0xc, 1);
-    g_MapSprites[5].texV =
-        (unsigned char)((6 - state[8 + state[4]] - g_MapLayoutOffset[state[4]]) * 0x10);
-    display_texture(&g_MapSprites[5], 0x2d, 0xc, 1);
+    if (g_bRebMode) {
+        // Her area's name, where RE1 has the building's and the floor.
+        const RebMapRect& l = g_RebMaps.labels[state[6] < 11 ? state[6] : 0];
+        spr[4].texU = l.u;
+        spr[4].texV = l.v;
+        display_texture(&spr[4], 0x2d, 0xc, 1);
+    } else {
+        spr[4].texV = (unsigned char)(state[4] * 0x10 + 0x48);
+        display_texture(&spr[4], 0x2d, 0xc, 1);
+        spr[5].texV =
+            (unsigned char)((6 - state[8 + state[4]] - g_MapLayoutOffset[state[4]]) * 0x10);
+        display_texture(&spr[5], 0x2d, 0xc, 1);
+    }
 
     unsigned char c = state[0x11] + 1;
     state[0x11] = c;
     bool blink = (c & 0x30) != 0;
     if ((state[0xc] & 1) != 0) {
-        g_MapSprites[6].texU = (unsigned char)(blink * 8 - 0x60);
-        display_texture(&g_MapSprites[6], 0x2d, 0xc, 1);
+        spr[6].texU = (unsigned char)(blink * 8 - 0x60);
+        display_texture(&spr[6], 0x2d, 0xc, 1);
     }
     if ((state[0xc] & 2) != 0) {
-        g_MapSprites[7].texU = (unsigned char)(blink * 8 - 0x50);
-        display_texture(&g_MapSprites[7], 0x2d, 0xc, 1);
+        spr[7].texU = (unsigned char)(blink * 8 - 0x50);
+        display_texture(&spr[7], 0x2d, 0xc, 1);
     }
 }
 
@@ -2904,13 +2961,17 @@ static void map_update_layout_state(unsigned char* state)
 {
     int layout = (int)(char)state[4];
     unsigned int room = (unsigned int)state[8 + layout];
+    // Her mode: her stages' areas (RebMaps.h), in the same 4-per-layout shape.
+    const unsigned char* areaTable = g_bRebMode ? &g_RebMaps.stageAreas[0][0] : g_MapAreaTable;
+    const unsigned char* roomCount = g_bRebMode ? g_RebMaps.stageCount : g_MapLayoutRoomCount;
+    TextureDesc* spr = map_sprites();
     state[0xc] = 0;
-    state[6] = g_MapAreaTable[layout * 4 + room];
+    state[6] = areaTable[layout * 4 + room];
 
     // Right room exists: not the last room of the layout, and the next
     // room's area is known (DAT_004d31f1 = area table shifted by one)
-    if (g_MapLayoutRoomCount[layout] - room != 1) {
-        unsigned char nextArea = g_MapAreaTable[layout * 4 + room + 1];
+    if (roomCount[layout] - room != 1) {
+        unsigned char nextArea = areaTable[layout * 4 + room + 1];
         if ((1 << (nextArea & 0x1f) & MAP_AREA_MASK) == 0) {
             if (map_area_known(nextArea) == 0) goto no_right_room;
         }
@@ -2919,7 +2980,7 @@ static void map_update_layout_state(unsigned char* state)
 no_right_room:
     // Left room exists (DAT_004d31ef = area table shifted back by one)
     if (room != 0) {
-        unsigned char prevArea = g_MapAreaTable[layout * 4 + room - 1];
+        unsigned char prevArea = areaTable[layout * 4 + room - 1];
         if ((1 << (prevArea & 0x1f) & MAP_AREA_MASK) == 0) {
             if (map_area_known(prevArea) == 0) goto no_left_room;
         }
@@ -2929,18 +2990,18 @@ no_left_room:
     // Marker colors: the current layout's marker stays bright, the rest dim
     for (int i = 0; i < 4; i++) {
         unsigned char v = (state[4] == i) ? 0x80 : 0x40;
-        g_MapSprites[i].colorMulR = v;
-        g_MapSprites[i].colorMulG = v;
-        g_MapSprites[i].colorMulB = v;
+        spr[i].colorMulR = v;
+        spr[i].colorMulG = v;
+        spr[i].colorMulB = v;
     }
     g_MapBaseDesc.colorMulR = 0x80;
     g_MapBaseDesc.colorMulG = 0x80;
     g_MapBaseDesc.colorMulB = 0x80;
     // Dot, floor glyph and arrow sprites
     for (int i = 4; i < 8; i++) {
-        g_MapSprites[i].colorMulR = 0x80;
-        g_MapSprites[i].colorMulG = 0x80;
-        g_MapSprites[i].colorMulB = 0x80;
+        spr[i].colorMulR = 0x80;
+        spr[i].colorMulG = 0x80;
+        spr[i].colorMulB = 0x80;
     }
     map_draw_browser(state);
 }
@@ -2989,6 +3050,20 @@ static void map_tab_navigate(unsigned char* state)
         if (((pad_held_byte1() & 0x40) != 0) && ((state[0xc] & 2) != 0)) {
             state[8 + state[4]] = state[8 + state[4]] - 1;
             play_sfx(3, 4, 0);
+        }
+        if (g_bRebMode) {
+            // Her stages run left to right down the mountain: right and left
+            // step to the next one she has reached.
+            int step = ((pad_held_byte1() & 0x80) != 0) ? 1 : ((pad_held_byte1() & 0x20) != 0) ? -1 : 0;
+            for (int n = (int)state[4] + step; step != 0 && n >= 0 && n < 4; n += step) {
+                if ((state[0xd] & (1 << n)) != 0) {
+                    state[4] = (unsigned char)n;
+                    play_sfx(3, 4, 0);
+                    break;
+                }
+            }
+            map_update_layout_state(state);
+            return;
         }
         // Right: next layout (mansion 4-layout wrap: 0<->3, 1<->2)
         if ((pad_held_byte1() & 0x80) != 0) {
@@ -3155,7 +3230,7 @@ static void map_display_draw(unsigned char* state)
 static void map_display_animate(unsigned char* state)
 {
     // "You are here" dot blink (only when the area group matches)
-    if (g_MapAreaGroups[state[6]] == state[5]) {
+    if ((g_bRebMode ? state[6] : g_MapAreaGroups[state[6]]) == state[5]) {
         switch (state[2]) {
         case 0:
             DAT_00ac368c = 0x50;
@@ -3321,8 +3396,9 @@ static void map_display_load_textures(unsigned char* state)
         void* mapBuf = (void*)((unsigned char*)g_TimImageBuffer__bitmap + 0x10000);
         size_t fileSize = LoadFile(DAT_008e1cb0, mapBuf, 0x20);
 
-        unsigned int group = g_MapAreaGroups[state[6]];
-        unsigned int roomCount = g_MapRoomCounts[group];
+        // Her mode: an area is its own group, with its own rooms (RebMaps.h).
+        unsigned int group = g_bRebMode ? state[6] : g_MapAreaGroups[state[6]];
+        unsigned int roomCount = g_bRebMode ? g_RebMaps.areaRooms[state[6] < 11 ? state[6] : 0] : g_MapRoomCounts[group];
 
         // The "room-marker patch section" is simply the map TIM's own CLUT, so
         // it is always present: load + 0x14 is CLUT entry 0, load + 0x22 is
@@ -3348,9 +3424,14 @@ static void map_display_load_textures(unsigned char* state)
             // is blanked (its marker is shown by the highlight page).
             unsigned int* pEntry = (unsigned int*)((unsigned char*)g_TimImageBuffer__bitmap + 0x1002e);
             for (unsigned int room = 0; room < roomCount; room++) {
-                if (Flg_ck((int)g_RoomFlags, g_StageRoomFlagOffset[group] + room) == 0) {
+                if (!map_room_visited(group, room)) {
                     if (known == 0) {
                         pEntry[0] = 0; pEntry[1] = 0; pEntry[2] = 0;
+                    } else if (g_bRebMode) {
+                        // Port addition: in her mode a room on a map she owns
+                        // but has not been in is dim, not left as bare walls.
+                        unsigned short* c = (unsigned short*)pEntry;
+                        for (int i = 1; i <= 3; i++) c[i] = (unsigned short)(((c[i] >> 1) & 0x3def) | (c[i] & 0x8000));
                     } else {
                         *(unsigned int*)((unsigned char*)pEntry + 2) = 0;
                         *(unsigned short*)((unsigned char*)pEntry + 6) = 0;
@@ -3389,7 +3470,7 @@ static void map_display_load_textures(unsigned char* state)
             }
             unsigned int* pEntry = (unsigned int*)((unsigned char*)g_TimImageBuffer__bitmap + 0x1002e);
             for (unsigned int room = 0; room < roomCount; room++) {
-                if ((Flg_ck((int)g_RoomFlags, g_StageRoomFlagOffset[group] + room) == 0) ||
+                if (!map_room_visited(group, room) ||
                     (group != state[5]) || (state[7] != room)) {
                     pEntry[0] = 0; pEntry[1] = 0; pEntry[2] = 0;
                 } else {
@@ -3441,10 +3522,11 @@ static void map_display_update(unsigned char* state)
     g_MapBaseDesc.colorMulR = 0x40;
     g_MapBaseDesc.colorMulG = 0x40;
     g_MapBaseDesc.colorMulB = 0x40;
+    TextureDesc* spr = map_sprites();
     for (int i = 0; i < 8; i++) {
-        g_MapSprites[i].colorMulR = 0x30;
-        g_MapSprites[i].colorMulG = 0x30;
-        g_MapSprites[i].colorMulB = 0x30;
+        spr[i].colorMulR = 0x30;
+        spr[i].colorMulG = 0x30;
+        spr[i].colorMulB = 0x30;
     }
     map_draw_browser(state);
 }
@@ -3452,6 +3534,22 @@ static void map_display_update(unsigned char* state)
 // (0x00488430) - Build the area-known bitmask and the layout availability mask
 static void map_build_area_mask(unsigned char* state)
 {
+    if (g_bRebMode) {
+        // Her areas: one she has been in, or whose map she has; and the
+        // overview stages those are in.
+        MAP_AREA_MASK = 0;
+        for (unsigned int area = 0; area < 11; area++) {
+            for (unsigned int room = 0; room < g_RebMaps.areaRooms[area]; room++) {
+                if (map_room_visited(area, room)) MAP_AREA_MASK |= 1 << area;
+            }
+            if (map_area_known((unsigned char)area) != 0) MAP_AREA_MASK |= 1 << area;
+        }
+        MAP_LAYOUT_MASK = 0;
+        for (unsigned int area = 0; area < 11; area++) {
+            if ((MAP_AREA_MASK & (1 << area)) != 0) MAP_LAYOUT_MASK |= 1 << g_RebMaps.areaStage[area];
+        }
+        return;
+    }
     MAP_AREA_MASK = 0;
     // Areas reached through visited rooms (per area group and room range)
     for (unsigned int group = 0; group < 5; group++) {
@@ -3502,6 +3600,11 @@ static void map_build_area_mask(unsigned char* state)
 // set and the second still clear. Full trace in docs/SCENARIO_FLAGS.md.
 static void map_update_objective_highlight(void)
 {
+    if (g_bRebMode) {
+        // Chris's and Jill's objectives; her day has none on the map.
+        MAP_MODE = 0;
+        return;
+    }
     if ((g_main_state_flags & MSF_CHAR_VARIANT) != 0) {
         if (Flg_ck((int)g_ScenarioFlags2, SCENARIO2_FLAG_PROGRESS_23) != 0) {
             if (Flg_ck((int)g_ScenarioFlags, SCENARIO_FLAG_PROGRESS_49) == 0) { MAP_MODE = 1; return; }
@@ -3541,8 +3644,37 @@ static void file_set_collected_flag(int fileIndex)
 }
 
 // (0x00488160) - Initialize map screen with room data (menu open, modes 0/6)
+// Port addition: her map screen opens on her own area and room, each stage on
+// its first area she has reached.
+static void map_reb_init(void)
+{
+    map_reb_sprites();
+    const RebMapRoom* r = reb_map_room(g_stageId % 5, g_roomId);
+    MAP_AREA = r ? r->area : 0;
+    MAP_ROOM = r ? r->slot : 0xff;
+    MAP_GROUP = MAP_AREA;
+    map_build_area_mask(&DAT_00ac9890[0]);
+    for (int i = 0; i < 4; i++) {
+        MAP_ROOM_IDX[i] = 0;
+        for (int j = g_RebMaps.stageCount[i] - 1; j >= 0; j--) {
+            if ((MAP_AREA_MASK & (1 << g_RebMaps.stageAreas[i][j])) != 0) MAP_ROOM_IDX[i] = (unsigned char)j;
+        }
+        for (int j = 0; j < g_RebMaps.stageCount[i]; j++) {
+            if (g_RebMaps.stageAreas[i][j] == MAP_AREA) MAP_ROOM_IDX[i] = (unsigned char)j;
+        }
+    }
+    MAP_MODE = 0;
+    MAP_LAYOUT = g_RebMaps.areaStage[MAP_AREA];
+    MAP_HL_STATE = 0;
+}
+
 static void menu_init_map_screen(void)
 {
+    if (g_bRebMode) {
+        *(unsigned int*)&DAT_00ac9890[0] = 0;   // state, substate, blink, zoom
+        map_reb_init();
+        return;
+    }
     MAP_ROOM_IDX[0] = 1;
     MAP_ROOM_IDX[1] = 1;
     MAP_ROOM_IDX[2] = 1;
@@ -3708,6 +3840,19 @@ static void menu_init_map_display(void)
 {
     map_update_objective_highlight();
     *(unsigned int*)&DAT_00ac9890[0] = 0;
+    if (g_bRebMode) {
+        // RE1 opens this on Chris's and Jill's objectives; in her mode it
+        // shows where she is.
+        MAP_MOVE_FLAGS = 0;
+        MAP_ARROW_ANIM = 0;
+        MAP_HL_COUNT = 0;
+        MAP_TIMER = 0;
+        DAT_00ac9890[0x13] = 0;
+        MAP_EXIT_FLAG = 0;
+        MAP_HL_FRAME = 0;
+        map_reb_init();
+        return;
+    }
     if (MAP_MODE != 1) {
         MAP_LAYOUT = g_MapAreaLayouts[6];   // DAT_004d3206: layout 2 (lab map)
         MAP_GROUP = 5;
