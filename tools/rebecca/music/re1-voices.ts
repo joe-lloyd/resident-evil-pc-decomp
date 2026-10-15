@@ -1,39 +1,26 @@
-// Pick a free sound for each of RE1's instrument samples, so the RE1 tracks
-// can also play on sounds we may use: VCSL (CC0) or Strudel's own synths.
-// Nothing here is chosen by ear. Each game sample is measured: its harmonics,
-// how noisy it is, how bright, how its level moves. One sample of every VCSL
-// instrument is measured the same way, and the synths are worked out from
-// their waveforms. The nearest wins, through the low-pass filter that brings
-// it closest, so the filter becomes the voice's .lpf().
+// Pick a free sound for each of RE1's instruments, so the RE1 tracks can also
+// play on sounds we may use: VCSL (CC0) and Strudel's own synths.
+//
+// A first try matched each game sample to the free sound with the nearest
+// spectrum. It picked bare sawtooth waves and white noise, which sound like a
+// chiptune. So this sorts each game instrument into a family by what it does
+// (bass, strings, piano, bell, cymbal and so on), from its measured sound and
+// how the music uses it, and gives each family one sound chosen to sound good:
+// a recorded VCSL instrument where there is one, a detuned synth with vibrato
+// where there isn't. The notes stay the game's; the instrument is ours.
 //
 //   node tools/rebecca/music/re1-voices.ts <rae music dir> <cache dir> <voices.json>
 //
-// The cache gets one WAV per VCSL instrument from the pinned commit.
-// voices.json maps "SEPxx/sNN" to the chosen sound, for re1.ts --free. A
-// sound tried by ear and found wrong goes in re1-voices.fix.json beside this
-// file, which wins over the measurement.
+// voices.json maps each instrument tone, "SEPxx/p<program>t<tone>", to its
+// voice, for re1.ts. To change an instrument by ear, put its family in
+// re1-voices.fix.json beside this file, by program ("SEP0F/p2": "harp") or by
+// tone ("SEP0F/p7t3": "snare"); it wins over the sorting.
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spuEnvelope, type Music } from './re1.ts';
 
 export const VCSL = 'https://raw.githubusercontent.com/felixroos/dough-samples/9eacfc86ec4393e68a463ff52b01c19cfaa77f38/vcsl.json';
-
-export interface Voice {
-  /** A VCSL sound or a Strudel synth. */
-  readonly s: string;
-  readonly kind: 'pitched' | 'bank' | 'synth' | 'noise';
-  /** Low-pass cutoff in Hz at the game sample's centre key, or none. */
-  readonly lpf?: number;
-  /** For a pitched sound: the cutoff in harmonics of each note, so it follows the pitch as the game's samples do. */
-  readonly harmonics?: number;
-  /** Times the game's own gain, to match the game sample's level. */
-  readonly gain: number;
-  /** How far the measurements are apart: 0 is the same. */
-  readonly distance: number;
-  /** What the game sample measured as, for the page. */
-  readonly heard: string;
-}
 
 // ---- Reading sound -----------------------------------------------------------
 
@@ -121,20 +108,28 @@ export interface Timbre {
   readonly bands: readonly number[];
   /** 0 for a pure tone, near 1 for noise. */
   readonly flatness: number;
-  /** How strongly it repeats at its expected period: near 1 for a pitched sound. */
+  /** How strongly it repeats at its best period: near 1 for a pitched sound. */
   readonly pitched: number;
   /** Seconds to its peak, and from the peak down 20 dB (Infinity if it never falls that far). */
   readonly attack: number;
   readonly fall: number;
   /** RMS of the steady part, as the sample stands. */
   readonly level: number;
+  /** The amplitude-weighted mean harmonic: near 1 for a dull sound, 3 and up for a bright one. */
+  readonly brightness: number;
+  /** Share of the energy up to the 12th harmonic that sits on the harmonics: low for a bell's or a gong's partials. */
+  readonly harmonicity: number;
+  /** The fundamental it was measured at, in Hz. */
+  readonly f0: number;
 }
 
 /**
  * Measure a sound around its steady part: from `steady` (a sample index) or
- * from 60 ms after its peak. `f0` is where its fundamental should be.
+ * from 60 ms after its peak. `expected` is where its fundamental should be;
+ * the sound's own repeat period wins when it has a clear one.
  */
-export function measure(x: Float32Array, rate: number, f0: number, steady?: number): Timbre {
+export function measure(x: Float32Array, rate: number, expected: number, steady?: number): Timbre {
+  let f0 = expected;
   const frame = Math.round(rate / 100);
   const env: number[] = [];
   for (let i = 0; i + frame <= x.length; i += frame) {
@@ -146,7 +141,8 @@ export function measure(x: Float32Array, rate: number, f0: number, steady?: numb
   const peak = env[peakAt] ?? 0;
   const attack = (env.findIndex((v) => v >= 0.9 * peak) * frame) / rate;
   const fallAt = env.findIndex((v, i) => i > peakAt && v < peak / 10);
-  const fall = fallAt < 0 ? Infinity : ((fallAt - peakAt) * frame) / rate;
+  // A one-shot that stops before it has fallen 20 dB falls at its end; a looped one rings on.
+  const fall = fallAt >= 0 ? ((fallAt - peakAt) * frame) / rate : steady === undefined ? ((env.length - peakAt) * frame) / rate : Infinity;
   // A short loop or one-shot is repeated to fill the window, as the SPU loops it.
   const n = 8192;
   let from = steady ?? Math.min(peakAt * frame + Math.round(rate * 0.06), Math.max(0, x.length - n));
@@ -157,6 +153,35 @@ export function measure(x: Float32Array, rate: number, f0: number, steady?: numb
     for (let i = 0; i < n; i++) src[i] = seg.length ? seg[i % seg.length]! : 0;
     from = 0;
   }
+  // The sample's own pitch: the shortest period that repeats nearly as well as
+  // the best one, down to 50 Hz. A centre key can sit octaves away from
+  // what the sample sounds (RE1 tunes some samples far from their recording).
+  const corr = (lag: number) => {
+    let ab = 0;
+    let aa = 0;
+    let bb = 0;
+    for (let i = from; i < from + n - lag && i + lag < src.length; i++) {
+      ab += src[i]! * src[i + lag]!;
+      aa += src[i]! ** 2;
+      bb += src[i + lag]! ** 2;
+    }
+    return ab / Math.sqrt(aa * bb + 1e-12);
+  };
+  // Short lags of a smooth sound always correlate, so look only past the
+  // first dip below zero.
+  const lags = Array.from({ length: Math.floor(rate / 50) }, (_, i) => i + 1);
+  const scores = lags.map(corr);
+  const dip = scores.findIndex((c) => c < 0);
+  const past = dip < 0 ? [] : scores.slice(dip);
+  const top = past.length ? Math.max(...past) : 0;
+  const pitched = top;
+  if (pitched > 0.5) {
+    // The first peak near the best, climbed to its top: a smooth sound's peaks are broad.
+    let j = past.findIndex((c) => c >= 0.92 * top);
+    while (j + 1 < past.length && past[j + 1]! >= past[j]!) j++;
+    const lag = dip + 1 + j;
+    if (rate / lag >= 40 && rate / lag <= 4000) f0 = rate / lag;
+  }
   const mag = spectrum(src, from, n);
   const bin = rate / n;
   const at = (hz: number) => {
@@ -165,7 +190,17 @@ export function measure(x: Float32Array, rate: number, f0: number, steady?: numb
     return m;
   };
   const h = Array.from({ length: HARMONICS }, (_, k) => (f0 * (k + 1) < rate / 2 ? db(at(f0 * (k + 1))) : -120));
-  const top = Math.max(...h);
+  const amps = h.map((v) => 10 ** (v / 20));
+  const brightness = amps.reduce((a, v, k) => a + (k + 1) * v, 0) / (amps.reduce((a, v) => a + v, 0) + 1e-12);
+  let onHarmonics = 0;
+  let all = 0;
+  for (let k = Math.floor((f0 * 0.5) / bin); k < Math.min(mag.length, Math.ceil((f0 * 12.5) / bin)); k++) {
+    const e = mag[k]! ** 2;
+    all += e;
+    const r = (k * bin) / f0;
+    if (Math.abs(r - Math.round(r)) < 0.04 * Math.max(1, Math.round(r) / 4) && Math.round(r) >= 1) onHarmonics += e;
+  }
+  const loudest = Math.max(...h);
   const bandsRaw = BANDS.map((lo) => {
     let e = 0;
     for (let k = Math.floor(lo / bin); k < Math.min(mag.length, Math.floor((lo * 2) / bin)); k++) e += mag[k]! ** 2;
@@ -181,166 +216,146 @@ export function measure(x: Float32Array, rate: number, f0: number, steady?: numb
     count++;
   }
   const flatness = Math.exp(logSum / count) / (sum / count + 1e-12);
-  // The best normalised autocorrelation within 6% of the expected period.
-  const corr = (lag: number) => {
-    let ab = 0;
-    let aa = 0;
-    let bb = 0;
-    for (let i = from; i < from + n - lag && i + lag < src.length; i++) {
-      ab += src[i]! * src[i + lag]!;
-      aa += src[i]! ** 2;
-      bb += src[i + lag]! ** 2;
-    }
-    return ab / Math.sqrt(aa * bb + 1e-12);
-  };
-  const period = rate / f0;
-  let pitched = -1;
-  for (let lag = Math.max(2, Math.floor(period * 0.94)); lag <= Math.ceil(period * 1.06); lag++) pitched = Math.max(pitched, corr(lag));
   let rms = 0;
   for (let i = from; i < from + n; i++) rms += (src[i] ?? 0) ** 2;
   return {
-    harmonics: h.map((v) => Math.max(-60, v - top)),
+    harmonics: h.map((v) => Math.max(-60, v - loudest)),
     bands: bandsRaw.map((v) => Math.max(-60, v - btop)),
     flatness,
     pitched,
     attack,
     fall,
     level: Math.sqrt(rms / n),
+    brightness,
+    harmonicity: onHarmonics / (all + 1e-12),
+    f0,
   };
 }
 
-// ---- The free sounds ---------------------------------------------------------
+// ---- The families ------------------------------------------------------------
 
-/** dB of Strudel's low-pass (a biquad, Q 1) at `f` for cutoff `fc`. */
-const lowpass = (f: number, fc: number) => -10 * Math.log10((1 - (f / fc) ** 2) ** 2 + (f / fc) ** 2);
+export interface Family {
+  /** A VCSL sound or a Strudel synth. */
+  readonly s: string;
+  readonly kind: 'sample' | 'bank' | 'synth' | 'noise';
+  /** More Strudel calls that make the sound: unison, vibrato, a filter envelope. */
+  readonly chain?: string;
+  /** Low-pass cutoff in harmonics of each note, for synths: it follows the pitch. */
+  readonly harmonics?: number;
+  /** A fixed low-pass cutoff in Hz. */
+  readonly lpf?: number;
+  /** The least attack and release in seconds, where the game's envelope is too abrupt for this sound. */
+  readonly attack?: number;
+  readonly release?: number;
+  /** Times the game's own gain. */
+  readonly level: number;
+  readonly about: string;
+}
 
-/** Strudel's synths as harmonic levels (dB of harmonic k) and RMS at gain 1 (0.3 times the waveform). */
-const SYNTHS: Record<string, { harmonic: (k: number) => number; rms: number }> = {
-  sawtooth: { harmonic: (k) => db(1 / k), rms: 0.3 * 0.577 },
-  square: { harmonic: (k) => (k % 2 ? db(1 / k) : -120), rms: 0.3 },
-  triangle: { harmonic: (k) => (k % 2 ? db(1 / k ** 2) : -120), rms: 0.3 * 0.577 },
-  sine: { harmonic: (k) => (k === 1 ? 0 : -120), rms: 0.3 * 0.707 },
-};
-/** The noises' octave-band slopes in dB per octave. */
-const NOISES: Record<string, number> = { white: 3, pink: 0, brown: -3 };
-const CUTOFFS = [1, 1.5, 2, 3, 4, 6, 8, 12, 16, 24, Infinity];
-/** For unpitched sounds the cutoff is in Hz, not harmonics. */
-const DRUM_CUTOFFS = [250, 500, 1000, 2000, 4000, 8000, Infinity];
-/** A cutoff above this is no cutoff. */
-const OPEN = 16000;
+export const FAMILIES = {
+  strings: { s: 'supersaw', kind: 'synth', chain: '.unison(5).detune(0.12).spread(0.8).vib(5).vibmod(0.08)', harmonics: 3, attack: 0.12, release: 0.4, level: 1.3, about: 'A string section: detuned saws, filtered, with vibrato' },
+  pad: { s: 'supersaw', kind: 'synth', chain: '.unison(4).detune(0.2).spread(0.9)', harmonics: 2, attack: 0.4, release: 1, level: 1.1, about: 'A slow synth pad' },
+  choir: { s: 'supersaw', kind: 'synth', chain: ".unison(4).detune(0.1).spread(0.7).vowel('o').vib(4.5).vibmod(0.1)", harmonics: 6, attack: 0.2, release: 0.6, level: 1.6, about: 'A wordless choir: detuned saws through a vowel' },
+  brass: { s: 'supersaw', kind: 'synth', chain: '.unison(3).detune(0.06).lpenv(2).lpattack(0.08).lpdecay(0.3).vib(5).vibmod(0.05)', harmonics: 4, attack: 0.03, level: 1.2, about: 'Brass: bright saws with a filter swell' },
+  organ: { s: 'organ_8inch', kind: 'sample', level: 0.8, about: 'Organ (VCSL)' },
+  flute: { s: 'recorder_alto_vib', kind: 'sample', attack: 0.03, level: 1, about: 'Recorder with vibrato (VCSL)' },
+  lead: { s: 'ocarina_vib', kind: 'sample', attack: 0.04, release: 0.3, level: 1.1, about: 'Ocarina with vibrato (VCSL), for a sung lead line' },
+  shimmer: { s: 'triangle', kind: 'synth', chain: '.vib(5).vibmod(0.12)', harmonics: 4, attack: 0.3, release: 1.2, level: 1.4, about: 'A soft, high, glassy pad' },
+  piano: { s: 'steinway', kind: 'sample', level: 1, about: 'Grand piano (VCSL)' },
+  harp: { s: 'harp', kind: 'sample', level: 1.2, about: 'Concert harp (VCSL), for plucks and pizzicato' },
+  bell: { s: 'tubularbells', kind: 'sample', level: 0.8, about: 'Tubular bells (VCSL)' },
+  vibes: { s: 'vibraphone', kind: 'sample', level: 1, about: 'Vibraphone (VCSL)' },
+  glock: { s: 'glockenspiel', kind: 'sample', level: 0.7, about: 'Glockenspiel (VCSL)' },
+  marimba: { s: 'marimba', kind: 'sample', level: 1, about: 'Marimba (VCSL)' },
+  bass: { s: 'supersaw', kind: 'synth', chain: '.unison(2).detune(0.05)', harmonics: 2.5, attack: 0.01, release: 0.15, level: 1.5, about: 'A round synth bass' },
+  'bass-pluck': { s: 'steinway', kind: 'sample', level: 1.2, about: 'Low piano, for plucked bass' },
+  kick: { s: 'bassdrum1', kind: 'bank', level: 1, about: 'Bass drum (VCSL)' },
+  snare: { s: 'snare_modern', kind: 'bank', level: 0.8, about: 'Snare (VCSL)' },
+  hat: { s: 'hihat', kind: 'bank', level: 0.6, about: 'Hi-hat (VCSL)' },
+  shaker: { s: 'shaker_small', kind: 'bank', level: 0.7, about: 'Shaker (VCSL)' },
+  crash: { s: 'clash', kind: 'bank', level: 0.6, about: 'Clash cymbals (VCSL)' },
+  cymbal: { s: 'sus_cymbal', kind: 'bank', level: 0.8, about: 'Suspended cymbal (VCSL)' },
+  tom: { s: 'tom_mallet', kind: 'bank', level: 1, about: 'Tom (VCSL)' },
+  timpani: { s: 'timpani', kind: 'bank', level: 1, about: 'Timpani (VCSL)' },
+  gong: { s: 'gong', kind: 'bank', level: 0.8, about: 'Gong (VCSL)' },
+  metal: { s: 'anvil', kind: 'bank', level: 0.6, about: 'Anvil (VCSL), for metal hits' },
+  wind: { s: 'pink', kind: 'noise', lpf: 900, attack: 0.3, release: 0.8, level: 0.5, about: 'Filtered noise, for wind and air' },
+} as const satisfies Record<string, Family>;
+export type FamilyName = keyof typeof FAMILIES;
 
-const weights = Array.from({ length: HARMONICS }, (_, k) => 1 / Math.sqrt(k + 1));
-const harmonicDistance = (a: readonly number[], b: readonly number[]) => {
-  const top = Math.max(...b);
-  let d = 0;
-  let w = 0;
-  for (let k = 0; k < HARMONICS; k++) {
-    d += weights[k]! * Math.abs(a[k]! - Math.max(-60, b[k]! - top));
-    w += weights[k]!;
+export interface Voice extends Family {
+  readonly family: FamilyName;
+  /** Why it was put in its family, for the page and the code's comments. */
+  readonly heard: string;
+}
+
+/** How a program is used by the music: the keys it plays and how long its notes are, in seconds. */
+export interface Use { readonly keys: readonly number[]; readonly seconds: readonly number[]; readonly bends: number }
+
+const median = (xs: readonly number[]) => (xs.length ? [...xs].sort((a, b) => a - b)[Math.floor(xs.length / 2)]! : NaN);
+
+/** The family of one game sample, from what it measures as and how its program is played. */
+export function sort(t: Timbre, sustains: boolean, kit: boolean, use: Use): { family: FamilyName; heard: string } {
+  const key = median(use.keys);
+  const long = median(use.seconds);
+  const unpitched = t.flatness > 0.3 || (t.pitched < 0.4 && t.flatness > 0.2) || t.harmonicity < 0.15;
+  const say = (family: FamilyName, why: string) => ({ family, heard: why });
+  if (unpitched || (kit && t.pitched < 0.7)) {
+    const [low, , , mid1, mid2, mid3, high1, high2] = [t.bands[0]!, t.bands[1]!, t.bands[2]!, t.bands[3]!, t.bands[4]!, t.bands[5]!, t.bands[6]!, t.bands[7]!];
+    const lowE = Math.max(low, t.bands[1]!, t.bands[2]!);
+    const midE = Math.max(mid1, mid2, mid3);
+    const highE = Math.max(high1, high2, t.bands[8]!);
+    if (t.fall === Infinity && sustains) return say('wind', 'unpitched and held: a drone or air');
+    if (t.fall > 2.5) return say(lowE > highE ? 'gong' : 'cymbal', `unpitched, rings for ${t.fall.toFixed(1)} s`);
+    if (lowE >= midE && lowE >= highE) return say(t.fall < 0.6 ? 'kick' : 'timpani', `unpitched, low, falls in ${t.fall.toFixed(2)} s`);
+    if (highE > midE + 3) return say(t.fall < 0.3 ? (t.fall < 0.12 ? 'hat' : 'shaker') : t.fall < 1.5 ? 'crash' : 'cymbal', `unpitched, high, falls in ${t.fall === Infinity ? 'never' : `${t.fall.toFixed(2)} s`}`);
+    if (t.pitched > 0.3) return say(t.fall < 0.5 ? 'tom' : 'metal', 'unpitched but ringing, in the middle');
+    return say('snare', 'unpitched noise in the middle');
   }
-  return d / w;
-};
-const bandDistance = (a: readonly number[], b: readonly number[]) => {
-  const top = Math.max(...b);
-  return a.reduce((s, v, i) => s + Math.abs(v - Math.max(-60, b[i]! - top)), 0) / a.length;
-};
-/** Seconds as a log ratio, so 0.1 s against 0.2 s weighs as 1 s against 2 s. */
-const timeDistance = (a: number, b: number) => Math.abs(Math.log2(Math.min(a, 8) + 0.05) - Math.log2(Math.min(b, 8) + 0.05));
+  if (t.harmonicity < 0.55 && !sustains) {
+    if (key < 50) return say('timpani', `low, partials off the harmonics (${t.harmonicity.toFixed(2)}): a drum with a pitch`);
+    return say(key >= 76 ? 'glock' : key >= 60 ? 'vibes' : 'bell', `partials off the harmonics (${t.harmonicity.toFixed(2)}): struck metal`);
+  }
+  if (key < 48) return say(sustains ? 'bass' : 'bass-pluck', `plays low (around ${noteOf(key)})`);
+  // A slow swell is a pad, whatever its envelope does after; so are very long notes.
+  if (t.attack > 0.6 || long > 4) return say(key >= 80 ? 'shimmer' : 'pad', t.attack > 0.6 ? `swells in over ${t.attack.toFixed(1)} s` : `notes of ${long.toFixed(1)} s: a held chord`);
+  // A held sound playing quick notes, an arpeggio, is heard as plucked.
+  if (sustains && long < 0.35) return say('harp', `held, but plays quick notes (${long.toFixed(2)} s): an arpeggio`);
+  // A held line that bends its pitch is a sung lead.
+  if (sustains && use.bends >= 4) return say('lead', `held, bends its pitch ${use.bends} times: a lead line`);
+  if (!sustains) {
+    if (t.fall < 0.35 || long < 0.15) return say(key >= 72 && t.harmonicity < 0.75 ? 'marimba' : 'harp', `short notes that die fast (${t.fall.toFixed(2)} s)`);
+    return say('piano', `struck, falls in ${t.fall === Infinity ? 'its own time' : `${t.fall.toFixed(2)} s`}`);
+  }
+  if (t.attack > 0.08) return say(t.brightness > 2.2 && key >= 60 && key < 76 ? 'choir' : 'strings', `held, swells in over ${t.attack.toFixed(2)} s`);
+  if (t.brightness > 2.6 && key < 72) return say('brass', `held, bright (${t.brightness.toFixed(1)})`);
+  if (t.brightness > 2.6) return say('strings', `held, bright and high (${t.brightness.toFixed(1)})`);
+  if (key < 67 && long < 1.5) return say('piano', `held, starts at once, dull, notes of ${long.toFixed(2)} s`);
+  return say(key >= 67 ? 'flute' : 'organ', `held, starts at once, ${t.brightness.toFixed(1)} bright`);
+}
 
-interface Candidate { s: string; kind: Voice['kind']; t?: Timbre; f0?: number }
+const NAMES = ['c', 'db', 'd', 'eb', 'e', 'f', 'gb', 'g', 'ab', 'a', 'bb', 'b'];
+const noteOf = (m: number) => (Number.isNaN(m) ? '?' : `${NAMES[Math.round(m) % 12]}${Math.floor(Math.round(m) / 12) - 1}`);
 
-/** One file per VCSL instrument: the pitched ones nearest middle C, the banks' first. */
-async function vcslCandidates(cache: string): Promise<Candidate[]> {
-  mkdirSync(cache, { recursive: true });
-  const mapFile = path.join(cache, 'vcsl.json');
-  if (!existsSync(mapFile)) writeFileSync(mapFile, Buffer.from(await (await fetch(VCSL)).arrayBuffer()));
-  const map = JSON.parse(readFileSync(mapFile, 'utf8')) as Record<string, string | string[] | Record<string, string | string[]>>;
-  const first = (u: string | string[]) => (Array.isArray(u) ? u[0]! : u);
-  const base = map._base as string;
-  const out: Candidate[] = [];
-  for (const [name, v] of Object.entries(map)) {
-    if (name.startsWith('_')) continue;
-    const pitched = !Array.isArray(v);
-    const [key, url] = pitched
-      ? Object.entries(v as Record<string, string | string[]>).map(([k, u]) => [k, first(u)] as const).sort((a, b) => Math.abs(midi(a[0]) - 60) - Math.abs(midi(b[0]) - 60))[0]!
-      : ['c3', (v as string[])[0]!];
-    if (!url.toLowerCase().endsWith('.wav')) continue;
-    const file = path.join(cache, `${name}.wav`);
-    if (!existsSync(file)) {
-      const r = await fetch(base + url);
-      if (!r.ok) continue;
-      writeFileSync(file, Buffer.from(await r.arrayBuffer()));
-    }
-    try {
-      const { x, rate } = readWav(readFileSync(file));
-      const f0 = 440 * 2 ** ((midi(key) - 69) / 12);
-      out.push({ s: name, kind: pitched ? 'pitched' : 'bank', t: measure(x, rate, f0), f0 });
-    } catch {
-      // A file that won't read is left out.
+/** Each program's keys and note lengths across a file's sequences. */
+function uses(music: Music): Map<number, { keys: number[]; seconds: number[]; bends: number }> {
+  const out = new Map<number, { keys: number[]; seconds: number[]; bends: number }>();
+  for (const seq of music.sequences) {
+    const program = new Map<number, number>();
+    for (const e of seq.events) {
+      if (e.kind === 'program') program.set(e.channel, e.program);
+      if (e.kind === 'bend' && e.value !== 0) {
+        const p = program.get(e.channel) ?? 0;
+        (out.get(p) ?? out.set(p, { keys: [], seconds: [], bends: 0 }).get(p)!).bends++;
+      }
+      if (e.kind !== 'note') continue;
+      const p = program.get(e.channel) ?? 0;
+      const u = out.get(p) ?? out.set(p, { keys: [], seconds: [], bends: 0 }).get(p)!;
+      u.keys.push(e.key);
+      u.seconds.push((e.length / seq.ppq) * (seq.usPerQuarter / 1e6));
     }
   }
   return out;
-}
-
-const NAMES: Record<string, number> = { c: 0, d: 2, e: 4, f: 5, g: 7, a: 9, b: 11 };
-function midi(note: string): number {
-  const m = note.toLowerCase().match(/^([a-g])(#|b|s)?(-?\d+)$/);
-  if (!m) throw new Error(`not a note: ${note}`);
-  return (Number(m[3]) + 1) * 12 + NAMES[m[1]!]! + (m[2] === '#' || m[2] === 's' ? 1 : m[2] === 'b' ? -1 : 0);
-}
-
-/** Every free sound for one game sample, each through its best filter, nearest first. */
-export function options(target: Timbre, f0: number, sustains: boolean, pool: readonly Candidate[]): Voice[] {
-  const unpitched = target.flatness > 0.3 || target.pitched < 0.4;
-  const heard = `${unpitched ? 'unpitched' : 'pitched'}, ${sustains ? 'held' : target.fall === Infinity ? 'rings on' : `falls 20 dB in ${target.fall.toFixed(2)} s`}, noise ${target.flatness.toFixed(2)}`;
-  const best = new Map<string, Voice>();
-  const consider = (v: Omit<Voice, 'heard'>) => {
-    const was = best.get(v.s);
-    if (!was || v.distance < was.distance) best.set(v.s, { ...v, heard });
-  };
-  const cut = (hz: number) => (hz >= OPEN ? undefined : Math.round(hz));
-  if (unpitched) {
-    for (const c of pool) {
-      if (!c.t || c.kind !== 'bank') continue;
-      for (const fc of DRUM_CUTOFFS) {
-        const bands = c.t.bands.map((v, i) => v + (fc === Infinity ? 0 : lowpass(BANDS[i]! * 1.41, fc)));
-        const d = bandDistance(target.bands, bands) + 8 * Math.abs(target.flatness - c.t.flatness) + 4 * timeDistance(target.fall, c.t.fall);
-        consider({ s: c.s, kind: 'bank', lpf: cut(fc), gain: target.level / Math.max(c.t.level, 1e-4), distance: d });
-      }
-    }
-    for (const [s, slope] of Object.entries(NOISES)) {
-      for (const fc of DRUM_CUTOFFS) {
-        const bands = BANDS.map((lo, i) => i * slope + (fc === Infinity ? 0 : lowpass(lo * 1.41, fc)));
-        // Noise holds as long as the note: its fall comes from the game's own envelope.
-        const d = bandDistance(target.bands, bands) + 8 * Math.abs(target.flatness - 0.9);
-        consider({ s, kind: 'noise', lpf: cut(fc), gain: target.level / 0.1, distance: d });
-      }
-    }
-  } else {
-    for (const c of pool) {
-      if (!c.t || c.kind !== 'pitched' || c.t.pitched < 0.6) continue;
-      // A sample that dies away can't hold a note the game holds.
-      const dies = c.t.fall < 1.5;
-      const penalty = (sustains && dies ? 6 : 0) + (!sustains ? 2 * timeDistance(target.fall, c.t.fall) : 0) + 2 * timeDistance(target.attack, c.t.attack);
-      for (const mult of CUTOFFS) {
-        const h = c.t.harmonics.map((v, k) => v + (mult === Infinity ? 0 : lowpass(k + 1, mult)));
-        consider({ s: c.s, kind: 'pitched', lpf: cut(mult * f0), harmonics: mult === Infinity ? undefined : mult, gain: target.level / Math.max(c.t.level, 1e-4), distance: harmonicDistance(target.harmonics, h) + penalty });
-      }
-    }
-    for (const [s, synth] of Object.entries(SYNTHS)) {
-      for (const mult of CUTOFFS) {
-        const h = Array.from({ length: HARMONICS }, (_, k) => synth.harmonic(k + 1) + (mult === Infinity ? 0 : lowpass(k + 1, mult)));
-        // The filter takes level off: the harmonics' energy through it against without.
-        const kept = Math.sqrt(h.reduce((a, v) => a + 10 ** (v / 10), 0) / Array.from({ length: HARMONICS }, (_, k) => synth.harmonic(k + 1)).reduce((a, v) => a + 10 ** (v / 10), 0));
-        // A synth holds forever and takes the game's envelope, so it can play anything; a
-        // recorded instrument that is nearly as close sounds more like one, so it wins a tie.
-        consider({ s, kind: 'synth', lpf: cut(mult * f0), harmonics: mult === Infinity ? undefined : mult, gain: target.level / (synth.rms * kept), distance: harmonicDistance(target.harmonics, h) + (sustains ? 1 : 3) });
-      }
-    }
-  }
-  return [...best.values()]
-    .map((v) => ({ ...v, gain: Math.round(Math.min(4, Math.max(0.05, v.gain)) * 100) / 100, distance: Math.round(v.distance * 10) / 10 }))
-    .sort((a, b) => a.distance - b.distance);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
@@ -349,45 +364,44 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.error('usage: node tools/rebecca/music/re1-voices.ts <rae music dir> <cache dir> <voices.json>');
     process.exit(2);
   }
-  const pool = await vcslCandidates(cache);
-  console.log(`${pool.length} VCSL instruments measured`);
+  mkdirSync(cache, { recursive: true });
+  const fixFile = path.join(path.dirname(fileURLToPath(import.meta.url)), 're1-voices.fix.json');
+  const fixes = (existsSync(fixFile) ? JSON.parse(readFileSync(fixFile, 'utf8')) : {}) as Record<string, FamilyName>;
+  for (const [k, f] of Object.entries(fixes)) if (!(f in FAMILIES)) throw new Error(`${fixFile}: ${k} names ${f}, which is not a family`);
   const voices: Record<string, Voice> = {};
   for (const file of readdirSync(input).filter((f) => /^SEP[0-9A-F]{2}\.json$/.test(f)).sort()) {
     const music = JSON.parse(readFileSync(path.join(input, file), 'utf8')) as Music;
-    const scored = new Map<number, Voice[]>();
-    for (const sample of music.samples) {
-      const tone = music.bank.programs.flatMap((p) => p.tones).find((t) => t.sample === sample.index);
-      if (!tone) continue;
-      const { x, rate } = readWav(readFileSync(path.join(input, sample.file)));
-      if (x.length < 64) continue;
-      const f0 = 440 * 2 ** ((tone.center + tone.fine / 128 - 69) / 12);
-      // Held when the sample loops and the game's envelope keeps it sounding; a looped sample
-      // whose envelope fades while the key is down plays like a struck or plucked note.
-      const sustains = sample.loop !== undefined && spuEnvelope(tone.adsr1, tone.adsr2).sustain > 0;
-      scored.set(sample.index, options(measure(x, rate, f0, sample.loop?.start), f0, sustains, pool));
-    }
-    // An instrument recorded at several keys gets one free sound across all of them, the one
-    // nearest over the lot, so a tune doesn't change instrument at a key split. A drum kit
-    // (a tone per key) keeps a sound per drum.
+    const used = uses(music);
     for (const program of music.bank.programs) {
-      const tones = program.tones.filter((t) => scored.has(t.sample));
-      const kit = tones.some((t) => t.minKey === t.maxKey);
-      for (const t of tones) {
-        const key = music.samples[t.sample]!.file.replace(/\.wav$/, '');
-        if (voices[key]) continue;
-        const mine = scored.get(t.sample)!;
-        if (kit || tones.length < 2) {
-          voices[key] = mine[0]!;
-          continue;
-        }
-        const total = (s: string) => tones.reduce((a, o) => a + (scored.get(o.sample)!.find((v) => v.s === s)?.distance ?? 99), 0);
-        const pick = [...new Set(tones.flatMap((o) => scored.get(o.sample)!.slice(0, 8).map((v) => v.s)))].sort((a, b) => total(a) - total(b))[0]!;
-        voices[key] = mine.find((v) => v.s === pick) ?? mine[0]!;
+      const kit = program.tones.some((t) => t.minKey === t.maxKey);
+      const use = used.get(program.index) ?? { keys: [], seconds: [], bends: 0 };
+      // One family for an instrument recorded at several keys, from its middle tone; a kit sorts each drum.
+      const sorted = new Map<number, { family: FamilyName; heard: string }>();
+      for (const tone of program.tones) {
+        const sample = music.samples[tone.sample];
+        if (!sample) continue;
+        const { x, rate } = readWav(readFileSync(path.join(input, sample.file)));
+        if (x.length < 64) continue;
+        // The sample sounds fine/128 of a semitone below its centre key; the SPU tunes it up by that.
+        const f0 = 440 * 2 ** ((tone.center - tone.fine / 128 - 69) / 12);
+        const sustains = sample.loop !== undefined && spuEnvelope(tone.adsr1, tone.adsr2).sustain > 0;
+        const mine = kit ? { keys: [tone.minKey], seconds: use.seconds, bends: 0 } : use;
+        sorted.set(tone.sample, sort(measure(x, rate, f0, sample.loop?.start), sustains, kit, mine));
       }
+      const middle = program.tones[Math.floor(program.tones.length / 2)];
+      program.tones.forEach((tone, i) => {
+        const mine = sorted.get(tone.sample);
+        if (!mine) return;
+        const pid = `${file.slice(0, 5)}/p${program.index}`;
+        const id = `${pid}t${i}`;
+        const pick = kit ? mine : (sorted.get(middle!.sample) ?? mine);
+        const fixed = fixes[id] ?? fixes[pid];
+        voices[id] = { ...FAMILIES[fixed ?? pick.family], family: fixed ?? pick.family, heard: fixed ? 'set by ear' : pick.heard };
+      });
     }
   }
   writeFileSync(out, JSON.stringify(voices, null, 1));
   const counts = new Map<string, number>();
-  for (const v of Object.values(voices)) counts.set(v.s, (counts.get(v.s) ?? 0) + 1);
-  console.log(`${Object.keys(voices).length} samples matched:`, [...counts].sort((a, b) => b[1] - a[1]).map(([s, n]) => `${s} ${n}`).join(', '));
+  for (const v of Object.values(voices)) counts.set(v.family, (counts.get(v.family) ?? 0) + 1);
+  console.log(`${Object.keys(voices).length} instrument tones sorted:`, [...counts].sort((a, b) => b[1] - a[1]).map(([s, n]) => `${s} ${n}`).join(', '));
 }

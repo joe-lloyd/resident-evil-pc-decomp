@@ -109,22 +109,23 @@ owner's page is <https://home.arpa/research/re1-music/>.
     slide in the game hold still.
 - **A second version on free sounds.** Every track also plays the same
   notes on VCSL and Strudel's synths, so it reads as plain Strudel code and
-  sounds like what we can ship. `tools/rebecca/music/re1-voices.ts` picks
-  each replacement by measurement, not by ear:
-  - It measures each game sample: harmonics, noisiness, brightness, attack
-    and fall.
-  - It measures one sample of each VCSL instrument the same way, and works
-    out the synths from their waveforms.
-  - The nearest wins, through the low-pass filter that brings it closest.
-    For pitched voices the cutoff follows each note, as a repitched game
-    sample's brightness does.
-  - One instrument recorded at several keys gets one replacement.
-  - Over all 471 samples, a filtered sawtooth wins most pitched ones: the
-    game's pads and strings. Pianos, harps, harmonicas and organs win where
-    they are close. Noise and VCSL percussion take the drums.
+  sounds like what we can ship. `tools/rebecca/music/re1-voices.ts` sorts
+  each of the game's instruments into a family:
+  - The families are strings, pad, choir, brass, organ, flute, lead,
+    piano, harp, bells, bass and the drums.
+  - It sorts from what the sample measures as (its own pitch, how noisy,
+    how bright, how it starts and fades) and how the music uses it (how low
+    it plays, how long its notes are, whether it bends).
+  - Each family has one sound chosen to sound good. That is a recorded VCSL
+    instrument where there is one, and detuned synths with vibrato and a
+    filter that follows the pitch where there isn't: VCSL has no strings,
+    choir or brass. The free versions add a little reverb, as the PS1 did.
 
-  A choice found wrong by ear goes in `tools/rebecca/music/re1-voices.fix.json`,
-  keyed `SEPxx/sNN`, and wins over the measurement.
+  A first try matched each sample to the free sound with the nearest
+  spectrum. It chose bare sawtooth waves and white noise, which sounded like
+  a chiptune, and the owner rejected it. A family wrong by ear goes in
+  `tools/rebecca/music/re1-voices.fix.json` by program (`"SEP0F/p2": "harp"`)
+  and wins over the sorting.
 - **The proof.** `tools/rebecca/music/re1-check.ts` evaluates every track
   with Strudel's engine and compares each note's start, length and pitch
   with the disc, as exact fractions. All 97 tracks, 17,010 notes, match,
