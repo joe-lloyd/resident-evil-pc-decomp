@@ -3,9 +3,9 @@
 // To camp-yard.
 door_aot_set(0, 4250, 5950, 1530, 850, 0, 0, 0, 4, 0, ROOM_31E, 5015, 0, 7990, 3072, UNLOCKED, 193);
 // The typewriter and the item box, its lid on the body the scene paints.
-aot_set(1, 3060, 5355, 1105, 1445, SCE_TYPEWRITER, 129, 0, 0, 0, 0, 0, 0);
-aot_set(2, 5865, 4675, 1955, 2125, SCE_ITEMBOX, 129, 0, 0, 0, 0, 0, 0);
-obj(0, 17, 255, 7809, -1440, 5720, 2048, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+aot_set(1, 3400, 5355, 765, 1445, SCE_TYPEWRITER, 129, 0, 0, 0, 0, 0, 0);
+aot_set(2, 6120, 5440, 1700, 1360, SCE_ITEMBOX, 129, 0, 0, 0, 0, 0, 0);
+obj(0, 17, 255, 7801, -1152, 5720, 2048, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 aot_set(3, 3400, 2040, 935, 2040, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 // Foreman's letters, a file.
 if (ck(FG_ITEM, 233, 0)) {
