@@ -101,6 +101,11 @@ owner's page is <https://home.arpa/research/re1-music/>.
   sequence:
   - One cycle is one bar. Each voice is mini-notation weighted in the
     sequence's own ticks, so the timing is exact.
+  - A track that plays notes before its loop start plays them once, as the
+    PS1 does, then repeats only the loop. The code is an `arrange` of the
+    intro and the loop, counted in ticks: `arrange` adds its counts as
+    floats, and counts in bars made the times inexact. 32 of the 97
+    sequences have an intro.
   - The instruments are the game's samples, keyed at their centre note and
     looped where the bank loops them.
   - Envelopes are worked out from the bank's ADSR, so they are close, not
@@ -124,13 +129,24 @@ owner's page is <https://home.arpa/research/re1-music/>.
   A first try matched each sample to the free sound with the nearest
   spectrum. It chose bare sawtooth waves and white noise, which sounded like
   a chiptune, and the owner rejected it. A family wrong by ear goes in
-  `tools/rebecca/music/re1-voices.fix.json` by program (`"SEP0F/p2": "harp"`)
-  and wins over the sorting.
+  `tools/rebecca/music/re1-voices.fix.json`, by program
+  (`"SEP0F/p2": "harp"`) or by tone (`"SEP0F/p7t3": "snare"`), and wins
+  over the sorting. A tone's fix wins over its program's. `re1.ts` applies
+  the file when it loads voices.json, so a fix needs no new sort. A fix
+  that names no tone or no family is an error.
 - **The proof.** `tools/rebecca/music/re1-check.ts` evaluates every track
-  with Strudel's engine and compares each note's start, length and pitch
-  with the disc, as exact fractions. All 97 tracks, 17,010 notes, match,
-  in both versions. A
-  converter tampered to shorten one note length fails 34 tracks.
+  with Strudel's engine. It queries the intro once and the loop twice, and
+  compares each note's start, length, pitch and sound with the disc, as
+  exact fractions. The sound is the game's sample, or the family that
+  voices.json and the fix file give the tone. Notes are compared as
+  multisets, so a note played twice must be on the disc twice. All 97
+  tracks, 17,010 notes, match, in both versions: 194 of 194 tracks,
+  34,020 notes. Tampering fails it:
+  - writing the whole first pass as the loop, as re1.ts did before, fails
+    64 tracks;
+  - doubling one voice fails 190, and merging unison notes fails 6;
+  - spreading a fix's family name in place of its voice, or dropping
+    program fixes, fails the track the fix is for.
 - **It stays off GitHub.** It is Capcom's music, from the player's disc.
   Both repositories are public, so only the tools are committed. The output
   is built locally and published on the LAN:
