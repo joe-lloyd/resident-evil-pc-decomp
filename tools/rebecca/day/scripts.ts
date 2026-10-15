@@ -343,6 +343,25 @@ function main(): void {
       lines.push(`aot_set(${id++}, ${size(kit.saves.box)}, SCE_ITEMBOX, 129, 0, 0, 0, 0, 0, 0);`);
       lines.push(`obj(0, 17, 255, ${lid.x}, ${lid.y}, ${lid.z}, ${lid.angle}, ${Array(16).fill(0).join(', ')});`);
     }
+    // The room's map, if the plan finds one here (maps/pickups.ts): before
+    // the checks in the table, so where its zone meets one it is the map the
+    // action button takes; clear of the doors, the checks and the spots as
+    // far as the floor allows. Its model is after the supplies' (rooms.ts).
+    const floor: Floor = { bounds: kit.bounds, walls: kit.walls, voids: kit.voids, doors: (kit.doors ?? []).map((d) => ({ zone: d.zone, arrive: d.arrive })) };
+    const others = [
+      ...(kit.doors ?? []).map((d) => d.zone),
+      ...(kit.saves ? [kit.saves.typewriter, kit.saves.box] : []),
+      ...(kit.checks ?? []).map((c) => c.zone),
+      ...(kit.spots ?? []).map((sp) => sp.zone),
+      ...(kit.items ?? []).map((it) => ({ x0: it.x - 900, z0: it.z - 900, x1: it.x + 900, z1: it.z + 900 })),
+    ];
+    const mapLine = mapLines(slug, floor, others, id, supplyModels(slug).length);
+    lines.push(...mapLine);
+    if (mapLine.length) id++;
+    const mapZone = (() => {
+      const m = /item_aot_set\(\d+, (\d+), (\d+), (\d+), (\d+),/.exec(mapLine.join('\n'));
+      return m ? { x0: +m[1]!, z0: +m[2]!, x1: +m[1]! + +m[3]!, z1: +m[2]! + +m[4]! } : undefined;
+    })();
     for (const c of kit.checks ?? []) {
       const doc = DOCUMENTS.find((d) => d.room === slug && c.text.startsWith(d.check));
       if (doc) {
@@ -359,20 +378,11 @@ function main(): void {
       lines.push(`aot_set(${id++}, ${size(c.zone)}, SCE_MESSAGE, 129, ${128 + msgs.length}, 0, 255, 0, 0, 0);`);
       msgs.push(c.text);
     }
-    const floor: Floor = { bounds: kit.bounds, walls: kit.walls, voids: kit.voids, doors: (kit.doors ?? []).map((d) => ({ zone: d.zone, arrive: d.arrive })) };
     lines.push(...foeLines(slug, floor, killFlags));
-    lines.push(...supplyLines(slug, floor, itemFlags, id));
+    // Supplies keep off the map's floor: a wall to them.
+    const mapWall = mapZone ? [{ ...mapZone, shape: 'box' as const }] : [];
+    lines.push(...supplyLines(slug, { ...floor, walls: [...floor.walls, ...mapWall] }, itemFlags, id));
     id += SUPPLIES[slug]?.length ?? 0;
-    // The room's map, if the plan finds one here: its model after the
-    // supplies' (rooms.ts), its zone clear of the room's others.
-    const taken = lines.flatMap((l) => {
-      const m = /(?:item_)?aot_set\(\d+, (\d+), (\d+), (\d+), (\d+),/.exec(l);
-      return m ? [{ x0: +m[1]!, z0: +m[2]!, x1: +m[1]! + +m[3]!, z1: +m[2]! + +m[4]! }] : [];
-    });
-    taken.push(...(kit.spots ?? []).map((sp) => sp.zone), ...(kit.items ?? []).map((it) => ({ x0: it.x - 900, z0: it.z - 900, x1: it.x + 900, z1: it.z + 900 })));
-    const mapLine = mapLines(slug, floor, taken, id, supplyModels(slug).length);
-    lines.push(...mapLine);
-    if (mapLine.length) id++;
     // The key items: after the supplies and the map in the room's item models (room.ts).
     const specSlots = supplyModels(slug).length + mapModels(slug).length;
     lines.push(...keyItemLines(kit.items ?? [], keyFlags, id, specSlots));
