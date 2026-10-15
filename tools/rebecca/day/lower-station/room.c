@@ -20,11 +20,18 @@ aot_set(10, 7990, 5865, 765, 1020, SCE_MESSAGE, 129, 136, 0, 255, 0, 0, 0);
 if (ck(FG_ITEM, 193, 0)) {  // clip
     item_aot_set(11, 7620, 1500, 1800, 1800, 11, 15, 0, 255, 72, 33, 0, 0, 96, 9, 0, 0, 193, 129, 0, 0);
 }
+if (ck(FG_ITEM, 252, 0)) {
+    set(FG_ROOM, 12, 0);
+}
 return;
 
 // main procedure 0
 if (ck(FG_COMMON, 247, 1)) {
     set(FG_COMMON, 247, 0);
     message(128, 255, 0);
+}
+if (ck(FG_ROOM, 12, 0) && ck(FG_ITEM, 252, 1)) {
+    set(FG_ROOM, 12, 1);
+    message(137, 255, 0);
 }
 return;

@@ -32,11 +32,18 @@ if (ck(FG_ITEM, 199, 0)) {  // ribbons
 if (ck(FG_ITEM, 169, 0)) {  // gate key (gate-key)
     item_aot_set(15, 8144, 4455, 1800, 1800, 52, 1, 4, 255, 84, 35, 180, 246, 235, 20, 0, 0, 169, 129, 0, 0);
 }
+if (ck(FG_ITEM, 253, 0)) {
+    set(FG_ROOM, 12, 0);
+}
 return;
 
 // main procedure 0
 if (ck(FG_COMMON, 250, 1)) {
     set(FG_COMMON, 250, 0);
     message(128, 255, 0);
+}
+if (ck(FG_ROOM, 12, 0) && ck(FG_ITEM, 253, 1)) {
+    set(FG_ROOM, 12, 1);
+    message(136, 255, 0);
 }
 return;

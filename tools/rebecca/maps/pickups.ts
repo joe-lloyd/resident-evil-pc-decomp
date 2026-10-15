@@ -20,13 +20,27 @@ export const MAP_MODEL: PickupModel = { from: 'Stage1/ROOM1070.RDT', index: 0 };
  */
 export const MAP_FLAGS = Array.from({ length: MAP_ITEMS.length }, (_, i) => 248 + i);
 
+/** What she says on taking each map, by its id in MAP_ITEMS. */
+const FOUND: Record<string, string> = {
+  'map-trail': "The ranger's trail map. The station, the gorge and the summit.",
+  'map-camp': 'A site plan of Camp 4, off the notice board.',
+  'map-forestry': 'A Forest Service road map. The road, the tower, the line, the quarry.',
+  'map-mine': 'A survey of the mine. The levels, the pump and the lift.',
+  'map-valley': "The Skyway's route map. The line, the valley, the creek.",
+  'map-estate': 'A plan of the estate grounds. The wall, the kennels, the garden, the cellar.',
+};
+
 /** The map that lies in a room, by the room's slug. */
-export function mapIn(slug: string): { id: number; flag: number; name: string } | undefined {
+export function mapIn(slug: string): { id: number; flag: number; name: string; found: string } | undefined {
   const i = MAP_ITEMS.findIndex((m) => {
     const step = day.steps.find((s) => s.id === m.step);
     return step && (day.places.find((p) => p.id === step.at)?.room ?? step.at) === slug;
   });
-  return i < 0 ? undefined : { id: FIRST_MAP_ITEM + i, flag: MAP_FLAGS[i]!, name: MAP_ITEMS[i]!.name };
+  if (i < 0) return undefined;
+  const m = MAP_ITEMS[i]!;
+  const found = FOUND[m.id];
+  if (!found) throw new Error(`${m.id}: no line for taking it`);
+  return { id: FIRST_MAP_ITEM + i, flag: MAP_FLAGS[i]!, name: m.name, found };
 }
 
 /** The item models a kit room needs for its map: none, or RE1's map. */

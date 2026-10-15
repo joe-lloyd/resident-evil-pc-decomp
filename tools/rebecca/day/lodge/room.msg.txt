@@ -6,3 +6,4 @@
 5: \nHis tools. Kept clean,\noiled. Before.
 6: \nSeed trays. Everything in\nthem has died.
 7: \nThis is where it happened.\nSomeone called Scott.
+8: \nA plan of the estate\ngrounds. The wall, the\p{0}\nkennels, the garden, the\ncellar.

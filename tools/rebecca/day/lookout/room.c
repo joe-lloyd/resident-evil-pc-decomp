@@ -71,6 +71,11 @@ if (ck(FG_COMMON, 199, 0)) {   // ck(f, 0): the bit is set, as set(f, 0) leaves 
     enemy(34 /* Barry (Stars) */, 0, 255, 1, 2, 0, 0, 2656, 0, 0, 10710, 0, 5610, 0, 0, 0, 0);
     enemy(33 /* Jill (Stars) */, 0, 255, 1, 2, 0, 0, 2944, 0, 0, 5780, 0, 6290, 1, 0, 0, 0);
 }
+// FG_ROOM 22: the trail map was on the desk when she came in (main says her
+// line the frame she takes it).
+if (ck(FG_ITEM, 248, 0)) {
+    set(FG_ROOM, 22, 0);
+}
 return;
 
 // main procedure 0
@@ -92,5 +97,9 @@ if (ck(FG_ROOM, 21, 1)) {
 if (ck(FG_ROOM, 21, 0) && ck(FG_COMMON, 201, 1)) {
     set(FG_COMMON, 201, 0);
     message(128, 255, 0);
+}
+if (ck(FG_ROOM, 22, 0) && ck(FG_ITEM, 248, 1)) {
+    set(FG_ROOM, 22, 1);
+    message(138, 255, 0);
 }
 return;

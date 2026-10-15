@@ -7,3 +7,4 @@
 6: \nHis coat's still on the\nhook. He never left.
 7: \nARKLAY SKYWAY, 1996. Built\nwith the support of the\nUmbrella Corporation.\p{0}\nUmbrella. Again.
 8: \nA CB radio. Static on\nevery channel.
+9: \nThe Skyway's route map.\nThe line, the valley, the\ncreek.

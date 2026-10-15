@@ -16,7 +16,7 @@ import type { DayRoom } from './room.ts';
 import { BOOKS, DOCUMENTS, ITEM_FLAG_BASE } from '../files/documents.ts';
 import { foeLines, KILL_FLAGS, type Floor } from './foes.ts';
 import { ITEM_FLAGS, SUPPLIES, supplyLines, supplyModels } from './supplies.ts';
-import { mapLines, mapModels } from '../maps/pickups.ts';
+import { mapIn, mapLines, mapModels } from '../maps/pickups.ts';
 import { KEY_ITEM_FLAGS, KEY_ITEMS, keyItemLines, keyItemModels, sameModel, type ItemSpot } from '../items/items.ts';
 import { BAG_SLOTS, GEAR, LOSS_BIT, LOSS_LINE, LOSS_ROOM } from './gear.ts';
 import { EVENT_FLAGS, EVENTS, eventsIn, giveModels, GIVE_FLAGS, itemModelSlots, keyItem } from './events.ts';
@@ -481,6 +481,14 @@ function main(): void {
     }
     // RE1's room action table has 24 slots.
     if (id > 24) throw new Error(`${slug}: ${id} room actions, the table has 24`);
+    // Her line on taking the room's map: FG_ROOM marks the map as here when
+    // the room loads, and main says the line the frame its flag clears.
+    const mapHere = mapIn(slug);
+    if (mapHere) {
+      const b = bit++;
+      lines.push(`if (ck(FG_ITEM, ${mapHere.flag}, 0)) {`, `    set(FG_ROOM, ${b}, 0);`, '}');
+      main.push(`if (ck(FG_ROOM, ${b}, 0) && ck(FG_ITEM, ${mapHere.flag}, 1)) {`, `    set(FG_ROOM, ${b}, 1);`, `    message(${say(mapHere.found)}, 255, 0);`, '}');
+    }
     if (bit > 29) throw new Error(`${slug}: its events need FG_ROOM bits up to ${bit - 1}, past the engine's from 29`);
     lines.push('return;', '', '// main procedure 0');
     const flag = kit.entry ? flags.shift() : undefined;

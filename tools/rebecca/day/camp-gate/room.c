@@ -13,11 +13,18 @@ aot_set(5, 18360, 4080, 2040, 2040, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
 aot_set(6, 11560, 6800, 3740, 1700, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
 aot_set(7, 22440, 11220, 3060, 2040, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 aot_set(8, 8840, 7820, 5780, 4080, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
+if (ck(FG_ITEM, 249, 0)) {
+    set(FG_ROOM, 12, 0);
+}
 return;
 
 // main procedure 0
 if (ck(FG_COMMON, 212, 1)) {
     set(FG_COMMON, 212, 0);
     message(128, 255, 0);
+}
+if (ck(FG_ROOM, 12, 0) && ck(FG_ITEM, 249, 1)) {
+    set(FG_ROOM, 12, 1);
+    message(135, 255, 0);
 }
 return;

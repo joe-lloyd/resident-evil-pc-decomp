@@ -5,3 +5,4 @@
 4: \nA logger, dead over the\nlogs they piled up. The\ncrows have had his eyes.
 5: \nThe camp truck, shoved out\nof the gate.\p{0}\nBloody hands all over the\ninside of the door.\nSomeone wanted out.
 6: \nThe barricade. Logs,\nsandbags, spikes. Pulled\ndown, or pushed.
+7: \nA site plan of Camp 4, off\nthe notice board.

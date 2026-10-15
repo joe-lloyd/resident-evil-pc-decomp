@@ -17,11 +17,18 @@ aot_set(9, 7820, 16490, 2040, 1360, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
 enemy(5, 0, 204, 1, 2, 0, 0, 3838, 0, 0, 17020, 0, 6650, 0, 0, 0, 0);  // a crow
 enemy(5, 0, 205, 1, 2, 0, 0, 313, 0, 0, 20080, 0, 16850, 1, 0, 0, 0);  // a crow
 enemy(5, 0, 206, 1, 2, 0, 0, 1757, 0, 0, 11920, 0, 15490, 2, 0, 0, 0);  // a crow
+if (ck(FG_ITEM, 250, 0)) {
+    set(FG_ROOM, 12, 0);
+}
 return;
 
 // main procedure 0
 if (ck(FG_COMMON, 222, 1)) {
     set(FG_COMMON, 222, 0);
     message(128, 255, 0);
+}
+if (ck(FG_ROOM, 12, 0) && ck(FG_ITEM, 250, 1)) {
+    set(FG_ROOM, 12, 1);
+    message(136, 255, 0);
 }
 return;

@@ -8,3 +8,4 @@
 7: \nA survey map of the Arklay\nMountains.\p{0}\nSomeone has circled a house\nin the valley. The old\nSpencer estate.\p{0}\nBravo's last position was\nnear there.
 8: \nHis hat. He went out\nwithout it.
 9: \nTins, jars, a few books.\nEnough food for a month\nup here.
+10: \nThe ranger's trail map.\nThe station, the gorge and\nthe summit.

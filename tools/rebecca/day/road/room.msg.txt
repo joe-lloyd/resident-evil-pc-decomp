@@ -6,3 +6,4 @@
 5: \nGlass from a headlamp, and\nblood. Grey fur.\p{0}\nSomething big ran out in\nfront of whoever drove\nthrough here.
 6: \nPaw prints, crossing the\nroad. Big ones.\p{0}\nThe dogs came down this\nway.
 7: \nA ranger's hat, in the\nditch.
+8: \nA Forest Service road map.\nThe road, the tower, the\nline, the quarry.
