@@ -467,6 +467,38 @@ BOOL InitSoftwareRenderer(void)
     return TRUE;
 }
 
+// Port addition: a test game opens on the second screen, in one corner of a
+// two-by-two grid picked by its test port (7801 top left, 7811 top right,
+// 7820 bottom left, 7830 bottom right), so the games the harness runs side by
+// side don't open on top of each other. With one screen it uses that one.
+static BOOL CALLBACK FindSecondScreen(HMONITOR monitor, HDC, LPRECT, LPARAM found)
+{
+    MONITORINFO info = { sizeof(info) };
+    if (GetMonitorInfoA(monitor, &info) && !(info.dwFlags & MONITORINFOF_PRIMARY)) {
+        *(HMONITOR*)found = monitor;
+        return FALSE;
+    }
+    return TRUE;
+}
+
+static void PlaceTestWindow(int width, int height, int* x, int* y)
+{
+    HMONITOR screen = NULL;
+    EnumDisplayMonitors(NULL, NULL, FindSecondScreen, (LPARAM)&screen);
+    if (screen == NULL) {
+        POINT origin = { 0, 0 };
+        screen = MonitorFromPoint(origin, MONITOR_DEFAULTTOPRIMARY);
+    }
+    MONITORINFO info = { sizeof(info) };
+    if (!GetMonitorInfoA(screen, &info)) return;
+    const RECT& area = info.rcWork;
+    const int cellW = (area.right - area.left) / 2;
+    const int cellH = (area.bottom - area.top) / 2;
+    const int slot = (TestMode_Port() / 10) % 4;
+    *x = area.left + (slot % 2) * cellW + (cellW > width ? (cellW - width) / 2 : 0);
+    *y = area.top + (slot / 2) * cellH + (cellH > height ? (cellH - height) / 2 : 0);
+}
+
 // ============================================================================
 // CreateGameWindow - Register class and create the game window
 // 0x00441bfc
@@ -511,6 +543,9 @@ BOOL CreateGameWindow(int nCmdShow)
         // Center window on desktop
         winX = ((desktopRect.right - desktopRect.left) - winWidth) / 2;
         winY = ((desktopRect.bottom - desktopRect.top) - winHeight) / 2;
+        if (TestMode_Active()) {
+            PlaceTestWindow(winWidth, winHeight, &winX, &winY);
+        }
     }
     
     // Register window class

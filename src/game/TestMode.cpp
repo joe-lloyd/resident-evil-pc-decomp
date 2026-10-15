@@ -33,13 +33,21 @@ static int          s_clientSeen = 0;      // plat_test_link_client_id at the la
 static char         s_body[8192];
 static char         s_lastBody[8192];
 
+static int          s_port = 0;
+
 int TestMode_Start(int port)
 {
     if (!plat_test_link_open(port)) return 0;
     s_active = 1;
+    s_port = port;
     memset(s_heldUntil, 0, sizeof(s_heldUntil));
     plat_key_inject_exclusive(TRUE);
     return 1;
+}
+
+int TestMode_Port(void)
+{
+    return s_port;
 }
 
 int TestMode_Active(void)
