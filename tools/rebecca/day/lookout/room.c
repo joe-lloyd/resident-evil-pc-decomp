@@ -53,8 +53,12 @@ obj(0, 17, 255, 11050, -936, 7106, 1024, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 // south-west camera. enemy operands: id, weapon (0: none), kill flag (255:
 // none), 1, 2, 0, 0, angle (0 faces +X, 0x800 -X, 0xC00 +Z), 0, 0, X, Y, Z,
 // enemy slot, animation, frame, 0: the shape every shipped NPC spawn has.
-enemy(34 /* Barry (Stars) */, 0, 255, 1, 2, 0, 0, 2656, 0, 0, 10710, 0, 5610, 0, 0, 0, 0);
-enemy(33 /* Jill (Stars) */, 0, 255, 1, 2, 0, 0, 2944, 0, 0, 5780, 0, 6290, 1, 0, 0, 0);
+// Only while FG_COMMON 199 is set, which tests/people.ts sets: in the story
+// neither of them is in the cabin.
+if (ck(FG_COMMON, 199, 0)) {   // ck(f, 0): the bit is set, as set(f, 0) leaves it
+    enemy(34 /* Barry (Stars) */, 0, 255, 1, 2, 0, 0, 2656, 0, 0, 10710, 0, 5610, 0, 0, 0, 0);
+    enemy(33 /* Jill (Stars) */, 0, 255, 1, 2, 0, 0, 2944, 0, 0, 5780, 0, 6290, 1, 0, 0, 0);
+}
 return;
 
 // main procedure 0

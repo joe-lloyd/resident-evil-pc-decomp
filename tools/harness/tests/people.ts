@@ -79,7 +79,11 @@ const BACKDROP_LOOP = 48;
 const failed: string[] = [];
 try {
   await link.waitFor((s) => s.play, 'gameplay', 120_000);
-  const s = await settle(link);
+  // The cabin places them only for this test (FG_COMMON 199): set it and come in again.
+  await settle(link);
+  await link.setFlag(1, 199, true);
+  await link.room(2, 0x14);
+  const s = await settle(link, (st) => st.stage === 2 && st.room === 0x14);
   for (const e of expected) {
     const found = s.enemies.find((n) => n.type === e.type);
     if (!found) failed.push(`${e.name}: no entity ${e.type} in the room`);
