@@ -107,16 +107,36 @@ owner's page is <https://home.arpa/research/re1-music/>.
     exact.
   - Pitch bends and the SPU's reverb are not reproduced, so leads that
     slide in the game hold still.
+- **A second version on free sounds.** Every track also plays the same
+  notes on VCSL and Strudel's synths, so it reads as plain Strudel code and
+  sounds like what we can ship. `tools/rebecca/music/re1-voices.ts` picks
+  each replacement by measurement, not by ear:
+  - It measures each game sample: harmonics, noisiness, brightness, attack
+    and fall.
+  - It measures one sample of each VCSL instrument the same way, and works
+    out the synths from their waveforms.
+  - The nearest wins, through the low-pass filter that brings it closest.
+    For pitched voices the cutoff follows each note, as a repitched game
+    sample's brightness does.
+  - One instrument recorded at several keys gets one replacement.
+  - Over all 471 samples, a filtered sawtooth wins most pitched ones: the
+    game's pads and strings. Pianos, harps, harmonicas and organs win where
+    they are close. Noise and VCSL percussion take the drums.
+
+  A choice found wrong by ear goes in `tools/rebecca/music/re1-voices.fix.json`,
+  keyed `SEPxx/sNN`, and wins over the measurement.
 - **The proof.** `tools/rebecca/music/re1-check.ts` evaluates every track
   with Strudel's engine and compares each note's start, length and pitch
-  with the disc, as exact fractions. All 97 tracks, 17,010 notes, match. A
+  with the disc, as exact fractions. All 97 tracks, 17,010 notes, match,
+  in both versions. A
   converter tampered to shorten one note length fails 34 tracks.
 - **It stays off GitHub.** It is Capcom's music, from the player's disc.
   Both repositories are public, so only the tools are committed. The output
   is built locally and published on the LAN:
 
       pnpm rae music re1.img /tmp/re1-music          # in retro-archive-explorer
-      node tools/rebecca/music/re1.ts /tmp/re1-music /tmp/re1-strudel
+      node tools/rebecca/music/re1-voices.ts /tmp/re1-music /tmp/vcsl /tmp/voices.json
+      node tools/rebecca/music/re1.ts /tmp/re1-music /tmp/re1-strudel /tmp/voices.json
       node tools/rebecca/music/page-re1.ts /tmp/re1-strudel <@strudel/web 1.2.5 dist>
 
   The page plays the code with Strudel's own browser build, hosted beside

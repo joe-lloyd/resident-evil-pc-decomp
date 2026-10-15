@@ -10,13 +10,16 @@
 // made from the player's disc and published on the LAN only.
 //
 //   pnpm rae music re1.img /tmp/re1-music          (retro-archive-explorer)
-//   node tools/rebecca/music/re1.ts /tmp/re1-music <outdir>
+//   node tools/rebecca/music/re1.ts /tmp/re1-music <outdir> [voices.json]
 //
 // <outdir> gets one .js per sequence with notes, the samples they play, and
-// tracks.json; page-re1.ts draws the player page from it.
-import { copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+// tracks.json; page-re1.ts draws the player page from it. With voices.json
+// (re1-voices.ts) each track also gets a .free.js on free sounds; choices
+// in re1-voices.fix.json beside this file win over the measured ones.
+import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { Voice } from './re1-voices.ts';
 
 // The shapes `rae music` writes (retro-archive-explorer, electron/parsers/audio/psxSeq.ts).
 interface Tone { program: number; minKey: number; maxKey: number; center: number; fine: number; volume: number; pan: number; sample: number; adsr1: number; adsr2: number }
@@ -98,8 +101,15 @@ export function spuEnvelope(adsr1: number, adsr2: number): { attack: number; dec
 
 interface Voiced { at: number; length: number; key: number; gain: number; pan: number; voice: string }
 
-/** Sequence `seq` of `music` as Strudel code, or undefined when it plays no notes. */
-export function transcribe(music: Music, s: number, id: string, name: string | undefined, rooms: readonly string[]): Track | undefined {
+/** VCSL's sample map at the commit the sketches use. */
+const VCSL_MAP = 'https://raw.githubusercontent.com/felixroos/dough-samples/9eacfc86ec4393e68a463ff52b01c19cfaa77f38/vcsl.json';
+
+/**
+ * Sequence `s` of `music` as Strudel code, or undefined when it plays no
+ * notes. With `free` (re1-voices.ts, by sample) it plays on free sounds in
+ * place of the game's samples; the notes are the same either way.
+ */
+export function transcribe(music: Music, s: number, id: string, name: string | undefined, rooms: readonly string[], free?: Readonly<Record<string, Voice>>): Track | undefined {
   const seq = music.sequences[s]!;
   const notes = seq.events.filter((e) => e.kind === 'note');
   if (notes.length === 0) return undefined;
@@ -190,10 +200,33 @@ export function transcribe(music: Music, s: number, id: string, name: string | u
     return parts.join(' ').replace(/ \n/g, '\n');
   };
   const sampleOf = new Map(music.samples.map((x) => [x.index, x]));
+  const constOr = (name: string, chords: Chord[], value: (c: Chord) => number) => {
+    const values = new Set(chords.map(value));
+    return values.size === 1 ? `.${name}(${[...values][0]})` : `.${name}(\`${mini(chords, (c) => String(value(c)))}\`)`;
+  };
+  const hz = (key: number) => 440 * 2 ** ((key - 69) / 12);
+  const freeSounds = new Set<string>();
   const code = lanes.map(({ sound, channel, chords }) => {
     const { tone } = sounds.get(sound)!;
     const env = spuEnvelope(tone.adsr1, tone.adsr2);
     const sample = sampleOf.get(tone.sample)!;
+    const notes = mini(chords, (c) => (c.keys.length === 1 ? noteName(c.keys[0]!) : `[${c.keys.map(noteName).join(',')}]`));
+    const envelope = `.attack(${env.attack}).decay(${env.decay}).sustain(${env.sustain}).release(${env.release})`;
+    if (free) {
+      const v: Voice = free[sample.file.replace(/\.wav$/, '')] ?? { s: 'triangle', kind: 'synth', gain: 1, distance: 99, heard: 'not measured' };
+      if (v.kind === 'pitched' || v.kind === 'bank') freeSounds.add(v.s);
+      const calls = [
+        `.s('${v.s}')`,
+        // A drum from a VCSL bank sounds at its own pitch on the game sample's centre key.
+        v.kind === 'bank' ? `.speed(${round(2 ** ((36 - tone.center) / 12), 4)})` : '',
+        constOr('gain', chords, (c) => round(c.gain * v.gain, 2)),
+        constOr('pan', chords, (c) => c.pan),
+        v.harmonics ? constOr('lpf', chords, (c) => Math.min(16000, Math.round(v.harmonics! * hz(Math.min(...c.keys))))) : v.lpf ? `.lpf(${v.lpf})` : '',
+        envelope,
+        '.clip(1)',
+      ];
+      return `  // ${channel}, ${sound.split('_')[1]}: the game's ${sample.file} (${v.heard}) on ${v.s}, ${v.distance} apart\n  note(\`${notes}\`)\n    ${calls.filter(Boolean).join('')}`;
+    }
     const gains = new Set(chords.map((c) => c.gain));
     const pans = new Set(chords.map((c) => c.pan));
     const calls = [
@@ -201,11 +234,10 @@ export function transcribe(music: Music, s: number, id: string, name: string | u
       tone.fine ? `.speed(${round(2 ** (tone.fine / 128 / 12), 4)})` : '',
       gains.size === 1 ? `.gain(${[...gains][0]})` : `.gain(\`${mini(chords, (c) => String(c.gain))}\`)`,
       pans.size === 1 ? `.pan(${[...pans][0]})` : `.pan(\`${mini(chords, (c) => String(c.pan))}\`)`,
-      `.attack(${env.attack}).decay(${env.decay}).sustain(${env.sustain}).release(${env.release})`,
+      envelope,
       sample.loop ? `.loop(1).loopBegin(${round(sample.loop.start / sample.frames, 4)}).loopEnd(${round(Math.min(1, sample.loop.end / sample.frames), 4)})` : '',
       '.clip(1)',
     ];
-    const notes = mini(chords, (c) => (c.keys.length === 1 ? noteName(c.keys[0]!) : `[${c.keys.map(noteName).join(',')}]`));
     return `  // ${channel}, ${sound.split('_')[1]}\n  note(\`${notes}\`)\n    ${calls.filter(Boolean).join('')}`;
   });
 
@@ -221,16 +253,15 @@ export function transcribe(music: Music, s: number, id: string, name: string | u
     `// RE1's music from the PS1 disc: ${music.file}, sequence ${s}${name ? `, which the PC port plays as ${name}` : ''}.`,
     rooms.length ? `// Plays in: ${rooms.join(', ')}.` : '',
     `// ${bpm} BPM in ${seq.beats}/${seq.beatUnit}, ${bars} bars${seq.loop ? ', looping' : ''}. ${voiced.length} notes in ${lanes.length} voices.`,
-    "// Notes and timing are exact. The instruments are the game's own samples, with envelopes from its bank.",
+    free
+      ? "// Notes and timing are exact. The instruments are free sounds, VCSL (CC0) and Strudel's synths, each the nearest by measurement to the game's sample it stands in for (re1-voices.ts); envelopes are the game's."
+      : "// Notes and timing are exact. The instruments are the game's own samples, with envelopes from its bank.",
     limits.length ? `// Not reproduced: ${limits.join(', ')}, and the PS1's reverb.` : "// Not reproduced: the PS1's reverb.",
     "// Generated by tools/rebecca/music/re1.ts from the player's disc. Capcom's music: keep it out of the repository.",
   ].filter(Boolean);
   const text = `${header.join('\n')}
 setcpm(${round(bpm / ((seq.beats * 4) / seq.beatUnit), 4)})
-samples({
-${map.join('\n')}
-})
-
+${free ? (freeSounds.size ? `samples('${VCSL_MAP}')\n` : '') : `samples({\n${map.join('\n')}\n})\n`}
 stack(
 ${code.join(',\n')}
 ).slow(${span} / ${ticksPerBar}) // ${bars} bars of ${ticksPerBar} ticks
@@ -268,15 +299,20 @@ export function catalogue(src: string): { names: (string | undefined)[][]; rooms
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const [input, out] = process.argv.slice(2);
+  const [input, out, voicesFile] = process.argv.slice(2);
   if (!input || !out) {
-    console.error('usage: node tools/rebecca/music/re1.ts <rae music dir> <outdir>');
+    console.error('usage: node tools/rebecca/music/re1.ts <rae music dir> <outdir> [voices.json]');
     process.exit(2);
   }
-  const src = path.join(path.dirname(fileURLToPath(import.meta.url)), '../../../src');
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  const src = path.join(here, '../../../src');
+  const fixes = path.join(here, 're1-voices.fix.json');
+  const free: Record<string, Voice> | undefined = voicesFile
+    ? { ...JSON.parse(readFileSync(voicesFile, 'utf8')), ...(existsSync(fixes) ? JSON.parse(readFileSync(fixes, 'utf8')) : {}) }
+    : undefined;
   const { names, rooms } = catalogue(src);
   mkdirSync(out, { recursive: true });
-  const tracks: Omit<Track, 'code' | 'played'>[] = [];
+  const tracks: (Omit<Track, 'code' | 'played'> & { free: boolean })[] = [];
   for (const file of readdirSync(input).filter((f) => /^SEP[0-9A-F]{2}\.json$/.test(f)).sort()) {
     const music = JSON.parse(readFileSync(path.join(input, file), 'utf8')) as Music;
     const group = parseInt(file.slice(3, 5), 16);
@@ -285,12 +321,13 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
       const t = transcribe(music, s, id, names[group]?.[s], rooms.get(group) ?? []);
       if (!t) return;
       writeFileSync(path.join(out, `${id}.js`), t.code);
+      if (free) writeFileSync(path.join(out, `${id}.free.js`), transcribe(music, s, id, names[group]?.[s], rooms.get(group) ?? [], free)!.code);
       for (const m of t.code.matchAll(/'(SEP[0-9A-F]{2}\/s\d+\.wav)'/g)) {
         mkdirSync(path.join(out, path.dirname(m[1]!)), { recursive: true });
         copyFileSync(path.join(input, m[1]!), path.join(out, m[1]!));
       }
       const { code: _c, played: _p, ...meta } = t;
-      tracks.push(meta);
+      tracks.push({ ...meta, free: free !== undefined });
     });
   }
   writeFileSync(path.join(out, 'tracks.json'), JSON.stringify(tracks, null, 1));

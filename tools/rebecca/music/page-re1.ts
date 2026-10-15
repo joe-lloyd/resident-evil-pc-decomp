@@ -1,5 +1,6 @@
 // The player page for RE1's music in Strudel (re1.ts writes the tracks): each
-// track's code in an editable box with Play and Stop, run by Strudel's own
+// track's code in an editable box with Play and Stop, on the game's samples
+// and, where re1.ts wrote one, on free sounds. Run by Strudel's own
 // browser build next to the page, so the game's samples load from the same
 // site. LAN only: this is Capcom's music from the player's disc.
 //
@@ -8,17 +9,20 @@ import { cpSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type { Track } from './re1.ts';
 
-type Meta = Omit<Track, 'code' | 'played'>;
+type Meta = Omit<Track, 'code' | 'played'> & { free?: boolean };
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const title = (rooms: readonly string[]) => (rooms[0] ?? 'Not placed in a room').toLowerCase().replace(/^./, (c) => c.toUpperCase());
 
-function card(t: Meta, code: string): string {
+const version = (kind: 'game' | 'free', label: string, code: string) =>
+  `<div class="version" data-version="${kind}"><button data-play>${label}</button>
+<details><summary>The code</summary><textarea spellcheck="false" rows="24">${esc(code)}</textarea></details></div>`;
+
+function card(t: Meta, code: string, free: string | undefined): string {
   const where = t.rooms.length ? t.rooms.map((r) => r.toLowerCase()).join(', ') : 'no room in the PC table';
   return `<section class="track" id="${t.id}">
 <h3>${esc(title(t.rooms))} <span class="dim">${esc(t.name ?? 'no PC name')} · ${t.id}</span></h3>
 <p class="dim">${t.bpm} BPM, ${t.bars} bars, ${t.notes} notes in ${t.voices} voices. Plays in: ${esc(where)}.</p>
-<p><button data-play="${t.id}">Play</button> <button data-stop>Stop</button></p>
-<details><summary>The code</summary><textarea spellcheck="false" rows="24">${esc(code)}</textarea></details>
+<div class="versions">${version('game', "Play on the game's samples", code)}${free ? version('free', 'Play on free sounds', free) : ''}<button data-stop>Stop</button></div>
 </section>`;
 }
 
@@ -31,7 +35,8 @@ const tracks = JSON.parse(readFileSync(path.join(out, 'tracks.json'), 'utf8')) a
 const named = (prefix: string) => tracks.filter((t) => t.name?.startsWith(prefix));
 const music = named('Bgm_');
 const loops = tracks.filter((t) => !music.includes(t));
-const cards = (list: Meta[]) => list.map((t) => card(t, readFileSync(path.join(out, `${t.id}.js`), 'utf8'))).join('\n');
+const cards = (list: Meta[]) =>
+  list.map((t) => card(t, readFileSync(path.join(out, `${t.id}.js`), 'utf8'), t.free ? readFileSync(path.join(out, `${t.id}.free.js`), 'utf8') : undefined)).join('\n');
 cpSync(web, path.join(out, 'strudel'), { recursive: true });
 writeFileSync(path.join(out, 'index.html'), `<!doctype html>
 <meta charset="utf-8">
@@ -46,11 +51,13 @@ a{color:var(--accent)}.track{border-top:1px solid var(--line);padding:.6em 0}
 button{background:none;color:var(--accent);border:1px solid var(--accent);border-radius:4px;padding:.25em .9em;font:inherit;cursor:pointer}
 button.on{background:var(--accent);color:var(--bg)}
 textarea{width:100%;box-sizing:border-box;background:#1b1917;color:var(--fg);border:1px solid var(--line);font:12px/1.4 ui-monospace,monospace;padding:.6em}
+.versions{display:flex;flex-wrap:wrap;gap:.5em 1em;align-items:flex-start}.version{flex:1 1 20em}.versions>button{align-self:flex-start}
 #status{position:sticky;top:0;background:var(--bg);padding:.4em 0;color:var(--dim);font-size:.9em;border-bottom:1px solid var(--line)}
 </style>
 <h1>RE1's music in Strudel</h1>
 <p>Every piece of music on the PS1 disc, written out as Strudel code: ${music.length} tracks of music and ${loops.length} sound loops. The notes and their timing are the disc's own, checked note for note by a script, and the instruments are the game's own samples. The envelopes are worked out from the game's sound bank, so they are close but not exact. Pitch bends and the PS1's reverb are missing, so leads that slide in the game hold still here.</p>
-<p>Press Play to hear a track. Open the code, change anything and press Play again. One bar is one cycle, so a track's code lines up bar by bar with the others, and with ours.</p>
+<p>Each track plays two ways. <b>On the game's samples</b> is as close to the game as Strudel gets. <b>On free sounds</b> plays the same notes on sounds we are allowed to use: VCSL, a CC0 sample library, and Strudel's own synths. A script picked each free sound by measuring the game's sample it replaces: its harmonics, how noisy and how bright it is, how it fades. Its low-pass filter is set to match how muffled the game's sample is. Nobody picked them by ear yet, so some will be wrong. Say which and they get fixed.</p>
+<p>Open the code, change anything and press Play again. One bar is one cycle, so a track's code lines up bar by bar with the others, and with ours.</p>
 <p class="dim">Made from your own disc and shown only on the home network. It is Capcom's music, so none of it goes in the public repositories. Rebuild it with <code>pnpm rae music</code> and <code>tools/rebecca/music/re1.ts</code>.</p>
 <div id="status">Loading Strudel…</div>
 <h2>Music</h2>
@@ -72,14 +79,15 @@ document.addEventListener('click', async (e) => {
     return;
   }
   const card = b.closest('.track');
+  const v = b.closest('.version');
   await ready;
   try {
     status.textContent = 'Loading ' + card.id + '…';
-    await strudel.evaluate(card.querySelector('textarea').value);
+    await strudel.evaluate(v.querySelector('textarea').value);
     playing?.classList.remove('on');
     playing = b;
     b.classList.add('on');
-    status.textContent = 'Playing ' + card.querySelector('h3').firstChild.textContent.trim() + ' (' + card.id + ').';
+    status.textContent = 'Playing ' + card.querySelector('h3').firstChild.textContent.trim() + ' (' + card.id + ') on ' + (v.dataset.version === 'free' ? 'free sounds.' : "the game's samples.");
   } catch (err) {
     status.textContent = 'Error in ' + card.id + ': ' + err.message;
   }
