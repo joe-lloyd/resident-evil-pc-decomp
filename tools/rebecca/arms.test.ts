@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
-import { buildArms, emdSections, emwMesh, texel, tmdPolys, type Poly } from './arms.ts';
+import { buildArms, emdSections, emwMesh, texel, texelIndex, tmdPolys, type Poly } from './arms.ts';
 
 const base = process.env.RE1_BASE ?? '/tmp/re1-pc';
 const files = ['enemy/CHAR11.EMD', 'enemy/CHAR13.EMD', 'players/W31.EMW', 'players/W32.EMW', 'players/W33.EMW', 'players/W34.EMW'];
@@ -84,6 +84,12 @@ test("each gun polygon shows on her sheet what it showed on Jill's, and each han
         if ([x, y, ox, oy].some((n) => Math.abs(n - Math.round(n)) < 1e-6)) return;
         assert.equal(texel(arms.rebecca, 1, Math.floor(x), Math.floor(y)), texel(jill, 0, Math.floor(ox), Math.floor(oy)), `weapon ${i} polygon ${k}`);
       });
+      // See-through stays see-through at each corner: the engine draws only entry 0 clear.
+      p.uv.forEach(([u, v], c) => {
+        const [ou, ov] = was[k]!.uv[c]!;
+        const clear = texelIndex(jill, ou + (was[k]!.tsb & 0xf) * 128, ov) === 0;
+        assert.equal(texelIndex(arms.rebecca, u + (p.tsb & 0xf) * 128, v) === 0, clear, `weapon ${i} polygon ${k} corner ${c}: transparency`);
+      });
       gun++;
     });
   });
@@ -102,4 +108,15 @@ test('only texture fields change, and no file changes size', { skip }, () => {
   w33.forEach((b, i) => {
     if (!textureFields.has(i)) assert.equal(arms.weapons[0]![i], b, `weapon byte 0x${i.toString(16)}`);
   });
+});
+
+test('the files passed in come back unchanged, Buffers included, as build.ts passes them', { skip }, () => {
+  // readFileSync gives Buffers, whose slice() is a view, not a copy.
+  const buf = (f: string) => readFileSync(path.join(base, f));
+  const jill = buf('enemy/CHAR11.EMD');
+  const rebecca = buf('enemy/CHAR13.EMD');
+  const weapons = ['W31', 'W33', 'W34'].map((w) => buf(`players/${w}.EMW`));
+  const before = [jill, rebecca, ...weapons].map((b) => Buffer.from(b));
+  buildArms(jill, rebecca, weapons.map((file) => ({ file })), [buf('players/W32.EMW')]);
+  [jill, rebecca, ...weapons].forEach((b, i) => assert.ok(b.equals(before[i]!), `input ${i} was changed`));
 });

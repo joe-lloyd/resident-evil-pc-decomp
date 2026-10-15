@@ -317,7 +317,8 @@ export interface Arms {
  * Nothing passed in is modified.
  */
 export function buildArms(jill: Uint8Array, rebecca: Uint8Array, weapons: readonly Weapon[], keep: readonly Uint8Array[] = []): Arms {
-  const her = rebecca.slice();
+  // Copies: a Node Buffer's slice() is a view of the caller's bytes.
+  const her = Uint8Array.from(rebecca);
   const jillSheet = sheet(jill, emdSections(jill).tim);
   const herSheet = sheet(her, emdSections(her).tim);
   const body = tmdPolys(her, emdSections(her).mesh);
@@ -331,7 +332,7 @@ export function buildArms(jill: Uint8Array, rebecca: Uint8Array, weapons: readon
   const takenRow1 = new Set<number>([0]);
   dilate(row1, 1).forEach((m, i) => m && takenRow1.add(her[herSheet.pixels + i]!));
 
-  const out = weapons.map((w) => w.file.slice());
+  const out = weapons.map((w) => Uint8Array.from(w.file));
   const polys = out.map((f) => tmdPolys(f, emwMesh(f)));
   for (const p of polys.flat()) {
     if (rowOf(p) !== 0 || p.tsb !== TSB_LEFT) throw new Error(`a weapon polygon at 0x${p.at.toString(16)} is not on Jill's first palette row and left page`);
@@ -384,7 +385,9 @@ export function buildArms(jill: Uint8Array, rebecca: Uint8Array, weapons: readon
     const spot = place(free, texels);
     for (const t of texels) {
       const [rx, ry] = turnTexel((t % SIDE) - spot.x0, ((t / SIDE) | 0) - spot.y0, spot.w, spot.h, spot.turns);
-      her[herSheet.pixels + (spot.to.y + ry) * SIDE + spot.to.x + rx] = entryFor(colourAt(jill, jillSheet, 0, jill[jillSheet.pixels + t]!));
+      // Entry 0 is see-through on both sheets: keep it, rather than give its colour an opaque entry.
+      const index = jill[jillSheet.pixels + t]!;
+      her[herSheet.pixels + (spot.to.y + ry) * SIDE + spot.to.x + rx] = index === 0 ? 0 : entryFor(colourAt(jill, jillSheet, 0, index));
     }
     for (const i of members) spotOf.set(i, spot);
   };
@@ -434,4 +437,9 @@ export function buildArms(jill: Uint8Array, rebecca: Uint8Array, weapons: readon
 export function texel(file: Uint8Array, row: number, x: number, y: number): number {
   const s = sheet(file, emdSections(file).tim);
   return colourAt(file, s, row, file[s.pixels + y * SIDE + x]!);
+}
+
+/** The palette entry of the texel at (x, y) of a model's sheet: 0 is drawn see-through. */
+export function texelIndex(file: Uint8Array, x: number, y: number): number {
+  return file[sheet(file, emdSections(file).tim).pixels + y * SIDE + x]!;
 }
