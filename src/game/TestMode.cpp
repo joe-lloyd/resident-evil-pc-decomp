@@ -7,6 +7,7 @@
 #include "../platform/platform.h"
 #include "TestMode.h"
 #include "../marni/MarniSystem.h"
+#include "../marni/MarniSound.h"
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
@@ -330,7 +331,14 @@ static void build_state(void)
         if (bank) put(",");
         put_hex(fb.data, fb.size);
     }
-    put("]");
+    put("],\"bgm\":{\"state\":%d,\"ch\":[", (int)(unsigned char)g_BGM_STATE);
+    // Each BGM channel: the WAV it loaded ("" for none), playing, and volume.
+    for (int ch = 0; ch < 3; ch++) {
+        const char* file = bgm_channel_file(ch);
+        const int bank = g_SndBank[ch].handle;
+        put("%s[\"%s\",%d,%d]", ch ? "," : "", file ? file : "", getSndStat(bank), bank ? getSndVol(bank) : 0);
+    }
+    put("]}");
 }
 
 void TestMode_Tick(int gameFrame)
