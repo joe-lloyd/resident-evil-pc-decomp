@@ -71,6 +71,6 @@ test('every room and cutscene has its music decided, within RE1\'s three channel
   assert.deepEqual(checkMusic(day, CUTSCENES.map(([id]) => id)), []);
 });
 
-test('every room is a few doors from a quiet save room that plays her save-room theme', () => {
+test('every room is a few doors from a quiet save room that plays the save room music', () => {
   assert.deepEqual(checkSaves(day), []);
 });

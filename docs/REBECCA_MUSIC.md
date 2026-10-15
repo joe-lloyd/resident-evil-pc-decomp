@@ -24,7 +24,8 @@ The owner's page is <https://home.arpa/research/rebecca-music/>.
 - **The save room.** Two or three minor chords held under a short looping
   melody: arpeggios on a synthesised guitar and a pitch-sliding lead
   ([Laced](https://www.lacedrecords.com/blogs/blog/vgm-subgenres-the-anxious-calm-of-resident-evil-save-room-music)).
-  Her own save-room theme follows that shape with a tune of ours.
+  Every save room in her day plays it, from the player's own game files:
+  it is the sound of being safe, and nothing new would mean as much.
 
 ## How the PC game plays music
 
@@ -123,11 +124,10 @@ owner's page is <https://home.arpa/research/re1-music/>.
 
 ## The sketches
 
-All three are in `tools/rebecca/music/sketches/` and are checked by `check.ts`.
+Both are in `tools/rebecca/music/sketches/` and are checked by `check.ts`.
 
 | Sketch | Cue | What it tries |
 |---|---|---|
-| `safe.js` | her save-room theme | held minor chords, a harp arpeggio, an ocarina lead |
 | `yard.js` | the station, her hub | wind, low piano far apart, bowed vibraphone, a glass note |
 | `chase.js` | the mine, unarmed | low ostinato, timpani, anvil, a bowed cluster |
 
@@ -159,12 +159,11 @@ Each step ends in something to check:
    and Jill's hall music is unchanged.
 6. **Write the pieces,** in order of how long she hears them:
    1. the station;
-   2. her save-room theme;
-   3. the camp, the road and the mine;
-   4. the chase;
-   5. the dawn, the partner's and Hal's themes;
-   6. the rest;
-   7. the credits last, built from the others.
+   2. the camp, the road and the mine;
+   3. the chase;
+   4. the dawn, the partner's and Hal's themes;
+   5. the rest;
+   6. the credits last, built from the others.
 7. **Switch channels as she works.** Room scripts set the state with 0x37:
    - the generator hum joins once the power is on;
    - the mill joins once the race fills;
@@ -172,12 +171,17 @@ Each step ends in something to check:
 8. **Test it.** The harness walks the day and checks which files are loaded
    in each room.
 
+## Settled
+
+- **The save rooms play RE1's own music,** owner's call, 2026-10-15. Every
+  save room in RE1 plays group 15 (`Bgm_31`): the disc's music table puts
+  it in the 1F, underground, guardhouse and lab save rooms. Her mode points
+  at the player's own `sound/Bgm_31.wav`; nothing is shipped.
+
 ## Open questions
 
 - Is Strudel's sound close enough, or does the owner want a more orchestral
   bank, such as Sonatina (CC Sampling Plus, needs a credit)?
-- Is `Bgm_31` RE1's save-room theme? The code points that way: the mansion's
-  and the guardhouse's save rooms use it. Someone has to listen to confirm.
-- How big can the patch be? 15 tracks of two minutes at 22050 Hz mono 16-bit
-  come to about 80 MB. The options are 8-bit, which halves that, or teaching
+- How big can the patch be? 14 tracks of two minutes at 22050 Hz mono 16-bit
+  come to about 75 MB. The options are 8-bit, which halves that, or teaching
   the overlay to find `.ogg` files.

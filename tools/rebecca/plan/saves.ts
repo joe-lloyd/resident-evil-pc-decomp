@@ -5,7 +5,8 @@
 // it has one per area and ink ribbons ration the saves.
 //
 // Each save room is a quiet room with no enemies, on the way into an area,
-// and plays her save-room theme (music.ts, cue "safe"). The item boxes are
+// and plays RE1's own save room music from the player's files (music.ts,
+// cue "save"), as the mansion's save room does. The item boxes are
 // one shared box, as in RE1, so what she leaves in the cabin's footlocker is
 // in the cottage's crate too. That matters in the mine: she loses everything
 // she carries there, but not what is in the box.
@@ -87,7 +88,7 @@ export function checkSaves(plan: Plan): string[] {
     const p = plan.places.find((x) => x.id === s.place);
     if (!p) errors.push(`save room ${s.place} is not in the plan`);
     else if (p.enemies) errors.push(`save room ${s.place} has enemies: ${p.enemies}`);
-    if (!CUES.find((c) => c.id === 'safe')?.places.includes(s.place)) errors.push(`save room ${s.place} doesn't play her save-room theme`);
+    if (!CUES.find((c) => c.id === 'save')?.places.includes(s.place)) errors.push(`save room ${s.place} doesn't play the save room music`);
     if (seen.has(s.place)) errors.push(`${s.place} is a save room twice`);
     seen.add(s.place);
   }

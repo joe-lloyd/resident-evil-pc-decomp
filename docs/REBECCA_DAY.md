@@ -129,7 +129,8 @@ mine. Notes are messages, read where she finds them.
 ## Saving
 
 She saves the way Chris and Jill do: at a typewriter, with an ink ribbon,
-in a quiet room with an item box and her save-room theme. There is one in
+in a quiet room with an item box and RE1's own save room music, played
+from the player's game files. There is one in
 every area: the cabin, the foreman's office, the generator hut, Hal's
 cottage, the weather station, the lower station and the garden shed. The
 mansion's save room keeps its own typewriter and box. RE1 has seven

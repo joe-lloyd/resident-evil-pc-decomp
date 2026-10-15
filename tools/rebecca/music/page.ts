@@ -17,7 +17,6 @@ const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replac
 const strudelUrl = (code: string) => `https://strudel.cc/#${encodeURIComponent(Buffer.from(code, 'utf8').toString('base64'))}`;
 
 const SKETCHES: readonly [file: string, title: string, note: string][] = [
-  ['safe', 'Her save-room theme', "RE1's shape, our tune: minor chords held under a slow harp arpeggio, an ocarina on top."],
   ['yard', 'The station yard', 'The hub she keeps coming back to: wind, a low piano note now and then, bowed chords that never resolve.'],
   ['chase', 'The mine, unarmed', 'The one fast piece: she has lost her gear and runs for the lift.'],
 ];
@@ -75,7 +74,7 @@ ol li,ul li{margin:.35em 0}
 <ul>
 <li>It was written in MIDI and played on the PlayStation over a tiny bank of samples: music got 256 KB. That is where the sound comes from: short looped samples at low quality, dull blurred reverb, a bit of grit.</li>
 <li>Many rooms have no music at all, only wind, a clock, footsteps. The silence does as much as the music.</li>
-<li>The save room theme is two or three minor chords and a short melody on a loop. Her save-room theme keeps that shape with a tune of ours.</li>
+<li>The save room theme is two or three minor chords and a short melody on a loop. Every save room in her day plays it, from the player's own game files.</li>
 </ul>
 
 <h2>How we make it</h2>
@@ -102,7 +101,6 @@ ol li,ul li{margin:.35em 0}
 <li><b>Write the pieces,</b> in order of how long she hears them:
 <ol>
 <li>the station;</li>
-<li>her save-room theme;</li>
 <li>the camp, the road and the mine;</li>
 <li>the chase;</li>
 <li>the dawn, the partner's and Hal's themes;</li>
@@ -116,8 +114,7 @@ ol li,ul li{margin:.35em 0}
 <h2>Questions for you</h2>
 <ul>
 <li>Do the sketches sound like the right world, or should we try a more orchestral sample library? Some need a credit line.</li>
-<li>Should the save room at the end use RE1's own save-room music? It's the moment the player knows they're home.</li>
-<li>How big can the download be? Fifteen two-minute tracks at RE1's quality come to about 80 MB, or half that at 8-bit.</li>
+<li>How big can the download be? Fourteen two-minute tracks at RE1's quality come to about 75 MB, or half that at 8-bit.</li>
 </ul>
 <p class="dim">Made ${new Date().toISOString().slice(0, 16).replace('T', ' ')} UTC from tools/rebecca/plan/music.ts and tools/rebecca/music/sketches/. The write-up with sources is docs/REBECCA_MUSIC.md.</p>
 `;

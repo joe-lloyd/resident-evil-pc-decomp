@@ -53,13 +53,6 @@ export const CUES: readonly Cue[] = [
     sketch: 'yard',
   },
   {
-    id: 'safe', title: 'A place to rest', kind: 'new', places: ['cabin', 'office', 'generator', 'cottage', 'weather', 'lower-station', 'garden-shed'], cutscenes: [],
-    mood: 'Her own save-room theme, for every room with a typewriter (saves.ts): safe for a minute, still sad. In the manner of RE1\'s, with our own tune.',
-    sound: 'Two or three minor chords held under a slow harp arpeggio, a breathy lead on top.',
-    channels: ['the chords and the harp', 'the lead'],
-    sketch: 'safe',
-  },
-  {
     id: 'partner', title: 'The partner', kind: 'new', places: [], cutscenes: ['cut-partner', 'cut-den'],
     mood: "The ranger's partner's theme: tired, determined, a short phrase that comes back each time she turns up and in the credits.",
     sound: 'A recorder or ocarina phrase over low strings.',
@@ -142,15 +135,16 @@ export const CUES: readonly Cue[] = [
     channels: ['drips', 'the house above'],
   },
   {
-    id: 'save', title: "RE1's save room", kind: 'reuse', places: ['save'], cutscenes: ['cut-sleep', 'cut-chris'],
-    mood: 'The theme every player knows: she has made it. It fades as she falls asleep, and the footsteps are Chris.',
+    id: 'save', title: "RE1's save room", kind: 'reuse',
+    places: ['cabin', 'office', 'generator', 'cottage', 'weather', 'lower-station', 'garden-shed', 'save'], cutscenes: ['cut-sleep', 'cut-chris'],
+    mood: 'The theme every player knows, in every room with a typewriter (saves.ts): safe for a minute. In the mansion it fades as she falls asleep, and the footsteps are Chris.',
     sound: "RE1's own save room music, from the player's own files.",
     channels: ['the save room theme'],
     file: 'Bgm_31',
   },
   {
     id: 'credits', title: 'Her credits', kind: 'new', places: [], cutscenes: ['cut-credits'],
-    mood: 'The day in one piece: the dawn chord, the station, the partner\'s phrase, Hal\'s piano, ending on her save-room theme.',
+    mood: 'The day in one piece: the dawn chord, the station, the partner\'s phrase, Hal\'s piano, ending quietly on the dawn chord.',
     sound: 'Everything above, in order, about three minutes.',
     channels: ['the piece'],
   },
