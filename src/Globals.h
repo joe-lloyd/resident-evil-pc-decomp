@@ -2073,6 +2073,8 @@ void init_room(void);
 void room_set(void);
 void LoadRoomRdt(void);
 void update_room_bgm(void);
+// Port addition, for test mode: the WAV BGM channel 0-2 has loaded, or NULL.
+const char* bgm_channel_file(int channel);
 void LoadHeldItemsImages(void);
 void load_room_bg(void);
 void load_room_bg_image(void);

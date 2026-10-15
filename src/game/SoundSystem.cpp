@@ -5,6 +5,7 @@
 #include "../marni/MarniSound.h"
 #include "Entities.h"
 #include "SoundTables.h"
+#include "RebMusic.h"
 #include "dc/ArrangeStages.h"     // room_file_stage(), STAGE_ARRANGE_FIRST
 #include "dc/ArrangeSoundRows.h"  // dc_arrange_snd_slots()
 #include "../DebugPrint.h"
@@ -632,6 +633,9 @@ static void bgm_fade_out_all(void)
 // 4-byte row and into whatever .rdata follows the table. Every caller either
 // tests for 0xFF first or only uses the result when it isn't, so 0xFF is the
 // right answer for the out-of-range case.
+//
+// Port addition: her mode reads her own table (RebMusic.cpp), RE1's rows with
+// hers laid over them, the same shape.
 // ----------------------------------------------------------------------------
 static unsigned char bgm_group_for(unsigned char roomId, unsigned char bgmState)
 {
@@ -639,7 +643,28 @@ static unsigned char bgm_group_for(unsigned char roomId, unsigned char bgmState)
     if (g_bgmDataTable == NULL || idx >= sizeof(g_BgmRoomData)) {
         return 0xFF;
     }
-    return g_bgmDataTable[idx];
+    const unsigned char* hers = g_bRebMode ? RebMusic_RoomTable() : NULL;
+    return (hers != NULL ? hers : g_bgmDataTable)[idx];
+}
+
+// The WAV a group plays on a channel, and its loop flag: RE1's tables for
+// RE1's groups, her table for hers (port addition).
+static const char* bgm_file_for(unsigned char group, int channel, unsigned char* loop)
+{
+    if (group < REB_MUSIC_FIRST_GROUP) {
+        *loop = g_BgmLoopTable[group][channel];
+        return g_BgmNameTable[group][channel];
+    }
+    return RebMusic_File(group, channel, loop);
+}
+
+// The file each channel loaded, for test mode (port addition).
+static const char* s_bgmChannelFile[3];
+
+const char* bgm_channel_file(int channel)
+{
+    if (channel < 0 || channel > 2 || g_SndBank[channel].handle == 0) return NULL;
+    return s_bgmChannelFile[channel];
 }
 
 // ============================================================================
@@ -728,7 +753,8 @@ static void bgm_load_and_start(unsigned char bgmState)
 
         if (group == 0xFF) continue;
 
-        const char* filename = g_BgmNameTable[group][idx];
+        unsigned char loop = 0;
+        const char* filename = bgm_file_for(group, idx, &loop);
         if (filename == NULL) continue;
 
         char path[260];
@@ -744,7 +770,8 @@ static void bgm_load_and_start(unsigned char bgmState)
             continue;
         }
 
-        ch->slot = (signed char)g_BgmLoopTable[group][idx];
+        s_bgmChannelFile[idx] = filename;
+        ch->slot = (signed char)loop;
         pan_set(bank, 0);
 
         // 0x0047f4df: three tracks load muted and are faded up later by the SCD
