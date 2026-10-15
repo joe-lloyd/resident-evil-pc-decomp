@@ -12,6 +12,7 @@ import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFi
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { day, MANSION } from './day.ts';
+import { doorsToSave, MAX_DOORS, SAVES } from './saves.ts';
 import { check, type ActInfo, type Place, type Plan, type Report, type Step, type StepKind } from './plan.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -145,8 +146,8 @@ function map(plan: Plan, act: ActInfo): string {
   });
   const boxes = shown.map((p) => {
     const c = centre.get(p.id)!;
-    const cls = own.has(p.id) ? p.built : 'ghost';
-    return `<g class="place ${cls}"><title>${esc(`${p.name}${own.has(p.id) ? '' : ` (act ${p.act})`}\n${p.there}\n${p.cameras} cameras`)}</title>
+    const cls = `${own.has(p.id) ? p.built : 'ghost'}${saveAt.has(p.id) ? ' save' : ''}`;
+    return `<g class="place ${cls}"><title>${esc(`${p.name}${own.has(p.id) ? '' : ` (act ${p.act})`}${saveAt.has(p.id) ? '\nSave room: typewriter and item box' : ''}\n${p.there}\n${p.cameras} cameras`)}</title>
   <rect x="${c.x - BW / 2}" y="${c.y - BH / 2}" width="${BW}" height="${BH}" rx="6"/>
   ${wrap(p.name, 20).map((l, i, all) => `<text x="${c.x}" y="${c.y + 4 + (i - (all.length - 1) / 2) * 14}" text-anchor="middle">${esc(l)}</text>`).join('')}</g>`;
   });
@@ -156,6 +157,23 @@ function map(plan: Plan, act: ActInfo): string {
 ${lines.join('\n')}
 ${boxes.join('\n')}
 </svg>`;
+}
+
+const saveAt = new Set(SAVES.map((s) => s.place));
+
+/** The save rooms, and the rooms farthest from one. */
+function saveRooms(plan: Plan): string {
+  const name = (id: string) => plan.places.find((p) => p.id === id)?.name ?? id;
+  const dist = doorsToSave(plan);
+  const far = [...dist].filter(([, d]) => d >= 4).sort((a, b) => b[1] - a[1]);
+  const rows = SAVES.map((s) => {
+    const p = plan.places.find((x) => x.id === s.place);
+    return `<tr><td>${esc(name(s.place))}</td><td class="n">${p?.act ?? ''}</td><td>${esc(s.props)}</td><td class="n">${s.ribbons ? s.ribbons * 3 : ''}</td><td>${esc(s.why)}</td></tr>`;
+  });
+  return `<h2 id="saves">Where she saves</h2>
+<p>${SAVES.length} save rooms, each with a typewriter and an item box, plus the mansion's own save room at the end. RE1 has seven typewriter rooms in about 110 rooms. Her day is shorter and its spokes are one-way trips, so it has one per area, and ink ribbons ration the saves: ${sum(SAVES.map((s) => s.ribbons)) * 3} in the day. The item boxes are one shared box, as in RE1, so what she leaves in the cabin is waiting in the cottage, and after the mine takes her gear.</p>
+<p>No room is more than ${MAX_DOORS} doors from a save room. The farthest: ${far.map(([id, d]) => `${esc(name(id))} (${d})`).join(', ')}.</p>
+<table><thead><tr><th>Room</th><th class="n">Act</th><th>Typewriter and box</th><th class="n">Ribbons</th><th>Why here</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
 }
 
 function beats(places: readonly Place[]): string {
@@ -318,6 +336,7 @@ p, li { color: var(--soft); max-width: 78ch; } a { color: #86b6ef; }
 .map .place rect { fill: #2c2c2a; stroke: #c3c2b7; }
 .map .place.planned rect { fill: var(--bg); stroke: #6b6a64; stroke-dasharray: 4 3; }
 .map .place.ghost { opacity: 0.6; }
+.map .place.save rect { stroke: #7d9a5a; stroke-width: 3; stroke-dasharray: none; }
 .map .place text { fill: var(--text); font-size: 12px; }
 table { border-collapse: collapse; width: 100%; font-size: 13px; }
 th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-bottom: 1px solid #33332f; }
@@ -343,7 +362,7 @@ ${overview(plan, report)}
 <dt>Puzzle dependency chart</dt>
 <dd>Every find, action and clue is a box, and lines come in from the boxes it needs first. Read it left to right. Ron Gilbert drew these for Maniac Mansion and Monkey Island (<a href="https://grumpygamer.com/puzzle_dependency_charts">his write-up</a>). A long thin chart is a corridor, and a wide one gives her several jobs at once. Solid boxes are built and dashed ones are planned. Faint boxes on the left come from an earlier act. Click a box to light up everything it needs, and click it again to clear.</dd>
 <dt>Lock and key map</dt>
-<dd>The rooms and the ways between them. Grey lines are open, orange dashes are locked until a step opens them, and purple dots are shortcuts, opened from the far side. Faint rooms belong to another act. Hover a line to see what opens it. Mark Brown's <a href="https://zeldauniverse.net/2017/01/26/explore-zelda-dungeon-design-in-mark-browns-youtube-series-boss-keys/">Boss Keys</a> videos draw Zelda dungeons this way.</dd>
+<dd>The rooms and the ways between them. Grey lines are open, orange dashes are locked until a step opens them, and purple dots are shortcuts, opened from the far side. Faint rooms belong to another act. Rooms with a green border are save rooms. Hover a line to see what opens it. Mark Brown's <a href="https://zeldauniverse.net/2017/01/26/explore-zelda-dungeon-design-in-mark-browns-youtube-series-boss-keys/">Boss Keys</a> videos draw Zelda dungeons this way.</dd>
 <dt>Beat chart</dt>
 <dd>One row per room: what is there, what moves, what attacks and what it tells. Read down a column to see the pacing. Scott Rogers lays one out in <a href="https://oreilly.com/library/view/level-up-the/9781118877197">Level Up!</a>.</dd>
 <dt>Storyboard</dt>
@@ -351,6 +370,8 @@ ${overview(plan, report)}
 </dl>
 <div class="key">${Object.values(KIND).map((k) => `<span style="--c:${k.colour}">${k.word}</span>`).join('')}</div>
 <p>Everything here comes from <code>tools/rebecca/plan/day.ts</code>. A script checks that file before drawing it. It confirms every step can be reached, that each step's needs really get her to its room, and that every find is used somewhere.</p>
+
+${saveRooms(plan)}
 
 <h2>How many things she can do at once</h2>
 <p>Played one step at a time, each bar is how many steps were open to her at that point. A run of ones is a corridor. Act 2 should be wide and the ending can narrow.</p>

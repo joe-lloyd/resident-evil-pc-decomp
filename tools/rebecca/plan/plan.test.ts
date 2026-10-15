@@ -5,6 +5,7 @@ import { day } from './day.ts';
 import { check, type Plan } from './plan.ts';
 import { checkMaps } from './maps.ts';
 import { checkMusic } from './music.ts';
+import { checkSaves } from './saves.ts';
 import { CUTSCENES } from './todo.ts';
 
 test("Rebecca's day can be played through to her credits", () => {
@@ -68,4 +69,8 @@ test('every room is on one map, and each map is a step she can take', () => {
 
 test('every room and cutscene has its music decided, within RE1\'s three channels', () => {
   assert.deepEqual(checkMusic(day, CUTSCENES.map(([id]) => id)), []);
+});
+
+test('every room is a few doors from a quiet save room that plays her save-room theme', () => {
+  assert.deepEqual(checkSaves(day), []);
 });

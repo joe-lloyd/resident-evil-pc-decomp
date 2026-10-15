@@ -6,6 +6,7 @@
 // below. Drawn by todo-page.ts.
 import { AREAS, MAP_ITEMS } from './maps.ts';
 import { CUES } from './music.ts';
+import { SAVES } from './saves.ts';
 import type { Link, Place, Plan, Step } from './plan.ts';
 
 export type Status = 'done' | 'doing' | 'todo';
@@ -54,6 +55,7 @@ const STATUS: Record<string, Status> = {
   'music-research': 'done',
   'music-plan': 'done',
   'music-sketches': 'doing',
+  'saves-plan': 'done',
 };
 
 const status = (id: string, fallback: Status = 'todo'): Status => STATUS[id] ?? fallback;
@@ -197,6 +199,21 @@ export function sections(plan: Plan, facts: Facts): Section[] {
       ],
     },
     {
+      id: 'saves',
+      title: 'Saving',
+      blurb: 'Save rooms as in RE1: a quiet room with a typewriter, an item box and her save-room theme, in every area. Ink ribbons ration the saves, and the item boxes share one store.',
+      items: [
+        row('saves-plan', 'A save room in every area, checked against the plan (saves.ts)', `${SAVES.length} rooms; none more than a few doors away`),
+        row('saves-mode', 'A save made in her day loads back into her day', 'Her mode is set only at character select today. Store it in the save, as the port already stores the DC difficulty (dcGameMode)'),
+        row('saves-names', 'Her place names on the save screen', "The slot list names a save by the mansion's areas (GetSaveLocationIndex); hers needs the station, the camp, the mine, the valley"),
+        row('saves-props', 'A typewriter and an item box modelled in each save room, worn like the rest'),
+        row('saves-ribbons', 'Ink ribbons to pick up, with their model in her rooms'),
+        ...SAVES.map((v) => row(`save-${v.place}`, `${name(v.place)}: typewriter and item box`, v.props)),
+        row('saves-mansion', "The mansion's save room keeps its typewriter and box", 'Already in her ROOM1000 script'),
+        row('saves-test', 'A test that saves at a typewriter, loads the save, and is back in her day with the box as she left it'),
+      ],
+    },
+    {
       id: 'files',
       title: 'Files she reads',
       blurb: 'Diaries, logs and letters open as pages, as RE1 files do, not as lines of text at the bottom of the screen.',
@@ -321,7 +338,7 @@ export function sections(plan: Plan, facts: Facts): Section[] {
       blurb: 'It feels right to play: tense, fair, about two hours.',
       items: [
         row('balance-ammo', 'Ammunition and healing: enough to survive, never comfortable'),
-        row('balance-saves', 'Typewriters, ink ribbons and item boxes'),
+        row('balance-saves', 'How many ink ribbons, tuned by playing'),
         row('balance-enemies', 'Enemy health, damage and numbers'),
         row('balance-route', "The route reads: she can always tell where she hasn't been"),
         row('balance-time', 'A first playthrough at about two hours'),

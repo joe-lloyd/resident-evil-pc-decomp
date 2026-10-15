@@ -53,8 +53,8 @@ export const CUES: readonly Cue[] = [
     sketch: 'yard',
   },
   {
-    id: 'safe', title: 'A place to rest', kind: 'new', places: ['cabin'], cutscenes: [],
-    mood: 'Her own save-room theme, for every room with a typewriter: safe for a minute, still sad. In the manner of RE1\'s, with our own tune.',
+    id: 'safe', title: 'A place to rest', kind: 'new', places: ['cabin', 'office', 'generator', 'cottage', 'weather', 'lower-station', 'garden-shed'], cutscenes: [],
+    mood: 'Her own save-room theme, for every room with a typewriter (saves.ts): safe for a minute, still sad. In the manner of RE1\'s, with our own tune.',
     sound: 'Two or three minor chords held under a slow harp arpeggio, a breathy lead on top.',
     channels: ['the chords and the harp', 'the lead'],
     sketch: 'safe',
@@ -73,20 +73,20 @@ export const CUES: readonly Cue[] = [
   },
   {
     id: 'camp', title: 'Logging Camp 4', kind: 'new',
-    places: ['logging-road', 'camp-gate', 'camp-yard', 'bunkhouse', 'office', 'mess', 'depot', 'workshop', 'sawmill', 'pond', 'flume'], cutscenes: [],
+    places: ['logging-road', 'camp-gate', 'camp-yard', 'bunkhouse', 'mess', 'depot', 'workshop', 'sawmill', 'pond', 'flume'], cutscenes: [],
     mood: 'Somewhere people worked until last week. Mechanical and tense, a slow beat like machinery left running.',
     sound: 'Muted metal hits, a low ostinato, slit drum, a far saw.',
     channels: ['the theme', 'the mill turning, once the race fills', 'water'],
   },
   {
     id: 'road', title: 'The forestry road', kind: 'new',
-    places: ['road', 'washout', 'generator', 'tower-foot', 'tower-stairs', 'tower-top', 'switch', 'line-track'], cutscenes: ['cut-tower'],
+    places: ['road', 'washout', 'tower-foot', 'tower-stairs', 'tower-top', 'switch', 'line-track'], cutscenes: ['cut-tower'],
     mood: 'Open and exposed. Higher up the tower the wind takes over.',
     sound: 'High bowed psaltery, a low pedal note, wind.',
     channels: ['the theme', 'wind, louder up the tower', 'the line humming, once the breakers close'],
   },
   {
-    id: 'quarry', title: 'The quarry', kind: 'new', places: ['east-path', 'cottage', 'quarry', 'quarry-office'], cutscenes: [],
+    id: 'quarry', title: 'The quarry', kind: 'new', places: ['east-path', 'quarry', 'quarry-office'], cutscenes: [],
     mood: 'Dry and hard. The quarry rosters going red: everyone here got sick.',
     sound: 'Anvil and brake drum far off, a low synth drone, sparse timpani.',
     channels: ['the theme', 'the wind in the pit'],
@@ -106,7 +106,7 @@ export const CUES: readonly Cue[] = [
     sketch: 'chase',
   },
   {
-    id: 'summit', title: 'The summit', kind: 'new', places: ['summit-trail', 'weather', 'mast'], cutscenes: [],
+    id: 'summit', title: 'The summit', kind: 'new', places: ['summit-trail', 'mast'], cutscenes: [],
     mood: 'Thin air and radio static. Lonely, the highest point of her day.',
     sound: 'Wineglass and handchimes, high wind, static.',
     channels: ['the theme', 'wind', 'radio static near the mast'],
@@ -118,7 +118,7 @@ export const CUES: readonly Cue[] = [
     channels: ['the strings', 'the cable'],
   },
   {
-    id: 'valley', title: 'The valley at dusk', kind: 'new', places: ['valley-path', 'lower-yard', 'lower-station', 'creek', 'lodge'], cutscenes: [],
+    id: 'valley', title: 'The valley at dusk', kind: 'new', places: ['valley-path', 'lower-yard', 'creek', 'lodge'], cutscenes: [],
     mood: 'Dusk and grief. Bravo came down here last night.',
     sound: 'Steinway in the low middle, a harp, the creek.',
     channels: ['the theme', 'the creek'],
@@ -130,7 +130,7 @@ export const CUES: readonly Cue[] = [
     channels: ['the room\'s own sound'],
   },
   {
-    id: 'estate', title: 'The grounds', kind: 'new', places: ['estate-wall', 'kennels', 'back-garden', 'garden-shed'], cutscenes: [],
+    id: 'estate', title: 'The grounds', kind: 'new', places: ['estate-wall', 'kennels', 'back-garden'], cutscenes: [],
     mood: 'The mansion is close. The music starts to sound like RE1\'s own, so she walks into the game the player knows.',
     sound: 'Pipe organ, quiet; low piano; dogs far off.',
     channels: ['the theme', 'the dogs, until the kennels are quiet'],

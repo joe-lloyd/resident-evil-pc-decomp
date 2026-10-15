@@ -126,6 +126,33 @@ key, a crowbar. The puzzles are small and physical: fuel for the generator,
 a sluice to run the sawmill, dynamite for a rockfall, a pump to drain the
 mine. Notes are messages, read where she finds them.
 
+## Saving
+
+She saves the way Chris and Jill do: at a typewriter, with an ink ribbon,
+in a quiet room with an item box and her save-room theme. There is one in
+every area: the cabin, the foreman's office, the generator hut, Hal's
+cottage, the weather station, the lower station and the garden shed. The
+mansion's save room keeps its own typewriter and box. RE1 has seven
+typewriter rooms in about 110 rooms; her day is shorter and its spokes are
+one-way trips, so it has one per area and the ribbons ration the saves.
+
+All the item boxes share one store, as in RE1. What she leaves in the
+cabin's footlocker is waiting in the cottage, and after the mine takes her
+gear. The rooms, what the typewriter and box are in each, and the ribbons
+are in `tools/rebecca/plan/saves.ts`. `plan.test.ts` checks that every save
+room is quiet, plays her theme, and that no room is more than five doors
+from one.
+
+The engine already runs typewriters and item boxes from a room's script
+(`SCE_TYPEWRITER` and `SCE_ITEMBOX`, `src/game/PlayerAnimations.cpp:7024` and
+`:7217`), and Rebecca spends ribbons as Chris does. One gap: her mode is set
+only at character select (`src/game/CharacterSelectionScreen.cpp:824`) and
+the save doesn't record it, so a save from her day would load into Chris's
+and Jill's game. The fix follows the port's own Director's Cut difficulty,
+which each save already stores (`dcGameMode`, `SaveLoadScreen.cpp:525`). The
+save screen also names each slot by the mansion's areas
+(`GetSaveLocationIndex`), so hers needs her own place names.
+
 ## Music
 
 New pieces in the manner of RE1's, written as Strudel code with CC0 samples,
