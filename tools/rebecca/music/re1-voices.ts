@@ -14,7 +14,9 @@
 // voices.json maps each instrument tone, "SEPxx/p<program>t<tone>", to its
 // voice, for re1.ts. To change an instrument by ear, put its family in
 // re1-voices.fix.json beside this file, by program ("SEP0F/p2": "harp") or by
-// tone ("SEP0F/p7t3": "snare"); it wins over the sorting.
+// tone ("SEP0F/p7t3": "snare"); it wins over the sorting. re1.ts and
+// re1-check.ts apply the same file when they load voices.json, so a fix
+// takes effect without sorting again.
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -289,6 +291,39 @@ export interface Voice extends Family {
   readonly heard: string;
 }
 
+const isFamily = (f: unknown): f is FamilyName => typeof f === 'string' && Object.hasOwn(FAMILIES, f);
+
+/** re1-voices.fix.json beside this file: families chosen by ear, by program ("SEP0F/p2") or by tone ("SEP0F/p7t3"). */
+export function readFixes(file = path.join(path.dirname(fileURLToPath(import.meta.url)), 're1-voices.fix.json')): Record<string, FamilyName> {
+  if (!existsSync(file)) return {};
+  const fixes: Record<string, FamilyName> = {};
+  for (const [k, f] of Object.entries(JSON.parse(readFileSync(file, 'utf8')) as Record<string, unknown>)) {
+    if (!isFamily(f)) throw new Error(`${file}: ${k} names ${String(f)}, which is not a family`);
+    fixes[k] = f;
+  }
+  return fixes;
+}
+
+/**
+ * `voices` with each family set by ear expanded into its voice: a tone's own
+ * fix wins over its program's. A fix that names no tone is an error, so a
+ * typo can't pass for a choice.
+ */
+export function withFixes(voices: Readonly<Record<string, Voice>>, fixes: Readonly<Record<string, FamilyName>>): Record<string, Voice> {
+  const program = (id: string) => id.replace(/t\d+$/, '');
+  const out = { ...voices };
+  for (const id of Object.keys(out)) {
+    const family = fixes[id] ?? fixes[program(id)];
+    if (family) out[id] = { ...FAMILIES[family], family, heard: 'set by ear' };
+  }
+  const unused = Object.keys(fixes).filter((k) => !Object.keys(out).some((id) => id === k || program(id) === k));
+  if (unused.length) throw new Error(`re1-voices.fix.json: ${unused.join(', ')} names no instrument tone`);
+  return out;
+}
+
+/** A voices.json from this script with re1-voices.fix.json applied: the voices re1.ts plays. */
+export const loadVoices = (file: string): Record<string, Voice> => withFixes(JSON.parse(readFileSync(file, 'utf8')) as Record<string, Voice>, readFixes());
+
 /** How a program is used by the music: the keys it plays and how long its notes are, in seconds. */
 export interface Use { readonly keys: readonly number[]; readonly seconds: readonly number[]; readonly bends: number }
 
@@ -365,10 +400,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     process.exit(2);
   }
   mkdirSync(cache, { recursive: true });
-  const fixFile = path.join(path.dirname(fileURLToPath(import.meta.url)), 're1-voices.fix.json');
-  const fixes = (existsSync(fixFile) ? JSON.parse(readFileSync(fixFile, 'utf8')) : {}) as Record<string, FamilyName>;
-  for (const [k, f] of Object.entries(fixes)) if (!(f in FAMILIES)) throw new Error(`${fixFile}: ${k} names ${f}, which is not a family`);
-  const voices: Record<string, Voice> = {};
+  const measured: Record<string, Voice> = {};
   for (const file of readdirSync(input).filter((f) => /^SEP[0-9A-F]{2}\.json$/.test(f)).sort()) {
     const music = JSON.parse(readFileSync(path.join(input, file), 'utf8')) as Music;
     const used = uses(music);
@@ -393,13 +425,12 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
         const mine = sorted.get(tone.sample);
         if (!mine) return;
         const pid = `${file.slice(0, 5)}/p${program.index}`;
-        const id = `${pid}t${i}`;
         const pick = kit ? mine : (sorted.get(middle!.sample) ?? mine);
-        const fixed = fixes[id] ?? fixes[pid];
-        voices[id] = { ...FAMILIES[fixed ?? pick.family], family: fixed ?? pick.family, heard: fixed ? 'set by ear' : pick.heard };
+        measured[`${pid}t${i}`] = { ...FAMILIES[pick.family], family: pick.family, heard: pick.heard };
       });
     }
   }
+  const voices = withFixes(measured, readFixes());
   writeFileSync(out, JSON.stringify(voices, null, 1));
   const counts = new Map<string, number>();
   for (const v of Object.values(voices)) counts.set(v.family, (counts.get(v.family) ?? 0) + 1);

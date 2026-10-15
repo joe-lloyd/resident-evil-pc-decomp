@@ -16,10 +16,10 @@
 // tracks.json; page-re1.ts draws the player page from it. With voices.json
 // (re1-voices.ts) each track also gets a .free.js on free sounds; choices
 // in re1-voices.fix.json beside this file win over the measured ones.
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { copyFileSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import type { Voice } from './re1-voices.ts';
+import { loadVoices, type Voice } from './re1-voices.ts';
 
 // The shapes `rae music` writes (retro-archive-explorer, electron/parsers/audio/psxSeq.ts).
 interface Tone { program: number; minKey: number; maxKey: number; center: number; fine: number; volume: number; pan: number; sample: number; adsr1: number; adsr2: number }
@@ -307,10 +307,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   }
   const here = path.dirname(fileURLToPath(import.meta.url));
   const src = path.join(here, '../../../src');
-  const fixes = path.join(here, 're1-voices.fix.json');
-  const free: Record<string, Voice> | undefined = voicesFile
-    ? { ...JSON.parse(readFileSync(voicesFile, 'utf8')), ...(existsSync(fixes) ? JSON.parse(readFileSync(fixes, 'utf8')) : {}) }
-    : undefined;
+  const free = voicesFile ? loadVoices(voicesFile) : undefined;
   const { names, rooms } = catalogue(src);
   mkdirSync(out, { recursive: true });
   const tracks: (Omit<Track, 'code' | 'played'> & { free: boolean })[] = [];
