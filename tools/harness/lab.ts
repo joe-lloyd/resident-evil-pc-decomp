@@ -127,6 +127,11 @@ export function deployOverlay(localOverlayDir: string, name = 'REB'): void {
   execFileSync('scp', ['-q', '-r', '-o', 'BatchMode=yes', localOverlayDir, `${host}:${gameDir.replace(/\\/g, '/')}/${name}`]);
 }
 
+/** Delete a file on the game machine, if it is there. */
+export function remove(remotePath: string): void {
+  powershell(`if (Test-Path '${remotePath}') { Remove-Item -Force '${remotePath}' }`);
+}
+
 /** Copy a file from the game machine, e.g. a screenshot taken with shot(). */
 export function fetch(remotePath: string, localPath: string): void {
   execFileSync('scp', ['-q', '-o', 'BatchMode=yes', `${host}:${remotePath.replace(/\\/g, '/')}`, localPath]);
