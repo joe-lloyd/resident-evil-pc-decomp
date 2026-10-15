@@ -18,11 +18,13 @@ import { foeLines, KILL_FLAGS, type Floor } from './foes.ts';
 import { ITEM_FLAGS, SUPPLIES, supplyLines, supplyModels } from './supplies.ts';
 import { mapIn, mapLines, mapModels } from '../maps/pickups.ts';
 import { KEY_ITEM_FLAGS, KEY_ITEMS, keyItemLines, keyItemModels, sameModel, type ItemSpot } from '../items/items.ts';
-import { BAG_SLOTS, GEAR, LOSS_BIT, LOSS_LINE, LOSS_ROOM } from './gear.ts';
+import { BAG_SLOTS, GEAR, LOSS_BIT, LOSS_LINE, LOSS_ROOM, LOSS_START } from './gear.ts';
 import { EVENT_FLAGS, EVENTS, eventsIn, giveModels, GIVE_FLAGS, itemModelSlots, keyItem } from './events.ts';
 import { day } from '../plan/day.ts';
 import { CUES } from '../plan/music.ts';
 import { musicSwitches, musicTable, type StateWrite } from '../music/table.ts';
+import { compileScene, type Compiled } from './cutscene.ts';
+import { CUT_FLAGS, scenesIn } from './cutscenes.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -228,11 +230,11 @@ const doorKey = (from: string, to: string) => {
 /**
  * Common flags for "she has been here", one per kit room with a first
  * thought; the built rooms use 200-206 and the trail 159. 207-255 hold 49,
- * and there are more kit rooms than that, so the rest come from 109-129, a
- * run no shipped room script and no engine flag uses (the events have
- * 130-158, day/events.ts).
+ * and there are 51 kit rooms, so the rest come from 109-114, a run no shipped
+ * room script and no engine flag uses (the events have 130-158,
+ * day/events.ts; the cutscenes 115-129, day/cutscenes.ts).
  */
-const ENTRY_FLAGS = [...Array.from({ length: 49 }, (_, i) => 207 + i), ...Array.from({ length: 21 }, (_, i) => 109 + i)];
+export const ENTRY_FLAGS = [...Array.from({ length: 49 }, (_, i) => 207 + i), ...Array.from({ length: 6 }, (_, i) => 109 + i)];
 /**
  * How a door fires: a walk on touch; a door that opens on the action button
  * while she stands in its zone (0x40). Without 0x40 the engine tests the
@@ -287,7 +289,9 @@ export function pages(text: string): string[] {
   return out;
 }
 
-const message = (n: number, text: string) => `${n}: ${pages(text).map((p) => `\\n${p}`).join('\\p{0}')}`;
+/** A quote mark that opens speech is the font's opening quote (\\o); a plain one closes it. */
+const quotes = (page: string) => page.replace(/(^|\\n| )"/g, '$1\\o');
+const message = (n: number, text: string) => `${n}: ${pages(text).map((p) => `\\n${quotes(p)}`).join('\\p{0}')}`;
 
 const size = (z: Zone) => `${z.x0}, ${z.z0}, ${z.x1 - z.x0}, ${z.z1 - z.z0}`;
 
@@ -435,7 +439,17 @@ function main(): void {
     const specSlots = supplyModels(slug).length + mapModels(slug).length;
     lines.push(...keyItemLines(kit.items ?? [], keyFlags, id, specSlots));
     id += kit.items?.length ?? 0;
+    // The room's cutscenes (day/cutscenes.ts). One a check starts takes that
+    // check's room action, and writes it itself.
+    const scenes = scenesIn(slug);
+    const sceneChecks = new Map<string, { id: number; zone: Zone; message: number }>();
     for (const c of kit.checks ?? []) {
+      const scene = scenes.find((sc) => sc.trigger.on === 'check' && c.text.startsWith(sc.trigger.check));
+      if (scene) {
+        sceneChecks.set(scene.id, { id: id++, zone: c.zone, message: 128 + msgs.length });
+        msgs.push(c.text);
+        continue;
+      }
       const doc = DOCUMENTS.find((d) => d.room === slug && c.text.startsWith(d.check));
       if (doc) {
         // A document is a file she picks up and reads (files/documents.ts):
@@ -451,7 +465,11 @@ function main(): void {
       lines.push(`aot_set(${id++}, ${size(c.zone)}, SCE_MESSAGE, 129, ${128 + msgs.length}, 0, 255, 0, 0, 0);`);
       msgs.push(c.text);
     }
-    lines.push(...foeLines(slug, floor, killFlags));
+    // A scene she walks into or that greets her has nobody to fight in it:
+    // the room's enemies come once it has run.
+    const calm = scenes.filter((sc) => sc.trigger.on === 'enter' || sc.trigger.on === 'zone').map((sc) => `ck(FG_COMMON, ${CUT_FLAGS.get(sc.id)}, 0)`);
+    const foes = foeLines(slug, floor, killFlags);
+    lines.push(...(calm.length && foes.length ? [`if (${calm.join(' && ')}) {`, ...foes.map((l) => `    ${l}`), '}'] : foes));
     // Supplies keep off the map's floor: a wall to them.
     const mapWall = mapZone ? [{ ...mapZone, shape: 'box' as const }] : [];
     lines.push(...supplyLines(slug, { ...floor, walls: [...floor.walls, ...mapWall] }, itemFlags, id));
@@ -550,6 +568,11 @@ function main(): void {
         bit++;
       }
     }
+    const compiled: Compiled[] = scenes.map((sc, n) =>
+      compileScene(sc, n, CUT_FLAGS.get(sc.id)!, { say, check: sceneChecks.get(sc.id), freeAction: () => id++, freeBit: () => bit++ }),
+    );
+    for (const c of compiled) lines.push(...c.init);
+    main.push(...compiled.flatMap((c) => c.main));
     // RE1's room action table has 24 slots.
     if (id > 24) throw new Error(`${slug}: ${id} room actions, the table has 24`);
     // Her line on taking the room's map: FG_ROOM marks the map as here when
@@ -564,6 +587,8 @@ function main(): void {
     lines.push(...music.init(slug, entryFlags.get(LOSS_ROOM)));
     lines.push('return;', '', '// main procedure 0');
     const flag = entryFlags.get(slug);
+    // A scene that greets her says her first thought itself.
+    const greeted = scenes.some((sc) => sc.trigger.on === 'enter');
     if (flag !== undefined && slug === LOSS_ROOM) {
       // The mine takes her gear (gear.ts): the room's thought runs on into the loss.
       msgs[0] = `${msgs[0]}\n${LOSS_LINE}`;
@@ -571,14 +596,16 @@ function main(): void {
       // item, so the first visit raises FG_ROOM LOSS_BIT and each try is a
       // block of its own while it is up (room flags clear when a room loads).
       lines.push(
-        `if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, `    set(FG_ROOM, ${LOSS_BIT}, 0);`, '    sys_multi(0);', '}',
+        // With a scene for it, the scene raises the bit when the floor goes (LOSS_START).
+        ...(greeted ? [] : [`if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, ...LOSS_START.map((l) => `    ${l}`), '}']),
         ...GEAR.flatMap((g) => Array.from({ length: BAG_SLOTS }, () => [`if (ck(FG_ROOM, ${LOSS_BIT}, 0) && item_ck(${g})) {`, `    remove_item(${g});`, '}']).flat()),
-        `if (ck(FG_ROOM, ${LOSS_BIT}, 0)) {`, `    set(FG_ROOM, ${LOSS_BIT}, 1);`, '    message(128, 255, 0);', '}',
+        `if (ck(FG_ROOM, ${LOSS_BIT}, 0)) {`, `    set(FG_ROOM, ${LOSS_BIT}, 1);`, ...(greeted ? [] : ['    message(128, 255, 0);']), '}',
       );
     } else if (flag !== undefined) {
-      lines.push(`if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, '    message(128, 255, 0);', '}');
+      lines.push(`if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, ...(greeted ? [] : ['    message(128, 255, 0);']), '}');
     }
     lines.push(...main, 'return;', '');
+    for (const c of compiled) lines.push(...c.event, '');
     writeFileSync(path.join(here, slug, 'room.c'), lines.join('\n'));
     writeFileSync(path.join(here, slug, 'room.msg.txt'), msgs.map((m, i) => message(i, m)).join('\n') + '\n');
     console.log(`${slug}: ${kit.doors?.length ?? 0} doors, ${kit.checks?.length ?? 0} checks${kit.saves ? ', a typewriter and a box' : ''}`);

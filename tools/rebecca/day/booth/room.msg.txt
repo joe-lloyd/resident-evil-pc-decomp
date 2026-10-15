@@ -11,3 +11,17 @@
 10: \nThe key switch for the\ndrive. It's empty.\p{0}\nNo key, no gondola.
 11: \nThe key switch, turned to\nRUN.
 12: \nI turn Hal's key. Out\nthere, the bullwheel\nturns...\p{0}\nThe gondola is running!
+13: \nThe handset, back on its\nhook.\p{0}\nHal's in the mine. He has\nthe key.
+14: \nThe handset's still warm.\nSomeone's breathing on the\nline.
+15: \n\oHello? Is anyone there?"
+16: \n\o...Who's this? You're not\none of my crew."
+17: \n\oRebecca Chambers,\nS.T.A.R.S. Who are you?"
+18: \n\oHal. I run the gondola.\nI'm down in the mine."
+19: \n\oI need to get off this\nmountain. Can it run?"
+20: \n\oNot as she is. Get the\ngenerator going,"
+21: \n\othen throw the breakers.\nThat powers the line."
+22: \n\oThe drive cog sheared.\nThere's a spare at the\ncamp."
+23: \n\oAnd F3 blew. The rangers\nkeep fuses in their shed."
+24: \n\oI've got the key. Come\nand find me... I got bit."
+25: \n\oHal? Hal!"
+26: \nThe line's dead.\p{0}\nHe's in the mine, and he\nhas the key.

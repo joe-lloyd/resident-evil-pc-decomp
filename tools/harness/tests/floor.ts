@@ -15,7 +15,7 @@ export interface Json {
   doors?: { to: string; zone: Rect; arrive: { x: number; z: number } }[];
   walls?: Rect[];
   voids?: Rect[];
-  checks?: { zone: Rect }[];
+  checks?: { zone: Rect; text: string }[];
   spots?: { step: string; zone: Rect }[];
 }
 export const read = (slug: string): Json | undefined => {

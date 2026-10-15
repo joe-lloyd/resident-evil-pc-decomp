@@ -9,7 +9,6 @@ obj(0, 17, 255, 7129, -1440, 3485, 2048, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 aot_set(3, 5100, 1700, 1870, 1190, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(4, 1700, 4080, 1530, 850, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(5, 3230, 4080, 1360, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
-aot_set(6, 5440, 4165, 1700, 850, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
 aot_set(7, 5950, 5015, 1190, 850, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 aot_set(8, 3570, 5100, 850, 1020, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
 if (ck(FG_ITEM, 180, 0)) {  // greenHerb
@@ -30,6 +29,12 @@ if (ck(FG_COMMON, 141, 1)) {
     aot_set(13, 1700, 1870, 1530, 850, SCE_MESSAGE, 129, 138, 0, 255, 0, 0, 0);
 } else {
     aot_set(13, 1700, 1870, 1530, 850, SCE_MESSAGE, 129, 139, 0, 255, 0, 0, 0);
+}
+// cut-phone (day/cutscenes.ts): its people, and what starts it. FG_COMMON 115 once it has run.
+if (ck(FG_COMMON, 115, 1)) {
+    aot_set(6, 5440, 4165, 1700, 850, SCE_EVENT, 129, 9, 0, 0, 0, 0, 0);
+} else {
+    aot_set(6, 5440, 4165, 1700, 850, SCE_MESSAGE, 129, 141, 0, 255, 0, 0, 0);
 }
 return;
 
@@ -71,5 +76,62 @@ if (ck(FG_COMMON, 141, 1)) {
         aot_set(13, 1700, 1870, 1530, 850, SCE_MESSAGE, 129, 139, 0, 255, 0, 0, 0);
         message(140, 255, 0);
     }
+}
+return;
+
+// event procedure 0
+// cut-phone (day/cutscenes.ts)
+scd {
+    set(FG_COMMON, 115, 0);
+    aot_set(6, 5440, 4165, 1700, 850, SCE_MESSAGE, 129, 141, 0, 255, 0, 0, 0);
+    set(FG_STATUS, 15, 0);
+    set(FG_6, 23, 1);
+    return;
+}
+cutnext(1);
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_pose(6, 7140, 4590, 62);
+anim_end_release();
+do {
+    yield();
+} while (ck(FG_ROOM, 62, 1));
+message(142, 0, 0);  // her
+wait_voice();
+message(143, 0, 0);  // her
+wait_voice();
+sleep(20);
+message(144, 0, 0);  // Hal
+wait_voice();
+message(145, 0, 0);  // her
+wait_voice();
+message(146, 0, 0);  // Hal
+wait_voice();
+message(147, 0, 0);  // her
+wait_voice();
+message(148, 0, 0);  // Hal
+wait_voice();
+message(149, 0, 0);  // Hal
+wait_voice();
+message(150, 0, 0);  // Hal
+wait_voice();
+message(151, 0, 0);  // Hal
+wait_voice();
+message(152, 0, 0);  // Hal
+wait_voice();
+sleep(30);
+message(153, 0, 0);  // her
+wait_voice();
+message(154, 0, 0);  // her
+wait_voice();
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_idle();
+anim_end_release();
+scd {
+    set(FG_STATUS, 15, 1);
+    cut_auto(0);
+    set(FG_6, 23, 0);
+    return;
 }
 return;

@@ -36,3 +36,6 @@ const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i)
  * the ids her key items borrow (items.ts), which fall outside these.
  */
 export const GEAR: readonly number[] = [...range(0x01, 0x12), 0x41, ...range(0x43, 0x4b)];
+
+/** What starts the loss: the bit up (the room's main takes each item while it is), and the weapon out of her hands. */
+export const LOSS_START = [`set(FG_ROOM, ${LOSS_BIT}, 0);`, 'sys_multi(0);'] as const;
