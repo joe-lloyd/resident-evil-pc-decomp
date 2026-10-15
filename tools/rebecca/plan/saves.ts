@@ -1,15 +1,17 @@
 // Where she can save: the rooms with a typewriter and an item box, as data.
-// RE1 has seven typewriter rooms and six item boxes in its 110 or so rooms
-// (counted from the PS1 disc's room scripts: SCE_TYPEWRITER and SCE_ITEMBOX).
-// Her day is shorter and its spokes are one-way trips out from the yard, so
-// it has one per area and ink ribbons ration the saves.
 //
-// Each save room is a quiet room with no enemies, on the way into an area,
-// and plays RE1's own save room music from the player's files (music.ts,
-// cue "save"), as the mansion's save room does. The item boxes are
-// one shared box, as in RE1, so what she leaves in the cabin's footlocker is
-// in the cottage's crate too. That matters in the mine: she loses everything
-// she carries there, but not what is in the box.
+// Placed the way RE1 places them, measured from the PC game's own room
+// scripts (re1-saves.ts): 7 typewriter rooms in 107 rooms, one for every 15
+// or so. A room there is 2.7 doors from a typewriter on average and 6 at the
+// most, and 4 of the 7 are dead ends off a corridor or a hub: a side room she
+// passes again and again, never a room on the way through. Her day is half
+// the size, so it has five, plus the mansion's at the end, and none is
+// farther than RE1's farthest.
+//
+// Each is a quiet room with no enemies that plays RE1's own save room music
+// from the player's files (music.ts, cue "save"). The item boxes are one
+// shared store, as in RE1, so what she leaves in the cabin's footlocker is in
+// the booth's locker too.
 import { CUES } from './music.ts';
 import type { Plan } from './plan.ts';
 
@@ -22,60 +24,65 @@ export interface SaveRoom {
   readonly why: string;
 }
 
-/** No room is more doors than this from a save room, counting every way between rooms, locked or not. */
-export const MAX_DOORS = 5;
+/** RE1's own spacing (re1-saves.ts over the PC room files): the farthest room from a typewriter, and the average. */
+export const RE1 = { rooms: 107, saves: 7, maxDoors: 6, meanDoors: 2.74 } as const;
 
 export const SAVES: readonly SaveRoom[] = [
   {
     place: 'cabin', ribbons: 1,
-    props: "The ranger's typewriter on the desk by the radio. His footlocker at the bunk's foot is the item box.",
-    why: 'The first save, in the hub she keeps coming back to. The yard, the shed and the gorge are a door or two away.',
+    props: "The ranger's typewriter on a side table under the broken window. His footlocker at the bunk's foot is the item box.",
+    why: 'The first save, minutes in, off the hub she keeps coming back to. The shed, the woods, the road and the gorge are a door or two away.',
   },
   {
     place: 'office', ribbons: 1,
     props: "The foreman's typewriter, the payroll half typed. A tin trunk under the window is the box.",
-    why: 'The camp is eleven rooms of loggers. The office key is on the cook in the mess, next door across the yard.',
+    why: 'Off the camp yard, behind the key on the dead cook: the reward for getting into the camp. The mill, the pond and the flume are within four doors.',
   },
   {
-    place: 'generator', ribbons: 0,
-    props: "The line crew's typewriter on the log desk. Their tool locker is the box. The lights come on when the generator runs.",
-    why: 'The middle of the west spoke: the washout, the switch house and the tower are all within four doors.',
+    place: 'booth', ribbons: 0,
+    props: "Hal's typewriter on the control desk, a duty log in it. A parts locker is the box.",
+    why: "Off the gondola station, where the east path, the line track's shortcut and the ride down all meet. The last save before the gondola, which only goes down.",
   },
   {
-    place: 'cottage', ribbons: 1,
-    props: "Hal's typewriter on the kitchen table, his radio still on. The box is a blanket chest.",
-    why: 'Before the quarry and the mine. Whatever she leaves in the box is waiting for her after the mine takes her gear.',
+    place: 'mine-office', ribbons: 1,
+    props: "The shift boss's typewriter for the accident book. An empty powder chest is the box.",
+    why: 'The one quiet room in the mine, off the tunnel. The pump, the gallery and the lift are two or three doors on.',
   },
   {
-    place: 'weather', ribbons: 0,
-    props: "The observer's typewriter by the barograph. An equipment case is the box.",
-    why: 'Where the lift brings her up after the chase, unarmed, with only what the box holds.',
-  },
-  {
-    place: 'lower-station', ribbons: 1,
-    props: "The keeper's typewriter beside the cold kettle. A parcel crate is the box.",
-    why: 'The first room indoors after the ride down. The valley path, the helicopter and the creek are close.',
-  },
-  {
-    place: 'garden-shed', ribbons: 0,
-    props: "The gardener's old typewriter for seed orders on the potting bench. A seed chest is the box.",
-    why: 'The last save before the mansion: the kennels and the cellar are two doors away.',
+    place: 'lodge', ribbons: 1,
+    props: "The gardener's typewriter for seed orders on the kitchen table. A blanket chest is the box.",
+    why: "Across the creek, behind the door she prises open: the valley's only save, three doors before the kennels' pack.",
   },
 ];
 
-/** Doors from each place to its nearest save room, over every link in either direction. */
+/** At least this many of her rooms for each save room, so saves stay rare, as the owner asked. RE1 has 15. */
+export const MIN_ROOMS_PER_SAVE = 10;
+
+/**
+ * Doors from each place to the nearest save room she can walk to. Every way
+ * between rooms counts, locked or not, as in the RE1 count, in both
+ * directions but for the rides: the flume and the gondola only go down.
+ * The room the day ends in is left out: she sleeps there, and never leaves.
+ */
 export function doorsToSave(plan: Plan): Map<string, number> {
   const next = new Map<string, string[]>(plan.places.map((p) => [p.id, []]));
   for (const l of plan.links) {
     next.get(l.from)?.push(l.to);
-    next.get(l.to)?.push(l.from);
+    if (l.kind !== 'ride') next.get(l.to)?.push(l.from);
   }
+  const saves = new Set(SAVES.map((s) => s.place));
+  const end = plan.steps.find((s) => s.kind === 'goal')?.at;
   const dist = new Map<string, number>();
-  let edge = SAVES.map((s) => s.place).filter((p) => next.has(p));
-  for (const p of edge) dist.set(p, 0);
-  for (let d = 1; edge.length; d++) {
-    edge = edge.flatMap((p) => next.get(p)!).filter((p) => !dist.has(p));
-    for (const p of edge) dist.set(p, d);
+  for (const p of plan.places.filter((p) => p.id !== end)) {
+    const seen = new Set([p.id]);
+    let edge = [p.id];
+    for (let d = 0; edge.length; d++) {
+      if (edge.some((e) => saves.has(e))) {
+        dist.set(p.id, d);
+        break;
+      }
+      edge = edge.flatMap((e) => next.get(e) ?? []).filter((e) => !seen.has(e) && Boolean(seen.add(e)));
+    }
   }
   return dist;
 }
@@ -92,11 +99,17 @@ export function checkSaves(plan: Plan): string[] {
     if (seen.has(s.place)) errors.push(`${s.place} is a save room twice`);
     seen.add(s.place);
   }
-  const dist = doorsToSave(plan);
-  for (const p of plan.places) {
-    const d = dist.get(p.id);
-    if (d === undefined) errors.push(`${p.id} can't reach a save room`);
-    else if (d > MAX_DOORS) errors.push(`${p.id} is ${d} doors from a save room; the most is ${MAX_DOORS}`);
+  if (plan.places.length / SAVES.length < MIN_ROOMS_PER_SAVE) {
+    errors.push(`${SAVES.length} save rooms in ${plan.places.length} rooms is more than one for every ${MIN_ROOMS_PER_SAVE}`);
   }
+  const dist = doorsToSave(plan);
+  for (const [id, d] of dist) {
+    if (d > RE1.maxDoors) errors.push(`${id} is ${d} doors from a save room; RE1's farthest room is ${RE1.maxDoors}`);
+  }
+  for (const p of plan.places) {
+    if (!dist.has(p.id) && p.id !== plan.steps.find((s) => s.kind === 'goal')?.at) errors.push(`${p.id} can't reach a save room`);
+  }
+  const mean = [...dist.values()].reduce((a, b) => a + b, 0) / dist.size;
+  if (mean > RE1.meanDoors) errors.push(`a room is ${mean.toFixed(2)} doors from a save room on average; RE1's are ${RE1.meanDoors}`);
   return errors;
 }

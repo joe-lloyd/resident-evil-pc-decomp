@@ -1,11 +1,13 @@
 // node --test tools/rebecca/plan/plan.test.ts
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { test } from 'node:test';
+import { dayRooms } from '../day/rooms.ts';
 import { day } from './day.ts';
 import { check, type Plan } from './plan.ts';
 import { checkMaps } from './maps.ts';
 import { checkMusic } from './music.ts';
-import { checkSaves } from './saves.ts';
+import { checkSaves, SAVES } from './saves.ts';
 import { CUTSCENES } from './todo.ts';
 
 test("Rebecca's day can be played through to her credits", () => {
@@ -71,6 +73,18 @@ test('every room and cutscene has its music decided, within RE1\'s three channel
   assert.deepEqual(checkMusic(day, CUTSCENES.map(([id]) => id)), []);
 });
 
-test('every room is a few doors from a quiet save room that plays the save room music', () => {
+test('save rooms are as rare and as near as RE1 places its own, quiet, with the save room music', () => {
   assert.deepEqual(checkSaves(day), []);
+});
+
+test("the save screen names a save by her save room's place", () => {
+  // The engine's table of her save rooms: { stage, room, name }, // place.
+  const cpp = readFileSync(new URL('../../../src/game/SaveLoadScreen.cpp', import.meta.url), 'utf8');
+  const table = [...cpp.matchAll(/\{ (\d+), 0x([0-9A-F]{2}), s_rebLoc\w+ \},\s*\/\/ ([\w-]+)/g)].map(([, stage, room, place]) => `${place} ${stage} ${parseInt(room!, 16)}`);
+  const want = SAVES.map((s) => {
+    const folder = day.places.find((p) => p.id === s.place)?.room ?? s.place;
+    const r = dayRooms.find((d) => d.slug === folder);
+    return `${s.place} ${r?.stage} ${r?.room}`;
+  });
+  assert.deepEqual(table.sort(), want.sort());
 });

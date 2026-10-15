@@ -12,7 +12,7 @@ import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFi
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { day, MANSION } from './day.ts';
-import { doorsToSave, MAX_DOORS, SAVES } from './saves.ts';
+import { doorsToSave, RE1, SAVES } from './saves.ts';
 import { check, type ActInfo, type Place, type Plan, type Report, type Step, type StepKind } from './plan.ts';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -165,14 +165,15 @@ const saveAt = new Set(SAVES.map((s) => s.place));
 function saveRooms(plan: Plan): string {
   const name = (id: string) => plan.places.find((p) => p.id === id)?.name ?? id;
   const dist = doorsToSave(plan);
-  const far = [...dist].filter(([, d]) => d >= 4).sort((a, b) => b[1] - a[1]);
+  const far = [...dist].filter(([, d]) => d >= 5).sort((a, b) => b[1] - a[1]);
+  const mean = sum([...dist.values()]) / dist.size;
   const rows = SAVES.map((s) => {
     const p = plan.places.find((x) => x.id === s.place);
     return `<tr><td>${esc(name(s.place))}</td><td class="n">${p?.act ?? ''}</td><td>${esc(s.props)}</td><td class="n">${s.ribbons ? s.ribbons * 3 : ''}</td><td>${esc(s.why)}</td></tr>`;
   });
   return `<h2 id="saves">Where she saves</h2>
-<p>${SAVES.length} save rooms, each with a typewriter and an item box, plus the mansion's own save room at the end. RE1 has seven typewriter rooms in about 110 rooms. Her day is shorter and its spokes are one-way trips, so it has one per area, and ink ribbons ration the saves: ${sum(SAVES.map((s) => s.ribbons)) * 3} in the day. The item boxes are one shared box, as in RE1, so what she leaves in the cabin is waiting in the cottage, and after the mine takes her gear.</p>
-<p>No room is more than ${MAX_DOORS} doors from a save room. The farthest: ${far.map(([id, d]) => `${esc(name(id))} (${d})`).join(', ')}.</p>
+<p>${SAVES.length} save rooms, each with a typewriter and an item box, plus the mansion's own save room at the end. They are placed the way RE1 places its own, measured from the PC game's room files: RE1 has ${RE1.saves} typewriter rooms in ${RE1.rooms} rooms, mostly dead-end side rooms off a corridor or a hub she keeps passing. Ink ribbons ration the saves: ${sum(SAVES.map((s) => s.ribbons)) * 3} in the day. The item boxes share one store, as in RE1, so what she leaves in the cabin is waiting in the mine.</p>
+<p>A room is ${mean.toFixed(1)} doors from a save room on average, against RE1's ${RE1.meanDoors}, and none is farther than RE1's farthest, ${RE1.maxDoors}. The farthest: ${far.map(([id, d]) => `${esc(name(id))} (${d})`).join(', ')}.</p>
 <table><thead><tr><th>Room</th><th class="n">Act</th><th>Typewriter and box</th><th class="n">Ribbons</th><th>Why here</th></tr></thead><tbody>${rows.join('')}</tbody></table>`;
 }
 

@@ -202,9 +202,9 @@ export function sections(plan: Plan, facts: Facts): Section[] {
     {
       id: 'saves',
       title: 'Saving',
-      blurb: 'Save rooms as in RE1: a quiet room with a typewriter, an item box and her save-room theme, in every area. Ink ribbons ration the saves, and the item boxes share one store.',
+      blurb: "Save rooms as rare and as near as RE1's own, measured from its room files: a quiet side room with a typewriter, an item box and RE1's save room music. Ink ribbons ration the saves, and the item boxes share one store.",
       items: [
-        row('saves-plan', 'A save room in every area, checked against the plan (saves.ts)', `${SAVES.length} rooms; none more than a few doors away`),
+        row('saves-plan', "Save rooms placed to RE1's spacing, checked against the plan (saves.ts, re1-saves.ts)", `${SAVES.length} rooms, one for every ${Math.round(plan.places.length / SAVES.length)}; none farther than RE1's farthest`),
         row('saves-mode', 'A save made in her day loads back into her day', 'Her mode is set only at character select today. Store it in the save, as the port already stores the DC difficulty (dcGameMode)'),
         row('saves-names', 'Her place names on the save screen', "The slot list names a save by the mansion's areas (GetSaveLocationIndex); hers needs the station, the camp, the mine, the valley"),
         row('saves-props', 'A typewriter and an item box modelled in each save room, worn like the rest'),
