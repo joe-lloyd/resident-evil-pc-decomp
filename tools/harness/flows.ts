@@ -1,4 +1,5 @@
 // Reusable ways to get the game somewhere: from launch to a playable room.
+import { choice } from './jev.ts';
 import { Key, type GameLink } from './link.ts';
 import { blocked, loadShapes, planPath } from './room-map.ts';
 import { MSF, messageOnScreen, screen, type GameState } from './state.ts';
@@ -126,53 +127,198 @@ export function turnBetween(from: number, to: number): number {
   return d;
 }
 
+/** Walking, or running: the run key held with forward, about twice as fast. */
+export type Pace = 'walk' | 'run';
+
+/** The keys each game has held down, so a walk changes only what it must and can hand them to the next leg. */
+const heldKeys = new WeakMap<GameLink, Set<number>>();
+
+/** Hold exactly `want`: let go of the others, press the new ones. */
+async function hold(link: GameLink, want: readonly number[]): Promise<void> {
+  const held = heldKeys.get(link) ?? heldKeys.set(link, new Set()).get(link)!;
+  for (const k of [...held]) if (!want.includes(k)) {
+    held.delete(k);
+    await link.up(k);
+  }
+  for (const k of want) if (!held.has(k)) {
+    held.add(k);
+    await link.down(k);
+  }
+}
+
+/** The next state line after `s`, or a fresh one if the game sends none (she stands still). */
+async function after(link: GameLink, s: GameState): Promise<GameState> {
+  try {
+    return await link.waitFor((t) => t.frame > s.frame, 'the next frame', 300);
+  } catch {
+    return link.state();
+  }
+}
+
+/** Frames between sending a key and seeing her answer it, over the tunnel. */
+const LAG = 3;
+/** Within this of the goal a run drops to a walk, so she stops where she means to. */
+const BRAKE = 1500;
 /**
- * Walk to within `radius` of (x, z) with tank controls: turn to face the
- * target, walk a few frames, look again. Right turns raise the angle, at about
- * 200 units a frame. Throws StuckError when the distance stops shrinking.
+ * A turn wider than this (about 25 degrees) is made standing; narrower ones
+ * while moving. Walking, she turns about 40 angle units a frame and covers
+ * about 80 game units, so a wide turn on the move is a wide curve into the
+ * furniture.
+ */
+const STANDING_TURN = 300;
+
+/**
+ * Walk or run to within `radius` of (x, z) with tank controls, the way a
+ * player does: forward held all the way, steering with left and right as she
+ * goes, and only a wide turn made on the spot. Short corrections are taps of
+ * a frame or two, so she doesn't weave. With `carryOn` the keys stay held at
+ * the goal, for the next leg of a path. Throws StuckError when the distance
+ * stops shrinking.
  */
 export async function walkTo(
   link: GameLink,
   x: number,
   z: number,
-  { radius = 500, timeoutMs = 30_000 }: { radius?: number; timeoutMs?: number } = {},
+  { radius = 500, timeoutMs = 30_000, pace = 'walk', carryOn = false }: { radius?: number; timeoutMs?: number; pace?: Pace; carryOn?: boolean } = {},
 ): Promise<GameState> {
   const deadline = Date.now() + timeoutMs;
   let best = Infinity;
-  let sinceBest = 0;
+  let bestFrame = 0;
+  let speed = 0;
+  let tapUntil = 0;
   const first = await link.state();
-  for (;;) {
-    let s = await throughTransition(link, await link.state());
-    checkAlive(s);
-    // A door that fires on touch (or a scripted move) can change the room
-    // mid-walk; the target means nothing in the new room.
-    if (s.stage !== first.stage || s.room !== first.room) return s;
-    if (fightBackRange > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !fightBackIgnores.includes(e.type) && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
-      await fight(link, { range: fightBackRange + 3000, ignore: fightBackIgnores });
-      s = await link.state();
-      best = Infinity; // fighting moves her; judge progress afresh
+  let s = first;
+  let prev = first;
+  try {
+    for (;;) {
+      s = await after(link, s);
+      if (screen(s) === 'transition') {
+        await hold(link, []);
+        s = await throughTransition(link, s);
+      }
+      checkAlive(s);
+      // A door that fires on touch (or a scripted move) can change the room
+      // mid-walk; the target means nothing in the new room.
+      if (s.stage !== first.stage || s.room !== first.room) {
+        await hold(link, []);
+        return s;
+      }
+      if (fightBackRange > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !fightBackIgnores.includes(e.type) && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
+        await hold(link, []);
+        await fight(link, { range: fightBackRange + 3000, ignore: fightBackIgnores });
+        s = await link.state();
+        best = Infinity; // fighting moves her; judge progress afresh
+      }
+      const frames = Math.max(1, s.frame - prev.frame);
+      speed = 0.6 * speed + 0.4 * (Math.hypot(s.player.x - prev.player.x, s.player.z - prev.player.z) / frames);
+      prev = s;
+      const dist = Math.hypot(x - s.player.x, z - s.player.z);
+      if (process.env.HARNESS_TRACE === '2') {
+        console.log(`    ${pace} ${s.stage}:${s.room.toString(16)} f${s.frame} (${s.player.x}, ${s.player.z}) angle ${s.player.angle} speed ${speed.toFixed(0)} -> (${Math.round(x)}, ${Math.round(z)}) dist ${Math.round(dist)}`);
+      }
+      // She keeps going for LAG frames after the key comes up.
+      if (dist <= radius + (carryOn ? 0 : speed * LAG)) {
+        if (!carryOn) {
+          await hold(link, []);
+          s = await link.frames(LAG + 2);
+        }
+        return s;
+      }
+      if (Date.now() > deadline) throw new StuckError(`never reached (${x}, ${z}); ${Math.round(dist)} away`, s);
+      if (dist < best - 50) {
+        best = dist;
+        bestFrame = s.frame;
+      } else if (s.frame - bestFrame > 45) {
+        throw new StuckError(`stuck ${Math.round(dist)} from (${x}, ${z}) at (${s.player.x}, ${s.player.z})`, s);
+      }
+      const turn = turnBetween(s.player.angle, headingTo(s.player.x, s.player.z, x, z));
+      const side = turn > 0 ? Key.right : Key.left;
+      if (Math.abs(turn) > STANDING_TURN) {
+        await hold(link, [side]);
+        continue;
+      }
+      const forward = pace === 'run' && dist > BRAKE ? [Key.up, Key.run] : [Key.up];
+      if (Math.abs(turn) > 150) {
+        await hold(link, [...forward, side]);
+      } else {
+        await hold(link, forward);
+        // A small correction: a tap of a frame or two, then wait to see it land.
+        if (Math.abs(turn) > 60 && s.frame >= tapUntil) {
+          const n = Math.min(3, Math.max(1, Math.round(Math.abs(turn) / 40)));
+          await link.tap(side, n);
+          tapUntil = s.frame + n + LAG;
+        }
+      }
     }
-    const dist = Math.hypot(x - s.player.x, z - s.player.z);
-    if (process.env.HARNESS_TRACE === '2') {
-      console.log(`    walk ${s.stage}:${s.room.toString(16)} (${s.player.x}, ${s.player.z}) angle ${s.player.angle} hp ${s.player.hp} ${screen(s)} msf ${s.msf.toString(16)} -> (${Math.round(x)}, ${Math.round(z)}) dist ${Math.round(dist)} enemies ${JSON.stringify(s.enemies.map((e) => [e.type, e.hp, e.x, e.z]))}`);
-    }
-    if (dist <= radius) return s;
-    if (Date.now() > deadline) throw new StuckError(`never reached (${x}, ${z}); ${Math.round(dist)} away`, s);
-    if (dist < best - 50) {
-      best = dist;
-      sinceBest = 0;
-    } else if (++sinceBest > 12) {
-      throw new StuckError(`stuck ${Math.round(dist)} from (${x}, ${z}) at (${s.player.x}, ${s.player.z})`, s);
-    }
-    const turn = turnBetween(s.player.angle, headingTo(s.player.x, s.player.z, x, z));
-    if (Math.abs(turn) > 150) {
-      await face(link, headingTo(s.player.x, s.player.z, x, z));
-    } else {
-      await link.tap(Key.up, dist > 2500 ? 10 : 4);
-      await link.frames(dist > 2500 ? 10 : 5);
-    }
+  } catch (err) {
+    await hold(link, []);
+    throw err;
   }
 }
+
+/**
+ * Run or walk? Jev decides from a short account of the way ahead: how far it
+ * is, how many sharp corners, who is near it, how hurt she is. Without a Jev
+ * key she runs, which is what a player does by default.
+ */
+export async function choosePace(s: GameState, path: readonly { x: number; z: number }[]): Promise<Pace> {
+  if (!process.env.TYPESAFE_API_KEY) return 'run';
+  const points = [{ x: s.player.x, z: s.player.z }, ...path];
+  let length = 0;
+  let corners = 0;
+  for (let i = 1; i < points.length; i++) {
+    length += Math.hypot(points[i]!.x - points[i - 1]!.x, points[i]!.z - points[i - 1]!.z);
+    if (i >= 2) {
+      const a = headingTo(points[i - 2]!.x, points[i - 2]!.z, points[i - 1]!.x, points[i - 1]!.z);
+      const b = headingTo(points[i - 1]!.x, points[i - 1]!.z, points[i]!.x, points[i]!.z);
+      if (Math.abs(turnBetween(a, b)) > 512) corners++;
+    }
+  }
+  const metres = (u: number) => Math.round((u / UNITS_PER_METRE) * 10) / 10;
+  // How close each live enemy comes to the way, in metres.
+  const nearWay = (e: { x: number; z: number }) =>
+    Math.min(...points.slice(1).map((p, i) => segmentDistance(e, points[i]!, p)));
+  const enemies = s.enemies
+    .filter((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE)
+    .map((e) => ({ kind: ENEMY_NAMES[e.type] ?? `enemy type ${e.type}`, metresFromHer: metres(Math.hypot(e.x - s.player.x, e.z - s.player.z)), metresFromTheWay: metres(nearWay(e)) }));
+  const state = {
+    game: 'Resident Evil (1996), tank controls, fixed cameras',
+    her: { name: 'Rebecca', health: `${s.player.hp} of ${s.player.maxHp}` },
+    way: { metres: metres(length), sharpCorners: corners },
+    enemies,
+  };
+  try {
+    const a = await choice(
+      state,
+      'Rebecca is about to cross part of a room to a spot she needs. Should she run or walk there? Running is about twice as fast, but she turns wide and can stop short of nothing, so she can overshoot in tight corners or brush past a monster that gets a hit in.',
+      {
+        run: 'Run: the way is more than a few metres and no monster is close to it, or a monster is close to her and getting away matters most.',
+        walk: 'Walk: the way is short or turns sharply through a cramped space, or a monster stands right beside the way and she must pass it under control.',
+      },
+    );
+    if (process.env.HARNESS_TRACE) console.log(`  Jev: ${a.choice} (run ${a.probabilities.run.toFixed(2)}) for ${JSON.stringify({ way: state.way, enemies })}`);
+    return a.choice;
+  } catch (err) {
+    console.log(`  Jev could not choose a pace (${String(err).slice(0, 120)}); running`);
+    return 'run';
+  }
+}
+
+/** Shortest distance from `p` to the segment a-b. */
+function segmentDistance(p: { x: number; z: number }, a: { x: number; z: number }, b: { x: number; z: number }): number {
+  const dx = b.x - a.x;
+  const dz = b.z - a.z;
+  const t = Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.z - a.z) * dz) / (dx * dx + dz * dz || 1)));
+  return Math.hypot(p.x - (a.x + t * dx), p.z - (a.z + t * dz));
+}
+
+/** Game units in a metre, as Rebecca's rooms are built (reb.UNITS). */
+const UNITS_PER_METRE = 1700;
+/** RE1's enemy types by number, for Jev's account of the room (retro-archive-explorer's scd1.ts ENEMY_NAMES). */
+const ENEMY_NAMES: readonly string[] = [
+  'zombie', 'zombie', 'dog (Cerberus)', 'giant spider', 'giant spider', 'crow', 'Hunter', 'wasp', 'Plant 42', 'Chimera', 'snake (Adder)', 'shark', 'Tyrant',
+  'giant snake', 'Plant 42 roots', 'plant', 'Tyrant', 'zombie',
+];
 
 /**
  * If a door or a walk between rooms is playing, wait for it to finish: she
@@ -340,12 +486,12 @@ export async function navigate(
   link: GameLink,
   x: number,
   z: number,
-  { radius = 500, tries = 8 }: { radius?: number; tries?: number } = {},
+  { radius = 500, tries = 8, pace = 'walk', carryOn = false }: { radius?: number; tries?: number; pace?: Pace; carryOn?: boolean } = {},
 ): Promise<GameState> {
   let side = 1;
   for (let i = 0; ; i++) {
     try {
-      return await walkTo(link, x, z, { radius, timeoutMs: 40_000 });
+      return await walkTo(link, x, z, { radius, timeoutMs: 40_000, pace, carryOn });
     } catch (err) {
       if (!(err instanceof StuckError) || i >= tries) throw err;
       const s = err.state;
@@ -370,15 +516,18 @@ export async function goTo(
   dataDirs: string[],
   x: number,
   z: number,
-  { radius = 400, log = false }: { radius?: number; log?: boolean } = {},
+  { radius = 400, log = false, pace }: { radius?: number; log?: boolean; pace?: Pace } = {},
 ): Promise<GameState> {
   const s = await link.state();
   const path = planPath(loadShapes(dataDirs, s.stage, s.room, s.player.cf), s.player.x, s.player.z, x, z);
   if (!path) throw new StuckError(`no path to (${x}, ${z}) in this room`, s);
-  if (log) console.log(`  path ${path.map((p) => `(${Math.round(p.x)},${Math.round(p.z)})`).join(' ')}`);
+  const chosen = pace ?? (await choosePace(s, path));
+  if (log || process.env.HARNESS_TRACE) console.log(`  ${chosen} ${path.map((p) => `(${Math.round(p.x)},${Math.round(p.z)})`).join(' ')}`);
   let last = s;
   for (const [i, p] of path.entries()) {
-    last = await navigate(link, p.x, p.z, { radius: i === path.length - 1 ? radius : 350, tries: 4 });
+    const end = i === path.length - 1;
+    // The keys stay down between legs, so the path is one movement, not a stop at every corner.
+    last = await navigate(link, p.x, p.z, { radius: end ? radius : 350, tries: 4, pace: chosen, carryOn: !end });
     if (last.stage !== s.stage || last.room !== s.room) return last;
   }
   return last;

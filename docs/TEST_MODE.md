@@ -88,6 +88,19 @@ and no dependencies.
 - `jev.ts` asks Jev, TypeSafe's typed judgment model, for decisions that need
   common sense. It reads text only, so it gets the state, never a picture.
 
+She moves the way a player does. `walkTo` holds forward the whole way, steers
+with taps of left and right while moving, and stops to turn only for a turn
+wider than about 25 degrees. `goTo` keeps the keys down from one waypoint of
+its path to the next. Before each `goTo`, Jev chooses whether she runs (the
+run key held with forward) or walks, from a short account of the way: its
+length, its sharp corners, the live enemies near it and her health. Without
+`TYPESAFE_API_KEY` she runs. Set `HARNESS_TRACE=1` to see each choice and its
+probability.
+
+```
+TYPESAFE_API_KEY=$(ssh vault get typesafe-api-key) OVERLAY=... node tools/harness/tests/day.ts yard shed
+```
+
 ```
 node tools/harness/deploy.ts test-mode       # build the branch and install it
 node tools/harness/tests/rebecca-boot.ts     # run one test
