@@ -22,6 +22,8 @@ const taken = (s: GameState, n: number) => {
   return ((new DataView(b.buffer, b.byteOffset, b.byteLength).getUint32((n >> 5) * 4, true) >>> (31 - (n & 31))) & 1) === 0;
 };
 const SPRAY_FLAG = 241;
+/** The logbook's room-item flag: files/documents.ts, ITEM_FLAG_BASE plus its place in BOOKS. */
+const LOGBOOK_FLAG = 230;
 const KEY_FLAG = 242;
 const CRANK_FLAG = 243;
 const HEX_CRANK = 30;
@@ -104,10 +106,10 @@ export async function lookout(run: Run): Promise<void> {
   s = await check(link, CABIN.radio);
   if (await radio()) run.log(s, 'listened to the radio');
   else run.fail('the radio said nothing');
-  const logbook = run.expectMessage(0x82, 'the logbook', 60_000);
-  s = await check(link, CABIN.logbook);
-  if (await logbook()) run.log(s, 'read the logbook: the crank is in the shed');
-  else run.fail('the logbook said nothing');
+  // The logbook is a file she takes (files/documents.ts); tests/files.ts reads its pages.
+  s = await checkUntil(run, CABIN.logbook, (st) => taken(st, LOGBOOK_FLAG));
+  if (taken(s, LOGBOOK_FLAG)) run.log(s, 'took the logbook: the crank is in the shed');
+  else run.fail('could not take the logbook from the desk');
   s = await checkUntil(run, CABIN.spray, (st) => taken(st, SPRAY_FLAG));
   if (taken(s, SPRAY_FLAG)) run.log(s, 'took the First Aid Spray');
   else run.fail('could not take the First Aid Spray from the table');
