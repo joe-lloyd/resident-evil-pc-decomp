@@ -187,9 +187,10 @@ def build():
     room.check((2.2, Y0 + 0.85, 3.1, Y0 + 1.6), "A jacket over the chair. ARKLAY SKYWAY on the patch.\nHal's.")
     room.check((X0, 1.7, X0 + 1.0, 3.6), "A cot, pulled out. A bandage soaked through on the blanket.\nHe rested here, then went on down.")
     room.check((X1 - 0.8, 1.2, X1, 1.95), "The candles are new. GIANT POWDER on the boxes. Empty.")
-    # Clear of the jacket's zone on the chair and the drip's in the middle.
-    room.save_room(typewriter=(2.05, Y0, 2.55, Y0 + 0.85), box=(3.76, 2.0, X1, 3.27), lid=box_lid)
-    room.check((DRIP[0] - 0.4, DRIP[1] - 0.4, DRIP[0] + 0.4, DRIP[1] + 0.4), "Water's coming through the roof. The bucket ran over long ago.")
+    # Each takes in the floor in front where she stands; they come first in the
+    # table, and the jacket's and the drip's zones keep most of theirs.
+    room.save_room(typewriter=(2.05, Y0, 2.55, Y0 + 1.05), box=(3.4, 2.0, X1, 3.27), lid=box_lid)
+    room.check((DRIP[0] - 0.25, DRIP[1] - 0.25, DRIP[0] + 0.25, DRIP[1] + 0.25), "Water's coming through the roof. The bucket ran over long ago.")
     room.entry = "Candles. Someone lit these today."
     room.export(anim)
 

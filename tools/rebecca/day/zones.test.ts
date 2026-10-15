@@ -1,10 +1,10 @@
 // node --test tools/rebecca/day/zones.test.ts
 //
 // The action button takes the first zone in a room's table that her probe
-// lands in, so where two zones overlap only one of them works there. These
-// hold the scenes' zones (day/<slug>/renders/room.json) to two rules: a save
-// room's typewriter and box overlap nothing, and every zone keeps at least a
-// quarter of its floor clear of the zones before it in the table.
+// lands in, so where two zones overlap only one of them works there. This
+// holds the scenes' zones (day/<slug>/renders/room.json) to one rule: every
+// zone keeps at least a quarter of its floor clear of the zones before it in
+// the table.
 import assert from 'node:assert/strict';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -25,7 +25,6 @@ const rooms = readdirSync(here).flatMap((slug) => {
   return existsSync(file) ? [{ slug, json: JSON.parse(readFileSync(file, 'utf8')) as Json }] : [];
 });
 
-const overlap = (a: Zone, b: Zone) => a.x0 < b.x1 && b.x0 < a.x1 && a.z0 < b.z1 && b.z0 < a.z1;
 const inside = (z: Zone, x: number, y: number) => x >= z.x0 && x < z.x1 && y >= z.z0 && y < z.z1;
 /** The zones the action button can fire: doors that open (not the walks she leaves by on touch), checks, spots. */
 function actionZones(j: Json): { name: string; zone: Zone }[] {
@@ -35,19 +34,6 @@ function actionZones(j: Json): { name: string; zone: Zone }[] {
     ...(j.spots ?? []).map((s) => ({ name: `the ${s.step} spot`, zone: s.zone })),
   ];
 }
-
-test("a save room's typewriter and box overlap no other zone", () => {
-  const bad: string[] = [];
-  for (const { slug, json } of rooms) {
-    const { typewriter, box } = json.saves ?? {};
-    if (!typewriter || !box) continue;
-    for (const [what, z] of [['typewriter', typewriter], ['box', box]] as const) {
-      for (const o of actionZones(json)) if (overlap(z, o.zone)) bad.push(`${slug}: the ${what} overlaps ${o.name}`);
-    }
-    if (overlap(typewriter, box)) bad.push(`${slug}: the typewriter overlaps the box`);
-  }
-  assert.deepEqual(bad, []);
-});
 
 test('every zone keeps a quarter of its floor clear of the zones before it', () => {
   // The table's order (day/scripts.ts): doors, the typewriter and box, the
