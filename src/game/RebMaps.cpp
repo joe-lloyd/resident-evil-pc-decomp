@@ -93,7 +93,7 @@ const RebMaps g_RebMaps = {
         { 160, 0, 43, 36, 78, 44 },  // Ranger Station
         { 0, 168, 50, 42, 78, 60 },  // The Mountain
         { 78, 168, 120, 57, 42, 23 },  // The Valley
-        { 160, 44, 161, 64, 31, 12 },  // Spencer Estate
+        { 160, 44, 161, 64, 32, 12 },  // Spencer Estate
     },
     // Each area's name.
     {

@@ -224,14 +224,16 @@ function land(): Canvas {
       const h = height(x, y);
       // Light from the top left, off the slope of the ground.
       const lit = Math.max(0, Math.min(1, 0.5 + (height(x - 1, y - 1) - height(x + 1, y + 1)) * 6));
-      const crowns = hash(x, y, 3) * 0.5 + fbm(x / 2.5, y / 2.5, 11, 2) * 0.5;
+      // Tree crowns: blobs a pixel or two across, each lit on its top left.
+      const crown = valueNoise(x / 1.4, y / 1.4, 11);
+      const crowns = Math.max(0, Math.min(1, (crown - valueNoise((x + 0.7) / 1.4, (y + 0.7) / 1.4, 11)) * 2.2 + crown * 0.6 + hash(x, y, 3) * 0.15));
       const r = toRiver(x, y);
       let index: number;
       if (r < 0.9) index = shade('water', 0.35 + lit * 0.4);
       else if (r < 1.6) index = shade('rock', 0.2 + lit * 0.3);
       else if (h > 0.78) index = shade('rock', 0.25 + lit * 0.6 + crowns * 0.15); // bare rock above the trees
       else if (h > 0.7) index = shade('meadow', 0.2 + lit * 0.5 + crowns * 0.3);
-      else index = shade('forest', 0.08 + lit * 0.45 + crowns * 0.35 + (1 - h) * 0.1);
+      else index = shade('forest', 0.02 + lit * 0.35 + crowns * 0.5 + (1 - h) * 0.08);
       c.pixels[y * BASE_W + x] = index;
     }
   return c;
@@ -280,16 +282,21 @@ function places(c: Canvas, upTo: number): void {
     const m = placeAt('tunnel');
     for (let dx = -1; dx <= 0; dx++) put(c, m.x + dx, m.y, shade('ink', 0), stageOfPlace('tunnel'));
   }
-  // The mansion over its cellar: a long pale house with a dark roof.
+  // The mansion over its cellar: RE1's house from above, a long front with
+  // its two wings back, pale roofs lit on their top left, a dark edge.
   if (shown('save')) {
     const at = placeAt('save');
     const s = stageOfPlace('save');
+    const part = (dx: number, dy: number) => (dy >= -4 && dy <= -1 && Math.abs(dx) <= 6) || (dy >= -4 && dy <= 4 && Math.abs(dx) >= 4 && Math.abs(dx) <= 6);
     for (let dy = -5; dy <= 5; dy++)
-      for (let dx = -6; dx <= 6; dx++) {
-        const wing = Math.abs(dy) >= 3 || Math.abs(dx) >= 4;
-        if (!wing) continue;
-        const edge = Math.abs(dy) === 5 || Math.abs(dx) === 6 || (Math.abs(dy) === 3 && Math.abs(dx) < 4) || (Math.abs(dx) === 4 && Math.abs(dy) < 3);
-        put(c, at.x + dx, at.y + dy, edge ? shade('mansion', 0.15) : shade('mansion', 0.6 + 0.3 * ((dx + dy) & 1) - (dy > 0 ? 0.15 : 0)), s);
+      for (let dx = -7; dx <= 7; dx++) {
+        if (!part(dx, dy)) {
+          if (part(dx - 1, dy - 1)) put(c, at.x + dx, at.y + dy, shade('ink', 0.1), s); // its shadow
+          continue;
+        }
+        const edge = !part(dx - 1, dy) || !part(dx + 1, dy) || !part(dx, dy - 1) || !part(dx, dy + 1);
+        const ridge = (dy === -3 && Math.abs(dx) <= 4) || (Math.abs(dx) === 5 && dy >= -3);
+        put(c, at.x + dx, at.y + dy, shade('mansion', edge ? 0.2 : ridge ? 0.95 : 0.65 + 0.1 * ((dx + dy) & 1)), s);
       }
   }
 }
