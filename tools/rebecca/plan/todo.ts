@@ -119,7 +119,7 @@ const STATUS: Record<string, Status> = {
   'saves-test': 'done',
   // Picked up, read and kept in her FILE tab in the game (tools/harness/tests/files.ts).
   'files-viewer': 'done',
-  // In the game, but the reader shows only each page's top 192 rows, and the
+  // In the game and laid out for the top 192 rows the reader shows. The
   // owner is reviewing the texts and the paper.
   'files-art': 'doing',
   'file-logbook': 'doing',
