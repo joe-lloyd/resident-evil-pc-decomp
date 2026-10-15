@@ -209,7 +209,7 @@ def build():
     # ---- What the game needs.
     room.door("junction", (X0 + 0.1, Y1 - 0.45, X1 - 0.1, Y1), arrive=(1.95, 1.65), face=(0, -1))
     room.door("summit-trail", (X0 + 0.1, Y0, X1 - 0.1, Y0 + 0.45), arrive=(1.95, 1.9), face=(0, 1))
-    room.check((X1 - 0.6, 1.47, X1, 2.08), "The cage controls. UP and DOWN.\nThe lever's dead without power up top.")
+    room.spot("lift-up", (X1 - 0.6, 1.47, X1, 2.08))  # day/events.ts says what she sees and does here
     room.check((X0 + 0.4, 1.47, X1 - 0.6, 2.08), "A miner's cap lamp, dead. The strap's snapped.\nThere's an old smear of blood across the plates.")
     room.check((X0, 1.47, X0 + 0.4, 2.08), "MAX 6 MEN.")
     room.entry = "The cage creaks under me."

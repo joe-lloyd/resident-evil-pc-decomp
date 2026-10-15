@@ -3,9 +3,12 @@ comes up from the crawl space. Rendered through the room's own six cameras
 (read from ROOM1000.RDT: from, to, lens) onto a transparent film with a
 shadow-catching floor, to lay over the original backgrounds.
 
-A sample: nothing builds the patch from it yet. HX and HZ place it in game
-units (default 5200, 5600: the open floor in the middle of camera 0). OUT is
-the folder for closed<N>.png.
+tools/rebecca/saveroom/render.ts renders it on the Blender machine into
+saveroom/renders/, and build.ts lays each closed<N>.png over the player's own
+RC1000<N>.pak for her overlay (saveroom/patch.ts). HX and HZ place it in game
+units (default 5200, 5600: the open floor in the middle of camera 0), where
+she arrives from the crawl space (day/scripts.ts, GAME_ROOMS). OUT is the
+folder for closed<N>.png. Its surfaces get the kit's wear, as every room's do.
 
 Looks: five uneven boards in the room's own dark olive brown, each its own
 shade, with uneven gaps showing black, chipped edges, a chunk gone from one
@@ -137,6 +140,7 @@ reb.point("Lamp", (2.2, 4.8, 2.4), 60, (1.0, 0.85, 0.62), 0.8)
 reb.point("Fill", (HX + 0.8, HZ + 1.2, 2.4), 18, (0.95, 0.92, 0.82), 1.5)
 w = bpy.data.worlds.new("w"); w.use_nodes = True; w.node_tree.nodes["Background"].inputs[0].default_value = (0.05, 0.048, 0.04, 1)
 w.node_tree.nodes["Background"].inputs[1].default_value = float(os.environ.get("AMB", 1.0)); sc.world = w
+kit.wear(float(os.environ.get("RE1_WEAR", "1.3")))
 sc.render.engine = "CYCLES"; sc.cycles.device = "GPU"; sc.cycles.samples = 256
 sc.render.resolution_x, sc.render.resolution_y = 320, 240
 sc.render.film_transparent = True

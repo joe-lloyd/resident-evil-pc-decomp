@@ -256,7 +256,6 @@ def build():
     # ---- What the game needs.
     room.door("cellar", (X0, SOUTH[0], X0 + 0.6, SOUTH[1]), arrive=(2.2, 5.2), face=(1, 0))
     room.door("save", (hx0, hy0, hx1, hy1 + 0.9), arrive=((hx0 + hx1) / 2, 3.2), face=(0, 1), walk=False)
-    room.check((hx0, hy1, hx1, hy1 + 1.0), "A hatch, up into the house. There's light round its edges.\nIt's quiet up there.")
     room.check((6.6, 2.4, 8.0, 3.8), "A blanket, a candle stub, an empty biscuit tin.\nSomeone hid down here.")
     room.check((5.2, SOUTH[0], 6.2, SOUTH[0] + 0.7), "Rat poison. The rats ate it all anyway.")
     room.check((3.0, SOUTH[0], 5.0, SOUTH[1]), "Footsteps, overhead. Slow ones.\nKeep going.")

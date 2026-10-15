@@ -16,7 +16,7 @@
 // init procedure 0
 // The door out to the yard (ROOM3150): she comes out onto the porch steps,
 // facing the yard (+Z, angle 0xC00).
-door_aot_set(0, 5950, 9100, 1530, 1100, 0, 0, 0, 4, 0, ROOM_315, 22015, 0, 13515, 3072, UNLOCKED, 129);
+door_aot_set(0, 5950, 9100, 1530, 1100, 1, 0, 7, 1, 0, ROOM_315, 22015, 0, 13515, 3072, UNLOCKED, 129);
 // On the table by the cards: the First Aid Spray, model at (7276, -1292, 7310).
 if (ck(FG_ITEM, 241, 0)) {
     item_aot_set(1, 6120, 6630, 1700, 1700, 65 /* F-Aid Spray */, 1, 0, 255, 108, 28, 244, 250, 142, 28, 0, 0, 241, 129, 0, 0);

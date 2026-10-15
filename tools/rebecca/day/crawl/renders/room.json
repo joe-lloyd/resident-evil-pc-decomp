@@ -162,15 +162,6 @@
  "checks": [
   {
    "zone": {
-    "x0": 11560,
-    "z0": 3400,
-    "x1": 12920,
-    "z1": 5100
-   },
-   "text": "A hatch, up into the house. There's light round its edges.\nIt's quiet up there."
-  },
-  {
-   "zone": {
     "x0": 11220,
     "z0": 4080,
     "x1": 13600,
@@ -206,6 +197,9 @@
    "text": "Pipes. Cobwebs. Rat droppings. Lovely."
   }
  ],
+ "saves": null,
+ "items": [],
+ "spots": [],
  "entry": "Under the house.\nI can hear someone walking around up there.",
  "notes": [
   "from the cellar hole: the south leg, bars of light across the clay, the pipes",

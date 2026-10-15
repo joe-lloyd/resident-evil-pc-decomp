@@ -156,114 +156,114 @@
   },
   {
    "shape": "circle",
-   "x0": 26827,
-   "z0": 9522,
-   "x1": 28312,
-   "z1": 10402,
+   "x0": 26710,
+   "z0": 9565,
+   "x1": 27661,
+   "z1": 10608,
    "name": "Snapped trunk.004"
   },
   {
    "shape": "circle",
-   "x0": 28316,
-   "z0": 8346,
-   "x1": 29624,
-   "z1": 9254,
+   "x0": 28149,
+   "z0": 8343,
+   "x1": 29228,
+   "z1": 9405,
    "name": "Snapped trunk.005"
   },
   {
    "shape": "circle",
-   "x0": 30777,
-   "z0": 19494,
-   "x1": 32594,
-   "z1": 20904,
+   "x0": 30816,
+   "z0": 19936,
+   "x1": 32115,
+   "z1": 21205,
    "name": "Snapped trunk.006"
   },
   {
    "shape": "circle",
-   "x0": 29170,
-   "z0": 18462,
-   "x1": 30534,
-   "z1": 19738,
+   "x0": 29432,
+   "z0": 18721,
+   "x1": 30800,
+   "z1": 19516,
    "name": "Snapped trunk.007"
   },
   {
    "shape": "circle",
-   "x0": 32249,
-   "z0": 9814,
-   "x1": 33518,
-   "z1": 10930,
+   "x0": 32253,
+   "z0": 10154,
+   "x1": 33481,
+   "z1": 11076,
    "name": "Snapped trunk.008"
   },
   {
    "shape": "circle",
-   "x0": 33515,
-   "z0": 18217,
-   "x1": 35084,
-   "z1": 19402,
+   "x0": 33555,
+   "z0": 18214,
+   "x1": 35217,
+   "z1": 19143,
    "name": "Snapped trunk.009"
   },
   {
    "shape": "circle",
-   "x0": 31427,
-   "z0": 17874,
-   "x1": 32443,
-   "z1": 19024,
+   "x0": 31573,
+   "z0": 17975,
+   "x1": 32521,
+   "z1": 18816,
    "name": "Snapped trunk.010"
   },
   {
    "shape": "circle",
-   "x0": 32061,
-   "z0": 7331,
-   "x1": 33702,
-   "z1": 8200,
+   "x0": 32184,
+   "z0": 7293,
+   "x1": 33850,
+   "z1": 8584,
    "name": "Snapped trunk.011"
   },
   {
    "shape": "circle",
-   "x0": 37611,
-   "z0": 20269,
-   "x1": 38693,
-   "z1": 21487,
+   "x0": 36980,
+   "z0": 19888,
+   "x1": 38613,
+   "z1": 21273,
    "name": "Snapped trunk.012"
   },
   {
    "shape": "circle",
-   "x0": 39376,
-   "z0": 9984,
-   "x1": 40521,
-   "z1": 10940,
+   "x0": 39688,
+   "z0": 10107,
+   "x1": 41091,
+   "z1": 11051,
    "name": "Snapped trunk.013"
   },
   {
    "shape": "circle",
-   "x0": 39293,
-   "z0": 18253,
-   "x1": 40865,
-   "z1": 19445,
+   "x0": 40044,
+   "z0": 18741,
+   "x1": 40760,
+   "z1": 19336,
    "name": "Snapped trunk.014"
   },
   {
    "shape": "circle",
-   "x0": 25009,
-   "z0": 6975,
-   "x1": 26686,
-   "z1": 8381,
+   "x0": 24683,
+   "z0": 6853,
+   "x1": 26670,
+   "z1": 7968,
    "name": "Snapped trunk.015"
   },
   {
    "shape": "circle",
-   "x0": 36013,
-   "z0": 6450,
-   "x1": 37815,
-   "z1": 7507,
+   "x0": 35392,
+   "z0": 6385,
+   "x1": 36955,
+   "z1": 7712,
    "name": "Snapped trunk.016"
   },
   {
    "shape": "circle",
-   "x0": 29606,
-   "z0": 7165,
-   "x1": 30918,
-   "z1": 7812,
+   "x0": 29320,
+   "z0": 6629,
+   "x1": 30794,
+   "z1": 8079,
    "name": "Snapped trunk.017"
   },
   {
@@ -429,6 +429,15 @@
    "text": "The trees are snapped off and burnt black, all the way along.\nShe spun before she came down."
   }
  ],
+ "items": [
+  {
+   "step": "crowbar",
+   "x": 9520,
+   "y": -6,
+   "z": 18530
+  }
+ ],
+ "spots": [],
  "entry": "The helicopter.\nThis is where we came down.",
  "notes": [
   "from the valley path: the cabin's open side, the tail, the boot prints going out",

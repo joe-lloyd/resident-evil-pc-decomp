@@ -22,6 +22,7 @@ coordinates are unsigned in the game, so every room lives at X, Z >= 0.
 import json
 import math
 import os
+import random
 
 import bpy
 from mathutils import Vector, noise
@@ -116,12 +117,37 @@ def mat_surface(name, stops, scale=4.0, detail=12, rough=0.9, bump=0.6):
 
 
 def mat_cards(name, dark, light):
-    """Leaf, needle or grass cards, each card a shade of its own."""
+    """Leaf, needle or grass cards, each card a shade of its own and broken
+    into bright and dark specks across it, the way RE1's photographed
+    foliage is a mass of lit tips and black gaps rather than flat shapes."""
     m, nodes, links, bsdf = nodes_material(name)
     bsdf.inputs["Roughness"].default_value = 0.55
     geo = nodes.new("ShaderNodeNewGeometry")
     col = ramp(nodes, links, geo.outputs["Random Per Island"], [(0.0, dark), (1.0, light)])
-    links.new(col.outputs["Color"], bsdf.inputs["Base Color"])
+    n = noise_tex(nodes, links, 28, 4, 0.8)
+    rng = nodes.new("ShaderNodeMapRange")
+    rng.inputs["From Min"].default_value, rng.inputs["From Max"].default_value = 0.3, 0.7
+    rng.inputs["To Min"].default_value, rng.inputs["To Max"].default_value = 0.4, 2.1
+    links.new(n.outputs["Fac"], rng.inputs["Value"])
+    lit = nodes.new("ShaderNodeVectorMath")
+    lit.operation = "SCALE"
+    links.new(col.outputs["Color"], lit.inputs[0])
+    links.new(rng.outputs["Result"], lit.inputs["Scale"])
+    links.new(lit.outputs[0], bsdf.inputs["Base Color"])
+    # Lace: each card has holes, so a mass of them reads as needles and
+    # fronds with the dark showing through, not as solid shapes.
+    holes = noise_tex(nodes, links, 55, 2, 0.5)
+    cut = nodes.new("ShaderNodeMath")
+    cut.operation = "GREATER_THAN"
+    cut.inputs[1].default_value = 0.44
+    links.new(holes.outputs["Fac"], cut.inputs[0])
+    clear = nodes.new("ShaderNodeBsdfTransparent")
+    both = nodes.new("ShaderNodeMixShader")
+    links.new(cut.outputs[0], both.inputs["Fac"])
+    links.new(clear.outputs[0], both.inputs[1])
+    links.new(bsdf.outputs[0], both.inputs[2])
+    out = nodes["Material Output"]
+    links.new(both.outputs[0], out.inputs["Surface"])
     return m
 
 
@@ -198,50 +224,106 @@ def terrain(name, mat, x_range, y_range, height, step=0.4):
     return mesh_object(name, verts, faces, mat)
 
 
+def _lean(base):
+    """A tree's lean, the same for its crown and its trunk: drawn from where it stands."""
+    r = random.Random(round(base[0] * 1000) * 7919 + round(base[1] * 1000))
+    return Vector((r.uniform(-1, 1), r.uniform(-1, 1), 0)) * r.uniform(0.0, 0.05)
+
+
 def conifer(rng, base, h, verts, faces):
-    """A spruce's needles: about 380 drooping cards per metre on a ragged cone."""
+    """A spruce's needles, ragged as RE1's photo trees are: whorls of drooping
+    branches at uneven heights, a bare lower trunk, one side thinner where it
+    grew against its neighbours, a lean, and now and then a broken top. About
+    460 cards a metre, since the cards are lace."""
     up = Vector((0, 0, 1))
     base = Vector(base)
-    radius = h * rng.uniform(0.2, 0.27)
-    for _ in range(int(h * 380)):
-        t = rng.uniform(0.18, 1.0) ** 0.8
-        r = radius * (1.0 - t) ** 0.9 * rng.uniform(0.55, 1.05) + 0.05
-        a = rng.uniform(0, 2 * math.pi)
-        out = Vector((math.cos(a), math.sin(a), 0))
-        p = base + up * (h * t) + out * r * rng.uniform(0.3, 1.0)
-        card(verts, faces, p, out, up, rng.uniform(0.1, 0.2), rng.uniform(0.25, 0.5) * (0.6 + 0.4 * r), rng.uniform(0.3, 0.8))
+    lean = _lean(base)
+    top = h * (rng.uniform(0.55, 0.8) if rng.random() < 0.15 else 1.0)
+    radius = h * rng.uniform(0.17, 0.26)
+    bare = rng.uniform(0.12, 0.35)
+    gap = rng.uniform(0, 2 * math.pi)
+    z = h * bare
+    budget = int(h * 460)
+    while z < top and budget > 0:
+        t = z / h
+        for _ in range(rng.randint(3, 7)):
+            a = rng.uniform(0, 2 * math.pi)
+            if abs(math.atan2(math.sin(a - gap), math.cos(a - gap))) < 0.8 and rng.random() < 0.6:
+                continue
+            out = Vector((math.cos(a), math.sin(a), 0))
+            length = (radius * (1.0 - t) ** 0.8 + 0.15) * rng.uniform(0.5, 1.25)
+            droop = rng.uniform(0.15, 0.55)
+            root = base + lean * z + up * z
+            steps = max(3, int(length / 0.12))
+            for k in range(steps):
+                s = (k + 1) / steps
+                p = root + out * length * s - up * droop * length * s * s
+                for _ in range(rng.randint(2, 4)):
+                    jitter = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), rng.uniform(-0.6, 0.2))) * 0.12
+                    twist = Vector((rng.uniform(-0.6, 0.6), rng.uniform(-0.6, 0.6), 0))
+                    card(verts, faces, p + jitter, (out + twist).normalized(), up,
+                         rng.uniform(0.1, 0.2), rng.uniform(0.2, 0.42) * (0.7 + 0.3 * (1 - s)), rng.uniform(0.4, 1.0))
+                    budget -= 1
+        z += rng.uniform(0.25, 0.6) * (1.0 + (1 - t))
+    # A ragged leader at the top.
+    for _ in range(int(top * 10)):
+        p = base + lean * top + up * rng.uniform(top * 0.9, top)
+        card(verts, faces, p, Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)).normalized(), up, 0.08, 0.25, 0.3)
 
 
 def trunks(name, mat, bases):
-    """Tapered seven-sided trunks: bases is [(Vector base, height)]."""
+    """Trunks with a kink, the crown's lean and dead branch stubs on the bare
+    lower part: bases is [(Vector base, height)]."""
     verts, faces = [], []
     for base, h in bases:
-        k = len(verts)
+        rng = random.Random(round(base.x * 977) + round(base.y * 131))
+        lean = _lean(base)
         r = h * 0.03
-        for ring, z in ((0, 0.0), (1, h * 0.85)):
-            rr = r if ring == 0 else r * 0.25
+        rings = [(0.0, r * 1.25), (0.08, r), (0.45, r * 0.7), (0.85, r * 0.25)]
+        k0 = len(verts)
+        for i, (t, rr) in enumerate(rings):
+            c = Vector(base) + Vector((0, 0, h * t)) + lean * h * t + Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.04 * i
             for s in range(7):
                 a = 2 * math.pi * s / 7
-                verts.append((base.x + math.cos(a) * rr, base.y + math.sin(a) * rr, base.z + z))
-        for s in range(7):
-            faces.append((k + s, k + (s + 1) % 7, k + 7 + (s + 1) % 7, k + 7 + s))
+                verts.append((c.x + math.cos(a) * rr * rng.uniform(0.85, 1.1), c.y + math.sin(a) * rr * rng.uniform(0.85, 1.1), c.z))
+        for i in range(len(rings) - 1):
+            a0, a1 = k0 + i * 7, k0 + (i + 1) * 7
+            for s in range(7):
+                faces.append((a0 + s, a0 + (s + 1) % 7, a1 + (s + 1) % 7, a1 + s))
+        for _ in range(rng.randint(4, 10)):
+            z = h * rng.uniform(0.1, 0.35)
+            a = rng.uniform(0, 2 * math.pi)
+            p = Vector(base) + Vector((0, 0, z)) + lean * z
+            d = Vector((math.cos(a), math.sin(a), rng.uniform(-0.4, 0.1))) * rng.uniform(0.3, 1.1)
+            k = len(verts)
+            side = Vector((-math.sin(a), math.cos(a), 0)) * 0.02
+            verts += [tuple(p - side), tuple(p + side), tuple(p + d + side * 0.3), tuple(p + d - side * 0.3)]
+            faces.append((k, k + 1, k + 2, k + 3))
     return mesh_object(name, verts, faces, mat)
 
 
 def fern(rng, centre, size, verts, faces):
-    """Fronds fanning out from the middle, each a run of small leaflets."""
+    """Fronds fanning out from the middle, each a run of small leaflets, and
+    no two alike: fronds of uneven length, some bent over or broken off, some
+    leaflets gone, the whole clump leaning one way."""
     up = Vector((0, 0, 1))
     c = Vector(centre)
-    for _ in range(int(size * 110)):
+    tilt = Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * rng.uniform(0.0, 0.35)
+    for _ in range(int(size * rng.uniform(70, 120))):
         a = rng.uniform(0, 2 * math.pi)
-        lift = rng.uniform(0.3, 1.1)
-        frond = Vector((math.cos(a), math.sin(a), 0))
-        for k in range(14):
+        frond = (Vector((math.cos(a), math.sin(a), 0)) + tilt).normalized()
+        reach = size * rng.uniform(0.6, 1.4)
+        lift = rng.uniform(0.2, 1.2)
+        sag = rng.uniform(0.4, 1.1) if rng.random() < 0.25 else 0.6
+        broken = rng.randint(6, 13) if rng.random() < 0.2 else 14
+        for k in range(broken):
             t = k / 14
-            arc = c + frond * size * t * 1.3 + up * size * (math.sin(lift) * t - 0.6 * t * t)
+            arc = c + frond * reach * t * 1.3 + up * reach * (math.sin(lift) * t - sag * t * t)
             for side in (-1, 1):
-                out = (frond + up.cross(frond) * side * 0.9).normalized()
-                card(verts, faces, arc, out, up, rng.uniform(0.04, 0.07), 0.15 * (1.1 - t), rng.uniform(0.1, 0.5))
+                if rng.random() < 0.12:
+                    continue
+                out = (frond + up.cross(frond) * side * rng.uniform(0.6, 1.1)).normalized()
+                card(verts, faces, arc, out, up, rng.uniform(0.035, 0.075), 0.15 * (1.1 - t) * rng.uniform(0.7, 1.2), rng.uniform(0.1, 0.6))
 
 
 def grass_tufts(rng, count, where, height, verts, faces):
@@ -262,9 +344,10 @@ def grass_tufts(rng, count, where, height, verts, faces):
             faces.append((k, k + 1, k + 2))
 
 
-def boulder(rng, centre, r, verts, faces, squash=0.9):
-    """A lumpy rock, appended to verts/faces."""
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=3, radius=1)
+def boulder(rng, centre, r, verts, faces, squash=0.9, subdivisions=3):
+    """A lumpy rock, appended to verts/faces. One subdivision, drawn flat
+    (mesh_object smooth=False), makes a freshly broken, angular one."""
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=subdivisions, radius=1)
     tmp = bpy.context.active_object
     seed = rng.uniform(0, 100)
     k = len(verts)
@@ -672,6 +755,10 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
             walls.append({"shape": shape, "x0": x0, "z0": z0, "x1": x1, "z1": z1, "name": ob.name})
     with open(os.path.join(out_dir, "room.json"), "w") as f:
         json.dump({"cameras": cameras, "walls": walls, **meta, **(extra or {})}, f, indent=1)
+    # RE1_RECORDS=1: the room's records alone (doors, checks, items), no
+    # pictures, for a change to what the scene records rather than its look.
+    if os.environ.get("RE1_RECORDS"):
+        return
 
     # Backgrounds.
     _cycles(samples, True, 1.0)

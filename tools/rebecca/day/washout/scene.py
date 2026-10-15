@@ -260,10 +260,13 @@ def cab_shell(bm, timber, glass, c, z0, door=(0.3, 1.1), roof_m=None):
 def gully_depth(x, y):
     """How far below the road the gully floor is at (x, y), 0 outside it:
     a rough U, deepest along x 8.4-11.6, its banks up to the road's edge."""
-    edge = EDGE + 0.3 + 0.25 * noise.noise(Vector((x * 0.9, 0.5, 2)))
+    # The lip bitten back unevenly where the road broke away, and the sides
+    # slumped in and out, not cut straight.
+    edge = EDGE + 0.3 + 0.25 * noise.noise(Vector((x * 0.9, 0.5, 2))) + 0.18 * noise.noise(Vector((x * 2.6, 1.5, 3)))
     if y <= edge:
         return 0.0
-    t = max(0.0, min(1.0, (3.0 - abs(x - 10.0)) / 1.4))
+    half = min(3.0, 2.7 + 0.8 * noise.noise(Vector((y * 0.6, x > 10.0, 7))) + 0.35 * noise.noise(Vector((y * 2.2, x > 10.0, 8))))  # never past the void (room.void)
+    t = max(0.0, min(1.0, (half - abs(x - 10.0)) / 1.4))
     lat = t * t * (3 - 2 * t)
     u = min(1.0, (y - edge) / 1.5)
     down = u * u * (3 - 2 * u)
@@ -373,45 +376,12 @@ def ribbon(name, m, path, width, z_of, step=0.25):
 
 
 def pickup(name, paint, door_open=1.2):
-    """A pickup, nose toward +x, wheels on z = 0, its centre at the origin.
-    Returns (body, driver's door pivot)."""
-    glass = reb.mat_glass("Pickup glass", (0.35, 0.4, 0.4))
-    parts = [
-        reb.prim("cube", "bed floor", paint, (-1.35, 0, 0.78), (2.5, 1.8, 0.08)),
-        reb.prim("cube", "bed side", paint, (-1.35, 0.88, 1.0), (2.5, 0.06, 0.5)),
-        reb.prim("cube", "bed side", paint, (-1.35, -0.88, 1.0), (2.5, 0.06, 0.5)),
-        reb.prim("cube", "tailgate", paint, (-2.58, 0, 1.0), (0.06, 1.8, 0.5)),
-        reb.prim("cube", "cab", paint, (0.75, 0, 1.25), (1.6, 1.86, 1.0), bevel=0.05),
-        reb.prim("cube", "roof", paint, (0.7, 0, 1.82), (1.3, 1.8, 0.14), bevel=0.04),
-        reb.prim("cube", "hood", paint, (2.05, 0, 1.0), (1.05, 1.84, 0.4), rot=(0, 0.08, 0), bevel=0.04),
-        reb.prim("cube", "grille", mat("steel"), (2.6, 0, 0.88), (0.06, 1.6, 0.36)),
-        reb.prim("cube", "front bumper", mat("steel"), (2.68, 0, 0.6), (0.12, 1.9, 0.14)),
-        reb.prim("cube", "rear bumper", mat("steel"), (-2.66, 0, 0.6), (0.12, 1.9, 0.12)),
-        reb.prim("cube", "sill", mat("black"), (0.0, 0, 0.55), (5.2, 1.7, 0.2)),
-    ]
-    for x in (-1.7, 1.75):
-        for y in (-0.82, 0.82):
-            parts.append(reb.prim("cyl", "wheel", mat("rubber"), (x, y, 0.38), (0.76, 0.76, 0.28), rot=(math.pi / 2, 0, 0), segments=18))
-            parts.append(reb.prim("cyl", "hub", mat("steel"), (x, y * 1.18, 0.38), (0.3, 0.3, 0.02), rot=(math.pi / 2, 0, 0), segments=12))
-    for y in (-0.6, 0.6):
-        parts.append(reb.prim("cyl", "headlamp", mat("glass") if y < 0 else mat("black"), (2.63, y, 0.95), (0.18, 0.18, 0.04), rot=(0, math.pi / 2, 0), segments=12))
-    body = kit.join(name, parts)
-    win = kit.join(f"{name} windows", [
-        reb.prim("cube", "windscreen", glass, (1.52, 0, 1.55), (0.04, 1.7, 0.5), rot=(0, -0.45, 0)),
-        reb.prim("cube", "back window", glass, (-0.04, 0, 1.55), (0.03, 1.5, 0.4)),
-        reb.prim("cube", "side window", glass, (0.75, -0.94, 1.55), (1.2, 0.02, 0.45)),
-    ])
-    win.parent = body
-    # The driver's door on the left (+y), hinged at its front edge, swung open.
-    pivot = reb.prim("sphere", f"{name} door hinge", mat("black"), (1.5, 0.94, 1.15), (0.03, 0.03, 0.03))
-    door = reb.prim("cube", f"{name} door", paint, (-0.72, 0.0, 0.0), (1.45, 0.06, 1.0), bevel=0.02)
-    door.parent = pivot
-    reb.prim("cube", f"{name} door glass", glass, (-0.72, 0.0, 0.62), (1.2, 0.02, 0.4)).parent = pivot
-    kit.text(f"{name} door words", "ARKLAY TIMBER CO.", mat("white paint"), (-0.72, 0.035, 0.05), size=0.1, rot=(math.pi / 2, 0, math.pi)).parent = pivot
-    kit.text(f"{name} door words 2", "CAMP 4", mat("white paint"), (-0.72, 0.035, -0.12), size=0.1, rot=(math.pi / 2, 0, math.pi)).parent = pivot
-    pivot.rotation_euler = (0, 0, door_open)
-    pivot.parent = body
-    return body, pivot
+    """The logging company's pickup (kit.pickup), its words on the driver's
+    door. Returns (body, driver's door hinge)."""
+    body, hinge = kit.pickup(name, paint, door_open=door_open)
+    kit.text(f"{name} door words", "ARKLAY TIMBER CO.", mat("white paint"), (-0.68, 0.035, 0.0), size=0.1, rot=(math.pi / 2, 0, math.pi)).parent = hinge
+    kit.text(f"{name} door words 2", "CAMP 4", mat("white paint"), (-0.68, 0.035, -0.17), size=0.1, rot=(math.pi / 2, 0, math.pi)).parent = hinge
+    return body, hinge
 
 
 def build():
@@ -514,8 +484,10 @@ def build():
     kit.splat("Blood on the door", mat("blood"), (-0.4, 0.04, 0.1), 0.1, rot=(math.pi / 2, 0, 0), seed=12).parent = door_pivot
     b, w = kit.crow("Crow on the lip", (12.3, 5.9, 0.0), heading=1.2)
     reb.cloth("Tarp blown out of the bed", mat("canvas"), (12.4, EDGE - 0.1, 0.03), (1.0, 0.7), rot=(0, 0, 0.4), lumps=0.05, seed=3)
-    driver = kit.body("Logger", (10.3, 11.9, POOL_Z - 0.14), 1.2, pose="front", top=reb.mat_plain("Hi-vis vest", (0.6, 0.2, 0.02), 0.7), legs=mat("denim"), seed=4)
-    kit.splat("Blood in the water", reb.mat_plain("Blood in water", (0.12, 0.01, 0.006), 0.2), (10.2, 12.3, POOL_Z + 0.004), 0.75, seed=9, stretch=(1.5, 0.9), lumps=0.6)
+    # West of the pickup's nose, his back just breaking the water, so the
+    # camera on the west lip sees him past the cab.
+    driver = kit.body("Logger", (9.0, 11.3, POOL_Z - 0.08), 1.2, pose="front", top=reb.mat_plain("Hi-vis vest", (0.6, 0.2, 0.02), 0.7), legs=mat("denim"), seed=4)
+    kit.splat("Blood in the water", reb.mat_plain("Blood in water", (0.12, 0.01, 0.006), 0.2), (9.0, 11.7, POOL_Z + 0.004), 0.75, seed=9, stretch=(1.5, 0.9), lumps=0.6)
     reb.prim("cube", "Cap floating", reb.mat_plain("Cap orange", (0.45, 0.13, 0.03), 0.7), (11.4, 11.6, POOL_Z + 0.03), (0.22, 0.18, 0.06), rot=(0, 0, 0.5), bevel=0.03)
     cone = reb.prim("cone", "Traffic cone", reb.mat_plain("Cone orange", (0.6, 0.15, 0.02), 0.6), (16.4, 10.4, 0.18), (0.36, 0.36, 0.7), rot=(1.45, 0, 0.7), segments=14, top=0.15)
     kit.shards("Windscreen glass", (11.6, EDGE - 0.3, 0.0), spread=0.6, count=10, seed=2)

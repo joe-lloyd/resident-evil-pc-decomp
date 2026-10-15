@@ -144,17 +144,11 @@
     "z1": 10710
    },
    "text": "The ladder goes down inside the tower, all the way to the trees.\nThere's someone on it, a little way down. Hanging by his harness. The crows are on him."
-  },
-  {
-   "zone": {
-    "x0": 3740,
-    "z0": 6800,
-    "x1": 6460,
-    "z1": 7650
-   },
-   "text": "Car 4. The hatch is open. The crows on its roof don't even move."
   }
  ],
+ "saves": null,
+ "items": [],
+ "spots": [],
  "entry": "Pylon 7. It's a long way down.",
  "notes": [
   "from off the east end: the length of the grating to the car, the crows on the arm, the drop",

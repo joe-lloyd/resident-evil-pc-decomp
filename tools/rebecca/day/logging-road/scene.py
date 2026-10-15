@@ -143,10 +143,20 @@ def build():
             for d in (0.0, 0.32):
                 wheel("Dual wheel", x, TY + s * (0.92 + d), r=0.5, width=0.28)
     # Hood, fenders, grille, lamps, bumper.
-    reb.prim("cube", "Hood", paint, ((CAB[1] + FX - 0.25) / 2, TY, 1.6), (FX - 0.25 - CAB[1], 1.35, 1.1), bevel=0.08)
+    # The long hood, rounded over and narrowing to the grille; the front fenders arched over the wheels.
+    hood = kit.loft("Hood", [(CAB[1], 0.68, 1.05, 2.15, 6), (CAB[1] + 0.3, 0.68, 1.05, 2.14, 6), (FX - 0.6, 0.62, 1.05, 2.05, 5), (FX - 0.25, 0.6, 1.08, 2.0, 4)], [paint], ring=32)
+    hood.location.y = TY
+    reb.mask(hood)
     for s in (-1, 1):
-        reb.prim("cube", "Front fender", paint, (15.45, TY + s * 1.0, 1.15), (1.6, 0.42, 0.25), bevel=0.06)
-        reb.prim("cube", "Fender skirt", paint, (15.45, TY + s * 1.0, 1.0), (1.6, 0.4, 0.06), rot=(s * 0.4, 0, 0))
+        arc = []
+        for k in range(9):
+            t = -1 + 2 * k / 8
+            zb = 0.75 + 0.62 * math.sqrt(max(0.0, 1 - t * t * 0.92))
+            arc.append((15.45 + 0.95 * t, 0.24, zb, zb + 0.07, 3))
+        fender = kit.loft("Front fender", arc, [paint], ring=16)
+        fender.location.y = TY + s * 1.0
+        reb.mask(fender)
+        reb.prim("cube", "Step", mat("iron"), (14.2, TY + s * 1.15, 0.95), (0.6, 0.3, 0.05), bevel=0.01)
     reb.prim("cube", "Grille", chrome, (FX - 0.22, TY, 1.55), (0.06, 1.15, 1.0))
     for k in range(9):
         reb.prim("cube", "Grille bar", dark, (FX - 0.19, TY - 0.5 + k * 0.125, 1.55), (0.02, 0.03, 0.9))

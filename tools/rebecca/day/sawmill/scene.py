@@ -48,6 +48,7 @@ import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import bmesh  # noqa: E402
 import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
@@ -321,7 +322,8 @@ def build():
     fresh = reb.mat_surface("Fresh boards", [(0.0, (0.35, 0.24, 0.13)), (0.6, (0.5, 0.37, 0.21)), (1.0, (0.42, 0.3, 0.17))], scale=4, bump=0.2)
     iron = mat("iron")
     green = mat("green paint")
-    blade_m = reb.mat_metal("Saw steel", (0.38, 0.38, 0.37), 0.35)
+    # Worn, not polished: a mirror blade only shows the dark shed and reads as a black disc.
+    blade_m = reb.mat_surface("Saw steel", [(0.0, (0.2, 0.2, 0.19)), (0.45, (0.4, 0.4, 0.38)), (0.7, (0.5, 0.5, 0.48)), (1.0, (0.3, 0.16, 0.08))], scale=14, rough=0.45, bump=0.1)
     belt_m = reb.mat_plain("Belt leather", (0.05, 0.03, 0.018), 0.55)
     tin = reb.mat_surface("Roof tin underside", [(0.0, (0.1, 0.1, 0.095)), (0.7, (0.17, 0.17, 0.16)), (1.0, (0.18, 0.09, 0.04))], scale=2, rough=0.6, bump=0.2)
     enamel = reb.mat_plain("Lamp enamel", (0.1, 0.18, 0.12), 0.45)
@@ -496,11 +498,34 @@ def build():
     kit.rod("Wheel shaft", iron, (WHEEL_X + 0.5, SHAFT_Y, SHAFT_Z), (11.8, SHAFT_Y, SHAFT_Z), 0.11, 16)
     reb.prim("cube", "Shaft bearing", iron, (X1 - 0.25, SHAFT_Y, SHAFT_Z - 0.18), (0.4, 0.35, 0.3))
     reb.prim("cube", "Bearing post", timber, (X1 - 0.25, SHAFT_Y, (SHAFT_Z - 0.33) / 2), (0.3, 0.3, SHAFT_Z - 0.33))
-    pulley = reb.prim("cyl", "Big pulley", iron, (12.8, SHAFT_Y, SHAFT_Z), (1.7, 1.7, 0.32), rot=(0, math.pi / 2, 0), segments=32)
-    spokes = []
+    # A flat-belt pulley: a cast rim on six spokes round a hub, not a solid
+    # disc (which, this close to the north-east camera, read as a black blob).
+    # Its axis is its own z, laid along x, as the spin wants it.
+    rv, rf = [], []
+    seg = 40
+    for k in range(seg):
+        a = 2 * math.pi * k / seg
+        for r in (0.85, 0.76):
+            for z in (-0.16, 0.16):
+                rv.append((r * math.cos(a), r * math.sin(a), z))
+    for k in range(seg):
+        o, n_ = 4 * k, 4 * ((k + 1) % seg)
+        rf += [(o, n_, n_ + 1, o + 1), (o + 2, o + 3, n_ + 3, n_ + 2), (o + 1, n_ + 1, n_ + 3, o + 3), (o, o + 2, n_ + 2, n_)]
+    pulley = reb.mesh_object("Big pulley", rv, rf, mat("rust"), smooth=False)
+    bm = bmesh.new()
+    bm.from_mesh(pulley.data)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(pulley.data)
+    bm.free()
+    pulley.location = (12.8, SHAFT_Y, SHAFT_Z)
+    pulley.rotation_euler = (0, math.pi / 2, 0)
+    bpy.context.view_layer.update()
+    spokes = [reb.prim("cyl", "Pulley hub", iron, (12.8, SHAFT_Y, SHAFT_Z), (0.34, 0.34, 0.36), rot=(0, math.pi / 2, 0), segments=16)]
+    spokes[0].parent = pulley
+    spokes[0].matrix_parent_inverse = pulley.matrix_world.inverted()
     for k in range(6):
         a = math.pi * k / 3
-        spokes.append(kit.rod("Pulley spoke", mat("rust"), (12.62, SHAFT_Y, SHAFT_Z), (12.62, SHAFT_Y + math.cos(a) * 0.82, SHAFT_Z + math.sin(a) * 0.82), 0.035, 6))
+        spokes.append(kit.rod("Pulley spoke", mat("rust"), (12.8, SHAFT_Y, SHAFT_Z), (12.8, SHAFT_Y + math.cos(a) * 0.78, SHAFT_Z + math.sin(a) * 0.78), 0.04, 6))
         spokes[-1].parent = pulley
         spokes[-1].matrix_parent_inverse = pulley.matrix_world.inverted()
     reb.mask(reb.wall(bpy.data.objects["Bearing post"]))
@@ -612,7 +637,7 @@ def build():
     room.check((sx0, sy0 - 0.7, sx1, sy0), "Blood, thrown across the boards in a long fan.\nThe saw was running when it happened.")
     room.check((bx - 1.6, by + 1.0, bx - 0.6, by + 1.6), "The head saw. There's still a log on the carriage, half cut.\nSomeone threw the belt off to stop the blade.")
     room.check((11.6, SHAFT_Y + 0.6, 13.6, SHAFT_Y + 1.6), "The water wheel's shaft. It's still turning.\nThe belt's off, so it isn't driving anything.")
-    room.check((tx - 0.9, RAIL_Y[1], tx + 0.9, RAIL_Y[1] + 0.8), "The log crane, on its track. 5 TON.\nIt could lift anything in this camp, if it had power.")
+    room.spot("crane", (tx - 0.9, RAIL_Y[1], tx + 0.9, RAIL_Y[1] + 0.8))  # day/events.ts says what she sees and does here
     room.check((X1 - 1.0, BACK_DOOR[0] - 0.5, X1, BACK_DOOR[0]), "A bloody hand on the back door's frame.\nHe went out this way.")
     room.check((6.4, Y1 - 0.6, 7.6, Y1), "Board feet cut: Monday 4100. Tuesday 3850. Wednesday 1200.\nThen nothing.")
     room.check((17.0, wb[2], 18.6, wb[2] + 0.6), "Somebody's in the race. Face down, going round and round in the eddy.\nThe tailer. He worked the boards off the saw.")

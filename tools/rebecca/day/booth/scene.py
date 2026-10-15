@@ -216,11 +216,12 @@ def build():
     # ---- What the game needs.
     room.door("platform", (DOOR[0], Y1 - 0.4, DOOR[1], Y1), arrive=(3.05, 2.9), face=(0, -1))
     room.check((3.0, Y0, 4.1, Y0 + 0.7), "The duty board, in chalk. POWER OFF 4.50. DRIVE COG SHEARED. F3 BLOWN.\nAt the bottom, underlined twice: HAL HAS KEY.")
-    room.check((X0, 1.1, X0 + 0.9, 1.6), "The key switch for the drive. It's empty.\nNo key, no gondola.")
+    room.spot("gondola-runs", (X0, 1.1, X0 + 0.9, 1.6))  # day/events.ts says what she sees and does here
     room.check((X0, 2.4, X0 + 0.9, 2.9), "His coffee went over. A photo of a girl with a fish, propped against the glass.")
     room.check((1.9, 2.4, 2.7, 3.0), "Gauze, soaked through. He dressed something in a hurry.\nA bite, by the look of the first aid box. Everything in it is gone.")
-    # The fuse box and the phone hang over the item box: their zones reach out past its front.
-    room.check((X1 - 1.0, 1.3, X1, 1.95), "Fuse F3 is burnt black. The wall above it is sooty.")
+    # The fuse box and the phone hang over the item box: their zones reach out
+    # past its front, where her action probe lands.
+    room.spot("fit-fuse", (X1 - 1.0, 1.3, X1, 1.95))  # day/events.ts says what she sees and does here
     room.check((X1 - 1.0, 2.45, X1, 2.95), "The handset is hanging off the hook. The line's dead.")
     room.check((X1 - 0.7, 2.95, X1, 3.45), "ARKLAY SKYWAY. See the valley the way the eagles do.\nSomeone has scratched out the family's eyes.")
     room.check((DOOR[0] - 0.5, Y1 - 0.6, DOOR[0], Y1), "A handprint in blood on the door frame. It's still tacky.")

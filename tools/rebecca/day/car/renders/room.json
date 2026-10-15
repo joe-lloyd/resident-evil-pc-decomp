@@ -121,9 +121,9 @@
   {
    "zone": {
     "x0": 2720,
-    "z0": 1700,
+    "z0": 2465,
     "x1": 4250,
-    "z1": 2550
+    "z1": 3230
    },
    "text": "Claw marks on the inside of the door. Handprints on the glass, all the way up.\nShe was trying to get out."
   },
@@ -137,6 +137,9 @@
    "text": "CAR 4. MAX 6."
   }
  ],
+ "saves": null,
+ "items": [],
+ "spots": [],
  "entry": "It's stopped. We're hanging over the trees.\nThere's a pylon right ahead.",
  "notes": [
   "high by the door, north-west: the bloody west bench, the spilled bag, the pylon through the south glass",

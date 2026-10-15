@@ -49,6 +49,13 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "line-on",
+   "bank": 1,
+   "bit": -1
+  }
+ ],
  "bounds": {
   "x0": 1700,
   "z0": 1700,
@@ -94,15 +101,6 @@
   {
    "zone": {
     "x0": 1700,
-    "z0": 2040,
-    "x1": 3060,
-    "z1": 3910
-   },
-   "text": "The breakers. SKYWAY LINE, STATION 3, MINE. Every one of them is down. OFF."
-  },
-  {
-   "zone": {
-    "x0": 1700,
     "z0": 3910,
     "x1": 3060,
     "z1": 4760
@@ -135,6 +133,18 @@
     "z1": 3740
    },
    "text": "Blood on the door frame. He went out to the line track."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "line-on",
+   "zone": {
+    "x0": 1700,
+    "z0": 2040,
+    "x1": 3060,
+    "z1": 3910
+   }
   }
  ],
  "entry": "It smells of burnt rubber.",

@@ -119,10 +119,10 @@ def build():
     rng = random.Random(31)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
-    room.camera((6.25, 9.85, 2.6), (2.9, 4.6, 0.6), 200, "high in the south-east corner: the tables, the benches over, the cook against the counter")
-    room.camera((1.15, 9.85, 2.6), (4.8, 4.6, 0.6), 200, "high in the south-west corner: the length of the hall to the hatch, the door on the right")
-    room.camera((6.25, 3.8, 2.6), (2.6, 8.4, 0.5), 200, "high by the kitchen doorway: the last meal on the tables, the fork in the board")
-    room.camera((1.15, 3.45, 2.6), (5.0, 1.3, 0.6), 200, "high in the kitchen's south-west corner: the range, the steaming pot, the block")
+    room.camera((6.25, 9.85, 2.45), (2.9, 4.6, 0.6), 200, "high in the south-east corner: the tables, the benches over, the cook against the counter")
+    room.camera((1.15, 9.85, 2.45), (4.8, 4.6, 0.6), 200, "high in the south-west corner: the length of the hall to the hatch, the door on the right")
+    room.camera((6.25, 3.8, 2.45), (2.6, 8.4, 0.5), 200, "high by the kitchen doorway: the last meal on the tables, the fork in the board")
+    room.camera((1.15, 3.45, 2.45), (5.0, 1.3, 0.6), 200, "high in the kitchen's south-west corner: the range, the steaming pot, the block")
 
     # ---- Materials.
     walls_m = kit.boards("Whitewashed boards", (0.42, 0.4, 0.35), width=0.18, grime=0.85)
@@ -221,6 +221,8 @@ def build():
     # ---- The counter: the cook, dead against it in his apron, keys on his belt, the cleaver by his hand.
     ck = (3.0, PART + 0.27, 0.0)
     kit.body("The cook", ck, heading=math.pi / 2, pose="slumped", top=apron, legs=reb.mat_plain("Cook's trousers", (0.25, 0.24, 0.22), 0.9), seed=12)
+    # The office key, off the ring on his belt (office-key).
+    room.item("office-key", (ck[0], ck[1] + 0.7, 0.0))
     reb.prim("cube", "Apron bib", apron, (ck[0], ck[1] + 0.2, 0.55), (0.36, 0.02, 0.5), rot=(0.25, 0, 0))
     hip = Vector((ck[0] - 0.2, ck[1] + 0.25, 0.2))
     kit.rod("Key ring", mat("steel"), hip, hip + Vector((0.0, 0.0, -0.08)), 0.03, 10)

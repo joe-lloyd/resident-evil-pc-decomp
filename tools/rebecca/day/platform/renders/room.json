@@ -364,15 +364,6 @@
   },
   {
    "zone": {
-    "x0": 2890,
-    "z0": 15980,
-    "x1": 7140,
-    "z1": 19380
-   },
-   "text": "The drive's gearbox, open. The big cog has sheared: four teeth gone.\nA spanner lies in the oil where it was dropped."
-  },
-  {
-   "zone": {
     "x0": 15640,
     "z0": 11390,
     "x1": 18700,
@@ -406,6 +397,18 @@
     "z1": 18360
    },
    "text": "A stake's been pulled out of the rock. The rope hangs down over the edge.\nHis cap. Scrape marks, right to the lip."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "fit-cog",
+   "zone": {
+    "x0": 2890,
+    "z0": 15980,
+    "x1": 7140,
+    "z1": 19380
+   }
   }
  ],
  "entry": "A gondola station. Down the mountain, into the valley.\nIf it ran.",

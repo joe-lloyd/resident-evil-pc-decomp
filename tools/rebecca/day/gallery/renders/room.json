@@ -160,6 +160,15 @@
    "text": "DANGER. WINZE. The floor drops away under the water there."
   }
  ],
+ "items": [
+  {
+   "step": "op-key",
+   "x": 12410,
+   "y": -1666,
+   "z": 7310
+  }
+ ],
+ "spots": [],
  "entry": "The water's cold. It's black. I can't see the floor.",
  "notes": [
   "from the foot of the decline: the black water, the cart he hid on, Hal floating by the rope",

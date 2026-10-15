@@ -102,16 +102,32 @@ def build():
     reb.prim("cube", "Board frame", mat("iron"), (X0 + 0.05, 2.5, 2.33), (0.1, 2.7, 0.06))
     reb.prim("cube", "Board frame", mat("iron"), (X0 + 0.05, 2.5, 0.58), (0.1, 2.7, 0.06))
     labels = ("SKYWAY LINE", "STATION 3", "MINE", "PUMP", "CAMP 4")
+    # Once she closes them (day/events.ts "line-on"): handles up, a green lamp lit over each.
+    down, up = [], []
+    lamp_on = reb.mat_emit("Breaker lamp, on", (0.3, 1.0, 0.35), 12)
     for i, label in enumerate(labels):
         y = 1.45 + i * 0.52
         if abs(y - SPARK[1]) < 0.2:
             continue
         reb.prim("cube", f"Breaker {i}", cab_grey, (X0 + 0.16, y, 1.55), (0.16, 0.34, 0.5), bevel=0.01)
         handle = kit.rod(f"Breaker handle {i}", mat("black"), (X0 + 0.25, y, 1.55), (X0 + 0.42, y, 1.32), 0.025)
-        reb.prim("sphere", f"Handle knob {i}", mat("red paint"), (X0 + 0.43, y, 1.31), (0.06, 0.06, 0.06), segments=10)
+        knob = reb.prim("sphere", f"Handle knob {i}", mat("red paint"), (X0 + 0.43, y, 1.31), (0.06, 0.06, 0.06), segments=10)
+        down += [handle, knob]
+        up += [kit.rod(f"Breaker handle up {i}", mat("black"), (X0 + 0.25, y, 1.55), (X0 + 0.42, y, 1.78), 0.025),
+               reb.prim("sphere", f"Handle knob up {i}", mat("red paint"), (X0 + 0.43, y, 1.79), (0.06, 0.06, 0.06), segments=10),
+               reb.prim("sphere", f"Breaker lamp {i}", lamp_on, (X0 + 0.1, y, 2.12), (0.04, 0.04, 0.04), segments=8)]
         reb.prim("cube", f"Label {i}", mat("white paint"), (X0 + 0.09, y, 1.95), (0.01, 0.4, 0.09))
         kit.text(f"Label words {i}", label, mat("black"), (X0 + 0.096, y, 1.95), size=0.045, rot=(math.pi / 2, 0, math.pi / 2))
-        kit.text(f"Off mark {i}", "OFF", mat("red paint"), (X0 + 0.096, y, 1.2), size=0.05, rot=(math.pi / 2, 0, math.pi / 2))
+        down.append(kit.text(f"Off mark {i}", "OFF", mat("red paint"), (X0 + 0.096, y, 1.2), size=0.05, rot=(math.pi / 2, 0, math.pi / 2)))
+    for ob in up:
+        ob.hide_render = True
+
+    def line(on):
+        for ob in down:
+            ob.hide_render = on
+        for ob in up:
+            ob.hide_render = not on
+    room.state("line-on", line)
     # The contactor that shorted: blackened, its cover blown off, sparks still coming.
     reb.prim("cube", "Contactor", mat("black"), (X0 + 0.15, SPARK[1], 1.45), (0.14, 0.34, 0.42), bevel=0.01)
     for dy in (-0.08, 0.0, 0.08):
@@ -209,7 +225,7 @@ def build():
     # ---- What the game needs.
     room.door("generator", (NDOOR[0], Y0, NDOOR[1], Y0 + 0.6), arrive=(2.2, 2.1), face=(0, 1))
     room.door("line-track", (X1 - 0.6, EDOOR[0], X1, EDOOR[1]), arrive=(3.4, 2.65), face=(-1, 0))
-    room.check((X0, 1.2, X0 + 0.8, 2.3), "The breakers. SKYWAY LINE, STATION 3, MINE. Every one of them is down. OFF.")
+    room.spot("line-on", (X0, 1.2, X0 + 0.8, 2.3))  # day/events.ts says what she sees and does here
     room.check((X0, 2.3, X0 + 0.8, 2.8), "A contactor, burnt black. It's still sparking off the batteries.\nThere's a scorched handprint beside it.")
     room.check((X0 + 0.4, 2.5, X0 + 1.0, 3.1), "A lineman's rubber glove. It's melted.")
     room.check((lx - 0.3, Y1 - 0.9, lx + 0.7, Y1), "MAIN ISOLATOR, SKYWAY LINE. The lever's down, and padlocked.\nNo power reaches the gondola until this goes up.")

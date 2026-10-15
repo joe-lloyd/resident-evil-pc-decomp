@@ -125,21 +125,21 @@
  "checks": [
   {
    "zone": {
-    "x0": 2813,
-    "z0": 2312,
-    "x1": 5534,
-    "z1": 4165
-   },
-   "text": "Wine and blood, pooled together. A bottle smashed.\nThis is where it got him."
-  },
-  {
-   "zone": {
     "x0": 3570,
     "z0": 2312,
     "x1": 5100,
     "z1": 3230
    },
    "text": "Bloody handprints down the bottles. He tried to get up."
+  },
+  {
+   "zone": {
+    "x0": 2813,
+    "z0": 2312,
+    "x1": 5534,
+    "z1": 4165
+   },
+   "text": "Wine and blood, pooled together. A bottle smashed.\nThis is where it got him."
   },
   {
    "zone": {
@@ -169,6 +169,9 @@
    "text": "Dusty bottles. Years of them."
   }
  ],
+ "saves": null,
+ "items": [],
+ "spots": [],
  "entry": "The wine store. It smells of wine. And something else.",
  "notes": [
   "high in the north-east corner: the pool under the rack, the smear out through the arch",

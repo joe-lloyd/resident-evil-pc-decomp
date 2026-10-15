@@ -189,34 +189,34 @@
   },
   {
    "shape": "circle",
-   "x0": 11966,
-   "z0": 23185,
-   "x1": 13269,
-   "z1": 24255,
+   "x0": 12038,
+   "z0": 22966,
+   "x1": 13417,
+   "z1": 24167,
    "name": "Cairn 0"
   },
   {
    "shape": "circle",
-   "x0": 12857,
-   "z0": 26066,
-   "x1": 14191,
-   "z1": 27165,
+   "x0": 12928,
+   "z0": 26184,
+   "x1": 14301,
+   "z1": 27265,
    "name": "Cairn 1"
   },
   {
    "shape": "circle",
-   "x0": 16254,
-   "z0": 28122,
-   "x1": 17665,
-   "z1": 29270,
+   "x0": 16243,
+   "z0": 28263,
+   "x1": 17658,
+   "z1": 29333,
    "name": "Cairn 2"
   },
   {
    "shape": "circle",
-   "x0": 11925,
-   "z0": 30481,
-   "x1": 13409,
-   "z1": 31587,
+   "x0": 11892,
+   "z0": 30510,
+   "x1": 13116,
+   "z1": 31638,
    "name": "Cairn 3"
   }
  ],
@@ -378,6 +378,8 @@
    "text": "Straight down, both sides. The crows just hang there in the wind, watching me."
   }
  ],
+ "items": [],
+ "spots": [],
  "entry": "The mast. Its light's still blinking.",
  "notes": [
   "from the trail in, south-west: the mast in its fence, the cabin, the crow on the wire",

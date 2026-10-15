@@ -252,6 +252,15 @@
    "text": "Smoke, rising out of the trees in the valley. Something came down there.\nBravo's helicopter. And far off, a big house among the trees."
   }
  ],
+ "items": [
+  {
+   "step": "switch-key",
+   "x": 11050,
+   "y": -1462,
+   "z": 6800
+  }
+ ],
+ "spots": [],
  "entry": "The lookout. You can see half the mountain from here.",
  "notes": [
   "inside, high in the north-west corner: the fire finder, the cot, the door, the valley through the glass",

@@ -421,6 +421,8 @@ def build():
     # ---- The desk along the north wall: the log, the binoculars, the dead radio, a lamp.
     desk = kit.table("Desk", reb.mat_wood("Desk", (0.2, 0.14, 0.08)), P(1.0, -CW + 0.3, 0.0), size=(2.2, 0.55, 0.85))
     reb.wall(desk)
+    # The switch house key, on the desk by the log (switch-key).
+    room.item("switch-key", P(0.5, -CW + 0.3, 0.86))
     reb.prim("cube", "Logbook", mat("paper"), P(0.7, -CW + 0.32, 0.855), (0.42, 0.3, 0.012), rot=(0, 0, 0.08))
     reb.prim("cube", "Logbook cover", reb.mat_plain("Ledger green", (0.06, 0.12, 0.08), 0.6), P(0.7, -CW + 0.32, 0.848), (0.44, 0.32, 0.006), rot=(0, 0, 0.08))
     for i in range(6):

@@ -23,6 +23,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bpy  # noqa: E402
 import reb  # noqa: E402
+import kit  # noqa: E402
 from mathutils import Vector, noise  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))
@@ -231,30 +232,13 @@ def build():
     # ---- The truck: a green ranger pickup, driver's door open, the winch on its bumper.
     tx0, tx1, ty0, ty1 = TRUCK
     tym = (ty0 + ty1) / 2
-    body = []
-    body.append(reb.prim("cube", "Truck bed", paint, (tx0 + 1.25, tym, 0.85), (2.5, ty1 - ty0 - 0.1, 0.6), bevel=0.03))
-    body.append(reb.prim("cube", "Truck cab", paint, (tx0 + 3.05, tym, 1.25), (1.1, ty1 - ty0 - 0.15, 1.3), bevel=0.06))
-    body.append(reb.prim("cube", "Truck hood", paint, (tx0 + 4.25, tym, 0.95), (1.3, ty1 - ty0 - 0.1, 0.75), bevel=0.06))
-    reb.prim("cube", "Windscreen", glass, (tx0 + 3.62, tym, 1.6), (0.04, ty1 - ty0 - 0.35, 0.55), rot=(0, -0.3, 0))
-    for y in (ty0 + 0.04, ty1 - 0.04):
-        reb.prim("cube", "Side window", glass, (tx0 + 3.05, y, 1.6), (0.75, 0.02, 0.45))
-    reb.prim("cube", "Door stripe", white, (tx0 + 3.05, ty1 - 0.02, 1.1), (1.0, 0.02, 0.12))
-    reb.prim("cube", "Grille", chrome, (tx1 - 0.08, tym, 0.85), (0.04, ty1 - ty0 - 0.5, 0.45))
-    reb.prim("cube", "Bumper", chrome, (tx1 + 0.08, tym, 0.5), (0.18, ty1 - ty0, 0.18), bevel=0.02)
-    for y in (ty0 + 0.3, ty1 - 0.3):
-        reb.prim("cyl", "Headlight", reb.mat_plain("Headlight glass", (0.7, 0.7, 0.62), 0.1), (tx1 - 0.05, y, 1.0), (0.2, 0.2, 0.05), rot=(0, math.pi / 2, 0))
-    for x in (tx0 + 0.85, tx0 + 4.0):
-        for y in (ty0 + 0.05, ty1 - 0.05):
-            reb.prim("cyl", "Tyre", rubber, (x, y, 0.38), (0.76, 0.76, 0.26), rot=(math.pi / 2, 0, 0), segments=20)
-            reb.prim("cyl", "Hub", chrome, (x, y + (0.13 if y > tym else -0.13), 0.38), (0.32, 0.32, 0.02), rot=(math.pi / 2, 0, 0), segments=16)
-    reb.prim("cube", "Chassis", iron, (tx0 + 2.5, tym, 0.5), (5.0, ty1 - ty0 - 0.4, 0.2))
-    # The driver's door hangs open on the north side.
-    door = reb.prim("cube", "Truck door", paint, (tx0 + 3.05 + 0.35, ty0 - 0.45, 1.1), (1.0, 0.06, 0.95), rot=(0, 0, -0.75), bevel=0.02)
-    body.append(door)
-    reb.prim("cube", "Seat", reb.mat_plain("Seat vinyl", (0.08, 0.06, 0.05), 0.5), (tx0 + 3.0, tym, 1.0), (0.6, ty1 - ty0 - 0.4, 0.15))
+    truck, hinge = kit.pickup("Truck", paint, door_open=0.75, door_side=-1)
+    truck.location = (tx1 - 2.75, tym, 0.0)
+    reb.prim("cube", "Door stripe", white, (-0.68, -0.035, 0.0), (1.2, 0.01, 0.12)).parent = hinge
+    body = [truck]
     # Gear in the bed: a jerrycan, a coil of rope, a tarp.
-    reb.prim("cube", "Jerrycan", reb.mat_plain("Red can", (0.35, 0.04, 0.03), 0.5), (tx0 + 0.4, ty0 + 0.4, 1.3), (0.35, 0.18, 0.45), bevel=0.02)
-    reb.cloth("Tarp", reb.mat_plain("Tarp", (0.12, 0.15, 0.1), 0.8), (tx0 + 1.4, tym + 0.2, 1.17), (1.6, 1.2), lumps=0.08, seed=4)
+    reb.prim("cube", "Jerrycan", reb.mat_plain("Red can", (0.35, 0.04, 0.03), 0.5), (tx0 + 0.6, ty0 + 0.45, 1.07), (0.35, 0.18, 0.45), bevel=0.02)
+    reb.cloth("Tarp", reb.mat_plain("Tarp", (0.12, 0.15, 0.1), 0.8), (tx0 + 1.5, tym + 0.2, 0.92), (1.6, 1.2), lumps=0.08, seed=4)
     for x in (tx0, tx1):
         for y in (ty0 + 0.12, ty1 - 0.12):
             hz = amber
@@ -492,6 +476,8 @@ def build():
         place_pine(moved)
 
     place_pine(False)
+    # The kit's worn, bitty surfaces, as every kit room has.
+    kit.wear(float(os.environ.get("RE1_WEAR", "1.3")))
     reb.export(
         CAMERAS,
         OUT,

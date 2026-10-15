@@ -3,7 +3,7 @@
   {
    "from": [
     1955,
-    -3740,
+    -3570,
     6545
    ],
    "to": [
@@ -16,7 +16,7 @@
   {
    "from": [
     7905,
-    -3740,
+    -3570,
     1955
    ],
    "to": [
@@ -29,7 +29,7 @@
   {
    "from": [
     1955,
-    -3740,
+    -3570,
     1955
    ],
    "to": [
@@ -176,6 +176,8 @@
    "text": "July. Every day crossed off up to yesterday."
   }
  ],
+ "items": [],
+ "spots": [],
  "entry": "A radio. It's on. Someone could hear me.",
  "notes": [
   "high in the south-west corner: the instrument bench, the radio desk under the broken window",

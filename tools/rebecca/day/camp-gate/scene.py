@@ -252,22 +252,9 @@ def build():
 
     # ---- The pickup, shoved out sideways through the gap: flat tyres, glass gone, bloody hands inside the door.
     px, py, pr = PICKUP
-    parts = []
-    parts.append(reb.prim("cube", "bed", truck_m, (-1.2, 0, 0.95), (1.9, 1.75, 0.55), bevel=0.03))
-    parts.append(reb.prim("cube", "bed floor", dark, (-1.2, 0, 1.2), (1.8, 1.6, 0.04)))
-    parts.append(reb.prim("cube", "cab", truck_m, (0.55, 0, 1.25), (1.4, 1.75, 1.15), bevel=0.05))
-    parts.append(reb.prim("cube", "hood", truck_m, (1.85, 0, 0.92), (1.3, 1.72, 0.5), bevel=0.05))
-    parts.append(reb.prim("cube", "grille", chrome, (2.52, 0, 0.88), (0.05, 1.5, 0.35)))
-    parts.append(reb.prim("cube", "bumper", chrome, (2.6, 0, 0.6), (0.1, 1.85, 0.16)))
-    parts.append(reb.prim("cube", "back bumper", chrome, (-2.2, 0, 0.62), (0.1, 1.8, 0.14)))
-    parts.append(reb.prim("cube", "dark cab glass hole", dark, (0.6, 0, 1.6), (1.2, 1.77, 0.38)))
-    parts.append(reb.prim("cube", "windshield hole", dark, (1.26, 0, 1.55), (0.04, 1.5, 0.4), rot=(0, -0.3, 0)))
-    for x in (1.7, -1.4):
-        for s in (-1, 1):
-            parts.append(reb.prim("cyl", "tyre", mat("rubber"), (x, s * 0.78, 0.33), (0.66, 0.66, 0.24), rot=(math.pi / 2, 0, 0), segments=16))
-            parts.append(reb.prim("cyl", "hubcap", chrome, (x, s * 0.91, 0.33), (0.3, 0.3, 0.02), rot=(math.pi / 2, 0, 0), segments=12))
-    pickup = kit.join("Pickup", parts)
-    settle(pickup, (px, py, -0.06), (0.04, -0.02, pr))
+    pickup, hinge = kit.pickup("Pickup", truck_m, door_open=1.1, door_side=1, glass_gone=True, flat=0.35)
+    pickup.location = (px, py, -0.06)
+    pickup.rotation_euler = (0.04, -0.02, pr)
     reb.mask(pickup)
     reb.wall(reb.prim("cube", "Pickup footprint", None, (px, py, 0.6), (4.4, 1.9, 1.2), rot=(0, 0, pr))).hide_render = True
     c, s_ = math.cos(pr), math.sin(pr)
@@ -275,20 +262,16 @@ def build():
     def on_truck(lx, ly):
         return Vector((px + lx * c - ly * s_, py + lx * s_ + ly * c))
     # Its driver's door hangs open on the south side, the bloody hands inside it.
-    hinge_at = on_truck(1.2, 0.9)
-    hinge = reb.prim("cube", "Pickup door hinge", mat("iron"), (hinge_at.x, hinge_at.y, 1.0), (0.04, 0.04, 0.8))
-    pdoor = reb.prim("cube", "Pickup door", truck_m, (-0.55, 0.03, 0.15), (1.1, 0.06, 1.0), bevel=0.02)
     hands = []
     for k in range(3):
-        hands.append(kit.splat(f"Hand inside the door {k}", mat("blood"), (-0.3 - k * 0.25, -0.004, 0.25 + 0.12 * (k % 2)), 0.06, rot=(math.pi / 2, 0, 0), seed=30 + k))
-    smear = reb.prim("cube", "Smear inside the door", mat("old blood"), (-0.5, -0.004, 0.05), (0.5, 0.004, 0.06), rot=(0, 0.3, 0))
-    for p in [pdoor, smear] + hands:
+        hands.append(kit.splat(f"Hand inside the door {k}", mat("blood"), (-0.3 - k * 0.25, -0.037, 0.05 + 0.12 * (k % 2)), 0.06, rot=(math.pi / 2, 0, 0), seed=30 + k))
+    smear = reb.prim("cube", "Smear inside the door", mat("old blood"), (-0.5, -0.037, -0.15), (0.5, 0.004, 0.06), rot=(0, 0.3, 0))
+    for p in [smear] + hands:
         p.parent = hinge
-    hinge.rotation_euler = (0, 0, pr - 1.1)
     kit.scratches("Claws on the pickup", reb.mat_plain("Bare metal", (0.35, 0.35, 0.33), 0.3), tuple(on_truck(-1.0, -0.9).to_3d() + Vector((0, 0, 1.1))), (s_, -c), count=5, length=0.4, seed=40)
     kit.shards("Pickup glass", (px + 0.3, py + 1.2, 0.0), spread=0.9, count=26, seed=41)
     for k in range(3):
-        reb.prim("cube", f"Sandbag in the bed {k}", mat("canvas"), tuple(on_truck(-1.6 + k * 0.5, 0.3 * (k - 1)).to_3d() + Vector((0, 0, 1.33))), (0.42, 0.26, 0.2), rot=(0, 0, pr + 0.2 * k), bevel=0.06)
+        reb.prim("cube", f"Sandbag in the bed {k}", mat("canvas"), tuple(on_truck(-1.6 + k * 0.5, 0.3 * (k - 1)).to_3d() + Vector((0, 0, 0.88))), (0.42, 0.26, 0.2), rot=(0, 0, pr + 0.2 * k), bevel=0.06)
 
     # ---- Beyond the fence: the camp. The workshop's tin, the sawmill's tall grey shed, a bunkhouse roof.
     camp_tin = corrugated("Camp tin", (0.12, 0.13, 0.12), pitch=0.1)

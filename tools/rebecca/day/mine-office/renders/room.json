@@ -151,10 +151,10 @@
    "x0": 3485,
    "z0": 1700,
    "x1": 4335,
-   "z1": 3485
+   "z1": 3145
   },
   "box": {
-   "x0": 5780,
+   "x0": 6392,
    "z0": 3400,
    "x1": 7820,
    "z1": 5559
@@ -167,6 +167,8 @@
    "scale": 1.0
   }
  },
+ "items": [],
+ "spots": [],
  "entry": "Candles. Someone lit these today.",
  "notes": [
   "high by the door: the desk under the mine map, the candles, the helmet, his jacket on the chair",

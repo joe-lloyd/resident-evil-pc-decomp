@@ -1,10 +1,10 @@
 // bunkhouse (31F), written by day/scripts.ts from day/bunkhouse/scene.py: edit the scene, not this file.
 // init procedure 0
 // To camp-yard.
-door_aot_set(0, 10200, 9350, 1530, 850, 0, 0, 0, 4, 0, ROOM_31E, 19465, 0, 5780, 3072, UNLOCKED, 193);
+door_aot_set(0, 10200, 9350, 1530, 850, 1, 0, 7, 1, 0, ROOM_31E, 19465, 0, 5780, 3072, UNLOCKED, 193);
 // Bunkhouse calendar, a file.
 if (ck(FG_ITEM, 232, 0)) {
-    item_aot_set(1, 11475, 1700, 1360, 2210, 107, 1, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 232, 129, 0, 0);
+    item_aot_set(1, 11475, 1700, 1360, 2210, 107, 1, 2, 255, 0, 0, 0, 0, 0, 0, 0, 0, 232, 129, 0, 0);
 }
 aot_set(2, 12920, 3910, 3230, 850, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(3, 15640, 6970, 3060, 935, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
@@ -13,6 +13,13 @@ aot_set(5, 7480, 5100, 2380, 1870, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
 aot_set(6, 11730, 6290, 2210, 1870, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 aot_set(7, 9860, 3145, 2040, 935, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
 aot_set(8, 2210, 3910, 2550, 850, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
+enemy(17, 0, 195, 1, 2, 0, 0, 3874, 0, 0, 2400, 0, 4780, 0, 0, 0, 0);  // a zombie
+if (ck(FG_ITEM, 181, 0)) {  // clip
+    item_aot_set(9, 1500, 3880, 1800, 1800, 11, 15, 0, 255, 96, 9, 0, 0, 172, 18, 0, 0, 181, 129, 0, 0);
+}
+if (ck(FG_ITEM, 182, 0)) {  // redHerb
+    item_aot_set(10, 18500, 3880, 1800, 1800, 67, 1, 1, 255, 200, 75, 0, 0, 172, 18, 0, 0, 182, 129, 1, 0);
+}
 return;
 
 // main procedure 0

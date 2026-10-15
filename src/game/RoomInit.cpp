@@ -5,6 +5,7 @@
 #include "FileLoader.h"
 #include "SpriteRenderer.h"
 #include "dc/ItemDescriptions.h"
+#include "RebItems.h"
 #include "dc/EntityModels.h"    // the arrange wardrobe's two outfit flags
 #include "../system/AssetPath.h"
 #include "TestMode.h"
@@ -191,11 +192,15 @@ unsigned int set_item_description_message(unsigned short descIndex, unsigned sho
         : g_bDcMode ? dc_usa_item_descriptions()
                     : g_ItemDescriptions;
 
+    // Port addition: in her mode, an item a key item of hers takes the place
+    // of has her description (RebItems.cpp).
+    const unsigned char* mine = g_bRebMode ? reb_item_description((unsigned char)(descIndex + 1)) : NULL;
+
     // The original indexes the table unchecked; the entries past the last item
     // are the zero padding that follows it, so an out-of-range id would set a
     // NULL g_MessagePtr and fault in UpdateMessageDisplay. Refuse instead.
-    if (descIndex >= (sizeof(g_ItemDescriptions) / sizeof(g_ItemDescriptions[0])) ||
-        descriptions[descIndex] == NULL) {
+    if (mine == NULL && (descIndex >= (sizeof(g_ItemDescriptions) / sizeof(g_ItemDescriptions[0])) ||
+                         descriptions[descIndex] == NULL)) {
         return 1;
     }
 
@@ -208,7 +213,7 @@ unsigned int set_item_description_message(unsigned short descIndex, unsigned sho
     g_MessageStateCounter = 0;
     g_MessageSpeedUpFlag = 0x80;
     g_lastScanCodeOrMsgID = (DWORD)descIndex;
-    g_MessagePtr = descriptions[descIndex];
+    g_MessagePtr = mine ? (unsigned char*)mine : descriptions[descIndex];
     g_MessageScreenY = 0xba - (short)g_ScreenOffsetY;
 
     return 0;

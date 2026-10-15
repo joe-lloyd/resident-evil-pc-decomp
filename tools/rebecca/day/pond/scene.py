@@ -362,7 +362,7 @@ def build():
     room.door("flume", (BRIDGE[0], Y0, BRIDGE[1], Y0 + 0.6), arrive=(4.0, 3.8), face=(0, 1))
     room.check((SAWYER[0] - 1.8, SHORE_Y, SAWYER[0] + 0.6, SHORE_Y + 0.8), "A man face down in the reeds. His left sleeve is empty from the elbow.\nThe sawyer. He made it this far.")
     room.check((13.0, SHORE_Y, 15.4, SHORE_Y + 0.8), "A hard hat, floating out there. And dead fish, belly up.\nSomething's wrong with the water too.")
-    room.check((DAM[0], RACE_EW[3], DAM[1], RACE_EW[3] + 0.8), "The sluice gate, wound open. The sign says open means the mill runs.\nThe crank turns it.")
+    room.spot("mill-race", (DAM[0], RACE_EW[3], DAM[1], RACE_EW[3] + 0.8))  # day/events.ts says what she sees and does here
     room.check((RACE_NS[1], 3.6, RACE_NS[1] + 1.0, 5.6), "The water wheel. It drives the mill through that shaft.\nIt's turning, but the mill isn't.")
     room.check((MILL_X, BACK_DOOR[0] - 0.6, MILL_X + 0.8, BACK_DOOR[0]), "A bloody hand on the mill's back door.")
     room.check((BRIDGE[0], Y0 + 0.6, BRIDGE[1], Y0 + 1.2), "A footbridge over the race. The flume's that way.")

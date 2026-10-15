@@ -103,15 +103,6 @@
   {
    "zone": {
     "x0": 1700,
-    "z0": 1870,
-    "x1": 3230,
-    "z1": 2720
-   },
-   "text": "The key switch for the drive. It's empty.\nNo key, no gondola."
-  },
-  {
-   "zone": {
-    "x0": 1700,
     "z0": 4080,
     "x1": 3230,
     "z1": 4930
@@ -126,15 +117,6 @@
     "z1": 5100
    },
    "text": "Gauze, soaked through. He dressed something in a hurry.\nA bite, by the look of the first aid box. Everything in it is gone."
-  },
-  {
-   "zone": {
-    "x0": 5440,
-    "z0": 2210,
-    "x1": 7140,
-    "z1": 3315
-   },
-   "text": "Fuse F3 is burnt black. The wall above it is sooty."
   },
   {
    "zone": {
@@ -185,6 +167,27 @@
    "scale": 1.0
   }
  },
+ "items": [],
+ "spots": [
+  {
+   "step": "gondola-runs",
+   "zone": {
+    "x0": 1700,
+    "z0": 1870,
+    "x1": 3230,
+    "z1": 2720
+   }
+  },
+  {
+   "step": "fit-fuse",
+   "zone": {
+    "x0": 5440,
+    "z0": 2210,
+    "x1": 7140,
+    "z1": 3315
+   }
+  }
+ ],
  "entry": "The heater's still on. He can't have gone long.",
  "notes": [
   "high over the door: the desk under the holed window, the tipped chair, the duty board",

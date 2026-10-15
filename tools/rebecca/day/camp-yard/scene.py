@@ -632,7 +632,12 @@ def build():
     sk = []
     sx0, sx1, sy = 5.9, 10.0, 13.0
     sk.append(reb.prim("cube", "Skidder frame", yellow, ((sx0 + sx1) / 2, sy, 0.9), (sx1 - sx0 - 0.6, 1.2, 0.6), bevel=0.04))
-    sk.append(reb.prim("cube", "Skidder engine", yellow, (sx1 - 1.0, sy, 1.45), (1.4, 1.1, 0.7), bevel=0.06))
+    engine = kit.loft("Skidder engine", [(sx1 - 1.75, 0.58, 1.15, 1.85, 4), (sx1 - 0.5, 0.56, 1.15, 1.82, 4), (sx1 - 0.25, 0.5, 1.15, 1.7, 3)], [yellow], ring=24)
+    engine.location.y = sy
+    sk.append(engine)
+    for s_ in (-1, 1):
+        for k in range(5):
+            sk.append(reb.prim("cube", "Engine louvre", mat("black"), (sx1 - 1.5 + k * 0.2, sy + s_ * 0.575, 1.5), (0.08, 0.02, 0.3)))
     sk.append(reb.prim("cube", "Skidder cab floor", yellow, (sx0 + 1.6, sy, 1.3), (1.4, 1.5, 0.15)))
     for dx in (0.95, 2.25):
         for dy in (-0.7, 0.7):
@@ -640,10 +645,15 @@ def build():
     sk.append(reb.prim("cube", "Cab roof", yellow, (sx0 + 1.6, sy, 2.8), (1.6, 1.6, 0.08)))
     sk.append(reb.prim("cube", "Seat", mat("black"), (sx0 + 1.5, sy, 1.55), (0.45, 0.5, 0.3)))
     sk.append(kit.rod("Exhaust", mat("rust"), (sx1 - 0.7, sy - 0.35, 1.8), (sx1 - 0.7, sy - 0.35, 2.6), 0.05))
+    # Big lugged forestry tyres on yellow rims.
     for x in (sx0 + 0.8, sx1 - 1.0):
         for s in (-1, 1):
-            sk.append(reb.prim("cyl", "Tyre", mat("rubber"), (x, sy + s * 0.95, 0.75), (1.5, 1.5, 0.55), rot=(math.pi / 2, 0, 0), segments=20))
-            sk.append(reb.prim("cyl", "Hub", yellow, (x, sy + s * 1.24, 0.75), (0.5, 0.5, 0.04), rot=(math.pi / 2, 0, 0), segments=12))
+            sk += kit.wheel("Skidder", (x, sy + s * 0.95, 0.75), r=0.72, width=0.55, rim=yellow)
+            for k in range(22):
+                a_ = 2 * math.pi * k / 22
+                for half in (-1, 1):
+                    sk.append(reb.prim("cube", "Tyre lug", mat("rubber"), (x + 0.74 * math.cos(a_), sy + s * 0.95 + half * 0.13, 0.75 + 0.74 * math.sin(a_)),
+                                       (0.07, 0.26, 0.06), rot=(0, -a_, half * 0.45)))
     sk.append(reb.prim("cube", "Blade", yellow, (sx1 + 0.35, sy, 0.38), (0.12, 2.6, 0.75), rot=(0, 0.2, 0), bevel=0.02))
     sk.append(reb.prim("cube", "Blade arm", mat("iron"), (sx1 + 0.05, sy - 0.6, 0.7), (0.7, 0.12, 0.12), rot=(0, 0.4, 0)))
     sk.append(reb.prim("cube", "Blade arm", mat("iron"), (sx1 + 0.05, sy + 0.6, 0.7), (0.7, 0.12, 0.12), rot=(0, 0.4, 0)))

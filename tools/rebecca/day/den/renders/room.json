@@ -192,6 +192,15 @@
    "text": "Water dripping off the rock into a puddle. The puddle's red."
   }
  ],
+ "items": [
+  {
+   "step": "truck-keys",
+   "x": 18785,
+   "y": 76,
+   "z": 9095
+  }
+ ],
+ "spots": [],
  "entry": "The smell hits first. Then the flies.",
  "notes": [
   "from the way down: the hollow, the overhang, the ranger under the lip",

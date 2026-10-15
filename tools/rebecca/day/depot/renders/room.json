@@ -242,15 +242,6 @@
  "checks": [
   {
    "zone": {
-    "x0": 12920,
-    "z0": 6460,
-    "x1": 14620,
-    "z1": 7480
-   },
-   "text": "Diesel, dripping from the nozzle. The hose reel is chained, and padlocked.\nThey didn't want anyone running off with the fuel."
-  },
-  {
-   "zone": {
     "x0": 10710,
     "z0": 6630,
     "x1": 12410,
@@ -284,6 +275,18 @@
     "z1": 8500
    },
    "text": "The lean-to. Oil, grease, rags."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "fuel",
+   "zone": {
+    "x0": 12920,
+    "z0": 6460,
+    "x1": 14620,
+    "z1": 7480
+   }
   }
  ],
  "entry": "Diesel. The whole place reeks of it.",

@@ -442,6 +442,14 @@ def build():
         x, y = rng.uniform(lx0, lx1), rng.uniform(ly0, ly1)
         reb.boulder(rng, (x, y, lz), rng.uniform(0.15, 0.5), rv, rf)
     reb.mesh_object("Ledge rocks", rv, rf, mat("rock"))
+    # The cliff walls either side of the ledge, its lip and the drop below it:
+    # broken granite standing out of the slope, not a smooth sheet.
+    cv, cf = [], []
+    for centre, size in (((19.5, 2.2, -1.5), (1.6, 1.4, 2.6)), ((21.5, 1.8, -2.5), (1.8, 1.6, 3.0)), ((23.5, 2.5, -4.0), (2.0, 2.0, 3.5)),
+                         ((19.3, 11.8, -1.6), (1.5, 1.4, 2.6)), ((21.3, 12.2, -2.6), (1.8, 1.6, 3.0)), ((23.6, 11.5, -4.2), (2.0, 2.0, 3.5)),
+                         ((18.0, 4.4, -1.0), (0.8, 0.9, 1.4)), ((18.1, 9.6, -1.1), (0.8, 0.9, 1.5)), ((23.7, 7.0, -6.6), (1.6, 3.5, 3.0))):
+        kit.crag(rng, cv, cf, centre, size, floor=-0.9)
+    reb.mesh_object("Cliff crags", cv, cf, cliff, smooth=False)
 
     # ---- The summit far off south: the weather hut, the headframe.
     reb.prim("cube", "Far weather hut", kit.boards("Far hut boards", (0.28, 0.27, 0.22), width=0.14), (4.0, 50.0, height(4.0, 50.0) + 1.25), (4.0, 3.2, 2.5))

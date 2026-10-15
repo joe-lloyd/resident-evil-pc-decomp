@@ -219,6 +219,24 @@ def build():
     nx0, ny0, nx1, ny1 = NEAR
     reb.terrain("Mountainside near", side, (nx0, nx1), (ny0, ny1), height, step=0.25)
     reb.terrain("Mountainside", side, (-14, 50), (-12, 40), lambda x, y: height(x, y) - (3.0 if nx0 + 1 < x < nx1 - 1 and ny0 + 1 < y < ny1 - 1 else 0.0), step=0.6)
+    # The gorge's far side: its floor 90 m down, its wall rising beyond, wooded,
+    # so a camera looking down the drop finds rock and trees, not sky.
+    def far_side(x, y):
+        n = noise.noise(Vector((x * 0.05, y * 0.05, 7.0)))
+        return -90.0 + max(0.0, y - 46.0) * 2.4 + 6.0 * n
+    reb.terrain("Gorge far side", side, (-30, 80), (36, 110), far_side, step=2.0)
+    tv, tf = [], []
+    for _ in range(260):
+        x, y = rng.uniform(-30, 80), rng.uniform(40, 105)
+        reb.conifer(rng, Vector((x, y, far_side(x, y))), rng.uniform(14, 24), tv, tf)
+    reb.mesh_object("Gorge spruce", tv, tf, mat("needles"))
+    # Granite standing out of the cliff over the ledge and under its lip.
+    cv, cf = [], []
+    for x in (19.5, 22.5, 25.5, 28.5, 32.0, 36.0):
+        y = ledge_y(x)
+        kit.crag(rng, cv, cf, (x, y - LEDGE_HALF - 2.2, 2.0), (1.4, 1.2, 2.8), floor=-0.8)
+        kit.crag(rng, cv, cf, (x + 1.2, y + LEDGE_HALF + 2.0, -5.8), (1.6, 1.3, 3.2), floor=-0.9)
+    reb.mesh_object("Gorge crags", cv, cf, steep(mat("rock"), "Granite, steep"), smooth=False)
     reb.prim("cube", "Slab edge east", mat("concrete"), (X1 + 0.32, (10.4 + Y1 + 0.5) / 2, -1.2), (0.3, Y1 + 0.5 - 10.4, 2.4))
     reb.prim("cube", "Platform slab", concrete, ((X0 + X1) / 2, (Y0 + Y1) / 2, -0.15), (X1 - X0 + 0.6, Y1 - Y0 + 0.8, 0.3))
     reb.prim("cube", "Slab edge", mat("concrete"), ((X0 + X1) / 2, Y1 + 0.42, -1.2), (X1 - X0 + 0.6, 0.3, 2.4))
@@ -427,7 +445,7 @@ def build():
     room.door("car", (cx0 + 0.6, cy0 - 0.6, cx0 + 1.6, cy0), arrive=(8.3, 9.9), face=(0, -1), walk=False, touch=False)
     room.check((15.8, 10.6, X1, 12.0), "The smear ends at the rail. The crows are at something caught on it.\nA strip of plaid shirt.")
     room.check((cx0, cy0 - 0.7, cx1, cy0), "Car 4. The door has been forced from inside. The glass is smeared red.")
-    room.check((wx0 + 0.6, wy0 + 0.4, wx1 - 0.4, wy1 - 1.2), "The drive's gearbox, open. The big cog has sheared: four teeth gone.\nA spanner lies in the oil where it was dropped.")
+    room.spot("fit-cog", (wx0 + 0.6, wy0 + 0.4, wx1 - 0.4, wy1 - 1.2))  # day/events.ts says what she sees and does here
     room.check((10.6, 6.7, 12.4, 7.9), "A hiker's pack, split open. Clothes, a water bottle, a trail map.")
     room.check((8.5, Y0, 11.5, 3.2), "ARKLAY SKYWAY. UPPER STATION. ELEV 1840.")
     room.check((7.2, 5.8, 9.4, 6.8), "OUT OF SERVICE.")

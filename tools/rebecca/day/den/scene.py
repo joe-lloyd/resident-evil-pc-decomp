@@ -96,23 +96,6 @@ def hanging_root(rng, verts, faces, top, length, r=0.03):
     tube(verts, faces, pts, r, 5, 0.7)
 
 
-def rock_mass(rng, verts, faces, centre, size, floor=-0.35):
-    """A block of granite: a lumpy, faceted mass `size` (x, y, z half-sizes),
-    flat underneath where it was split off."""
-    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=4, radius=1)
-    tmp = bpy.context.active_object
-    seed = rng.uniform(0, 100)
-    k = len(verts)
-    for v in tmp.data.vertices:
-        n = v.co.normalized()
-        d = 1 + 0.4 * noise.noise(n * 1.4 + Vector((seed, 0, 0))) + 0.15 * noise.noise(n * 4.5 + Vector((0, seed, 0))) + 0.06 * noise.noise(n * 12 + Vector((seed, seed, 0)))
-        p = n * d
-        p.z = max(p.z, floor + 0.05 * noise.noise(n * 3 + Vector((0, 0, seed))))
-        verts.append((centre[0] + p.x * size[0], centre[1] + p.y * size[1], centre[2] + p.z * size[2]))
-    faces.extend([tuple(k + i for i in poly.vertices) for poly in tmp.data.polygons])
-    bpy.data.objects.remove(tmp)
-
-
 def world(at, heading, local):
     """A point in a kit.body's own frame placed in the world."""
     return Vector(at) + Matrix.Rotation(heading, 3, "Z") @ Vector(local)
@@ -146,10 +129,10 @@ def build():
     rv, rf = [], []
     # The shelf: blocks whose flat undersides make the overhang's roof, about 3.2 m up.
     for (x, y, sx, sy) in ((4.6, 1.6, 2.8, 3.0), (8.4, 2.0, 2.6, 2.6), (12.2, 1.7, 2.8, 2.9), (15.6, 1.0, 2.2, 2.6)):
-        rock_mass(rng, rv, rf, (x, y, 4.3), (sx, sy, 3.2), floor=-0.35)
+        kit.crag(rng, rv, rf, (x, y, 4.3), (sx, sy, 3.2), floor=-0.35)
     # The face under it and the rock behind, down to the floor.
     for (x, y, sx, sy, sz) in ((5.6, -0.6, 2.6, 2.0, 2.4), (9.6, -0.4, 2.4, 1.9, 2.3), (13.4, -0.6, 2.6, 2.0, 2.4), (2.0, 1.2, 2.2, 2.6, 3.6), (16.8, 2.0, 2.0, 2.2, 3.0), (9.0, -3.5, 6.0, 3.0, 6.0)):
-        rock_mass(rng, rv, rf, (x, y, 0.8), (sx, sy, sz), floor=-0.6)
+        kit.crag(rng, rv, rf, (x, y, 0.8), (sx, sy, sz), floor=-0.6)
     granite = reb.mat_surface("Den granite", [(0.0, (0.025, 0.025, 0.023)), (0.45, (0.06, 0.058, 0.052)), (0.7, (0.035, 0.05, 0.025)), (1.0, (0.11, 0.105, 0.095))], scale=1.1, rough=0.6, bump=1.0)
     reb.mesh_object("Overhang", rv, rf, granite, smooth=False)
     # A spruce grows on top of the rock; its roots come down over the lip.
@@ -219,6 +202,8 @@ def build():
     heading = math.radians(100)   # head toward the rock (north)
     rx, ry = RANGER
     kit.body("The ranger", (rx, ry, height(rx, ry) + 0.01), heading, pose="back", top=mat("khaki"), legs=trousers, seed=8, missing=("l_hand", "r_foot"))
+    # His keys, by his hand, for his partner to give her (plan step truck-keys).
+    room.item("truck-keys", (rx + 0.45, ry + 0.35, height(rx + 0.45, ry + 0.35)))
     kit.splat("His blood", mat("blood"), tuple(world((rx, ry, 0), heading, (1.05, 0, 0.0))), 0.42, rot=(0, 0, 0.4), seed=9, stretch=(1.5, 1.0))
     kit.splat("His blood, older", mat("old blood"), tuple(world((rx, ry, 0), heading, (0.7, 0.3, -0.002))), 0.6, rot=(0, 0, 1.2), seed=10, stretch=(1.4, 1.0))
     j = kit._POSES["back"]

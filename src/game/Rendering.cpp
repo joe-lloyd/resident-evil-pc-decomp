@@ -8,6 +8,7 @@
 #include "../marni/PSXTexture.h"
 #include "../system/AssetPath.h"
 #include "dc/Items.h"    // lockpick item id (is_lockpick_item)
+#include "RebItems.h"   // her key items' names in her mode
 #include "SpriteRenderer.h"
 #include "TmdRenderer.h"
 #include <cstdlib>
@@ -1189,10 +1190,12 @@ static const unsigned char** dc_usa_item_names(void)
 
 unsigned char* message_item_name_lookup(unsigned char itemId)
 {
-    // Port addition: in her mode the file slots she fills carry her names.
+    // Port addition: in her mode the file slots she fills carry her names
+    // (RebFiles.cpp), and so does an item a key item of hers takes the place
+    // of (RebItems.cpp). Chris's and Jill's games never get here.
     if (g_bRebMode) {
-        const unsigned char* reb = reb_file_name(itemId);
-        if (reb) return (unsigned char*)reb;
+        if (const unsigned char* file = reb_file_name(itemId)) return (unsigned char*)file;
+        if (const unsigned char* mine = reb_item_name(itemId)) return (unsigned char*)mine;
     }
 
     // The Japanese release has its own pair of tables (0x004cd388/0x004cd548,

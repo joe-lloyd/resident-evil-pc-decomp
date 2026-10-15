@@ -10,15 +10,15 @@ round him, his blood is spread across the flags in wide smears, and the
 feeder's footprints go from him, red, toward the wine store's arch and
 fade. The garden stairs come down from the bulkhead in the north wall, the
 moon falling down them. Against the west wall stands a heavy oak rack of
-preserves; past its south end, low in the wall behind it, a crawl
-passage runs off under the house: the scuffs on the flags show the rack
-has been moved before.
+preserves, across a low crawl passage that runs off under the house: the
+scuffs on the flags show the rack has been moved before. Pushed, it slides
+north and the passage shows.
 
 Metres: the floor is x 1.0-9.0, y 1.0-6.0, the walls 2.0 high to a
 segmental brick vault, 3.0 at its crown. The garden stairs rise north out
 of the north wall at x 6.6-8.0. The wine store's arch is in the east wall
 at y 2.0-3.2. The crawl passage is in the west wall at y 5.0-5.8, a metre
-high, behind the south end of the rack (x 1.0-1.6, y 2.6-4.9).
+high, behind the rack (x 1.0-1.6, y 3.5-5.8; pushed, y 2.6-4.9).
 
 Moving: the candle flames, flies over the body, dust drifting down the
 moonlight on the stairs.
@@ -31,6 +31,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
+import bpy  # noqa: E402
 from kit import mat  # noqa: E402
 from mathutils import Matrix, Vector  # noqa: E402
 
@@ -39,7 +40,8 @@ SPRING, CROWN = 2.0, 3.0
 STAIRS = (6.6, 8.0)
 WINE = (2.0, 3.2)
 CRAWL = (5.0, 5.8)
-RACK = (1.0, 1.6, 2.6, 4.9)
+RACK = (1.0, 1.6, 3.5, 5.8)   # across the crawl hole until she pushes it (day/events.ts "push-rack")
+PUSHED = -0.9                 # how far north it slides
 
 
 def courses(name, light, dark, mortar, size, floor=False, rough=0.85):
@@ -228,24 +230,33 @@ def build():
     for z in (0.1, 0.65, 1.2, 1.75):
         rack_parts.append(reb.prim("cube", "Rack shelf", mat("dark wood"), ((rx0 + rx1) / 2, (ry0 + ry1) / 2, z), (rx1 - rx0, ry1 - ry0, 0.05)))
     rack = kit.join("Rack", rack_parts)
+    on_rack = [rack]
     reb.wall(reb.prim("cube", "Rack footprint", None, ((rx0 + rx1) / 2, (ry0 + ry1) / 2, 0.5), (rx1 - rx0, ry1 - ry0, 1.0))).hide_render = True
     for z in (0.15, 0.7, 1.25, 1.8):
         y = ry0 + 0.12
         while y < ry1 - 0.1:
             k = rng.random()
             if k < 0.55:
-                reb.prim("cyl", "Preserve jar", reb.mat_glass("Jar", rng.choice(((0.6, 0.25, 0.1), (0.4, 0.45, 0.15), (0.55, 0.1, 0.1)))), ((rx0 + rx1) / 2 + rng.uniform(-0.1, 0.1), y, z + 0.1), (0.12, 0.12, 0.17), segments=10)
+                on_rack.append(reb.prim("cyl", "Preserve jar", reb.mat_glass("Jar", rng.choice(((0.6, 0.25, 0.1), (0.4, 0.45, 0.15), (0.55, 0.1, 0.1)))), ((rx0 + rx1) / 2 + rng.uniform(-0.1, 0.1), y, z + 0.1), (0.12, 0.12, 0.17), segments=10))
             elif k < 0.75:
-                reb.prim("cube", "Crock", reb.mat_plain("Stoneware", (0.35, 0.3, 0.22), 0.5), ((rx0 + rx1) / 2, y, z + 0.12), (0.2, 0.2, 0.22), bevel=0.04)
+                on_rack.append(reb.prim("cube", "Crock", reb.mat_plain("Stoneware", (0.35, 0.3, 0.22), 0.5), ((rx0 + rx1) / 2, y, z + 0.12), (0.2, 0.2, 0.22), bevel=0.04))
             y += rng.uniform(0.14, 0.22)
     for i in range(6):
         kit.rod(f"Scuff {i}", reb.mat_plain("Scuff", (0.25, 0.24, 0.22), 0.9), (rx1 + 0.02, ry1 - 0.3 + i * 0.05, 0.002), (rx1 + 0.6 + i * 0.05, ry1 + 0.35 + i * 0.03, 0.002), 0.006, 4)
 
+    def push(done):
+        # The footprint stays where the rack stood: the crawl door's zone
+        # reaches out past it, so she can still get to the hole.
+        for ob in on_rack:
+            ob.location.y += PUSHED if done else -PUSHED
+    room.state("push-rack", push)
+
     # ---- Barrels on their cradles along the south wall; coal heaped under its chute, north-east.
-    for i, x in enumerate((2.6, 3.6, 5.6, 6.6)):
+    # Clear of the crawl hole's corner, so she can get to it past the rack.
+    for i, x in enumerate((3.2, 4.2, 5.6, 6.6)):
         barrel(f"Barrel {i}", oak, mat("iron"), (x, Y1 - 0.55, 0.0), rot=math.pi / 2)
-    reb.wall(reb.prim("cube", "Barrels footprint", None, (4.6, Y1 - 0.5, 0.5), (4.8, 1.0, 1.0))).hide_render = True
-    barrel("Barrel stacked", oak, mat("iron"), (3.1, Y1 - 0.55, 0.88), rot=math.pi / 2)
+    reb.wall(reb.prim("cube", "Barrels footprint", None, (4.9, Y1 - 0.5, 0.5), (4.2, 1.0, 1.0))).hide_render = True
+    barrel("Barrel stacked", oak, mat("iron"), (3.7, Y1 - 0.55, 0.88), rot=math.pi / 2)
     kit.drum("Ale cask, standing", oak, (7.9, Y1 - 0.5, 0.0))
     reb.wall(reb.prim("cube", "Cask footprint", None, (7.9, Y1 - 0.5, 0.5), (0.6, 0.6, 1.0))).hide_render = True
     reb.prim("cube", "Spigot", mat("rust"), (5.6, Y1 - 0.55 - 0.52, 0.5), (0.04, 0.08, 0.04))
@@ -271,9 +282,12 @@ def build():
 
     # ---- Candles: on a barrel head, in the niches, on the rack.
     candles = []
-    for i, at in enumerate(((3.1, Y1 - 0.55 - 0.02, 1.76), (X0 + 0.08, 1.9, 1.3), (X1 - 0.08, 4.6, 1.3), (rx1 - 0.15, 2.75, 1.25), (6.0, 2.0, 0.0), (4.8, 5.2, 0.0))):
+    for i, at in enumerate(((3.7, Y1 - 0.55 - 0.02, 1.76), (X0 + 0.08, 1.9, 1.3), (X1 - 0.08, 4.6, 1.3), (rx1 - 0.15, ry0 + 0.15, 1.25), (6.0, 2.0, 0.0), (4.8, 5.2, 0.0))):
         stick, light, flame = kit.candle(f"Candle {i}", at, energy=6 if at[2] > 0 else 4, height=0.14 if i % 2 else 0.1)
         candles.append((light, flame))
+        if i == 3:
+            # It slides with the rack: the stick, its flame, its wax and its light.
+            on_rack.extend(o for o in bpy.data.objects if o.name.startswith("Candle 3"))
     for x, y in ((X0 + 0.04, 1.9), (X1 - 0.04, 4.6)):
         reb.prim("cube", "Niche", reb.mat_plain("Niche dark", (0.02, 0.015, 0.012), 0.9), (x, y, 1.42), (0.06, 0.35, 0.4))
     kit.web("Web", (X0 + 0.05, Y0 + 0.05, SPRING), 0.4, (1, 1))
@@ -302,14 +316,13 @@ def build():
     # ---- What the game needs.
     room.door("back-garden", (sx0, Y0, sx1, Y0 + 0.6), arrive=((sx0 + sx1) / 2, 1.9), face=(0, 1))
     room.door("wine", (X1 - 0.6, WINE[0], X1, WINE[1]), arrive=(8.1, ac), face=(-1, 0))
-    room.door("crawl", (X0, CRAWL[0], X0 + 0.6, CRAWL[1]), arrive=(2.1, sum(CRAWL) / 2), face=(1, 0))
+    room.door("crawl", (X0, CRAWL[0], X0 + 1.3, CRAWL[1]), arrive=(2.1, sum(CRAWL) / 2), face=(1, 0))
     room.check((chest.x - 1.0, chest.y - 0.8, chest.x + 0.8, chest.y + 0.8), "One of the footmen. Something's been... eating him.\nIt's not long gone.")
     room.check((bx - 1.2, by + 0.6, bx, by + 1.6), "A silver tray. Broken glasses. He was bringing something down.")
     room.check((6.6, 2.2, 8.4, 3.3), "Footprints in his blood. Going that way.")
-    room.check((rx1, ry0, rx1 + 0.6, ry1), "A heavy rack of preserves. There are scrape marks on the floor by its end.\nIt's been moved.")
-    room.check((X0, CRAWL[0], X0 + 0.8, CRAWL[1]), "A low passage behind the rack. It goes under the house.")
+    room.spot("push-rack", (rx1, ry0, rx1 + 0.6, CRAWL[0]))  # day/events.ts says what she sees and does here
     room.check((7.6, Y0, X1, 2.2), "Coal, under the chute.")
-    room.check((2.0, Y1 - 1.1, 7.0, Y1), "Barrels. Someone's lit a candle on one of them.")
+    room.check((2.8, Y1 - 1.1, 7.0, Y1), "Barrels. Someone's lit a candle on one of them.")
     room.entry = "Candles. Someone's down here."
     room.export(anim, samples=128)
 

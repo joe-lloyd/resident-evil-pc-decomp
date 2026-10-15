@@ -308,15 +308,6 @@
   },
   {
    "zone": {
-    "x0": 7650,
-    "z0": 8670,
-    "x1": 10710,
-    "z1": 10030
-   },
-   "text": "The log crane, on its track. 5 TON.\nIt could lift anything in this camp, if it had power."
-  },
-  {
-   "zone": {
     "x0": 22100,
     "z0": 15470,
     "x1": 23800,
@@ -359,6 +350,18 @@
     "z1": 18360
    },
    "text": "The sawyer's blood, all along the planks.\nHe was going for the pond."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "crane",
+   "zone": {
+    "x0": 7650,
+    "z0": 8670,
+    "x1": 10710,
+    "z1": 10030
+   }
   }
  ],
  "entry": "Sawdust, and the smell of blood.",

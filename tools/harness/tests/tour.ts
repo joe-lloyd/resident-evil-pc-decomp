@@ -3,33 +3,21 @@
 // First it works out from the scene's walls where she can walk from where
 // she comes into the room; a door she can't reach fails there. Then, in the
 // game: for a door that opens she stands in it and presses action; for a
-// walk-through path she starts a step short and walks on.
+// walk-through path she starts a step short and walks on. Every puzzle's flag
+// and every lock is set first, so the ways they open are open.
 //
 //   node tools/harness/tests/tour.ts [<slug> ...]      (default: every rendered kit room)
 //
 // Needs the engine and the overlay deployed (see mountain-trail.ts). Prints a
 // line per door and exits 1 if any door fails.
-import { existsSync, readFileSync } from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { open } from '../lab.ts';
 import { Key } from '../link.ts';
-import { faceTowards, settle } from '../flows.ts';
+import { faceTowards, headingTo, settle } from '../flows.ts';
 import { dayRooms, kitRooms } from '../../rebecca/day/rooms.ts';
-
-const day = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 'rebecca', 'day');
-type Rect = { x0: number; z0: number; x1: number; z1: number };
-interface Json {
-  bounds: Rect;
-  doors?: { to: string; zone: Rect; arrive: { x: number; z: number } }[];
-  walls?: Rect[];
-  voids?: Rect[];
-  checks?: { zone: Rect }[];
-}
-const read = (slug: string): Json | undefined => {
-  const f = path.join(day, slug, 'renders', 'room.json');
-  return existsSync(f) ? (JSON.parse(readFileSync(f, 'utf8')) as Json) : undefined;
-};
+import { inside, nearest, opens, outward, read, walkable } from './floor.ts';
+import { EVENT_FLAGS } from '../../rebecca/day/events.ts';
+import { LOCK_FLAGS } from '../../rebecca/day/scripts.ts';
+import { Bank } from '../state.ts';
 
 const bySlug = new Map(dayRooms.map((r) => [r.slug, r]));
 const wanted = process.argv.slice(2);
@@ -38,83 +26,16 @@ if (!rooms.length) throw new Error('no rendered kit rooms to tour');
 // A door only exists once both its rooms are built (day/scripts.ts leaves the rest out).
 const built = (slug: string) => bySlug.has(slug) && (!kitRooms.some((k) => k.slug === slug) || read(slug)?.doors !== undefined);
 
-/** Her body's reach round the point she stands on, in game units. */
-const BODY = 450;
-const inside = (r: Rect, x: number, z: number, pad = 0) => x > r.x0 - pad && x < r.x1 + pad && z > r.z0 - pad && z < r.z1 + pad;
-
-/** Whether the game has this door firing on the action button (it is in the room script as 0x80). */
-function opens(slug: string, zone: Rect): boolean {
-  const c = readFileSync(path.join(day, slug, 'room.c'), 'utf8');
-  for (const m of c.matchAll(/door_aot_set\(\d+, (\d+), (\d+), (\d+), (\d+),.*, (\d+)\);/g)) {
-    if (Number(m[1]) === zone.x0 && Number(m[2]) === zone.z0) return (Number(m[5]) & 0x80) !== 0;
-  }
-  throw new Error(`no door at (${zone.x0}, ${zone.z0}) in ${slug}/room.c`);
-}
-
-/** Grid step for working out where she can walk, in game units. */
-const CELL = 250;
-
-/**
- * The floor she can reach from where she comes into the room (any door's
- * arrival), keeping her body clear of walls and drops and out of the room's
- * walk-through doors, which would take her out. Returns the reachable cell
- * centres.
- */
-function walkable(json: Json, touchZones: Rect[]): [number, number][] {
-  const b = json.bounds;
-  const blockers = [...(json.walls ?? []), ...(json.voids ?? [])];
-  const free = (x: number, z: number) =>
-    inside(b, x, z, -BODY) && !blockers.some((r) => inside(r, x, z, BODY)) && !touchZones.some((r) => inside(r, x, z));
-  const nx = Math.ceil((b.x1 - b.x0) / CELL);
-  const nz = Math.ceil((b.z1 - b.z0) / CELL);
-  const at = (i: number, k: number): [number, number] => [b.x0 + (i + 0.5) * CELL, b.z0 + (k + 0.5) * CELL];
-  const seen = new Set<number>();
-  const queue: [number, number][] = [];
-  for (const d of json.doors ?? []) {
-    const i = Math.floor((d.arrive.x - b.x0) / CELL);
-    const k = Math.floor((d.arrive.z - b.z0) / CELL);
-    // She may arrive a little inside a wall's reach: start from the nearest free cell.
-    let best: [number, number] | undefined;
-    for (let r = 0; r <= 4 && !best; r++) {
-      for (let di = -r; di <= r && !best; di++) for (let dk = -r; dk <= r && !best; dk++) {
-        const [x, z] = at(i + di, k + dk);
-        if (i + di >= 0 && i + di < nx && k + dk >= 0 && k + dk < nz && free(x, z)) best = [i + di, k + dk];
-      }
-    }
-    if (best && !seen.has(best[0] * 4096 + best[1])) {
-      seen.add(best[0] * 4096 + best[1]);
-      queue.push(best);
-    }
-  }
-  const out: [number, number][] = [];
-  while (queue.length) {
-    const [i, k] = queue.pop()!;
-    out.push(at(i, k));
-    for (const [di, dk] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) {
-      const ni = i + di!, nk = k + dk!;
-      if (ni < 0 || nk < 0 || ni >= nx || nk >= nz || seen.has(ni * 4096 + nk)) continue;
-      const [x, z] = at(ni, nk);
-      if (!free(x, z)) continue;
-      seen.add(ni * 4096 + nk);
-      queue.push([ni, nk]);
-    }
-  }
-  return out;
-}
-
-/** The reachable spot nearest `x, z` that passes `ok`. */
-function nearest(cells: [number, number][], x: number, z: number, ok: (c: [number, number]) => boolean): [number, number] | undefined {
-  let best: [number, number] | undefined;
-  for (const c of cells) if (ok(c) && (!best || Math.hypot(c[0] - x, c[1] - z) < Math.hypot(best[0] - x, best[1] - z))) best = c;
-  return best && [Math.round(best[0]), Math.round(best[1])];
-}
-
 const first = rooms[0]!;
 const session = await open(Number(process.env.PORT ?? 7801), `--mode REB --boot rebecca:${first.stage}:${first.room}`);
 const link = session.link;
 const failures: string[] = [];
 try {
   await link.waitFor((s) => s.play, "gameplay", 120_000);
+  // Every way a puzzle opens, open, and every lock unlocked (the kit rooms'
+  // and the yard shed's 60): puzzles.ts tests them shut.
+  for (const f of EVENT_FLAGS.values()) await link.setFlag(Bank.common, f, true);
+  for (const f of [...LOCK_FLAGS, 60]) await link.setFlag(Bank.locks, f, true);
   for (const r of rooms) {
     const json = read(r.slug)!;
     for (const d of json.doors ?? []) {
@@ -134,11 +55,12 @@ try {
           // A door that opens: she can stand in it, and action there takes her through.
           const spot = nearest(cells, cx, cz, ([x, z]) => inside(d.zone, x, z));
           if (!spot) throw new Error('no spot in its zone she can walk to from where she comes in');
-          await link.place(spot[0], spot[1]);
+          const [ox, oz] = outward(json, d.zone);
+          await link.place(spot[0], spot[1], headingTo(spot[0], spot[1], ox, oz));
           await link.frames(6);
-          await faceTowards(link, cx, cz);
           await link.tap(Key.action, 2);
-          s = await link.frames(20);
+          // A lift's door takes longer to start than a door's: up to three seconds.
+          for (let k = 0; k < 9 && s.stage === r.stage && s.room === r.room; k++) s = await link.frames(10);
           if (s.stage === r.stage && s.room === r.room) throw new Error(`stood in it at (${s.player.x}, ${s.player.z}) and action did nothing`);
         } else {
           // A walk-through path: she can get a step short of it, and walking on takes her out.

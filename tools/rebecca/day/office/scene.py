@@ -174,6 +174,8 @@ def build():
     safe = kit.box("Safe", safe_m, (1.4, 3.55, 0.0), (0.6, 0.6, 0.85), bevel=0.02)
     reb.mask(reb.wall(safe))
     reb.prim("cube", "Safe door", safe_m, (1.4, 3.24, 0.45), (0.5, 0.02, 0.72))
+    # The workshop key, from the safe (safe).
+    room.item("safe", (1.4, 3.0, 0.0))
     reb.prim("cyl", "Safe dial", mat("steel"), (1.4, 3.22, 0.6), (0.12, 0.12, 0.03), rot=(math.pi / 2, 0, 0), segments=20)
     reb.prim("cube", "Safe handle", brass, (1.55, 3.22, 0.42), (0.03, 0.04, 0.14))
     kit.text("Safe maker", "MOSLER", reb.mat_plain("Gold leaf", (0.5, 0.38, 0.1), 0.4), (1.4, 3.225, 0.78), size=0.05)

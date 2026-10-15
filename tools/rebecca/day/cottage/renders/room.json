@@ -3,7 +3,7 @@
   {
    "from": [
     8925,
-    -3655,
+    -3400,
     7225
    ],
    "to": [
@@ -16,7 +16,7 @@
   {
    "from": [
     1955,
-    -3655,
+    -3400,
     1955
    ],
    "to": [
@@ -29,7 +29,7 @@
   {
    "from": [
     8925,
-    -3655,
+    -3400,
     2805
    ],
    "to": [
@@ -42,7 +42,7 @@
   {
    "from": [
     1955,
-    -3655,
+    -3400,
     7225
    ],
    "to": [
@@ -166,7 +166,7 @@
     "x1": 4420,
     "z1": 7480
    },
-   "text": "A key on a hook by the door. The tag says QUARRY OFFICE."
+   "text": "A key on a hook by the door. The tag says QUARRY OFFICE.\nThe bolt's drawn and the bar's off the door.\nHe locked himself in, then thought better of it."
   },
   {
    "zone": {
@@ -221,17 +221,18 @@
     "z1": 7480
    },
    "text": "Fishing rods, a creel, waders. A man who liked quiet."
-  },
-  {
-   "zone": {
-    "x0": 4080,
-    "z0": 6800,
-    "x1": 4930,
-    "z1": 7480
-   },
-   "text": "The bolt's drawn and the bar's off the door.\nHe locked himself in, then thought better of it."
   }
  ],
+ "saves": null,
+ "items": [
+  {
+   "step": "quarry-key",
+   "x": 3655,
+   "y": -2380,
+   "z": 7344
+  }
+ ],
+ "spots": [],
  "entry": "The radio's still on.",
  "notes": [
   "high over the stove: the table and the diary, the bed, the photos of his daughter",

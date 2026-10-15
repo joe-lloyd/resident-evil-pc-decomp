@@ -27,6 +27,7 @@ import math
 import os
 import random
 
+import bmesh
 import bpy
 from mathutils import Matrix, Vector, noise
 
@@ -60,16 +61,21 @@ class Room:
         self.inside = inside
         self.shift = shift
         self.cameras = []
+        self.eyes = []
         self.notes = []
         self.doors = []
         self.checks = []
         self.voids = []
         self.saves = {}
+        self.items = []
+        self.spots = []
+        self.states = []
         self.entry = None
 
     def camera(self, eye, look, fov=190, note=""):
         self.cameras.append({"from": G(*eye), "to": G(*look), "fov": fov})
         self.notes.append(note)
+        self.eyes.append(Vector(eye))
 
     def door(self, to, zone, arrive, face, walk=None, touch=None):
         """`to` is the neighbour's slug. walk: the dark-path walk (default for an
@@ -95,6 +101,25 @@ class Room:
         she stands, as RE1's are; and the box's lid, as item_box() placed it."""
         rect = lambda r: {"x0": reb.g(r[0]), "z0": reb.g(r[1]), "x1": reb.g(r[2]), "z1": reb.g(r[3])}
         self.saves = {"typewriter": rect(typewriter), "box": rect(box), "lid": dict(lid)}
+    def item(self, step, at):
+        """Where the key item the plan's `step` gives lies (items/items.ts): `at`
+        is (x, y, height) in metres, on the floor or on what it rests on."""
+        x, y, z = at
+        self.items.append({"step": step, "x": reb.g(x), "y": -reb.g(z), "z": reb.g(y)})
+
+    def spot(self, step, zone):
+        """Where she works the plan's `step` here (day/events.ts): the zone she
+        stands in to use an item or press the action button, in metres."""
+        x0, y0, x1, y1 = zone
+        self.spots.append({"step": step, "zone": {"x0": reb.g(x0), "z0": reb.g(y0), "x1": reb.g(x1), "z1": reb.g(y1)}})
+
+    def state(self, step, pose):
+        """How the room looks once the plan's `step` has happened
+        (day/events.ts): pose(True) makes the change, pose(False) undoes it.
+        Rendered as a second background per camera and shown while the
+        step's flag is set (room.ts looks the flag up). It may not move a
+        mask() object, and the floor's walls stay as they were."""
+        self.states.append({"name": step, "bank": 1, "bit": -1, "set": pose})
 
     def void(self, rect):
         """Floor inside the bounds that is not there: a drop, a pit, deep water."""
@@ -120,7 +145,7 @@ class Room:
         for c in self.cameras:
             c["from"] = (c["from"][0] + gx, c["from"][1], c["from"][2] + gz)
             c["to"] = (c["to"][0] + gx, c["to"][1], c["to"][2] + gz)
-        rects = [d["zone"] for d in self.doors] + [c["zone"] for c in self.checks] + self.voids
+        rects = [d["zone"] for d in self.doors] + [c["zone"] for c in self.checks] + [sp["zone"] for sp in self.spots] + self.voids
         if self.saves:
             rects += [self.saves["typewriter"], self.saves["box"]]
             self.saves["lid"]["x"] += gx
@@ -133,8 +158,84 @@ class Room:
         for d in self.doors:
             d["arrive"]["x"] += gx
             d["arrive"]["z"] += gz
+        for it in self.items:
+            it["x"] += gx
+            it["z"] += gz
+
+    def _clear_lenses(self, reach=2.2):
+        """Take needles and fern fronds off within `reach` metres of a camera's
+        eye: the ragged spruces' low whorls hang at camera height, and a
+        branch against the lens fills the shot."""
+        foliage = ("Needles", "Fern")
+        for ob in bpy.data.objects:
+            if ob.type != "MESH" or not any(m and m.name.startswith(foliage) for m in ob.data.materials):
+                continue
+            bm = bmesh.new()
+            bm.from_mesh(ob.data)
+            world = ob.matrix_world
+            near = [f for f in bm.faces if any((world @ f.calc_center_median() - e).length < reach for e in self.eyes)]
+            if near:
+                bmesh.ops.delete(bm, geom=near, context="FACES")
+                bm.to_mesh(ob.data)
+            bm.free()
+
+    def _fill(self, strength):
+        """RE1's rooms are dim but their walls always read; ours went to black
+        away from the lamps. An indoor room gets a soft warm light in the
+        middle of its floor, unseen by the camera and in reflections, with
+        soft shadows so corners stay dark, its power by the floor's area:
+        enough to read the walls, not enough to flatten the lamps' pools."""
+        if not self.inside or strength <= 0:
+            return
+        x0, y0, x1, y1 = self.bounds
+        area = (x1 - x0) * (y1 - y0)
+        light = bpy.data.lights.new("Room fill", "POINT")
+        light.energy = strength * area
+        light.color = (1.0, 0.88, 0.72)
+        light.shadow_soft_size = 1.5
+        ob = bpy.data.objects.new("Room fill", light)
+        ob.location = ((x0 + x1) / 2, (y0 + y1) / 2, 1.7)
+        ob.visible_camera = False
+        ob.visible_glossy = False
+        bpy.context.scene.collection.objects.link(ob)
+        # The ceiling: the cameras sit just under it and the fill reaches it
+        # at a grazing angle, so it went black in a band across the top of
+        # the frame. What lights a real ceiling is the floor's bounce: a weak
+        # light just under it, facing up, over most of the room.
+        top = self._ceiling((x0 + x1) / 2, (y0 + y1) / 2)
+        if top is None:
+            return
+        up = bpy.data.lights.new("Ceiling bounce", "AREA")
+        up.shape = "RECTANGLE"
+        up.size, up.size_y = (x1 - x0) * 0.8, (y1 - y0) * 0.8
+        up.energy = 0.2 * strength * area
+        up.color = (1.0, 0.9, 0.78)
+        ob = bpy.data.objects.new("Ceiling bounce", up)
+        ob.location = ((x0 + x1) / 2, (y0 + y1) / 2, top - 0.25)
+        ob.rotation_euler = (math.pi, 0, 0)
+        ob.visible_camera = False
+        ob.visible_glossy = False
+        bpy.context.scene.collection.objects.link(ob)
+
+    def _ceiling(self, x, y):
+        """The height of the ceiling straight up from the floor at (x, y), or
+        None: the first rendered surface whose object spans most of the room
+        (not a table, a lamp or a beam)."""
+        dg = bpy.context.evaluated_depsgraph_get()
+        x0, y0, x1, y1 = self.bounds
+        z = 0.05
+        while z < 12:
+            hit, at, _n, _i, ob, _m = bpy.context.scene.ray_cast(dg, Vector((x, y, z)), Vector((0, 0, 1)), distance=12)
+            if not hit:
+                return None
+            if not ob.hide_render and ob.dimensions.x >= 0.5 * (x1 - x0) and ob.dimensions.y >= 0.5 * (y1 - y0):
+                return at.z
+            z = at.z + 0.01
+        return None
 
     def export(self, anim=None, samples=256, states=()):
+        self._fill(float(os.environ.get("RE1_FILL") or "6"))
+        self._clear_lenses()
         self._apply_shift()
         x0, y0, x1, y1 = self.bounds
         if min(x0, y0) < 0.6 or max(x1, y1) > 19.0:
@@ -148,11 +249,13 @@ class Room:
             "doors": self.doors,
             "checks": self.checks,
             "saves": self.saves or None,
+            "items": self.items,
+            "spots": self.spots,
             "entry": self.entry,
             "notes": self.notes,
         }
         reb.export(self.cameras, OUT, samples=samples, extra=extra,
-                   anim=anim.spec() if anim and anim.moves else None, states=states)
+                   anim=anim.spec() if anim and anim.moves else None, states=[*states, *self.states])
 
 
 # ---------------------------------------------------------------------------
@@ -174,7 +277,8 @@ def mat(name):
         "mud": lambda: s("Mud", [(0.0, (0.05, 0.035, 0.02)), (1.0, (0.13, 0.09, 0.055))], scale=5, rough=0.6, bump=0.5),
         "dirt": lambda: s("Dirt", [(0.0, (0.1, 0.075, 0.05)), (1.0, (0.2, 0.15, 0.1))], scale=6, bump=0.6),
         "grass": lambda: s("Meadow", [(0.0, (0.06, 0.08, 0.025)), (0.5, (0.13, 0.15, 0.05)), (1.0, (0.2, 0.18, 0.09))], scale=1.5, bump=0.4),
-        "gravel": lambda: s("Gravel", [(0.0, (0.12, 0.115, 0.1)), (0.5, (0.22, 0.21, 0.19)), (1.0, (0.33, 0.31, 0.28))], scale=30, bump=1.0),
+        # Stones a few centimetres across: finer than this averages away at 320 x 240.
+        "gravel": lambda: s("Gravel", [(0.0, (0.08, 0.075, 0.065)), (0.4, (0.2, 0.19, 0.17)), (0.6, (0.26, 0.25, 0.22)), (1.0, (0.36, 0.34, 0.3))], scale=9, bump=1.0),
         "rock": lambda: s("Granite", [(0.0, (0.12, 0.12, 0.11)), (1.0, (0.3, 0.29, 0.27))], scale=3, bump=0.9),
         "wet rock": lambda: s("Wet rock", [(0.0, (0.04, 0.04, 0.038)), (1.0, (0.14, 0.13, 0.12))], scale=3, rough=0.35, bump=1.0),
         "bark": lambda: s("Bark", [(0.0, (0.05, 0.035, 0.025)), (1.0, (0.13, 0.09, 0.06))], scale=10, bump=0.9),
@@ -229,8 +333,9 @@ _UNWORN = ("Water", "Blood", "Glass", "Bottle glass", "Web", "Crow feathers")
 def wear(strength=1.0, texel=0.012):
     """Give every surface in the scene the same worn, low-resolution texture,
     as RE1's backgrounds have: water stains with hard edges, streaks run
-    down, fine speckle in blocky texels `texel` metres across, grime dark in
-    the corners and where things touch, and the colour muddied a little.
+    down, fine speckle in blocky texels `texel` metres across, coarser grit
+    that stays bitty at the game's size, grime dark in the corners and where
+    things touch, and the colour muddied a little.
     Runs once, before the render, over every material with a Principled BSDF."""
     if strength <= 0:
         return
@@ -291,6 +396,34 @@ def wear(strength=1.0, texel=0.012):
             mix.inputs["Factor"].default_value = 1.0
             links.new(out, mix.inputs["A"]); links.new(f, mix.inputs["B"])
             out = mix.outputs["Result"]
+        # Grit: what makes RE1's surfaces bitty at 320 x 240. Blocky texels
+        # about two and a half centimetres across, features a few times that,
+        # bright and dark, and the same pattern roughening the surface so
+        # specks catch the light. The speckle above is finer than a pixel at
+        # the game's size and averages away; this does not.
+        gsnap = nodes.new("ShaderNodeVectorMath"); gsnap.operation = "SNAP"
+        gsnap.inputs[1].default_value = (texel * 2.2,) * 3
+        links.new(shift.outputs[0], gsnap.inputs[0])
+        gn = nodes.new("ShaderNodeTexNoise")
+        gn.inputs["Scale"].default_value = 18
+        gn.inputs["Detail"].default_value = 6
+        gn.inputs["Roughness"].default_value = 0.8
+        links.new(gsnap.outputs[0], gn.inputs["Vector"])
+        gr = nodes.new("ShaderNodeMapRange")
+        gr.inputs["From Min"].default_value, gr.inputs["From Max"].default_value = 0.25, 0.75
+        gr.inputs["To Min"].default_value, gr.inputs["To Max"].default_value = 1 - 0.42 * k, 1 + 0.25 * k
+        links.new(gn.outputs["Fac"], gr.inputs["Value"])
+        gs = nodes.new("ShaderNodeVectorMath"); gs.operation = "SCALE"
+        links.new(out, gs.inputs[0]); links.new(gr.outputs["Result"], gs.inputs["Scale"])
+        out = gs.outputs[0]
+        bump = nodes.new("ShaderNodeBump")
+        bump.inputs["Strength"].default_value = min(1.0, 0.3 * k)
+        bump.inputs["Distance"].default_value = 0.01
+        links.new(gn.outputs["Fac"], bump.inputs["Height"])
+        normal = bsdf.inputs["Normal"]
+        if normal.is_linked:
+            links.new(normal.links[0].from_socket, bump.inputs["Normal"])
+        links.new(bump.outputs["Normal"], normal)
         mud = nodes.new("ShaderNodeHueSaturation")
         mud.inputs["Saturation"].default_value = 1 - 0.18 * k
         links.new(out, mud.inputs["Color"])
@@ -398,13 +531,23 @@ def boards(name, rgb, width=0.15, seam=0.08, grime=0.5):
 
 
 def join(name, parts, material=None, origin=None):
-    """Join objects into one (keeping their materials). The result has no
-    turn or scale of its own and its origin at `origin`, or at the first
-    part's location if None. Build a prop's parts around (0, 0, 0), join with
+    """Join objects into one (keeping their materials, and each part's
+    modifiers made real first: Blender's join keeps only the first part's,
+    and would smooth or bevel every part by them). The result has no turn or
+    scale of its own and its origin at `origin`, or at the first part's
+    location if None. Build a prop's parts around (0, 0, 0), join with
     origin=(0, 0, 0), then set its location and turn to place it."""
     parts = [p for p in parts if p is not None]
     if not parts:
         return None
+    if len(parts) > 1 and any(p.modifiers for p in parts):
+        bpy.context.view_layer.update()
+        dg = bpy.context.evaluated_depsgraph_get()
+        for p in parts:
+            if p.type == "MESH" and p.modifiers:
+                me = bpy.data.meshes.new_from_object(p.evaluated_get(dg), preserve_all_data_layers=True, depsgraph=dg)
+                p.modifiers.clear()
+                p.data = me
     pivot = Vector(origin if origin is not None else parts[0].location)
     bpy.ops.object.select_all(action="DESELECT")
     for p in parts:
@@ -423,6 +566,220 @@ def join(name, parts, material=None, origin=None):
     if material is not None:
         ob.data.materials.clear()
         ob.data.materials.append(material)
+    return ob
+
+
+def loft(name, sections, mats, ring=32, material_of=None, holes=None, shell=0.0, subdiv=2):
+    """A smooth body through cross-sections along x: a fuselage, a cab, a
+    bonnet. Each section is (x, half width, bottom z, top z, n): a rounded
+    rectangle across y-z, squarer as n grows (2 is an ellipse). Both ends
+    are closed. `mats` are its materials; `material_of(centre)` picks each
+    face's (an index into mats, by the face's centre), and `holes(centre)`
+    cuts the faces it is true for: doors, open hatches. `shell` gives it
+    walls that thick, the inside in mats[-1]."""
+    bm = bmesh.new()
+    rings = []
+    for x, hw, zb, zt, n in sections:
+        mid, hh = (zb + zt) / 2, (zt - zb) / 2
+        pts = []
+        for k in range(ring):
+            t = 2 * math.pi * k / ring
+            c, s_ = math.cos(t), math.sin(t)
+            y = hw * math.copysign(abs(c) ** (2 / n), c)
+            z = mid + hh * math.copysign(abs(s_) ** (2 / n), s_)
+            pts.append(bm.verts.new((x, y, z)))
+        rings.append(pts)
+    for r0, r1 in zip(rings, rings[1:]):
+        for k in range(ring):
+            bm.faces.new((r0[k], r0[(k + 1) % ring], r1[(k + 1) % ring], r1[k]))
+    bm.faces.new(rings[0])
+    bm.faces.new(rings[-1][::-1])
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    if holes:
+        bmesh.ops.delete(bm, geom=[f for f in bm.faces if holes(f.calc_center_median())], context="FACES")
+    if material_of:
+        for f in bm.faces:
+            f.material_index = material_of(f.calc_center_median())
+    me = bpy.data.meshes.new(name)
+    bm.to_mesh(me)
+    bm.free()
+    for m in mats:
+        me.materials.append(m)
+    for poly in me.polygons:
+        poly.use_smooth = True
+    ob = bpy.data.objects.new(name, me)
+    bpy.context.scene.collection.objects.link(ob)
+    if subdiv:
+        sub = ob.modifiers.new("Smooth", "SUBSURF")
+        sub.levels = sub.render_levels = subdiv
+    if shell:
+        sol = ob.modifiers.new("Shell", "SOLIDIFY")
+        sol.thickness = shell
+        sol.material_offset = len(mats) - 1
+        sol.use_even_offset = True
+    return ob
+
+
+def crag(rng, verts, faces, centre, size, floor=-0.35):
+    """A mass of granite: lumpy, its facets a hand across, `size` (x, y, z
+    half-sizes), flat underneath where it was split off. Into verts and
+    faces, for one mesh of many (shade it flat)."""
+    # Facets a hand across, not half a metre: at 4 the big blocks read as flat triangles.
+    bpy.ops.mesh.primitive_ico_sphere_add(subdivisions=6, radius=1)
+    tmp = bpy.context.active_object
+    seed = rng.uniform(0, 100)
+    k = len(verts)
+    for v in tmp.data.vertices:
+        n = v.co.normalized()
+        d = 1 + 0.4 * noise.noise(n * 1.4 + Vector((seed, 0, 0))) + 0.15 * noise.noise(n * 4.5 + Vector((0, seed, 0))) + 0.06 * noise.noise(n * 12 + Vector((seed, seed, 0))) + 0.025 * abs(noise.noise(n * 34 + Vector((seed, 0, seed))))
+        p = n * d
+        p.z = max(p.z, floor + 0.05 * noise.noise(n * 3 + Vector((0, 0, seed))))
+        verts.append((centre[0] + p.x * size[0], centre[1] + p.y * size[1], centre[2] + p.z * size[2]))
+    faces.extend([tuple(k + i for i in poly.vertices) for poly in tmp.data.polygons])
+    bpy.data.objects.remove(tmp)
+
+
+def wheel(name, at, r=0.38, width=0.27, rim=None, flat=0.0):
+    """A tyre on a steel rim, its axle along y, centred on `at`: the tyre's
+    shoulders rounded, the rim dished with a hub cap. `flat` squashes it
+    onto the ground (a slashed tyre). Returns the parts."""
+    rim = rim or mat("steel")
+    tyre = reb.prim("cyl", f"{name} tyre", mat("rubber"), at, (2 * r, 2 * r, width), rot=(math.pi / 2, 0, 0), segments=32)
+    bev = tyre.modifiers.new("Shoulders", "BEVEL")
+    bev.width = width * 0.3
+    bev.segments = 3
+    parts = [tyre]
+    for side in (-1, 1):
+        y = at[1] + side * (width / 2 - 0.01)
+        parts.append(reb.prim("cyl", f"{name} rim", rim, (at[0], y, at[2]), (1.15 * r, 1.15 * r, 0.03), rot=(math.pi / 2, 0, 0), segments=24))
+        parts.append(reb.prim("sphere", f"{name} hub", rim, (at[0], y + side * 0.02, at[2]), (0.4 * r, 0.12, 0.4 * r), segments=12))
+    if flat:
+        for p in parts:
+            p.scale.z = 1 - flat
+            p.location.z -= r * flat * 0.9
+    return parts
+
+
+def pickup(name, paint, door_open=None, door_side=1, glass_gone=False, flat=0.0):
+    """A 1970s pickup, nose toward +x, wheels on z = 0, centred on the
+    origin, 5.4 m long: cab and bonnet one rounded body with its windscreen,
+    side and back windows; the bed open on top; wheel arches cut round the
+    tyres; chrome grille, bumpers and mirrors. `door_open` swings the
+    driver's door (on the +y side, or -y with door_side -1) that far out,
+    radians, leaving its doorway open. `glass_gone` leaves the windows empty.
+    Returns (body, the door's hinge or None): put what hangs on the door on
+    the hinge."""
+    chrome = reb.mat_metal("Chrome", (0.6, 0.6, 0.58), 0.25)
+    glass = reb.mat_glass("Pickup glass", (0.35, 0.4, 0.4))
+    dark = mat("black")
+    inside = reb.mat_plain("Cab inside", (0.04, 0.035, 0.03), 0.8)
+    wheels_x = (1.72, -1.68)
+
+    def arch(c):
+        x, y, z = c
+        return abs(y) > 0.55 and any(math.hypot(x - wx, z - 0.38) < 0.5 for wx in wheels_x)
+
+    def window(c):
+        x, y, z = c
+        if 0.98 < x < 1.4 and z > 1.22 and abs(y) < 0.82:
+            return True                                    # windscreen
+        if abs(y) > 0.7 and 1.3 < z < 1.78 and -0.06 < x < 1.0:
+            return True                                    # side windows
+        return False
+
+    def doorway(c):
+        x, y, z = c
+        return door_open is not None and y * door_side > 0.55 and -0.08 < x < 1.32 and 0.58 < z < 1.84
+
+    def cab_faces(c):
+        x, y, z = c
+        if window(c):
+            return 1
+        if x > 2.7:
+            return 2                                       # the nose: dark behind the grille's bars
+        return 0
+
+    cab = loft(f"{name} cab", [
+        (2.74, 0.84, 0.56, 1.0, 8), (2.66, 0.92, 0.5, 1.08, 10), (1.5, 0.93, 0.5, 1.14, 10), (1.38, 0.93, 0.5, 1.19, 10),
+        (0.98, 0.88, 0.5, 1.86, 8), (-0.06, 0.9, 0.5, 1.88, 8), (-0.18, 0.9, 0.5, 1.84, 8)],
+        [paint, glass, dark, inside], ring=40, material_of=cab_faces,
+        holes=lambda c: arch(c) or doorway(c) or (glass_gone and window(c)), shell=0.03)
+    bed = loft(f"{name} bed", [(-0.28, 0.92, 0.5, 1.2, 10), (-2.6, 0.92, 0.5, 1.2, 10), (-2.66, 0.9, 0.52, 1.18, 8)],
+               [paint, inside], ring=40, holes=lambda c: arch(c) or (c[2] > 1.1 and abs(c[1]) < 0.86 and -2.58 < c[0] < -0.32), shell=0.04)
+    parts = [cab, bed,
+             reb.prim("cube", f"{name} bed floor", mat("planks"), (-1.45, 0, 0.82), (2.25, 1.74, 0.04)),
+             reb.prim("cube", f"{name} chassis", dark, (0.05, 0, 0.42), (5.0, 1.3, 0.2)),
+             reb.prim("cube", f"{name} seat", reb.mat_plain("Seat vinyl", (0.08, 0.06, 0.05), 0.5), (0.25, 0, 0.98), (0.55, 1.6, 0.16), bevel=0.04),
+             reb.prim("cube", f"{name} seat back", reb.mat_plain("Seat vinyl", (0.08, 0.06, 0.05), 0.5), (0.0, 0, 1.3), (0.14, 1.6, 0.6), rot=(0, -0.15, 0), bevel=0.04),
+             reb.prim("cube", f"{name} dash", inside, (1.2, 0, 1.12), (0.35, 1.7, 0.22)),
+             reb.prim("cube", f"{name} back window", glass if not glass_gone else inside, (-0.2, 0, 1.55), (0.02, 1.2, 0.36)),
+             reb.prim("cyl", f"{name} wheel", dark, (0.95, 0.42 * door_side, 1.32), (0.4, 0.4, 0.03), rot=(0, 1.1, 0), segments=16)]
+    # Grille bars and its frame, the lamps in it, the bumpers wrapping the corners.
+    for z in (0.7, 0.81, 0.92):
+        parts.append(reb.prim("cube", f"{name} grille bar", chrome, (2.75, 0, z), (0.03, 1.2, 0.025)))
+    parts.append(reb.prim("cube", f"{name} grille frame", chrome, (2.745, 0, 0.81), (0.03, 1.66, 0.4)))
+    for y in (-0.66, 0.66):
+        parts.append(reb.prim("cube", f"{name} lamp bezel", chrome, (2.74, y, 0.85), (0.05, 0.3, 0.3), bevel=0.02))
+        parts.append(reb.prim("cyl", f"{name} headlamp", reb.mat_plain("Headlamp glass", (0.7, 0.7, 0.62), 0.1), (2.77, y, 0.85), (0.22, 0.22, 0.03), rot=(0, math.pi / 2, 0), segments=16))
+        parts.append(reb.prim("cube", f"{name} tail lamp", reb.mat_plain("Tail lamp", (0.4, 0.03, 0.02), 0.3), (-2.68, y * 1.3, 1.0), (0.04, 0.12, 0.26)))
+    for x, d in ((2.86, 1), (-2.74, -1)):
+        parts.append(reb.prim("cube", f"{name} bumper", chrome, (x, 0, 0.55), (0.12, 1.86, 0.2), bevel=0.03))
+        for y in (-0.9, 0.9):
+            parts.append(reb.prim("cube", f"{name} bumper end", chrome, (x - d * 0.12, y, 0.55), (0.24, 0.1, 0.2), rot=(0, 0, d * math.copysign(0.4, y)), bevel=0.03))
+    for y in (-1, 1):
+        parts.append(rod(f"{name} mirror arm", chrome, (1.0, y * 0.9, 1.3), (1.05, y * 1.12, 1.5), 0.012, 6))
+        parts.append(reb.prim("cube", f"{name} mirror", dark, (1.05, y * 1.14, 1.55), (0.05, 0.12, 0.2), bevel=0.01))
+        parts.append(reb.prim("cube", f"{name} handle", chrome, (0.05, y * 0.935, 1.28), (0.16, 0.02, 0.03)))
+        # Rails along the top of the bed's sides.
+        parts.append(reb.prim("cube", f"{name} bed rail", paint, (-1.45, y * 0.9, 1.21), (2.32, 0.1, 0.03), bevel=0.01))
+    for wx in wheels_x:
+        for y in (-0.8, 0.8):
+            parts += wheel(f"{name} wheel", (wx, y, 0.38), flat=flat if (wx > 0 and y < 0) or (wx < 0 and y > 0) else 0.0)
+    body = join(name, parts, origin=(0, 0, 0))
+    hinge = None
+    if door_open is not None:
+        hinge = reb.prim("sphere", f"{name} door hinge", dark, (1.3, door_side * 0.93, 1.15), (0.03, 0.03, 0.03))
+        door = reb.prim("cube", f"{name} door", paint, (-0.68, 0.0, -0.2), (1.36, 0.06, 0.62), bevel=0.02)
+        frame = [reb.prim("cube", f"{name} door frame", paint, (-0.68, 0.0, 0.62), (1.36, 0.05, 0.04)),
+                 reb.prim("cube", f"{name} door frame", paint, (-1.33, 0.0, 0.36), (0.05, 0.05, 0.5)),
+                 reb.prim("cube", f"{name} door frame", paint, (-0.03, 0.0, 0.36), (0.05, 0.05, 0.5), rot=(0, -0.3, 0))]
+        pane = [] if glass_gone else [reb.prim("cube", f"{name} door glass", glass, (-0.68, 0.0, 0.36), (1.25, 0.015, 0.5))]
+        trim = reb.prim("cube", f"{name} door inside", inside, (-0.68, -door_side * 0.035, -0.2), (1.3, 0.01, 0.58))
+        for p in [door, trim] + frame + pane:
+            p.parent = hinge
+        # Out from the cab: the door runs back (-x) from its hinge.
+        hinge.rotation_euler = (0, 0, -door_side * door_open)
+        hinge.parent = body
+    return body, hinge
+
+
+def tube(name, m, points, r, segments=12):
+    """A round tube of radius r bending smoothly through `points` (a skid, a
+    rail, a pipe), its ends capped: a mesh, like rod's."""
+    cu = bpy.data.curves.new(name, "CURVE")
+    cu.dimensions = "3D"
+    sp = cu.splines.new("NURBS")
+    sp.points.add(len(points) - 1)
+    for p, q in zip(sp.points, points):
+        p.co = (*q, 1)
+    sp.order_u = min(3, len(points))
+    sp.use_endpoint_u = True
+    sp.resolution_u = 8
+    cu.bevel_depth = r
+    cu.bevel_resolution = max(1, segments // 4 - 1)
+    cu.use_fill_caps = True
+    tmp = bpy.data.objects.new(name, cu)
+    bpy.context.scene.collection.objects.link(tmp)
+    bpy.context.view_layer.update()
+    me = bpy.data.meshes.new_from_object(tmp.evaluated_get(bpy.context.evaluated_depsgraph_get()))
+    bpy.data.objects.remove(tmp)
+    bpy.data.curves.remove(cu)
+    for poly in me.polygons:
+        poly.use_smooth = True
+    me.materials.clear()
+    me.materials.append(m)
+    ob = bpy.data.objects.new(name, me)
+    bpy.context.scene.collection.objects.link(ob)
     return ob
 
 
@@ -859,7 +1216,8 @@ def bulb(name, at, energy=20, rgb=(1.0, 0.8, 0.55), flex=0.5):
 
 # Joint positions in metres for a body 1.78 m tall, its head toward +x, lying
 # on its back, then face down, then sitting slumped against a wall at x = 0
-# (legs out toward +x). Left side is +y.
+# (legs out toward +x). Left side is +y. corpses.py poses each MakeHuman body
+# to these; body() lays a pool or a sheet by them.
 _POSES = {
     "back": {
         "head": (1.62, 0.0, 0.11), "neck": (1.46, 0, 0.12), "chest": (1.22, 0, 0.13), "pelvis": (0.88, 0, 0.12),
@@ -884,41 +1242,71 @@ _POSES = {
     },
 }
 
-_BONES = [
-    ("neck", "chest", 0.06, "top"), ("chest", "pelvis", 0.16, "top"),
-    ("l_shoulder", "r_shoulder", 0.07, "top"),
-    ("l_shoulder", "l_elbow", 0.05, "top"), ("l_elbow", "l_hand", 0.042, "skin"),
-    ("r_shoulder", "r_elbow", 0.05, "top"), ("r_elbow", "r_hand", 0.042, "skin"),
-    ("l_hip", "l_knee", 0.075, "legs"), ("l_knee", "l_foot", 0.06, "legs"),
-    ("r_hip", "r_knee", 0.075, "legs"), ("r_knee", "r_foot", 0.06, "legs"),
-    ("l_hip", "r_hip", 0.09, "legs"),
-]
+# What corpses.py baked into each vertex's "part": 1 + an index here.
+_PARTS = ["upperarm_l", "lowerarm_l", "hand_l", "upperarm_r", "lowerarm_r", "hand_r",
+          "thigh_l", "calf_l", "foot_l", "thigh_r", "calf_r", "foot_r"]
+# A missing joint takes the bone ending there and every bone below it.
+_BELOW = {"elbow": ("upperarm", "lowerarm", "hand"), "hand": ("lowerarm", "hand"),
+          "knee": ("thigh", "calf", "foot"), "foot": ("calf", "foot")}
+_LIBRARY = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "corpses.blend")
+_corpses = {}
 
 
-def body(name, at, heading=0.0, pose="back", top=None, legs=None, bloody=0.0, seed=0, sheet=False, missing=()):
-    """A dead man: `pose` back, front or slumped; head toward `heading`
-    (radians from +x). `top` and `legs` are clothing materials; `bloody`
-    lays a pool under him; `sheet` covers him; `missing` lists parts gone
-    ("l_hand", "r_knee"...: the limb below that joint)."""
+def _corpse(figure, pose):
+    """The baked corpse from corpses.blend (blender/build-corpses.ts), appended once."""
+    key = f"Corpse {figure} {pose}"
+    if key not in _corpses:
+        if not os.path.exists(_LIBRARY):
+            raise RuntimeError(f"{_LIBRARY} is missing: run tools/rebecca/blender/build-corpses.ts")
+        with bpy.data.libraries.load(_LIBRARY) as (_, dst):
+            dst.objects = [key]
+        _corpses[key] = dst.objects[0]
+    return _corpses[key]
+
+
+def _cut(me, missing, mirror, flesh):
+    """Take the missing limbs off the mesh and close each stump with `flesh`."""
+    gone = set()
+    for joint in missing:
+        side, what = joint.split("_", 1)
+        if mirror:
+            side = "r" if side == "l" else "l"
+        gone |= {_PARTS.index(f"{b}_{side}") + 1 for b in _BELOW[what]}
+    bm = bmesh.new()
+    bm.from_mesh(me)
+    part = bm.verts.layers.int.get("part")
+    for e in bm.edges:
+        e.tag = e.is_boundary
+    bmesh.ops.delete(bm, geom=[v for v in bm.verts if v[part] in gone], context="VERTS")
+    me.materials.append(flesh)
+    stumps = bmesh.ops.holes_fill(bm, edges=[e for e in bm.edges if e.is_boundary and not e.tag], sides=0)
+    for f in stumps["faces"]:
+        f.material_index = len(me.materials) - 1
+    bm.to_mesh(me)
+    bm.free()
+
+
+def body(name, at, heading=0.0, pose="back", top=None, legs=None, bloody=0.0, seed=0, sheet=False, missing=(), figure="man"):
+    """A dead man (or, `figure` "woman", a woman): `pose` back, front or
+    slumped; head toward `heading` (radians from +x). `top` and `legs` are
+    clothing materials; `bloody` lays a pool under him; `sheet` covers him;
+    `missing` lists parts gone ("l_hand", "r_knee"...: the limb below that
+    joint). An odd `seed` lays him out mirrored."""
     rng = random.Random(seed)
     j = {k: Vector(v) for k, v in _POSES[pose].items()}
-    top = top or mat("flannel")
-    legs = legs or mat("denim")
-    skin = mat("skin")
-    parts = []
-    for a, b, r, kind in _BONES:
-        if a in missing or b in missing:
-            continue
-        m = {"top": top, "legs": legs, "skin": skin}[kind]
-        parts.append(rod(f"{name} {a}", m, j[a], j[b], r, 10))
-        parts.append(reb.prim("sphere", f"{name} joint", m, j[b], (2 * r,) * 3, segments=10))
-    head_dir = (j["head"] - j["neck"]).normalized()
-    parts.append(reb.prim("sphere", f"{name} head", skin, j["head"], (0.2, 0.17, 0.22), segments=16))
-    parts.append(reb.prim("sphere", f"{name} hair", mat("black"), j["head"] - Vector((0, 0, 0.015)) + head_dir * 0.02, (0.205, 0.175, 0.2), segments=12))
-    for foot in ("l_foot", "r_foot"):
-        if foot not in missing:
-            parts.append(reb.prim("cube", f"{name} boot", mat("rubber"), j[foot] + Vector((-0.02, 0, 0.02)), (0.12, 0.1, 0.12), bevel=0.02))
-    ob = join(name, parts, origin=(0, 0, 0))
+    me = _corpse(figure, pose).data.copy()
+    mirror = seed % 2 == 1
+    if mirror:
+        me.transform(Matrix.Scale(-1, 4, (0, 1, 0)))
+        me.flip_normals()
+    for i, m in enumerate(me.materials):
+        slot = m.name.split(".")[0]
+        if slot in ("top", "legs"):
+            me.materials[i] = (top or mat("flannel")) if slot == "top" else (legs or mat("denim"))
+    if missing:
+        _cut(me, missing, mirror, mat("old blood"))
+    ob = bpy.data.objects.new(name, me)
+    bpy.context.scene.collection.objects.link(ob)
     ob.location = at
     ob.rotation_euler = (0, 0, heading)
     bpy.context.view_layer.update()
@@ -1322,7 +1710,8 @@ def vista(rng, centre, toward, below=-60.0, ridges=3, far=(160, 420), spread=200
     c = Vector((centre[0], centre[1], 0))
     fwd = Vector((toward[0], toward[1], 0)).normalized()
     side = Vector((-fwd.y, fwd.x, 0))
-    floor_m = reb.mat_surface("Valley forest", [(0.0, tuple(v * 0.6 for v in forest)), (1.0, forest)], scale=0.08, bump=0.0)
+    # The valley's forest, speckled with single trees like the ridges', or it reads as a flat lake from above.
+    floor_m = _ridge_material("Valley forest", forest, rock, haze, 0.2, below)
     verts, faces = [], []
     n = 30
     for j in range(n + 1):
@@ -1340,15 +1729,20 @@ def vista(rng, centre, toward, below=-60.0, ridges=3, far=(160, 420), spread=200
         fade = 0.25 + 0.55 * r / max(1, ridges - 1)
         rm = _ridge_material(f"Ridge {r}", forest, rock, haze, fade, below)
         verts, faces = [], []
-        m, rows, depth = 70, 6, 60.0 + 25 * r
+        m, rows, depth = 220, 16, 60.0 + 25 * r
         seed = rng.uniform(0, 100)
         for j in range(rows + 1):
             for i in range(m + 1):
                 u = (i / m - 0.5) * spread * (3 + r)
                 peak = 70 + 90 * (0.5 + noise.noise(Vector((u * 0.005, seed, r)))) + 30 * noise.noise(Vector((u * 0.025, seed, 1)))
+                # Crags along the crest, sharp where the noise turns.
+                peak += 14 * (0.5 - abs(noise.noise(Vector((u * 0.06, seed, 3)))))
                 t = j / rows
                 base = c + fwd * (dist + depth * t) + side * u
                 hgt = peak * (t ** 0.6) + 8 * noise.noise(Vector((u * 0.05, t * 3, seed)))
+                # Gullies down the face: cut deepest mid-slope, so the sun
+                # catches one side of each spur and leaves the other dark.
+                hgt -= 9 * abs(noise.noise(Vector((u * 0.035, t * 0.8, seed + 7)))) * math.sin(math.pi * min(1.0, t * 1.2))
                 verts.append((base.x, base.y, below - 10 + hgt))
         for j in range(rows):
             for i in range(m):
@@ -1382,7 +1776,22 @@ def _ridge_material(name, forest, rock, haze, fade, below):
     mix = lambda c: tuple(x * (1 - fade) + h * fade for x, h in zip(c, haze))
     reb.ramp(nodes, links, add.outputs[0], [(0.0, mix(forest)), (0.45, mix(tuple(v * 1.3 for v in forest))), (0.6, mix(rock)), (1.0, mix(tuple(min(1, v * 1.8) for v in rock)))])
     r = [nd for nd in nodes if nd.type == "VALTORGB"][-1]
-    links.new(r.outputs["Color"], bsdf.inputs["Base Color"])
+    # Bits: single trees and boulders a pixel or two across at this range,
+    # dark and light, lost in the haze with the colour.
+    speck = reb.noise_tex(nodes, links, 0.7, 2, 0.5)
+    sr = nodes.new("ShaderNodeMapRange")
+    sr.inputs["From Min"].default_value = 0.35
+    sr.inputs["From Max"].default_value = 0.65
+    sr.inputs["To Min"].default_value = 1 - 0.55 * (1 - fade)
+    sr.inputs["To Max"].default_value = 1 + 0.35 * (1 - fade)
+    links.new(speck.outputs["Fac"], sr.inputs["Value"])
+    mul = nodes.new("ShaderNodeMix")
+    mul.data_type = "RGBA"
+    mul.blend_type = "MULTIPLY"
+    mul.inputs["Factor"].default_value = 1.0
+    links.new(r.outputs["Color"], mul.inputs["A"])
+    links.new(sr.outputs["Result"], mul.inputs["B"])
+    links.new(mul.outputs["Result"], bsdf.inputs["Base Color"])
     return m
 
 

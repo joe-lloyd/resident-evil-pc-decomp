@@ -21,6 +21,10 @@ import { buildWalk, walkFileName } from './walks.ts';
 import { readPng } from '../harness/image.ts';
 import { dayRooms, dayStart, walks } from './day/rooms.ts';
 import { people, personModel } from './npc/people.ts';
+import { saveRoomFiles } from './saveroom/patch.ts';
+import { buildIconSheet, globalsCpp, iconRows } from './items/sheet.ts';
+import { itemView, itemViewFiles, menuDataCpp, readItemModel } from './items/tmd.ts';
+import { KEY_ITEMS } from './items/items.ts';
 
 /**
  * Where a new game in REB mode starts (stage counts from 0, as in the debug
@@ -108,6 +112,23 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
     writeFileSync(path.join(reb, 'players', name), arms.weapons[i]!);
     written.push(`players/${name}`);
   });
+  // Her key items' icons over their donors', in the player's own item sheet.
+  const icons = buildIconSheet(readFileSync(findFile(dataDir, 'ITEM_ALL.PIX')), readFileSync(findFile(dataDir, 'STATUS.TIM')), globalsCpp());
+  writeFileSync(path.join(reb, 'DATA', 'ITEM_ALL.PIX'), icons);
+  written.push('DATA/ITEM_ALL.PIX');
+
+  // Her items' own models to examine, over their donors' in ITEM_M2.
+  const viewFile = itemViewFiles(menuDataCpp(), iconRows(globalsCpp()));
+  mkdirSync(path.join(reb, 'ITEM_M2'), { recursive: true });
+  for (const k of KEY_ITEMS) {
+    if (!('own' in k.model)) continue;
+    const m = readItemModel(k.model.own);
+    if (!m) throw new Error(`items/models/${k.model.own}.json is missing: run items/render-items.ts`);
+    const name = viewFile(k.id);
+    if (written.includes(`ITEM_M2/${name}`)) throw new Error(`${k.step}: another item's model is ${name} already`);
+    writeFileSync(path.join(reb, 'ITEM_M2', name), itemView(m.mesh, m.texture));
+    written.push(`ITEM_M2/${name}`);
+  }
 
   // The walks between her outdoor rooms, and her footsteps on the path.
   mkdirSync(path.join(reb, 'objspr'), { recursive: true });
@@ -129,11 +150,23 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
     written.push(`enemy/${person.model}`);
   }
 
-  // Her files' pages (files/documents.ts), in place of RE1's in her mode only.
-  mkdirSync(path.join(reb, 'item_m2'), { recursive: true });
+  // Her files' pages (files/documents.ts), in place of RE1's in her mode
+  // only. The same folder as her items' models above: one name for it, since
+  // Windows doesn't tell ITEM_M2 from item_m2, and no file written twice.
+  mkdirSync(path.join(reb, 'ITEM_M2'), { recursive: true });
   for (const { name, bytes } of filePages()) {
-    writeFileSync(path.join(reb, 'item_m2', name), bytes);
-    written.push(`item_m2/${name}`);
+    if (written.includes(`ITEM_M2/${name}`)) throw new Error(`a file's page and an item's model are both ${name}`);
+    writeFileSync(path.join(reb, 'ITEM_M2', name), bytes);
+    written.push(`ITEM_M2/${name}`);
+  }
+
+  // The save room's trapdoor, where she comes up from the crawl space: the
+  // player's own backgrounds with it laid over them (saveroom/patch.ts).
+  const stage1 = findFile(baseDir, 'Stage1');
+  mkdirSync(path.join(reb, 'Stage1'), { recursive: true });
+  for (const { name, bytes } of saveRoomFiles((n) => readFileSync(findFile(stage1, n)))) {
+    writeFileSync(path.join(reb, 'Stage1', name), bytes);
+    written.push(`Stage1/${name}`);
   }
 
   // New rooms: the rooms of her day (day/rooms.ts), those rendered so far.

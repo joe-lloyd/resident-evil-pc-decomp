@@ -269,7 +269,7 @@ def build():
         reb.boulder(rng, (x, y, height(x, y) - 0.1), rng.uniform(0.25, 1.1) if rng.random() < 0.3 else rng.uniform(0.1, 0.3), sv, sf)
     reb.mesh_object("Scree on the hill", sv, sf, kit.dirtied(mat("rock"), 0.4))
     # The gap's dark: the adit black behind the rocks, low on the west side.
-    reb.prim("cube", "Dark of the gap", mat("black"), ((GAP[0] + GAP[1]) / 2, FACE_Y - 0.15, GAP[2] / 2), (GAP[1] - GAP[0] + 0.1, 0.05, GAP[2]))
+    reb.prim("cube", "Dark of the gap", mat("black"), ((GAP[0] + GAP[1]) / 2, FACE_Y - 0.9, GAP[2] / 2), (GAP[1] - GAP[0] + 0.1, 1.5, GAP[2]))
     reb.prim("cube", "Yard", yard, ((X0 + X1) / 2, (FACE_Y + Y1) / 2 + 0.1, -0.04), (X1 - X0 + 0.8, Y1 - FACE_Y + 0.6, 0.08))
     kit.path_strip("Track in", mat("dirt"), [(0.62, 7.2), (X0, 7.2), (4.0, 7.0), (6.5, 6.0)], lambda x, y: max(0.0, height(x, y)), width=1.0, lift=0.004)
     kit.path_strip("Track on to the quarry", mat("dirt"), [(-30.0, 6.4), (-12.0, 7.0), (-4.45, 7.1)], height, width=1.0, lift=0.006)
@@ -303,22 +303,38 @@ def build():
 
     # ---- The rockfall: filling the mouth from the east side, spilling into the yard; the gap west.
     rv, rf = [], []
-    for _ in range(46):
-        x = rng.uniform(GAP[1] + 0.1, p1 + 0.3)
+    # Freshly broken stone, angular, each kept clear of the gap by its own size.
+    for _ in range(52):
+        r = rng.uniform(0.3, 0.65)
+        x = rng.uniform(GAP[1] + 0.1 + r * 1.2, p1 + 0.3)
         y = rng.uniform(FACE_Y - 1.2, FACE_Y + 1.0)
         z = rng.uniform(0.0, 2.5) * (1.0 - max(0.0, y - FACE_Y) / 1.4)
-        reb.boulder(rng, (x, y, max(0.0, z)), rng.uniform(0.3, 0.65), rv, rf)
+        reb.boulder(rng, (x, y, max(0.0, z)), r, rv, rf, subdivisions=1)
     for _ in range(14):
         x = rng.uniform(p0 + 0.05, GAP[1])
         y = rng.uniform(FACE_Y - 1.0, FACE_Y + 0.4)
-        reb.boulder(rng, (x, y, rng.uniform(GAP[2] + 0.4, 2.5)), rng.uniform(0.25, 0.45), rv, rf)
-    for _ in range(28):
-        x = rng.uniform(GAP[1] - 0.1, p1 + 1.2)
+        reb.boulder(rng, (x, y, rng.uniform(GAP[2] + 0.5, 2.5)), rng.uniform(0.25, 0.4), rv, rf, subdivisions=1)
+    for _ in range(34):
+        r = rng.uniform(0.1, 0.45)
+        x = rng.uniform(GAP[1] + 0.15 + r * 1.2, p1 + 1.2)
         y = rng.uniform(FACE_Y + 0.6, 4.3)
-        reb.boulder(rng, (x, y, 0.0), rng.uniform(0.15, 0.45), rv, rf, squash=0.7)
+        reb.boulder(rng, (x, y, 0.0), r, rv, rf, squash=0.7, subdivisions=1)
     for (x, y, r) in ((7.6, 3.6, 0.3), (11.4, 4.6, 0.35), (10.5, 5.1, 0.25), (6.9, 4.0, 0.2)):
-        reb.boulder(rng, (x, y, 0.0), r, rv, rf, squash=0.7)
-    reb.mesh_object("Rockfall", rv, rf, kit.dirtied(mat("rock"), 0.5))
+        reb.boulder(rng, (x, y, 0.0), r, rv, rf, squash=0.7, subdivisions=1)
+    rockfall = reb.mesh_object("Rockfall", rv, rf, kit.dirtied(mat("rock"), 0.8), smooth=False)
+    # Once she blasts it (day/events.ts "blast"): the fall blown out into the
+    # yard as low rubble, the adit open and black behind the portal.
+    brng = random.Random(77)
+    bv, bf = [], []
+    for _ in range(70):
+        r = brng.uniform(0.08, 0.3)
+        reb.boulder(brng, (brng.uniform(p0 - 0.6, p1 + 1.6), brng.uniform(FACE_Y + 0.2, 4.4), 0.0), r, bv, bf, squash=0.6, subdivisions=1)
+    blasted = reb.mesh_object("Blasted rubble", bv, bf, kit.dirtied(mat("rock"), 0.8), smooth=False)
+    adit = reb.prim("cube", "Dark of the adit", mat("black"), ((p0 + p1) / 2, FACE_Y - 1.0, ph / 2), (p1 - p0, 1.6, ph))
+    soot = kit.splat("Blast soot", reb.mat_plain("Soot", (0.02, 0.018, 0.016), 0.95), ((p0 + p1) / 2, FACE_Y + 1.6, 0.0), 1.8, seed=21, stretch=(1.4, 0.8), lumps=0.6)
+    after_blast = (blasted, adit, soot)
+    for ob in after_blast:
+        ob.hide_render = True
     reb.wall(reb.prim("cube", "Rockfall footprint", None, ((GAP[1] + p1 + 1.0) / 2, (FACE_Y + 4.3) / 2, 0.5), (p1 + 1.0 - GAP[1], 4.3 - FACE_Y, 1.0))).hide_render = True
     gv, gf = [], []
     for _ in range(200):
@@ -330,13 +346,20 @@ def build():
     # The webs: sheets in the corners, strands over the rocks, the wrapped bundle under the cap.
     kit.web("Web, west corner", (p0 + 0.02, FACE_Y + 0.05, ph - 0.02), 0.75, (1, -1))
     kit.web("Web, east corner", (p1 - 0.02, FACE_Y + 0.05, ph - 0.02), 0.85, (-1, -1))
-    kit.web("Web, low in the gap", (p0 + 0.02, FACE_Y - 0.3, GAP[2]), 0.5, (1, -1))
+    gap_web = kit.web("Web, low in the gap", (p0 + 0.02, FACE_Y - 0.3, GAP[2]), 0.5, (1, -1))
     strands = []
     for k in range(14):
         a = Vector((rng.uniform(p0, p1), FACE_Y + rng.uniform(-0.2, 0.2), rng.uniform(1.5, ph)))
         b = Vector((rng.uniform(p0 - 0.6, p1 + 1.2), rng.uniform(FACE_Y + 0.5, 4.0), rng.uniform(0.0, 0.8)))
         strands.append(kit.rod("Strand", silk, a, b, 0.004, 3))
-    kit.join("Strands", strands)
+    strands = kit.join("Strands", strands)
+
+    def blast(done):
+        for ob in (rockfall, gap_web, strands):
+            ob.hide_render = done
+        for ob in after_blast:
+            ob.hide_render = not done
+    room.state("blast", blast)
     bundle_pivot = reb.prim("sphere", "Bundle thread top", silk, (9.6, FACE_Y + 0.05, ph - 0.05), (0.02, 0.02, 0.02))
     thread = kit.rod("Bundle thread", silk, (0, 0, 0), (0, 0, -0.45), 0.006, 3)
     bundle = reb.prim("sphere", "Wrapped bundle", reb.mat_surface("Cocoon", [(0.0, (0.45, 0.44, 0.4)), (0.7, (0.62, 0.6, 0.56)), (1.0, (0.3, 0.12, 0.08))], scale=16, bump=0.8), (0, 0, -0.8), (0.28, 0.24, 0.7), segments=12)
@@ -567,7 +590,7 @@ def build():
     room.door("quarry", (X_W, DECK[2], X_W + 0.6, DECK[3]), arrive=(-1.9, 6.9), face=(1, 0))
     room.door("tunnel", (p0 - 0.1, Y0, GAP[1] + 0.05, Y0 + 0.8), arrive=(8.4, 4.6), face=(0, 1), walk=False)
     room.check((p0 - 1.0, Y0, p0 - 0.2, Y0 + 0.9), "A gap under the rocks, into the dark. Webs over it.\nThere's blood on the post. Someone squeezed through.")
-    room.check((GAP[1], Y0, p1 + 1.0, 4.6), "The roof's been brought down across the mouth. On purpose:\nthere's a blasting wire running out of the rocks.")
+    room.spot("blast", (GAP[1], Y0, p1 + 1.0, 4.6))  # day/events.ts says what she sees and does here
     room.check((px - 0.7, py - 0.2, px + 0.8, Y1), "A blasting plunger, pushed home. Whoever fired it\ndropped their hard hat and ran.")
     room.check((11.0, Y0, 12.2, 3.3), "SEALED. DO NOT ENTER.\nWhat were they keeping in?")
     room.check((11.0, 5.6, 12.8, 7.6), "An ore cart, tipped over. Silver ore, dull and grey.")

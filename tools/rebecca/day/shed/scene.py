@@ -17,6 +17,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
+import kit  # noqa: E402
 from mathutils import Vector  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))
@@ -173,6 +174,10 @@ def build():
         lamp.location = end - Vector((0, 0, 0.02))
         lamp.data.energy = 22 * flick[k]
         reb.emit_strength(bulb_m, 30 * flick[k])
+
+    # The kit's worn, bitty surfaces, as every kit room has.
+
+    kit.wear(float(os.environ.get("RE1_WEAR", "1.3")))
 
     reb.export(
         CAMERAS,

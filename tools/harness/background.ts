@@ -98,10 +98,10 @@ export function unpackPak(src: Uint8Array, expectedSize: number): Uint8Array {
   return dst.subarray(0, outPos);
 }
 
-const TIM_HEADER_BYTES = 20;
+export const TIM_HEADER_BYTES = 20;
 const TIM_MAGIC = 0x10;
 const TIM_FLAGS_16BPP = 0x02;
-const IMAGE_BYTES = 320 * 240 * 2;
+export const IMAGE_BYTES = 320 * 240 * 2;
 
 /** 5 bit colour channel to 8 bit, replicating the top bits into the low ones. */
 function expand5(v: number): number {

@@ -17,6 +17,7 @@
 extern void logos_state(void);
 extern void title_state(void);
 extern void game_start(void);
+extern void LoadAllItemsTexture(void);   // GameInit.cpp
 extern void texture_viewer_state(void);
 
 // ============================================================================
@@ -829,6 +830,7 @@ case_6:
                 // mansion intro movie.
                 g_GameMode = GAME_MODE_REB;
                 SetAssetMode("REB");
+                LoadAllItemsTexture();   // her overlay's item sheet: her key items' icons
                 g_SelectedCharactedId = CHAR_REBECCA;
                 g_main_state_flags &= ~MSF_CHAR_VARIANT;
                 sounds_reset();
@@ -839,6 +841,7 @@ case_6:
                 // Chris or Jill chosen in a session that was Rebecca's: back to the shipped game.
                 g_GameMode = GAME_MODE_OG;
                 SetAssetMode("");
+                LoadAllItemsTexture();
             }
             g_SelectedCharactedId = chosen;
             if (g_SelectedCharactedId != CHAR_CHRIS) {

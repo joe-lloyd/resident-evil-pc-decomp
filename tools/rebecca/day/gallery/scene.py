@@ -171,6 +171,8 @@ def build():
     # ---- The carts: the one he hid on, two more standing in the water, one over on its side.
     cx, cy = CART
     hid = ore_cart("Cart he hid on", rust, (cx, cy), 0.1, sink=0.05)
+    # The operator's key, on the blanket where Hal lay (op-key).
+    room.item("op-key", (cx + 0.1, cy - 0.3, 0.98))
     reb.wall(hid)
     reb.mask(hid)
     reb.cloth("Blanket on the cart", reb.mat_plain("Grey blanket", (0.14, 0.14, 0.13), 0.95), (cx, cy, 0.95), (1.3, 1.0), rot=(0, 0, 0.1), cuts=12, lumps=0.06, seed=4)

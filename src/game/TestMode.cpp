@@ -323,8 +323,8 @@ static void build_state(void)
     }
     int selFront = -1;
     const int selState = CharSelect_State(&selFront);
-    put("],\"msg\":{\"choice\":%d,\"id\":%d,\"flags\":%d,\"menu\":%d},\"sel\":{\"state\":%d,\"front\":%d},\"banks\":[",
-        (int)g_menu_choice_id, s_lastMessageId, (int)g_message_flags, (int)g_openMenuFlag, selState, selFront);
+    put("],\"msg\":{\"choice\":%d,\"id\":%d,\"flags\":%d,\"menu\":%d},\"sel\":{\"state\":%d,\"front\":%d},\"used\":%d,\"banks\":[",
+        (int)g_menu_choice_id, s_lastMessageId, (int)g_message_flags, (int)g_openMenuFlag, selState, selFront, (int)g_usedItemId);
     for (int bank = 0; bank < 10; bank++) {
         FlagBank fb = flag_bank(bank);
         if (bank) put(",");

@@ -1,9 +1,11 @@
 0: \nCold. It hasn't run for\nhours.
-1: \nThe generator's panel. The\nfuel gauge is right down\non E.\p{0}\nIt ran itself dry.
-2: \nThe day tank. The sight\nglass is empty.
-3: \nA jerrycan on its side,\nthe cap off. Not a drop in\nit.
-4: \nHis log. 23 JUL 21.40,\nTANK LOW, NO ANSWER ON\nFUEL.\p{0}\n24 JUL 02.10, DOG ON THE\nLINE TRACK. BIT ME BAD.\nLYING DOWN.\p{0}\nThe last line is just a\nsmear. GEN STOPPED 3.30.\nCANT STAND.
-5: \nJuly 1998. Crossed off up\nto the 23rd.
-6: \nHis cot. The pillow's\nsoaked through with blood.\p{0}\nThe flies have found it.
-7: \nDead wasps all along the\nsill.
-8: \nOily boot prints, going\nout the back. To the\nswitch house.
+1: \nThe day tank. The sight\nglass is empty.
+2: \nA jerrycan on its side,\nthe cap off. Not a drop in\nit.
+3: \nHis log. 23 JUL 21.40,\nTANK LOW, NO ANSWER ON\nFUEL.\p{0}\n24 JUL 02.10, DOG ON THE\nLINE TRACK. BIT ME BAD.\nLYING DOWN.\p{0}\nThe last line is just a\nsmear. GEN STOPPED 3.30.\nCANT STAND.
+4: \nJuly 1998. Crossed off up\nto the 23rd.
+5: \nHis cot. The pillow's\nsoaked through with blood.\p{0}\nThe flies have found it.
+6: \nDead wasps all along the\nsill.
+7: \nOily boot prints, going\nout the back. To the\nswitch house.
+8: \nThe generator's panel. The\nfuel gauge is right down\non E.\p{0}\nIt ran itself dry.
+9: \nThe generator thuds away.\nThe whole hut shakes.
+10: \nDiesel in. It coughs,\ncatches... and runs.\p{0}\nThe lights are coming on.

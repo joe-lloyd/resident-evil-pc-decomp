@@ -243,8 +243,9 @@ def build():
 
     # ---- What the game needs.
     room.door("cellar", (X0, ARCH[0], X0 + 0.6, ARCH[1]), arrive=(1.9, ac), face=(1, 0))
-    room.check((px - 1.1, Y0 + 0.36, px + 0.5, py + 0.7), "Wine and blood, pooled together. A bottle smashed.\nThis is where it got him.")
+    # The handprints first: the pool's zone takes in theirs, and the first zone in the table wins.
     room.check((2.1, Y0 + 0.36, 3.0, Y0 + 0.9), "Bloody handprints down the bottles. He tried to get up.")
+    room.check((px - 1.1, Y0 + 0.36, px + 0.5, py + 0.7), "Wine and blood, pooled together. A bottle smashed.\nThis is where it got him.")
     room.check((lx - 0.5, ly - 0.4, lx + 0.4, ly + 0.4), "The cellar book. Tonight's page: one Margaux, ticked.\nHe came down for a bottle.")
     room.check((2.0, Y1 - 1.0, 3.3, Y1 - 0.36), "Crates of wine. SPENCER, stencilled on the side.\nSomeone stuck a candle in a bottle here.")
     room.check((X1 - 0.8, 1.4, X1 - 0.36, 2.2), "Dusty bottles. Years of them.")

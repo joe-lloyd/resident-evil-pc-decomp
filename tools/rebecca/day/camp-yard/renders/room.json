@@ -236,9 +236,9 @@
   },
   {
    "shape": "box",
-   "x0": 10073,
+   "x0": 9982,
    "z0": 19890,
-   "x1": 17816,
+   "x1": 17815,
    "z1": 24310,
    "name": "Skidder"
   },
@@ -483,6 +483,8 @@
    "text": "Diesel, leaking from a drum into the mud."
   }
  ],
+ "items": [],
+ "spots": [],
  "entry": "Camp 4. The gate was shut from inside.",
  "notes": [
   "from the gate: the body in the mud, the skidder, the fire pit, the bunkhouse beyond",

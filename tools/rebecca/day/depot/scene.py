@@ -340,7 +340,7 @@ def build():
 
     # ---- What the game needs.
     room.door("camp-yard", (GATE[0], Y0, GATE[1], Y0 + 0.6), arrive=(6.5, 2.5), face=(0, 1))
-    room.check((7.6, 3.8, 8.6, 4.4), "Diesel, dripping from the nozzle. The hose reel is chained, and padlocked.\nThey didn't want anyone running off with the fuel.")
+    room.spot("fuel", (7.6, 3.8, 8.6, 4.4))  # day/events.ts says what she sees and does here
     room.check((tx1 - 1.0, ty - 1.3, tx1, ty - 0.75), "The fuel ledger. Gallons in, gallons out, signed every day.\nThe last entries are a mess. Then they stop.")
     room.check((8.1, 2.6, 8.5, 4.0), "A dog. Not a camp dog: a big one, its hide torn open in strips.\nIt dug in under the wire. Somebody shot it.")
     room.check((3.9, 2.0, 4.8, 2.8), "A snake's skin, shed. Another by the tank.\nAdders. They like the warm drums.")

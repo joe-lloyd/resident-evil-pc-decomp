@@ -345,15 +345,6 @@
  "checks": [
   {
    "zone": {
-    "x0": 20400,
-    "z0": 20230,
-    "x1": 23120,
-    "z1": 21420
-   },
-   "text": "Cellar doors. Padlocked.\nThere's blood on the handle."
-  },
-  {
-   "zone": {
     "x0": 10540,
     "z0": 22100,
     "x1": 12580,
@@ -407,6 +398,9 @@
    "text": "The lamp's lit. The moths found it."
   }
  ],
+ "saves": null,
+ "items": [],
+ "spots": [],
  "entry": "The back of the mansion.\nThe house is dark.",
  "notes": [
   "from the yews at the north: the fountain, the house's back, the lit window",

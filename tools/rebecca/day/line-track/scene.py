@@ -380,7 +380,7 @@ def build():
     room.check((8.1, 6.0, 9.1, 6.9), "A hard hat. ARKLAY POWER. Upside down, with blood in it.")
     room.check((9.0, 6.9, 9.9, 7.7), "A torch, smashed. The grass is flattened all round here.\nSomeone fought for his life.")
     room.check((5.6, 8.6, 7.4, 9.4), "The line's dead. A string of insulators has torn loose up there.\nIt swings in the wind.")
-    room.check((X1 - 1.4, 8.0, X1, 9.0), "LINE TRACK. STAFF ONLY. The gondola station's through the gate.")
+    room.spot("line-gate", (X1 - 1.4, 8.0, X1, 9.0))  # day/events.ts says what she sees and does here
     room.check((X0, 5.2, X0 + 0.8, SWITCH_DOOR[0] - 0.1), "The switch house. A handprint in blood on the door frame.")
     room.entry = "The power line. Not a hum from it."
     room.export(anim)

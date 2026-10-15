@@ -66,8 +66,8 @@ def build():
     rng = random.Random(97)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
-    room.camera((3.65, 1.15, 2.05), (1.4, 3.4, 0.5), 200, "high in the north-east corner: the door, the web in the window, the tools, the sacks and the dead rat")
-    room.camera((1.15, 3.65, 2.05), (3.4, 1.4, 0.7), 200, "high by the window: the key board, the bench and its lantern")
+    room.camera((3.65, 1.15, 1.9), (1.4, 3.4, 0.5), 200, "high in the north-east corner: the door, the web in the window, the tools, the sacks and the dead rat")
+    room.camera((1.15, 3.65, 1.9), (3.4, 1.4, 0.7), 200, "high by the window: the key board, the bench and its lantern")
 
     boards = kit.boards("Shed boards", (0.15, 0.12, 0.08), width=0.15, grime=0.75)
     floor_m = kit.boards("Shed floor", (0.12, 0.09, 0.06), width=0.18, grime=0.85)
@@ -122,6 +122,8 @@ def build():
     # ---- The key board on the north wall by the door: the cellar key on its red tag.
     kx = 1.75
     reb.prim("cube", "Key board", mat("dark wood"), (kx, Y0 + 0.015, 1.45), (0.7, 0.03, 0.45))
+    # The cellar key on the board (cellar-key).
+    room.item("cellar-key", (kx, Y0 + 0.08, 1.4))
     kit.text("Key board label", "ESTATE KEYS", mat("white paint"), (kx, Y0 + 0.033, 1.62), size=0.045, rot=(math.pi / 2, 0, math.pi))
     labels = ("CELLAR", "SHED", "", "GATE", "", "STABLE")
     for i, lab in enumerate(labels):

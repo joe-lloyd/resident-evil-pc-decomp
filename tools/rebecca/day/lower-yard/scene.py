@@ -171,32 +171,43 @@ def struts(name, m, segs, r, sides=4):
 def sedan(paint, glass):
     """A late-80s four-door saloon, burgundy, its driver's door open and its dome light on.
     Built along +x about the origin, then placed. Returns (body, dome light, dome material)."""
-    parts = []
-    parts.append(reb.prim("cube", "Sedan body", paint, (0, 0, 0.55), (4.6, 1.75, 0.62), bevel=0.12))
-    parts.append(reb.prim("cube", "Sedan cabin", paint, (-0.25, 0, 1.08), (2.5, 1.55, 0.5), bevel=0.1))
-    parts.append(reb.prim("cube", "Sedan bumper", mat("black"), (2.33, 0, 0.42), (0.1, 1.78, 0.18)))
-    parts.append(reb.prim("cube", "Sedan bumper", mat("black"), (-2.33, 0, 0.42), (0.1, 1.78, 0.18)))
-    for p in parts:
-        p.data.transform(p.matrix_basis)
-        p.matrix_basis = Matrix.Identity(4)
-    body = kit.join("Sedan", parts)
-    for name, at, size in (("windscreen", (0.95, 0, 1.08), (0.04, 1.42, 0.42)), ("rear screen", (-1.45, 0, 1.08), (0.04, 1.42, 0.42)),
-                           ("side glass", (-0.25, 0.77, 1.1), (2.2, 0.02, 0.38)), ("side glass", (-0.25, -0.77, 1.1), (2.2, 0.02, 0.38))):
-        g = reb.prim("cube", f"Sedan {name}", glass, at, size, rot=(0, 0.45 if name == "windscreen" else -0.45 if name == "rear screen" else 0, 0))
-        g.parent = body
+    # One smooth shell: bonnet, raked windscreen, roof, rear screen, boot.
+    sections = [(2.32, 0.8, 0.34, 0.72, 6), (2.2, 0.87, 0.28, 0.8, 10), (1.0, 0.88, 0.28, 0.86, 10), (0.85, 0.87, 0.28, 0.9, 10),
+                (0.35, 0.8, 0.28, 1.36, 6), (-0.95, 0.8, 0.28, 1.38, 6), (-1.5, 0.85, 0.28, 0.96, 10), (-1.65, 0.86, 0.28, 0.9, 10),
+                (-2.2, 0.87, 0.3, 0.88, 10), (-2.32, 0.8, 0.36, 0.8, 6)]
+
+    def glazed(c):
+        x, y, z = c
+        if 0.38 < x < 0.85 and z > 0.95 and abs(y) < 0.78:
+            return 1   # windscreen
+        if -1.5 < x < -1.0 and z > 0.97 and abs(y) < 0.78:
+            return 1   # rear screen
+        return 1 if abs(y) > 0.6 and 0.98 < z < 1.3 and -1.35 < x < 0.32 else 0
+
+    def cut(c):
+        x, y, z = c
+        arch = abs(y) > 0.5 and any(math.hypot(x - wx, z - 0.32) < 0.42 for wx in (1.45, -1.45))
+        doorway = y > 0.5 and -0.3 < x < 0.75 and 0.36 < z < 1.32
+        return arch or doorway
+
+    shell = kit.loft("Sedan body", sections, [paint, glass, reb.mat_plain("Sedan inside", (0.04, 0.03, 0.03), 0.8)], ring=40, material_of=glazed, holes=cut, shell=0.03)
+    parts = [shell]
+    for x in (2.36, -2.36):
+        parts.append(reb.prim("cube", "Sedan bumper", mat("black"), (x, 0, 0.42), (0.1, 1.78, 0.18), bevel=0.04))
+    parts.append(reb.prim("cube", "Sedan grille", mat("black"), (2.33, 0, 0.6), (0.02, 0.7, 0.12)))
+    parts.append(reb.prim("cube", "Sedan rubbing strip", mat("black"), (0, -0.885, 0.55), (4.2, 0.02, 0.05)))
+    body = kit.join("Sedan", parts, origin=(0, 0, 0))
     inside = reb.prim("cube", "Sedan inside", reb.mat_plain("Sedan seats", (0.08, 0.06, 0.05), 0.8), (-0.25, 0, 0.95), (2.3, 1.45, 0.5))
     inside.parent = body
     kit.splat("Blood on the driver's seat", mat("blood"), (0.2, 0.4, 1.205), 0.18, seed=3).parent = body
     for x in (1.45, -1.45):
-        for y in (0.8, -0.8):
-            w = reb.prim("cyl", "Wheel", mat("rubber"), (x, y, 0.32), (0.64, 0.64, 0.22), rot=(math.pi / 2, 0, 0), segments=18)
-            w.parent = body
-            h = reb.prim("cyl", "Hubcap", mat("steel"), (x, y + (0.115 if y > 0 else -0.115), 0.32), (0.36, 0.36, 0.01), rot=(math.pi / 2, 0, 0), segments=14)
-            h.parent = body
+        for y in (0.78, -0.78):
+            for w in kit.wheel("Sedan wheel", (x, y, 0.32), r=0.32, width=0.2):
+                w.parent = body
     for y in (0.6, -0.6):
-        hl = reb.prim("cube", "Headlight", reb.mat_plain("Headlight", (0.6, 0.6, 0.55), 0.2), (2.29, y, 0.62), (0.04, 0.32, 0.14))
+        hl = reb.prim("cube", "Headlight", reb.mat_plain("Headlight", (0.6, 0.6, 0.55), 0.2), (2.31, y, 0.62), (0.04, 0.32, 0.14), bevel=0.01)
         hl.parent = body
-        tl = reb.prim("cube", "Tail light", reb.mat_plain("Tail light", (0.3, 0.02, 0.02), 0.3), (-2.29, y, 0.66), (0.04, 0.3, 0.12))
+        tl = reb.prim("cube", "Tail light", reb.mat_plain("Tail light", (0.3, 0.02, 0.02), 0.3), (-2.31, y, 0.7), (0.04, 0.3, 0.12), bevel=0.01)
         tl.parent = body
     # The driver's door, swung open on the left side (+y).
     door = reb.prim("cube", "Driver's door", paint, (0.55, 0.0, 0.0), (1.1, 0.06, 0.95), bevel=0.03)
@@ -279,6 +290,14 @@ def build():
     # ---- Ground: asphalt car park, a gravel yard, the verge.
     reb.terrain("Ground", mat("grass"), (-50, 70), (-50, 70), height, step=0.8)
     reb.prim("cube", "Yard gravel", gravel, (7.6, 7.0, -0.03), (14.0, 13.0, 0.06))
+    # Loose stones on it, pale and dark, thickest along the edges and the
+    # middle where wheels have not packed them down.
+    pv, pf = [], []
+    for _ in range(1400):
+        x, y = rng.uniform(0.7, 13.4), rng.uniform(0.6, 9.6)
+        sz = rng.uniform(0.03, 0.09) if rng.random() < 0.9 else rng.uniform(0.1, 0.18)
+        reb.box(pv, pf, (x, y, sz * 0.25), (sz, sz * rng.uniform(0.6, 1.1), sz * 0.5), rng.uniform(0, 3))
+    reb.mesh_object("Yard stones", pv, pf, reb.mat_surface("Yard stone", [(0.0, (0.1, 0.095, 0.085)), (0.5, (0.3, 0.28, 0.25)), (1.0, (0.45, 0.43, 0.39))], scale=6, bump=0.3), smooth=False)
     reb.prim("cube", "Car park", asphalt, (5.0, 12.6, -0.01), (9.0, 5.4, 0.06))
     for i in range(5):
         reb.prim("cube", "Bay line", mat("white paint"), (1.6 + i * 2.6, 13.4, 0.022), (0.08, 2.6, 0.004))

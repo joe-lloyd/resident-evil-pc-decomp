@@ -6782,7 +6782,10 @@ int door_try_enter(unsigned char* entry)
         // 0x0041b4d7: needs a specific item.
         if (get_item_slot(need) < 0) {
             unsigned int m = need - ITEM_SWORD_KEY; // diff keys to get index
-            if (m > 9) {
+            // Port addition: her key items take mansion keys' ids, whose
+            // messages name a carving or a plate; her locks say plainly
+            // "It's locked." (message 10).
+            if (m > 9 || g_bRebMode) {
                 m = 10;
             }
             door_locked_message(m);

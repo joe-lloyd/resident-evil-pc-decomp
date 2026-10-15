@@ -25,7 +25,12 @@ function readFacts(): Facts {
     const file = path.join(dayDir, slug, 'renders', 'room.json');
     if (!existsSync(file)) continue;
     const json = JSON.parse(readFileSync(file, 'utf8')) as RoomJson;
-    rooms.set(slug, { doors: (json.doors ?? []).map((d) => d.to), checks: json.checks?.length ?? 0, entry: Boolean(json.entry) });
+    // A room's things to examine are the messages its script sets: the kit
+    // rooms' scripts are written from room.json's checks, the hand-written
+    // rooms' scripts carry their own.
+    const script = path.join(dayDir, slug, 'room.c');
+    const checks = existsSync(script) ? readFileSync(script, 'utf8').split('SCE_MESSAGE').length - 1 : (json.checks?.length ?? 0);
+    rooms.set(slug, { doors: (json.doors ?? []).map((d) => d.to), checks, entry: Boolean(json.entry) });
   }
   return { rooms };
 }

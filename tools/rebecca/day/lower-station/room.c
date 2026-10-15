@@ -1,10 +1,10 @@
 // lower-station (21A), written by day/scripts.ts from day/lower-station/scene.py: edit the scene, not this file.
 // init procedure 0
 // To lower-yard.
-door_aot_set(0, 1700, 4420, 765, 1700, 0, 0, 0, 4, 0, ROOM_219, 29580, 0, 9350, 2048, UNLOCKED, 193);
+door_aot_set(0, 1700, 4420, 765, 1700, 0, 1, 10, 8, 0, ROOM_219, 29580, 0, 9350, 2048, UNLOCKED, 193);
 // Lower station log, a file.
 if (ck(FG_ITEM, 238, 0)) {
-    item_aot_set(1, 6800, 5865, 1190, 1020, 104, 1, 0, 255, 0, 0, 0, 0, 0, 0, 0, 0, 238, 129, 0, 0);
+    item_aot_set(1, 6800, 5865, 1190, 1020, 104, 1, 1, 255, 0, 0, 0, 0, 0, 0, 0, 0, 238, 129, 0, 0);
 }
 aot_set(2, 8755, 5865, 765, 1020, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(3, 3060, 3400, 3740, 1020, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
@@ -14,6 +14,9 @@ aot_set(6, 1700, 1700, 1360, 850, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 aot_set(7, 8670, 5440, 850, 1190, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
 aot_set(8, 5440, 7650, 1360, 850, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
 aot_set(9, 7990, 5865, 765, 1020, SCE_MESSAGE, 129, 136, 0, 255, 0, 0, 0);
+if (ck(FG_ITEM, 191, 0)) {  // clip
+    item_aot_set(10, 7620, 1500, 1800, 1800, 11, 15, 0, 255, 72, 33, 0, 0, 96, 9, 0, 0, 191, 129, 0, 0);
+}
 return;
 
 // main procedure 0

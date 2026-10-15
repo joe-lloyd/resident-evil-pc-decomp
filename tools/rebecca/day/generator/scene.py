@@ -237,6 +237,21 @@ def build():
     reb.prim("sphere", "Charge LED", led_m, (3.1, Y0 + 0.16, 2.44), (0.015, 0.015, 0.015), segments=8)
     lamp = reb.spot("Emergency lamp light", (3.1, Y0 + 0.3, 2.3), (3.2, 3.4, 0.0), 120, (1.0, 0.9, 0.75), 120, 0.6, 0.1)
     fill = reb.point("Lamp spill", (3.1, Y0 + 0.4, 2.2), 6, (1.0, 0.9, 0.75), 0.2)
+    # Once the generator runs (day/events.ts "generator-on"): the hut's own
+    # light, a caged bulkhead lamp in the middle of the ceiling, comes on.
+    reb.prim("cyl", "Bulkhead lamp base", mat("iron"), (3.4, 2.9, H - 0.04), (0.22, 0.22, 0.06), segments=12)
+    glass_off = reb.mat_plain("Bulkhead glass, off", (0.35, 0.33, 0.28), 0.3)
+    glass_on = reb.mat_emit("Bulkhead glass, on", (1.0, 0.85, 0.6), 15)
+    bulkhead = reb.prim("sphere", "Bulkhead glass", glass_off, (3.4, 2.9, H - 0.12), (0.16, 0.16, 0.12), segments=12)
+    for k in range(3):
+        kit.rod("Bulkhead cage", mat("iron"), (3.4 - 0.09 + k * 0.09, 2.9 - 0.09, H - 0.06), (3.4 - 0.09 + k * 0.09, 2.9 + 0.09, H - 0.2), 0.006, 4)
+    mains = reb.point("Mains light", (3.4, 2.9, H - 0.3), 160, (1.0, 0.82, 0.55), 0.15)
+    mains.hide_render = True
+
+    def power(on):
+        bulkhead.data.materials[0] = glass_on if on else glass_off
+        mains.hide_render = not on
+    room.state("generator-on", power)
 
     anim = kit.Anim(16)
     anim.flicker(lamp, lamp_m, depth=0.5, dropouts=4)
@@ -250,9 +265,10 @@ def build():
     # ---- What the game needs.
     room.door("washout", (NDOOR[0], Y0, NDOOR[1], Y0 + 0.6), arrive=(3.1, 2.0), face=(0, 1))
     room.door("switch", (SDOOR[0], Y1 - 0.6, SDOOR[1], Y1), arrive=(4.2, 3.6), face=(0, -1))
-    room.check((gx1, 1.9, gx1 + 0.6, 2.6), "The generator's panel. The fuel gauge is right down on E.\nIt ran itself dry.")
+    room.spot("generator-on", (gx1, 1.9, gx1 + 0.6, 2.6))  # day/events.ts says what she sees and does here
     room.check((1.2, Y0, 2.4, 1.6), "The day tank. The sight glass is empty.")
-    room.check((2.4, 1.8, 3.2, 2.6), "A jerrycan on its side, the cap off. Not a drop in it.")
+    # The can lies where she stands to fuel the generator: its check is its far end, clear of the spot.
+    room.check((2.95, 1.8, 3.35, 2.6), "A jerrycan on its side, the cap off. Not a drop in it.")
     room.check((2.3, Y1 - 0.9, 3.0, Y1 - 0.6), "His log. 23 JUL 21.40, TANK LOW, NO ANSWER ON FUEL.\n24 JUL 02.10, DOG ON THE LINE TRACK. BIT ME BAD. LYING DOWN.\nThe last line is just a smear. GEN STOPPED 3.30. CANT STAND.")
     room.check((1.9, Y1 - 0.6, 2.5, Y1), "July 1998. Crossed off up to the 23rd.")
     room.check((cot_x0 - 0.6, cot_y0, cot_x0, cot_y0 + 1.0), "His cot. The pillow's soaked through with blood.\nThe flies have found it.")

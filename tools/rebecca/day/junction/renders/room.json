@@ -144,6 +144,13 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "drain",
+   "bank": 1,
+   "bit": -1
+  }
+ ],
  "bounds": {
   "x0": 1700,
   "z0": 1700,
@@ -220,24 +227,6 @@
   },
   {
    "zone": {
-    "x0": 17680,
-    "z0": 8840,
-    "x1": 22100,
-    "z1": 11730
-   },
-   "text": "The mine's pump. The motor's cold.\nIts pipe runs down into the flooded way."
-  },
-  {
-   "zone": {
-    "x0": 20740,
-    "z0": 12580,
-    "x1": 22100,
-    "z1": 14280
-   },
-   "text": "The pump's switch. It's thrown off."
-  },
-  {
-   "zone": {
     "x0": 7140,
     "z0": 12070,
     "x1": 13260,
@@ -262,6 +251,18 @@
     "z1": 11560
    },
    "text": "Egg sacs, all over the roof. That one's split open."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "drain",
+   "zone": {
+    "x0": 17000,
+    "z0": 8840,
+    "x1": 18360,
+    "z1": 11220
+   }
   }
  ],
  "entry": "The roof is covered in egg sacs.",

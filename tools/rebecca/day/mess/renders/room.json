@@ -3,7 +3,7 @@
   {
    "from": [
     10625,
-    -4420,
+    -4165,
     16745
    ],
    "to": [
@@ -16,7 +16,7 @@
   {
    "from": [
     1955,
-    -4420,
+    -4165,
     16745
    ],
    "to": [
@@ -29,7 +29,7 @@
   {
    "from": [
     10625,
-    -4420,
+    -4165,
     6460
    ],
    "to": [
@@ -42,7 +42,7 @@
   {
    "from": [
     1955,
-    -4420,
+    -4165,
     5865
    ],
    "to": [
@@ -112,9 +112,9 @@
   },
   {
    "shape": "box",
-   "x0": 909,
+   "x0": 1929,
    "z0": 1751,
-   "x1": 3000,
+   "x1": 4021,
    "z1": 2261,
    "name": "Kitchen shelves"
   },
@@ -277,6 +277,15 @@
    "text": "The serving hatch. The kitchen's through there."
   }
  ],
+ "items": [
+  {
+   "step": "office-key",
+   "x": 5100,
+   "y": 0,
+   "z": 7769
+  }
+ ],
+ "spots": [],
  "entry": "Flies. Hundreds of them.",
  "notes": [
   "high in the south-east corner: the tables, the benches over, the cook against the counter",

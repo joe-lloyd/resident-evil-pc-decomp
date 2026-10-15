@@ -49,16 +49,26 @@ CUT = (5.2, 8.3)
 
 
 
+def _hash(k):
+    """A steady pseudo-random 0-1 for an integer: the same joint, the same setback."""
+    return (math.sin(k * 12.9898 + 4.1) * 43758.5453) % 1.0
+
+
 def height(x, y):
     """The quarry floor flat; benches north, rock rims west and east with their gaps, the spoil lip south."""
     n = noise.noise(Vector((x * 0.35, y * 0.35, 2)))
     if X0 - 0.3 < x < X1 + 0.3 and Y0 - 0.3 < y < Y1 + 0.3:
         return -0.06
     z = 0.0
-    d = Y0 - 0.3 - y + 0.6 * noise.noise(Vector((x * 0.25, 7, 1))) + 0.35 * noise.noise(Vector((x * 1.3, 2, 4)))
+    # The granite breaks along its joints: each run of face between two
+    # joints stands a little proud of or behind its neighbours, and its top
+    # sits a little high or low, so the benches come out blocky, not smooth.
+    j = math.floor(x / 1.3 + 0.4 * noise.noise(Vector((y * 0.2, 9, 1))))
+    d = Y0 - 0.3 - y + 0.6 * noise.noise(Vector((x * 0.25, 7, 1))) + 0.35 * noise.noise(Vector((x * 1.3, 2, 4))) + 0.5 * (_hash(j) - 0.5)
     if d > 0:
+        bench = 0 if d < 2.6 else 1 if d < 5.0 else 2
         z = max(z, 4.0 if d < 2.6 else 8.0 if d < 5.0 else 12.0 + (d - 5.0) * 0.4)
-        z += 0.6 * n + 0.25 * noise.noise(Vector((x * 1.1, y * 1.1, 6)))
+        z += 0.6 * n + 0.25 * noise.noise(Vector((x * 1.1, y * 1.1, 6))) + 0.7 * (_hash(j * 7 + bench) - 0.5)
     dw = X0 - 0.3 - x + 0.4 * noise.noise(Vector((y * 0.3, 3, 1)))
     if dw > 0:
         gap = ENTRY[0] < y < ENTRY[1]
@@ -222,6 +232,44 @@ def build():
         reb.box(dv, df, (x, y, 2.3), (0.05, 0.02, 3.2))
     reb.mesh_object("Drill lines", dv, df, mat("black"), smooth=False)
 
+    # Slabs standing proud of the bench faces where the rock broke unevenly,
+    # and streaks of water stain down them: a heightfield gives a sheer face
+    # one strip of quads, which reads as a smooth wall.
+    sv, sf, tv, tf = [], [], [], []
+    for bench, base in ((0.0, 0.0), (2.6, 4.0), (5.0, 8.0)):
+        x = -1.0
+        while x < X1 + 2.0:
+            w = rng.uniform(0.4, 1.1)
+            x += w * 0.8
+            j = math.floor(x / 1.3 + 0.4 * noise.noise(Vector((Y0 * 0.2, 9, 1))))
+            yf = Y0 - 0.3 + 0.6 * noise.noise(Vector((x * 0.25, 7, 1))) + 0.35 * noise.noise(Vector((x * 1.3, 2, 4))) + 0.5 * (_hash(j) - 0.5) - bench
+            for _ in range(rng.randint(1, 3)):
+                h = rng.uniform(0.3, 1.3)
+                dep = rng.uniform(0.1, 0.32)
+                z = base + rng.uniform(0.2, 3.6 - h * 0.5)
+                reb.box(sv, sf, (x + rng.uniform(-0.2, 0.2), yf + dep / 2 - 0.1, z), (w, dep + 0.2, h), rng.uniform(-0.12, 0.12))
+            if rng.random() < 0.35:
+                reb.box(tv, tf, (x, yf + 0.02, base + 1.8), (rng.uniform(0.08, 0.3), 0.02, rng.uniform(1.5, 3.4)))
+    # The same on the west and east rims, facing in across the floor, clear of the way in and the cut.
+    for side, top, gap in ((-1, 4.5, ENTRY), (1, 7.0, CUT)):
+        y = Y0 - 0.5
+        while y < Y1 + 0.5:
+            w = rng.uniform(0.4, 1.1)
+            y += w * 0.8
+            if gap[0] - 0.3 < y < gap[1] + 0.3:
+                continue
+            seed = 3 if side < 0 else 5
+            xf = (X0 - 0.3 + 0.4 * noise.noise(Vector((y * 0.3, seed, 1)))) if side < 0 else (X1 + 0.3 - 0.4 * noise.noise(Vector((y * 0.3, seed, 1))))
+            for _ in range(rng.randint(1, 2)):
+                h = rng.uniform(0.3, 1.2)
+                dep = rng.uniform(0.1, 0.3)
+                z = rng.uniform(0.2, top - h * 0.5)
+                reb.box(sv, sf, (xf - side * (dep / 2 - 0.1), y + rng.uniform(-0.2, 0.2), z), (dep + 0.2, w, h), rng.uniform(-0.12, 0.12))
+            if rng.random() < 0.3:
+                reb.box(tv, tf, (xf - side * 0.02, y, 1.8), (0.02, rng.uniform(0.08, 0.3), rng.uniform(1.5, 3.4)))
+    reb.mesh_object("Face slabs", sv, sf, face_m, smooth=False)
+    reb.mesh_object("Water stains", tv, tf, reb.mat_plain("Water stain", (0.035, 0.032, 0.03), 0.9), smooth=False)
+
     # ---- The cut blocks, stacked where the derrick set them down.
     bv, bf = [], []
     walls = []
@@ -235,6 +283,23 @@ def build():
         w.hide_render = True
         walls.append(reb.wall(w))
     blocks = reb.mesh_object("Cut blocks", bv, bf, block_m, smooth=False)
+    # Half-holes from the drills down the faces where each block was split
+    # off, and chips knocked off the arrises, lying at their feet.
+    hv, hf, kv, kf = [], [], [], []
+    for (x, y, sx, sy, sz, stack) in ((8.6, 5.6, 1.8, 1.1, 1.1, 2), (10.6, 5.5, 1.6, 1.2, 1.0, 2), (12.4, 5.8, 1.4, 1.0, 1.0, 1), (9.0, 7.6, 2.0, 1.2, 1.2, 1), (11.3, 7.8, 1.5, 1.1, 1.1, 2), (13.2, 8.4, 1.2, 1.0, 0.9, 1)):
+        h = sz * stack
+        side = rng.choice((-1, 1))
+        for k in range(int(sx / 0.16)):
+            if rng.random() < 0.3:
+                continue
+            hv_x = x - sx / 2 + 0.08 + k * 0.16
+            reb.box(hv, hf, (hv_x, y + side * (sy / 2 + 0.004), h / 2), (0.025, 0.012, h * rng.uniform(0.6, 0.98)))
+        for _ in range(rng.randint(4, 9)):
+            a = rng.uniform(0, 2 * math.pi)
+            cs = rng.uniform(0.05, 0.14)
+            reb.box(kv, kf, (x + math.cos(a) * (sx / 2 + 0.15), y + math.sin(a) * (sy / 2 + 0.15), cs * 0.3), (cs, cs * 0.8, cs * 0.6), rng.uniform(0, 3))
+    reb.mesh_object("Drill half-holes", hv, hf, mat("black"), smooth=False)
+    reb.mesh_object("Block chips", kv, kf, block_m, smooth=False)
     reb.mask(reb.prim("cube", "Tall stack mask", None, (8.6, 5.6, 1.1), (1.8, 1.1, 2.2))).hide_render = True
     # Wedge holes along a split block, the feathers still in.
     for k in range(6):

@@ -192,6 +192,7 @@
     <ClCompile Include="src\game\dc\EntityModels.cpp" />
     <ClCompile Include="src\game\dc\ArrangeStages.cpp" />
     <ClCompile Include="src\game\dc\ArrangeSoundRows.cpp" />
+    <ClCompile Include="src\game\RebItems.cpp" />
     <ClCompile Include="src\game\Rendering.cpp" />
     <ClCompile Include="src\game\JpnTextTables.cpp" />
     <ClCompile Include="src\game\PrintText.cpp" />

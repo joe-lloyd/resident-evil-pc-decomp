@@ -150,9 +150,11 @@ void init_and_start_game(void)
 
 // ---------------------------------------------------------------------------
 // LoadAllItemsTexture
-// Loads item_all.pix into the items image buffer.
+// Loads item_all.pix into the items image buffer. Port addition: also called
+// when the character select switches into or out of Rebecca's mode, whose
+// overlay has its own sheet (her key items' icons); the boot load ran before.
 // ---------------------------------------------------------------------------
-static void LoadAllItemsTexture(void)
+void LoadAllItemsTexture(void)
 {
     // One path for every mode: the DC's sheet is a superset (4 extra rows plus
     // the MOON CREST halves replacing USA sprites) and lives in the DC overlay

@@ -5,6 +5,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { readPng } from '../harness/image.ts';
+import { look } from './day/look.ts';
 import { makePak } from './pak.ts';
 
 export function buildWalk(rendersDir: string): Uint8Array {
@@ -12,7 +13,7 @@ export function buildWalk(rendersDir: string): Uint8Array {
   if (meta.frames < 1 || meta.frames > 0xffff || meta.ticks < 1 || meta.ticks > 255 || meta.stepTicks < 0 || meta.stepTicks > 255) {
     throw new Error(`${rendersDir}: bad walk.json`);
   }
-  const paks = Array.from({ length: meta.frames }, (_, k) => makePak(readPng(path.join(rendersDir, `walk.${String(k).padStart(4, '0')}.png`))));
+  const paks = Array.from({ length: meta.frames }, (_, k) => makePak(look(readPng(path.join(rendersDir, `walk.${String(k).padStart(4, '0')}.png`)))));
   const head = 8 + 4 * paks.length;
   const out = new Uint8Array(head + paks.reduce((n, p) => n + p.length, 0));
   const v = new DataView(out.buffer);

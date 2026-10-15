@@ -112,6 +112,8 @@ def build():
     reb.prim("cube", "Blasting log", reb.mat_plain("Log book", (0.1, 0.12, 0.2), 0.6), (X0 + 0.28, 1.7, 0.785), (0.2, 0.28, 0.02), rot=(0, 0, 0.1))
     lx, ly0, ly1 = X0 + 0.28, 2.6, 3.4
     locker = kit.box("Explosives locker", locker_m, (lx, (ly0 + ly1) / 2, 0.0), (0.55, ly1 - ly0, 1.85), bevel=0.01)
+    # The dynamite, out of the locker (dynamite).
+    room.item("dynamite", (lx + 0.45, (ly0 + ly1) / 2, 0.0))
     reb.wall(locker)
     reb.mask(locker)
     reb.prim("cube", "Locker door seam", mat("black"), (lx + 0.278, (ly0 + ly1) / 2, 0.95), (0.004, 0.01, 1.7))

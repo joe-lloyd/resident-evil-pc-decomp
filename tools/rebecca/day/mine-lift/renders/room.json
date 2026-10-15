@@ -76,15 +76,6 @@
  "checks": [
   {
    "zone": {
-    "x0": 3910,
-    "z0": 2499,
-    "x1": 4930,
-    "z1": 3536
-   },
-   "text": "The cage controls. UP and DOWN.\nThe lever's dead without power up top."
-  },
-  {
-   "zone": {
     "x0": 2380,
     "z0": 2499,
     "x1": 3910,
@@ -100,6 +91,18 @@
     "z1": 3536
    },
    "text": "MAX 6 MEN."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "lift-up",
+   "zone": {
+    "x0": 3910,
+    "z0": 2499,
+    "x1": 4930,
+    "z1": 3536
+   }
   }
  ],
  "entry": "The cage creaks under me.",

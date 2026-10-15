@@ -1,8 +1,11 @@
 0: \nWebs. Thick ones.
-1: \nA gap under the rocks,\ninto the dark. Webs over\nit.\p{0}\nThere's blood on the post.\nSomeone squeezed through.
-2: \nThe roof's been brought\ndown across the mouth. On\npurpose:\p{0}\nthere's a blasting wire\nrunning out of the rocks.
+1: \nThe gap's too tight for\nme,\p{0}\nand the rocks over it are\nloose.
+2: \nA gap under the rocks,\ninto the dark. Webs over\nit.\p{0}\nThere's blood on the post.\nSomeone squeezed through.
 3: \nA blasting plunger, pushed\nhome. Whoever fired it\p{0}\ndropped their hard hat and\nran.
 4: \nSEALED. DO NOT ENTER.\p{0}\nWhat were they keeping in?
 5: \nAn ore cart, tipped over.\nSilver ore, dull and grey.
 6: \nAnother cart, on its side\non the trestle.\p{0}\nThe web runs from it right\ndown into the ravine.
 7: \nThe trestle creaks. It's a\nlong way down.
+8: \nThe roof's been brought\ndown across the mouth. On\npurpose:\p{0}\nthere's a blasting wire\nrunning out of the rocks.
+9: \nThe mine mouth, blasted\nclear.
+10: \nI wedge the dynamite into\nthe rockfall, light it and\nrun.\p{0}\nThe whole hillside jumps.\nThe way is open.

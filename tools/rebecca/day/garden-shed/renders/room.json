@@ -3,7 +3,7 @@
   {
    "from": [
     6205,
-    -3485,
+    -3230,
     1955
    ],
    "to": [
@@ -16,7 +16,7 @@
   {
    "from": [
     1955,
-    -3485,
+    -3230,
     6205
    ],
    "to": [
@@ -54,9 +54,9 @@
   },
   {
    "shape": "box",
-   "x0": 2695,
+   "x0": 3204,
    "z0": 1751,
-   "x1": 3766,
+   "x1": 4276,
    "z1": 2227,
    "name": "Shelves"
   }
@@ -146,6 +146,15 @@
    "text": "His tools. Clean and in a row."
   }
  ],
+ "items": [
+  {
+   "step": "cellar-key",
+   "x": 2975,
+   "y": -2380,
+   "z": 1836
+  }
+ ],
+ "spots": [],
  "entry": "A potting shed. The lantern's lit.",
  "notes": [
   "high in the north-east corner: the door, the web in the window, the tools, the sacks and the dead rat",

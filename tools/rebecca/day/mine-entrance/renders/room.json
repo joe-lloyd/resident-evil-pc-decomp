@@ -157,6 +157,13 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "blast",
+   "bank": 1,
+   "bit": -1
+  }
+ ],
  "bounds": {
   "x0": 1105,
   "z0": 4250,
@@ -223,15 +230,6 @@
   },
   {
    "zone": {
-    "x0": 21845,
-    "z0": 4250,
-    "x1": 25500,
-    "z1": 7820
-   },
-   "text": "The roof's been brought down across the mouth. On purpose:\nthere's a blasting wire running out of the rocks."
-  },
-  {
-   "zone": {
     "x0": 26350,
     "z0": 14790,
     "x1": 28900,
@@ -274,6 +272,18 @@
     "z1": 11220
    },
    "text": "The trestle creaks. It's a long way down."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "blast",
+   "zone": {
+    "x0": 21845,
+    "z0": 4250,
+    "x1": 25500,
+    "z1": 7820
+   }
   }
  ],
  "entry": "Webs. Thick ones.",

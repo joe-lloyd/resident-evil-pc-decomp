@@ -1,6 +1,8 @@
 0: \nDiesel. The whole place\nreeks of it.
-1: \nDiesel, dripping from the\nnozzle. The hose reel is\nchained, and padlocked.\p{0}\nThey didn't want anyone\nrunning off with the fuel.
-2: \nThe fuel ledger. Gallons\nin, gallons out, signed\nevery day.\p{0}\nThe last entries are a\nmess. Then they stop.
-3: \nA dog. Not a camp dog: a\nbig one, its hide torn\nopen in strips.\p{0}\nIt dug in under the wire.\nSomebody shot it.
-4: \nA snake's skin, shed.\nAnother by the tank.\p{0}\nAdders. They like the warm\ndrums.
-5: \nThe lean-to. Oil, grease,\nrags.
+1: \nThe fuel ledger. Gallons\nin, gallons out, signed\nevery day.\p{0}\nThe last entries are a\nmess. Then they stop.
+2: \nA dog. Not a camp dog: a\nbig one, its hide torn\nopen in strips.\p{0}\nIt dug in under the wire.\nSomebody shot it.
+3: \nA snake's skin, shed.\nAnother by the tank.\p{0}\nAdders. They like the warm\ndrums.
+4: \nThe lean-to. Oil, grease,\nrags.
+5: \nDiesel, dripping from the\nnozzle. The hose reel is\nchained, and padlocked.\p{0}\nThe hand pump still works.\nI need something to carry\nit in.
+6: \nThe diesel tank. The hand\npump drips.
+7: \nI fill the jerrycan at the\nhand pump.\p{0}\nIt's heavy now.

@@ -15,6 +15,10 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readPng } from '../../harness/image.ts';
+import { look } from './look.ts';
+import { keyItemModels, type ItemSpot, type PickupModel } from '../items/items.ts';
+import { ownPickup } from '../items/tmd.ts';
+import { EVENT_FLAGS, itemModelSlots } from './events.ts';
 import { animFileName, buildAnim, type AnimLayer } from '../bganim.ts';
 import { buildMasks, maskPakName } from '../masks.ts';
 import { autoFloors, readDepth } from './floors.ts';
@@ -54,9 +58,10 @@ interface DayRoomBase {
   readonly footsteps: number;
   /**
    * Item models the room's pick-ups use, in slot order (item_aot_set's model
-   * index): a base-game room and the slot its own item_aot_set uses.
+   * index): a base-game room and the slot its own item_aot_set uses, or one
+   * of her items' own (items/models.py).
    */
-  readonly itemModels?: readonly { readonly from: string; readonly index: number }[];
+  readonly itemModels?: readonly PickupModel[];
 }
 
 interface RoomJson {
@@ -70,10 +75,12 @@ interface RoomJson {
   exit?: Rect;
   /** Looping animation: cam<N>.a<k>.png for k = 1 .. frames - 1, cam<N>.png being frame 0. */
   anim?: { frames: number; ticks: number };
-  /** Changes of state: cam<N>.s-<name>.png, shown while the flag is set. */
+  /** Changes of state: cam<N>.s-<name>.png, shown while the flag is set. Bit -1: the flag of the puzzle step `name` (events.ts). */
   states?: { name: string; bank: 0 | 1; bit: number }[];
   /** A save room: where kit.item_box put the item box, whose lid is RE1's own (ITEM_BOX_LID). */
   saves?: { lid: { x: number; y: number; z: number; angle: number; scale?: number } } | null;
+  /** Where the scene puts the key items she finds here (kit.Room.item). */
+  items?: ItemSpot[];
 }
 
 /** The item box's lid, the same object in every RE1 save room: model 0 of the mansion's 1F save room. */
@@ -270,7 +277,7 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
   });
   const floors = spec.cameraFloor === 'auto' ? autoFloors({ ...json, walls: [...json.walls, ...(json.voids ?? [])] }, depths) : spec.cameraFloor;
   const cameras = json.cameras.map((c, i) => {
-    const background = readPng(path.join(renders, `cam${i}.png`));
+    const background = look(readPng(path.join(renders, `cam${i}.png`)));
     const depth = depths[i];
     const masks = depth ? buildMasks(background, depth) : undefined;
     const pak = `RC${stem.slice(4, 7)}${i}.pak`;
@@ -285,11 +292,13 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
     const layers: AnimLayer[] = [];
     if (json.anim && json.anim.frames > 1) {
       const frames = [background];
-      for (let k = 1; k < json.anim.frames; k++) frames.push(readPng(path.join(renders, `cam${i}.a${k}.png`)));
+      for (let k = 1; k < json.anim.frames; k++) frames.push(look(readPng(path.join(renders, `cam${i}.a${k}.png`))));
       layers.push({ frames, ticks: json.anim.ticks });
     }
     for (const st of json.states ?? []) {
-      layers.push({ frames: [readPng(path.join(renders, `cam${i}.s-${st.name}.png`))], ticks: 0, when: { bank: st.bank, bit: st.bit, value: true } });
+      const bit = st.bit >= 0 ? st.bit : EVENT_FLAGS.get(st.name);
+      if (bit === undefined) throw new Error(`${spec.slug}: state ${st.name} is no puzzle step of events.ts`);
+      layers.push({ frames: [look(readPng(path.join(renders, `cam${i}.s-${st.name}.png`)))], ticks: 0, when: { bank: st.bank, bit, value: true } });
     }
     const anim = buildAnim(background, layers);
     if (anim) {
@@ -308,8 +317,9 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
   };
   const rdt = composeRoom(donor, {
     cameras,
-    // The room's item models, then one empty slot: a file pickup sits on it and draws nothing.
-    itemModels: [...(spec.itemModels ?? []).map((m) => model(baseRoom(m.from), 'item', m.index)), {}],
+    itemModels: itemModelSlots(spec.itemModels ?? [], json.items ?? [], spec.slug).map((m) =>
+      'empty' in m ? {} : 'own' in m ? ownPickup(m.own) : model(baseRoom(m.from), 'item', m.index),
+    ),
     // A save room's item box: RE1's own lid, object model 0 of the mansion's save room.
     objectModels: json.saves ? [scaleModel(model(baseRoom(ITEM_BOX_LID.from), 'object', ITEM_BOX_LID.index), json.saves.lid.scale ?? 1)] : undefined,
     ...('hour' in spec ? lightingFor(spec.hour, spec.inside, json.bounds) : { ambient: spec.ambient, lights: spec.lights }),

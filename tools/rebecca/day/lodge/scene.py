@@ -69,10 +69,10 @@ def build():
     rng = random.Random(53)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
-    room.camera((5.25, 1.15, 2.3), (2.0, 3.9, 0.5), 200, "high over the washstand: the table and its lamp, the bed, the fireplace, the tools")
-    room.camera((1.85, 4.45, 2.3), (4.9, 1.6, 0.6), 200, "high by the fireplace: the table, the pink basin, the door, the key on its hook")
-    room.camera((1.15, 1.15, 2.3), (4.7, 4.1, 0.5), 200, "high by the window: the bed, ITCHY on the wall, the pool by the door")
-    room.camera((5.25, 4.45, 2.3), (2.0, 1.5, 0.7), 200, "high over the bed: the window, the seed trays, the diary, the tools")
+    room.camera((5.25, 1.15, 2.15), (2.0, 3.9, 0.5), 200, "high over the washstand: the table and its lamp, the bed, the fireplace, the tools")
+    room.camera((1.85, 4.45, 2.15), (4.9, 1.6, 0.6), 200, "high by the fireplace: the table, the pink basin, the door, the key on its hook")
+    room.camera((1.15, 1.15, 2.15), (4.7, 4.1, 0.5), 200, "high by the window: the bed, ITCHY on the wall, the pool by the door")
+    room.camera((5.25, 4.45, 2.15), (2.0, 1.5, 0.7), 200, "high over the bed: the window, the seed trays, the diary, the tools")
 
     plaster = kit.dirtied(mat("plaster"), 0.8, scale=1.5)
     floor_m = kit.boards("Lodge floor", (0.17, 0.12, 0.07), width=0.15, grime=0.8)
@@ -240,6 +240,8 @@ def build():
     reb.prim("cube", "Boot, fallen", mat("rubber"), (X1 - 0.35, 3.25, 0.07), (0.14, 0.36, 0.14), rot=(0, 0, 0.7), bevel=0.03)
     kit.splat("Mud", mat("mud"), (X1 - 0.3, 3.05, 0.0), 0.18, seed=15)
     reb.prim("cube", "Key board", beam_m, (X1 - 0.02, 3.15, 1.5), (0.03, 0.4, 0.3))
+    # The back gate key on its hook (gate-key).
+    room.item("gate-key", (X1 - 0.08, 3.15, 1.4))
     key_m = mat("iron")
     reb.prim("cyl", "Key bow", key_m, (X1 - 0.06, 3.1, 1.42), (0.08, 0.08, 0.015), rot=(0, math.pi / 2, 0), segments=12)
     reb.prim("cube", "Key shank", key_m, (X1 - 0.06, 3.1, 1.3), (0.015, 0.015, 0.2))

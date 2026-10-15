@@ -40,13 +40,47 @@ export interface Facts {
 
 /** Rows whose status the repository can't show: set by hand as work lands. */
 const STATUS: Record<string, Status> = {
-  'look-wear': 'doing',
+  'look-wear': 'done',
+  'look-trees': 'done',
+  'look-interiors': 'done',
+  'look-filter-build': 'done',
+  'look-rerender': 'done',
+  'look-weak': 'doing',
+  // Built; waiting on a look in the game.
+  'look-trapdoor-patch': 'doing',
+  'doors-anim': 'doing',
+  'doors-ladder': 'doing',
+  'items-supplies': 'doing',
+  // Seen in the game by tests/items.ts: her case, each item lying in its room, each one checked.
+  'items-icons': 'done',
+  'items-models': 'done',
+  // Seen in the game by tests/gear.ts: her start kit, the loss in the gallery, Kevin's gun.
+  'weapons-plan': 'done',
+  // Built; waiting on the renders and a look.
+  'look-dead': 'doing',
+  'look-vehicles': 'doing',
+  'look-weak-2': 'doing',
+  'words-entry': 'done',
+  // The hand-written yard's, played before.
+  'puzzle-unlock-shed': 'done',
+  'puzzle-winch-pine': 'done',
+  'find-shed-key': 'done',
+  'find-crank': 'done',
+  // Worked in the game by tests/puzzles.ts.
+  ...Object.fromEntries(['mill-race', 'crane', 'generator-on', 'line-on', 'blast', 'lift-up', 'drain', 'push-rack'].map((s): [string, Status] => [`puzzle-${s}`, 'done'])),
+  // Locks written by day/scripts.ts: the tour walks their doors unlocked, but no test uses the key yet.
+  ...Object.fromEntries(['cut-depot', 'cut-chain', 'tower-door', 'pry-lodge', 'open-gate'].map((s): [string, Status] => [`puzzle-${s}`, 'doing'])),
+  // Rendered as a state of the room (kit.Room.state); waiting on the renders and a look in the game.
+  ...Object.fromEntries(['blast', 'push-rack', 'generator-on', 'line-on', 'drain'].map((s): [string, Status] => [`moving-${s}`, 'doing'])),
+  ...Object.fromEntries(
+    ['truck-keys', 'cutters', 'office-key', 'safe', 'cog', 'jerrycan', 'fuel', 'switch-key', 'quarry-key', 'dynamite', 'op-key', 'fuses', 'crowbar', 'gate-key', 'cellar-key'].map((s): [string, Status] => [`find-${s}`, 'doing']),
+  ),
   'look-trapdoor-sample': 'done',
   'look-filter-sample': 'done',
   'look-reviewed-builders': 'done',
   'doors-tour-tool': 'done',
-  // 101 of 102 doors pass the tour; the bunkhouse's waits for its re-render.
-  'doors-wired': 'doing',
+  // All 102 doors pass the tour (tests/tour.ts) on the re-rendered rooms.
+  'doors-wired': 'done',
   'enemies-plan': 'done',
   'items-plan': 'done',
   'maps-plan': 'done',
@@ -195,6 +229,9 @@ export function sections(plan: Plan, facts: Facts): Section[] {
         row('look-filter-build', 'The light look filter as a build step, on backgrounds and masks alike'),
         row('look-rerender', 'Re-render every room with the new look'),
         row('look-weak', 'Fix the weak rooms', 'The quarry, the mine mouth gap, the washout body, the switch house, the lower yard gravel, the flat far ridges'),
+        row('look-dead', 'The dead as people', 'MakeHuman bodies, clothed and posed, baked once (blender/corpses.py), in every room that has one'),
+        row('look-vehicles', 'Vehicles with real shapes', "Bravo's helicopter, the pickups, the sedan, the log truck and the skidder lofted in the kit"),
+        row('look-weak-2', 'Fix the weak rooms, second pass', "The sawmill's black saw blade, the den's flat-faceted granite, the mast's smooth cliffs, the platform's empty gorge"),
         row('look-trapdoor-sample', "Sample of the save room's trapdoor, closed and worn"),
         row('look-trapdoor-patch', "The save room's trapdoor as a patch built from the player's files"),
       ],
@@ -221,7 +258,7 @@ export function sections(plan: Plan, facts: Facts): Section[] {
       items: [
         row('items-plan', 'Every key item planned, and checked that it can be had before it is needed'),
         row('weapons-plan', 'Her weapons through the day', 'A knife and a handgun with a few rounds; the mine takes everything; a gun again from Kevin at the crash'),
-        row('items-models', 'Pickup models for the new key items'),
+        row('items-models', 'Models for the new key items: lying in the room and examined', 'Seven of her own (items/models.py, items/tmd.ts); the keys keep their donors\''),
         row('items-icons', 'Inventory icons and names for the new key items'),
         row('items-supplies', 'Ammunition, herbs and first aid sprays placed through the day'),
         ...finds.map((s) => stepRow(s, 'find')),

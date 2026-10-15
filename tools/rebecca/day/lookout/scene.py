@@ -441,6 +441,8 @@ def build():
 
     room_box = {"x0": reb.g(X0), "z0": reb.g(Y0), "x1": reb.g(X1), "z1": reb.g(Y1)}
     door_gap = {"x0": reb.g(DOOR[0]), "z0": reb.g(Y1) - 10, "x1": reb.g(DOOR[1]), "z1": reb.g(Y1 + 0.6)}
+    # The kit's worn, bitty surfaces, as every kit room has.
+    kit.wear(float(os.environ.get("RE1_WEAR", "1.3")))
     # Where she saves, for the builder; room.c places the lid and the zones.
     saves = {"lid": box_lid}
     reb.export(CAMERAS, OUT, samples=768, extra={"bounds": room_box, "exit": door_gap, "saves": saves}, anim={"frames": FRAMES, "ticks": 3, "set": pose})

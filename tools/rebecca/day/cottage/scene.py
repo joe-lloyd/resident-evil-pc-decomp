@@ -56,10 +56,10 @@ def build():
     rng = random.Random(19)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
-    room.camera((5.25, 4.25, 2.15), (2.0, 1.8, 0.2), 200, "high over the stove: the table and the diary, the bed, the photos of his daughter")
-    room.camera((1.15, 1.15, 2.15), (4.2, 3.8, 0.3), 200, "high over the bed: the door, its bar lifted off, the key hook, the rods in the corner")
-    room.camera((5.25, 1.65, 2.15), (2.0, 3.6, 0.2), 200, "high over the sink: the chair dragged to the window, the scrapes, the first aid tin")
-    room.camera((1.15, 4.25, 2.15), (4.6, 1.6, 0.3), 200, "high by the west window: the sink full of towels, the radio, the stove")
+    room.camera((5.25, 4.25, 2.0), (2.0, 1.8, 0.2), 200, "high over the stove: the table and the diary, the bed, the photos of his daughter")
+    room.camera((1.15, 1.15, 2.0), (4.2, 3.8, 0.3), 200, "high over the bed: the door, its bar lifted off, the key hook, the rods in the corner")
+    room.camera((5.25, 1.65, 2.0), (2.0, 3.6, 0.2), 200, "high over the sink: the chair dragged to the window, the scrapes, the first aid tin")
+    room.camera((1.15, 4.25, 2.0), (4.6, 1.6, 0.3), 200, "high by the west window: the sink full of towels, the radio, the stove")
 
     pine = kit.boards("Pine panelling", (0.26, 0.17, 0.09), width=0.14, grime=0.75)
     floor_m = kit.dirtied(reb.mat_wood("Floorboards", (0.17, 0.11, 0.06)), 0.6)
@@ -119,6 +119,8 @@ def build():
         reb.prim("cube", "Bar bracket", mat("iron"), (x, Y1 - 0.06, 1.25), (0.08, 0.1, 0.12))
     bar = reb.prim("cube", "Door bar", mat("logs"), (d1 + 0.42, Y1 - 0.14, 0.62), (0.09, 0.09, 1.3), rot=(0.12, -0.38, 0))
     reb.mask(bar)
+    # The quarry office key on its hook (quarry-key).
+    room.item("quarry-key", (d0 - 0.45, Y1 - 0.08, 1.4))
     # The key board by the door: the quarry office key on its tag, empty hooks.
     reb.prim("cube", "Key board", frame_m, (d0 - 0.45, Y1 - 0.02, 1.5), (0.4, 0.03, 0.16))
     for k, x in enumerate((-0.15, -0.05, 0.05, 0.15)):
@@ -301,14 +303,13 @@ def build():
     room.door("east-path", (d0, Y1 - 0.5, d1, Y1), arrive=(3.05, 3.5), face=(0, -1))
     room.check((2.4, 2.1, 3.3, 2.95), "His diary, open. The last entry is shaky:\n\"it itches. hide in the mine till they come.\"")
     room.check((3.3, 2.1, 3.6, 2.95), "The first aid tin, emptied. Bandage wrappers everywhere.\nHe did what he could with it.")
-    room.check((d0 - 0.75, Y1 - 0.5, d0, Y1), "A key on a hook by the door. The tag says QUARRY OFFICE.")
+    room.check((d0 - 0.75, Y1 - 0.5, d0, Y1), "A key on a hook by the door. The tag says QUARRY OFFICE.\nThe bolt's drawn and the bar's off the door.\nHe locked himself in, then thought better of it.")
     room.check((3.85, Y0, 4.9, Y0 + 1.0), "The sink is full of towels. They're soaked through.\nThe water's pink.")
     room.check((2.35, Y0, 3.35, Y0 + 0.9), "A girl holding up a fish, grinning. The same photo was in the booth.\nA drawing under it, in crayon: DAD.")
     room.check((2.0, Y0, 2.35, Y0 + 0.9), "The radio's on, hissing. Nothing on any channel.")
     room.check((1.4, 3.4, 2.4, Y1), "He dragged the chair to the window and sat watching the path.\nBinoculars. Cold coffee.")
     room.check((X0, Y0, X0 + 1.2, Y0 + 2.1), "The bed's been slept in, or tried. Blood on the pillow.")
     room.check((d1, Y1 - 0.6, X1, Y1), "Fishing rods, a creel, waders. A man who liked quiet.")
-    room.check((d0 - 0.2, Y1 - 0.4, d0 + 0.3, Y1), "The bolt's drawn and the bar's off the door.\nHe locked himself in, then thought better of it.")
     room.entry = "The radio's still on."
     room.export(anim)
 

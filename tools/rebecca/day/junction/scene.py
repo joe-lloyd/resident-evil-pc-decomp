@@ -188,7 +188,14 @@ def build():
     for ob in afloat:
         ob.parent = pool
         ob.matrix_parent_inverse = pool.matrix_world.inverted()
-    reb.prim("cube", "Under the water", reb.mat_plain("Deep", (0.004, 0.005, 0.005), 0.9), (6.0, EDGE + 4.0, WATER_Z - 0.6), (6.4, 8.0, 0.02))
+    under = reb.prim("cube", "Under the water", reb.mat_plain("Deep", (0.004, 0.005, 0.005), 0.9), (6.0, EDGE + 4.0, WATER_Z - 0.6), (6.4, 8.0, 0.02))
+
+    # Once the pump runs (day/events.ts "drain"): the water down the way,
+    # the decline showing wet below where it stood, its wreckage riding down.
+    def drained(done):
+        for ob in (pool, under):
+            ob.location.z += -1.6 if done else 1.6
+    room.state("drain", drained)
     # The adit coming in from the west: its arch, a lamp burning down it.
     kit.tunnel("Adit in", rock, [(X0 + 0.3, (a0 + a1) / 2), (X0 - 5.0, (a0 + a1) / 2)], width=a1 - a0 + 0.4, height=ah + 0.3, rough=0.12, seed=13, floor_m=floor_m)
     reb.prim("cube", "Adit dark", mat("black"), (X0 - 5.5, (a0 + a1) / 2, 1.5), (0.2, 4.0, 4.0))
@@ -380,8 +387,8 @@ def build():
     room.door("mine-lift", (gx0, cy1 + 0.1, gx1, cy1 + 0.7), arrive=(7.2, 3.6), face=(0, 1))
     room.door("gallery", (d0, EDGE - 0.6, d1, EDGE), arrive=(6.0, 6.8), face=(0, -1))
     room.check((c1 + 0.1, Y0, c1 + 1.1, Y0 + 0.8), "The lift cage. LIFT TO SURFACE. The cable goes up into the dark.")
-    room.check((10.4, 5.2, X1, 6.9), "The mine's pump. The motor's cold.\nIts pipe runs down into the flooded way.")
-    room.check((X1 - 0.8, 7.4, X1, 8.4), "The pump's switch. It's thrown off.")
+    # The pump's switch is behind it and its pipes, out of her reach: she works it from the pump's west face.
+    room.spot("drain", (10.0, 5.2, 10.8, 6.6))  # day/events.ts says what she sees and does here
     room.check((d0, EDGE - 1.2, d1, EDGE - 0.6), "The way down goes under the water. It's black.\nHis blood goes right to the edge. He went in.")
     room.check((9.9, 3.6, 10.4, 5.2), "A dog, one of the big ones, wrapped up in web.\nSomething down here eats them.")
     room.check((5.4, 5.6, 7.4, 6.8), "Egg sacs, all over the roof. That one's split open.")

@@ -360,7 +360,8 @@ def build():
     room.check((X0, Y0, X0 + 0.9, Y1), "Her seat. Soaked through.\nShe sat here bleeding all the way up.")
     room.check((2.1, Y0 + 0.05, X1 - 0.45, 1.6), "A handbag, spilled. A wallet: a driving licence for a Linda Pryce, Raccoon City.\nThe car keys aren't in it.")
     room.check((1.5, 1.9, 2.4, Y1), "A bandage, unwound. Someone dressed a bite on her wrist.\nIt didn't help.")
-    room.check((DOOR[0], Y0, DOOR[1], Y0 + 0.5), "Claw marks on the inside of the door. Handprints on the glass, all the way up.\nShe was trying to get out.")
+    # In front of the door, which takes its own zone.
+    room.check((DOOR[0], Y0 + 0.45, DOOR[1], Y0 + 0.9), "Claw marks on the inside of the door. Handprints on the glass, all the way up.\nShe was trying to get out.")
     room.check((X1 - 0.5, Y0, X1, Y1), "CAR 4. MAX 6.")
     room.entry = "It's stopped. We're hanging over the trees.\nThere's a pylon right ahead."
     room.export(anim)

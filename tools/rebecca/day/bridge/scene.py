@@ -18,6 +18,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bpy  # noqa: E402
 import reb  # noqa: E402
+import kit  # noqa: E402
 from mathutils import Vector, noise  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))
@@ -84,8 +85,27 @@ def build():
     ground.data.materials.append(rock)
     for poly in ground.data.polygons:
         c = poly.center
-        if NEAR - 0.3 < c.y < FAR + 0.3 and c.z < -0.25:
+        if NEAR - 0.6 < c.y < FAR + 0.6 and (c.z < -0.25 or abs(poly.normal.z) < 0.6):
             poly.material_index = 1
+    # Slabs standing out of the gorge walls and dark cracks between them:
+    # the heightfield alone reads as smooth grey planes at 320 x 240.
+    sv, sf, cv, cf = [], [], [], []
+    mw = ground.matrix_world
+    for poly in ground.data.polygons:
+        if poly.material_index != 1 or abs(poly.normal.z) > 0.75 or rng.random() > 0.45:
+            continue
+        c, n = mw @ poly.center, poly.normal
+        # Off the mesh's grid, or they line up in courses like brickwork.
+        c = c + Vector((rng.uniform(-0.2, 0.2), 0, rng.uniform(-0.15, 0.15)))
+        yaw = math.atan2(n.y, n.x) - math.pi / 2
+        dep = rng.uniform(0.08, 0.3)
+        w, h = rng.uniform(0.3, 0.9), rng.uniform(0.2, 0.7)
+        if rng.random() < 0.8:
+            reb.box(sv, sf, (c.x + n.x * dep * 0.4, c.y + n.y * dep * 0.4, c.z), (w, dep + 0.15, h), yaw + rng.uniform(-0.15, 0.15))
+        else:
+            reb.box(cv, cf, (c.x + n.x * 0.03, c.y + n.y * 0.03, c.z), (w * 1.5, 0.04, 0.05), yaw)
+    reb.mesh_object("Gorge slabs", sv, sf, rock, smooth=False)
+    reb.mesh_object("Gorge cracks", cv, cf, reb.mat_plain("Crack", (0.015, 0.014, 0.012), 0.9), smooth=False)
     # The trail: worn dirt down to the bridge, and on from its far end.
     v, f = [], []
     for (ax, ay), (bx, by) in (((9.0, -2.0), (7.5, 3.5)), ((7.5, 3.5), (6.0, NEAR)), ((6.0, FAR), (5.0, 22.0))):
@@ -247,11 +267,12 @@ def build():
     reb.mesh_object("Cliff shrubs", sv, sf, ferns)
 
     # Light: mid-morning sun over the gorge, a haze in it.
-    reb.light_for("morning", mist_box=((6, 12, -12), (60, 9, 9)), mist_density=0.012)
+    # Less mist and a softer sun than first set: they washed the gorge to flat grey and the banks pale.
+    reb.light_for("morning", mist_box=((6, 12, -12), (60, 9, 9)), mist_density=0.006)
     sun = bpy.data.objects["Sun"]
     sun.rotation_euler = (math.radians(90 - 40), 0, math.radians(140))
-    sun.data.energy = 5.5
-    reb.gradient_sky((0.85, 0.8, 0.68), (0.35, 0.52, 0.8), below=(0.08, 0.09, 0.07), strength=1.6)
+    sun.data.energy = 4.0
+    reb.gradient_sky((0.85, 0.8, 0.68), (0.35, 0.52, 0.8), below=(0.08, 0.09, 0.07), strength=1.2)
 
     def pose(k):
         phase = 2 * math.pi * k / FRAMES
@@ -274,6 +295,7 @@ def build():
 
     # Walkable: the whole box, less the gorge either side of the bridge.
     bounds = {"x0": reb.g(X0), "z0": reb.g(Y0), "x1": reb.g(X1), "z1": reb.g(Y1)}
+    kit.wear(float(os.environ.get("RE1_WEAR", "1.3")))
     reb.export(
         CAMERAS,
         OUT,

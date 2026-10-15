@@ -54,9 +54,9 @@ def build():
     rng = random.Random(1998)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
-    room.camera((1.15, 3.85, 2.2), (4.2, 1.6, 0.75), 200, "high in the south-west corner: the instrument bench, the radio desk under the broken window")
-    room.camera((4.65, 1.15, 2.2), (1.7, 3.6, 0.5), 200, "high in the north-east corner: the bunk, the stove, the coat on its hook, the open door")
-    room.camera((1.15, 1.15, 2.2), (4.3, 3.7, 0.55), 195, "high in the north-west corner: the radio and the log, the chair rolled off, the door")
+    room.camera((1.15, 3.85, 2.1), (4.2, 1.6, 0.75), 200, "high in the south-west corner: the instrument bench, the radio desk under the broken window")
+    room.camera((4.65, 1.15, 2.1), (1.7, 3.6, 0.5), 200, "high in the north-east corner: the bunk, the stove, the coat on its hook, the open door")
+    room.camera((1.15, 1.15, 2.1), (4.3, 3.7, 0.55), 195, "high in the north-west corner: the radio and the log, the chair rolled off, the door")
 
     paint = kit.dirtied(kit.boards("Hut panelling", (0.24, 0.27, 0.22), width=0.13, grime=0.5), 0.4)
     lino = reb.mat_surface("Lino", [(0.0, (0.06, 0.05, 0.04)), (0.5, (0.14, 0.11, 0.07)), (1.0, (0.09, 0.07, 0.05))], scale=4, rough=0.5, bump=0.2)

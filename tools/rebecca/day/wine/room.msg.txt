@@ -1,6 +1,6 @@
 0: \nThe wine store. It smells\nof wine. And something\nelse.
-1: \nWine and blood, pooled\ntogether. A bottle\nsmashed.\p{0}\nThis is where it got him.
-2: \nBloody handprints down the\nbottles. He tried to get\nup.
+1: \nBloody handprints down the\nbottles. He tried to get\nup.
+2: \nWine and blood, pooled\ntogether. A bottle\nsmashed.\p{0}\nThis is where it got him.
 3: \nThe cellar book. Tonight's\npage: one Margaux, ticked.\p{0}\nHe came down for a bottle.
 4: \nCrates of wine. SPENCER,\nstencilled on the side.\p{0}\nSomeone stuck a candle in\na bottle here.
 5: \nDusty bottles. Years of\nthem.

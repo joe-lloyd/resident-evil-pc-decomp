@@ -16,9 +16,9 @@
 // Back up the trail to the ridge, on touch at the yard's north-west corner.
 door_aot_set(0, 3400, 3400, 4250, 850, 0, 15, 48, 4, 0, ROOM_312, 3500, 0, 14400, 1024, UNLOCKED, 1);
 // The cabin door, from the porch steps: inside the door, facing in (-Z).
-door_aot_set(1, 21080, 12325, 1870, 1020, 0, 0, 0, 4, 0, ROOM_314, 6715, 0, 9180, 1024, UNLOCKED, 129);
+door_aot_set(1, 21080, 12325, 1870, 1020, 1, 0, 7, 1, 0, ROOM_314, 6715, 0, 9180, 1024, UNLOCKED, 129);
 // The shed, padlocked: lock 60 (0x80 | 60 = 188) opens with the Small Key.
-door_aot_set(2, 9180, 12410, 1190, 1360, 0, 0, 0, 4, 188, ROOM_316, 4845, 0, 3570, 2048, 61 /* Small Key */, 129);
+door_aot_set(2, 9180, 12410, 1190, 1360, 1, 0, 7, 1, 188, ROOM_316, 4845, 0, 3570, 2048, 61 /* Small Key */, 129);
 // The trail down: the pine blocks it until it is dragged clear.
 if (ck(FG_COMMON, 205, 1)) {
     aot_set(3, 24310, 19380, 4930, 1360, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
@@ -34,6 +34,18 @@ aot_set(7, 9180, 6120, 2720, 1360, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);     
 aot_set(8, 26010, 13260, 2210, 2040, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);   // his rifle in the grass
 aot_set(9, 27540, 4420, 1360, 1700, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);    // the smashed window
 aot_set(10, 27540, 9860, 2380, 2040, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);   // drag marks into the trees
+// The truck's toolbox, in the bed behind the cab, examined from the bed's
+// south side: locked until she carries the ranger's keys (RANGER KEYS, item
+// 57); then the bolt cutters inside (BOLT CUTTERS, item 28), model slot 0 at
+// (13940, -2040, 18360). FG_ITEM 246: still there. item_ck searches her
+// case; testitem would test the item last used, which is none on entering.
+if (ck(FG_ITEM, 246, 0)) {
+    if (item_ck(57)) {
+        item_aot_set(13, 11050, 15300, 2550, 1190, 28, 1, 0, 255, 116, 54, 8, 248, 184, 71, 0, 0, 246, 129, 0, 0);
+    } else {
+        aot_set(13, 11050, 15300, 2550, 1190, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);   // the toolbox, locked
+    }
+}
 // The dog comes out of the trees once she has the key: from behind the
 // cabin's far corner, so she sees it come round before it reaches her.
 if (ck(FG_ITEM, 242, 1)) {
@@ -56,11 +68,11 @@ if (ck(FG_COMMON, 202, 1)) {
 // frame she uses it, and a message opened then is dropped, so the line waits
 // a second (the state word 4 counts seconds; setw restarts it). The pine
 // moves as she says it drags clear: FG_COMMON 205 switches the background.
-// FG_ROOM 10: the crank is on the winch, her line still to come.
+// FG_ROOM 10: the crank is on the winch, her line still to come. She keeps
+// the crank: the pond's sluice takes it too (day/events.ts).
 if (ck(FG_COMMON, 205, 1)) {
     if (ck(FG_ROOM, 10, 1) && testitem(30 /* Hex Crank */)) {
         set(FG_ROOM, 10, 0);
-        remove_item(30 /* Hex Crank */);
         setw(4, 0, 0);
     }
     if (ck(FG_ROOM, 10, 0) && cmpw(0, 4, 1, 0)) {

@@ -2,6 +2,7 @@
 // scene, renders, script and messages are in its folder under day/; room.ts
 // builds it. Room ids come from the free slots in stages 2 to 4 (Stage3 to
 // Stage5 files); docs/REBECCA_DAY.md has the plan.
+import { supplyModels } from './supplies.ts';
 import type { DayRoom, Hour } from './room.ts';
 
 /**
@@ -89,7 +90,7 @@ export const yard: DayRoom = {
   ],
   cameraFloor: 'auto',
   footsteps: 0x2d,
-  itemModels: [],
+  itemModels: [{ own: 'cutters' }], // the bolt cutters (items/models.py)
 };
 
 /** The ranger's tool shed, off the yard: the winch's crank on the bench (game units = metres * 1700). */
@@ -107,7 +108,11 @@ export const shed: DayRoom = {
   ],
   cameraFloor: 'auto',
   footsteps: 0x2d,
-  itemModels: [{ from: 'Stage3/ROOM30A0.RDT', index: 1 }], // Hex Crank, as the winch's crank
+  itemModels: [
+    { from: 'Stage3/ROOM30A0.RDT', index: 1 }, // Hex Crank, as the winch's crank
+    { own: 'jerrycan' }, // the jerrycan (items/models.py)
+    { own: 'fuses' }, // the fuses (items/models.py)
+  ],
 };
 
 /** The ravine bridge below the station: a plank footbridge over a gorge, adders in the grass (game units = metres * 1700). */
@@ -206,6 +211,7 @@ export const kitRooms: readonly DayRoom[] = KIT_ROOMS.map(([slug, stage, room, h
   inside,
   cameraFloor: 'auto',
   footsteps: 0x2d,
+  itemModels: supplyModels(slug),
 }));
 
 export const dayRooms: readonly DayRoom[] = [ridge, trail, lookout, yard, shed, bridge, ...kitRooms];

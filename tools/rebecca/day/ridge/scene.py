@@ -13,6 +13,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
+import kit  # noqa: E402
 
 # Laid out when a metre was taken as 1000 units, and its world stays that
 # way (reb.UNITS = 1000): the cameras, the clearing and the valley keep their
@@ -269,6 +270,10 @@ def build():
             ob.location = (8 + radius * math.cos(a), 45 + radius * 0.6 * math.sin(a), 6 + dz)
             ob.rotation_euler = (0.5 if k % 2 else -0.5, 0, a + math.pi)
             ob.scale = (1.8, 1.8, 1.8)
+
+    # The kit's worn, bitty surfaces, as every kit room has.
+
+    kit.wear(float(os.environ.get("RE1_WEAR", "1.3")))
 
     reb.export(
         CAMERAS,

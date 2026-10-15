@@ -78,6 +78,13 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "generator-on",
+   "bank": 1,
+   "bit": -1
+  }
+ ],
  "bounds": {
   "x0": 1700,
   "z0": 1700,
@@ -122,15 +129,6 @@
  "checks": [
   {
    "zone": {
-    "x0": 3995,
-    "z0": 3230,
-    "x1": 5015,
-    "z1": 4420
-   },
-   "text": "The generator's panel. The fuel gauge is right down on E.\nIt ran itself dry."
-  },
-  {
-   "zone": {
     "x0": 2040,
     "z0": 1700,
     "x1": 4080,
@@ -140,9 +138,9 @@
   },
   {
    "zone": {
-    "x0": 4080,
+    "x0": 5015,
     "z0": 3060,
-    "x1": 5440,
+    "x1": 5695,
     "z1": 4420
    },
    "text": "A jerrycan on its side, the cap off. Not a drop in it."
@@ -191,6 +189,19 @@
     "z1": 7140
    },
    "text": "Oily boot prints, going out the back. To the switch house."
+  }
+ ],
+ "saves": null,
+ "items": [],
+ "spots": [
+  {
+   "step": "generator-on",
+   "zone": {
+    "x0": 3995,
+    "z0": 3230,
+    "x1": 5015,
+    "z1": 4420
+   }
   }
  ],
  "entry": "Cold. It hasn't run for hours.",

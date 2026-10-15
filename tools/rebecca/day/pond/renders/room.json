@@ -218,15 +218,6 @@
   },
   {
    "zone": {
-    "x0": 8840,
-    "z0": 5100,
-    "x1": 10880,
-    "z1": 6460
-   },
-   "text": "The sluice gate, wound open. The sign says open means the mill runs.\nThe crank turns it."
-  },
-  {
-   "zone": {
     "x0": 4250,
     "z0": 6120,
     "x1": 5950,
@@ -251,6 +242,18 @@
     "z1": 5440
    },
    "text": "A footbridge over the race. The flume's that way."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "mill-race",
+   "zone": {
+    "x0": 8840,
+    "z0": 5100,
+    "x1": 10880,
+    "z1": 6460
+   }
   }
  ],
  "entry": "The mill pond. The wheel's still turning.",

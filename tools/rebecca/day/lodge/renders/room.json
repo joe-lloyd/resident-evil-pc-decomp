@@ -3,7 +3,7 @@
   {
    "from": [
     8925,
-    -3910,
+    -3655,
     1955
    ],
    "to": [
@@ -16,7 +16,7 @@
   {
    "from": [
     3145,
-    -3910,
+    -3655,
     7565
    ],
    "to": [
@@ -29,7 +29,7 @@
   {
    "from": [
     1955,
-    -3910,
+    -3655,
     1955
    ],
    "to": [
@@ -42,7 +42,7 @@
   {
    "from": [
     8925,
-    -3910,
+    -3655,
     7565
    ],
    "to": [
@@ -231,9 +231,19 @@
    "x": 4310,
    "z": 7809,
    "y": -1440,
-   "angle": 1024
+   "angle": 1024,
+   "scale": 1.0
   }
  },
+ "items": [
+  {
+   "step": "gate-key",
+   "x": 9044,
+   "y": -2380,
+   "z": 5355
+  }
+ ],
+ "spots": [],
  "entry": "Someone left the lamp burning.",
  "notes": [
   "high over the washstand: the table and its lamp, the bed, the fireplace, the tools",

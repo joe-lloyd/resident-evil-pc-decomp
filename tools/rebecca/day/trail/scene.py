@@ -18,6 +18,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bpy  # noqa: E402
 import reb  # noqa: E402
+import kit  # noqa: E402
 from mathutils import Vector, noise  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))
@@ -175,6 +176,10 @@ def build():
             ob.location = (-25 + 55 * t, 14 + dy * 3 + 6 * t, 14 + dz + 1.5 * math.sin(t * 6))
             ob.scale = (2.2, 2.2, 2.2)
             ob.rotation_euler = (0.4 if k % 2 else -0.4, 0, -math.pi / 2)
+
+    # The kit's worn, bitty surfaces, as every kit room has.
+
+    kit.wear(float(os.environ.get("RE1_WEAR", "1.3")))
 
     reb.export(
         CAMERAS,

@@ -57,14 +57,14 @@
   {
    "shape": "box",
    "x0": 1700,
-   "z0": 4420,
+   "z0": 5950,
    "x1": 2720,
-   "z1": 8330,
+   "z1": 9860,
    "name": "Rack footprint"
   },
   {
    "shape": "box",
-   "x0": 3740,
+   "x0": 4760,
    "z0": 8500,
    "x1": 11900,
    "z1": 10200,
@@ -107,6 +107,13 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "push-rack",
+   "bank": 1,
+   "bit": -1
+  }
+ ],
  "bounds": {
   "x0": 1700,
   "z0": 1700,
@@ -152,7 +159,7 @@
    "zone": {
     "x0": 1700,
     "z0": 8500,
-    "x1": 2720,
+    "x1": 3910,
     "z1": 9860
    },
    "arrive": {
@@ -194,24 +201,6 @@
   },
   {
    "zone": {
-    "x0": 2720,
-    "z0": 4420,
-    "x1": 3740,
-    "z1": 8330
-   },
-   "text": "A heavy rack of preserves. There are scrape marks on the floor by its end.\nIt's been moved."
-  },
-  {
-   "zone": {
-    "x0": 1700,
-    "z0": 8500,
-    "x1": 3060,
-    "z1": 9860
-   },
-   "text": "A low passage behind the rack. It goes under the house."
-  },
-  {
-   "zone": {
     "x0": 12920,
     "z0": 1700,
     "x1": 15300,
@@ -221,12 +210,24 @@
   },
   {
    "zone": {
-    "x0": 3400,
+    "x0": 4760,
     "z0": 8330,
     "x1": 11900,
     "z1": 10200
    },
    "text": "Barrels. Someone's lit a candle on one of them."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "push-rack",
+   "zone": {
+    "x0": 2720,
+    "z0": 5950,
+    "x1": 3740,
+    "z1": 8500
+   }
   }
  ],
  "entry": "Candles. Someone's down here.",

@@ -133,34 +133,34 @@
   },
   {
    "shape": "circle",
-   "x0": 4146,
-   "z0": 24818,
-   "x1": 6872,
-   "z1": 27138,
+   "x0": 4104,
+   "z0": 24834,
+   "x1": 6932,
+   "z1": 27137,
    "name": "Mossy rock"
   },
   {
    "shape": "circle",
-   "x0": 27166,
-   "z0": 1999,
-   "x1": 29951,
-   "z1": 4711,
+   "x0": 27031,
+   "z0": 2062,
+   "x1": 29964,
+   "z1": 4909,
    "name": "Mossy rock.001"
   },
   {
    "shape": "circle",
-   "x0": 22080,
-   "z0": 10368,
-   "x1": 24151,
-   "z1": 12163,
+   "x0": 22086,
+   "z0": 10320,
+   "x1": 24174,
+   "z1": 12082,
    "name": "Mossy rock.002"
   },
   {
    "shape": "circle",
-   "x0": 12407,
-   "z0": 23885,
-   "x1": 14839,
-   "z1": 25832,
+   "x0": 12426,
+   "z0": 23904,
+   "x1": 14764,
+   "z1": 25746,
    "name": "Mossy rock.003"
   },
   {
@@ -304,6 +304,8 @@
    "text": "The pylon's ladder. There's blood at the foot of it,\ndripping from somewhere up above."
   }
  ],
+ "items": [],
+ "spots": [],
  "entry": "Down. Smoke in the west.\nThat could be the helicopter.",
  "notes": [
   "from the north-west corner: the pylon's foot, the fork and its signpost, the hiker beyond",

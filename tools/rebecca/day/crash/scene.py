@@ -206,7 +206,7 @@ def build():
     room.camera((15.2, 12.8, 3.8), (20.6, 8.0, 0.0), 200, "from the clearing's south-east: into the burnt swath, the snapped trunks, the blade sunk in one")
     room.camera((23.4, 8.6, 3.4), (16.4, 9.2, 0.3), 200, "from the swath's far end: back through the burnt trunks to the helicopter in the clearing")
 
-    navy = reb.mat_surface("Bravo navy", [(0.0, (0.02, 0.026, 0.045)), (0.75, (0.045, 0.055, 0.085)), (1.0, (0.09, 0.08, 0.07))], scale=3, rough=0.4, bump=0.1)
+    navy = reb.mat_surface("Bravo navy", [(0.0, (0.03, 0.038, 0.062)), (0.75, (0.06, 0.072, 0.11)), (1.0, (0.1, 0.09, 0.08))], scale=3, rough=0.4, bump=0.1)
     scorched = reb.mat_surface("Scorched paint", [(0.0, (0.01, 0.01, 0.01)), (0.7, (0.04, 0.035, 0.03)), (1.0, (0.1, 0.06, 0.03))], scale=6, rough=0.8, bump=0.4)
     cabin_dark = reb.mat_plain("Cabin dark", (0.025, 0.025, 0.028), 0.8)
     seat_m = reb.mat_surface("Seat vinyl", [(0.0, (0.03, 0.03, 0.03)), (1.0, (0.07, 0.065, 0.06))], scale=10, rough=0.5, bump=0.2)
@@ -241,23 +241,35 @@ def build():
         parts.append(ob)
         return ob
 
-    # Cabin shell: floor, roof, north side, back, the south side open at the pilot's door and the cargo door.
-    P(reb.prim("cube", "Cabin floor", cabin_dark, H(0.25, 0, 0.5), (3.7, 1.8, 0.1)))
-    P(reb.prim("cube", "Belly", navy, H(0.25, 0, 0.38), (3.8, 1.8, 0.2), bevel=0.06))
-    P(reb.prim("cube", "Roof", navy, H(0.4, 0, 2.0), (3.4, 1.8, 0.1), bevel=0.05))
-    P(reb.prim("cube", "North side", navy, H(0.25, -0.88, 1.25), (3.7, 0.06, 1.5)))
-    P(reb.prim("cube", "Back bulkhead", navy, H(2.08, 0, 1.25), (0.08, 1.8, 1.6)))
-    P(reb.prim("cube", "Door pillar", navy, H(0.3, 0.88, 1.25), (0.14, 0.06, 1.5)))
-    P(reb.prim("cube", "South side, aft", navy, H(1.75, 0.88, 1.25), (0.66, 0.06, 1.5)))
-    P(reb.prim("cube", "Cargo door, slid back", navy, H(2.35, 0.96, 1.2), (1.3, 0.05, 1.4)))
+    # The airframe: one smooth shell from the nose to the bulkhead behind the
+    # cargo bay, glazed over the nose and down to the chin, windows down the
+    # north side, open on the south where the pilot's door was torn off and the
+    # cargo door slid back.
+    P(reb.prim("cube", "Cabin floor", cabin_dark, H(0.25, 0, 0.5), (3.7, 1.7, 0.1)))
+    sections = [(-2.62, 0.06, 0.98, 1.08, 2.0), (-2.5, 0.42, 0.66, 1.42, 2.2), (-2.25, 0.7, 0.5, 1.72, 2.4),
+                (-1.85, 0.85, 0.43, 1.92, 2.8), (-1.25, 0.9, 0.4, 2.02, 3.2), (-0.4, 0.9, 0.38, 2.03, 3.6),
+                (0.6, 0.9, 0.38, 2.03, 3.6), (1.5, 0.89, 0.4, 2.0, 3.4), (2.0, 0.8, 0.55, 1.95, 3.0), (2.12, 0.66, 0.75, 1.88, 2.6)]
+
+    def glazing(c):
+        x, y, z = c
+        if x < -1.05 and z > 1.0 - 0.3 * (x < -1.9):
+            return 1   # the canopy and the chin windows
+        if y < -0.5 and 1.3 < z < 1.8 and any(a < x < a + 0.55 for a in (-0.95, -0.15, 0.6)):
+            return 1   # windows down the north side
+        return 0
+
+    def doorways(c):
+        x, y, z = c
+        return y > 0.45 and 0.5 < z < 1.88 and (-1.2 < x < 0.22 or 0.38 < x < 1.42)
+
+    shell = kit.loft("Fuselage", sections, [navy, canopy, cabin_dark], ring=36, material_of=glazing, holes=doorways, shell=0.045)
+    shell.location = (C.x, C.y, 0.0)
+    P(shell)
+    P(reb.prim("cube", "Door pillar", navy, H(0.3, 0.86, 1.22), (0.14, 0.07, 1.42), bevel=0.02))
+    P(reb.prim("cube", "Cargo door, slid back", navy, H(2.0, 0.97, 1.2), (1.1, 0.05, 1.36), bevel=0.02))
+    P(reb.prim("cube", "Cargo door window", canopy, H(2.0, 1.0, 1.55), (0.6, 0.01, 0.45)))
     P(reb.prim("cube", "Door rail", mat("steel"), H(1.2, 0.93, 1.95), (2.8, 0.04, 0.04)))
-    P(reb.prim("cube", "Cabin inside", cabin_dark, H(0.3, -0.84, 1.25), (3.5, 0.02, 1.4)))
-    for x in (-0.95, -0.15, 0.6):
-        P(reb.prim("cube", "Window, north", canopy, H(x, -0.9, 1.55), (0.55, 0.02, 0.45)))
-    # Nose and the starred canopy.
-    P(reb.prim("sphere", "Nose", navy, H(-1.75, 0, 0.8), (1.6, 1.72, 0.85), segments=20))
-    P(reb.prim("sphere", "Canopy", canopy, H(-1.55, 0, 1.38), (1.4, 1.66, 1.12), segments=20))
-    P(reb.prim("cube", "Canopy frame", navy, H(-1.5, 0, 1.45), (1.2, 0.06, 1.0), rot=(0, 0.6, 0)))
+    P(reb.prim("cube", "Canopy frame", navy, H(-1.6, 0, 1.6), (1.6, 0.05, 0.06), rot=(0, 0.42, 0)))
     P(reb.prim("cube", "Console", cabin_dark, H(-1.1, 0, 0.95), (0.5, 1.5, 0.5), rot=(0, 0.35, 0)))
     hub = Vector(H(-2.15, 0.35, 1.5))
     for i in range(12):
@@ -266,7 +278,11 @@ def build():
         P(kit.rod("Crack", reb.mat_plain("Crack", (0.7, 0.72, 0.75), 0.3), hub, hub + d, 0.003, 4))
     P(kit.splat("Blood on the canopy", mat("blood"), H(-2.05, 0.45, 1.35), 0.12, rot=(0, -1.2, 0), seed=11, stretch=(1.0, 1.5)))
     # Engine housing on the roof, scorched, its exhaust smoking; the mast and rotor head.
-    P(reb.prim("cube", "Engine housing", navy, H(1.0, 0, 2.32), (2.0, 1.1, 0.55), bevel=0.12))
+    cowl = kit.loft("Engine housing", [(-0.05, 0.3, 1.98, 2.1, 2.5), (0.2, 0.52, 1.98, 2.45, 3.0), (1.4, 0.55, 1.98, 2.62, 3.0), (2.0, 0.42, 1.98, 2.5, 2.6), (2.25, 0.2, 2.1, 2.42, 2.2)], [navy], ring=24)
+    cowl.location = (C.x, C.y, 0.0)
+    P(cowl)
+    for dy in (-1, 1):
+        P(reb.prim("cube", "Cowl louvres", cabin_dark, H(0.9, dy * 0.54, 2.3), (0.6, 0.02, 0.14)))
     P(reb.prim("cube", "Engine cowl, burst", scorched, H(1.55, 0.35, 2.45), (0.9, 0.5, 0.35), rot=(0.5, 0, 0.2), bevel=0.04))
     for dy in (-0.3, 0.3):
         P(kit.rod("Exhaust", scorched, H(1.9, dy, 2.4), H(2.4, dy * 1.3, 2.55), 0.11, 10))
@@ -290,14 +306,16 @@ def build():
         p.matrix_parent_inverse = blade_pivot.matrix_world.inverted()
     blade_pivot.rotation_euler = (0, 0, 2.3)
     P(blade_pivot)
-    # Skids: the north one buckled under her.
-    for dy, sag in ((-0.85, 0.12), (0.85, 0.0)):
-        P(kit.rod("Skid", mat("steel"), H(-1.6, dy, 0.1 - sag), H(1.9, dy, 0.08), 0.045))
-        P(kit.rod("Skid toe", mat("steel"), H(-1.6, dy, 0.1 - sag), H(-1.9, dy, 0.3), 0.045))
-        for x in (-0.8, 1.2):
-            P(kit.rod("Skid strut", mat("steel"), H(x, dy, 0.1 - sag * 0.5), H(x, dy * 0.7, 0.4), 0.04))
+    # Skids: the north one buckled under her. Each a tube curling up at the toe, on two bent cross tubes.
+    for dy, sag in ((-0.95, 0.12), (0.95, 0.0)):
+        toe = [H(1.9, dy, 0.08), H(-1.2, dy, 0.1 - sag), H(-1.75, dy, 0.14 - sag), H(-2.0, dy, 0.32)]
+        P(kit.tube("Skid", mat("steel"), toe, 0.045))
+    for x in (-0.8, 1.2):
+        P(kit.tube("Cross tube", mat("steel"), [H(x, -0.95, 0.1), H(x, -0.8, 0.42), H(x, -0.4, 0.45), H(x, 0.4, 0.45), H(x, 0.8, 0.42), H(x, 0.95, 0.1)], 0.04))
     # The tail boom's stump, torn off behind the cabin.
-    P(kit.rod("Tail boom stump", navy, H(2.1, 0, 1.55), H(3.9, 0, 1.75), 0.32, 12))
+    stump = kit.loft("Tail boom stump", [(2.0, 0.5, 1.15, 1.95, 2.4), (2.6, 0.34, 1.35, 1.95, 2.2), (3.9, 0.28, 1.5, 2.0, 2.0)], [navy], ring=20)
+    stump.location = (C.x, C.y, 0.0)
+    P(stump)
     P(reb.prim("cone", "Torn end", scorched, H(4.0, 0, 1.76), (0.62, 0.62, 0.25), rot=(0, math.pi / 2, 0), top=0.7, segments=12))
     for i in range(5):
         a = rng.uniform(0, 2 * math.pi)
@@ -345,7 +363,7 @@ def build():
         p.matrix_parent_inverse = root.matrix_world.inverted()
     root.rotation_euler = (0.07, -0.05, 0.12)
     bpy.context.view_layer.update()
-    for name in ("Belly", "Roof", "North side", "Back bulkhead", "South side, aft", "Nose", "Canopy", "Engine housing", "Tail boom stump", "Cargo door, slid back", "Door pillar"):
+    for name in ("Fuselage", "Engine housing", "Tail boom stump", "Cargo door, slid back", "Door pillar"):
         reb.mask(bpy.data.objects[name])
     reb.wall(reb.prim("cube", "Cabin footprint", None, (9.6, 7.5, 0.5), (4.6, 1.8, 1.0), rot=(0, 0, 0.12))).hide_render = True
     reb.wall(reb.prim("cube", "Boom footprint", None, (12.4, 7.85, 0.5), (1.6, 0.7, 1.0), rot=(0, 0, 0.12))).hide_render = True
@@ -369,6 +387,8 @@ def build():
     kit.shards("Perspex by the nose", (6.6, 7.0, height(6.6, 7.0)), spread=0.8, count=20, seed=4)
     # The pilot's door, torn off and lying on its face.
     reb.prim("cube", "Pilot's door", navy, (7.6, 10.2, height(7.6, 10.2) + 0.04), (1.1, 0.06, 1.3), rot=(math.pi / 2 - 0.05, 0, 0.4))
+    # The crowbar, by the torn-off door (crowbar).
+    room.item("crowbar", (7.0, 10.9, height(7.0, 10.9)))
 
     # ---- Where Bravo patched themselves up: the medkit, the gauze, the cases, the radio, a flare.
     def gz(x, y):

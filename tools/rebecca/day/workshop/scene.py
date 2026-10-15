@@ -167,6 +167,8 @@ def build():
     bench = kit.table("Workbench", bench_m, (1.38, 3.7, 0.0), size=(0.7, 3.2, 0.9))
     reb.mask(reb.wall(bench))
     reb.prim("cube", "Bench shelf", bench_m, (1.38, 3.7, 0.25), (0.62, 3.1, 0.03))
+    # The spare drive cog, on the bench (cog).
+    room.item("cog", (1.38, 3.2, 0.9))
     vice = [reb.prim("cube", "vice body", mat("green paint"), (1.6, 2.6, 0.98), (0.2, 0.25, 0.14)),
             reb.prim("cube", "vice jaw", mat("green paint"), (1.78, 2.6, 0.98), (0.06, 0.25, 0.14)),
             kit.rod("vice screw", mat("steel"), (1.6, 2.6, 0.97), (1.95, 2.6, 0.97), 0.015, 6),

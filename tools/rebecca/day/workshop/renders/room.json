@@ -223,6 +223,15 @@
    "text": "He barred the door from inside. The bar's been broken.\nFrom this side."
   }
  ],
+ "items": [
+  {
+   "step": "cog",
+   "x": 2346,
+   "y": -1530,
+   "z": 5440
+  }
+ ],
+ "spots": [],
  "entry": "Oil and something worse.",
  "notes": [
   "high in the south-west corner over Gus's mattress: the door, the engine on the hoist, the cable sparking",

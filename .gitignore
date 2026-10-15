@@ -20,3 +20,5 @@ dist/
 config.ini
 re1.lock.audit/
 __pycache__/
+# Her items' exported models and baked textures (tools/rebecca/items/render-items.ts makes them).
+tools/rebecca/items/models/

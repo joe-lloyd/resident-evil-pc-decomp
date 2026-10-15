@@ -336,21 +336,24 @@
   },
   {
    "zone": {
-    "x0": 29920,
-    "z0": 13600,
-    "x1": 32300,
-    "z1": 15300
-   },
-   "text": "LINE TRACK. STAFF ONLY. The gondola station's through the gate."
-  },
-  {
-   "zone": {
     "x0": 1700,
     "z0": 8840,
     "x1": 3060,
     "z1": 10370
    },
    "text": "The switch house. A handprint in blood on the door frame."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "line-gate",
+   "zone": {
+    "x0": 29920,
+    "z0": 13600,
+    "x1": 32300,
+    "z1": 15300
+   }
   }
  ],
  "entry": "The power line. Not a hum from it.",

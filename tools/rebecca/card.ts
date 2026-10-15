@@ -64,7 +64,7 @@ export function buildCardSheet(selectB: Uint8Array, statface: Uint8Array, letter
   if (sheet.bpp !== 16 || sheet.width !== SHEET || sheet.height !== SHEET) throw new Error('Select_b.tim is not the 256 x 256 16 bpp sheet');
   if (faces.bpp !== 8 || !faces.clut) throw new Error('Statface.tim is not an 8 bpp TIM with a palette');
   if (lettering.width !== ID_W || lettering.height !== ID_H) throw new Error(`the lettering must be ${ID_W} x ${ID_H}`);
-  const out = selectB.slice();
+  const out = Uint8Array.from(selectB); // a copy: a Node Buffer's slice() is a view of the caller's bytes
   const ov = new DataView(out.buffer, out.byteOffset, out.byteLength);
   const at = (x: number, y: number) => sheet.pixels + (y * SHEET + x) * 2;
   const get = (x: number, y: number) => ov.getUint16(at(REBECCA_ID.x + x, REBECCA_ID.y + y), true);
