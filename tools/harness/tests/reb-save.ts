@@ -8,7 +8,8 @@
 //
 //   OVERLAY=<REB build> PORT=7820 RE1_LAB_GAME_DIR='D:\Games\RE1-ch1' node tools/harness/tests/reb-save.ts
 //
-// It deletes slot 1 of that game folder's SAVE first, and saves there.
+// It deletes slot 1 of that game folder's SAVE first, saves there, and
+// deletes it again at the end.
 import path from 'node:path';
 import { mkdirSync, readFileSync } from 'node:fs';
 import { fetch, open, remove } from '../lab.ts';
@@ -143,6 +144,9 @@ try {
   expect(qty(s, INK_RIBBON) === 2, `${qty(s, INK_RIBBON)} ink ribbons after loading, expected 2`);
 } finally {
   session.end();
+  // Leave no save behind: with one on disk the title starts on LOAD GAME,
+  // and tests that start a new game expect NEW GAME.
+  remove(slot1);
 }
 if (failures.length) {
   console.error(`FAIL\n  ${failures.join('\n  ')}`);
