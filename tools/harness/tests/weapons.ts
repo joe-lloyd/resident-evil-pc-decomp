@@ -14,14 +14,14 @@ import { snapshot } from '../snapshot.ts';
 const outDir = process.argv[2] ?? '/tmp/rebecca-weapons-game';
 const ITEM = { knife: 0x01, beretta: 0x02, shotgun: 0x03, magnum: 0x05 } as const;
 
-// After the gives, her six slots are: Beretta, its clip, knife, shotgun,
-// Magnum. The menu shows them two to a row and opens with the cursor on the
-// first slot.
+// The menu shows her slots two to a row and opens with the cursor on the
+// first. Each weapon's slot is read from her case after the gives: what she
+// starts with (day/gear.ts) decides where they land.
 const weapons = [
-  { name: 'knife', item: ITEM.knife, slot: 2 },
-  { name: 'beretta', item: ITEM.beretta, slot: 0 },
-  { name: 'shotgun', item: ITEM.shotgun, slot: 3 },
-  { name: 'magnum', item: ITEM.magnum, slot: 4 },
+  { name: 'knife', item: ITEM.knife },
+  { name: 'beretta', item: ITEM.beretta },
+  { name: 'shotgun', item: ITEM.shotgun },
+  { name: 'magnum', item: ITEM.magnum },
 ] as const;
 
 const session = await open(Number(process.env.PORT ?? 7811), '--mode REB --boot rebecca:2:20');
@@ -30,18 +30,23 @@ const failed: string[] = [];
 try {
   await link.waitFor((s) => s.play, 'gameplay', 120_000);
   await settle(link);
-  await link.give(ITEM.knife, 1);
-  await link.give(ITEM.shotgun, 7);
-  await link.give(ITEM.magnum, 6);
+  for (const [id, qty] of [[ITEM.knife, 1], [ITEM.shotgun, 7], [ITEM.magnum, 6]] as const) {
+    if (!(await link.state()).items.some((it) => it.id === id)) await link.give(id, qty);
+  }
   await link.frames(10);
   for (const w of weapons) {
+    const slot = (await link.state()).items.findIndex((it) => it.id === w.item);
+    if (slot < 0) {
+      failed.push(`${w.name}: not in her case`);
+      continue;
+    }
     await link.tap(Key.menu, 3);
     await link.frames(50);
-    for (let i = 0; i < w.slot >> 1; i++) {
+    for (let i = 0; i < slot >> 1; i++) {
       await link.tap(Key.down, 2);
       await link.frames(8);
     }
-    if (w.slot & 1) {
+    if (slot & 1) {
       await link.tap(Key.right, 2);
       await link.frames(8);
     }

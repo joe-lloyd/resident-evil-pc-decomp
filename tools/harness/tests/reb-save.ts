@@ -67,8 +67,8 @@ try {
   log(s, 'took the ribbons');
 
   // The item box: its lid swings open, then the box screen, her bag on the right and the box's list on
-  // the left. Pick the spray in her bag (slot 2, the second row), then the
-  // box's empty row above its first item, and swap them.
+  // the left. Pick the spray in her bag (two slots to a row, the cursor on
+  // the first), then the box's empty row above its first item, and swap them.
   s = await approach(link, BOX);
   await picture(link, 'reb-save-box-shut');
   await link.tap(Key.action, 3);
@@ -77,7 +77,9 @@ try {
   s = await link.waitFor((st) => screen(st) === 'menu', 'the box screen', 20_000);
   await link.frames(30);
   await picture(link, 'reb-save-box');
-  for (const key of [Key.down, Key.action, Key.up, Key.action]) {
+  const spray = s.items.findIndex((i) => i.id === FIRST_AID_SPRAY);
+  const toSpray = [...Array<number>(spray >> 1).fill(Key.down), ...(spray & 1 ? [Key.right] : [])];
+  for (const key of [...toSpray, Key.action, Key.up, Key.action]) {
     await link.tap(key, 3);
     await link.frames(20);
   }

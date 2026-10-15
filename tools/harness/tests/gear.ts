@@ -54,8 +54,9 @@ try {
   expect([BERETTA, CLIP, KNIFE].every((id) => ids(s).includes(id)), `she starts with her Beretta, a clip and her knife (has ${ids(s).join(', ')})`);
   expect(s.player.weapon !== 0, 'she starts with a gun in her hands');
 
-  // Two sprays, in two slots: the mine takes both (remove_item takes one slot at a time).
-  for (const id of [SPRAY, SPRAY, GREEN_HERB, COG]) await link.give(id, 1);
+  // Two sprays, in two slots: the mine takes both (remove_item takes one slot
+  // at a time). With her knife, Beretta and clip that fills her six slots.
+  for (const id of [SPRAY, SPRAY, COG]) await link.give(id, 1);
   const gallery = room('gallery');
   await link.room(gallery.stage, gallery.room);
   s = await settle(link, (st) => st.stage === gallery.stage && st.room === gallery.room, 30_000);
