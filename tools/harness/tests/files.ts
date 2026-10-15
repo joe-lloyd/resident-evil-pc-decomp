@@ -12,7 +12,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { open } from '../lab.ts';
 import { Key, type GameLink } from '../link.ts';
-import { approach, fight, settle, useRoomData } from '../flows.ts';
+import { DiedError, approach, fight, settle, useRoomData } from '../flows.ts';
 import { snapshot } from '../snapshot.ts';
 import { readPng, type Image } from '../image.ts';
 import type { GameState } from '../state.ts';
@@ -149,7 +149,11 @@ try {
       // only peck.
       if (s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && e.type !== CROW)) {
         await link.give(CLIP, 30);
-        await fight(link, { ignore: [CROW] });
+        // One far down a long room can outlast the fight; then go for the pickup anyway.
+        await fight(link, { ignore: [CROW], timeoutMs: 240_000 }).catch((err: Error) => {
+          if (err instanceof DiedError) throw err;
+          console.log(`      ${r.doc.id}: ${err.message}; going for the pickup`);
+        });
         await settle(link);
       }
       // Stand her a step from the pickup first, so the walk to it is short
