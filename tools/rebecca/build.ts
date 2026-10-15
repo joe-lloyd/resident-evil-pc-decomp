@@ -25,6 +25,9 @@ import { saveRoomFiles } from './saveroom/patch.ts';
 import { buildIconSheet, globalsCpp, iconRows } from './items/sheet.ts';
 import { itemView, itemViewFiles, menuDataCpp, readItemModel } from './items/tmd.ts';
 import { KEY_ITEMS } from './items/items.ts';
+import { CUES } from './plan/music.ts';
+import { day } from './plan/day.ts';
+import { musicFile, musicTable, setRoomStates } from './music/table.ts';
 
 /**
  * Where a new game in REB mode starts (stage counts from 0, as in the debug
@@ -79,6 +82,10 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   card.writeInt16LE(start.z, 0x22e);
   card.writeInt16LE(start.angle, 0x230);
   for (const index of killedAtStart) setFlag(card, CARD_ENEMY_FLAGS, index);
+  // Her rooms' music (music/table.ts): each room's state plays its cue's group, or is silent.
+  const renders = path.join(here, 'music', 'renders');
+  const music = musicTable(CUES, day.places, dayRooms, (sketch) => existsSync(path.join(renders, `${sketch}.wav`)));
+  setRoomStates(card, music);
   mkdirSync(path.join(reb, 'DATA'), { recursive: true });
   writeFileSync(path.join(reb, 'DATA', 'BIO_CARD.DAT'), card);
   written.push('DATA/BIO_CARD.DAT');
@@ -141,6 +148,17 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
     writeFileSync(path.join(reb, 'sound', name), bytes);
     written.push(`sound/${name}`);
   }
+  // Her music table, and our renders it plays. RE1's own files, such as the
+  // save room's Bgm_31, stay the player's: the table only names them.
+  writeFileSync(path.join(reb, 'sound', 'music.dat'), musicFile(music));
+  written.push('sound/music.dat');
+  for (const g of music.groups) {
+    if (!g.render) continue;
+    writeFileSync(path.join(reb, 'sound', `${g.file}.wav`), readFileSync(path.join(renders, `${g.render}.wav`)));
+    written.push(`sound/${g.file}.wav`);
+  }
+  const unrendered = CUES.filter((c) => c.kind === 'new' && c.places.length && !music.groups.some((g) => g.cue === c.id));
+  if (unrendered.length) console.warn(`music: no render yet, so silent: ${unrendered.map((c) => c.id).join(', ')}`);
 
   // The people of her day: the player's own character models with our skins (npc/people.ts).
   const enemyDir = findFile(baseDir, 'enemy');
