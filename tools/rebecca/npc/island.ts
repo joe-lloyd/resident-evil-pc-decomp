@@ -82,7 +82,7 @@ export function ownIsland(tmd: Uint8Array, island: Island): Uint8Array {
     const touching = pieces.filter((piece) => piece.some((j) => [...covers[i]!].some((k) => covers[j]!.has(k))));
     pieces.splice(0, pieces.length, ...pieces.filter((piece) => !touching.includes(piece)), [i, ...touching.flat()]);
   }
-  const out = tmd.slice();
+  const out = Uint8Array.from(tmd);
   const view = new DataView(out.buffer, out.byteOffset, out.byteLength);
   /** Move a piece to free texels in either half; false when nowhere fits. */
   const move = (piece: number[]): boolean => {

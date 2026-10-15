@@ -49,7 +49,8 @@ export const people: readonly Person[] = [
  * length is the lowest frame offset any entry holds.
  */
 export function idleFirst(edd: Uint8Array, idle: number): Uint8Array {
-  const out = edd.slice();
+  // A copy: a Node Buffer's slice() is a view, and the first set would overwrite entry 0 before it moves.
+  const out = Uint8Array.from(edd);
   out.set(edd.subarray(idle * 4, idle * 4 + 4), 0);
   out.set(edd.subarray(0, 4), idle * 4);
   return out;

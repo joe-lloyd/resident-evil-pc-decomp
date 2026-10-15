@@ -74,6 +74,8 @@ function changed(a: Image, b: Image, r: ReturnType<typeof box>): number {
 
 const session = await open(Number(process.env.PORT ?? 7811), '--mode REB --boot rebecca:2:20');
 const link = session.link;
+/** Frames before the cabin's background animation repeats: 16 frames, three ticks each. */
+const BACKDROP_LOOP = 48;
 const failed: string[] = [];
 try {
   await link.waitFor((s) => s.play, 'gameplay', 120_000);
@@ -92,10 +94,13 @@ try {
     if (seen.has(here.camera)) continue;
     seen.add(here.camera);
     await snapshot(link, outDir, `cam${here.camera}`);
-    // A second of the idle, every fourth frame.
+    // The idle, sampled a background-loop apart: the cabin's backdrop (its
+    // curtain moves) repeats every 48 frames, so between samples only the
+    // actor has changed. Their idle loop is 40 frames, so each sample still
+    // catches it at a different point.
     const frames: Image[] = [];
-    for (let i = 0; i < 8; i++) {
-      await link.frames(4);
+    for (let i = 0; i < 6; i++) {
+      await link.frames(BACKDROP_LOOP);
       frames.push(readPng(await snapshot(link, outDir, `cam${here.camera}-idle${i}`)));
     }
     const cam = room.cameras[here.camera]!;
