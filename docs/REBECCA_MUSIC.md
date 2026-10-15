@@ -84,6 +84,43 @@ The owner's page is <https://home.arpa/research/rebecca-music/>.
   write the WAV, all in Node. It is more work, but it is ours and needs no
   browser.
 
+## RE1's own music as a reference
+
+To write in RE1's manner, we have RE1's music in the same language: every
+track on the PS1 disc as Strudel code, to read beside ours and to play. The
+owner's page is <https://home.arpa/research/re1-music/>.
+
+- **Where it comes from.** The PS1 disc keeps each room group's music as one
+  `SOUND/SEPxx.HSB`: a VAB sound bank, a SEP file of up to three MIDI-like
+  sequences (the PC port's three channels), and the bank's samples. `rae
+  music` in retro-archive-explorer reads them. Of the 57 files, 97
+  sequences have notes: 64 are music and 33 are sound loops. 50 of them
+  come within 5% of the length of the PC port's WAV for the same track.
+- **How it is written.** `tools/rebecca/music/re1.ts` writes one `.js` per
+  sequence:
+  - One cycle is one bar. Each voice is mini-notation weighted in the
+    sequence's own ticks, so the timing is exact.
+  - The instruments are the game's samples, keyed at their centre note and
+    looped where the bank loops them.
+  - Envelopes are worked out from the bank's ADSR, so they are close, not
+    exact.
+  - Pitch bends and the SPU's reverb are not reproduced, so leads that
+    slide in the game hold still.
+- **The proof.** `tools/rebecca/music/re1-check.ts` evaluates every track
+  with Strudel's engine and compares each note's start, length and pitch
+  with the disc, as exact fractions. All 97 tracks, 17,010 notes, match. A
+  converter tampered to shorten one note length fails 34 tracks.
+- **It stays off GitHub.** It is Capcom's music, from the player's disc.
+  Both repositories are public, so only the tools are committed. The output
+  is built locally and published on the LAN:
+
+      pnpm rae music re1.img /tmp/re1-music          # in retro-archive-explorer
+      node tools/rebecca/music/re1.ts /tmp/re1-music /tmp/re1-strudel
+      node tools/rebecca/music/page-re1.ts /tmp/re1-strudel <@strudel/web 1.2.5 dist>
+
+  The page plays the code with Strudel's own browser build, hosted beside
+  it. strudel.cc can't load samples from the home network.
+
 ## The sketches
 
 All three are in `tools/rebecca/music/sketches/` and are checked by `check.ts`.

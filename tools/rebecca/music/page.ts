@@ -71,6 +71,7 @@ ol li,ul li{margin:.35em 0}
 <div class="sketches">${sketches}</div>
 
 <h2>What makes RE1 sound like RE1</h2>
+<p>Hear it for yourself: <a href="../re1-music/">every track of RE1's music written out as Strudel code</a>, note for note from your PS1 disc, with the game's own instruments. Read its code beside ours.</p>
 <ul>
 <li>It was written in MIDI and played on the PlayStation over a tiny bank of samples: music got 256 KB. That is where the sound comes from: short looped samples at low quality, dull blurred reverb, a bit of grit.</li>
 <li>Many rooms have no music at all, only wind, a clock, footsteps. The silence does as much as the music.</li>

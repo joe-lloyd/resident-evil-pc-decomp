@@ -55,6 +55,7 @@ const STATUS: Record<string, Status> = {
   'music-research': 'done',
   'music-plan': 'done',
   'music-sketches': 'doing',
+  'music-re1': 'done',
   'saves-plan': 'done',
 };
 
@@ -317,6 +318,7 @@ export function sections(plan: Plan, facts: Facts): Section[] {
       items: [
         row('music-research', 'How RE1 plays music, and how we make ours, written up (docs/REBECCA_MUSIC.md)'),
         row('music-plan', 'A cue for every room and cutscene, checked against the plan (music.ts)'),
+        row('music-re1', "RE1's own music as Strudel code, note for note, to learn from (LAN only)", '97 tracks from the PS1 disc, checked against it by re1-check.ts'),
         row('music-sketches', 'Sketches to listen to in Strudel, and the owner\'s verdict on the sound'),
         row('music-render', 'A render step: a pattern in, a WAV out, with the PS1 treatment, the same every time'),
         row('music-loop', 'Loop points written into each WAV, so an intro plays once and the rest loops'),
