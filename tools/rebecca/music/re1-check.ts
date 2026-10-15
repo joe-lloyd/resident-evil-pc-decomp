@@ -39,6 +39,17 @@ Object.assign(globalThis, { samples: () => {}, setcpm: () => {} });
 
 interface Hap { whole: { begin: { mul(n: number): { valueOf(): number } }; end: { mul(n: number): { valueOf(): number } } }; value: { note: string; s: string; gain: unknown } }
 
+/** What is left of `a` once each item of `b` takes one equal item out of it. */
+const less = (a: readonly string[], b: readonly string[]) => {
+  const left = new Map<string, number>();
+  for (const x of b) left.set(x, (left.get(x) ?? 0) + 1);
+  return a.filter((x) => {
+    const n = left.get(x) ?? 0;
+    left.set(x, n - 1);
+    return n <= 0;
+  });
+};
+
 let tracks = 0;
 let notes = 0;
 const failures: string[] = [];
@@ -78,8 +89,9 @@ for (const file of readdirSync(input).filter((f) => /^SEP[0-9A-F]{2}\.json$/.tes
         .map((n) => key(n.tick - start, Math.max(1, Math.min(n.length, end - n.tick)), noteName(n.key), n.sound))
         .sort();
       notes += want.length;
-      const missing = want.filter((w) => !got.includes(w));
-      const extra = got.filter((g) => !want.includes(g));
+      // As multisets: a note the disc plays twice must play twice, and once only once.
+      const missing = less(want, got);
+      const extra = less(got, want);
       if (missing.length || extra.length || silent) failures.push(`${t.id}: ${missing.length} missing (${missing.slice(0, 2).join('; ')}), ${extra.length} extra (${extra.slice(0, 2).join('; ')}), ${silent} with no gain`);
     }
   }
