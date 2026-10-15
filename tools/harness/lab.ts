@@ -7,6 +7,9 @@
 // RE1_LAB_USER      Windows user that owns the desktop session (default: joell)
 // RE1_LAB_REPO_DIR  clone of this fork on that machine, with a `fork` remote (default: C:\Users\joell\Tools\re1-decomp)
 import { spawn, execFileSync, type ChildProcess } from 'node:child_process';
+import { rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { GameLink } from './link.ts';
 
 const host = process.env.RE1_LAB_HOST ?? 'jellybingus';
@@ -121,10 +124,31 @@ export function buildAndDeploy(branch: string): string[] {
   return lines.includes('DEPLOYED') ? [] : lines;
 }
 
-/** Replace the game folder's `name` overlay (e.g. REB) with a local build of it. */
+/**
+ * Replace the game folder's `name` overlay (e.g. REB) with a local build of
+ * it. It goes over as one archive, about a third of its size and one file
+ * where scp -r sends hundreds, and the old overlay is only removed once the
+ * archive is there.
+ */
 export function deployOverlay(localOverlayDir: string, name = 'REB'): void {
-  powershell(`if (Test-Path '${gameDir}\\${name}') { Remove-Item -Recurse -Force '${gameDir}\\${name}' }`);
-  execFileSync('scp', ['-q', '-r', '-o', 'BatchMode=yes', localOverlayDir, `${host}:${gameDir.replace(/\\/g, '/')}/${name}`]);
+  const archive = path.join(tmpdir(), `${name}-${process.pid}.tgz`);
+  const remote = `${gameDir}\\${name}.upload.tgz`;
+  const unpacked = `${gameDir}\\${name}.upload`;
+  execFileSync('tar', ['czf', archive, '-C', path.dirname(localOverlayDir), path.basename(localOverlayDir)]);
+  try {
+    execFileSync('scp', ['-q', '-o', 'BatchMode=yes', archive, `${host}:${remote.replace(/\\/g, '/')}`]);
+  } finally {
+    rmSync(archive, { force: true });
+  }
+  powershell(`
+    $ErrorActionPreference = 'Stop'
+    if (Test-Path '${unpacked}') { Remove-Item -Recurse -Force '${unpacked}' }
+    New-Item -ItemType Directory '${unpacked}' | Out-Null
+    tar -xzf '${remote}' -C '${unpacked}'
+    if (Test-Path '${gameDir}\\${name}') { Remove-Item -Recurse -Force '${gameDir}\\${name}' }
+    Move-Item '${unpacked}\\${path.basename(localOverlayDir)}' '${gameDir}\\${name}'
+    Remove-Item -Recurse -Force '${unpacked}', '${remote}'
+  `);
 }
 
 /** Delete a file on the game machine, if it is there. */
