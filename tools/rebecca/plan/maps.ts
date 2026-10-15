@@ -28,6 +28,30 @@ export interface MapItem {
 /** RE1's map screen slots. */
 export const AREA_SLOTS = 11;
 export const MAP_ITEM_SLOTS = 6;
+/** RE1's first map item; her maps are it and the ones after, in MAP_ITEMS order. */
+export const FIRST_MAP_ITEM = 0x4e;
+/** The overview's stages (RE1's map0d, map0c, map00, map0e), and the areas each lists. */
+export const STAGE_SLOTS = 4;
+export const AREAS_PER_STAGE = 4;
+
+export interface Stage {
+  /** Its name under the overview. */
+  readonly name: string;
+  /** Its areas, in the order up and down step through them. */
+  readonly areas: readonly string[];
+}
+
+/**
+ * The overview of the mountain unlocks in four stages, as RE1's does (the
+ * mansion; the courtyard; the guardhouse; the lab): each shows its places on
+ * the mountain once she has been in one of its areas, and the stages before.
+ */
+export const STAGES: readonly Stage[] = [
+  { name: 'Ranger Station', areas: ['station', 'summit'] },
+  { name: 'The Mountain', areas: ['camp', 'road', 'quarry', 'mine'] },
+  { name: 'The Valley', areas: ['skyway', 'valley'] },
+  { name: 'Spencer Estate', areas: ['grounds', 'cellar', 'mansion'] },
+];
 
 export const AREAS: readonly Area[] = [
   { id: 'station', name: 'Ranger Station', places: ['ridge', 'trail', 'yard', 'cabin', 'shed', 'woods', 'den', 'bridge', 'platform', 'booth'] },
@@ -66,6 +90,12 @@ export function checkMaps(plan: Plan): string[] {
     }
   }
   for (const p of plan.places) if (!areaOf.has(p.id)) errors.push(`${p.id} is on no map`);
+  if (STAGES.length > STAGE_SLOTS) errors.push(`${STAGES.length} overview stages, but the map screen has ${STAGE_SLOTS}`);
+  for (const st of STAGES) if (st.areas.length > AREAS_PER_STAGE) errors.push(`${st.name} has ${st.areas.length} areas, but a stage lists ${AREAS_PER_STAGE}`);
+  for (const a of AREAS) {
+    const n = STAGES.filter((st) => st.areas.includes(a.id)).length;
+    if (n !== 1) errors.push(`${a.id} is in ${n} overview stages, not one`);
+  }
   const shown = new Map<string, string>();
   for (const m of MAP_ITEMS) {
     const step = plan.steps.find((s) => s.id === m.step);

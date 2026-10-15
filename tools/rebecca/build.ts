@@ -28,6 +28,7 @@ import { KEY_ITEMS } from './items/items.ts';
 import { CUES } from './plan/music.ts';
 import { day } from './plan/day.ts';
 import { musicFile, musicTable, setRoomStates } from './music/table.ts';
+import { mapFiles } from './maps/files.ts';
 
 /**
  * Where a new game in REB mode starts (stage counts from 0, as in the debug
@@ -174,6 +175,14 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   mkdirSync(path.join(reb, 'ITEM_M2'), { recursive: true });
   for (const { name, bytes } of filePages()) {
     if (written.includes(`ITEM_M2/${name}`)) throw new Error(`a file's page and an item's model are both ${name}`);
+    writeFileSync(path.join(reb, 'ITEM_M2', name), bytes);
+    written.push(`ITEM_M2/${name}`);
+  }
+
+  // Her map screen's pictures (maps/files.ts): her areas, the overview at
+  // each stage and the grid under them, in place of RE1's in her mode only.
+  for (const { name, bytes } of mapFiles()) {
+    if (written.includes(`ITEM_M2/${name}`)) throw new Error(`a map and another file are both ${name}`);
     writeFileSync(path.join(reb, 'ITEM_M2', name), bytes);
     written.push(`ITEM_M2/${name}`);
   }
