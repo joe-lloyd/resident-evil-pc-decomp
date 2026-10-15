@@ -4,6 +4,7 @@
 #include "../Globals.h"
 #include "../system/AssetPath.h"
 #include "../system/AudioFile.h"
+#include "../game/TestMode.h"
 #include <cstdio>
 #include <cstring>
 #include <cmath>
@@ -621,6 +622,10 @@ void InitializeSoundSystem(void)
             OutputDebugStringA(dbg);
             g_pMasterVoice = NULL;
         } else {
+            // Port addition: a test game plays quietly. The harness runs
+            // several at once on the test machine, and reads what plays from
+            // the test link, not from the speakers.
+            if (TestMode_Active()) g_pMasterVoice->SetVolume(0.05f);
             OutputDebugStringA("[XA2] XAudio2 engine ready\n");
         }
     }
