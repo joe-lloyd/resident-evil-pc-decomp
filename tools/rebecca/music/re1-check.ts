@@ -1,7 +1,8 @@
 // Prove the RE1 transcriptions play the disc's notes: evaluate each track's
-// generated Strudel code with Strudel's own engine, query one pass of it, and
-// compare every note's start, length, pitch and sound with the sequence, as
-// exact fractions of a bar. Notes cut at the loop end are compared cut, and
+// generated Strudel code with Strudel's own engine, query it as the PS1 plays
+// it (the notes before the loop start once, then the loop twice), and compare
+// every note's start, length, pitch and sound with the sequence, as exact
+// fractions of a bar. Notes cut at the loop end are compared cut, and
 // notes the bank has no tone for are left out: the PS1 plays nothing for them.
 // The sound is the game's sample for the note's tone, or on free sounds the
 // family voices.json and re1-voices.fix.json give that tone.
@@ -62,14 +63,7 @@ for (const file of readdirSync(input).filter((f) => /^SEP[0-9A-F]{2}\.json$/.tes
       tracks++;
       const seq = music.sequences[s]!;
       const ticksPerBar = (seq.ppq * 4 * seq.beats) / seq.beatUnit;
-      const { pattern } = await core.evaluate(t.code, transpiler);
-      const haps: Hap[] = pattern.queryArc(0, t.ticksPerCycle / ticksPerBar).filter((h: Hap & { hasOnset(): boolean }) => h.hasOnset());
-      const key = (at: number, length: number, note: string, sound: string) => `${at} ${length} ${note} ${sound}`;
-      // A bar's worth of ticks times the hap's time in bars is its time in ticks, exactly.
-      const got = haps.map((h) => key(Number(h.whole.begin.mul(ticksPerBar)), Number(h.whole.end.mul(ticksPerBar)) - Number(h.whole.begin.mul(ticksPerBar)), h.value.note, h.value.s)).sort();
-      const silent = haps.filter((h) => typeof h.value.gain !== 'number' || !Number.isFinite(h.value.gain)).length;
-      // What the disc plays over the transcribed pass: from the loop start if nothing sounds before it, to the loop end.
-      // A note sounds when its channel's program has a tone covering its key; the SPU plays nothing for the rest.
+      // What the disc plays. A note sounds when its channel's program has a tone covering its key; the SPU plays nothing for the rest.
       const program = new Map<number, number>();
       const toneOf = (channel: number, key: number) => {
         const p = music.bank.programs.find((p) => p.index === (program.get(channel) ?? 0));
@@ -82,13 +76,27 @@ for (const file of readdirSync(input).filter((f) => /^SEP[0-9A-F]{2}\.json$/.tes
         const tone = e.kind === 'note' ? toneOf(e.channel, e.key) : undefined;
         return e.kind === 'note' && tone ? [{ ...e, sound: voices ? freeSound(`${file.slice(0, 5)}/${tone}`) : `${game}_${tone}` }] : [];
       });
-      const start = seq.loop && !disc.some((n) => n.tick < seq.loop!.start) ? seq.loop.start : 0;
+      // Laid out as the PS1 plays it: what sounds before the loop start once, then the loop twice.
+      // With nothing before the loop start the track starts there; with no loop it is one pass.
       const end = seq.loop?.end ?? seq.ticks;
-      const want = disc
-        .filter((n) => n.tick >= start && n.tick < end)
-        .map((n) => key(n.tick - start, Math.max(1, Math.min(n.length, end - n.tick)), noteName(n.key), n.sound))
+      const loopStart = seq.loop?.start ?? 0;
+      const start = seq.loop && !disc.some((n) => n.tick < loopStart) ? loopStart : 0;
+      const passes = seq.loop ? 2 : 1;
+      const key = (at: number, length: number, note: string, sound: string) => `${at} ${length} ${note} ${sound}`;
+      const heard = disc.filter((n) => n.tick >= start && n.tick < end);
+      const want = heard
+        .flatMap((n) => {
+          const at = n.tick - start;
+          const shifts = n.tick < loopStart ? [0] : Array.from({ length: passes }, (_, i) => i * (end - loopStart));
+          return shifts.map((d) => key(at + d, Math.max(1, Math.min(n.length, end - n.tick)), noteName(n.key), n.sound));
+        })
         .sort();
-      notes += want.length;
+      const { pattern } = await core.evaluate(t.code, transpiler);
+      const haps: Hap[] = pattern.queryArc(0, (loopStart - start + passes * (end - loopStart)) / ticksPerBar).filter((h: Hap & { hasOnset(): boolean }) => h.hasOnset());
+      // A bar's worth of ticks times the hap's time in bars is its time in ticks, exactly.
+      const got = haps.map((h) => key(Number(h.whole.begin.mul(ticksPerBar)), Number(h.whole.end.mul(ticksPerBar)) - Number(h.whole.begin.mul(ticksPerBar)), h.value.note, h.value.s)).sort();
+      const silent = haps.filter((h) => typeof h.value.gain !== 'number' || !Number.isFinite(h.value.gain)).length;
+      notes += heard.length;
       // As multisets: a note the disc plays twice must play twice, and once only once.
       const missing = less(want, got);
       const extra = less(got, want);
@@ -97,5 +105,5 @@ for (const file of readdirSync(input).filter((f) => /^SEP[0-9A-F]{2}\.json$/.tes
   }
 }
 for (const f of failures) console.log(`FAIL ${f}`);
-console.log(`${tracks - failures.length} of ${tracks} tracks play their ${notes} notes exactly`);
+console.log(`${tracks - failures.length} of ${tracks} tracks play their ${notes} notes exactly, the intro once and the loop twice`);
 process.exit(failures.length ? 1 : 0);

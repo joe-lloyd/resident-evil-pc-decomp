@@ -9,7 +9,7 @@ import { cpSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import type { Track } from './re1.ts';
 
-type Meta = Omit<Track, 'code' | 'played'> & { free?: boolean };
+type Meta = Omit<Track, 'code'> & { free?: boolean };
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const title = (rooms: readonly string[]) => (rooms[0] ?? 'Not placed in a room').toLowerCase().replace(/^./, (c) => c.toUpperCase());
 
