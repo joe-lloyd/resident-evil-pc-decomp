@@ -108,8 +108,14 @@ async function read(link: GameLink, r: Result, prefix: string): Promise<void> {
     if (i > 0) await link.tap(Key.right, 3);
     await link.frames(40);
     const shot = await shoot(link, r, `${prefix}${i + 1}`, `${prefix === 'p' ? 'Picked up' : 'From the FILE tab'}: page ${i + 1} of ${r.doc.pages.length}`);
-    const diff = pageDifference(readPng(shot), toImage(drawPage(r.doc, i), 2));
-    if (diff > SAME_PAGE) r.problems.push(`${prefix === 'p' ? 'pickup' : 'FILE tab'} page ${i + 1} is not ours (difference ${diff.toFixed(1)})`);
+    // Compare the shot with every page of the file: it must be ours, and closer
+    // to this page than to any other, so a page turn that did not happen fails.
+    const img = readPng(shot);
+    const diffs = r.doc.pages.map((_, j) => pageDifference(img, toImage(drawPage(r.doc, j), 2)));
+    const diff = diffs[i]!;
+    const where = `${prefix === 'p' ? 'pickup' : 'FILE tab'} page ${i + 1}`;
+    if (diff > SAME_PAGE) r.problems.push(`${where} is not ours (difference ${diff.toFixed(1)})`);
+    else if (diffs.some((d, j) => j !== i && d <= diff)) r.problems.push(`${where} looks like page ${diffs.indexOf(Math.min(...diffs)) + 1}`);
   }
   // Past the last page lights EXIT; confirm closes the reader.
   await link.tap(Key.right, 3);
