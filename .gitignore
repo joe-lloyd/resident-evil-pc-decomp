@@ -22,3 +22,5 @@ re1.lock.audit/
 __pycache__/
 # Her items' exported models and baked textures (tools/rebecca/items/render-items.ts makes them).
 tools/rebecca/items/models/
+# Her music rendered to WAV (tools/rebecca/music/render.ts makes them the same every time).
+tools/rebecca/music/renders/
