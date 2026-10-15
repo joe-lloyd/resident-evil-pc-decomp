@@ -3,6 +3,7 @@
 // builds it. Room ids come from the free slots in stages 2 to 4 (Stage3 to
 // Stage5 files); docs/REBECCA_DAY.md has the plan.
 import { supplyModels } from './supplies.ts';
+import { MAP_MODEL, mapModels } from '../maps/pickups.ts';
 import type { DayRoom, Hour } from './room.ts';
 
 /**
@@ -68,6 +69,7 @@ export const lookout: DayRoom = {
     { from: 'Stage3/ROOM3090.RDT', index: 0 }, // F-Aid Spray
     { from: 'Stage1/ROOM1130.RDT', index: 0 }, // Small Key, as the shed key
     { from: 'Stage3/ROOM30E0.RDT', index: 2 }, // Ink Ribbon, by the typewriter
+    MAP_MODEL, // the Trail Map, on the desk (maps/pickups.ts)
   ],
 };
 
@@ -211,7 +213,8 @@ export const kitRooms: readonly DayRoom[] = KIT_ROOMS.map(([slug, stage, room, h
   inside,
   cameraFloor: 'auto',
   footsteps: 0x2d,
-  itemModels: supplyModels(slug),
+  // The supplies', then the room's map's (maps/pickups.ts).
+  itemModels: [...supplyModels(slug), ...mapModels(slug)],
 }));
 
 export const dayRooms: readonly DayRoom[] = [ridge, trail, lookout, yard, shed, bridge, ...kitRooms];

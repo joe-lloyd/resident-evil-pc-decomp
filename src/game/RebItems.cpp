@@ -43,6 +43,18 @@ static constexpr auto s_rebName3c = STR("QUARRY KEY\x07");
 static constexpr auto s_rebDesc3c = STR("A key tagged \"QUARRY\\nOFFICE\".");
 static constexpr auto s_rebName3d = STR("SHED KEY\x07");
 static constexpr auto s_rebDesc3d = STR("The key to the tool shed,\\noff the ranger's board.");
+static constexpr auto s_rebName4e = STR("TRAIL MAP\x07");
+static constexpr auto s_rebDesc4e = STR("A map of Ranger Station\\nand Summit.");
+static constexpr auto s_rebName4f = STR("CAMP PLAN\x07");
+static constexpr auto s_rebDesc4f = STR("A map of Logging Camp 4.");
+static constexpr auto s_rebName50 = STR("ROAD MAP\x07");
+static constexpr auto s_rebDesc50 = STR("A map of Forestry Road and\\nQuarry.");
+static constexpr auto s_rebName51 = STR("MINE SURVEY\x07");
+static constexpr auto s_rebDesc51 = STR("A map of Silver Mine.");
+static constexpr auto s_rebName52 = STR("SKYWAY MAP\x07");
+static constexpr auto s_rebDesc52 = STR("A map of Skyway Line and\\nValley.");
+static constexpr auto s_rebName53 = STR("GROUNDS PLAN\x07");
+static constexpr auto s_rebDesc53 = STR("A map of Estate Grounds\\nand Cellar.");
 
 struct RebItem {
     unsigned char id;
@@ -68,6 +80,12 @@ static const RebItem kRebItems[] = {
     { 0x3b, s_rebName3b.bytes, s_rebDesc3b.bytes },  // safe
     { 0x3c, s_rebName3c.bytes, s_rebDesc3c.bytes },  // quarry-key
     { 0x3d, s_rebName3d.bytes, s_rebDesc3d.bytes },  // shed-key
+    { 0x4e, s_rebName4e.bytes, s_rebDesc4e.bytes },  // map-trail
+    { 0x4f, s_rebName4f.bytes, s_rebDesc4f.bytes },  // map-camp
+    { 0x50, s_rebName50.bytes, s_rebDesc50.bytes },  // map-forestry
+    { 0x51, s_rebName51.bytes, s_rebDesc51.bytes },  // map-mine
+    { 0x52, s_rebName52.bytes, s_rebDesc52.bytes },  // map-valley
+    { 0x53, s_rebName53.bytes, s_rebDesc53.bytes },  // map-estate
 };
 
 static const RebItem* find(unsigned char itemId)

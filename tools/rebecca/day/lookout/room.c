@@ -7,7 +7,8 @@
 // Game units are metres * 1700 (scene.py builds the room in metres).
 // FG_COMMON 201: she has been in before. FG_ITEM 241: the spray is still on
 // the table, 242: the shed key is still on its hook, 240: the ink ribbons are
-// still by the typewriter (bit set = still there).
+// still by the typewriter, 248: the trail map is still on the desk (bit set =
+// still there).
 // item_aot_set operands after the model index: 255, the model's position
 // (X, Y, Z as little-endian 16-bit pairs), two rotation bytes, the item flag,
 // then 129 (taken with the action key), 0, 0.
@@ -27,10 +28,16 @@ if (ck(FG_ITEM, 242, 0)) {
 }
 aot_set(3, 4335, 4675, 850, 935, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);   // the radio
 // The logbook, a file (tools/rebecca/files/documents.ts): item 0x60 (slot 1), on the
-// room's empty model slot 3 (after the spray, the key and the ink ribbons), flag 230. Taken
-// from the open side of the desk chair.
+// room's empty model slot 4 (after the spray, the key, the ink ribbons and
+// the map), flag 230. Taken from the open side of the desk chair.
 if (ck(FG_ITEM, 230, 0)) {
-    item_aot_set(4, 5880, 4675, 800, 935, 96 /* Ranger's logbook */, 1, 3, 255, 0, 0, 0, 0, 0, 0, 0, 0, 230, 129, 0, 0);
+    item_aot_set(4, 5880, 4675, 800, 935, 96 /* Ranger's logbook */, 1, 4, 255, 0, 0, 0, 0, 0, 0, 0, 0, 230, 129, 0, 0);
+}
+// On the desk between the radio and the logbook: the ranger's trail map
+// (item 0x4E, maps/pickups.ts), RE1's own folded map in model slot 3, model
+// at (5530, -1292, 4080). FG_ITEM 248 while it is there.
+if (ck(FG_ITEM, 248, 0)) {
+    item_aot_set(16, 5185, 4675, 695, 935, 78 /* Trail Map */, 1, 3, 255, 154, 21, 244, 250, 240, 15, 0, 0, 248, 129, 0, 0);
 }
 aot_set(5, 9520, 7480, 765, 2550, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);  // the bunk
 aot_set(6, 4590, 7310, 850, 1360, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);  // the stove

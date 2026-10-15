@@ -16,6 +16,7 @@ import type { DayRoom } from './room.ts';
 import { BOOKS, DOCUMENTS, ITEM_FLAG_BASE } from '../files/documents.ts';
 import { foeLines, KILL_FLAGS, type Floor } from './foes.ts';
 import { ITEM_FLAGS, SUPPLIES, supplyLines, supplyModels } from './supplies.ts';
+import { mapLines, mapModels } from '../maps/pickups.ts';
 import { KEY_ITEM_FLAGS, KEY_ITEMS, keyItemLines, keyItemModels, sameModel, type ItemSpot } from '../items/items.ts';
 import { BAG_SLOTS, GEAR, LOSS_BIT, LOSS_LINE, LOSS_ROOM } from './gear.ts';
 import { EVENT_FLAGS, EVENTS, eventsIn, giveModels, GIVE_FLAGS, itemModelSlots, keyItem } from './events.ts';
@@ -362,8 +363,19 @@ function main(): void {
     lines.push(...foeLines(slug, floor, killFlags));
     lines.push(...supplyLines(slug, floor, itemFlags, id));
     id += SUPPLIES[slug]?.length ?? 0;
-    // The key items: after the supplies in the room's item models (room.ts).
-    lines.push(...keyItemLines(kit.items ?? [], keyFlags, id, supplyModels(slug).length));
+    // The room's map, if the plan finds one here: its model after the
+    // supplies' (rooms.ts), its zone clear of the room's others.
+    const taken = lines.flatMap((l) => {
+      const m = /(?:item_)?aot_set\(\d+, (\d+), (\d+), (\d+), (\d+),/.exec(l);
+      return m ? [{ x0: +m[1]!, z0: +m[2]!, x1: +m[1]! + +m[3]!, z1: +m[2]! + +m[4]! }] : [];
+    });
+    taken.push(...(kit.spots ?? []).map((sp) => sp.zone), ...(kit.items ?? []).map((it) => ({ x0: it.x - 900, z0: it.z - 900, x1: it.x + 900, z1: it.z + 900 })));
+    const mapLine = mapLines(slug, floor, taken, id, supplyModels(slug).length);
+    lines.push(...mapLine);
+    if (mapLine.length) id++;
+    // The key items: after the supplies and the map in the room's item models (room.ts).
+    const specSlots = supplyModels(slug).length + mapModels(slug).length;
+    lines.push(...keyItemLines(kit.items ?? [], keyFlags, id, specSlots));
     id += kit.items?.length ?? 0;
     // The events (day/events.ts): their zones now, their working in main.
     const main: string[] = [];
@@ -371,7 +383,7 @@ function main(): void {
     // come. Word 0 only, cleared when the room loads: the engine clears bits
     // 32-63 every frame (room_state_reset), and uses 0 and 29-31 itself.
     let bit = 12;
-    const giveSlot0 = supplyModels(slug).length + keyItemModels(kit.items ?? []).length;
+    const giveSlot0 = specSlots + keyItemModels(kit.items ?? []).length;
     for (const e of events) {
       const f = EVENT_FLAGS.get(e.step)!;
       const zone = size(spotOf(e.step));

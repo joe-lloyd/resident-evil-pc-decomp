@@ -69,11 +69,14 @@ const APART = 1700;
 
 /**
  * Where each supply lies: free floor against a wall or the floor's edge,
- * as far from her arrivals as that allows, and apart from the others.
+ * as far from her arrivals as that allows, and apart from the others and
+ * from any zone in `avoid`.
  */
-function spots(floor: Floor, count: number): { x: number; z: number }[] {
+export function spots(floor: Floor, count: number, avoid: readonly Floor['bounds'][] = []): { x: number; z: number }[] {
   const b = floor.bounds;
-  const free = freeFloor(floor);
+  const clear = (p: { x: number; z: number }) =>
+    avoid.every((r) => Math.max(r.x0 - p.x, p.x - r.x1, r.z0 - p.z, p.z - r.z1) >= ZONE / 2 + 200);
+  const free = freeFloor(floor).filter(clear);
   const edge = (p: { x: number; z: number }) =>
     Math.min(p.x - b.x0, b.x1 - p.x, p.z - b.z0, b.z1 - p.z, ...floor.walls.map((w) => Math.hypot(Math.max(w.x0 - p.x, 0, p.x - w.x1), Math.max(w.z0 - p.z, 0, p.z - w.z1))));
   const arrivals = floor.doors.map((d) => d.arrive);
