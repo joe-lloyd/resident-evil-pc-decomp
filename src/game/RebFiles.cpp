@@ -9,59 +9,59 @@
 #include "RebFiles.h"
 #include "PrintText.h"
 
-static constexpr auto s_rebFile0 = STR("RANGER'S LOGBOOK\x07");
-static constexpr auto s_rebFile1 = STR("HAL'S DIARY\x07");
-static constexpr auto s_rebFile3 = STR("QUARRY ROSTERS\x07");
+static constexpr auto s_rebFile1 = STR("RANGER'S LOGBOOK\x07");
+static constexpr auto s_rebFile2 = STR("FOREMAN'S LETTERS\x07");
+static constexpr auto s_rebFile3 = STR("MINE MAP\x07");
 static constexpr auto s_rebFile4 = STR("QUARANTINE NOTICE\x07");
-static constexpr auto s_rebFile5 = STR("GARDENER'S DIARY\x07");
-static constexpr auto s_rebFile6 = STR("FOREMAN'S LETTERS\x07");
-static constexpr auto s_rebFile9 = STR("LOWER STATION LOG\x07");
+static constexpr auto s_rebFile5 = STR("LOWER STATION LOG\x07");
+static constexpr auto s_rebFile6 = STR("GARDENER'S DIARY\x07");
+static constexpr auto s_rebFile8 = STR("HAL'S DIARY\x07");
+static constexpr auto s_rebFile9 = STR("QUARRY ROSTERS\x07");
 static constexpr auto s_rebFile10 = STR("LOOKOUT LOG\x07");
 static constexpr auto s_rebFile12 = STR("BUNKHOUSE CALENDAR\x07");
-static constexpr auto s_rebFile13 = STR("MINE MAP\x07");
 
 static const unsigned char* const kRebFileNames[16] = {
-    s_rebFile0.bytes,
-    s_rebFile1.bytes,
     nullptr,
+    s_rebFile1.bytes,
+    s_rebFile2.bytes,
     s_rebFile3.bytes,
     s_rebFile4.bytes,
     s_rebFile5.bytes,
     s_rebFile6.bytes,
     nullptr,
-    nullptr,
+    s_rebFile8.bytes,
     s_rebFile9.bytes,
     s_rebFile10.bytes,
     nullptr,
     s_rebFile12.bytes,
-    s_rebFile13.bytes,
+    nullptr,
     nullptr,
     nullptr,
 };
 
 static const short kRebFileTitleX[16] = {
+    0,
     13,
+    9,
+    45,
+    9,
+    9,
+    13,
+    0,
     33,
-    0,
     21,
-    9,
-    13,
-    9,
-    0,
-    0,
-    9,
     33,
     0,
     5,
-    45,
+    0,
     0,
     0,
 };
 
 // Her two books of eight, by file slot in the order she finds them; 0xff is empty.
 static const unsigned char kRebFileBooks[16] = {
-    0x00, 0x04, 0x0c, 0x06, 0x0a, 0x01, 0x03, 0x0d,
-    0x09, 0x05, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
+    0x01, 0x04, 0x0c, 0x02, 0x0a, 0x08, 0x09, 0x03,
+    0x05, 0x06, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 };
 
 const unsigned char* reb_file_name(unsigned char itemId)

@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { BOOKS, DOCUMENTS, SLOT_PAGES } from './documents.ts';
 import { ENGINE_FILE, engineSource } from './engine.ts';
-import { PAGE, TIM_SIZE, drawPage, filePages, layoutText, packPix, readTim, wrap } from './pages.ts';
+import { PAGE, SHOWN, TIM_SIZE, drawPage, filePages, layoutText, packPix, readTim, wrap } from './pages.ts';
 
 const dayDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'day');
 
@@ -25,7 +25,26 @@ test('a ledger line that opens with a time writes the time in its column', () =>
 });
 
 test('a page that runs past the paper fails', () => {
-  assert.throws(() => layoutText('word '.repeat(400), 'notebook'), /more than the 14 that fit/);
+  assert.throws(() => layoutText('word '.repeat(400), 'notebook'), /more than the 11 that fit/);
+});
+
+test('a ~N line changes the hand for the lines after it and takes no line', () => {
+  assert.deepEqual(layoutText('Fine today.\n\n~2\nitchy.', 'notebook'), [
+    { row: 0, x: 'left', time: undefined, s: 'Fine today.' },
+    { row: 2, x: 'left', time: undefined, s: 'itchy.', hand: 2 },
+  ]);
+});
+
+test('every page draws nothing below the top 256x192 the reader shows', () => {
+  for (const doc of DOCUMENTS)
+    doc.pages.forEach((page, i) => {
+      // The review page offers RE1's black for every text page, so that look must fit too.
+      for (const paper of page.kind === 'text' ? [doc.paper, 'black' as const] : [doc.paper]) {
+        const { pixels } = drawPage(doc, i, paper);
+        const below = pixels.subarray(SHOWN * PAGE).findIndex((c) => c !== 0);
+        assert.equal(below, -1, `${doc.id} page ${i} on ${paper}: drawn at row ${SHOWN + Math.floor(below / PAGE)}`);
+      }
+    });
 });
 
 test('every document fills its own slot with the page count the reader expects', () => {

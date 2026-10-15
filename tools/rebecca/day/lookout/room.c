@@ -26,11 +26,11 @@ if (ck(FG_ITEM, 242, 0)) {
     item_aot_set(2, 4930, 9095, 935, 1105, 61 /* Small Key */, 1, 1, 255, 200, 21, 146, 246, 148, 39, 0, 0, 242, 129, 0, 0);
 }
 aot_set(3, 4335, 4675, 850, 935, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);   // the radio
-// The logbook, a file (tools/rebecca/files/documents.ts): item 0x5F, on the
+// The logbook, a file (tools/rebecca/files/documents.ts): item 0x60 (slot 1), on the
 // room's empty model slot 3 (after the spray, the key and the ink ribbons), flag 230. Taken
 // from the open side of the desk chair.
 if (ck(FG_ITEM, 230, 0)) {
-    item_aot_set(4, 5880, 4675, 800, 935, 95 /* Ranger's logbook */, 1, 3, 255, 0, 0, 0, 0, 0, 0, 0, 0, 230, 129, 0, 0);
+    item_aot_set(4, 5880, 4675, 800, 935, 96 /* Ranger's logbook */, 1, 3, 255, 0, 0, 0, 0, 0, 0, 0, 0, 230, 129, 0, 0);
 }
 aot_set(5, 9520, 7480, 765, 2550, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);  // the bunk
 aot_set(6, 4590, 7310, 850, 1360, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);  // the stove

@@ -10,12 +10,19 @@
 // - On ledger paper, a line that opens with a time ("0305 " or "01.20 ")
 //   writes the time in the ledger's time column.
 // - `shaky` makes the hand unsteady: 1 for a bad night, 2 for the last
-//   lines of someone who is turning.
+//   lines of someone who is turning. A line of its own "~1" (or ~0, ~2)
+//   changes the hand from there to the end of the page, and takes no line.
+//
+// The reader shows only the top 256x192 of a page (pages.ts, SHOWN): eleven
+// lines of text, or nine under a letterhead. A page that runs longer fails.
 //
 // Each document fills one of the game's 16 file slots. The reader takes a
 // file's page count from the slot (g_itemMaxCounts, 0x004d2620: 4, 6, 11, 4,
 // 2, 6, 7, 7, 10, 5, 5, 4, 3, 3, 3, 4), so each document is written to the
-// count of the slot it sits in, title page included.
+// count of the slot it sits in, title page included. Her mode's tables are
+// all by slot and generated from here (engine.ts), and the collected flag is
+// 0x82 + slot for every slot, so a document can move to any free slot whose
+// count it fills.
 
 /** The paper a page is drawn on. `black` is RE1's own look: light type on the reader's black. */
 export type Paper = 'black' | 'notebook' | 'ledger' | 'letter';
@@ -118,7 +125,7 @@ export const DOCUMENTS: Doc[] = [
     room: 'lookout',
     where: 'The cabin, act 1: open on the desk. It tells her the winch crank is in the shed.',
     act: 1,
-    slot: 0,
+    slot: 1,
     check: "The ranger's logbook.",
     paper: 'ledger',
     pages: [
@@ -129,6 +136,11 @@ export const DOCUMENTS: Doc[] = [
 ^JULY 22 1998
 0715 Fog till nine. Trails quiet.
 1130 Sheriff's office called. Two more hikers missing, a couple from Ohio. Their car is still in the lower lot.
+`,
+      },
+      {
+        kind: 'text',
+        text: `
 1600 Walked the north ridge. Dog tracks again. Big ones. Not wolves. A print as wide as my hand.
 1840 Found a boot. Nothing else.
 `,
@@ -139,6 +151,11 @@ export const DOCUMENTS: Doc[] = [
 ^JULY 23
 0800 County order: the Arklay trails are closed after the killings.
 1300 Gondola still running. Told Hal he should shut it. He says the company decides.
+`,
+      },
+      {
+        kind: 'text',
+        text: `
 1800 Chained and locked the gate on Forest Road 7.
 2210 Storm. The radio's busy. S.T.A.R.S. lost a helicopter up here. Saw no lights.
 `,
@@ -200,7 +217,7 @@ Don't tell him.
     room: 'cottage',
     where: "The operator's cottage, act 2: open on the table. He went to hide in the mine.",
     act: 2,
-    slot: 1,
+    slot: 8,
     check: 'His diary, open.',
     paper: 'notebook',
     pages: [
@@ -213,16 +230,20 @@ Katie,
 Your mother says you're counting the days. So am I. Nine more.
 
 Fixed the bunk in the spare room. Found your old rod in the shed, red float and all.
-
-Twelve riders today. People keep going missing up here.
 `,
       },
       {
         kind: 'text',
         text: `
+Twelve riders today. People keep going missing up here.
+
 July 23
 The company says we keep running, trails or no trails. Two crates went up for Camp 4 in car 2, cold box, company tape. I signed like always. I don't ask.
-
+`,
+      },
+      {
+        kind: 'text',
+        text: `
 Pete at the bottom station says the estate's gardener came up again, raving the dogs are loose.
 
 Shut the line at six. Storm.
@@ -235,7 +256,11 @@ July 24, 3:30 in the morning
 Pete rang the line phone. A woman from the lot, bitten by a dog. His phone is dead and I've got the radio, so he's sending her up in 4.
 
 I ran the line out of hours.
-
+`,
+      },
+      {
+        kind: 'text',
+        text: `
 4:50. The power went with 4 nearly in. It hit the dock and sheared the drive cog. Blew a fuse.
 `,
       },
@@ -246,7 +271,12 @@ I ran the line out of hours.
 She wasn't sick, Katie. She was something else. She came out of that car like the door was paper.
 
 She came at the booth glass. I got my hand up.
-
+`,
+      },
+      {
+        kind: 'text',
+        shaky: 1,
+        text: `
 I wrote it all on the board like they taught us. Then I took the drive key and came home. Nobody runs the line without me.
 `,
       },
@@ -257,7 +287,12 @@ I wrote it all on the board like they taught us. Then I took the drive key and c
 Bolted the door. Barred it. The hand is bad, hot and swelling. The radio is only hiss.
 
 Something walks the path. I watch it from the window.
-
+`,
+      },
+      {
+        kind: 'text',
+        shaky: 2,
+        text: `
 I love you, Katie. Stay at your mother's. Don't come up.
 
 it itches. hide in the mine till they come.
@@ -272,7 +307,7 @@ it itches. hide in the mine till they come.
     room: 'mine-office',
     where: 'The mine office, act 2: pinned over the desk. It shows the pump and the lift.',
     act: 2,
-    slot: 13,
+    slot: 3,
     check: 'A map of the workings.',
     paper: 'notebook',
     pages: [
@@ -282,22 +317,22 @@ it itches. hide in the mine till they come.
         heading: 'ARKLAY SILVER MINE No.2',
         sub: 'Plan of workings, 1987',
         labels: [
-          ['ADIT', 24, 78],
-          ['TO QUARRY', 18, 102],
-          ['OFFICE', 63, 48],
-          ['LIFT', 168, 44],
-          ['TO SUMMIT', 168, 56],
-          ['PUMP', 194, 70],
-          ['JUNCTION', 156, 108],
-          ['No.3 LEVEL', 44, 132],
-          ['FLOODED', 100, 157],
-          ['OLD WINZE', 130, 186],
+          ['ADIT', 24, 66],
+          ['TO QUARRY', 18, 88],
+          ['OFFICE', 63, 40],
+          ['LIFT', 168, 36],
+          ['TO SUMMIT', 168, 47],
+          ['PUMP', 194, 60],
+          ['JUNCTION', 156, 92],
+          ['No.3 LEVEL', 44, 102],
+          ['FLOODED', 100, 125],
+          ['OLD WINZE', 130, 146],
         ],
         notes: [
-          ['Pump drains No.3.', 20, 206],
-          ['Lift runs on line power.', 20, 222],
+          ['Pump drains No.3.', 20, 163],
+          ['Lift runs on line power.', 20, 176],
         ],
-        thumb: [70, 160],
+        thumb: [70, 130],
       },
       {
         kind: 'text',
@@ -310,7 +345,12 @@ No.3 level floods to the roof in a day if the pump stops. Nobody goes below the 
 
 The winze stays roped.
 >J. Talley, 1987
-
+`,
+      },
+      {
+        kind: 'text',
+        paper: 'letter',
+        text: `
 1996: the pump and the lift now run off the Skyway's line. No station power, no lift.
 `,
       },
@@ -324,7 +364,7 @@ The winze stays roped.
     room: 'lower-station',
     where: 'The lower station, act 3: on his desk. The estate gardener came up the day before.',
     act: 3,
-    slot: 9,
+    slot: 5,
     check: "The keeper's log.",
     paper: 'ledger',
     pages: [
@@ -344,6 +384,11 @@ The winze stays roped.
 ^23 JULY
 0800 Line open. County says the trails are closed. Company says we run. We run.
 0930 Two crates up in 2 for Camp 4. Company tape, cold box.
+`,
+      },
+      {
+        kind: 'text',
+        text: `
 1610 The estate gardener came up for supplies again. Said the dogs have got out. Scratching at his arm the whole time.
 1800 Line closed. Storm.
 `,
@@ -375,7 +420,7 @@ The winze stays roped.
     room: 'lodge',
     where: "The gardener's lodge, act 3: on the table by the lamp. The itching, day by day.",
     act: 3,
-    slot: 5,
+    slot: 6,
     check: 'His diary. Day after day',
     paper: 'notebook',
     notes: [
@@ -402,28 +447,33 @@ July 21
 Kennel gate open this morning. Every chain snapped. The dogs are gone up the mountain.
 
 Wrist is red and hot. It itches under the bandage.
-
-Planted out the late beans anyway. Blight on the roses by the south wall.
 `,
       },
       {
         kind: 'text',
         text: `
+Planted out the late beans anyway. Blight on the roses by the south wall.
+
 July 22
 
 Itches. Couldn't sleep for it. Scratched it open in the night. The skin comes away under my nails.
-
+`,
+      },
+      {
+        kind: 'text',
+        text: `
 Everything in the seed trays has died. The water's fine. I don't understand it.
+
+~1
+July 23
+
+Walked up to the Skyway for supplies. Told Pete the dogs are loose. He looked at my arm and asked was I all right.
 `,
       },
       {
         kind: 'text',
         shaky: 1,
         text: `
-July 23
-
-Walked up to the Skyway for supplies. Told Pete the dogs are loose. He looked at my arm and asked was I all right.
-
 I'm all right.
 
 Bandages, lamp oil, tins. So hungry. Ate two tins on the walk back. Still hungry.
@@ -451,7 +501,7 @@ itchy. itchy. scott came. ugly face so i killed him. tasty
     room: 'office',
     where: "The foreman's office, act 2: on his desk. Umbrella paid for the gondola.",
     act: 2,
-    slot: 6,
+    slot: 2,
     check: 'Letters on Umbrella letterhead.',
     paper: 'letter',
     notes: [
@@ -468,16 +518,20 @@ April 2, 1996
 Mr. Earl Mathis
 Foreman, Camp 4
 Arklay Timber Co.
-
-Dear Mr. Mathis,
-The gondola contract is approved in full. Umbrella will meet the cost of the upper station and the line.
 `,
       },
       {
         kind: 'text',
         text: `
-The Skyway will carry your camp's freight at no charge.
+Dear Mr. Mathis,
+The gondola contract is approved in full. Umbrella will meet the cost of the upper station and the line.
 
+The Skyway will carry your camp's freight at no charge.
+`,
+      },
+      {
+        kind: 'text',
+        text: `
 In return, Camp 4 will take in company freight at the upper station and hold it in your cold store until our people collect it. Your crew is not to handle the contents.
 
 We look forward to a long and quiet partnership.
@@ -492,7 +546,11 @@ We look forward to a long and quiet partnership.
 July 9, 1998
 Mr. Mathis,
 The samples are to be kept cold and are not to be opened. A damaged crate is to be set aside, sealed, for our people.
-
+`,
+      },
+      {
+        kind: 'text',
+        text: `
 Discretion is a condition of the contract.
 >M. Prescott
 `,
@@ -504,7 +562,11 @@ Discretion is a condition of the contract.
 July 20, 1998
 Mr. Mathis,
 We have your letter of the 16th. Illness among your crew is a matter for your own doctor. It has no connection with our freight.
-
+`,
+      },
+      {
+        kind: 'text',
+        text: `
 Collection is delayed. Keep the cold store locked.
 >M. Prescott
 `,
@@ -534,7 +596,12 @@ Prescott,
 There is no doctor. I have three men who can stand.
 
 The crate that split on the 14th. Gus sealed it up with his bare hands like you said. Gus was first.
-
+`,
+      },
+      {
+        kind: 'text',
+        shaky: 1,
+        text: `
 I never told the county. I'm telling whoever reads this.
 >E. Mathis
 `,
@@ -612,7 +679,7 @@ THEY'RE ON THE STAIRS.
         kind: 'notice',
         heading: 'QUARANTINE',
         lines: ['SICKNESS IN CAMP 4', 'NO ENTRY', 'TURN BACK', '', 'ANYONE BITTEN BY A DOG', 'OR BY A MAN OF THIS CAMP', 'MUST NOT'],
-        tearAt: 168,
+        tearAt: 156,
       },
     ],
   },
@@ -623,7 +690,7 @@ THEY'RE ON THE STAIRS.
     room: 'quarry-office',
     where: 'The quarry office, act 2: on the board over the desk. The week going red.',
     act: 2,
-    slot: 3,
+    slot: 9,
     check: 'The shift rosters.',
     paper: 'ledger',
     pages: [
@@ -666,7 +733,12 @@ July 23
 No night shift. There's nobody left. Go home.
 
 Anybody bitten, by a dog or a man, goes to the hospital in town. Not home.
-
+`,
+      },
+      {
+        kind: 'text',
+        paper: 'notebook',
+        text: `
 Last one out locks the hut. My key's on me. Hal at the Skyway has the spare.
 >R. Teague
 `,

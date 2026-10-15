@@ -1,5 +1,5 @@
 // Lay Rebecca's files out for the owner to read and rate: every page as the
-// reader would show it, its words beside it, and a rating for the writing
+// reader shows it (its top 256x192, pages.ts SHOWN), its words beside it, and a rating for the writing
 // and the pages of each document. Ratings stay in that browser; "Copy my
 // ratings" puts them on the clipboard to hand back.
 //
@@ -22,7 +22,7 @@ function words(doc: Doc, page: Page): string {
     case 'title':
       return [doc.title, doc.subtitle].filter(Boolean).join('\n');
     case 'text':
-      return page.text.trim().replace(/^[>^]/gm, '');
+      return page.text.trim().replace(/^~\d\n/gm, '').replace(/^[>^]/gm, '');
     case 'calendar':
       return `${page.company}\n${page.town}\n${page.month}\n\nRinged in red: ${page.circled.join(', ')}\nIn the boxes: ${Object.entries(page.notes).map(([d, n]) => `${d} ${n}`).join(', ')}\nAcross the bottom: ${page.scrawl}`;
     case 'map':
@@ -47,7 +47,7 @@ const sections = DOCUMENTS.map((doc, n) => {
       writeFileSync(path.join(out, black), encodePng(toImage(drawPage(doc, i, 'black'))));
     }
     pages++;
-    return `<figure><a href="${paper}" data-paper="${paper}" data-black="${black}"><img src="${paper}" data-paper="${paper}" data-black="${black}" width="384" height="384" alt="${esc(doc.title)}, page ${i + 1}"></a><figcaption><b>Page ${i + 1}</b><pre>${esc(words(doc, page))}</pre></figcaption></figure>`;
+    return `<figure><a href="${paper}" data-paper="${paper}" data-black="${black}"><img src="${paper}" data-paper="${paper}" data-black="${black}" width="384" height="288" alt="${esc(doc.title)}, page ${i + 1}"></a><figcaption><b>Page ${i + 1}</b><pre>${esc(words(doc, page))}</pre></figcaption></figure>`;
   });
   const pix = packPix(doc.pages.map((_, i) => drawPage(doc, i)));
   const notes = (doc.notes ?? []).map((t) => `<p class="decide">To decide: ${esc(t)}</p>`).join('');
@@ -83,9 +83,9 @@ pre{white-space:pre-wrap;font:13px/1.4 ui-monospace,Menlo,monospace;margin:0;col
 nav a{color:var(--dim);margin-right:.8em}
 </style></head><body>
 <h1>Rebecca's files</h1>
-<p class="lede">The ten papers she reads on her day, drawn as RE1 file pages: 256 by 256 pixels, 16 colours, packed in the game's own format. Each page is shown at twice its size, with its words beside it. Rate the writing and the pages of each file, then press Copy my ratings and paste the result back. Ratings stay in this browser until you copy them.</p>
+<p class="lede">The ten papers she reads on her day, drawn as RE1 file pages: 256 by 256 pixels, 16 colours, packed in the game's own format. The reader shows the top 256 by 192 of a page, and that is what each picture here is, at one and a half times its size, with its words beside it. Rate the writing and the pages of each file, then press Copy my ratings and paste the result back. Ratings stay in this browser until you copy them.</p>
 <p class="lede">The first page of each file is its title on black, as in RE1. The text pages come in two looks: on paper (a notebook, a ledger, a typed letter), or RE1's own light type on black. Switch between them below, and say which you want.</p>
-<p class="decide">In the game, the reader shows only the top 192 of each page's 256 rows, so the bottom quarter of these pages is cut off. Screenshots of every file picked up and read in the game are on <a href="game/" style="color:var(--gold)">the in-game page</a>.</p>
+<p class="lede">Every page is laid out inside those 192 rows, so nothing is cut off in the game. To fit, several files have more pages than before and moved to a file slot with that page count. Screenshots of every file picked up and read in the game are on <a href="game/" style="color:var(--gold)">the in-game page</a>.</p>
 <p class="lede">Everything still to do for her day is on the tracker: <a href="https://home.arpa/research/rebecca-todo/" style="color:var(--fg)">home.arpa/research/rebecca-todo</a>.</p>
 <nav>${DOCUMENTS.map((d) => `<a href="#${d.id}">${esc(d.title)}</a>`).join('')}</nav>
 <div class="tools">

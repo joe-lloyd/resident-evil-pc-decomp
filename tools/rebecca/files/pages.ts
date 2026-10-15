@@ -15,6 +15,12 @@ import { ADVANCE, GLYPH_H, glyph } from './font.ts';
 import { DOCUMENTS, type Calendar, type Doc, type MineMap, type Notice, type Page, type Paper, type Roster } from './documents.ts';
 
 export const PAGE = 256;
+/**
+ * The rows of a page the reader shows: it draws the top 256x192 of the TIM at
+ * (24, 24) of the 320x240 screen (DAT_004d2888 in src/game/MainMenu.cpp), so
+ * nothing may be drawn from this row down. RE1's own pages stop above it too.
+ */
+export const SHOWN = 192;
 const LINE = 16;
 
 // ---------------------------------------------------------------------------
@@ -233,7 +239,7 @@ export function wrap(paragraph: string, cols: number): string[] {
 // ---------------------------------------------------------------------------
 // Paper.
 
-const SHEET = { x0: 8, y0: 6, x1: 248, y1: 250 };
+const SHEET = { x0: 8, y0: 4, x1: 248, y1: 190 };
 
 function sheet(cv: Canvas, box = SHEET): void {
   const { x0, y0, x1, y1 } = box;
@@ -247,10 +253,10 @@ function sheet(cv: Canvas, box = SHEET): void {
       else if (r > 0.96) cv.set(x, y, C.PaperLight);
     }
   // A dog-eared top right corner.
-  for (let i = 0; i < 12; i++)
-    for (let j = 0; j < 12 - i; j++) {
+  for (let i = 0; i < 10; i++)
+    for (let j = 0; j < 10 - i; j++) {
       cv.set(x1 - 1 - j, y0 + i, C.Clear);
-      if (j === 12 - i - 1) cv.set(x1 - 1 - j, y0 + i, C.Edge);
+      if (j === 10 - i - 1) cv.set(x1 - 1 - j, y0 + i, C.Edge);
     }
 }
 
@@ -265,11 +271,13 @@ interface Layout {
   readonly time?: number;
 }
 
+// Eleven lines on a 16 pixel pitch from row 12, as RE1's own pages have them,
+// end at row 182: inside the SHOWN rows, and inside the sheet.
 const LAYOUTS: Record<Paper, Layout> = {
-  black: { left: 16, right: 240, top: 14, rows: 14 },
-  notebook: { left: 40, right: 240, top: 22, rows: 14 },
-  ledger: { left: 58, right: 240, top: 22, rows: 14, time: 18 },
-  letter: { left: 22, right: 236, top: 22, rows: 14 },
+  black: { left: 16, right: 240, top: 12, rows: 11 },
+  notebook: { left: 26, right: 243, top: 12, rows: 11 },
+  ledger: { left: 53, right: 242, top: 12, rows: 11, time: 13 },
+  letter: { left: 16, right: 242, top: 12, rows: 11 },
 };
 
 function ruling(cv: Canvas, paper: Paper, top: number): void {
@@ -279,7 +287,6 @@ function ruling(cv: Canvas, paper: Paper, top: number): void {
       for (let x = SHEET.x0 + 2; x < SHEET.x1 - 2; x++) if (cv.get(x, y) !== C.Clear) cv.set(x, y, C.Rule);
     const mx = paper === 'notebook' ? lay.left - 6 : lay.left - 5;
     for (let y = SHEET.y0 + 2; y < SHEET.y1 - 2; y++) if (cv.get(mx, y) !== C.Clear) cv.set(mx, y, C.Margin);
-    if (paper === 'ledger') for (let y = SHEET.y0 + 2; y < SHEET.y1 - 2; y++) if (cv.get(lay.time! - 4, y) !== C.Clear) cv.set(lay.time! - 4, y, C.Margin);
   }
 }
 
@@ -300,32 +307,52 @@ function titlePage(cv: Canvas, doc: Doc): void {
 }
 
 const TIME = /^(\d{4}|\d\d\.\d\d) (.*)$/;
+const HAND = /^~([0-2])$/;
+
+/** One laid-out line of a text page. `hand` is set where a "~N" line changed the writer's hand. */
+export interface TextLine {
+  readonly row: number;
+  readonly x: 'left' | 'right' | 'centre';
+  readonly time?: string;
+  readonly s: string;
+  readonly hand?: number;
+}
+
+/** How many lines fit from `top` down: the last line's descenders end inside the sheet, above row SHOWN. */
+const rowsFrom = (top: number) => Math.floor((SHEET.y1 - 4 - GLYPH_H - top) / LINE) + 1;
 
 /**
  * Lay a text page out. Paragraphs are split by blank lines and wrapped; a
  * single newline forces a break. A line starting with '>' is set to the
  * right (a signature), '^' is centred (a heading). On ledger paper a line
  * that opens with a time ("0305" or "01.20") puts the time in its column.
+ * A line "~N" changes the hand to shaky N for the lines after it.
  */
-export function layoutText(text: string, paper: Paper, rows = LAYOUTS[paper].rows): { row: number; x: 'left' | 'right' | 'centre'; time?: string; s: string }[] {
+export function layoutText(text: string, paper: Paper, rows = LAYOUTS[paper].rows): TextLine[] {
   const lay = LAYOUTS[paper];
   const cols = Math.floor((lay.right - lay.left) / ADVANCE);
-  const out: { row: number; x: 'left' | 'right' | 'centre'; time?: string; s: string }[] = [];
+  const out: TextLine[] = [];
   let row = 0;
+  let withHand: { hand?: number } = {};
   const paragraphs = text.replace(/^\n+|\n+$/g, '').split(/\n\s*\n/);
   paragraphs.forEach((para, pi) => {
     if (pi > 0) row++;
     for (const raw of para.split('\n')) {
       const line = raw.trim();
+      const h = HAND.exec(line);
+      if (h) {
+        withHand = { hand: Number(h[1]) };
+        continue;
+      }
       if (line.startsWith('>') || line.startsWith('^')) {
         const s = line.slice(1).trim();
         if ([...s].length > cols) throw new Error(`a set line is wider than the page: ${s}`);
-        out.push({ row: row++, x: line[0] === '>' ? 'right' : 'centre', s });
+        out.push({ row: row++, x: line[0] === '>' ? 'right' : 'centre', s, ...withHand });
         continue;
       }
       const t = lay.time !== undefined ? TIME.exec(line) : null;
       const body = t ? t[2] : line;
-      wrap(body, cols).forEach((s, i) => out.push({ row: row++, x: 'left', time: i === 0 && t ? t[1] : undefined, s }));
+      wrap(body, cols).forEach((s, i) => out.push({ row: row++, x: 'left', time: i === 0 && t ? t[1] : undefined, s, ...withHand }));
     }
   });
   if (row > rows) throw new Error(`a page runs to ${row} lines, more than the ${rows} that fit:\n${text}`);
@@ -338,9 +365,8 @@ function textPage(cv: Canvas, page: Extract<Page, { kind: 'text' }>, paper: Pape
   if (paper !== 'black') sheet(cv);
   if (page.letterhead) top = letterhead(cv, paper) + 4;
   ruling(cv, paper, top);
-  const pen: Pen = { c: C.Ink, shaky: page.shaky };
-  const rows = Math.min(lay.rows, Math.floor((SHEET.y1 - 2 - top) / LINE));
-  for (const l of layoutText(page.text, paper, rows)) {
+  for (const l of layoutText(page.text, paper, Math.min(lay.rows, rowsFrom(top)))) {
+    const pen: Pen = { c: C.Ink, shaky: l.hand ?? page.shaky };
     const y = top + l.row * LINE;
     const x = l.x === 'left' ? lay.left : l.x === 'right' ? lay.right - width(l.s) : Math.round((lay.left + lay.right - width(l.s)) / 2);
     if (l.time) write(cv, l.time, lay.time!, y, pen);
@@ -352,9 +378,9 @@ function textPage(cv: Canvas, page: Extract<Page, { kind: 'text' }>, paper: Pape
 
 /** Umbrella's letterhead: the eight-panel umbrella and the company's name. Returns the y under it. */
 function letterhead(cv: Canvas, paper: Paper): number {
-  const cx = 38;
-  const cy = 34;
-  const r = 15;
+  const cx = 30;
+  const cy = 23;
+  const r = 12;
   for (let y = -r; y <= r; y++)
     for (let x = -r; x <= r; x++) {
       const d = Math.max(Math.abs(x), Math.abs(y), (Math.abs(x) + Math.abs(y)) / 1.41);
@@ -362,10 +388,10 @@ function letterhead(cv: Canvas, paper: Paper): number {
       const seg = Math.floor(((Math.atan2(y, x) + Math.PI) / (Math.PI * 2)) * 8 + 0.5) % 8;
       cv.set(cx + x, cy + y, seg % 2 ? C.Red : paper === 'black' ? C.Caption : C.PaperLight);
     }
-  write(cv, 'UMBRELLA CORPORATION', 62, 22, { c: paper === 'black' ? C.Caption : C.Ink });
-  write(cv, 'Raccoon City Office', 62, 36, { c: paper === 'black' ? C.Caption : C.InkSoft });
-  cv.line(22, 56, 234, 56, C.Red);
-  return 58;
+  write(cv, 'UMBRELLA CORPORATION', 50, 13, { c: paper === 'black' ? C.Caption : C.Ink });
+  write(cv, 'Raccoon City Office', 50, 25, { c: paper === 'black' ? C.Caption : C.InkSoft });
+  cv.line(18, 38, 238, 38, C.Red);
+  return 40;
 }
 
 type Mark = NonNullable<Extract<Page, { kind: 'text' }>['marks']>[number];
@@ -392,71 +418,74 @@ function stain(cv: Canvas, m: Mark): void {
 
 /** The bunkhouse calendar: a supply company's July 1998, three days ringed in red. */
 function calendarPage(cv: Canvas, cal: Calendar): void {
-  sheet(cv, { x0: 14, y0: 6, x1: 242, y1: 250 });
+  const box = { x0: 14, y0: 4, x1: 242, y1: 190 };
+  sheet(cv, box);
   // The company's pine and name across the top.
-  for (let i = 0; i < 9; i++) cv.line(34 - i, 14 + i * 2, 34 + i, 14 + i * 2, C.Line);
-  cv.rect(33, 32, 36, 37, C.Line);
-  write(cv, cal.company, 50, 14, { c: C.Ink });
-  write(cv, cal.town, 50, 27, { c: C.InkSoft });
-  write(cv, cal.month, Math.round((PAGE - width(cal.month, 2)) / 2), 46, { c: C.Ink, scale: 2 });
+  for (let i = 0; i < 7; i++) cv.line(34 - i, 8 + i * 2, 34 + i, 8 + i * 2, C.Line);
+  cv.rect(33, 22, 36, 26, C.Line);
+  write(cv, cal.company, 50, 8, { c: C.Ink });
+  write(cv, cal.town, 50, 18, { c: C.InkSoft });
+  write(cv, cal.month, Math.round((PAGE - width(cal.month, 2)) / 2), 30, { c: C.Ink, scale: 2 });
   const gx = 22;
-  const gy = 76;
+  const gy = 58;
   const cw = 30;
-  const ch = 28;
-  ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach((d, i) => write(cv, d, gx + i * cw + 12, gy - 12, { c: i === 0 ? C.Red : C.Ink }));
-  for (let r = 0; r <= 5; r++) cv.line(gx, gy + r * ch, gx + 7 * cw, gy + r * ch, C.Line);
-  for (let c = 0; c <= 7; c++) cv.line(gx + c * cw, gy, gx + c * cw, gy + 5 * ch, C.Line);
+  const ch = 21;
+  ['S', 'M', 'T', 'W', 'T', 'F', 'S'].forEach((d, i) => write(cv, d, gx + i * cw + 12, gy - 11, { c: i === 0 ? C.Red : C.Ink }));
+  const rows = Math.ceil((cal.firstWeekday + cal.days) / 7);
+  for (let r = 0; r <= rows; r++) cv.line(gx, gy + r * ch, gx + 7 * cw, gy + r * ch, C.Line);
+  for (let c = 0; c <= 7; c++) cv.line(gx + c * cw, gy, gx + c * cw, gy + rows * ch, C.Line);
   for (let day = 1; day <= cal.days; day++) {
     const cell = cal.firstWeekday + day - 1;
     const x = gx + (cell % 7) * cw;
     const y = gy + Math.floor(cell / 7) * ch;
     const s = String(day);
-    write(cv, s, x + cw - 3 - width(s), y + 3, { c: cell % 7 === 0 ? C.Red : C.Ink });
+    write(cv, s, x + cw - 3 - width(s), y + 2, { c: cell % 7 === 0 ? C.Red : C.Ink });
+    // A steady pencil: a shaky one would run into the line under it.
     const note = cal.notes[day];
-    if (note) write(cv, note, x + 2, y + 15, { c: C.InkSoft, shaky: 1 });
-    if (cal.circled.includes(day)) cv.loop(x + cw - 3 - width(s) / 2 - 1, y + 7, 10, 8, C.Red);
+    if (note) write(cv, note, x + 2, y + 12, { c: C.InkSoft });
+    if (cal.circled.includes(day)) cv.loop(x + cw - 3 - width(s) / 2 - 1, y + 6, 10, 7, C.Red);
   }
-  bleed(cv, C.Ink, C.InkSoft, 14, 6, 242, 250);
-  write(cv, cal.scrawl, Math.round((PAGE - width(cal.scrawl, 2)) / 2), 222, { c: C.Red, scale: 2, shaky: 1 });
+  bleed(cv, C.Ink, C.InkSoft, box.x0, box.y0, box.x1, box.y1);
+  write(cv, cal.scrawl, Math.round((PAGE - width(cal.scrawl, 2)) / 2), gy + rows * ch + 4, { c: C.Red, scale: 2, shaky: 1 });
 }
 
 /** The shift boss's map of the workings, in pencil, with Hal's bloody thumb on the gallery. */
 function mapPage(cv: Canvas, map: MineMap): void {
   sheet(cv);
-  write(cv, map.heading, 20, 16, { c: C.Ink });
-  write(cv, map.sub, 20, 30, { c: C.InkSoft });
+  write(cv, map.heading, 20, 10, { c: C.Ink });
+  write(cv, map.sub, 20, 22, { c: C.InkSoft });
   const tunnel = (pts: [number, number][], w = 7) => {
     for (let i = 1; i < pts.length; i++) cv.line(pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1], C.Line, w);
     for (let i = 1; i < pts.length; i++) cv.line(pts[i - 1][0], pts[i - 1][1], pts[i][0], pts[i][1], C.PaperLight, w - 4);
   };
   // The adit from the quarry cut to the junction.
-  tunnel([[18, 92], [150, 92]]);
+  tunnel([[18, 80], [150, 80]]);
   // The office off the adit.
-  cv.rect(70, 60, 98, 82, C.Line);
-  cv.rect(72, 62, 96, 80, C.PaperLight);
-  tunnel([[84, 82], [84, 90]], 5);
+  cv.rect(70, 50, 98, 70, C.Line);
+  cv.rect(72, 52, 96, 68, C.PaperLight);
+  tunnel([[84, 70], [84, 78]], 5);
   // The junction, the pump house east of it, the lift north.
-  tunnel([[150, 92], [150, 60]]);
-  cv.rect(140, 44, 162, 62, C.Line);
-  cv.line(140, 44, 162, 62, C.Line);
-  cv.line(162, 44, 140, 62, C.Line);
-  tunnel([[150, 92], [196, 92]]);
-  cv.rect(196, 82, 222, 104, C.Line);
-  cv.rect(198, 84, 220, 102, C.PaperLight);
-  for (let a = 0; a < Math.PI * 2; a += 0.05) cv.set(Math.round(209 + Math.cos(a) * 6), Math.round(93 + Math.sin(a) * 6), C.Line);
+  tunnel([[150, 80], [150, 52]]);
+  cv.rect(140, 36, 162, 54, C.Line);
+  cv.line(140, 36, 162, 54, C.Line);
+  cv.line(162, 36, 140, 54, C.Line);
+  tunnel([[150, 80], [196, 80]]);
+  cv.rect(196, 70, 222, 90, C.Line);
+  cv.rect(198, 72, 220, 88, C.PaperLight);
+  for (let a = 0; a < Math.PI * 2; a += 0.05) cv.set(Math.round(209 + Math.cos(a) * 6), Math.round(80 + Math.sin(a) * 6), C.Line);
   // The decline down to the old third level and the gallery, under water.
-  tunnel([[150, 92], [150, 120], [128, 150]]);
-  cv.rect(40, 146, 214, 176, C.Line);
-  cv.rect(42, 148, 212, 174, C.Fill);
-  for (let y = 152; y < 172; y += 5) for (let x = 46; x < 208; x += 9) cv.line(x, y, x + 4, y + (x % 2 ? 1 : 0), C.PaperLight);
+  tunnel([[150, 80], [150, 100], [128, 120]]);
+  cv.rect(40, 116, 214, 142, C.Line);
+  cv.rect(42, 118, 212, 140, C.Fill);
+  for (let y = 122; y < 138; y += 5) for (let x = 46; x < 208; x += 9) cv.line(x, y, x + 4, y + (x % 2 ? 1 : 0), C.PaperLight);
   // The winze at the gallery's east end, roped off.
-  cv.rect(200, 176, 212, 196, C.Line);
+  cv.rect(200, 142, 212, 156, C.Line);
   // Labels.
   for (const [s, x, y] of map.labels) write(cv, s, x, y, { c: C.Ink });
-  write(cv, 'N', 230, 18, { c: C.Ink });
-  cv.line(232, 30, 232, 44, C.Ink);
-  cv.line(229, 33, 232, 30, C.Ink);
-  cv.line(235, 33, 232, 30, C.Ink);
+  write(cv, 'N', 230, 10, { c: C.Ink });
+  cv.line(232, 22, 232, 34, C.Ink);
+  cv.line(229, 25, 232, 22, C.Ink);
+  cv.line(235, 25, 232, 22, C.Ink);
   bleed(cv, C.Ink, C.InkSoft);
   for (const [s, x, y] of map.notes) write(cv, s, x, y, { c: C.Red, shaky: 1 });
   stain(cv, { kind: 'thumb', x: map.thumb[0], y: map.thumb[1] });
@@ -464,15 +493,15 @@ function mapPage(cv: Canvas, map: MineMap): void {
 
 /** A printed notice nailed to a tree, the bottom half torn away. */
 function noticePage(cv: Canvas, n: Notice): void {
-  const box = { x0: 30, y0: 20, x1: 226, y1: 236 };
+  const box = { x0: 30, y0: 10, x1: 226, y1: 190 };
   sheet(cv, box);
   // Nail holes, rust running from them.
   for (const x of [42, 214]) {
-    cv.rect(x - 1, 27, x + 2, 30, C.BloodDark);
-    for (let y = 30; y < 60; y++) if (cv.rand() < 0.7) cv.set(x + (cv.rand() < 0.2 ? 1 : 0), y, C.RedSoft);
+    cv.rect(x - 1, 17, x + 2, 20, C.BloodDark);
+    for (let y = 20; y < 50; y++) if (cv.rand() < 0.7) cv.set(x + (cv.rand() < 0.2 ? 1 : 0), y, C.RedSoft);
   }
-  write(cv, n.heading, Math.round((PAGE - width(n.heading, 2)) / 2), 40, { c: C.Red, scale: 2 });
-  let y = 68;
+  write(cv, n.heading, Math.round((PAGE - width(n.heading, 2)) / 2), 28, { c: C.Red, scale: 2 });
+  let y = 54;
   for (const l of n.lines) {
     write(cv, l, Math.round((PAGE - width(l)) / 2), y, { c: C.Ink });
     y += LINE;
@@ -492,19 +521,19 @@ function noticePage(cv: Canvas, n: Notice): void {
 /** A week's shift roster on the quarry office board: who came in, who went SICK. */
 function rosterPage(cv: Canvas, r: Roster): void {
   sheet(cv);
-  write(cv, r.company, 20, 16, { c: C.Ink });
-  write(cv, r.heading, 20, 30, { c: C.Ink });
+  write(cv, r.company, 20, 10, { c: C.Ink });
+  write(cv, r.heading, 20, 22, { c: C.Ink });
   const days = ['MON', 'TUE', 'WED', 'THU', 'FRI'];
   const nx = 18;
   const dx = 104;
   const cw = 28;
-  const top = 52;
-  const rh = 18;
+  const top = 34;
+  const rh = 15;
   days.forEach((d, i) => write(cv, d, dx + i * cw + 2, top, { c: C.Ink }));
   for (let i = 0; i <= r.rows.length; i++) cv.line(nx, top + 12 + i * rh, dx + 5 * cw, top + 12 + i * rh, C.Line);
   for (let i = 0; i <= 5; i++) cv.line(dx + i * cw, top + 12, dx + i * cw, top + 12 + r.rows.length * rh, C.Line);
   r.rows.forEach((row, i) => {
-    const y = top + 16 + i * rh;
+    const y = top + 15 + i * rh;
     write(cv, row.name, nx, y, { c: C.Ink });
     row.days.forEach((mark, d) => {
       const x = dx + d * cw;
@@ -516,7 +545,7 @@ function rosterPage(cv: Canvas, r: Roster): void {
     if (row.struck) cv.line(nx - 2, y + 4 + (i % 2), nx + width(row.name) + 2, y + 3, C.Red);
   });
   bleed(cv, C.Ink, C.InkSoft);
-  const fy = top + 22 + r.rows.length * rh;
+  const fy = top + 20 + r.rows.length * rh;
   if (r.foot) layoutText(r.foot, 'letter').forEach((l) => write(cv, l.s, 20, fy + l.row * LINE, { c: C.Red, shaky: 1 }));
 }
 
@@ -615,17 +644,18 @@ export function readTim(tim: Uint8Array): { pixels: Uint8Array; clut: number[] }
 
 export { TIM_SIZE };
 
-/** A page as the reader shows it on black, for the review page. */
+/** A page as the reader shows it: its top 256x192, on black. */
 export function toImage(d: Drawn, zoom = 2): Image {
   const w = PAGE * zoom;
-  const rgb = new Uint8Array(w * w * 3);
-  for (let y = 0; y < w; y++)
+  const h = SHOWN * zoom;
+  const rgb = new Uint8Array(w * h * 3);
+  for (let y = 0; y < h; y++)
     for (let x = 0; x < w; x++) {
       const c = d.pixels[Math.floor(y / zoom) * PAGE + Math.floor(x / zoom)];
       const s = c === C.Clear ? BLACK : d.palette[c].rgb;
       rgb.set(s, (y * w + x) * 3);
     }
-  return { width: w, height: w, rgb };
+  return { width: w, height: h, rgb };
 }
 
 /** The page file of each file slot, from g_filemPixNames (0x004d2350). */
