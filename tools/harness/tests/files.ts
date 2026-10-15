@@ -174,12 +174,19 @@ try {
     await link.frames(45);
   }
   const found = BOOKS.filter((id) => wanted.includes(id));
+  // The tab opens on book 1: turn to a file's book before stepping to it,
+  // even the first, which is in book 2 when only book 2's files are wanted.
+  let book = 0;
   for (let i = 0; i < found.length; i++) {
     const r = results.find((x) => x.doc.id === found[i])!;
-    if (i > 0) {
-      const sameBook = BOOKS.indexOf(found[i]!) >> 3 === BOOKS.indexOf(found[i - 1]!) >> 3;
-      await link.tap(sameBook ? Key.down : Key.right, 3);
-      await link.frames(sameBook ? 30 : 60);
+    const its = BOOKS.indexOf(found[i]!) >> 3;
+    if (its !== book) {
+      await link.tap(Key.right, 3);
+      await link.frames(60);
+      book = its;
+    } else if (i > 0) {
+      await link.tap(Key.down, 3);
+      await link.frames(30);
     }
     await shoot(link, r, 'book', `In the FILE tab: ${fileName(r.doc.title)}, book ${(BOOKS.indexOf(found[i]!) >> 3) + 1}`);
   }
