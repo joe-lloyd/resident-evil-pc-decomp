@@ -1013,9 +1013,10 @@ void check_event_item_usage(void)
 // menu closed) resets. The lid angle lives at omodel+0x76, the step at
 // g_counter_increase (reversed at the -199 stop so the lid eases back).
 //
-// Port addition: a box whose room has no lid object opens its menu at once.
-// Every box in the shipped game has a lid; Rebecca's chests are part of the
-// background, and the lid write went through an unset omodel pointer.
+// Port addition: a box whose room has no lid object opens its menu at once,
+// instead of writing the lid's angle through an unset omodel pointer. Every
+// box in the shipped game and in Rebecca's day has its lid (object model 0,
+// day/room.ts); this keeps a room built without one from stopping the game.
 // ============================================================================
 void check_itembox_state(void)
 {
