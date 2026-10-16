@@ -346,7 +346,20 @@ static void build_state(void)
         const int bank = g_SndBank[ch].handle;
         put("%s[\"%s\",%d,%d]", ch ? "," : "", file ? file : "", getSndStat(bank), bank ? getSndVol(bank) : 0);
     }
-    put("]}");
+    // Sound: the footstep set under the player and the walk step it loaded,
+    // her steps played and the last one's file; the room sound set and its
+    // two files (a door's open and close), how many played and the last.
+    int set = -1;
+    if (s_gameplayFrame && g_RdtPointer != NULL && g_RdtPointer->footstep_sound_zones != NULL) {
+        set = LookupFootstepZone((short)p.position.x, (short)p.position.z) & 0xFF;
+    }
+    const char* walk = set >= 0 ? emsnd_slot_file(set) : NULL;
+    const char* room0 = room_sfx_file(0);
+    const char* room1 = room_sfx_file(1);
+    const SoundProbe& sp = g_soundProbe;
+    put("]},\"snd\":{\"set\":%d,\"walk\":\"%s\",\"steps\":%u,\"step\":\"%s\",\"door\":%d,\"room\":[\"%s\",\"%s\"],\"sfx\":%u,\"last\":\"%s\"}",
+        set, walk ? walk : "", sp.step.plays, sp.step.last ? sp.step.last : "", (int)sp.roomSet,
+        room0 ? room0 : "", room1 ? room1 : "", sp.room.plays, sp.room.last ? sp.room.last : "");
 }
 
 void TestMode_Tick(int gameFrame)

@@ -6,6 +6,7 @@
 #include "Entities.h"
 #include "SoundTables.h"
 #include "RebMusic.h"
+#include "RebSound.h"
 #include "dc/ArrangeStages.h"     // room_file_stage(), STAGE_ARRANGE_FIRST
 #include "dc/ArrangeSoundRows.h"  // dc_arrange_snd_slots()
 #include "../DebugPrint.h"
@@ -13,6 +14,28 @@
 #include <cstdio>
 #include <cstring>
 #include "../system/AssetPath.h"
+
+// Port addition, for test mode: what each sound slot loaded and what played
+// (SoundProbe in Globals.h). The harness can't hear, so the game says.
+SoundProbe g_soundProbe;
+static const char* s_roomSfxFile[2];
+static const char* s_emSndFile[48];
+
+static void sound_probe_note(SoundProbeBank* b, const char* file)
+{
+    b->plays++;
+    b->last = file;
+}
+
+const char* room_sfx_file(int slot)
+{
+    return slot >= 0 && slot < 2 && g_RoomSfxBanks[slot * 2] != 0 ? s_roomSfxFile[slot] : NULL;
+}
+
+const char* emsnd_slot_file(int slot)
+{
+    return slot >= 0 && slot < 48 && g_emSndBanks[slot * 2] != 0 ? s_emSndFile[slot] : NULL;
+}
 
 // ============================================================================
 // sounds_reset (0x0047eb70)
@@ -148,6 +171,7 @@ void play_sfx(int bank, int soundId)
     case 0:
         if (soundId > 1) return;
         handle = g_RoomSfxBanks[soundId * 2];
+        if (handle != 0) sound_probe_note(&g_soundProbe.room, s_roomSfxFile[soundId]);
         break;
 
     case 1:
@@ -430,6 +454,8 @@ void load_room_sfx(unsigned char soundTableIndex)
 {
     int iVar6 = 0;
     int* piVar7 = g_RoomSfxBanks;
+    s_roomSfxFile[0] = s_roomSfxFile[1] = NULL;
+    g_soundProbe.roomSet = soundTableIndex;
 
     do {
         // destroy existing bank if loaded
@@ -455,6 +481,7 @@ void load_room_sfx(unsigned char soundTableIndex)
                 if (bank != 0) {
                     pan_set(bank, 0);
                     set_volume(bank, g_roomSfxVolume);
+                    s_roomSfxFile[iVar6 / 4] = filename;
                 }
             }
         }
@@ -1082,6 +1109,7 @@ void Play3DSnd(int bank, int soundId, int vol, int pos) // 0x0047f9c0
     case 0:
         if (soundId > 1) return;
         handle = g_RoomSfxBanks[soundId * 2];
+        if (handle != 0) sound_probe_note(&g_soundProbe.room, s_roomSfxFile[soundId]);
         break;
 
     case 1:
@@ -1386,6 +1414,7 @@ void PlayEntitySnd(unsigned char soundType) // 0x0047fbf0
     int handle = g_emSndBanks[(unsigned int)soundType * 2];
 
     if (handle != 0) {
+        sound_probe_note(&g_soundProbe.step, s_emSndFile[soundType]);
         int volume = CalcPanVolume(g_snd_pan_right, g_snd_pan_left);
         set_volume(handle, volume);
         SetSndSlot(handle, 0);
@@ -1439,6 +1468,7 @@ static void emsnd_load_slot(int slot, const char* filename)
     *piVar7 = 0;
     *((unsigned char*)(piVar7 + 1)) = 0;
     *((unsigned char*)(piVar7 + 1) + 1) = 0;
+    s_emSndFile[slot] = filename;
 
     if (filename == NULL) return;
 
@@ -1541,6 +1571,23 @@ void Room_LoadEnemySoundBanks(void) {
             dbg_printf("[emsnd] DC stage %u room %u (%s): %d slot override(s)\n",
                        (unsigned int)g_stageId, (unsigned int)g_roomId,
                        arrangeLoaded ? "arrange" : "base file", applied);
+        }
+    }
+
+    // Port addition, her mode: her rooms sit in free slots, whose rows are
+    // empty or run on into the next stage's first rooms, so her own names
+    // (RebSound.cpp) go over the row's: her floors' footsteps first of all.
+    if (g_bRebMode && get_stage_id() < 7) {
+        int applied = 0;
+        for (int slot = 0; slot < 48; slot++) {
+            const char* name = RebSound_Slot((int)get_stage_id(), g_roomId, slot);
+            if (name == NULL) continue;
+            emsnd_load_slot(slot, name[0] ? name : NULL);
+            applied++;
+        }
+        if (applied) {
+            dbg_printf("[emsnd] her stage %u room %u: %d slot(s) of her own\n",
+                       (unsigned int)g_stageId, (unsigned int)g_roomId, applied);
         }
     }
 }

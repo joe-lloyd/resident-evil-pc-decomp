@@ -37,6 +37,23 @@ export interface Bgm {
   channels: BgmChannel[];
 }
 
+/** What sounds the game loaded and played (TestMode.cpp "snd"); the harness can't hear. */
+export interface Sound {
+  /** The footstep set under the player: the low byte of the footstep zone she stands in, -1 out of play. */
+  set: number;
+  /** The WAV that set's walking step loaded (entity sound slot `set`), '' for none. */
+  walk: string;
+  /** Footsteps played since launch, and the last one's WAV. */
+  steps: number;
+  step: string;
+  /** The room sound set last loaded (a door record's sound byte) and its two WAVs, a door's open and close. */
+  door: number;
+  room: [string, string];
+  /** Sounds played from those two slots since launch, and the last one's WAV. */
+  sfx: number;
+  last: string;
+}
+
 export interface GameState {
   frame: number;
   /** game_loop's inner loop ran this frame: the game is in a room, not a menu screen. */
@@ -69,6 +86,8 @@ export interface GameState {
   banks: Uint8Array[];
   /** The music, or null from a game too old to say. */
   bgm: Bgm | null;
+  /** Footsteps and room sounds, or null from a game too old to say. */
+  sound: Sound | null;
 }
 
 export type Reply =
@@ -154,6 +173,23 @@ function parseGameState(o: Record<string, unknown>): GameState {
     selectFront: o.sel === undefined ? -1 : num(obj(o.sel, 'sel'), 'front'),
     banks: o.banks.map((b, i) => hexBytes(b, `banks[${i}]`)),
     bgm: o.bgm === undefined ? null : parseBgm(obj(o.bgm, 'bgm')),
+    sound: o.snd === undefined ? null : parseSound(obj(o.snd, 'snd')),
+  };
+}
+
+function parseSound(o: Record<string, unknown>): Sound {
+  const room: unknown[] = Array.isArray(o.room) ? o.room : [];
+  const [open, close] = room;
+  if (room.length !== 2 || typeof open !== 'string' || typeof close !== 'string') throw new ParseError('snd.room: expected 2 files');
+  return {
+    set: num(o, 'set'),
+    walk: str(o, 'walk'),
+    steps: num(o, 'steps'),
+    step: str(o, 'step'),
+    door: num(o, 'door'),
+    room: [open, close],
+    sfx: num(o, 'sfx'),
+    last: str(o, 'last'),
   };
 }
 

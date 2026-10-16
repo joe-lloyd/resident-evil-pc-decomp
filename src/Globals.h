@@ -2075,6 +2075,21 @@ void LoadRoomRdt(void);
 void update_room_bgm(void);
 // Port addition, for test mode: the WAV BGM channel 0-2 has loaded, or NULL.
 const char* bgm_channel_file(int channel);
+// Port addition, for test mode: the WAV room sound slot 0-1 (the door's or the
+// walk's, load_room_sfx) or entity sound slot 0-47 (g_emSndBanks) has loaded,
+// or NULL; and what played from them (SoundSystem.cpp).
+const char* room_sfx_file(int slot);
+const char* emsnd_slot_file(int slot);
+struct SoundProbeBank {
+    unsigned int plays;  // sounds that found a loaded bank and started
+    const char*  last;   // the WAV the last of them played
+};
+struct SoundProbe {
+    SoundProbeBank step;     // PlayEntitySnd: her footsteps
+    SoundProbeBank room;     // room sound slots: doors, walks
+    unsigned char  roomSet;  // the room sound set last loaded (a door record's +0x09)
+};
+extern SoundProbe g_soundProbe;
 void LoadHeldItemsImages(void);
 void load_room_bg(void);
 void load_room_bg_image(void);

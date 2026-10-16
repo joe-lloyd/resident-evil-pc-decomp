@@ -79,6 +79,7 @@ set(RE1_SOURCES
     src/game/PrintText.cpp
     src/game/RebItems.cpp
     src/game/RebMusic.cpp
+    src/game/RebSound.cpp
     src/game/Rendering.cpp
     src/game/Room.cpp
     src/game/BgAnim.cpp
