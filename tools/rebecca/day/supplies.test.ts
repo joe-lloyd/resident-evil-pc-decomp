@@ -25,9 +25,9 @@ test('each pickup has its own flag, kept while the item is there, and the model 
   const lines = supplyLines('lodge', floor, flags, 7);
   assert.deepEqual(flags, []);
   assert.equal(lines[0], 'if (ck(FG_ITEM, 180, 0)) {  // spray');
-  assert.match(lines[1]!, /^ {4}item_aot_set\(7, \d+, \d+, 1800, 1800, 65, 1, 0, 255, .*, 180, 129, 0, 0\);$/);
-  assert.match(lines[4]!, /^ {4}item_aot_set\(8, \d+, \d+, 1800, 1800, 67, 1, 1, 255, .*, 181, 129, 1, 0\);$/);
-  assert.match(lines[7]!, /^ {4}item_aot_set\(9, \d+, \d+, 1800, 1800, 47, 3, 2, 255, .*, 182, 129, 0, 0\);$/);
+  assert.match(lines[1]!, /^ {4}item_aot_set\(7, \d+, \d+, 1200, 1200, 65, 1, 0, 255, .*, 180, 129, 0, 0\);$/);
+  assert.match(lines[4]!, /^ {4}item_aot_set\(8, \d+, \d+, 1200, 1200, 67, 1, 1, 255, .*, 181, 129, 1, 0\);$/);
+  assert.match(lines[7]!, /^ {4}item_aot_set\(9, \d+, \d+, 1200, 1200, 47, 3, 2, 255, .*, 182, 129, 0, 0\);$/);
 });
 
 test('the flags stay clear of the rest of her day: 230-247, and the save room\'s 22', () => {

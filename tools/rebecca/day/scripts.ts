@@ -362,6 +362,13 @@ function main(): void {
       const m = /item_aot_set\(\d+, (\d+), (\d+), (\d+), (\d+),/.exec(mapLine.join('\n'));
       return m ? { x0: +m[1]!, z0: +m[2]!, x1: +m[1]! + +m[3]!, z1: +m[2]! + +m[4]! } : undefined;
     })();
+    // The key items, before the checks too: where a key item's zone meets a
+    // check's (Hal's operator key on the ore cart), the action button takes
+    // the key, and the check has its zone back once the key is taken. Their
+    // models come after the supplies' and the map's (room.ts).
+    const specSlots = supplyModels(slug).length + mapModels(slug).length;
+    lines.push(...keyItemLines(kit.items ?? [], keyFlags, id, specSlots));
+    id += kit.items?.length ?? 0;
     for (const c of kit.checks ?? []) {
       const doc = DOCUMENTS.find((d) => d.room === slug && c.text.startsWith(d.check));
       if (doc) {
@@ -383,10 +390,6 @@ function main(): void {
     const mapWall = mapZone ? [{ ...mapZone, shape: 'box' as const }] : [];
     lines.push(...supplyLines(slug, { ...floor, walls: [...floor.walls, ...mapWall] }, itemFlags, id));
     id += SUPPLIES[slug]?.length ?? 0;
-    // The key items: after the supplies and the map in the room's item models (room.ts).
-    const specSlots = supplyModels(slug).length + mapModels(slug).length;
-    lines.push(...keyItemLines(kit.items ?? [], keyFlags, id, specSlots));
-    id += kit.items?.length ?? 0;
     // The events (day/events.ts): their zones now, their working in main.
     const main: string[] = [];
     // FG_ROOM bits: an action pressed, or an item used and its line still to

@@ -64,7 +64,7 @@ export function supplyModels(slug: string): { from: string; index: number }[] {
   return [...new Set(SUPPLIES[slug] ?? [])].map((k) => KINDS[k].model);
 }
 
-const ZONE = 1800;
+const ZONE = 1200;
 const APART = 1700;
 
 /**

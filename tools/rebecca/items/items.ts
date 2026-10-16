@@ -80,6 +80,8 @@ export function keyItemModels(spots: readonly ItemSpot[]): PickupModel[] {
 }
 
 const word = (n: number) => `${n & 0xff}, ${(n >> 8) & 0xff}`;
+/** A key item's zone, square on it: her reach (600 ahead) lands in it from a step away, and it leaves the room's checks beside it theirs. */
+const ZONE = 1200;
 
 /**
  * A room's key item pickups: each where its scene put it, kept once taken by
@@ -93,7 +95,7 @@ export function keyItemLines(spots: readonly ItemSpot[], flags: number[], id: nu
     const flag = flags.shift();
     if (flag === undefined) throw new Error(`${s.step}: no item flag left`);
     const slot = first + models.findIndex((m) => sameModel(m, k.model));
-    const zone = `${s.x - 900}, ${s.z - 900}, 1800, 1800`;
+    const zone = `${s.x - ZONE / 2}, ${s.z - ZONE / 2}, ${ZONE}, ${ZONE}`;
     return [
       `if (ck(FG_ITEM, ${flag}, 0)) {  // ${k.name.toLowerCase()} (${s.step})`,
       `    item_aot_set(${id++}, ${zone}, ${k.id}, 1, ${slot}, 255, ${word(s.x)}, ${word(s.y & 0xffff)}, ${word(s.z)}, 0, 0, ${flag}, 129, 0, 0);`,

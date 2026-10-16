@@ -3,7 +3,7 @@
 // To tunnel.
 door_aot_set(0, 4080, 5610, 1530, 850, 1, 0, 7, 1, 0, ROOM_51C, 21335, 0, 15980, 3072, UNLOCKED, 193);
 // The typewriter and the item box, its lid on the body the scene paints.
-aot_set(1, 3485, 1700, 1190, 2210, SCE_TYPEWRITER, 129, 0, 0, 0, 0, 0, 0);
+aot_set(1, 3485, 1700, 850, 2550, SCE_TYPEWRITER, 129, 0, 0, 0, 0, 0, 0);
 aot_set(2, 5780, 3400, 2040, 2159, SCE_ITEMBOX, 129, 0, 0, 0, 0, 0, 0);
 obj(0, 17, 255, 7809, -1440, 4480, 2048, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 if (ck(FG_ITEM, 251, 0)) {  // the mine survey (maps/pickups.ts)
@@ -19,7 +19,7 @@ aot_set(7, 1700, 2890, 1700, 3230, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
 aot_set(8, 6460, 2040, 1360, 1275, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
 aot_set(9, 5270, 3910, 850, 850, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 if (ck(FG_ITEM, 191, 0)) {  // ribbons
-    item_aot_set(10, 4560, 2860, 1800, 1800, 47, 3, 0, 255, 84, 21, 0, 0, 176, 14, 0, 0, 191, 129, 0, 0);
+    item_aot_set(10, 4860, 3160, 1200, 1200, 47, 3, 0, 255, 84, 21, 0, 0, 176, 14, 0, 0, 191, 129, 0, 0);
 }
 if (ck(FG_ITEM, 251, 0)) {
     set(FG_ROOM, 12, 0);
