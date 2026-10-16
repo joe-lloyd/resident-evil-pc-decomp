@@ -572,6 +572,7 @@ anim_end_release();
 do {
     yield();
 } while (ck(FG_ROOM, 62, 1));
+cutnext(1);
 set(FG_STATUS, 62, 0);
 set(FG_ROOM, 11, 0);
 sys_multi(0);

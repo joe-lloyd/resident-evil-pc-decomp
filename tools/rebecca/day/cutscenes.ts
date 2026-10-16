@@ -96,7 +96,8 @@ export const CUTSCENES: readonly Cutscene[] = [
     // The flooded gallery (day/gallery/scene.py), the first time in: she
     // wades down from the junction at the west end, and the floor gives way
     // under the water (gear.ts: her weapons and healing are gone). Camera 0
-    // looks in from the foot of the decline.
+    // looks in from the foot of the decline; 1, from the far south-east,
+    // has her in the water as the floor goes.
     id: 'cut-mine-collapse',
     room: 'gallery',
     trigger: { on: 'enter', from: 'junction' },
@@ -104,6 +105,7 @@ export const CUTSCENES: readonly Cutscene[] = [
       cut(0),
       say("Cold, black water. I can't see the floor."),
       walk('her', { x: 6400, z: 11200 }),
+      cut(1),
       shake(true),
       scd(...LOSS_START),
       wait(25),
