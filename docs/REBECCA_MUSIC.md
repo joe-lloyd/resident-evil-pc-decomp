@@ -86,14 +86,24 @@ compiled one (`g_BgmNameTable`, `g_BgmRoomData`, `SoundTables.cpp`).
 
 - **The data.** `tools/rebecca/music/table.ts` works the table out from the
   cues in `plan/music.ts`. Each cue is one group, as in RE1, so rooms with
-  the same cue keep the music going through the door. A cue plays:
+  the same cue keep the music going through the door. A cue has up to three
+  channels, and each channel is a sketch of its own: the theme, and a layer
+  that some rooms or some step of hers switch on or off. A layer that never
+  switches is mixed into the theme's sketch. A channel plays:
   - for `reuse`, RE1's own file under `sound/`, from the player's game;
-  - for `new`, its render, shipped as `sound/Reb_<cue>.wav`;
-  - nothing for `ambience`, or for a `new` cue with no render yet.
+  - for `new`, its render, shipped as `sound/Reb_<cue>.wav` on channel 0
+    and `sound/Reb_<cue>_<n>.wav` on channel n;
+  - nothing for `ambience`, or for a channel with no render yet.
+- **The state byte.** A room's state (`SoundSystem.cpp` `update_room_bgm`)
+  holds the group in bits 0-2, an index into the room's row of four, and
+  channels 0-2 in bits 3-5. 0xFF is silence. A room starts with the
+  channels its cue plays there: the pond starts 0x28, the theme and the
+  water. Through a door into a room of the same group, only the channels
+  whose bits differ start or stop.
 - **The build.** `tools/rebecca/build.ts` writes the table into her overlay
   as `REB/sound/music.dat` and copies the renders beside it. It also sets
   each of her rooms' music state in her `BIO_CARD.DAT` (offset 0x33C, one
-  byte per room): 0x08 plays the room's group on channel 0, 0xFF is silence.
+  byte per room), as above.
   RE1's own audio never goes into the overlay: the save rooms' `Bgm_31` is
   only a name in the table.
 - **The engine.** `src/game/RebMusic.cpp` loads `music.dat` and lays her
@@ -105,7 +115,8 @@ compiled one (`g_BgmNameTable`, `g_BgmRoomData`, `SoundTables.cpp`).
 - **Every room of hers has a row.** Some of her slots have music in RE1's
   table. Before her table, three of her rooms played RE1's tracks by
   accident: the summit trail and the weather station played `Bgm_09`, and
-  the mine lift played `Bgm_1e`. Now each is silent until its cue has audio.
+  the mine lift played `Bgm_1e`. Now each plays its own cue: the summit's
+  and the mine's.
 - **A stage change.** `init_room` marks the music off without stopping it,
   so a silent room across a stage line kept the last room's track: the save
   room's `Bgm_31` went on into the mine lift. In her mode a silent room now
@@ -126,6 +137,49 @@ compiled one (`g_BgmNameTable`, `g_BgmRoomData`, `SoundTables.cpp`).
   another game on the test machine took the focus. Test mode now keeps its
   sound playing.
 
+## Switching channels as she works
+
+Room scripts change a room's state with opcode 0x37, `tbl37_set(stage,
+room, state)` in a room script. It writes the state the room plays on her
+next way in; it doesn't touch the music playing now. For that a script also
+starts or stops the channel with 0x15 or 0x16 (`bgm_play(n)`,
+`bgm_stop(n)`), which needs the channel loaded: a room loads every channel
+of its group, whichever are on.
+
+- **A step.** A channel in `plan/music.ts` can be off until a step of
+  `day/events.ts`, or on until one. `musicSwitches` in `table.ts` works out
+  each room's state after the step, and `day/scripts.ts` writes a 0x37 for
+  every room whose state changes into the script where the step happens,
+  beside its flag. If the step's room is one the channel plays in, the
+  script starts or stops it there and then. A cue switches at one step at
+  most, so the script can write each room's whole byte without asking what
+  else has happened; `checkMusic` holds it to that.
+  - Fuelling the generator sets the station's five rooms to 0x18: the hum,
+    channel 1, joins the next time she is there.
+  - Opening the sluice brings the mill, channel 1, into the camp yard, the
+    sawmill, the pond and the flume, and starts it at once in the pond.
+  - Closing the breakers starts the line hum, channel 2, in the switch house
+    and on the line track.
+  - Running the pump stops the water, channel 1, in the tunnel and the
+    junction.
+- **The chase.** A cue can take over another cue's rooms as the second
+  group of their rows (`Takeover`). The chase takes over the mine's five
+  rooms when the floor gives way, on her first step into the gallery
+  (`day/gear.ts`). The gallery's init sets the five to 0x09: group 1, the
+  chase, channel 0. Room scripts run their init before the engine picks the
+  room's music (`room_set`, then `update_room_bgm`), so the gallery plays
+  the chase from the moment she walks in. Through the mine the chase goes
+  on, one group. The quarry and the summit trail, the two ways out, set the
+  mine's rooms back to their own states, drained or not, once her gear is
+  gone. The owner has still to settle this placement.
+- **Layers don't start in step.** Each channel is its own file and loops
+  on its own. So the layers are textures with no beat to line up: the hum,
+  the water, the wind, the static. The mill thumps, but at its own pace,
+  as a machine would.
+- **Ambience is the sound work's.** The cues marked `ambience` stay silent
+  here, and so do the grounds' dogs: VCSL has no dog. Branch `reb-sound`
+  does ambience.
+
 ## The render step
 
     node tools/rebecca/music/render.ts <@strudel/web 1.2.5 dist> [sketch...]
@@ -133,9 +187,8 @@ compiled one (`g_BgmNameTable`, `g_BgmRoomData`, `SoundTables.cpp`).
 It writes `tools/rebecca/music/renders/<sketch>.wav`, by default for every
 sketch a cue names. The renders are not in git; the build ships what is
 there. Run it again and the bytes are the same: the script prints each
-file's sha256. The two renders so far are on the LAN to listen to:
-<https://home.arpa/research/rebecca-music/renders/yard.wav> and
-<https://home.arpa/research/rebecca-music/renders/chase.wav>.
+file's sha256. Every render is on the owner's page to listen to, beside
+its sketch: <https://home.arpa/research/rebecca-music/>.
 
 - **Strudel itself plays it.** The script runs Strudel's own browser build,
   the one the owner's page plays, in a headless Chrome. That is the
@@ -163,14 +216,30 @@ file's sha256. The two renders so far are on the LAN to listen to:
     in `~/.cache/rebecca-music`, or in `RE1_MUSIC_CACHE`.
   - Before these, two renders of the yard differed by one float step in
     about 50,000 samples, and the ADPCM pass spread that further. Now four
-    renders in a row give the same bytes.
+    renders in a row give the same bytes, and on 2026-10-16 all 22 of the
+    other sketches rendered again to the same bytes.
 - **The loop.** The script finds the piece's length from its notes: the
   fewest cycles after which they repeat. The yard repeats every 8 cycles
   (48 s) and the chase every 4 (6.7 s). It renders three passes. The file
   holds the first pass, which plays once, and the second, which loops. The
   second pass already holds the tails of the notes before it, so the join
   doesn't click. The third pass is there to measure the join: the loop
-  differs from it by at most 1 to 3 steps in 32768.
+  differs from it by at most 1 to 3 steps in 32768 for the yard and the
+  chase, and by up to 252 in the others, the most in the camp's water.
+  What the player hears is the step from the loop's last sample
+  back to its first. In every render that step is smaller than the steps
+  in the top 0.1% of the file's own: 577 at most, in the creek, whose own
+  top 0.1% start at 1,596.
+- **A layer's level.** A layer renders at its channel's `level` in
+  `plan/music.ts`, -28 to -34 dB RMS, so it sits under the theme at -24.
+- **No supersaw.** Strudel's supersaw starts each of its voices at a random
+  phase. The seed keeps the bytes the same, but each note gets new phases, so
+  the loop's first pass and the pass before it no longer meet: the dawn's
+  join jumped by 2,795 steps where its loudest step was 1,253. The pads are
+  pairs of sawtooth waves 0.1 of a semitone apart.
+- **A broken sample.** VCSL's map points `tom_mallet` at a path without
+  its `Membranophones/` folder, so it is a 404. `check.ts` doesn't fetch
+  samples; the render stops on it.
 - **The PS1 treatment** (`tools/rebecca/music/ps1.ts`):
   - Strudel renders at 44100 Hz stereo, which is halved to 22050 Hz mono
     through a 63-tap filter. RE1's own tracks are 22050 Hz mono.
@@ -261,17 +330,50 @@ owner's page is <https://home.arpa/research/re1-music/>.
 
 ## The sketches
 
-Both are in `tools/rebecca/music/sketches/` and are checked by `check.ts`.
+All are in `tools/rebecca/music/sketches/` and are checked by `check.ts`.
+They are first drafts, written in RE1's manner: sparse, low, a short loop
+of 30 to 50 seconds, rests where nothing plays, and every area in a key and
+colour of its own. Nobody has listened to them yet.
 
-| Sketch | Cue | What it tries |
-|---|---|---|
-| `yard.js` | the station, her hub | wind, low piano far apart, bowed vibraphone, a glass note |
-| `chase.js` | the mine, unarmed | low ostinato, timpani, anvil, a bowed cluster |
+| Cue | Sketch | Key | What it is meant to sound like |
+|---|---|---|---|
+| Morning after | `dawn` | E minor | a cold string pad on four chords, two bars each, a few harp notes, wind |
+| The station | `yard` | C | low piano notes far apart, bowed vibraphone chords, wind, a glass note |
+| | `station-hum` | C | the generator's hum, two octaves under the piano, its engine thudding |
+| The partner | `partner` | A minor | a four-note alto recorder phrase and its answer over low strings, a timpani tread |
+| Hal | `hal` | G | a slow hymn on an upright piano, a harmonica held back, a low drone |
+| Logging Camp 4 | `camp` | F# minor | a sawtooth ostinato like a belt left running, brake drum off the beat, slit drum, a far saw |
+| | `camp-mill` | | the wheel's thump each paddle, the axle's creak, the race |
+| | `camp-water` | | the pond: low water, an ocean drum |
+| The forestry road | `road` | D | a pedal fifth that never moves, wind, high bowed psaltery, a far knock |
+| | `road-wind` | | the tower's wind, whistling in the rails |
+| | `road-line` | | the line's hum on A, a whine and crackle on the wire |
+| The quarry | `quarry` | C# Phrygian | a dry drone with a semitone rubbing on it, sparse timpani, anvil and brake drum far off |
+| | `quarry-wind` | | the wind in the pit, grit trickling down the face |
+| The silver mine | `mine` | Bb | a drone felt more than heard, marimba drips off the beat, a bowed glass a tritone off |
+| | `mine-water` | | the flooded mine: water, an ocean drum, the sump gurgling |
+| Unarmed | `chase` | D | the one fast piece: low ostinato, timpani, anvil, a bowed cluster |
+| The summit | `summit` | E Lydian | thin high wind, handchimes far apart, a wineglass held under them, a pad far below |
+| | `summit-static` | | radio static and a carrier whine by the mast |
+| The line down | `skyway` | G minor | the cable over the sheaves and the bullwheel as rhythm, strings rising a step at a time |
+| The valley at dusk | `valley` | F minor | the Steinway in the low middle, a harp behind it, a dusk pad |
+| | `valley-creek` | | the creek |
+| The grounds | `estate` | Bb minor | a quiet pipe organ, low piano under it, a few organ notes on top |
+| Her credits | `credits` | | three minutes: the dawn chord, the station, the partner's phrase, Hal's piano, the dawn chord to end |
 
-They are a test of the sound, not finished pieces. Nobody has listened to
-them yet. The yard is rendered and plays in the station's five rooms. The
-chase is rendered too, but no room plays it: its cue has no places, and the
-script that switches the mine to it is step 7.
+The partner, Hal and the credits score cutscenes, which aren't built, so no
+room plays them. The station's piano alternates C and D flat, as the low
+piano of RE1's save room does. It is two notes a semitone apart, not a
+tune, but the owner may hear it.
+
+The owner's page is built from the sketches and their renders, then put
+in the research folder on pi-server:
+
+    node tools/rebecca/music/page.ts /tmp/rebecca-music
+    cd /tmp/rebecca-music && tar czf /tmp/rebecca-music.tgz index.html renders
+    scp /tmp/rebecca-music.tgz pi-server:/tmp/
+    # on pi-server: unpack it, then sudo install -m 644 each file into
+    # /opt/homelab/cert-setup/dashboard/research/rebecca-music/
 
 ## The plan
 
@@ -287,19 +389,17 @@ Each step ends in something to check:
    reads them. Still to do: the owner listens for the join.
 5. **Give her mode its own table.** Done: the yard plays our render in her
    mode, and Chris's save room plays RE1's own track.
-6. **Write the pieces,** in order of how long she hears them:
-   1. the station;
-   2. the camp, the road and the mine;
-   3. the chase;
-   4. the dawn, the partner's and Hal's themes;
-   5. the rest;
-   6. the credits last, built from the others.
-7. **Switch channels as she works.** Room scripts set the state with 0x37:
-   - the generator hum joins once the power is on;
-   - the mill joins once the race fills;
-   - the mine switches to the chase.
-8. **Test it.** Done: `tools/harness/tests/music.ts` visits rooms of hers
-   and Chris's save room, and checks the file each one plays.
+6. **Write the pieces.** A first draft of every cue, 2026-10-16, on the
+   owner's page with each render and a link into Strudel.
+7. **Switch channels as she works.** Done: room scripts set the state with
+   0x37 (above).
+8. **Test it.** Done: `tools/harness/tests/music.ts` visits a room of every
+   area and Chris's save room and checks the file each channel plays. It
+   works the four steps that switch a channel at their spots, the sluice,
+   the generator, the breakers and the pump, and follows the chase through
+   the mine and out. 52 checks passed on 2026-10-16, with the yard's loop
+   still playing 100 s on. The partner, Hal and the credits are rendered,
+   but no cutscene plays them yet, so the test can't hear them.
 
 ## Settled
 
@@ -311,14 +411,18 @@ Each step ends in something to check:
 ## Open questions
 
 - **The renders aren't in git.** They are rebuilt, the same bytes, with one
-  command. Should they be committed, about 4 MB for the yard, so a build
-  needs no Chrome and no network?
+  command, in about 35 minutes for all 23 on the old Mac, 20 of them for
+  the credits. Should they be committed, 68 MB, so a build needs no
+  Chrome and no network?
 - **8-bit or 16-bit.** RE1's PC tracks are 8-bit. Ours are 16-bit after the
-  ADPCM pass, so the yard is 4.2 MB. In 8-bit it would be half the size, with
-  more hiss under a quiet piece.
+  ADPCM pass: 68 MB for every render, 46 MB of it shipped in her overlay,
+  the 20 that rooms play. In 8-bit it would be half the size, with more hiss under a
+  quiet piece.
+- **Where the chase plays.** Now: from her first step into the gallery
+  until she reaches the quarry or the summit trail. It could start later,
+  when something comes for her, or end at the lift.
 
 - Is Strudel's sound close enough, or does the owner want a more orchestral
   bank, such as Sonatina (CC Sampling Plus, needs a credit)?
-- How big can the patch be? 14 tracks of two minutes at 22050 Hz mono 16-bit
-  come to about 75 MB. The options are 8-bit, which halves that, or teaching
-  the overlay to find `.ogg` files.
+- How big can the patch be? The options are 8-bit, which halves it, or
+  teaching the overlay to find `.ogg` files, an engine change.
