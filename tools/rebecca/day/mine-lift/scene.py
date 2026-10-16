@@ -20,6 +20,12 @@ junction's floor and its lamps. The cameras look in through the two gates.
 
 Moving: the counterweight cable creeping past, the bulb in the roof
 flickering, the bell pull swaying.
+
+State "lift-up" (UP pressed with the power on, day/events.ts): the cage
+climbs, played as it happens: the junction drops away under the south
+gate, the shaft's rock runs down past the bars, and the head house comes
+down into place behind the north gate, its landing and its door full of
+daylight. Then the cage stands at the summit: south, the dark of the shaft.
 """
 import math
 import os
@@ -27,6 +33,7 @@ import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
@@ -167,6 +174,9 @@ def build():
         reb.box(gv, gf, (x, y, s * 0.3), (s, s, s * 0.6), rng.uniform(0, 3))
     reb.mesh_object("Grit", gv, gf, mat("rock"), smooth=False)
 
+    # Everything from here is outside the cage, and slides down past it as it climbs.
+    inside = set(bpy.data.objects)
+
     # ---- The shaft round the cage: rock close on three sides, the guides, the counterweight cable running past.
     rock_face("Shaft west", rock, (X0 - 0.45, Y0 - 2.6, -3.0), (0, Y1 - Y0 + 3.8, 0), (0, 0, 16.0), 14, 40, (-1, 0, 0), seed=1)
     rock_face("Shaft east", rock, (X1 + 0.55, Y0 - 2.6, -3.0), (0, Y1 - Y0 + 3.8, 0), (0, 0, 16.0), 14, 40, (1, 0, 0), seed=2)
@@ -198,6 +208,42 @@ def build():
         reb.point(f"Junction lamp light {k}", (x, y, 2.9), 24, (1.0, 0.68, 0.38), 0.05)
     # Underground: no sky. The cage bulb, a cold glimmer down the shaft, the junction's lamps.
     reb.point("Shaft fill", ((X0 + X1) / 2, Y0 - 1.0, 2.6), 10, (0.55, 0.6, 0.7), 0.8)
+
+    outside = [o for o in bpy.data.objects if o not in inside and o.parent is None]
+
+    # ---- The head house at the summit, where the cage stops: a plank landing
+    # behind the north gate, a plank wall with its door open on daylight, and
+    # south of the cage the shaft's dark under the headframe's timbers.
+    before_top = set(bpy.data.objects)
+    boards = kit.boards("Head house boards", (0.16, 0.12, 0.08), width=0.2, grime=0.6)
+    reb.prim("cube", "Head house landing", kit.boards("Landing planks", (0.13, 0.1, 0.07), width=0.18, grime=0.5), ((X0 + X1) / 2, Y0 - 1.15, -0.05), (X1 - X0 + 1.4, 2.2, 0.1))
+    wy = Y0 - 2.2
+    for x0, x1 in ((X0 - 1.2, 1.5), (2.45, X1 + 1.2)):
+        reb.prim("cube", "Head house wall", boards, ((x0 + x1) / 2, wy, 1.6), (x1 - x0, 0.08, 3.2))
+    reb.prim("cube", "Head house wall over the door", boards, (1.975, wy, 2.6), (0.95, 0.08, 1.2))
+    reb.prim("cube", "Daylight", reb.mat_emit("Daylight", (0.85, 0.88, 0.92), 3.0), (1.975, wy - 0.6, 1.0), (1.6, 0.05, 2.4))
+    reb.spot("Daylight through the door", (1.975, wy - 0.5, 1.6), (1.975, Y0 + 0.8, 0.0), 260, (0.85, 0.88, 0.95), 50, 0.8, 0.4)
+    for x in (X0 - 0.4, X1 + 0.4):
+        kit.rod("Headframe post", kit.dirtied(reb.mat_wood("Headframe timber", (0.14, 0.095, 0.055)), 0.7), (x, Y1 + 0.35, -3.0), (x, Y1 + 0.35, 2.5), 0.12, 6)
+    reb.prim("cube", "Headframe beam", kit.dirtied(reb.mat_wood("Headframe timber", (0.14, 0.095, 0.055)), 0.7), ((X0 + X1) / 2, Y1 + 0.35, 2.43), (X1 - X0 + 1.2, 0.25, 0.22))
+    top = [o for o in bpy.data.objects if o not in before_top and o.parent is None]
+    out_rest = [(o, o.location.copy()) for o in outside]
+    top_rest = [(o, o.location.copy()) for o in top]
+    CLIMB = 8.0
+
+    def climb(t):
+        """t 0: at the foot; the cage takes up, climbs and slows to 1, at the
+        summit. The world outside moves, not the cage."""
+        t = float(t)
+        e = t * t * (3 - 2 * t)
+        for o, loc in out_rest:
+            o.location = loc - Vector((0, 0, CLIMB * e))
+            o.hide_render = t >= 1 and o.name.startswith(("Junction", "Collar", "Pump motor", "Drum", "Shaft landing", "Shaft sump", "Shaft back"))
+        for o, loc in top_rest:
+            o.location = loc + Vector((0, 0, CLIMB * (1 - e)))
+            o.hide_render = t <= 0
+    climb(0)
+    room.state("lift-up", climb, motion=(16, 6))
 
     anim = kit.Anim(16)
     mp = cable_m.node_tree.nodes["Run"]
