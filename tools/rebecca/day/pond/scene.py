@@ -3,8 +3,9 @@
 What it tells: the pond is what drives the mill. Water runs out through the
 sluice gate in the timber dam, down a plank-lined race, and turns the big
 wheel against the sawmill's east wall; its shaft goes in through the wall
-to the saw. The sluice is open, its wheel-crank on the beam above it, so
-the wheel still turns with nothing on the other end. The sawyer came out
+to the saw. The sluice is wound down to a crack, a trickle in the bottom
+of the race, and the wheel stands still; the handwheel that winds it, on
+the beam above, has a socket for a crank and no crank. The sawyer came out
 of the mill's back door with his arm gone: his blood runs down the bank
 from the door to the reeds, and he lies face down among them in the
 shallows, one sleeve empty. Out on the open water a logger's hard hat
@@ -21,8 +22,13 @@ flume. The dam runs north-south at x 5.2-6.4, its top a plank walk; the
 pond is east of it, x 6.4 on, y up to 9.4, deep. Reeds stand in the
 shallows along its south shore. The sawyer floats at x 9.6, y 8.9.
 
-Moving: the water wheel, the pond and the race rippling, the reeds, the
-body and the hat bobbing, flies on the bank's blood.
+Moving: the pond and the race rippling, the reeds, the body and the hat
+bobbing, flies on the bank's blood.
+
+State "mill-race" (the crank used on the sluice, day/events.ts): the gate
+wound up out of the water, the race full and white, the wheel turning,
+played as it happens: the gate rising, the race filling, the wheel taking
+up. The wheel then turns in the room's loop.
 """
 import math
 import os
@@ -155,10 +161,12 @@ def build():
         return h
     reb.terrain("Bank", bank, (-14, 40), (-20, 32), ground_h, step=0.35)
     reb.prim("cube", "Pond", water, (20.0, (SHORE_Y - 14) / 2 + 0.1, POND_Z), (28.0, SHORE_Y + 14 + 0.2, 0.02))
-    reb.prim("cube", "Race water", water, ((RACE_NS[0] + RACE_NS[1]) / 2, (RACE_NS[2] - 3 + RACE_NS[3]) / 2, RACE_Z), (RACE_NS[1] - RACE_NS[0], RACE_NS[3] - RACE_NS[2] + 3, 0.02))
-    reb.prim("cube", "Race water, east leg", water, ((RACE_EW[0] + RACE_EW[1]) / 2, (RACE_EW[2] - 3 + RACE_EW[3]) / 2, RACE_Z + 0.04), (RACE_EW[1] - RACE_EW[0], RACE_EW[3] - RACE_EW[2] + 3, 0.02))
+    race = [reb.prim("cube", "Race water", water, ((RACE_NS[0] + RACE_NS[1]) / 2, (RACE_NS[2] - 3 + RACE_NS[3]) / 2, RACE_Z), (RACE_NS[1] - RACE_NS[0], RACE_NS[3] - RACE_NS[2] + 3, 0.02)),
+            reb.prim("cube", "Race water, east leg", water, ((RACE_EW[0] + RACE_EW[1]) / 2, (RACE_EW[2] - 3 + RACE_EW[3]) / 2, RACE_Z + 0.04), (RACE_EW[1] - RACE_EW[0], RACE_EW[3] - RACE_EW[2] + 3, 0.02))]
+    race_rest = [ob.location.z for ob in race]
+    froth = []
     for k, (x, y, r) in enumerate(((5.0, 2.5, 0.5), (1.9, 3.4, 0.6), (1.8, 5.6, 0.5), (1.6, 6.3, 0.4))):
-        kit.splat(f"Foam {k}", foam, (x, y, RACE_Z + 0.03), r, seed=k, stretch=(1.0, 1.6), lumps=0.5)
+        froth.append(kit.splat(f"Foam {k}", foam, (x, y, RACE_Z + 0.03), r, seed=k, stretch=(1.0, 1.6), lumps=0.5))
     # The race's plank walls and their caps.
     for (x0, x1, y0, y1) in ((RACE_NS[1], RACE_NS[1] + 0.08, RACE_EW[3], RACE_NS[3]), (RACE_NS[0], RACE_NS[1], RACE_NS[3], RACE_NS[3] + 0.08), (RACE_EW[0], RACE_EW[1], RACE_EW[3], RACE_EW[3] + 0.08)):
         reb.prim("cube", "Race wall", wet_timber, ((x0 + x1) / 2, (y0 + y1) / 2, -0.6), (x1 - x0, y1 - y0, 1.24))
@@ -204,9 +212,9 @@ def build():
     reb.mask(reb.wall(pier))
     # Water pouring off the buckets on the down side.
     for k in range(3):
-        reb.prim("cube", f"Spill {k}", foam, (wx + (k - 1) * 0.3, wy - 1.5 - 0.1 * k, 0.4), (0.25, 0.04, 1.6), rot=(0.25, 0, 0))
+        froth.append(reb.prim("cube", f"Spill {k}", foam, (wx + (k - 1) * 0.3, wy - 1.5 - 0.1 * k, 0.4), (0.25, 0.04, 1.6), rot=(0.25, 0, 0)))
 
-    # ---- The sluice: two posts in the dam, the gate board raised, the crank's handwheel on the beam.
+    # ---- The sluice: two posts in the dam, the gate board wound down, the handwheel on the beam.
     sx = (DAM[0] + DAM[1]) / 2
     for y in (RACE_EW[2] + 0.05, RACE_EW[3] - 0.05):
         reb.wall(kit.rod("Sluice post", timber, (sx, y, -1.2), (sx, y, 2.0), 0.13, 8), "circle")
@@ -218,8 +226,8 @@ def build():
     for k in range(4):
         a = math.pi * k / 4
         kit.rod("Handwheel spoke", mat("rust"), (sx + 0.25, sum(RACE_EW[2:]) / 2, 2.2), (sx + 0.25, sum(RACE_EW[2:]) / 2 + math.cos(a) * 0.38, 2.2 + math.sin(a) * 0.38), 0.015, 5)
-    kit.rod("Crank handle", mat("rust"), (sx + 0.25, sum(RACE_EW[2:]) / 2 + 0.36, 2.2), (sx + 0.45, sum(RACE_EW[2:]) / 2 + 0.36, 2.2), 0.02, 5)
-    reb.prim("cube", "Water through the gate", foam, (sx - 0.3, sum(RACE_EW[2:]) / 2, -0.38), (0.7, 0.9, 0.04), rot=(0, 0.2, 0))
+    crank = kit.rod("Crank handle", mat("rust"), (sx + 0.25, sum(RACE_EW[2:]) / 2 + 0.36, 2.2), (sx + 0.45, sum(RACE_EW[2:]) / 2 + 0.36, 2.2), 0.02, 5)
+    froth.append(reb.prim("cube", "Water through the gate", foam, (sx - 0.3, sum(RACE_EW[2:]) / 2, -0.38), (0.7, 0.9, 0.04), rot=(0, 0.2, 0)))
     reb.prim("cube", "Sluice sign", mat("white paint"), (sx, RACE_EW[3] + 0.05, 1.35), (0.02, 0.5, 0.3))
     kit.text("Sluice sign words", "SLUICE", mat("black"), (sx + 0.015, RACE_EW[3] + 0.05, 1.4), size=0.08, rot=(math.pi / 2, 0, math.pi / 2))
     kit.text("Sluice sign words 2", "OPEN = MILL", mat("red paint"), (sx + 0.015, RACE_EW[3] + 0.05, 1.29), size=0.06, rot=(math.pi / 2, 0, math.pi / 2))
@@ -349,7 +357,6 @@ def build():
     sun.rotation_euler[0] = math.radians(30)
 
     anim = kit.Anim(16)
-    anim.spin(wheel, axis=0, turns=-1, symmetry=24)
     anim.ripple(water)
     anim.bob(sawyer, height=0.02, speed=1)
     anim.bob(hat, height=0.03, speed=2)
@@ -360,16 +367,54 @@ def build():
     anim.flies((8.6, 9.7, 0.05), count=8, radius=0.45)
     anim.bob(crow_b, height=0.04, speed=2)
 
+    # The sluice wound open with her crank: the gate rises out of the water,
+    # the race fills and froths, and the wheel takes up and turns.
+    gate_rest = gate.location.copy()
+    # Turned onto x, the handwheel spins on its own axis as a turn about x
+    # applied last.
+    hand.rotation_mode = "ZYX"
+    hand_rest = hand.rotation_euler.copy()
+    bpy.context.view_layer.update()
+    turning = [o for o in bpy.data.objects if o.parent is None and o.name.startswith(("Handwheel spoke", "Handwheel hole"))] + [crank]
+    for o in turning:
+        world = o.matrix_world.copy()
+        o.parent = hand
+        o.matrix_world = world
+
+    def wind(t):
+        """t 0: wound down to a crack; to 0.6 the gate rises and the race
+        fills, the froth coming as it runs; the wheel takes up from 0.3."""
+        t = float(t)
+        lift = min(1.0, t / 0.6)
+        lift = lift * lift * (3 - 2 * lift)
+        gate.location = gate_rest + Vector((0, 0, -0.5 + 1.1 * lift))
+        hand.rotation_euler = (hand_rest.x + 2 * math.pi * lift, hand_rest.y, hand_rest.z)
+        crank.hide_render = t <= 0
+        for ob, z in zip(race, race_rest):
+            ob.location.z = z - 0.55 * (1 - lift)
+        for k, ob in enumerate(froth):
+            ob.hide_render = t < 0.25 + 0.08 * k
+        # Gathering speed: at t 1 it has turned a quarter, which looks the
+        # same, so it meets the loop's first frame.
+        spin = max(0.0, (t - 0.3) / 0.7)
+        wheel.rotation_euler = (-2 * math.pi / 24 * 6 * spin * spin, 0, 0)
+
+    def wheel_turns(k):
+        """An eighth of a turn a loop: the spokes land where the next ones were."""
+        wheel.rotation_euler = (-2 * math.pi / 8 * k / anim.frames, 0, 0)
+    wind(0)
+    room.state("mill-race", wind, motion=(12, 4), cameras=[0, 1, 3], loop=wheel_turns)
+
     # ---- What the game needs.
     room.door("sawmill", (MILL_X, BACK_DOOR[0], MILL_X + 0.7, BACK_DOOR[1]), arrive=(2.6, 10.1), face=(1, 0), walk=False)
     room.door("flume", (BRIDGE[0], Y0, BRIDGE[1], Y0 + 0.6), arrive=(4.0, 3.8), face=(0, 1))
     room.check((SAWYER[0] - 1.8, SHORE_Y, SAWYER[0] + 0.6, SHORE_Y + 0.8), "A man face down in the reeds. His left sleeve is empty from the elbow.\nThe sawyer. He made it this far.")
     room.check((13.0, SHORE_Y, 15.4, SHORE_Y + 0.8), "A hard hat, floating out there. And dead fish, belly up.\nSomething's wrong with the water too.")
     room.spot("mill-race", (DAM[0], RACE_EW[3], DAM[1], RACE_EW[3] + 0.8))  # day/events.ts says what she sees and does here
-    room.check((RACE_NS[1], 3.6, RACE_NS[1] + 1.0, 5.6), "The water wheel. It drives the mill through that shaft.\nIt's turning, but the mill isn't.")
+    room.check((RACE_NS[1], 3.6, RACE_NS[1] + 1.0, 5.6), "The water wheel. It drives the mill through that shaft.\nIt turns when the sluice lets the water down the race.")
     room.check((MILL_X, BACK_DOOR[0] - 0.6, MILL_X + 0.8, BACK_DOOR[0]), "A bloody hand on the mill's back door.")
     room.check((BRIDGE[0], Y0 + 0.6, BRIDGE[1], Y0 + 1.2), "A footbridge over the race. The flume's that way.")
-    room.entry = "The mill pond. The wheel's still turning."
+    room.entry = "The mill pond. The wheel's stopped."
     room.export(anim)
 
 
