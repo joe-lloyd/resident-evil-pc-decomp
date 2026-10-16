@@ -5,7 +5,7 @@
 // Positions are game units: a scene's metres times 1700 (blender/reb.py), its
 // x and y becoming x and z. Cameras are numbered as the scene's room.camera
 // calls are.
-import { anim, cut, face, give, gone, line, say, scd, shake, wait, walk, type Cutscene } from './cutscene.ts';
+import { anim, cut, face, fade, give, gone, line, place, say, scd, shake, wait, walk, type Cutscene } from './cutscene.ts';
 import { LOSS_START } from './gear.ts';
 
 export const CUTSCENES: readonly Cutscene[] = [
@@ -159,6 +159,41 @@ export const CUTSCENES: readonly Cutscene[] = [
       say('He flew us out here, and he stayed with her.'),
       say('"I\'m sorry, Kevin. We never came back for you."'),
       wait(30),
+    ],
+  },
+  {
+    // The mansion's 1F save room, RE1's own (rooms/ROOM1000.c): she comes up
+    // through the hatch at (5200, 5600). Rebecca waits by the item box in
+    // Chris's game, at (7280, 3920); she sits down there. Chris comes in by
+    // the door from the hall. Camera 0 has the item box and that door.
+    // The scene is both tracker rows, cut-sleep and cut-chris.
+    id: 'cut-sleep',
+    room: 'save',
+    trigger: { on: 'enter', from: 'crawl' },
+    cast: [{ who: 'chris', at: { x: -30000, z: -30000 } }],
+    beats: [
+      cut(0),
+      say('A typewriter. A lamp. Nothing in here wants me dead.'),
+      walk('her', { x: 7100, z: 4200 }),
+      face('her', { x: 5200, z: 5600 }),
+      say("I can't go on. Not tonight."),
+      say("I'll close my eyes. Just for a minute."),
+      fade('black'),
+      wait(90),
+      place('chris', { x: 3550, z: 2700, angle: 0 }),
+      say('...Footsteps.'),
+      fade('clear'),
+      walk('chris', { x: 5900, z: 4400 }),
+      face('her', { x: 5900, z: 4400 }),
+      line('chris', '"Freeze!"'),
+      line('chris', '"...Wait. You\'re S.T.A.R.S.? Bravo team?"'),
+      say('"Rebecca Chambers. I\'m the team\'s medic."'),
+      line('chris', '"Chris Redfield, Alpha. Where\'s the rest of Bravo?"'),
+      say('"I don\'t know. We got separated."'),
+      line('chris', '"Stay here. It\'s safe. I\'ll check the house."'),
+      walk('chris', { x: 3550, z: 2700 }),
+      gone('chris'),
+      scd('set(FG_COMMON, 36, 0);  // canon: Chris met Rebecca'),
     ],
   },
 ];
