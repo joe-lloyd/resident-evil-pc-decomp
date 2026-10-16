@@ -4,7 +4,9 @@
 // The shipped game's backgrounds are still pictures. Rebecca's rooms bring a
 // file per camera that patches the background texture as the game runs: a
 // candle flame, grass in the wind, a fly round a lamp, and patches that show a
-// change of state (a fallen tree dragged off the path) while a flag is set.
+// change of state (a fallen tree dragged off the path) while a flag is set. A
+// change can also play once as it happens: the tree dragging across the path
+// in the moments after its flag is raised, then gone for the state behind it.
 //
 // objspr\anm0<stage><room, two decimal digits><camera>.dat, next to the mask
 // paks (load_room_bg_masks), little-endian:
@@ -12,9 +14,11 @@
 //   char magic[4] "RBA1"
 //   u16  layerCount
 //   per layer:
-//     u8  bank     flag bank (0 or 1, as cmd_bit_test numbers them), 0xFF = always
+//     u8  bank     flag bank (0, 1 or 2, as cmd_bit_test numbers them), 0xFF = always
 //     u8  bit      flag index in that bank
-//     u8  value    1 = shown while the flag is set, 0 = while it is clear
+//     u8  value    bit 0: 1 = shown while the flag is set, 0 = while it is clear;
+//                  bit 1: play once, from the frame the flag turns that way,
+//                  and hide after the last frame
 //     u8  ticks    game frames per animation frame
 //     u16 frameCount
 //     per frame:
@@ -24,6 +28,12 @@
 //
 // Layers draw in file order over the camera's background. The texture is only
 // rebuilt when some layer's frame or visibility changes.
+//
+// A play-once layer needs the moment its flag turned, which may be before the
+// camera that shows it loads: a room script raises the flag and cuts to that
+// camera in the same frame. So every drawn frame notes when each flag of banks
+// 0-2 last turned, room-wide; a new room, or a second with nothing drawn (a
+// load, a door), starts the notes over without counting what changed.
 // ============================================================================
 #include "../Globals.h"
 #include "../DebugPrint.h"
@@ -43,6 +53,11 @@ namespace {
 constexpr int W = 320;
 constexpr int H = 240;
 constexpr int MAX_LAYERS = 32;
+constexpr unsigned char VALUE_SET = 1;
+constexpr unsigned char VALUE_ONCE = 2;
+// Flags watched for play-once layers: banks 0 (128), 1 (256) and 2 (64).
+constexpr int BANK_BITS[3] = {128, 256, 64};
+constexpr int WATCHED = 128 + 256 + 64;
 
 struct Layer {
     unsigned char bank, bit, value, ticks;
@@ -59,6 +74,12 @@ unsigned int s_work[W * H];
 int s_shown[MAX_LAYERS];           // frame on screen per layer, -1 = hidden
 unsigned int s_serial = 0;         // display image the layers belong to
 
+bool s_seen[WATCHED];              // each watched flag at the last drawn frame
+DWORD s_turned[WATCHED];           // Game_timer when it last changed; 0 = not since the notes began
+DWORD s_lastTick = 0;
+int s_watchRoom = -1;              // stage * 256 + room the notes are for
+bool s_watching = false;
+
 unsigned int to_rgba(unsigned short px)
 {
     unsigned int r = ((px >> 0) & 0x1F) * 255 / 31;
@@ -71,7 +92,9 @@ unsigned short u16(const unsigned char* p) { return (unsigned short)(p[0] | (p[1
 
 bool flag_set(int bank, int bit)
 {
-    const void* data = bank == 0 ? (const void*)&g_ScenarioFlags : (const void*)&g_ScenarioFlags2;
+    const void* data = bank == 0 ? (const void*)&g_ScenarioFlags
+                     : bank == 1 ? (const void*)&g_ScenarioFlags2
+                                 : (const void*)g_LocksFlags;
     // Same bit order as cmd_bit_op: bit 0 of a word is its top bit.
     const unsigned int word = ((const unsigned int*)data)[bit >> 5];
     return (word & (0x80000000u >> (bit & 31))) != 0;
@@ -109,9 +132,41 @@ const unsigned char* frame_at(const Layer& l, int frame)
     return p;
 }
 
+int watched(int bank, int bit)
+{
+    int at = 0;
+    for (int b = 0; b < bank; b++) at += BANK_BITS[b];
+    return at + bit;
+}
+
+// Note when each watched flag turns. Called every drawn frame.
+void watch_flags(void)
+{
+    const int room = (int)g_stageId * 256 + (int)g_roomId;
+    const bool fresh = !s_watching || room != s_watchRoom || Game_timer - s_lastTick > 30;
+    int i = 0;
+    for (int bank = 0; bank < 3; bank++) {
+        for (int bit = 0; bit < BANK_BITS[bank]; bit++, i++) {
+            const bool now = flag_set(bank, bit);
+            if (fresh) s_turned[i] = 0;
+            else if (now != s_seen[i]) s_turned[i] = Game_timer;
+            s_seen[i] = now;
+        }
+    }
+    s_watching = true;
+    s_watchRoom = room;
+    s_lastTick = Game_timer;
+}
+
 int wanted_frame(const Layer& l)
 {
-    if (l.bank != 0xFF && flag_set(l.bank, l.bit) != (l.value != 0)) return -1;
+    if (l.bank != 0xFF && flag_set(l.bank, l.bit) != ((l.value & VALUE_SET) != 0)) return -1;
+    if (l.value & VALUE_ONCE) {
+        const DWORD turned = l.bank == 0xFF ? 0 : s_turned[watched(l.bank, l.bit)];
+        if (turned == 0) return -1;
+        const DWORD frame = (Game_timer - turned) / (l.ticks ? l.ticks : 1);
+        return frame < l.frameCount ? (int)frame : -1;
+    }
     if (l.frameCount <= 1 || l.ticks == 0) return 0;
     return (int)((Game_timer / l.ticks) % l.frameCount);
 }
@@ -161,7 +216,7 @@ void BgAnim_Load(const void* bitmap, int width, int height)
         l.frameCount = u16(p + 4);
         l.frames = p + 6;
         p = frame_at(l, l.frameCount);
-        if (p == NULL || (l.bank != 0xFF && (l.bank > 1 || (l.bank == 0 && l.bit >= 128)))) {
+        if (p == NULL || (l.bank != 0xFF && (l.bank > 2 || l.bit >= BANK_BITS[l.bank]))) {
             dbg_printf("[bganim] %s: layer %d is malformed\n", path, i);
             break;
         }
@@ -185,6 +240,7 @@ void BgAnim_Clear(void)
 // Once per drawn frame, before the background quad is queued.
 void BgAnim_Tick(void)
 {
+    if (g_bRebMode) watch_flags();
     if (s_layerCount == 0 || s_serial != g_displayImageSerial || g_displayImageSRV == MARNI_NULL_HANDLE) return;
     int want[MAX_LAYERS];
     bool changed = false;

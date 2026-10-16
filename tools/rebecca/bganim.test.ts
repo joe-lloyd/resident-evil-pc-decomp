@@ -79,3 +79,14 @@ test('render noise under the change threshold is not an animation', () => {
 test('the file name matches the engine: stage, room in decimal, camera', () => {
   assert.equal(animFileName(2, 20, 1), 'ANM02201.dat');
 });
+
+test('a change as it happens plays once, on a lock flag, from the moment it turns', () => {
+  const half = frame((x, y) => (x >= 200 && x < 260 && y >= 200 ? [10, 80, 10] : undefined));
+  const done = frame((x, y) => (x >= 200 && y >= 200 ? [10, 80, 10] : undefined));
+  const { layers } = parse(buildAnim(frame(), [{ frames: [half, done], ticks: 5, when: { bank: 2, bit: 43, value: true }, once: true }])!);
+  assert.deepEqual([layers[0]!.bank, layers[0]!.bit, layers[0]!.value, layers[0]!.ticks, layers[0]!.frames.length], [2, 43, 3, 5, 2]);
+});
+
+test('a lock flag past the bank is refused', () => {
+  assert.throws(() => buildAnim(frame(), [{ frames: [flame(1)], ticks: 0, when: { bank: 2, bit: 64, value: true } }]), /out of range/);
+});
