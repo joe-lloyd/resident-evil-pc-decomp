@@ -353,12 +353,40 @@ export async function faceTowards(link: GameLink, x: number, z: number): Promise
 
 type Zone = { x: number; z: number; w: number; d: number };
 
+/** How far ahead of her the action button reaches. */
+const PROBE = 600;
+/** Kept between her reach and a zone's edge, for the slack in how she faces. */
+const AIM_INSET = 150;
+
+/**
+ * The point of `zone` to face from (x, z): the one whose distance is nearest
+ * PROBE, so her reach lands on it. Facing the middle instead, her reach can
+ * fall past a narrow zone's far edge.
+ */
+function aimPoint(zone: Zone, x: number, z: number): { x: number; z: number } {
+  const span = (from: number, size: number) => {
+    const inset = Math.min(AIM_INSET, size / 2);
+    return Array.from({ length: 11 }, (_, i) => from + inset + ((size - 2 * inset) * i) / 10);
+  };
+  let best = { x: zone.x + zone.w / 2, z: zone.z + zone.d / 2 };
+  let off = Infinity;
+  for (const px of span(zone.x, zone.w))
+    for (const pz of span(zone.z, zone.d)) {
+      const o = Math.abs(Math.hypot(px - x, pz - z) - PROBE);
+      if (o < off) {
+        off = o;
+        best = { x: px, z: pz };
+      }
+    }
+  return best;
+}
+
 /**
  * Walk up to a zone (a door, a switch, a piano): to the open spot inside it
  * nearest to the player, or, when it lies wholly inside a wall or furniture,
- * to the open spot just outside it nearest its middle. Then face its middle,
- * where the engine's action probe (600 ahead) lands. Returns the state, which
- * may be in another room if a touch door fired on the way.
+ * to the open spot just outside it nearest its middle. Then face the point of
+ * it where the engine's action probe (PROBE ahead of her) lands. Returns the
+ * state, which may be in another room if a touch door fired on the way.
  */
 export async function approach(link: GameLink, zone: Zone): Promise<GameState> {
   const start = await link.state();
@@ -402,7 +430,8 @@ export async function approach(link: GameLink, zone: Zone): Promise<GameState> {
     arrived = err.state;
   }
   if (arrived.stage !== start.stage || arrived.room !== start.room) return arrived;
-  return faceTowards(link, cx, cz);
+  const aim = aimPoint(zone, arrived.player.x, arrived.player.z);
+  return faceTowards(link, aim.x, aim.z);
 }
 
 /** Walk up to a zone, press action once and let whatever opens close. */
