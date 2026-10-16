@@ -63,9 +63,13 @@ interface Change {
   bank: number;
   bit: number;
   cause: Cause;
-  /** The camera whose background changes most, and where (320x240). */
+  /** The camera the pictures are taken from, and where its background changes (320x240). */
   camera: number;
   rects: { x: number; y: number; w: number; h: number }[];
+  /** Every camera the change shows in, the most changed first: the first she can be stood in view of is used. */
+  views: { camera: number; rects: Change['rects'] }[];
+  /** Set once she has been stood in view of `camera`. */
+  fixed?: boolean;
 }
 
 /** The hand-written yard's winch: the crank used on it drags the pine clear (yard/room.c). */
@@ -112,17 +116,18 @@ function changes(): Change[] {
       const lockTo = (read(room.slug)?.doors ?? []).map((d) => bySlug.get(d.to)).find((r) => r && bank === Bank.locks && lockOf(room.slug, r)?.bit === bit);
       if (lockTo) cause = { kind: 'lock', to: lockTo.slug, item: lockOf(room.slug, lockTo)!.item };
       if (!cause) throw new Error(`${room.slug}: nothing in this test causes state ${st.name}`);
-      // The camera whose picture the change moves most.
-      let best = { camera: -1, area: 0, rects: [] as Change['rects'] };
+      // The cameras whose pictures the change moves, the most first.
+      const views: { camera: number; area: number; rects: Change['rects'] }[] = [];
       json.cameras.forEach((_, i) => {
         const base = to15(readPng(path.join(day, room.slug, 'renders', `cam${i}.png`)));
         const after = to15(readPng(path.join(day, room.slug, 'renders', `cam${i}.s-${st.name}.png`)));
         const rects = changedRects(base, [after]);
         const area = rects.reduce((n, r) => n + r.w * r.h, 0);
-        if (area > best.area) best = { camera: i, area, rects };
+        if (area > 0) views.push({ camera: i, area, rects });
       });
-      if (best.camera < 0) throw new Error(`${room.slug}: state ${st.name} changes no camera's picture`);
-      list.push({ name: st.name, room, bank, bit, cause, camera: best.camera, rects: best.rects });
+      if (!views.length) throw new Error(`${room.slug}: state ${st.name} changes no camera's picture`);
+      views.sort((a, b) => b.area - a.area);
+      list.push({ name: st.name, room, bank, bit, cause, camera: views[0]!.camera, rects: views[0]!.rects, views });
     }
   }
   return list;
@@ -156,21 +161,29 @@ function floorOf(c: Change) {
   return { ...json, doors: [{ to: '', zone: { x0: -1, z0: -1, x1: -1, z1: -1 }, arrive: { x: (z.x0 + z.x1) / 2, z: (z.z0 + z.z1) / 2 } }] };
 }
 
-/** Stand her somewhere the game shows from `camera`. */
+/**
+ * Stand her somewhere the game shows from the change's camera. The first
+ * time, that is the most changed camera she can be stood in view of: in a
+ * cage, the camera the change fills may show no floor of its own.
+ */
 async function onCamera(link: GameLink, c: Change): Promise<GameState> {
   const json = floorOf(c);
   const touch = (json.doors ?? []).filter((d) => d.to && !opens(c.room.slug, d.zone)).map((d) => d.zone);
   const cells = walkable(json, touch);
-  const floor = cameraFloor(c.room, c.camera);
-  const tries = floor
-    .map((r) => nearest(cells, (r.x0 + r.x1) / 2, (r.z0 + r.z1) / 2, ([x, z]) => inside(r, x, z, -300)))
-    .filter((p): p is [number, number] => p !== undefined);
-  for (const [x, z] of tries) {
-    await link.place(x, z);
-    const s = await link.frames(20);
-    if (s.camera === c.camera) return s;
+  for (const view of c.fixed ? [{ camera: c.camera, rects: c.rects }] : c.views) {
+    const tries = cameraFloor(c.room, view.camera)
+      .map((r) => nearest(cells, (r.x0 + r.x1) / 2, (r.z0 + r.z1) / 2, ([x, z]) => inside(r, x, z, -300)))
+      .filter((p): p is [number, number] => p !== undefined);
+    for (const [x, z] of tries) {
+      await link.place(x, z);
+      const s = await link.frames(20);
+      if (s.camera === view.camera) {
+        Object.assign(c, { camera: view.camera, rects: view.rects, fixed: true });
+        return s;
+      }
+    }
   }
-  throw new Error(`could not stand her where camera ${c.camera} shows her`);
+  throw new Error(`could not stand her where camera ${c.views.map((v) => v.camera).join(' or ')} shows her`);
 }
 
 /** How far ahead of her the game looks for a zone she acts on (update_player_position). */
@@ -314,7 +327,9 @@ try {
       const moved = difference(b!, a!, c.rects);
       const kept = difference(b!, g!, c.rects);
       const note = `camera ${c.camera}, ${moved.toFixed(1)} changed, ${kept.toFixed(1)} after coming back`;
-      if (moved < 6) throw new Error(`the picture barely changed where the renders do (${note})`);
+      // Two shots with nothing changed differ by 0-1 here; the crane's thin
+      // tongs moving in the dark mill, the faintest change, by 5.8.
+      if (moved < 4) throw new Error(`the picture barely changed where the renders do (${note})`);
       if (kept < moved / 2) throw new Error(`it did not stay changed (${note})`);
       console.log(`ok    ${c.room.slug}:${c.name}: ${note}`);
     } catch (err) {
