@@ -191,6 +191,36 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "mill-race",
+   "bank": 1,
+   "bit": -1,
+   "cameras": [
+    2,
+    6,
+    7
+   ],
+   "loop": true
+  },
+  {
+   "name": "crane",
+   "bank": 1,
+   "bit": -1,
+   "motion": {
+    "frames": 12,
+    "ticks": 5
+   },
+   "cameras": [
+    0,
+    2,
+    3,
+    6,
+    7
+   ],
+   "loop": true
+  }
+ ],
  "bounds": {
   "x0": 1700,
   "z0": 4420,
@@ -314,7 +344,7 @@
     "x1": 23120,
     "z1": 10540
    },
-   "text": "The water wheel's shaft. It's still turning.\nThe belt's off, so it isn't driving anything."
+   "text": "The water wheel's shaft. The belt to the saw's been thrown off.\nThe line shaft for the crane is still belted to it."
   },
   {
    "zone": {
@@ -350,7 +380,7 @@
     "x1": 27200,
     "z1": 16660
    },
-   "text": "The water wheel. The race still runs, so it still turns."
+   "text": "The water wheel. The race turns it, when the pond's sluice is open."
   },
   {
    "zone": {
