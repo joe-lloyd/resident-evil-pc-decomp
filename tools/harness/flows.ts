@@ -439,9 +439,10 @@ export async function check(link: GameLink, zone: Zone): Promise<GameState> {
  * Use an item from the status screen, as a player does: open it, move the
  * cursor to the item (it starts on slot 0; slots run two to a row) and pick
  * USE, the first entry of the item's menu. Returns once she has control again,
- * with any message the use opened closed.
+ * with any message the use opened closed; with `wait` false, the moment USE
+ * is pressed, to watch what it does.
  */
-export async function useItem(link: GameLink, id: number): Promise<GameState> {
+export async function useItem(link: GameLink, id: number, wait = true): Promise<GameState> {
   const s = await link.state();
   const slot = s.items.findIndex((it) => it.id === id);
   if (slot < 0) throw new StuckError(`she has no item ${id}`, s);
@@ -459,6 +460,7 @@ export async function useItem(link: GameLink, id: number): Promise<GameState> {
   await link.tap(Key.action, 3); // the item's menu
   await link.frames(15);
   await link.tap(Key.action, 3); // USE
+  if (!wait) return link.state();
   await link.frames(30);
   return settle(link);
 }
