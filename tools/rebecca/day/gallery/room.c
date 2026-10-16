@@ -9,6 +9,14 @@ aot_set(2, 14790, 7990, 3740, 2550, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(3, 10710, 6630, 3060, 2380, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(4, 17340, 7820, 6460, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
 enemy(17, 0, 221, 1, 2, 0, 0, 1917, 0, 0, 24500, 0, 12600, 0, 0, 0, 0);  // a zombie
+// The floor is about to give way (day/gear.ts): the mine plays chase until she is out of it.
+if (ck(FG_COMMON, 238, 1)) {
+    tbl37_set(4, 27, 9);   // mine-entrance
+    tbl37_set(4, 28, 9);   // tunnel
+    tbl37_set(4, 30, 9);   // junction
+    tbl37_set(4, 31, 9);   // gallery
+    tbl37_set(4, 9, 9);   // mine-lift
+}
 return;
 
 // main procedure 0

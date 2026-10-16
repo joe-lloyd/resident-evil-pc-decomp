@@ -37,6 +37,11 @@ if (ck(FG_COMMON, 131, 1)) {
         }
         set(FG_COMMON, 131, 0);
         aot_set(10, 3995, 3230, 1020, 1190, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
+        tbl37_set(2, 21, 24);   // yard
+        tbl37_set(2, 26, 24);   // woods
+        tbl37_set(2, 23, 24);   // bridge
+        tbl37_set(2, 24, 24);   // platform
+        tbl37_set(2, 22, 24);   // shed
         message(138, 255, 0);
     }
 }

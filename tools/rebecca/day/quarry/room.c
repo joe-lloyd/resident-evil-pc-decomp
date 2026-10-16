@@ -15,6 +15,21 @@ aot_set(8, 22950, 7140, 5950, 1190, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
 aot_set(9, 29920, 7820, 2380, 1700, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
 aot_set(10, 22100, 23460, 10200, 1190, SCE_MESSAGE, 129, 136, 0, 255, 0, 0, 0);
 enemy(2, 1, 217, 1, 2, 0, 0, 2635, 0, 0, 14980, 0, 2400, 0, 0, 0, 0);  // a cerberus
+// Out of the mine once it has taken her gear: its rooms play their own music again, not chase.
+if (ck(FG_COMMON, 238, 0) && ck(FG_COMMON, 135, 0)) {
+    tbl37_set(4, 27, 8);   // mine-entrance
+    tbl37_set(4, 28, 8);   // tunnel
+    tbl37_set(4, 30, 8);   // junction
+    tbl37_set(4, 31, 8);   // gallery
+    tbl37_set(4, 9, 8);   // mine-lift
+}
+if (ck(FG_COMMON, 238, 0) && ck(FG_COMMON, 135, 1)) {
+    tbl37_set(4, 27, 8);   // mine-entrance
+    tbl37_set(4, 28, 24);   // tunnel
+    tbl37_set(4, 30, 24);   // junction
+    tbl37_set(4, 31, 8);   // gallery
+    tbl37_set(4, 9, 8);   // mine-lift
+}
 return;
 
 // main procedure 0

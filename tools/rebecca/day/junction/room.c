@@ -35,6 +35,9 @@ if (ck(FG_COMMON, 135, 1) && ck(FG_ROOM, 12, 0)) {
         set(FG_COMMON, 135, 0);
         door_aot_set(2, 7140, 13090, 6120, 1020, 0, 1, 8, 0, 0, ROOM_51F, 4420, 0, 8500, 0, UNLOCKED, 193);
         aot_set(8, 17000, 8840, 1360, 2380, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
+        tbl37_set(4, 28, 8);   // tunnel
+        tbl37_set(4, 30, 8);   // junction
+        bgm_stop(1);
         message(136, 255, 0);
     } else {
         message(134, 255, 0);

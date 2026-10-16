@@ -21,6 +21,8 @@ import { KEY_ITEM_FLAGS, KEY_ITEMS, keyItemLines, keyItemModels, sameModel, type
 import { BAG_SLOTS, GEAR, LOSS_BIT, LOSS_LINE, LOSS_ROOM } from './gear.ts';
 import { EVENT_FLAGS, EVENTS, eventsIn, giveModels, GIVE_FLAGS, itemModelSlots, keyItem } from './events.ts';
 import { day } from '../plan/day.ts';
+import { CUES } from '../plan/music.ts';
+import { musicSwitches, musicTable, type StateWrite } from '../music/table.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -282,13 +284,70 @@ const message = (n: number, text: string) => `${n}: ${pages(text).map((p) => `\\
 
 const size = (z: Zone) => `${z.x0}, ${z.z0}, ${z.x1 - z.x0}, ${z.z1 - z.z0}`;
 
+/** Opcode 0x37 for each write: a room's music state, which it plays on her next way in. */
+const stateLines = (writes: readonly StateWrite[]) => writes.map((w) => `tbl37_set(${w.stage}, ${w.room}, ${w.state});   // ${w.slug}`);
+
+/**
+ * Her music's switches (music/table.ts), on the rooms' own terms. The states
+ * assume every sketch is rendered: a channel with no file has nothing to start.
+ */
+function musicLines() {
+  const { steps, takeovers } = musicSwitches(CUES, musicTable(CUES, day.places, dayRooms, () => true));
+  for (const st of steps) if (!EVENT_FLAGS.has(st.step)) throw new Error(`music switches at ${st.step}, which no room's script does (day/events.ts)`);
+  for (const t of takeovers) if (!t.start.some((w) => w.slug === LOSS_ROOM)) throw new Error(`${t.cue} starts where the mine takes her gear, ${LOSS_ROOM}, which it does not play in`);
+  return {
+    /** What a step does to the music as it happens, in the room it happens in. */
+    step(step: string, slug: string): string[] {
+      const st = steps.find((x) => x.step === step);
+      if (!st) return [];
+      return [...stateLines(st.writes), ...st.now.filter((n) => n.slug === slug).map((n) => (n.on ? `bgm_play(${n.channel});` : `bgm_stop(${n.channel});`))];
+    },
+    /**
+     * A room's init, before the engine picks the music (room_set runs it before
+     * update_room_bgm): where the mine takes her gear, the takeover starts on
+     * her first way in; where it ends, the rooms get their own music back.
+     */
+    init(slug: string, lossFlag: number | undefined): string[] {
+      const out: string[] = [];
+      for (const t of takeovers) {
+        if (slug === LOSS_ROOM) {
+          out.push(`// The floor is about to give way (day/gear.ts): the mine plays ${t.cue} until she is out of it.`, `if (ck(FG_COMMON, ${lossFlag}, 1)) {`, ...stateLines(t.start).map((l) => `    ${l}`), '}');
+        }
+        if (t.ends.includes(slug)) {
+          const lost = `ck(FG_COMMON, ${lossFlag}, 0)`;
+          out.push(`// Out of the mine once it has taken her gear: its rooms play their own music again, not ${t.cue}.`);
+          if (t.back.step === undefined) out.push(`if (${lost}) {`, ...stateLines(t.back.after).map((l) => `    ${l}`), '}');
+          else {
+            const f = EVENT_FLAGS.get(t.back.step)!;
+            out.push(`if (${lost} && ck(FG_COMMON, ${f}, 0)) {`, ...stateLines(t.back.after).map((l) => `    ${l}`), '}');
+            out.push(`if (${lost} && ck(FG_COMMON, ${f}, 1)) {`, ...stateLines(t.back.before).map((l) => `    ${l}`), '}');
+          }
+        }
+      }
+      return out;
+    },
+  };
+}
+
 function main(): void {
   const bySlug = new Map(dayRooms.map((r) => [r.slug, r]));
   const kits = new Map(dayRooms.flatMap((r) => {
     const k = readKit(r.slug);
     return k ? [[r.slug, k] as const] : [];
   }));
-  const flags = [...ENTRY_FLAGS];
+  // Each kit room's first-thought flag, handed out in room order, so a room
+  // can test another's (the mine's loss, music below).
+  const entryFlags = new Map<string, number>();
+  {
+    const free = [...ENTRY_FLAGS];
+    for (const [slug, kit] of kits) {
+      if (!kit.entry) continue;
+      const f = free.shift();
+      if (f === undefined) throw new Error(`${slug}: no flag left for its first thought`);
+      entryFlags.set(slug, f);
+    }
+  }
+  const music = musicLines();
   const killFlags = [...KILL_FLAGS];
   const itemFlags = [...ITEM_FLAGS];
   const keyFlags = [...KEY_ITEM_FLAGS];
@@ -428,6 +487,8 @@ function main(): void {
         `set(FG_COMMON, ${f}, 0);`,
         ...(reopen.has(e.step) ? [reopen.get(e.step)!] : []),
         ...(giveFlag === undefined ? [afterLine] : []),
+        // The music it changes (plan/music.ts): the rooms' states, and here at once.
+        ...music.step(e.step, slug),
         `message(${done}, 255, 0);`,
       ];
       if (use !== undefined) {
@@ -493,9 +554,9 @@ function main(): void {
       main.push(`if (ck(FG_ROOM, ${b}, 0) && ck(FG_ITEM, ${mapHere.flag}, 1)) {`, `    set(FG_ROOM, ${b}, 1);`, `    message(${say(mapHere.found)}, 255, 0);`, '}');
     }
     if (bit > 29) throw new Error(`${slug}: its events need FG_ROOM bits up to ${bit - 1}, past the engine's from 29`);
+    lines.push(...music.init(slug, entryFlags.get(LOSS_ROOM)));
     lines.push('return;', '', '// main procedure 0');
-    const flag = kit.entry ? flags.shift() : undefined;
-    if (kit.entry && flag === undefined) throw new Error(`${slug}: no flag left for its first thought`);
+    const flag = entryFlags.get(slug);
     if (flag !== undefined && slug === LOSS_ROOM) {
       // The mine takes her gear (gear.ts): the room's thought runs on into the loss.
       msgs[0] = `${msgs[0]}\n${LOSS_LINE}`;

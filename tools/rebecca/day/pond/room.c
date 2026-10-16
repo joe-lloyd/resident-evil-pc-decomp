@@ -37,6 +37,11 @@ if (ck(FG_COMMON, 137, 1)) {
         }
         set(FG_COMMON, 137, 0);
         aot_set(8, 8840, 5100, 2040, 1360, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
+        tbl37_set(2, 30, 24);   // camp-yard
+        tbl37_set(3, 22, 24);   // sawmill
+        tbl37_set(3, 23, 56);   // pond
+        tbl37_set(3, 24, 24);   // flume
+        bgm_play(1);
         message(136, 255, 0);
     }
 }
