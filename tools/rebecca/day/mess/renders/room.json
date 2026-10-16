@@ -193,6 +193,8 @@
   "x1": 10880,
   "z1": 17000
  },
+ "ground": "boards",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -277,6 +279,7 @@
    "text": "The serving hatch. The kitchen's through there."
   }
  ],
+ "saves": null,
  "items": [
   {
    "step": "office-key",

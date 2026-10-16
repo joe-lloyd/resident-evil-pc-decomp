@@ -306,6 +306,8 @@ def build():
     rng = random.Random(1972)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X_END, Y1), inside=True)
+    room.ground("earth")  # sawdust
+    room.floor((14.0, 9.0, X_END, 11.0), "boards")  # the plank walk
     room.camera((1.4, 3.0, 3.2), (9.0, 8.4, 0.6), 200, "high in the north-west corner: the log on the carriage, the blade, the blood on the boards")
     room.camera((13.6, 11.8, 3.2), (6.0, 5.4, 0.8), 200, "high in the south-east corner: the board stack's bloody face, the saw, the big doors far off")
     room.camera((13.6, 3.0, 3.3), (5.0, 9.2, 0.6), 200, "high in the north-east corner: the turning pulley, the slack belt, the crane, the mill's length")

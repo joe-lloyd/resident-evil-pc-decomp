@@ -157,6 +157,8 @@
   "x1": 22100,
   "z1": 17000
  },
+ "ground": "rock",
+ "floors": [],
  "voids": [
   {
    "x0": 6290,
@@ -253,6 +255,7 @@
    "text": "Egg sacs, all over the roof. That one's split open."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [
   {

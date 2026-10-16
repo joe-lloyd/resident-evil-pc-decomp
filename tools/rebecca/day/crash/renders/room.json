@@ -293,6 +293,8 @@
   "x1": 32300,
   "z1": 23800
  },
+ "ground": "earth",
+ "floors": [],
  "voids": [
   {
    "x0": 26520,
@@ -429,6 +431,7 @@
    "text": "The trees are snapped off and burnt black, all the way along.\nShe spun before she came down."
   }
  ],
+ "saves": null,
  "items": [
   {
    "step": "crowbar",

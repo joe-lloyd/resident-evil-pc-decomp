@@ -15,11 +15,13 @@
 // - boards: ft_wd, the mansion's wooden floors.
 // - rock: ft_cave, the caves under the courtyard.
 // - water: ft_swim, wading through the flooded rooms under the guardhouse.
-// - concrete: ft_conc, the guardhouse basement and the lab.
-// - metal: ft_pla, the steel plates of the lab and its lifts.
+// - concrete: ft_conc, the guardhouse basement and the lab; flagstones too.
+// - metal: ft_pla, the steel plates of the lab and its lifts; gratings too.
+// - lino: ft_lin, the mansion's back corridors.
+// - carpet: ft_cp, the mansion's carpets; rugs and rubber mats too.
 import { footstep, GROUND_STEPS, wav } from '../footsteps.ts';
 
-export const GROUNDS = ['earth', 'gravel', 'boards', 'rock', 'water', 'concrete', 'metal'] as const;
+export const GROUNDS = ['earth', 'gravel', 'boards', 'rock', 'water', 'concrete', 'metal', 'lino', 'carpet'] as const;
 export type Ground = (typeof GROUNDS)[number];
 
 export const isGround = (s: string): s is Ground => (GROUNDS as readonly string[]).includes(s);
@@ -39,6 +41,8 @@ export const STEP_SETS: Record<Ground, StepSet> = {
   water: { walk: 'ft_swimA', run: 'ft_swimB', fall: 'taore_wa' },
   concrete: { walk: 'ft_concA', run: 'ft_concB', fall: 'taore_st' },
   metal: { walk: 'ft_plaA', run: 'ft_plaB', fall: 'taore_pl' },
+  lino: { walk: 'ft_linA', run: 'ft_linB', fall: 'taore_st' },
+  carpet: { walk: 'ft_cpA', run: 'ft_cpB', fall: 'taore_cp' },
 };
 
 /** Our own steps, which the build ships under the names STEP_SETS gives them. */

@@ -198,6 +198,16 @@
   "x1": 28900,
   "z1": 23800
  },
+ "ground": "earth",
+ "floors": [
+  {
+   "kind": "water",
+   "x0": 13430,
+   "z0": 11220,
+   "x1": 16490,
+   "z1": 15640
+  }
+ ],
  "voids": [
   {
    "x0": 3400,
@@ -327,7 +337,9 @@
    "text": "Something was dragged down to the water.\nOne boot, in the reeds."
   }
  ],
+ "saves": null,
  "items": [],
+ "spots": [],
  "entry": "Running water. And a light, across the creek.",
  "notes": [
   "from the north bank, west: the creek, the ford, the lodge's lit window across the water",

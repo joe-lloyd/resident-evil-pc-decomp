@@ -235,6 +235,16 @@
   "x1": 32300,
   "z1": 22100
  },
+ "ground": "concrete",
+ "floors": [
+  {
+   "kind": "earth",
+   "x0": 26520,
+   "z0": 13600,
+   "x1": 32300,
+   "z1": 18360
+  }
+ ],
  "voids": [
   {
    "x0": 26520,
@@ -399,6 +409,7 @@
    "text": "A stake's been pulled out of the rock. The rope hangs down over the edge.\nHis cap. Scrape marks, right to the lip."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [
   {

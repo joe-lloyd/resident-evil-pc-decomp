@@ -134,6 +134,7 @@ def build():
     rng = random.Random(707)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("metal")  # the grating
     room.camera((12.2, 2.6, 3.0), (3.6, 5.0, -0.6), 200, "from off the east end: the length of the grating to the car, the crows on the arm, the drop")
     room.camera((-1.6, 3.2, 3.6), (7.5, 5.0, -0.6), 200, "from out past the car, west: the car's roof and its open hatch, the grating, the landing")
     room.camera((10.2, 9.4, 3.6), (7.0, 6.6, -3.2), 200, "from out over the drop, south-east: the landing, the ladder going down the tower, the lineman hanging below, the forest")

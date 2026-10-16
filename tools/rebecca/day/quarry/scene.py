@@ -172,6 +172,8 @@ def build():
     rng = random.Random(61)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("rock")  # granite grit
+    room.floor((1.0, 8.95, 17.0, 12.55), "gravel")  # the haul track
     room.camera((1.4, 9.4, 3.6), (11.0, 6.0, 0.8), 200, "from the way in: the derrick, the blocks, the crusher under the face")
     room.camera((18.6, 11.2, 3.8), (8.5, 8.2, 0.5), 200, "from the east side by the truck: the body by the blocks, the derrick over them")
     room.camera((12.4, 15.7, 3.3), (10.2, 6.5, 0.6), 205, "from the spoil lip: the worker in front of the blocks, the benches above")

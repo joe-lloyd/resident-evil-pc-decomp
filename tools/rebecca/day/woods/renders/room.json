@@ -270,6 +270,8 @@
   "x1": 30600,
   "z1": 23800
  },
+ "ground": "earth",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -395,6 +397,9 @@
    "text": "Orange paint on the bark, and a 4. A tree marked for felling.\nThe logging camp must be that way."
   }
  ],
+ "saves": null,
+ "items": [],
+ "spots": [],
  "entry": "The drag marks go on into the trees. So does the blood.",
  "notes": [
   "from the south-west: the drag in from the yard, the flashlight, the way north",

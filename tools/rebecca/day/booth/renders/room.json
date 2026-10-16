@@ -71,6 +71,8 @@
   "x1": 7140,
   "z1": 6120
  },
+ "ground": "lino",
+ "floors": [],
  "voids": [],
  "doors": [
   {

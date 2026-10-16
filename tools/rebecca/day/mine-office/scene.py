@@ -57,6 +57,7 @@ def build():
     rng = random.Random(31)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("rock")
     room.camera((4.4, 3.6, 2.05), (2.2, 1.3, 0.8), 200, "high by the door: the desk under the mine map, the candles, the helmet, his jacket on the chair")
     room.camera((1.2, 1.2, 2.05), (3.9, 3.4, 0.4), 205, "high over the cot: the plank front and its door, the candle ledge and the powder boxes, the bucket under the drip")
 

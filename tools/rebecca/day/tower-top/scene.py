@@ -351,6 +351,8 @@ def build():
     rng = random.Random(71)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("boards")  # the catwalk
+    room.floor((3.7, 3.7, 8.3, 8.3), "lino")  # the cab
     room.camera(CAMS[0], P(1.5, 1.6, 0.5), 200, "inside, high in the north-west corner: the fire finder, the cot, the door, the valley through the glass")
     room.camera(CAMS[1], P(-1.4, -1.4, 0.4), 200, "inside, high in the south-east corner: the hatch, the desk and the log, the west windows")
     room.camera(CAMS[2], P(3.5, 1.8, -1.0), 200, "out past the south-west corner: the catwalk to the open door, the broken east rail")

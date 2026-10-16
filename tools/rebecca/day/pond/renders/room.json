@@ -137,6 +137,23 @@
   "x1": 28050,
   "z1": 23800
  },
+ "ground": "earth",
+ "floors": [
+  {
+   "kind": "boards",
+   "x0": 5780,
+   "z0": 3400,
+   "x1": 7820,
+   "z1": 5100
+  },
+  {
+   "kind": "boards",
+   "x0": 8840,
+   "z0": 5100,
+   "x1": 10710,
+   "z1": 15980
+  }
+ ],
  "voids": [
   {
    "x0": 1700,
@@ -244,6 +261,7 @@
    "text": "A footbridge over the race. The flume's that way."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [
   {

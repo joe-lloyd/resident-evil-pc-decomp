@@ -234,6 +234,7 @@ def build():
     rng = random.Random(1998)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")  # forest floor
     room.camera((2.7, 13.4, 3.4), (9.0, 6.0, 0.2), 200, "from the south-west: the drag in from the yard, the flashlight, the way north")
     room.camera((9.8, 2.6, 3.2), (7.4, 10.5, 0.2), 200, "from the north edge looking back: the boot, the smear swinging round the blowdown")
     room.camera((17.5, 3.4, 3.0), (10.5, 8.5, 0.3), 200, "from the north-east: the doe and her flies, the blowdown, the drag beyond")

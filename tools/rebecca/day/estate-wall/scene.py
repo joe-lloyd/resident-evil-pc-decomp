@@ -187,6 +187,8 @@ def build():
     rng = random.Random(61)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y_N, X1, Y1), shift=SHIFT)
+    room.ground("earth")  # grass and the track
+    room.floor((X0, 11.8, X1, Y1), "gravel")  # the strip at the wall's foot
     room.camera((12.3, 0.4, 3.9), (9.8, 12.5, 1.4), 200, "from the track in: the gate, the wall, the mansion's roof over it")
     room.camera((2.6, 11.0, 3.0), (12.5, 9.8, 1.4), 200, "along the wall from the west: the ivy, the piers, the man on the gate")
     room.camera((16.6, 10.8, 3.2), (6.0, 10.2, 1.2), 200, "along the wall from the east: the plaque, the gate, the crows on the coping")

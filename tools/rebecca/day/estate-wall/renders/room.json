@@ -240,6 +240,16 @@
   "x1": 28900,
   "z1": 32300
  },
+ "ground": "earth",
+ "floors": [
+  {
+   "kind": "gravel",
+   "x0": 3400,
+   "z0": 31280,
+   "x1": 28900,
+   "z1": 32300
+  }
+ ],
  "voids": [
   {
    "x0": 3400,
@@ -377,6 +387,7 @@
    "text": "A shirt, torn on the glass. There's blood on it.\nSomeone tried to get over. Or something dragged them."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "The Spencer estate.\nThere's a light on, up at the house.",

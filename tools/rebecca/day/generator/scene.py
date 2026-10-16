@@ -46,6 +46,7 @@ def build():
     rng = random.Random(29)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("concrete")
     room.camera((5.25, 1.15, 2.45), (2.7, 4.6, 0.2), 190, "high in the north-east corner: the generator, the oil, the bench and the back door")
     room.camera((2.75, 4.62, 2.45), (4.7, 1.3, 0.5), 200, "high over the bench: the cot and its pillow, the open door, the emergency lamp")
     room.camera((5.25, 4.65, 2.4), (1.8, 1.6, 0.7), 195, "high in the south-east corner: the generator's panel on E, the window and its wasps")

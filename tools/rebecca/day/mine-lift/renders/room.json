@@ -38,6 +38,8 @@
   "x1": 4930,
   "z1": 4335
  },
+ "ground": "metal",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -93,6 +95,7 @@
    "text": "MAX 6 MEN."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [
   {

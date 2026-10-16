@@ -128,6 +128,9 @@ def build():
     rng = random.Random(77)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")  # the bank
+    room.floor((3.4, Y0, 4.6, 3.0), "boards")  # the footbridge
+    room.floor((5.2, 3.0, 6.3, 9.4), "boards")  # the walk along the dam
     room.camera((17.8, 13.4, 3.4), (7.0, 6.4, 0.0), 200, "from the south-east bank: the pond, the reeds and the body, the dam, the wheel against the mill")
     room.camera((3.2, 13.5, 3.6), (5.4, 4.0, 0.8), 200, "from the south-west by the mill: the back door, the blood to the reeds, the wheel, the sluice")
     room.camera((5.8, 2.4, 3.6), (8.0, 12.0, 0.0), 200, "from over the sluice: down the dam and the bank to the reeds and the body")

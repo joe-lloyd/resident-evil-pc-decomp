@@ -291,6 +291,8 @@
   "x1": 28900,
   "z1": 23460
  },
+ "ground": "gravel",
+ "floors": [],
  "voids": [],
  "doors": [
   {

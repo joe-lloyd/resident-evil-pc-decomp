@@ -124,6 +124,8 @@
   "x1": 13600,
   "z1": 10200
  },
+ "ground": "earth",
+ "floors": [],
  "voids": [],
  "doors": [
   {

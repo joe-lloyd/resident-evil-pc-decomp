@@ -276,6 +276,7 @@ def build():
     rng = random.Random(67)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("boards")  # the deck
     room.camera(CAMS[0], P(-2.4, -1.1, -0.7), 200, "under the cab at the south rail, looking north: the deck, the broken flight over the drop, the valley west")
     room.camera(CAMS[1], P(-0.6, 2.1, -0.4), 200, "under the cab in the north-east corner, looking south-west: the smashed radio, the flights, Walt far below on the rocks")
     room.camera(CAMS[2], P(2.0, 1.6, 0.0), 200, "under the cab in the north-west corner, looking south-east: the crows on the north rail, the last flight up to the hatch")

@@ -117,6 +117,9 @@ def build():
     rng = random.Random(7)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("gravel")  # the road
+    room.floor((X0, Y0, X1, ROAD[0]), "earth")  # the verges
+    room.floor((X0, ROAD[1], X1, Y1), "earth")
     room.camera(CAMS[0], (8.5, 6.4, 0.6), 200, "from the east end, the way she comes: the road west, the sign, the open gate")
     room.camera(CAMS[1], (11.0, 8.2, 0.5), 200, "from beyond the gate in the west: the gate's back, the torn notice, the road east")
     room.camera(CAMS[2], (6.5, 8.2, 0.2), 205, "from the north verge by the sign: the latch post, the cut chain, the clipboard")

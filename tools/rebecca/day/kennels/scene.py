@@ -99,6 +99,10 @@ def build():
     rng = random.Random(71)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("gravel")
+    room.floor((RUNS_X[0], 3.3, 6.8, 13.3), "concrete")  # the runs' slab
+    room.floor((HUT[0], HUT[2], HUT[1], HUT[3]), "boards")  # the handler's hut
+    room.floor((9.3, Y0, 10.7, Y1), "earth")  # the path from the gate to the house
     room.camera((10.4, 2.3, 3.6), (5.0, 9.6, 0.0), 200, "from inside the back gate: the runs torn open, the paw prints out across the yard")
     room.camera((16.6, 13.6, 3.4), (6.5, 5.5, 0.4), 200, "from the south-east: the yard, the hut's door banging, the runs beyond")
     room.camera((2.2, 14.6, 4.0), (11.0, 4.5, 0.0), 200, "from over the yews behind the last run: the length of the runs, the gate, the hut")

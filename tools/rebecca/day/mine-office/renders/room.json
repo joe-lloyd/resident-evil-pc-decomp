@@ -71,6 +71,8 @@
   "x1": 7820,
   "z1": 6460
  },
+ "ground": "rock",
+ "floors": [],
  "voids": [],
  "doors": [
   {

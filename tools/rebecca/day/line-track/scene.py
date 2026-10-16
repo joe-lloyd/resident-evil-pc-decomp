@@ -186,6 +186,7 @@ def build():
     rng = random.Random(53)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")  # grass and the dirt track
     room.camera(CAMS[0], (12.0, 8.4, 0.6), 200, "from by the switch house: the track east under the wires, the pylons, the deer")
     room.camera(CAMS[1], (8.0, 8.6, 0.6), 200, "from by the gate: the track west to the switch house, the hat, the long grass")
     room.camera(CAMS[2], (11.2, 9.6, 0.0), 205, "from the north fence: down on the deer and its crows, the second pylon")

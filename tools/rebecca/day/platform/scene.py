@@ -201,6 +201,8 @@ def build():
     rng = random.Random(77)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X_END, Y1), shift=SHIFT)
+    room.ground("concrete")  # the slab
+    room.floor((17.0, 8.0, X_END, 10.8), "earth")  # the ledge east
     room.camera((3.2, 0.8, 3.8), (10.5, 10.0, 0.2), 200, "from the trail's mouth: the platform, the car at the edge, the smear to the rail")
     room.camera((16.6, 12.6, 3.2), (8.0, 4.5, 0.8), 200, "from the south-east corner by the drop: the booth, the pack, the trail in")
     room.camera((13.2, 6.2, 3.0), (6.0, 12.4, 0.6), 200, "from in front of the booth: the car, the wheel house, the valley beyond")

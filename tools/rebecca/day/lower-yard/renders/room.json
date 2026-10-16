@@ -211,6 +211,16 @@
   "x1": 32300,
   "z1": 25500
  },
+ "ground": "gravel",
+ "floors": [
+  {
+   "kind": "concrete",
+   "x0": 10200,
+   "z0": 16830,
+   "x1": 25500,
+   "z1": 25500
+  }
+ ],
  "voids": [
   {
    "x0": 5610,
@@ -366,6 +376,7 @@
    "text": "The fence is broken through.\nSomething big went through it, low down."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "The bottom of the gondola. Someone left their car door open.",

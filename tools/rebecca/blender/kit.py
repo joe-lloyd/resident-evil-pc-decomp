@@ -125,7 +125,8 @@ class Room:
 
     def ground(self, kind):
         """What the floor is underfoot, for her footsteps (sound/ground.ts):
-        earth, gravel, boards, rock, water, concrete or metal. Every room says."""
+        earth, gravel, boards, rock, water, concrete, metal, lino or carpet.
+        Every room says."""
         self.underfoot = kind
 
     def floor(self, rect, kind):

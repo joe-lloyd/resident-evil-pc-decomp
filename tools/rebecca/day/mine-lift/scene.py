@@ -97,6 +97,7 @@ def build():
     rng = random.Random(17)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("metal")  # the cage's floor plates
     room.camera((2.55, 4.5, 2.4), (1.85, 1.4, 0.5), 200, "from the junction, through the south gate: the dead lamp, the smear, the controls, the counterweight cable running in the shaft")
     room.camera((1.35, -0.75, 2.45), (2.15, 2.3, 0.4), 200, "from the shaft behind the cage, through the north gate: the controls, the bell pull, the junction's lamps beyond")
 

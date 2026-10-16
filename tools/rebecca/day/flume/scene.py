@@ -125,6 +125,9 @@ def build():
     rng = random.Random(54)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")  # forest floor
+    room.floor((DECK[0], DECK[2], DECK[1], DECK[3]), "boards")  # the deck
+    room.floor((CATWALK[0], Y0, CATWALK[1], DECK[2]), "boards")  # the catwalk over the drop
     room.camera((3.0, 12.6, 3.4), (10.6, 4.6, 0.0), 200, "from the path in: the headbox, the deck, the boat, the trough running off the edge into the valley")
     room.camera((13.6, 5.6, 3.0), (6.4, 11.0, 0.4), 200, "from the north-east corner of the deck: the boat close, the cut rope, the blood, the headbox")
     room.camera((12.8, 14.6, 4.2), (9.0, -1.0, -2.0), 200, "from behind the headbox: down the flume and the trestles into the valley")

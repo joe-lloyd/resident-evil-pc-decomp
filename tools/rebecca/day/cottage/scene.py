@@ -56,6 +56,8 @@ def build():
     rng = random.Random(19)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("boards")
+    room.floor((2.55, 3.35, 3.55, 3.95), "carpet")  # the rag rug
     room.camera((5.25, 4.25, 2.0), (2.0, 1.8, 0.2), 200, "high over the stove: the table and the diary, the bed, the photos of his daughter")
     room.camera((1.15, 1.15, 2.0), (4.2, 3.8, 0.3), 200, "high over the bed: the door, its bar lifted off, the key hook, the rods in the corner")
     room.camera((5.25, 1.65, 2.0), (2.0, 3.6, 0.2), 200, "high over the sink: the chair dragged to the window, the scrapes, the first aid tin")

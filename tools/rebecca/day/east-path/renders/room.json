@@ -249,6 +249,8 @@
   "x1": 31450,
   "z1": 20400
  },
+ "ground": "earth",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -374,6 +376,7 @@
    "text": "The axe is still in the block. Somebody's woodpile, somebody's washing."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "Blood on the path. He came this way.",

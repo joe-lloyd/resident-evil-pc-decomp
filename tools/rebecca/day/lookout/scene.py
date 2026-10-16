@@ -445,7 +445,12 @@ def build():
     kit.wear(float(os.environ.get("RE1_WEAR", "1.3")))
     # Where she saves, for the builder; room.c places the lid and the zones.
     saves = {"lid": box_lid}
-    reb.export(CAMERAS, OUT, samples=768, extra={"bounds": room_box, "exit": door_gap, "saves": saves}, anim={"frames": FRAMES, "ticks": 3, "set": pose})
+    reb.export(CAMERAS, OUT, samples=768, extra={
+        "bounds": room_box, "exit": door_gap, "saves": saves,
+        # Underfoot (sound/ground.ts): the floorboards, and the rag rug on them.
+        "ground": "boards",
+        "floors": [{"kind": "carpet", "x0": reb.g(3.45), "z0": reb.g(3.5), "x1": reb.g(5.45), "z1": reb.g(4.8)}],
+    }, anim={"frames": FRAMES, "ticks": 3, "set": pose})
 
 
 build()

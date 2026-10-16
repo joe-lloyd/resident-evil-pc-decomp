@@ -99,6 +99,7 @@ def build():
     rng = random.Random(1974)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")  # mud and forest floor
     room.camera((1.4, 4.6, 3.6), (4.6, 11.4, 0.3), 200, "from the north-west corner where the road comes in from the woods: the log ends, the south verge")
     room.camera((1.6, 11.4, 3.6), (12.0, 8.6, 0.4), 200, "from the south-west, up the road: the length of the load, the south verge, the open door far off")
     room.camera((18.4, 11.4, 3.0), (10.0, 6.4, 0.8), 200, "from the south-east ahead of the truck: the grille, the blinker, the open door, the lunch in the mud")

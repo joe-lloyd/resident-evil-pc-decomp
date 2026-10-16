@@ -484,6 +484,9 @@ def build():
         samples=256,
         extra={
             "bounds": {"x0": reb.g(X0), "z0": reb.g(Y0), "x1": reb.g(X1), "z1": reb.g(Y1)},
+            # Underfoot (sound/ground.ts): the meadow and its worn dirt.
+            "ground": "earth",
+            "floors": [],
             "exits": [
                 {"x0": reb.g(2.0), "z0": 0, "x1": reb.g(4.5), "z1": reb.g(Y0) + 10},
             ],

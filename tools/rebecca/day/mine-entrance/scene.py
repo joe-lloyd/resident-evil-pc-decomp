@@ -241,6 +241,8 @@ def build():
     rng = random.Random(29)
     reb.clear_scene()
     room = kit.Room(bounds=(X_W, Y0, X1, Y1), shift=SHIFT)
+    room.ground("earth")  # the packed dirt yard
+    room.floor((X_W, DECK[2], X0, DECK[3]), "boards")  # the trestle
     room.camera((1.6, 10.4, 3.5), (9.2, 3.0, 1.2), 200, "from the west edge: the rails running in under the fall, the carts, the portal")
     room.camera((14.7, 6.4, 3.6), (6.0, 9.2, 0.6), 200, "from the east side: the plunger box behind its boulder, the wire, the carts, the yard to the track out west")
     room.camera((8.0, 10.9, 2.9), (8.9, 2.5, 1.5), 205, "from the south, straight at the portal: SEALED, the gap into the dark")

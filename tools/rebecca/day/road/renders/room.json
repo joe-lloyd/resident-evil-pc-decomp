@@ -142,6 +142,23 @@
   "x1": 32300,
   "z1": 17850
  },
+ "ground": "gravel",
+ "floors": [
+  {
+   "kind": "earth",
+   "x0": 1700,
+   "z0": 5950,
+   "x1": 32300,
+   "z1": 8500
+  },
+  {
+   "kind": "earth",
+   "x0": 1700,
+   "z0": 15300,
+   "x1": 32300,
+   "z1": 17850
+  }
+ ],
  "voids": [],
  "doors": [
   {
@@ -242,6 +259,7 @@
    "text": "A ranger's hat, in the ditch."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "The forestry road. The gate's open.",

@@ -125,6 +125,7 @@ def build():
     rng = random.Random(127)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("concrete")  # flagstones
     room.camera((4.15, 1.45, 1.88), (1.5, 3.3, 0.3), 200, "high in the north-east corner: the pool under the rack, the smear out through the arch")
     room.camera((1.15, 3.5, 1.88), (4.2, 1.5, 0.5), 200, "high by the arch: the racks, the drip, the candle in its bottle, the cellar book")
 

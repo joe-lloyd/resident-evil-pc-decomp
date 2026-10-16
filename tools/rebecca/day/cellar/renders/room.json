@@ -120,6 +120,8 @@
   "x1": 15300,
   "z1": 10200
  },
+ "ground": "concrete",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -218,6 +220,7 @@
    "text": "Barrels. Someone's lit a candle on one of them."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [
   {

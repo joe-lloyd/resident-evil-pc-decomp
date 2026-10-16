@@ -197,6 +197,16 @@
   "x1": 32300,
   "z1": 20740
  },
+ "ground": "earth",
+ "floors": [
+  {
+   "kind": "boards",
+   "x0": 23800,
+   "z0": 15300,
+   "x1": 32300,
+   "z1": 18700
+  }
+ ],
  "voids": [
   {
    "x0": 23800,
@@ -352,6 +362,7 @@
    "text": "The sawyer's blood, all along the planks.\nHe was going for the pond."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [
   {
