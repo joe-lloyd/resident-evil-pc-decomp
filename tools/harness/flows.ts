@@ -355,29 +355,22 @@ type Zone = { x: number; z: number; w: number; d: number };
 
 /** How far ahead of her the action button reaches. */
 const PROBE = 600;
-/** Kept between her reach and a zone's edge, for the slack in how she faces. */
-const AIM_INSET = 150;
-
 /**
- * The point of `zone` to face from (x, z): the one whose distance is nearest
- * PROBE, so her reach lands on it. Facing the middle instead, her reach can
- * fall past a narrow zone's far edge.
+ * The heading to face from (x, z) so that her reach, PROBE ahead, lands as
+ * deep inside `zone` as it can: the point PROBE away that is furthest from
+ * the zone's edges. Facing the middle instead, or a point further off than
+ * PROBE, her reach can stop short of a zone she stands beside.
  */
-function aimPoint(zone: Zone, x: number, z: number): { x: number; z: number } {
-  const span = (from: number, size: number) => {
-    const inset = Math.min(AIM_INSET, size / 2);
-    return Array.from({ length: 11 }, (_, i) => from + inset + ((size - 2 * inset) * i) / 10);
-  };
-  let best = { x: zone.x + zone.w / 2, z: zone.z + zone.d / 2 };
-  let off = Infinity;
-  for (const px of span(zone.x, zone.w))
-    for (const pz of span(zone.z, zone.d)) {
-      const o = Math.abs(Math.hypot(px - x, pz - z) - PROBE);
-      if (o < off) {
-        off = o;
-        best = { x: px, z: pz };
-      }
-    }
+function aimHeading(zone: Zone, x: number, z: number): number {
+  const depth = (px: number, pz: number) => Math.min(px - zone.x, zone.x + zone.w - px, pz - zone.z, zone.z + zone.d - pz);
+  let best = headingTo(x, z, zone.x + zone.w / 2, zone.z + zone.d / 2);
+  let deepest = -Infinity;
+  for (let a = 0; a < 4096; a += 16) {
+    const t = (a / 4096) * 2 * Math.PI;
+    // Angle 0 faces +X, 0x400 faces -Z (headingTo).
+    const d = depth(x + PROBE * Math.cos(t), z - PROBE * Math.sin(t));
+    if (d > deepest) [best, deepest] = [a, d];
+  }
   return best;
 }
 
@@ -430,8 +423,8 @@ export async function approach(link: GameLink, zone: Zone): Promise<GameState> {
     arrived = err.state;
   }
   if (arrived.stage !== start.stage || arrived.room !== start.room) return arrived;
-  const aim = aimPoint(zone, arrived.player.x, arrived.player.z);
-  return faceTowards(link, aim.x, aim.z);
+  // Turned to within 50 (4.4 degrees), her reach strays 46 at most.
+  return face(link, aimHeading(zone, arrived.player.x, arrived.player.z), 50);
 }
 
 /** Walk up to a zone, press action once and let whatever opens close. */
