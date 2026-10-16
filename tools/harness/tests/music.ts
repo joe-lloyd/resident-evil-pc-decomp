@@ -1,7 +1,8 @@
 // Which track each room plays. In her mode: a room of every area plays its
 // cue's render, with the layers that room has; the save rooms play RE1's own
-// save room music (Bgm_31, the player's own file); the ambience rooms are
-// silent. The mansion's save room keeps RE1's row. Then the scripts switch
+// save room music (Bgm_31, the player's own file); the quiet places play
+// only their loops (sound/ambience.ts). Every room plays exactly the channels
+// the music table gives it for the state it is in. The mansion's save room keeps RE1's row. Then the scripts switch
 // channels as she works (plan/music.ts): opening the sluice brings the mill
 // in at once and in the camp's other rooms, the generator brings the hum into
 // the station, the breakers bring the line's hum in at once, the pump stops
@@ -18,7 +19,12 @@ import { settle, useItem } from '../flows.ts';
 import { Bank, flag, playingMusic, roomLabel, type GameState } from '../state.ts';
 import { dayRooms } from '../../rebecca/day/rooms.ts';
 import { EVENT_FLAGS, EVENTS, keyItem } from '../../rebecca/day/events.ts';
-import { read, stand } from './floor.ts';
+import { day, read, stand } from './floor.ts';
+import { musicTable, roomChannels } from '../../rebecca/music/table.ts';
+import { CUES } from '../../rebecca/plan/music.ts';
+import { day as plan } from '../../rebecca/plan/day.ts';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { snapshot } from '../snapshot.ts';
 
 const port = Number(process.env.PORT ?? 7801);
@@ -38,7 +44,8 @@ const HER_ROOMS: readonly [what: string, slug: string, files: readonly string[]]
   ['the cabin, a save room', 'lookout', ['Bgm_31']],
   ['the gorge footbridge, the station again', 'bridge', ['Reb_station']],
   ["the operator's booth, a save room", 'booth', ['Bgm_31']],
-  ['the hollow, only the room', 'den', []],
+  ['the woods, the station with the forest under it', 'woods', ['Reb_station', 'Reb_amb_forest']],
+  ['the hollow, only the room: the forest', 'den', ['Reb_amb_forest']],
   ['the ridge, the morning after', 'ridge', ['Reb_dawn']],
   ['the trail down, the same piece', 'trail', ['Reb_dawn']],
   ['the camp gate', 'camp-gate', ['Reb_camp']],
@@ -50,26 +57,39 @@ const HER_ROOMS: readonly [what: string, slug: string, files: readonly string[]]
   ['the switch house, the line not humming yet', 'switch', ['Reb_road']],
   ['the east path', 'east-path', ['Reb_quarry']],
   ['the quarry, with the wind in the pit', 'quarry', ['Reb_quarry', 'Reb_quarry_1']],
-  ['the mine tunnel, still flooded', 'tunnel', ['Reb_mine', 'Reb_mine_1']],
+  ['the mine tunnel, still flooded', 'tunnel', ['Reb_mine', 'Reb_mine_1', 'Reb_amb_mine']],
   ['the mine office, a save room', 'mine-office', ['Bgm_31']],
-  ['the mine lift, in a lab room slot RE1 gives music', 'mine-lift', ['Reb_mine']],
+  ['the mine lift, in a lab room slot RE1 gives music', 'mine-lift', ['Reb_mine', 'Reb_amb_mine']],
   ['the summit trail, in a slot RE1 gives music', 'summit-trail', ['Reb_summit']],
   ['the radio mast, with its static', 'mast', ['Reb_summit', 'Reb_summit_1']],
-  ['the gondola car', 'car', ['Reb_skyway']],
-  ['the valley path', 'valley-path', ['Reb_valley']],
-  ['the creek, with its water', 'creek', ['Reb_valley', 'Reb_valley_1']],
-  ['the crash, only the room', 'crash', []],
+  ['the gondola car, in the gale', 'car', ['Reb_skyway', 'Reb_amb_gale']],
+  ['the valley path at dusk', 'valley-path', ['Reb_valley', 'Reb_amb_dusk']],
+  ['the creek, with its water, at dusk', 'creek', ['Reb_valley', 'Reb_valley_1', 'Reb_amb_dusk']],
+  ['the crash, only the room: dusk', 'crash', ['Reb_amb_dusk']],
   ["the gardener's lodge, a save room", 'lodge', ['Bgm_31']],
-  ['the estate wall', 'estate-wall', ['Reb_estate']],
-  ['the cellar, under the house', 'cellar', []],
+  ['the estate wall at night', 'estate-wall', ['Reb_estate', 'Reb_amb_night']],
+  ['the cellar, under the house', 'cellar', ['Reb_amb_cellar']],
 ];
+
+// The table as build.ts makes it: a sketch's channel plays once its render exists.
+const renders = path.join(day, '..', 'music', 'renders');
+const table = musicTable(CUES, plan.places, dayRooms, (sketch) => existsSync(path.join(renders, `${sketch}.wav`)));
+
+/** The channels her table gives the room she is in, for the state the game reports; undefined for a room not in it. */
+function tableChannels(s: GameState): string[] | undefined {
+  const r = table.rooms.find((x) => x.stage === s.stage && x.room === s.room);
+  return r && roomChannels(table, r, s.bgm!.state).map(([, f]) => f);
+}
 
 const failures: string[] = [];
 const same = (a: readonly string[], b: readonly string[]) => a.length === b.length && a.every((f, i) => f.toLowerCase() === b[i]!.toLowerCase());
 const describe = (s: GameState) => s.bgm!.channels.map((c) => `${c.file || '-'}${c.playing ? ' playing' : ''}${c.file ? ` at ${c.volume}` : ''}`).join(', ');
 
-/** Wait for the room's music to settle on `files`; silence must hold for two seconds. */
-async function expectMusic(link: GameLink, what: string, files: readonly string[]): Promise<GameState> {
+/**
+ * Wait for the room's music to settle on `files`; silence must hold for two
+ * seconds. In her mode the files must also be the ones her table gives the room.
+ */
+async function expectMusic(link: GameLink, what: string, files: readonly string[], hers = true): Promise<GameState> {
   let s = await link.state();
   const deadline = Date.now() + 15_000;
   let heard = 0;
@@ -79,9 +99,12 @@ async function expectMusic(link: GameLink, what: string, files: readonly string[
     if (heard >= (files.length ? 2 : 6)) break;
   }
   const ok = heard > 0 && same(playingMusic(s), files);
+  const fromTable = hers ? tableChannels(s) : undefined;
+  const asTable = fromTable === undefined || same(playingMusic(s), fromTable);
   const muted = s.bgm!.channels.some((c) => c.playing && c.volume <= -9999);
-  console.log(`${ok && !muted ? 'ok  ' : 'FAIL'} ${roomLabel(s)} ${what}: state ${s.bgm!.state.toString(16)}, ${describe(s)}`);
+  console.log(`${ok && asTable && !muted ? 'ok  ' : 'FAIL'} ${roomLabel(s)} ${what}: state ${s.bgm!.state.toString(16)}, ${describe(s)}`);
   if (!ok) failures.push(`${what} (${roomLabel(s)}) plays [${playingMusic(s).join(', ')}], not [${files.join(', ')}]`);
+  if (!asTable) failures.push(`${what} (${roomLabel(s)}) plays [${playingMusic(s).join(', ')}], but the table gives state ${s.bgm!.state.toString(16)} [${fromTable!.join(', ')}]`);
   if (muted) failures.push(`${what} (${roomLabel(s)}) plays at -9999, which is silent`);
   return s;
 }
@@ -165,12 +188,12 @@ async function work(link: GameLink, step: string): Promise<void> {
 
     // The pump: the mine's water stops at once in the junction, and in the tunnel.
     await go(link, 'junction');
-    await expectMusic(link, 'the junction, flooded', ['Reb_mine', 'Reb_mine_1']);
+    await expectMusic(link, 'the junction, flooded', ['Reb_mine', 'Reb_mine_1', 'Reb_amb_mine']);
     await work(link, 'drain');
-    await expectMusic(link, 'the junction, the pump running: the water stops', ['Reb_mine']);
+    await expectMusic(link, 'the junction, the pump running: the water stops', ['Reb_mine', 'Reb_amb_mine']);
     console.log(`     ${await snapshot(link, shots, 'music-junction-drain')}`);
     await go(link, 'tunnel');
-    await expectMusic(link, 'the tunnel, drained', ['Reb_mine']);
+    await expectMusic(link, 'the tunnel, drained', ['Reb_mine', 'Reb_amb_mine']);
 
     // The mine: her first step into the gallery switches its rooms to the chase.
     await go(link, 'gallery');
@@ -183,7 +206,7 @@ async function work(link: GameLink, step: string): Promise<void> {
     await go(link, 'quarry');
     await expectMusic(link, 'the quarry, out of the mine', ['Reb_quarry', 'Reb_quarry_1']);
     await go(link, 'tunnel');
-    await expectMusic(link, 'the tunnel again: the mine, drained, not the chase', ['Reb_mine']);
+    await expectMusic(link, 'the tunnel again: the mine, drained, not the chase', ['Reb_mine', 'Reb_amb_mine']);
 
     // RE1's tracks loop; so does ours. The station's file is 96 s: in the yard
     // past its end, it must still be playing.
@@ -205,12 +228,12 @@ async function work(link: GameLink, step: string): Promise<void> {
   try {
     const link = session.link;
     await settle(link, (s) => s.stage === 0 && s.room === 0);
-    await expectMusic(link, "Chris meets Rebecca in RE1's save room", ['Bgm_13']);
+    await expectMusic(link, "Chris meets Rebecca in RE1's save room", ['Bgm_13'], false);
     await link.room(0, 3);
     await settle(link, (s) => s.stage === 0 && s.room === 3);
     await link.room(0, 0);
     await settle(link, (s) => s.stage === 0 && s.room === 0);
-    await expectMusic(link, "Chris back in RE1's save room", ['Bgm_31']);
+    await expectMusic(link, "Chris back in RE1's save room", ['Bgm_31'], false);
   } finally {
     session.end();
   }
