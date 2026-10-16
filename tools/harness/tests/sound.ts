@@ -5,7 +5,8 @@
 // - Footsteps: she walks on each kind of floor and the step that plays is
 //   that floor's (sound/ground.ts): gravel and its verge on the forestry
 //   road, running too; the bunkhouse's boards; the bridge's planks over the
-//   gorge; the mine office's rock; the flooded gallery and the creek's ford.
+//   gorge; the mine office's rock; the flooded gallery and the creek's ford;
+//   and the concrete, metal, lino and carpet of her other rooms.
 // - Ambience: the loops under the music play on its spare channels in the
 //   rooms that have them, and stop indoors (sound/places.ts).
 // - Doors: a wooden door and an iron one play RE1's own sounds; a walk
@@ -178,7 +179,14 @@ async function ambience(link: GameLink, what: string, slug: string, want: 'loop'
 }
 
 /** Through a door that opens: stand in it, press action, and see what the door played. */
-async function door(link: GameLink, what: string, from: string, to: string, sounds: readonly string[], target: { stage: number; room: number } = room(to)): Promise<void> {
+async function door(
+  link: GameLink,
+  what: string,
+  from: string,
+  to: string,
+  sounds: readonly string[],
+  { target = room(to), skip = false }: { target?: { stage: number; room: number }; skip?: boolean } = {},
+): Promise<void> {
   await goToRoom(link, from);
   const f = floorsOf(from);
   const d = f.doors!.find((x) => x.to === to)!;
@@ -192,20 +200,36 @@ async function door(link: GameLink, what: string, from: string, to: string, soun
   let s = await link.state();
   let set = -1;
   let files: readonly string[] = [];
-  for (let k = 0; k < 60; k++) {
-    s = await link.frames(5);
-    if (k === 3) await shot(link, `${from}-${to}`);
-    if (s.sound!.sfx > before) {
-      heard.add(s.sound!.last);
+  // The game keeps its last eight sounds, and a look comes every few frames, so none is missed.
+  let count = before;
+  let pressed = false;
+  let stepsAfter = 0;
+  for (let k = 0; k < 300; k++) {
+    s = await link.frames(1);
+    if (k === 15) await shot(link, `${from}-${to}${skip ? '-skipped' : ''}`);
+    const fresh = s.sound!.sfx - count;
+    if (fresh > s.sound!.recent.length) console.log(`  (${fresh} sounds since the last look, past the ${s.sound!.recent.length} the game keeps)`);
+    if (fresh > 0) {
+      count = s.sound!.sfx;
+      for (const f of s.sound!.recent.slice(-fresh)) {
+        heard.add(f);
+        if (pressed && /^St_path/i.test(f)) stepsAfter++;
+      }
       set = s.sound!.door;
       files = s.sound!.room;
+      // Pressing run at her first step skips the walk: its first ten pictures have shown, and the gate is still open.
+      if (skip && [...heard].some((f) => /^St_path/i.test(f)) && !pressed) {
+        pressed = true;
+        await link.tap(Key.run, 2);
+      }
     }
     if (s.stage === target.stage && s.room === target.room && s.play && !(s.msf & 0x04000080)) break;
   }
   s = await settle(link);
   const arrived = s.stage === target.stage && s.room === target.room;
-  const line = `${what}: ${from} to ${to}${arrived ? '' : ` (still in ${roomLabel(s)})`}, sound set ${set} [${files.join(', ')}], played ${[...heard].join(', ') || 'nothing'}`;
-  check(arrived && sounds.every((x) => heard.has(x)), line, `expected ${sounds.join(' and ')}`);
+  const skipped = !skip || (pressed && stepsAfter <= 1);
+  const line = `${what}: ${from} to ${to}${arrived ? '' : ` (still in ${roomLabel(s)})`}${skip ? `, ${stepsAfter} steps after run was pressed` : ''}, sound set ${set} [${files.join(', ')}], played ${count - before}: ${[...heard].join(', ') || 'nothing'}`;
+  check(arrived && skipped && sounds.every((x) => heard.has(x)), line, `expected ${sounds.join(' and ')}${skip ? ', and the walk cut short' : ''}`);
 }
 
 // Her mode.
@@ -229,6 +253,11 @@ async function door(link: GameLink, what: string, from: string, to: string, soun
     await footsteps(link, 'rock, the mine', 'mine-office', 'rock', { run: 1200 });
     await footsteps(link, 'water, the flooded gallery', 'gallery', 'water');
     await footsteps(link, "water, the creek's ford", 'creek', 'water', { run: 1000 });
+    // Her rooms' other floors, RE1's own steps for each.
+    await footsteps(link, "concrete, the workshop's slab", 'workshop', 'concrete', { run: 1000 });
+    await footsteps(link, "metal, the mine lift's cage", 'mine-lift', 'metal', { run: 600 });
+    await footsteps(link, "lino, the operator's booth", 'booth', 'lino', { run: 800 });
+    await footsteps(link, "carpet, the gondola car", 'car', 'carpet', { run: 600 });
 
     await ambience(link, 'the station yard: its music and the wind', 'yard', 'loop');
     await ambience(link, 'the shed, indoors: the music alone', 'shed', 'quiet');
@@ -242,9 +271,10 @@ async function door(link: GameLink, what: string, from: string, to: string, soun
     await door(link, 'a wooden door', 'bunkhouse', 'camp-yard', ['Dr_wd01']);
     await door(link, 'an iron door', 'junction', 'tunnel', ['Dr_mtl01']);
     await door(link, 'the gate in the estate wall', 'estate-wall', 'kennels', ['Dr_gat01', 'Dr_gat02']);
+    await door(link, "the road's gate, the walk skipped: it still shuts", 'road', 'washout', ['Dr_gat01', 'Dr_gat02'], { skip: true });
     await door(link, 'the ladder up to the top of the tower', 'tower-stairs', 'tower-top', ['Ladder01']);
     // Last: the hatch comes up in the mansion's save room, a room of RE1's own.
-    await door(link, 'the hatch up into the save room', 'crawl', 'save', ['Ladder01'], { stage: 0, room: 0 });
+    await door(link, 'the hatch up into the save room', 'crawl', 'save', ['Ladder01'], { target: { stage: 0, room: 0 } });
   } finally {
     session.end();
   }
