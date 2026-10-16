@@ -65,6 +65,21 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "gondola-runs",
+   "bank": 1,
+   "bit": -1,
+   "motion": {
+    "frames": 6,
+    "ticks": 4
+   },
+   "cameras": [
+    0
+   ],
+   "loop": true
+  }
+ ],
  "bounds": {
   "x0": 1700,
   "z0": 1700,

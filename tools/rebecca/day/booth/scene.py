@@ -18,6 +18,11 @@ box along the east wall, under the fuse box and the phone.
 
 Moving: the phone's handset turning on its cord; the strip light failing;
 the heater's glow.
+
+State "gondola-runs" (Hal's key, day/events.ts): the key in the switch, the
+drive's lamps along the desk lit, the warning beacon in the corner, and
+the car lit out on the platform, played as it happens through camera 0;
+then the beacon flashes in the room's loop.
 """
 import math
 import os
@@ -96,6 +101,7 @@ def build():
     reb.prim("cube", "Outside, platform", mat("concrete"), (X0 - 3.0, 2.3, -0.05), (5.0, 8.0, 0.1))
     reb.prim("cube", "Outside, rail", mat("rust"), (X0 - 3.5, 2.3, 1.0), (0.06, 8.0, 0.06))
     reb.prim("cube", "Outside, gondola", mat("red paint"), (X0 - 4.5, 3.4, 1.6), (2.2, 1.8, 1.8), bevel=0.2)
+    car_lamp = reb.prim("cube", "Outside, gondola lit", reb.mat_emit("Car lamp", (1.0, 0.8, 0.5), 6), (X0 - 3.38, 3.4, 1.9), (0.02, 1.4, 0.55))
     reb.prim("cube", "Outside, far mountain", mat("rock"), (X0 - 40, 2.3, 4.0), (1.0, 120, 30))
     # Out of the door: the platform's concrete, its rail, the bullwheel's housing.
     reb.prim("cube", "Outside, platform south", mat("concrete"), (2.0, Y1 + 4.0, -0.05), (12.0, 8.0, 0.1))
@@ -116,6 +122,12 @@ def build():
     reb.prim("cyl", "Stop collar", yellow, (X0 + 0.42, 3.22, 0.98), (0.14, 0.14, 0.02), segments=16)
     reb.prim("cyl", "Key switch", mat("steel"), (X0 + 0.42, 1.35, 1.0), (0.06, 0.06, 0.03), segments=12)
     reb.prim("cube", "Empty keyway", mat("black"), (X0 + 0.42, 1.35, 1.016), (0.012, 0.03, 0.005))
+    # Once Hal's key turns: the key in the switch, the drive's lamps lighting
+    # along the desk one by one, and out of the window the car's lamp on.
+    key = [reb.prim("cube", "Hal's key", mat("steel"), (X0 + 0.42, 1.35, 1.05), (0.012, 0.05, 0.07), rot=(0, -0.25, 0.5)),
+           reb.prim("cube", "Hal's key tag", red, (X0 + 0.44, 1.37, 0.98), (0.01, 0.05, 0.08), rot=(0, -0.25, 0.3))]
+    lamps = [reb.prim("cyl", f"Drive lamp {i}", reb.mat_emit(f"Drive lamp {i}", rgb, 12), (X0 + 0.5, y, 0.93), (0.07, 0.07, 0.03), rot=(0, -0.25 + math.pi / 2, 0), segments=12)
+             for i, (y, rgb) in enumerate(((1.6, (0.2, 1.0, 0.3)), (1.85, (0.2, 1.0, 0.3)), (2.1, (1.0, 0.6, 0.1)), (2.35, (0.2, 1.0, 0.3))))]
     # The radio, a clipboard of run sheets, his coffee over, a photo propped against the glass.
     reb.prim("cube", "Radio", reb.mat_plain("Radio olive", (0.07, 0.08, 0.05), 0.5), (X0 + 0.3, 1.45, 1.06), (0.3, 0.22, 0.16), rot=(0, 0, 0.1), bevel=0.01)
     reb.prim("cyl", "Radio dial", mat("steel"), (X0 + 0.46, 1.45, 1.08), (0.05, 0.05, 0.01), rot=(0, math.pi / 2, 0), segments=12)
@@ -213,6 +225,35 @@ def build():
         a = anim.phase(k)
         pivot.rotation_euler = (0.12 * math.sin(a), 0.05 * math.cos(a), 0.6 * math.sin(a))
     anim.custom(turn)
+
+    # The drive's warning beacon, high in the corner over the desk: it
+    # flashes while the drive runs, and lights the walls round it, over her
+    # head where she stands at the key switch.
+    beacon_m = reb.mat_emit("Beacon", (1.0, 0.45, 0.05), 30)
+    beacon = [reb.prim("cyl", "Beacon base", mat("black"), (X0 + 0.12, Y0 + 0.12, 2.12), (0.12, 0.12, 0.04), segments=12),
+              reb.prim("sphere", "Beacon dome", beacon_m, (X0 + 0.12, Y0 + 0.12, 2.2), (0.11, 0.11, 0.12), segments=12)]
+    beacon_glow = reb.point("Beacon glow", (X0 + 0.3, Y0 + 0.3, 2.15), 25, (1.0, 0.45, 0.05), 0.1)
+
+    def key_turned(t):
+        """t 0: the switch empty; then the key in, the drive's lamps lighting
+        one by one, the beacon from half way, and last the car's lamp out on
+        the platform."""
+        t = float(t)
+        for ob in key:
+            ob.hide_render = t <= 0
+        for i, ob in enumerate(lamps):
+            ob.hide_render = t < (i + 1) / 5
+        for ob in beacon + [beacon_glow]:
+            ob.hide_render = t < 0.5
+        car_lamp.hide_render = t < 1
+
+    def flashing(k):
+        """The beacon's turning lamp, twice round a loop."""
+        f = 0.5 + 0.5 * math.cos(anim.phase(k, 2))
+        beacon_glow.data.energy = 25 * (0.15 + 0.85 * f)
+        beacon_m.node_tree.nodes["Emission"].inputs["Strength"].default_value = 30 * (0.2 + 0.8 * f)
+    key_turned(0)
+    room.state("gondola-runs", key_turned, motion=(6, 4), cameras=[0], loop=flashing)
 
     # ---- What the game needs.
     room.door("platform", (DOOR[0], Y1 - 0.4, DOOR[1], Y1), arrive=(3.05, 2.9), face=(0, -1))
