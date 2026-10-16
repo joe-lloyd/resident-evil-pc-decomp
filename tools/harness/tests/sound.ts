@@ -7,8 +7,9 @@
 //   road, running too; the bunkhouse's boards; the bridge's planks over the
 //   gorge; the mine office's rock; the flooded gallery and the creek's ford;
 //   and the concrete, metal, lino and carpet of her other rooms.
-// - Ambience: the loops under the music play on its spare channels in the
-//   rooms that have them, and stop indoors (sound/places.ts).
+// - Ambience: each room plays exactly the channels its cue gives it in the
+//   music table (plan/music.ts), its music and its loops, and no loop twice
+//   what the music has.
 // - Doors: a wooden door and an iron one play RE1's own sounds; a walk
 //   through a gate opens and shuts it; the ladder up through the hatch.
 // - Chris's game keeps RE1's own: his steps are RE1's, and no loop plays.
@@ -26,11 +27,11 @@ import { dayRooms } from '../../rebecca/day/rooms.ts';
 import { EVENT_FLAGS } from '../../rebecca/day/events.ts';
 import { LOCK_FLAGS } from '../../rebecca/day/scripts.ts';
 import { isGround, STEP_SETS, type Ground } from '../../rebecca/sound/ground.ts';
-import { ambienceFile } from '../../rebecca/sound/ambience.ts';
-import { musicTable, STATE_AMBIENCE } from '../../rebecca/music/table.ts';
+import { AMBIENCES, ambienceFile, type Ambience } from '../../rebecca/sound/ambience.ts';
+import { musicTable, roomChannels } from '../../rebecca/music/table.ts';
 import { CUES } from '../../rebecca/plan/music.ts';
 import { day as plan } from '../../rebecca/plan/day.ts';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { day, inside, outward, read, walkable, type Json, type Rect } from './floor.ts';
 
@@ -150,32 +151,32 @@ async function footsteps(
 /** The music channels playing: [channel, file]. */
 const channels = (s: GameState) => s.bgm!.channels.flatMap((c, i) => (c.playing && c.file ? [[i, c.file] as const] : []));
 
-// Which renders exist changes only channel 0, so the table is built as if every one did.
-const table = musicTable(CUES, plan.places, dayRooms, () => true);
+// The table as build.ts makes it: a sketch's channel plays once its render exists.
+const renders = path.join(day, '..', 'music', 'renders');
+const table = musicTable(CUES, plan.places, dayRooms, (sketch) => existsSync(path.join(renders, `${sketch}.wav`)));
 
-/** The loops the table gives `slug`'s room: [channel, file], channel 1 its cue's first loop, 2 its second. */
-function loopsOf(slug: string): (readonly [number, string])[] {
+/**
+ * In `slug`, the game plays exactly the channels the music table gives the
+ * room, its music and its loops, and `loops` are the loops among them. Each
+ * loop's file sits 10 dB under the music (sound/ambience.ts), and its channel
+ * must not lift it over.
+ */
+async function ambience(link: GameLink, what: string, slug: string, loops: readonly Ambience[]): Promise<void> {
   const r = table.rooms.find((x) => x.slug === slug);
   if (!r) throw new Error(`${slug} has no row in the music table`);
-  const g = r.group === null ? undefined : table.groups[r.group];
-  return STATE_AMBIENCE.flatMap((bit, i) => (g && r.state !== 0xff && r.state & bit ? [[i + 1, ambienceFile(g.ambience[i]!)] as const] : []));
-}
-
-/** In `slug`, the loops playing are the ones the table gives it, and none in a room it gives none. */
-async function ambience(link: GameLink, what: string, slug: string, want: 'loop' | 'quiet'): Promise<void> {
-  const loops = loopsOf(slug);
-  if ((loops.length > 0) !== (want === 'loop')) throw new Error(`${slug}: the table gives it ${loops.length ? loops.map(([c, f]) => `${c}:${f}`).join(', ') : 'no loop'}`);
+  const want = roomChannels(table, r);
+  const isLoop = (f: string) => AMBIENCES.some((a) => ambienceFile(a).toLowerCase() === f.toLowerCase());
+  const tableLoops = want.flatMap(([, f]) => (isLoop(f) ? [f] : []));
+  if (JSON.stringify(tableLoops) !== JSON.stringify(loops.map(ambienceFile))) throw new Error(`${slug}: the table gives it the loops [${tableLoops.join(', ')}]`);
   await goToRoom(link, slug);
   const key = (l: readonly (readonly [number, string])[]) => JSON.stringify(l.map(([c, f]) => [c, f.toLowerCase()]));
   let s = await link.frames(30);
-  for (let k = 0; k < 10 && key(channels(s).filter(([c]) => c > 0)) !== key(loops); k++) s = await link.frames(15);
-  const got = channels(s).filter(([c]) => c > 0);
-  // Each loop's file sits 10 dB under the music (sound/ambience.ts); the channel must not lift it over.
+  for (let k = 0; k < 10 && key(channels(s)) !== key(want); k++) s = await link.frames(15);
   const vol = (c: number) => s.bgm!.channels[c]!.volume;
-  const music = s.bgm!.channels[0]!.playing ? vol(0) : undefined;
-  const under = got.every(([c]) => music === undefined || vol(c) <= music);
+  const music = channels(s).filter(([, f]) => !isLoop(f)).map(([c]) => vol(c));
+  const under = channels(s).every(([c, f]) => !isLoop(f) || music.every((v) => vol(c) <= v));
   const line = `${what}: ${roomLabel(s)} plays ${channels(s).map(([c, f]) => `${c}:${f} at ${vol(c)}`).join(', ') || 'nothing'} (state ${s.bgm!.state.toString(16)})`;
-  check(key(got) === key(loops) && under, line, `expected loops ${loops.map(([c, f]) => `${c}:${f}`).join(', ') || 'none'}, no louder than the music`);
+  check(key(channels(s)) === key(want) && under, line, `expected ${want.map(([c, f]) => `${c}:${f}`).join(', ') || 'nothing'}, its loops no louder than its music`);
 }
 
 /** Through a door that opens: stand in it, press action, and see what the door played. */
@@ -259,14 +260,18 @@ async function door(
     await footsteps(link, "lino, the operator's booth", 'booth', 'lino', { run: 800 });
     await footsteps(link, "carpet, the gondola car", 'car', 'carpet', { run: 600 });
 
-    await ambience(link, 'the station yard: its music and the wind', 'yard', 'loop');
-    await ambience(link, 'the shed, indoors: the music alone', 'shed', 'quiet');
-    await ambience(link, 'the woods: the forest', 'woods', 'loop');
-    await ambience(link, 'the sawmill: the mill race', 'sawmill', 'loop');
-    await ambience(link, 'the mine junction: underground', 'junction', 'loop');
-    await ambience(link, 'the valley path at dusk', 'valley-path', 'loop');
-    await ambience(link, 'the summit trail: the gale', 'summit-trail', 'loop');
-    await ambience(link, "the operator's booth, a save room: no loop", 'booth', 'quiet');
+    // Each room plays its cue's channels and no other: one owner for each sound (docs/REBECCA_SOUND.md).
+    await ambience(link, 'the station yard: its music has the wind, so no loop', 'yard', []);
+    await ambience(link, 'the shed, indoors: the music alone', 'shed', []);
+    await ambience(link, 'the woods: the music and the forest', 'woods', ['forest']);
+    await ambience(link, "the tower top: the road's music and its wind layer, no loop", 'tower-top', []);
+    await ambience(link, "the mine junction: the music, the water and the mine's air", 'junction', ['mine']);
+    await ambience(link, 'the gondola car: the music and the gale', 'car', ['gale']);
+    await ambience(link, 'the valley path: the music and dusk', 'valley-path', ['dusk']);
+    await ambience(link, 'the hollow: the forest alone', 'den', ['forest']);
+    await ambience(link, 'the estate wall: the music and the night', 'estate-wall', ['night']);
+    await ambience(link, 'the cellar: the cellar alone', 'cellar', ['cellar']);
+    await ambience(link, "the operator's booth, a save room: no loop", 'booth', []);
 
     await door(link, 'a wooden door', 'bunkhouse', 'camp-yard', ['Dr_wd01']);
     await door(link, 'an iron door', 'junction', 'tunnel', ['Dr_mtl01']);
