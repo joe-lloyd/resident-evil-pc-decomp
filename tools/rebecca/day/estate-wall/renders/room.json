@@ -234,6 +234,17 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "open-gate",
+   "bank": 1,
+   "bit": -1,
+   "motion": {
+    "frames": 12,
+    "ticks": 4
+   }
+  }
+ ],
  "bounds": {
   "x0": 3400,
   "z0": 1105,
