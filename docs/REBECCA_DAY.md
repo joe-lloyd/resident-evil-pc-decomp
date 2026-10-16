@@ -179,6 +179,14 @@ and RE1's own save room music at the end, from the player's files. Every
 room and cutscene has a cue in `tools/rebecca/plan/music.ts`. The research
 and the plan are in [REBECCA_MUSIC.md](REBECCA_MUSIC.md).
 
+## Sound
+
+Her steps follow what each scene says is underfoot: our own for earth and
+gravel, RE1's for boards, rock, water and her other floors. Loops of wind,
+forest, the mill, the mine, dusk, night and the cellar play under her music
+on its spare channels. Her doors play RE1's door sounds, and her gates open
+and shut. How it works is in [REBECCA_SOUND.md](REBECCA_SOUND.md).
+
 ## Scale
 
 Rebecca stands 2700 game units tall (measured on screen,

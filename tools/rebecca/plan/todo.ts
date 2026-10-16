@@ -96,6 +96,13 @@ const STATUS: Record<string, Status> = {
   'maps-engine': 'done',
   'maps-states': 'done',
   'maps-test': 'done',
+  // Written up in docs/REBECCA_SOUND.md, and proven in the game by
+  // tools/harness/tests/sound.ts: her steps on each kind of floor, each
+  // place's loop under its music and none indoors, a wooden and an iron door,
+  // a gate walked and one skipped, the ladder and the hatch, Chris's unchanged.
+  'sound-footsteps': 'done',
+  'sound-ambience': 'done',
+  'sound-doors': 'done',
   ...Object.fromEntries(AREAS.map((a): [string, Status] => [`map-area-${a.id}`, 'done'])),
   ...Object.fromEntries(MAP_ITEMS.flatMap((m): [string, Status][] => [[`map-item-${m.id}`, 'done'], [`find-${m.step}`, 'done']])),
   'music-research': 'done',
