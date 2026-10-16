@@ -131,9 +131,12 @@ try {
       // The checkpoint: in its room, the scene not yet run.
       await link.setFlag(Bank.common, CUT_FLAGS.get(c.id)!, false);
       if (c.trigger.on === 'step') await link.setFlag(Bank.common, EVENT_FLAGS.get(c.trigger.step)!, false);
-      await link.room(at.stage, at.room);
-      await settle(link, (s) => here(s, at), 60_000);
-      await snapshot(link, dir, `${c.id}-00-before`);
+      // A scene that starts as she comes in starts with the jump itself.
+      if (c.trigger.on !== 'enter') {
+        await link.room(at.stage, at.room);
+        await settle(link, (s) => here(s, at), 60_000);
+        await snapshot(link, dir, `${c.id}-00-before`);
+      }
 
       await trigger(link, c, at);
       // Press on through it, a picture at each line and each cut.
