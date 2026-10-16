@@ -1,7 +1,7 @@
 // washout (41A), written by day/scripts.ts from day/washout/scene.py: edit the scene, not this file.
 // init procedure 0
 // To road.
-door_aot_set(0, 31280, 7650, 1020, 6800, 0, 16, 48, 4, 0, ROOM_419, 4420, 0, 11900, 0, UNLOCKED, 1);
+door_aot_set(0, 31280, 7650, 1020, 6800, 0, 16, 48, 4, 0, ROOM_419, 16320, 0, 11900, 0, UNLOCKED, 1);
 // To tower-foot.
 door_aot_set(1, 1700, 7820, 1020, 5100, 0, 15, 48, 4, 0, ROOM_41C, 29410, 0, 11900, 2048, UNLOCKED, 1);
 // To generator.

@@ -54,14 +54,14 @@
   },
   {
    "from": [
-    11220,
-    -5610,
-    7820
+    17680,
+    -4080,
+    17340
    ],
    "to": [
-    850,
-    -510,
-    14280
+    12920,
+    -1020,
+    7820
    ],
    "fov": 200
   }
@@ -85,10 +85,10 @@
   },
   {
    "shape": "box",
-   "x0": 4760,
-   "z0": 16617,
-   "x1": 13600,
-   "z1": 17042,
+   "x0": 13388,
+   "z0": 7310,
+   "x1": 13812,
+   "z1": 16490,
    "name": "Gate leaf footprint"
   },
   {
@@ -136,8 +136,19 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "cut-chain",
+   "bank": 1,
+   "bit": -1,
+   "motion": {
+    "frames": 12,
+    "ticks": 4
+   }
+  }
+ ],
  "bounds": {
-  "x0": 1700,
+  "x0": 14110,
   "z0": 5950,
   "x1": 32300,
   "z1": 17850
@@ -180,13 +191,13 @@
   {
    "to": "washout",
    "zone": {
-    "x0": 1700,
+    "x0": 14110,
     "z0": 8500,
-    "x1": 2720,
+    "x1": 15130,
     "z1": 15300
    },
    "arrive": {
-    "x": 4420,
+    "x": 16320,
     "z": 11900,
     "angle": 0
    },
@@ -197,12 +208,12 @@
  "checks": [
   {
    "zone": {
-    "x0": 13260,
+    "x0": 14110,
     "z0": 7310,
-    "x1": 15130,
-    "z1": 9010
+    "x1": 15640,
+    "z1": 8500
    },
-   "text": "The chain's been cut. Bolt cutters, clean through.\nThe padlock is still locked on the end of it."
+   "text": "GATE 7. A steel chain round the gate and its post,\nand a padlock on it."
   },
   {
    "zone": {
@@ -215,10 +226,10 @@
   },
   {
    "zone": {
-    "x0": 12410,
-    "z0": 7310,
-    "x1": 13600,
-    "z1": 8500
+    "x0": 14110,
+    "z0": 5950,
+    "x1": 15640,
+    "z1": 7310
    },
    "text": "A county notice, torn half away.\n...ARKLAY AREA CLOSED UNTIL FURTHER... ...HIKERS... ...DO NOT APPROACH..."
   },
@@ -233,12 +244,12 @@
   },
   {
    "zone": {
-    "x0": 5100,
+    "x0": 17340,
     "z0": 11560,
-    "x1": 7820,
+    "x1": 20060,
     "z1": 13600
    },
-   "text": "Glass from a headlamp, and blood. Grey fur.\nSomething big ran out in front of whoever drove through here."
+   "text": "Glass from a headlamp, and blood. Grey fur.\nSomething big ran out in front of a truck here."
   },
   {
    "zone": {
@@ -251,9 +262,9 @@
   },
   {
    "zone": {
-    "x0": 7820,
+    "x0": 15300,
     "z0": 16490,
-    "x1": 9860,
+    "x1": 17340,
     "z1": 17850
    },
    "text": "A ranger's hat, in the ditch."
@@ -262,12 +273,12 @@
  "saves": null,
  "items": [],
  "spots": [],
- "entry": "The forestry road. The gate's open.",
+ "entry": "The forestry road. The gate's chained shut.",
  "notes": [
-  "from the east end, the way she comes: the road west, the sign, the open gate",
+  "from the east end, the way she comes: the road west, the sign, the chained gate",
   "from beyond the gate in the west: the gate's back, the torn notice, the road east",
-  "from the north verge by the sign: the latch post, the cut chain, the clipboard",
+  "from the north verge by the sign: the latch post, the chain, the clipboard",
   "from the south verge east of the gate: the sign with its crows, the latch post",
-  "from just west of the latch post: the road on west toward the washout, the skid and the blood"
+  "from the south verge by the hinge post: along the gate to its chain on the latch post, the road on west through the bars"
  ]
 }
