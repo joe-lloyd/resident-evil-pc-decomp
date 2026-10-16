@@ -1,0 +1,13 @@
+0: \nSawdust, and the smell of\nblood.
+1: \nAn arm, in a plaid sleeve.\nTorn off at the elbow.\p{0}\nThe sawdust round it is\nsoaked through.
+2: \nBlood, thrown across the\nboards in a long fan.\p{0}\nThe saw was running when\nit happened.
+3: \nThe head saw. There's\nstill a log on the\ncarriage, half cut.\p{0}\nSomeone threw the belt off\nto stop the blade.
+4: \nThe water wheel's shaft.\nIt's still turning.\p{0}\nThe belt's off, so it\nisn't driving anything.
+5: \nA bloody hand on the back\ndoor's frame.\p{0}\nHe went out this way.
+6: \nBoard feet cut: Monday\n4100. Tuesday 3850.\nWednesday 1200.\p{0}\nThen nothing.
+7: \nSomebody's in the race.\nFace down, going round and\nround in the eddy.\p{0}\nThe tailer. He worked the\nboards off the saw.
+8: \nThe water wheel. The race\nstill runs, so it still\nturns.
+9: \nThe sawyer's blood, all\nalong the planks.\p{0}\nHe was going for the pond.
+10: \nThe log crane, on its\ntrack. 5 TON.\p{0}\nIt runs off the mill, and\nthe mill isn't running.
+11: \nThe crane, its hook\nswinging.
+12: \nThe crane groans and\nswings the stack of logs\noff the crate.

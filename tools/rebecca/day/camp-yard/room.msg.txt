@@ -1,0 +1,11 @@
+0: \nCamp 4. The gate was shut\nfrom inside.
+1: \nCAMP 4. QUARANTINE. BY\nORDER.\p{0}\nPainted by hand. The paint\nran before it dried.
+2: \nA logger, face down in the\nmud. A peavey is driven\ninto his back.\p{0}\nThat wasn't done by\nanything sick.
+3: \nThey burned something\nhere. Mattress springs.\nAnd bones.\p{0}\nOne log is still smoking.
+4: \nA fire axe, buried in the\ndoor. Someone was holding\nit shut from inside.
+5: \nHe sat down against the\nlogs with a shotgun and\nfired until it was empty.\p{0}\nShells everywhere.
+6: \nTwo men under canvas, laid\nout straight. Someone\nstill cared, at first.
+7: \nThe cookhouse bell. The\nrope's been cut short.
+8: \nThe skidder. Its blade is\ndown in the mud, the\nchokers still on the logs.\p{0}\nThe key's gone.
+9: \nLaundry on the line.\nNobody's coming for it.
+10: \nDiesel, leaking from a\ndrum into the mud.

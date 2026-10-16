@@ -1,0 +1,386 @@
+{
+ "cameras": [
+  {
+   "from": [
+    2720,
+    -5950,
+    19720
+   ],
+   "to": [
+    15300,
+    -1020,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    30260,
+    -6290,
+    5440
+   ],
+   "to": [
+    15300,
+    -1530,
+    17000
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    18020,
+    -5100,
+    19890
+   ],
+   "to": [
+    15980,
+    -1870,
+    6120
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    3400,
+    -6460,
+    7820
+   ],
+   "to": [
+    24650,
+    -340,
+    15300
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 11696,
+   "z0": 816,
+   "x1": 19584,
+   "z1": 1020,
+   "name": "Cottage wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 11696,
+   "z0": 6800,
+   "x1": 12835,
+   "z1": 7004,
+   "name": "Cottage wall s"
+  },
+  {
+   "shape": "box",
+   "x0": 12835,
+   "z0": 6800,
+   "x1": 14025,
+   "z1": 7004,
+   "name": "Cottage wall s.001"
+  },
+  {
+   "shape": "box",
+   "x0": 12835,
+   "z0": 6800,
+   "x1": 14025,
+   "z1": 7004,
+   "name": "Cottage wall s.002"
+  },
+  {
+   "shape": "box",
+   "x0": 14025,
+   "z0": 6800,
+   "x1": 14620,
+   "z1": 7004,
+   "name": "Cottage wall s.003"
+  },
+  {
+   "shape": "box",
+   "x0": 14620,
+   "z0": 6800,
+   "x1": 16150,
+   "z1": 7004,
+   "name": "Cottage wall s.004"
+  },
+  {
+   "shape": "box",
+   "x0": 16150,
+   "z0": 6800,
+   "x1": 17255,
+   "z1": 7004,
+   "name": "Cottage wall s.005"
+  },
+  {
+   "shape": "box",
+   "x0": 17255,
+   "z0": 6800,
+   "x1": 18445,
+   "z1": 7004,
+   "name": "Cottage wall s.006"
+  },
+  {
+   "shape": "box",
+   "x0": 17255,
+   "z0": 6800,
+   "x1": 18445,
+   "z1": 7004,
+   "name": "Cottage wall s.007"
+  },
+  {
+   "shape": "box",
+   "x0": 18445,
+   "z0": 6800,
+   "x1": 19584,
+   "z1": 7004,
+   "name": "Cottage wall s.008"
+  },
+  {
+   "shape": "box",
+   "x0": 11696,
+   "z0": 816,
+   "x1": 11900,
+   "z1": 7004,
+   "name": "Cottage wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 19380,
+   "z0": 816,
+   "x1": 19584,
+   "z1": 2720,
+   "name": "Cottage wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 19380,
+   "z0": 2720,
+   "x1": 19584,
+   "z1": 4080,
+   "name": "Cottage wall e.001"
+  },
+  {
+   "shape": "box",
+   "x0": 19380,
+   "z0": 2720,
+   "x1": 19584,
+   "z1": 4080,
+   "name": "Cottage wall e.002"
+  },
+  {
+   "shape": "box",
+   "x0": 19380,
+   "z0": 4080,
+   "x1": 19584,
+   "z1": 7004,
+   "name": "Cottage wall e.003"
+  },
+  {
+   "shape": "box",
+   "x0": 19465,
+   "z0": 3995,
+   "x1": 20485,
+   "z1": 5185,
+   "name": "Chimney"
+  },
+  {
+   "shape": "box",
+   "x0": 10511,
+   "z0": 1156,
+   "x1": 11589,
+   "z1": 6635,
+   "name": "Woodpile"
+  },
+  {
+   "shape": "circle",
+   "x0": 9064,
+   "z0": 7522,
+   "x1": 9976,
+   "z1": 8457,
+   "name": "Chopping block"
+  },
+  {
+   "shape": "circle",
+   "x0": 19593,
+   "z0": 6672,
+   "x1": 20698,
+   "z1": 7777,
+   "name": "Water butt"
+  },
+  {
+   "shape": "circle",
+   "x0": 24055,
+   "z0": 3995,
+   "x1": 24225,
+   "z1": 4165,
+   "name": "Line pole"
+  },
+  {
+   "shape": "box",
+   "x0": 7055,
+   "z0": 18683,
+   "x1": 9945,
+   "z1": 19397,
+   "name": "Bench"
+  },
+  {
+   "shape": "box",
+   "x0": 21318,
+   "z0": 9588,
+   "x1": 21522,
+   "z1": 9792,
+   "name": "Sign post foot"
+  },
+  {
+   "shape": "circle",
+   "x0": 24735,
+   "z0": 18275,
+   "x1": 24905,
+   "z1": 18445,
+   "name": "Windsock mast"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 2550,
+  "x1": 31450,
+  "z1": 20400
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "platform",
+   "zone": {
+    "x0": 1700,
+    "z0": 11050,
+    "x1": 2720,
+    "z1": 14450
+   },
+   "arrive": {
+    "x": 4420,
+    "z": 12750,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "cottage",
+   "zone": {
+    "x0": 14620,
+    "z0": 7055,
+    "x1": 16150,
+    "z1": 8075
+   },
+   "arrive": {
+    "x": 15385,
+    "z": 9690,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "quarry",
+   "zone": {
+    "x0": 30430,
+    "z0": 11900,
+    "x1": 31450,
+    "z1": 15300
+   },
+   "arrive": {
+    "x": 28900,
+    "z": 13600,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 6290,
+    "z0": 11220,
+    "x1": 8840,
+    "z1": 13770
+   },
+   "text": "A thermos, dropped on the path. The coffee's long dried.\nThe cup rolled off into the grass."
+  },
+  {
+   "zone": {
+    "x0": 10200,
+    "z0": 10540,
+    "x1": 13940,
+    "z1": 12580
+   },
+   "text": "Blood, drop after drop, from the station. He was bleeding as he walked."
+  },
+  {
+   "zone": {
+    "x0": 13770,
+    "z0": 7055,
+    "x1": 14620,
+    "z1": 8160
+   },
+   "text": "A bloody hand on the door frame. He went in."
+  },
+  {
+   "zone": {
+    "x0": 24480,
+    "z0": 11560,
+    "x1": 27540,
+    "z1": 13940
+   },
+   "text": "A rag soaked in blood. The drips go on, east.\nHe came out again and kept going."
+  },
+  {
+   "zone": {
+    "x0": 20230,
+    "z0": 8500,
+    "x1": 22610,
+    "z1": 10710
+   },
+   "text": "SKYWAY back the way I came. QUARRY and OLD MINE on ahead.\nThere's blood on the post."
+  },
+  {
+   "zone": {
+    "x0": 6800,
+    "z0": 17850,
+    "x1": 10200,
+    "z1": 20400
+   },
+   "text": "A bench with a view of the whole valley. A little plaque:\nFOR THE ONES WHO BUILT THE SKYWAY."
+  },
+  {
+   "zone": {
+    "x0": 23460,
+    "z0": 17000,
+    "x1": 26180,
+    "z1": 19720
+   },
+   "text": "The station's windsock. It's blowing hard off the valley."
+  },
+  {
+   "zone": {
+    "x0": 8500,
+    "z0": 7140,
+    "x1": 10540,
+    "z1": 9180
+   },
+   "text": "The axe is still in the block. Somebody's woodpile, somebody's washing."
+  }
+ ],
+ "items": [],
+ "spots": [],
+ "entry": "Blood on the path. He came this way.",
+ "notes": [
+  "from the west end by the fence: the path in, the thermos, the cottage set back",
+  "from the north-east corner: the drips going on east, the windsock, the bench and the valley",
+  "from the fence below the cottage: its front, the open door, the hand on the frame",
+  "from beside the woodpile: the length of the path east toward the quarry"
+ ]
+}

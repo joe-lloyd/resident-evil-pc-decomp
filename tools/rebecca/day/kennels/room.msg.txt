@@ -1,0 +1,8 @@
+0: \nKennels.\p{0}\nAll the runs are empty.
+1: \nThe gate's been torn off\nits hinges. From the\ninside.
+2: \nTheir handler. What's left\nof him.\p{0}\nHis catch-pole is snapped\nin two.
+3: \nA chain, snapped at the\ncollar end.\p{0}\nWhatever was on it pulled\nuntil it broke.
+4: \nREX. BRUTUS. SHADOW.\nKAISER.\p{0}\nThe dogs on the mountain\ncame from here.
+5: \nThe door won't stay shut.\p{0}\nThere's a lamp lit on the\ndesk. A feed chart on the\nwall.
+6: \nA water trough. The\nwater's pink.
+7: \nPaw prints, big ones.\nHeading out to the gate.\p{0}\nAnd toward the house.

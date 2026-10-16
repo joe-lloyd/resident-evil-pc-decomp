@@ -1,0 +1,422 @@
+{
+ "cameras": [
+  {
+   "from": [
+    2380,
+    -6120,
+    15980
+   ],
+   "to": [
+    18700,
+    -1360,
+    10200
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    31620,
+    -6460,
+    19040
+   ],
+   "to": [
+    14450,
+    -850,
+    13940
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    21080,
+    -5610,
+    26690
+   ],
+   "to": [
+    17340,
+    -1020,
+    11050
+   ],
+   "fov": 205
+  },
+  {
+   "from": [
+    14280,
+    -6290,
+    14280
+   ],
+   "to": [
+    5100,
+    -1020,
+    24140
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    19040,
+    -5780,
+    19040
+   ],
+   "to": [
+    30260,
+    -1360,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2720,
+    -6800,
+    9180
+   ],
+   "to": [
+    19550,
+    -340,
+    21250
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 10994,
+   "z0": 14696,
+   "x1": 12806,
+   "z1": 16244,
+   "name": "Barrow pan"
+  },
+  {
+   "shape": "box",
+   "x0": 13005,
+   "z0": 8500,
+   "x1": 16235,
+   "z1": 10540,
+   "name": "Block footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 16575,
+   "z0": 8245,
+   "x1": 19465,
+   "z1": 10455,
+   "name": "Block footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 19805,
+   "z0": 8925,
+   "x1": 22355,
+   "z1": 10795,
+   "name": "Block footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 13515,
+   "z0": 11815,
+   "x1": 17085,
+   "z1": 14025,
+   "name": "Block footprint.003"
+  },
+  {
+   "shape": "box",
+   "x0": 17850,
+   "z0": 12240,
+   "x1": 20570,
+   "z1": 14280,
+   "name": "Block footprint.004"
+  },
+  {
+   "shape": "box",
+   "x0": 21335,
+   "z0": 13345,
+   "x1": 23545,
+   "z1": 15215,
+   "name": "Block footprint.005"
+  },
+  {
+   "shape": "box",
+   "x0": 5610,
+   "z0": 3060,
+   "x1": 7990,
+   "z1": 5440,
+   "name": "Mast footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 8160,
+   "z0": 5610,
+   "x1": 10880,
+   "z1": 7650,
+   "name": "Winch house"
+  },
+  {
+   "shape": "circle",
+   "x0": 23538,
+   "z0": 2516,
+   "x1": 23892,
+   "z1": 2924,
+   "name": "Crusher leg"
+  },
+  {
+   "shape": "circle",
+   "x0": 23538,
+   "z0": 6256,
+   "x1": 23892,
+   "z1": 6664,
+   "name": "Crusher leg.001"
+  },
+  {
+   "shape": "circle",
+   "x0": 27958,
+   "z0": 2516,
+   "x1": 28312,
+   "z1": 2924,
+   "name": "Crusher leg.002"
+  },
+  {
+   "shape": "circle",
+   "x0": 27958,
+   "z0": 6256,
+   "x1": 28312,
+   "z1": 6664,
+   "name": "Crusher leg.003"
+  },
+  {
+   "shape": "box",
+   "x0": 22950,
+   "z0": 2040,
+   "x1": 28900,
+   "z1": 7140,
+   "name": "Crusher footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 32300,
+   "z0": 1700,
+   "x1": 38420,
+   "z1": 7140,
+   "name": "Gravel heap"
+  },
+  {
+   "shape": "box",
+   "x0": 27789,
+   "z0": 9411,
+   "x1": 30011,
+   "z1": 11329,
+   "name": "Ore cart"
+  },
+  {
+   "shape": "box",
+   "x0": 3400,
+   "z0": 21012,
+   "x1": 9520,
+   "z1": 21148,
+   "name": "Hut wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 3400,
+   "z0": 26112,
+   "x1": 9520,
+   "z1": 26248,
+   "name": "Hut wall s"
+  },
+  {
+   "shape": "box",
+   "x0": 3332,
+   "z0": 21080,
+   "x1": 3468,
+   "z1": 26180,
+   "name": "Hut wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 9452,
+   "z0": 21080,
+   "x1": 9588,
+   "z1": 26180,
+   "name": "Hut wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 3315,
+   "z0": 20995,
+   "x1": 9605,
+   "z1": 26265,
+   "name": "Hut footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 9775,
+   "z0": 21420,
+   "x1": 11135,
+   "z1": 24140,
+   "name": "Drums footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 2550,
+   "z0": 20570,
+   "x1": 2890,
+   "z1": 20910,
+   "name": "Siren pole"
+  },
+  {
+   "shape": "box",
+   "x0": 22440,
+   "z0": 24565,
+   "x1": 31960,
+   "z1": 28475,
+   "name": "Truck footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 32300,
+  "z1": 27200
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "east-path",
+   "zone": {
+    "x0": 1700,
+    "z0": 14620,
+    "x1": 2720,
+    "z1": 17680
+   },
+   "arrive": {
+    "x": 4080,
+    "z": 16150,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "quarry-office",
+   "zone": {
+    "x0": 5610,
+    "z0": 20060,
+    "x1": 7140,
+    "z1": 21080
+   },
+   "arrive": {
+    "x": 6375,
+    "z": 19040,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "mine-entrance",
+   "zone": {
+    "x0": 31280,
+    "z0": 9350,
+    "x1": 32300,
+    "z1": 13600
+   },
+   "arrive": {
+    "x": 29580,
+    "z": 12580,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 17000,
+    "z0": 17510,
+    "x1": 20910,
+    "z1": 20400
+   },
+   "text": "One of the quarrymen. The dogs have been at him.\nThey dragged him out from behind the blocks."
+  },
+  {
+   "zone": {
+    "x0": 21250,
+    "z0": 15300,
+    "x1": 23630,
+    "z1": 17510
+   },
+   "text": "His hard hat. His lunch, spilled. He was sitting down to eat."
+  },
+  {
+   "zone": {
+    "x0": 4930,
+    "z0": 19890,
+    "x1": 7820,
+    "z1": 21080
+   },
+   "text": "QUARRY OFFICE. DANGER, EXPLOSIVES.\nThe door's padlocked."
+  },
+  {
+   "zone": {
+    "x0": 4420,
+    "z0": 3060,
+    "x1": 10880,
+    "z1": 7480
+   },
+   "text": "The derrick crane. Its hook's still swinging over the blocks."
+  },
+  {
+   "zone": {
+    "x0": 12920,
+    "z0": 8330,
+    "x1": 23630,
+    "z1": 10880
+   },
+   "text": "Cut granite, stacked ready to go. Nobody's coming for it now."
+  },
+  {
+   "zone": {
+    "x0": 22950,
+    "z0": 7140,
+    "x1": 28900,
+    "z1": 8330
+   },
+   "text": "ARKLAY GRANITE CO. The crusher's rusted solid."
+  },
+  {
+   "zone": {
+    "x0": 29920,
+    "z0": 7820,
+    "x1": 32300,
+    "z1": 9520
+   },
+   "text": "Old rails, running off east. ARKLAY MINE."
+  },
+  {
+   "zone": {
+    "x0": 22100,
+    "z0": 23460,
+    "x1": 32300,
+    "z1": 24650
+   },
+   "text": "A truck, dead on its rims."
+  }
+ ],
+ "items": [],
+ "spots": [],
+ "entry": "A quarry. Something's been feeding here.",
+ "notes": [
+  "from the way in: the derrick, the blocks, the crusher under the face",
+  "from the east side by the truck: the body by the blocks, the derrick over them",
+  "from the spoil lip: the worker in front of the blocks, the benches above",
+  "from the floor north-east of the hut: its door and its signs, the way in, the derrick",
+  "from by the body: the crusher, the rails out east to the mine",
+  "from the north-west by the derrick's foot: the floor, the kill, the truck"
+ ]
+}

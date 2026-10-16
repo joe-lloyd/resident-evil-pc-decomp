@@ -150,6 +150,10 @@
     <ClCompile Include="src\game\RoomInit.cpp" />
     <ClCompile Include="src\game\EffectSprites.cpp" />
     <ClCompile Include="src\game\Room.cpp" />
+    <ClCompile Include="src\game\BgAnim.cpp" />
+    <ClCompile Include="src\game\PathWalk.cpp" />
+    <ClCompile Include="src\game\RebFiles.cpp" />
+    <ClCompile Include="src\game\RebMaps.cpp" />
     <ClCompile Include="src\game\RoomEvents.cpp" />
     <ClCompile Include="src\game\CmdFunctions.cpp" />
     <ClCompile Include="src\game\PathTrail.cpp" />
@@ -189,6 +193,8 @@
     <ClCompile Include="src\game\dc\EntityModels.cpp" />
     <ClCompile Include="src\game\dc\ArrangeStages.cpp" />
     <ClCompile Include="src\game\dc\ArrangeSoundRows.cpp" />
+    <ClCompile Include="src\game\RebItems.cpp" />
+    <ClCompile Include="src\game\RebMusic.cpp" />
     <ClCompile Include="src\game\Rendering.cpp" />
     <ClCompile Include="src\game\JpnTextTables.cpp" />
     <ClCompile Include="src\game\PrintText.cpp" />

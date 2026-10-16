@@ -1,0 +1,380 @@
+{
+ "cameras": [
+  {
+   "from": [
+    11220,
+    -6120,
+    2040
+   ],
+   "to": [
+    27200,
+    -1020,
+    15300
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    10030,
+    -5950,
+    27370
+   ],
+   "to": [
+    28900,
+    -2040,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    31280,
+    -6120,
+    1700
+   ],
+   "to": [
+    17000,
+    -340,
+    19550
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    31450,
+    -5610,
+    25840
+   ],
+   "to": [
+    17850,
+    -1360,
+    7650
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    170,
+    -4930,
+    16150
+   ],
+   "to": [
+    14450,
+    -1190,
+    15130
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    14280,
+    -5440,
+    15300
+   ],
+   "to": [
+    0,
+    -1020,
+    16490
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 32470,
+   "z0": 1700,
+   "x1": 43350,
+   "z1": 17850,
+   "name": "Station"
+  },
+  {
+   "shape": "box",
+   "x0": 31025,
+   "z0": 13600,
+   "x1": 32385,
+   "z1": 15130,
+   "name": "Drinks machine"
+  },
+  {
+   "shape": "box",
+   "x0": 15027,
+   "z0": 17577,
+   "x1": 23393,
+   "z1": 23053,
+   "name": "Sedan footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 25670,
+   "z0": 14110,
+   "x1": 28390,
+   "z1": 14212,
+   "name": "Booth wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 25670,
+   "z0": 16388,
+   "x1": 28390,
+   "z1": 16490,
+   "name": "Booth wall s"
+  },
+  {
+   "shape": "box",
+   "x0": 25670,
+   "z0": 14110,
+   "x1": 25772,
+   "z1": 14535,
+   "name": "Booth wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 25670,
+   "z0": 14535,
+   "x1": 25772,
+   "z1": 16065,
+   "name": "Booth wall w.001"
+  },
+  {
+   "shape": "box",
+   "x0": 25670,
+   "z0": 14535,
+   "x1": 25772,
+   "z1": 16065,
+   "name": "Booth wall w.002"
+  },
+  {
+   "shape": "box",
+   "x0": 25670,
+   "z0": 16065,
+   "x1": 25772,
+   "z1": 16490,
+   "name": "Booth wall w.003"
+  },
+  {
+   "shape": "box",
+   "x0": 28288,
+   "z0": 14110,
+   "x1": 28390,
+   "z1": 16490,
+   "name": "Booth wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 25882,
+   "z0": 14323,
+   "x1": 28177,
+   "z1": 16277,
+   "name": "Booth inside"
+  },
+  {
+   "shape": "box",
+   "x0": 22371,
+   "z0": 9940,
+   "x1": 24889,
+   "z1": 11820,
+   "name": "Handcart bed"
+  },
+  {
+   "shape": "circle",
+   "x0": 25585,
+   "z0": 3995,
+   "x1": 25755,
+   "z1": 4165,
+   "name": "Flagpole"
+  },
+  {
+   "shape": "circle",
+   "x0": 20451,
+   "z0": 9061,
+   "x1": 20689,
+   "z1": 9299,
+   "name": "Lamp post"
+  },
+  {
+   "shape": "circle",
+   "x0": 11645,
+   "z0": 12495,
+   "x1": 11815,
+   "z1": 12665,
+   "name": "Trail sign post"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1105,
+  "z0": 1700,
+  "x1": 32300,
+  "z1": 25500
+ },
+ "voids": [
+  {
+   "x0": 5610,
+   "z0": 1700,
+   "x1": 11050,
+   "z1": 12580
+  },
+  {
+   "x0": 5610,
+   "z0": 17170,
+   "x1": 11050,
+   "z1": 25500
+  },
+  {
+   "x0": 4590,
+   "z0": 1700,
+   "x1": 5610,
+   "z1": 13600
+  },
+  {
+   "x0": 4590,
+   "z0": 17425,
+   "x1": 5610,
+   "z1": 25500
+  },
+  {
+   "x0": 1105,
+   "z0": 1700,
+   "x1": 4590,
+   "z1": 13600
+  },
+  {
+   "x0": 1105,
+   "z0": 18275,
+   "x1": 4590,
+   "z1": 25500
+  }
+ ],
+ "doors": [
+  {
+   "to": "valley-path",
+   "zone": {
+    "x0": 1105,
+    "z0": 13600,
+    "x1": 2125,
+    "z1": 18275
+   },
+   "arrive": {
+    "x": 3910,
+    "z": 15980,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "lower-station",
+   "zone": {
+    "x0": 31280,
+    "z0": 8500,
+    "x1": 32300,
+    "z1": 10200
+   },
+   "arrive": {
+    "x": 29580,
+    "z": 9350,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 16823,
+    "z0": 21764,
+    "x1": 20053,
+    "z1": 23974
+   },
+   "text": "A burgundy sedan. The driver's door is wide open, the light's still on.\nBlood on the seat. The keys are in the ignition.\nHer other shoe."
+  },
+  {
+   "zone": {
+    "x0": 24480,
+    "z0": 14110,
+    "x1": 25670,
+    "z1": 16490
+   },
+   "text": "TICKETS. The window's smashed in. Claw marks on the boards."
+  },
+  {
+   "zone": {
+    "x0": 21930,
+    "z0": 9860,
+    "x1": 24990,
+    "z1": 11900
+   },
+   "text": "A handcart of sacks. SPENCER ESTATE.\nFertiliser, rat poison, chain."
+  },
+  {
+   "zone": {
+    "x0": 30940,
+    "z0": 13430,
+    "x1": 32300,
+    "z1": 15300
+   },
+   "text": "ICE COLD. It still works, after all this."
+  },
+  {
+   "zone": {
+    "x0": 12750,
+    "z0": 11050,
+    "x1": 15470,
+    "z1": 12410
+   },
+   "text": "A dog's leash, chewed through."
+  },
+  {
+   "zone": {
+    "x0": 30940,
+    "z0": 6120,
+    "x1": 32300,
+    "z1": 8160
+   },
+   "text": "The office window's been broken in. From outside."
+  },
+  {
+   "zone": {
+    "x0": 24650,
+    "z0": 3060,
+    "x1": 26690,
+    "z1": 5100
+   },
+   "text": "The flag's still up. Nobody took it down for the night."
+  },
+  {
+   "zone": {
+    "x0": 4590,
+    "z0": 12580,
+    "x1": 6630,
+    "z1": 13940
+   },
+   "text": "A child's shoe, set on the post.\nSomeone found it in the lane and left it where it'd be seen."
+  },
+  {
+   "zone": {
+    "x0": 2210,
+    "z0": 17000,
+    "x1": 4250,
+    "z1": 18275
+   },
+   "text": "The fence is broken through.\nSomething big went through it, low down."
+  }
+ ],
+ "items": [],
+ "spots": [],
+ "entry": "The bottom of the gondola. Someone left their car door open.",
+ "notes": [
+  "from the north-west corner: the yard, the booth, the station door and the drinks machine, the sedan",
+  "from the south-west, over the car park: the sedan's open door, the station front, the flag",
+  "from the station's north corner: the car park and the sedan, the trail head west",
+  "from the south-east: the booth, the flagpole, the trail into the trees",
+  "up the station lane from its west end: the shoe on the post, the fences, the yard and the station beyond",
+  "down the station lane west from the yard: the alders dripping, the shoe on the post, the dusk at the end"
+ ]
+}

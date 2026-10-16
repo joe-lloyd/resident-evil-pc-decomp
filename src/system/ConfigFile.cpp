@@ -516,6 +516,13 @@ BOOL ConfigFile_Load(void)
         g_GameMode = ReadInt(path, "Game", "DcMode", 0) ? GAME_MODE_DC
                                                         : GAME_MODE_OG;
     }
+    // Port addition: Rebecca's day has her messages in the English encoding
+    // only, and the Japanese tables have no entry for her opening narration.
+    // With JPN assets the shipped game runs instead.
+    if (g_GameMode == GAME_MODE_REB && GetAssetVersion() != 0) {
+        dbg_printf("[CONFIG] mode REB needs USA assets; running OG\n");
+        g_GameMode = GAME_MODE_OG;
+    }
     // OG uses no overlay; every other mode overlays a folder of its own name.
     SetAssetMode(g_GameMode == GAME_MODE_OG ? "" : GameModeName(g_GameMode));
     g_bPs1EndingCredits = ReadInt(path, "Game", "Ps1EndingCredits", 0) != 0;

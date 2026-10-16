@@ -1,0 +1,13 @@
+0: \nThe heater's still on. He\ncan't have gone long.
+1: \nThe duty board, in chalk.\nPOWER OFF 4.50. DRIVE COG\nSHEARED. F3 BLOWN.\p{0}\nAt the bottom, underlined\ntwice: HAL HAS KEY.
+2: \nHis coffee went over. A\nphoto of a girl with a\p{0}\nfish, propped against the\nglass.
+3: \nGauze, soaked through. He\ndressed something in a\nhurry.\p{0}\nA bite, by the look of the\nfirst aid box. Everything\nin it is gone.
+4: \nThe handset is hanging off\nthe hook. The line's dead.
+5: \nARKLAY SKYWAY. See the\nvalley the way the eagles\ndo.\p{0}\nSomeone has scratched out\nthe family's eyes.
+6: \nA handprint in blood on\nthe door frame. It's still\ntacky.
+7: \nFuse F3 is burnt black.\nThe wall above it is\nsooty.
+8: \nThe fuse box. Every fuse\nin place.
+9: \nI pull the burnt fuse and\npush a new one home.
+10: \nThe key switch for the\ndrive. It's empty.\p{0}\nNo key, no gondola.
+11: \nThe key switch, turned to\nRUN.
+12: \nI turn Hal's key. Out\nthere, the bullwheel\nturns...\p{0}\nThe gondola is running!

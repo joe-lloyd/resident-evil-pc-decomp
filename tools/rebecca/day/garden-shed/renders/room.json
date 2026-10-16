@@ -1,0 +1,163 @@
+{
+ "cameras": [
+  {
+   "from": [
+    6205,
+    -3230,
+    1955
+   ],
+   "to": [
+    2380,
+    -850,
+    5780
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -3230,
+    6205
+   ],
+   "to": [
+    5780,
+    -1190,
+    2380
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 5482,
+   "z0": 1870,
+   "x1": 6418,
+   "z1": 5950,
+   "name": "Potting bench"
+  },
+  {
+   "shape": "box",
+   "x0": 4590,
+   "z0": 4760,
+   "x1": 6460,
+   "z1": 6460,
+   "name": "Sacks footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 1785,
+   "z0": 1785,
+   "x1": 2805,
+   "z1": 2635,
+   "name": "Cans footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 3204,
+   "z0": 1751,
+   "x1": 4276,
+   "z1": 2227,
+   "name": "Shelves"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 6460,
+  "z1": 6460
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "back-garden",
+   "zone": {
+    "x0": 1700,
+    "z0": 3570,
+    "x1": 2550,
+    "z1": 4930
+   },
+   "arrive": {
+    "x": 2975,
+    "z": 4250,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 2210,
+    "z0": 1700,
+    "x1": 3740,
+    "z1": 2720
+   },
+   "text": "The estate's spare keys. CELLAR, on a red tag.\nTwo of the hooks are empty."
+  },
+  {
+   "zone": {
+    "x0": 4250,
+    "z0": 1700,
+    "x1": 5100,
+    "z1": 2720
+   },
+   "text": "A calendar. July, crossed off day by day.\nIt stops at the 20th."
+  },
+  {
+   "zone": {
+    "x0": 5270,
+    "z0": 2380,
+    "x1": 6460,
+    "z1": 3740
+   },
+   "text": "His lantern's still lit. The tea's stone cold."
+  },
+  {
+   "zone": {
+    "x0": 3060,
+    "z0": 4590,
+    "x1": 4420,
+    "z1": 5610
+   },
+   "text": "A dead rat. Swollen. Its fur's falling out.\nThe trap didn't get it. Something else did."
+  },
+  {
+   "zone": {
+    "x0": 4420,
+    "z0": 4930,
+    "x1": 6460,
+    "z1": 6460
+   },
+   "text": "Bone meal. Something's gnawed a sack open."
+  },
+  {
+   "zone": {
+    "x0": 2210,
+    "z0": 5440,
+    "x1": 4930,
+    "z1": 6460
+   },
+   "text": "His tools. Clean and in a row."
+  }
+ ],
+ "items": [
+  {
+   "step": "cellar-key",
+   "x": 2975,
+   "y": -2380,
+   "z": 1836
+  }
+ ],
+ "spots": [],
+ "entry": "A potting shed. The lantern's lit.",
+ "notes": [
+  "high in the north-east corner: the door, the web in the window, the tools, the sacks and the dead rat",
+  "high by the window: the key board, the bench and its lantern"
+ ]
+}

@@ -1,0 +1,7 @@
+0: \nThe lookout. You can see\nhalf the mountain from\nhere.
+1: \nThe fire finder. Its\nsights are still set on a\nbearing: 047.\p{0}\nNorth-east, down in the\nvalley. Where the smoke\nis.
+2: \nThe radio set's dead. The\nhandset hangs on its cord.
+3: \nA board of keys by the\ndoor. One tag says SWITCH\nHOUSE.
+4: \nHis cot. Blood on the\ncanvas, and scratch marks\nin the wall.\p{0}\nHe tore at himself.
+5: \nThe top rail's broken.\nBlood on the post.\p{0}\nThis is where he went\nover.
+6: \nSmoke, rising out of the\ntrees in the valley.\nSomething came down there.\p{0}\nBravo's helicopter. And\nfar off, a big house among\nthe trees.

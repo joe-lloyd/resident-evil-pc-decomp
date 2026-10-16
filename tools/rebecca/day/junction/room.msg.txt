@@ -1,0 +1,9 @@
+0: \nThe roof is covered in egg\nsacs.
+1: \nBlack water, right to the\nroof.
+2: \nThe lift cage. LIFT TO\nSURFACE. The cable goes up\ninto the dark.
+3: \nThe way down goes under\nthe water. It's black.\p{0}\nHis blood goes right to\nthe edge. He went in.
+4: \nA dog, one of the big\nones, wrapped up in web.\p{0}\nSomething down here eats\nthem.
+5: \nEgg sacs, all over the\nroof. That one's split\nopen.
+6: \nThe mine's pump. Its pipe\nruns down into the flooded\nway.\p{0}\nI throw its switch.\nNothing. There's no power\ndown here.
+7: \nThe pump grinds on.
+8: \nI throw the pump's switch.\nIt shudders into life.\p{0}\nThe water's going down.

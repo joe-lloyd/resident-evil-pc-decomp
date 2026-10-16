@@ -1,0 +1,6 @@
+0: \nDown. Smoke in the west.\p{0}\nThat could be the\nhelicopter.
+1: \nA hiker. He sat down\nagainst the tree and they\ntore his throat out.\p{0}\nDogs. The tracks are\neverywhere.
+2: \nA strip of green sleeve on\na broken branch. A\nS.T.A.R.S. patch.\p{0}\nBravo. Someone came\nthrough here in the night,\nrunning.
+3: \nARKLAY TRAIL, west. LOWER\nSTATION, east. CREEK,\nsouth.\p{0}\nSomething's clawed the\npost.
+4: \nPaw prints. A lot of them.\nBig dogs, running south.
+5: \nThe pylon's ladder.\nThere's blood at the foot\nof it,\p{0}\ndripping from somewhere up\nabove.

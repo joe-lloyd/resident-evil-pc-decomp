@@ -1,0 +1,11 @@
+0: \nThe door isn't locked.\p{0}\o"Hello? Ranger?"\p{0}\nNo one. But the lamp is\nstill lit.
+1: \nA field radio, still on.\nUnder the static, voices.\p{0}\n"...Bravo team, come in.\nBravo, respond..."\p{0}\n"...Alpha goes in after\ndark. Over..."\p{0}\nI try the handset. Only\nstatic comes back.
+2: \nThe blanket's half on the\nfloor. He got up fast.
+3: \nThe stove is still warm.\nHe was here this morning.
+4: \nSomething came in through\nthe window.\p{0}\nThere's blood on the sill.
+5: \nAn empty rifle rack.\p{0}\nShell casings on the floor\nby the door. He was\nshooting at something.
+6: \nBeans and coffee, half\nfinished. A game of patience\nlaid out.\p{0}\nHe never came back to it.
+7: \nA survey map of the Arklay\nMountains.\p{0}\nSomeone has circled a house\nin the valley. The old\nSpencer estate.\p{0}\nBravo's last position was\nnear there.
+8: \nHis hat. He went out\nwithout it.
+9: \nTins, jars, a few books.\nEnough food for a month\nup here.
+10: \nThe ranger's trail map.\nThe station, the gorge and\nthe summit.

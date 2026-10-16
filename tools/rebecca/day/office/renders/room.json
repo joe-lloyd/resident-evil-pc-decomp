@@ -1,0 +1,222 @@
+{
+ "cameras": [
+  {
+   "from": [
+    7565,
+    -3910,
+    6545
+   ],
+   "to": [
+    4420,
+    -1020,
+    2380
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    7565,
+    -3910,
+    1955
+   ],
+   "to": [
+    2890,
+    -850,
+    5950
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -3910,
+    6545
+   ],
+   "to": [
+    6630,
+    -1020,
+    2720
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 2040,
+   "z0": 2677,
+   "x1": 2890,
+   "z1": 3442,
+   "name": "Box stove"
+  },
+  {
+   "shape": "box",
+   "x0": 4293,
+   "z0": 3383,
+   "x1": 6588,
+   "z1": 4607,
+   "name": "Foreman's desk"
+  },
+  {
+   "shape": "box",
+   "x0": 4666,
+   "z0": 1700,
+   "x1": 6791,
+   "z1": 3230,
+   "name": "Where he lies"
+  },
+  {
+   "shape": "box",
+   "x0": 1870,
+   "z0": 5525,
+   "x1": 2890,
+   "z1": 6545,
+   "name": "Safe"
+  },
+  {
+   "shape": "box",
+   "x0": 6800,
+   "z0": 1742,
+   "x1": 7650,
+   "z1": 2677,
+   "name": "Filing cabinet"
+  },
+  {
+   "shape": "box",
+   "x0": 3060,
+   "z0": 5984,
+   "x1": 4080,
+   "z1": 6698,
+   "name": "Typing stand"
+  },
+  {
+   "shape": "box",
+   "x0": 6622,
+   "z0": 4848,
+   "x1": 7809,
+   "z1": 6593,
+   "name": "Item box"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 7820,
+  "z1": 6800
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "camp-yard",
+   "zone": {
+    "x0": 4250,
+    "z0": 5950,
+    "x1": 5780,
+    "z1": 6800
+   },
+   "arrive": {
+    "x": 3400,
+    "z": 4675,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 3400,
+    "z0": 2040,
+    "x1": 4335,
+    "z1": 4080
+   },
+   "text": "The foreman. He sat at his desk and put the shotgun under his chin.\nThe wall behind him is covered in it."
+  },
+  {
+   "zone": {
+    "x0": 5610,
+    "z0": 4607,
+    "x1": 6800,
+    "z1": 5355
+   },
+   "text": "Letters on Umbrella letterhead. \"The gondola contract is approved in full.\"\n\"The samples are to be kept cold and are not to be opened.\"\n\"Discretion is a condition of the contract.\""
+  },
+  {
+   "zone": {
+    "x0": 4250,
+    "z0": 4607,
+    "x1": 5610,
+    "z1": 5355
+   },
+   "text": "The payroll ledger. Twenty-one names.\nHe crossed them out, one by one. The last ones aren't crossed out. There was nobody left to do it."
+  },
+  {
+   "zone": {
+    "x0": 1870,
+    "z0": 4930,
+    "x1": 3400,
+    "z1": 5525
+   },
+   "text": "A safe. It's locked.\nA combination dial: three numbers."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 4080,
+    "x1": 2720,
+    "z1": 5610
+   },
+   "text": "A map of the camp, drawn by hand. Somebody marked a red X by the workshop."
+  },
+  {
+   "zone": {
+    "x0": 6120,
+    "z0": 2635,
+    "x1": 7820,
+    "z1": 3740
+   },
+   "text": "A desk fan, still running. The power's still on somewhere."
+  }
+ ],
+ "saves": {
+  "typewriter": {
+   "x0": 3400,
+   "z0": 5355,
+   "x1": 4165,
+   "z1": 6800
+  },
+  "box": {
+   "x0": 6120,
+   "z0": 5440,
+   "x1": 7820,
+   "z1": 6800
+  },
+  "lid": {
+   "x": 7801,
+   "z": 5720,
+   "y": -1152,
+   "angle": 2048,
+   "scale": 0.8
+  }
+ },
+ "items": [
+  {
+   "step": "safe",
+   "x": 2380,
+   "y": 0,
+   "z": 5100
+  }
+ ],
+ "spots": [],
+ "entry": "The smell hits first.",
+ "notes": [
+  "high in the south-east corner: the foreman against the wall, the spray, the desk, the stove",
+  "high in the north-east corner over the fan: the safe, the door, the map",
+  "high in the south-west corner over the safe: the desk side on, the empty gun rack, the fan"
+ ]
+}

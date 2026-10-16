@@ -1,0 +1,187 @@
+{
+ "cameras": [
+  {
+   "from": [
+    1955,
+    -3570,
+    6545
+   ],
+   "to": [
+    7140,
+    -1275,
+    2720
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    7905,
+    -3570,
+    1955
+   ],
+   "to": [
+    2890,
+    -850,
+    6120
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -3570,
+    1955
+   ],
+   "to": [
+    7310,
+    -935,
+    6290
+   ],
+   "fov": 195
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 7089,
+   "z0": 2975,
+   "x1": 8109,
+   "z1": 5865,
+   "name": "Radio desk"
+  },
+  {
+   "shape": "box",
+   "x0": 3060,
+   "z0": 1785,
+   "x1": 6290,
+   "z1": 2635,
+   "name": "Instrument bench"
+  },
+  {
+   "shape": "box",
+   "x0": 1717,
+   "z0": 1717,
+   "x1": 2975,
+   "z1": 2601,
+   "name": "Plan chest"
+  },
+  {
+   "shape": "box",
+   "x0": 1708,
+   "z0": 2474,
+   "x1": 3222,
+   "z1": 5857,
+   "name": "Observer's bed"
+  },
+  {
+   "shape": "circle",
+   "x0": 1955,
+   "z0": 5899,
+   "x1": 2635,
+   "z1": 6579,
+   "name": "Paraffin stove"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 8160,
+  "z1": 6800
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "summit-trail",
+   "zone": {
+    "x0": 4250,
+    "z0": 6120,
+    "x1": 5780,
+    "z1": 6800
+   },
+   "arrive": {
+    "x": 5015,
+    "z": 5610,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 6885,
+    "z0": 4420,
+    "x1": 8160,
+    "z1": 5610
+   },
+   "text": "The radio's still on. Through the hiss, a voice on the police band:\n'...Alpha team will fly the Arklay range at dusk... searching for Bravo...'\nThey're coming. Tonight."
+  },
+  {
+   "zone": {
+    "x0": 6885,
+    "z0": 3060,
+    "x1": 8160,
+    "z1": 4420
+   },
+   "text": "The station log. Every hour, to the minute.\n0815 POLICE BAND. STARS ALPHA TO FLY AT DUSK. ASKED WIND ON RIDGE.\n0840 CROWS AT THE GLASS AGAIN. HUNDREDS.\nHis tea's beside it, cold. A crow came through the window and died on his desk."
+  },
+  {
+   "zone": {
+    "x0": 2720,
+    "z0": 1700,
+    "x1": 4250,
+    "z1": 2805
+   },
+   "text": "A barograph. The pen is still drawing.\nThe pressure's falling."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 3060,
+    "x1": 3230,
+    "z1": 5610
+   },
+   "text": "His bed. Unmade. A photo of a woman by the pillow."
+  },
+  {
+   "zone": {
+    "x0": 2040,
+    "z0": 5950,
+    "x1": 3910,
+    "z1": 6800
+   },
+   "text": "His coat's still on the hook. Wherever he went, he went in a hurry."
+  },
+  {
+   "zone": {
+    "x0": 5610,
+    "z0": 3230,
+    "x1": 6970,
+    "z1": 4420
+   },
+   "text": "A pencil, dropped on the floor."
+  },
+  {
+   "zone": {
+    "x0": 6630,
+    "z0": 5950,
+    "x1": 8160,
+    "z1": 6800
+   },
+   "text": "July. Every day crossed off up to yesterday."
+  }
+ ],
+ "items": [],
+ "spots": [],
+ "entry": "A radio. It's on. Someone could hear me.",
+ "notes": [
+  "high in the south-west corner: the instrument bench, the radio desk under the broken window",
+  "high in the north-east corner: the bunk, the stove, the coat on its hook, the open door",
+  "high in the north-west corner: the radio and the log, the chair rolled off, the door"
+ ]
+}

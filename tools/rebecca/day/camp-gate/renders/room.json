@@ -1,0 +1,370 @@
+{
+ "cameras": [
+  {
+   "from": [
+    3740,
+    -5950,
+    21420
+   ],
+   "to": [
+    21250,
+    -1360,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    29920,
+    -6460,
+    23120
+   ],
+   "to": [
+    5100,
+    -510,
+    12920
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    18700,
+    -6290,
+    22780
+   ],
+   "to": [
+    16660,
+    -2720,
+    4420
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 0,
+   "z0": 2550,
+   "x1": 14280,
+   "z1": 3230,
+   "name": "Fence west footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 20060,
+   "z0": 2550,
+   "x1": 32300,
+   "z1": 3230,
+   "name": "Fence east footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 13940,
+   "z0": 2550,
+   "x1": 14620,
+   "z1": 3230,
+   "name": "Gate post footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 19720,
+   "z0": 2550,
+   "x1": 20400,
+   "z1": 3230,
+   "name": "Gate post footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 14620,
+   "z0": 3230,
+   "x1": 15640,
+   "z1": 5610,
+   "name": "West leaf footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 18445,
+   "z0": 3230,
+   "x1": 19635,
+   "z1": 5440,
+   "name": "East leaf footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 11050,
+   "z0": 3570,
+   "x1": 15470,
+   "z1": 6630,
+   "name": "Barricade footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 16677,
+   "z0": 7884,
+   "x1": 17867,
+   "z1": 9074,
+   "name": "Strewn log footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 17935,
+   "z0": 8755,
+   "x1": 19125,
+   "z1": 9945,
+   "name": "Strewn log footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 19193,
+   "z0": 9626,
+   "x1": 20383,
+   "z1": 10816,
+   "name": "Strewn log footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 10055,
+   "z0": 8687,
+   "x1": 11245,
+   "z1": 9877,
+   "name": "Strewn log footprint.003"
+  },
+  {
+   "shape": "box",
+   "x0": 11390,
+   "z0": 9435,
+   "x1": 12580,
+   "z1": 10625,
+   "name": "Strewn log footprint.004"
+  },
+  {
+   "shape": "box",
+   "x0": 12725,
+   "z0": 10183,
+   "x1": 13915,
+   "z1": 11373,
+   "name": "Strewn log footprint.005"
+  },
+  {
+   "shape": "box",
+   "x0": 15403,
+   "z0": 12218,
+   "x1": 16593,
+   "z1": 13408,
+   "name": "Strewn log footprint.006"
+  },
+  {
+   "shape": "box",
+   "x0": 16915,
+   "z0": 11985,
+   "x1": 18105,
+   "z1": 13175,
+   "name": "Strewn log footprint.007"
+  },
+  {
+   "shape": "box",
+   "x0": 18427,
+   "z0": 11752,
+   "x1": 19617,
+   "z1": 12942,
+   "name": "Strewn log footprint.008"
+  },
+  {
+   "shape": "box",
+   "x0": 6104,
+   "z0": 10654,
+   "x1": 7294,
+   "z1": 11844,
+   "name": "Strewn log footprint.009"
+  },
+  {
+   "shape": "box",
+   "x0": 7395,
+   "z0": 11475,
+   "x1": 8585,
+   "z1": 12665,
+   "name": "Strewn log footprint.010"
+  },
+  {
+   "shape": "box",
+   "x0": 8686,
+   "z0": 12296,
+   "x1": 9876,
+   "z1": 13486,
+   "name": "Strewn log footprint.011"
+  },
+  {
+   "shape": "box",
+   "x0": 27258,
+   "z0": 12772,
+   "x1": 28448,
+   "z1": 13962,
+   "name": "Strewn log footprint.012"
+  },
+  {
+   "shape": "box",
+   "x0": 28135,
+   "z0": 14025,
+   "x1": 29325,
+   "z1": 15215,
+   "name": "Strewn log footprint.013"
+  },
+  {
+   "shape": "box",
+   "x0": 29012,
+   "z0": 15278,
+   "x1": 30202,
+   "z1": 16468,
+   "name": "Strewn log footprint.014"
+  },
+  {
+   "shape": "box",
+   "x0": 20410,
+   "z0": 6439,
+   "x1": 28550,
+   "z1": 12601,
+   "name": "Pickup footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 2753,
+   "z0": 6120,
+   "x1": 4047,
+   "z1": 7480,
+   "name": "Stump 0"
+  },
+  {
+   "shape": "circle",
+   "x0": 29136,
+   "z0": 4454,
+   "x1": 30364,
+   "z1": 5746,
+   "name": "Stump 1"
+  },
+  {
+   "shape": "circle",
+   "x0": 2154,
+   "z0": 11305,
+   "x1": 3286,
+   "z1": 12495,
+   "name": "Stump 2"
+  },
+  {
+   "shape": "circle",
+   "x0": 28901,
+   "z0": 13906,
+   "x1": 30259,
+   "z1": 15334,
+   "name": "Stump 3"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 3400,
+  "x1": 30600,
+  "z1": 21080
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "logging-road",
+   "zone": {
+    "x0": 1700,
+    "z0": 14280,
+    "x1": 2720,
+    "z1": 19380
+   },
+   "arrive": {
+    "x": 4420,
+    "z": 16830,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "camp-yard",
+   "zone": {
+    "x0": 15300,
+    "z0": 3400,
+    "x1": 19040,
+    "z1": 4420
+   },
+   "arrive": {
+    "x": 17170,
+    "z": 6460,
+    "angle": 3072
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 6970,
+    "z0": 3400,
+    "x1": 10030,
+    "z1": 4760
+   },
+   "text": "SICK - KEEP OUT. Painted in a hurry, the paint still running."
+  },
+  {
+   "zone": {
+    "x0": 15300,
+    "z0": 4420,
+    "x1": 19040,
+    "z1": 5780
+   },
+   "text": "LOGGING CAMP 4. Someone's clawed the sign.\nThe gate's hanging open."
+  },
+  {
+   "zone": {
+    "x0": 18360,
+    "z0": 4080,
+    "x1": 20400,
+    "z1": 6120
+   },
+   "text": "The outside of the gate is clawed to splinters.\nSomething wanted in."
+  },
+  {
+   "zone": {
+    "x0": 11560,
+    "z0": 6800,
+    "x1": 15300,
+    "z1": 8500
+   },
+   "text": "A logger, dead over the logs they piled up. The crows have had his eyes."
+  },
+  {
+   "zone": {
+    "x0": 22440,
+    "z0": 11220,
+    "x1": 25500,
+    "z1": 13260
+   },
+   "text": "The camp truck, shoved out of the gate.\nBloody hands all over the inside of the door. Someone wanted out."
+  },
+  {
+   "zone": {
+    "x0": 8840,
+    "z0": 7820,
+    "x1": 14620,
+    "z1": 11900
+   },
+   "text": "The barricade. Logs, sandbags, spikes. Pulled down, or pushed."
+  }
+ ],
+ "items": [],
+ "spots": [],
+ "entry": "They shut themselves in. It didn't help.",
+ "notes": [
+  "from the road coming in: the gate, the strewn logs, the pickup shoved aside",
+  "from the south-east corner: the strewn logs, the logger on the barricade, the road leaving west into the trees",
+  "from the south, square on: the gate and its sign, the gap, the camp beyond"
+ ]
+}

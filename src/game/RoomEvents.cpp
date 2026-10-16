@@ -1012,11 +1012,23 @@ void check_event_item_usage(void)
 // rotate the lid open past -199 then let it settle back; state 4 (the box
 // menu closed) resets. The lid angle lives at omodel+0x76, the step at
 // g_counter_increase (reversed at the -199 stop so the lid eases back).
+//
+// Port addition: a box whose room has no lid object opens its menu at once,
+// instead of writing the lid's angle through an unset omodel pointer. Every
+// box in the shipped game and in Rebecca's day has its lid (object model 0,
+// day/room.ts); this keeps a room built without one from stopping the game.
 // ============================================================================
 void check_itembox_state(void)
 {
     switch (g_itembox_state) {
     case 1:
+        if (*(unsigned short*)((char*)g_pRoomActionEntry + 4) >= g_RdtPointer->omodel_slot_count) {
+            g_itembox_cover_pointer = NULL;
+            g_main_state_flags |= MSF_MENU_MODE_ITEMBOX;
+            g_message_flags = 0xffff;
+            g_itembox_state = 4;
+            return;
+        }
         g_short_itembox_open_timer = 1;
         g_counter_increase = 1;
         g_itembox_state = 2;
@@ -1044,7 +1056,9 @@ void check_itembox_state(void)
         break;
     case 4:
         g_itembox_state = 0;
-        *(short*)((char*)g_itembox_cover_pointer + 0x76) = 0;
+        if (g_itembox_cover_pointer != NULL) {
+            *(short*)((char*)g_itembox_cover_pointer + 0x76) = 0;
+        }
         return;
     }
 }

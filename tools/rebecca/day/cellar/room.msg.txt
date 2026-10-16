@@ -1,0 +1,10 @@
+0: \nCandles. Someone's down\nhere.
+1: \nA low passage. The rack's\nend is jammed across it.
+2: \nOne of the footmen.\nSomething's been... eating\nhim.\p{0}\nIt's not long gone.
+3: \nA silver tray. Broken\nglasses. He was bringing\nsomething down.
+4: \nFootprints in his blood.\nGoing that way.
+5: \nCoal, under the chute.
+6: \nBarrels. Someone's lit a\ncandle on one of them.
+7: \nA heavy rack of preserves.\nThere are scrape marks on\nthe floor by its end.\p{0}\nIt's been moved.
+8: \nThe rack, pushed back\nalong the wall.
+9: \nI put my shoulder to the\nrack.\p{0}\nIt scrapes along the\nflags: the passage is\nclear.

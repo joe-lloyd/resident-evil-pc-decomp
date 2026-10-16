@@ -8,6 +8,8 @@
 // Open the test link. Returns 0 when the port cannot be opened.
 int  TestMode_Start(int port);
 int  TestMode_Active(void);
+// The port the test link was opened on, 0 when test mode is off.
+int  TestMode_Port(void);
 
 // Run harness commands, expire held keys and send the state line if anything
 // changed. gameFrame is 1 after main_loop and 0 from the movie loop, which

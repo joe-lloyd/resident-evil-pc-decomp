@@ -1,0 +1,378 @@
+{
+ "cameras": [
+  {
+   "from": [
+    2380,
+    -5440,
+    5100
+   ],
+   "to": [
+    15300,
+    -1020,
+    14280
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    23120,
+    -5440,
+    20060
+   ],
+   "to": [
+    10200,
+    -1360,
+    9180
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    23120,
+    -5610,
+    5100
+   ],
+   "to": [
+    8500,
+    -1020,
+    15640
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2380,
+    -5440,
+    20060
+   ],
+   "to": [
+    17000,
+    -1360,
+    7480
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    19040,
+    -4080,
+    12240
+   ],
+   "to": [
+    14280,
+    -850,
+    9520
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    23120,
+    -4930,
+    12920
+   ],
+   "to": [
+    3400,
+    -1360,
+    12920
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    33490,
+    -6120,
+    21930
+   ],
+   "to": [
+    24820,
+    -340,
+    15300
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    27030,
+    -6120,
+    10200
+   ],
+   "to": [
+    31620,
+    0,
+    18020
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 7446,
+   "z0": 15776,
+   "x1": 7854,
+   "z1": 16184,
+   "name": "Mill post"
+  },
+  {
+   "shape": "box",
+   "x0": 19346,
+   "z0": 15776,
+   "x1": 19754,
+   "z1": 16184,
+   "name": "Mill post.001"
+  },
+  {
+   "shape": "box",
+   "x0": 2720,
+   "z0": 6545,
+   "x1": 18700,
+   "z1": 9265,
+   "name": "Carriage footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 13515,
+   "z0": 10200,
+   "x1": 15725,
+   "z1": 11390,
+   "name": "Saw frame"
+  },
+  {
+   "shape": "box",
+   "x0": 12920,
+   "z0": 8840,
+   "x1": 16320,
+   "z1": 11560,
+   "name": "Saw footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 13848,
+   "z0": 13260,
+   "x1": 20815,
+   "z1": 14620,
+   "name": "Board stack"
+  },
+  {
+   "shape": "box",
+   "x0": 23120,
+   "z0": 7565,
+   "x1": 23630,
+   "z1": 8075,
+   "name": "Bearing post"
+  },
+  {
+   "shape": "box",
+   "x0": 6460,
+   "z0": 17255,
+   "x1": 12580,
+   "z1": 18785,
+   "name": "Edger table"
+  },
+  {
+   "shape": "box",
+   "x0": 17680,
+   "z0": 19380,
+   "x1": 21760,
+   "z1": 20570,
+   "name": "Filer's bench"
+  },
+  {
+   "shape": "box",
+   "x0": 3230,
+   "z0": 13430,
+   "x1": 6970,
+   "z1": 15130,
+   "name": "Lumber cart"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 4420,
+  "x1": 32300,
+  "z1": 20740
+ },
+ "voids": [
+  {
+   "x0": 23800,
+   "z0": 4420,
+   "x1": 27540,
+   "z1": 15640
+  },
+  {
+   "x0": 27540,
+   "z0": 4420,
+   "x1": 32300,
+   "z1": 14620
+  },
+  {
+   "x0": 23800,
+   "z0": 19720,
+   "x1": 27540,
+   "z1": 20740
+  },
+  {
+   "x0": 27540,
+   "z0": 18360,
+   "x1": 32300,
+   "z1": 20740
+  },
+  {
+   "x0": 23800,
+   "z0": 15640,
+   "x1": 24310,
+   "z1": 16320
+  },
+  {
+   "x0": 23800,
+   "z0": 18020,
+   "x1": 24310,
+   "z1": 19720
+  }
+ ],
+ "doors": [
+  {
+   "to": "camp-yard",
+   "zone": {
+    "x0": 1700,
+    "z0": 10200,
+    "x1": 2890,
+    "z1": 15300
+   },
+   "arrive": {
+    "x": 4080,
+    "z": 12750,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "pond",
+   "zone": {
+    "x0": 31280,
+    "z0": 14960,
+    "x1": 32300,
+    "z1": 18020
+   },
+   "arrive": {
+    "x": 29580,
+    "z": 16490,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 12920,
+    "z0": 11900,
+    "x1": 17340,
+    "z1": 13260
+   },
+   "text": "An arm, in a plaid sleeve. Torn off at the elbow.\nThe sawdust round it is soaked through."
+  },
+  {
+   "zone": {
+    "x0": 13940,
+    "z0": 12070,
+    "x1": 20740,
+    "z1": 13260
+   },
+   "text": "Blood, thrown across the boards in a long fan.\nThe saw was running when it happened."
+  },
+  {
+   "zone": {
+    "x0": 11900,
+    "z0": 11220,
+    "x1": 13600,
+    "z1": 12240
+   },
+   "text": "The head saw. There's still a log on the carriage, half cut.\nSomeone threw the belt off to stop the blade."
+  },
+  {
+   "zone": {
+    "x0": 19720,
+    "z0": 8840,
+    "x1": 23120,
+    "z1": 10540
+   },
+   "text": "The water wheel's shaft. It's still turning.\nThe belt's off, so it isn't driving anything."
+  },
+  {
+   "zone": {
+    "x0": 22100,
+    "z0": 15470,
+    "x1": 23800,
+    "z1": 16320
+   },
+   "text": "A bloody hand on the back door's frame.\nHe went out this way."
+  },
+  {
+   "zone": {
+    "x0": 10880,
+    "z0": 19720,
+    "x1": 12920,
+    "z1": 20740
+   },
+   "text": "Board feet cut: Monday 4100. Tuesday 3850. Wednesday 1200.\nThen nothing."
+  },
+  {
+   "zone": {
+    "x0": 28900,
+    "z0": 14620,
+    "x1": 31620,
+    "z1": 15640
+   },
+   "text": "Somebody's in the race. Face down, going round and round in the eddy.\nThe tailer. He worked the boards off the saw."
+  },
+  {
+   "zone": {
+    "x0": 24735,
+    "z0": 15640,
+    "x1": 27200,
+    "z1": 16660
+   },
+   "text": "The water wheel. The race still runs, so it still turns."
+  },
+  {
+   "zone": {
+    "x0": 30260,
+    "z0": 17340,
+    "x1": 31280,
+    "z1": 18360
+   },
+   "text": "The sawyer's blood, all along the planks.\nHe was going for the pond."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "crane",
+   "zone": {
+    "x0": 7650,
+    "z0": 8670,
+    "x1": 10710,
+    "z1": 10030
+   }
+  }
+ ],
+ "entry": "Sawdust, and the smell of blood.",
+ "notes": [
+  "high in the north-west corner: the log on the carriage, the blade, the blood on the boards",
+  "high in the south-east corner: the board stack's bloody face, the saw, the big doors far off",
+  "high in the north-east corner: the turning pulley, the slack belt, the crane, the mill's length",
+  "high in the south-west corner: the big doors, the edger, the back door far off",
+  "close on the head saw: the blade, the arm in the sawdust",
+  "from by the back door: down the mill to the big doors and the yard",
+  "from past the pond gate, back along the walk: the race, the tailer turning in it, the wheel, the back door",
+  "from over the race by the wheel: the tailer below, the plank walk, the pond gate"
+ ]
+}

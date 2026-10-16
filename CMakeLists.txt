@@ -77,8 +77,14 @@ set(RE1_SOURCES
     src/game/PathTrail.cpp
     src/game/PlayerAnimations.cpp
     src/game/PrintText.cpp
+    src/game/RebItems.cpp
+    src/game/RebMusic.cpp
     src/game/Rendering.cpp
     src/game/Room.cpp
+    src/game/BgAnim.cpp
+    src/game/PathWalk.cpp
+    src/game/RebFiles.cpp
+    src/game/RebMaps.cpp
     src/game/RoomCollision.cpp
     src/game/RoomEvents.cpp
     src/game/RoomInit.cpp

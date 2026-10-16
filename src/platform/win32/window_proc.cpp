@@ -1,6 +1,7 @@
 // WindowProc.cpp - Main window procedure + keyboard input handling
 // WindowProc (0x00441170), OnKeyDown (0x00497830)
 #include "Globals.h"
+#include "game/TestMode.h"
 #include <mmsystem.h>
 
 // ============================================================================
@@ -108,7 +109,11 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
                 if (!g_bIsSoftwareRendering && g_mciVideoDeviceID == 1) {
                     g_bMCIVideoEvent = TRUE;
                 }
-                PauseSounds();
+                // Port addition: test mode keeps the game running out of
+                // focus, so it keeps its sound playing too. Other games on the
+                // test machine take the focus, and a paused BGM channel that
+                // the next room keeps would read as silence.
+                if (!TestMode_Active()) PauseSounds();
             } else {
                 // Window activated
                 g_bWindowFocused = TRUE;

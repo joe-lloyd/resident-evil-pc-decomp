@@ -480,6 +480,19 @@ extern bool          g_bSkipUnskippableFmv;    // [Game] SkipUnskippableFmv
 // Rebecca's scenario: NEW GAME starts her, and her room scripts come from the
 // REB overlay, built from the player's own data by tools/rebecca.
 #define g_bRebMode                   (g_GameMode == GAME_MODE_REB)
+// Her day is installed: the REB overlay holds her copy of the select sheet
+// (CharacterSelectionScreen.cpp), and the assets are the English ones. New
+// Game deals her card, and her saves load.
+bool RebeccaDayInstalled(void);
+// Switch the session between her day (GAME_MODE_REB) and the shipped game
+// (GAME_MODE_OG): the mode, its asset overlay and its item sheet together.
+void SwitchGameMode(int mode);
+// Her day's saves (SaveLoadScreen.cpp): mark the card as hers before writing
+// it, switch the session to the save's own game after restoring one, and say
+// whether a save with this mode byte (0x233) is refused here.
+void SaveMode_MarkCard(void);
+void SaveMode_AdoptCard(void);
+int  SaveMode_LoadBlocked(unsigned char modeByte);
 
 // g_DcDifficulty is the DC title screen's choice (PS1 g_abDcGameMode
 // 0x800c8693); it is also stored in the save block, so a DC save reloads as its
@@ -1133,6 +1146,10 @@ extern const unsigned char g_ItemExamineTypes[48];     // 0x004bd9b8
 
 // Title screen display image SRV
 extern MarniHandle   g_displayImageSRV;
+extern unsigned int  g_displayImageSerial;            // port: bumped by every display_image
+void BgAnim_Load(const void* bitmap, int width, int height);  // BgAnim.cpp
+void BgAnim_Clear(void);
+void BgAnim_Tick(void);
 
 // Title state globals
 extern unsigned char g_titleLoopFlag;                  // 0x00d22777
@@ -1975,6 +1992,10 @@ void room_transition_load(void);                      // 0x004813c0 - room/stage
 // room_transition_load while the destination room loads underneath.
 void door_system_load_data(void);                     // FUN_00412300 - .dor + texture page
 void door_system_start_animation(void);               // Task_execute(1, FUN_00444770)
+// Port addition (PathWalk.cpp): a door record of this type plays walk number
+// record +0x08 between Rebecca's outdoor rooms instead of a .dor animation.
+#define DOOR_TYPE_WALK 0x30
+bool PathWalk_Start(unsigned char variant);
 void set_fading(int type, int counter);               // 0x0047b980
 int  cmd_bgm_stop_all(void);                                  // 0x00460b80 - stop sound banks
 void display_die_screen(void);                        // 0x00443090 - death screen display
@@ -2052,6 +2073,8 @@ void init_room(void);
 void room_set(void);
 void LoadRoomRdt(void);
 void update_room_bgm(void);
+// Port addition, for test mode: the WAV BGM channel 0-2 has loaded, or NULL.
+const char* bgm_channel_file(int channel);
 void LoadHeldItemsImages(void);
 void load_room_bg(void);
 void load_room_bg_image(void);

@@ -1,0 +1,296 @@
+{
+ "cameras": [
+  {
+   "from": [
+    10625,
+    -4165,
+    16745
+   ],
+   "to": [
+    4930,
+    -1020,
+    7820
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -4165,
+    16745
+   ],
+   "to": [
+    8160,
+    -1020,
+    7820
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    10625,
+    -4165,
+    6460
+   ],
+   "to": [
+    4420,
+    -850,
+    14280
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -4165,
+    5865
+   ],
+   "to": [
+    8500,
+    -1020,
+    2210
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 1700,
+   "z0": 6018,
+   "x1": 3060,
+   "z1": 6222,
+   "name": "Partition footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 7140,
+   "z0": 6018,
+   "x1": 9010,
+   "z1": 6222,
+   "name": "Partition footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 10540,
+   "z0": 6018,
+   "x1": 10880,
+   "z1": 6222,
+   "name": "Partition footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 3060,
+   "z0": 5695,
+   "x1": 7140,
+   "z1": 6545,
+   "name": "Counter footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 5950,
+   "z0": 1708,
+   "x1": 7650,
+   "z1": 2983,
+   "name": "Range"
+  },
+  {
+   "shape": "box",
+   "x0": 2040,
+   "z0": 3145,
+   "x1": 3570,
+   "z1": 5525,
+   "name": "Kitchen table"
+  },
+  {
+   "shape": "circle",
+   "x0": 4165,
+   "z0": 2550,
+   "x1": 5185,
+   "z1": 3570,
+   "name": "Block footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 1929,
+   "z0": 1751,
+   "x1": 4021,
+   "z1": 2261,
+   "name": "Kitchen shelves"
+  },
+  {
+   "shape": "box",
+   "x0": 8712,
+   "z0": 1955,
+   "x1": 10327,
+   "z1": 3485,
+   "name": "Sacks footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 9775,
+   "z0": 3740,
+   "x1": 10795,
+   "z1": 4760,
+   "name": "Water barrel"
+  },
+  {
+   "shape": "box",
+   "x0": 3145,
+   "z0": 10200,
+   "x1": 4675,
+   "z1": 16320,
+   "name": "Long table 2.3"
+  },
+  {
+   "shape": "box",
+   "x0": 7055,
+   "z0": 10200,
+   "x1": 8585,
+   "z1": 16320,
+   "name": "Long table 4.6"
+  },
+  {
+   "shape": "box",
+   "x0": 2363,
+   "z0": 10540,
+   "x1": 2907,
+   "z1": 15980,
+   "name": "Bench 0"
+  },
+  {
+   "shape": "box",
+   "x0": 4405,
+   "z0": 11130,
+   "x1": 6016,
+   "z1": 16629,
+   "name": "Bench 1"
+  },
+  {
+   "shape": "box",
+   "x0": 6297,
+   "z0": 9575,
+   "x1": 8425,
+   "z1": 15045,
+   "name": "Bench 2"
+  },
+  {
+   "shape": "box",
+   "x0": 8714,
+   "z0": 10531,
+   "x1": 9476,
+   "z1": 15989,
+   "name": "Bench 3"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 10880,
+  "z1": 17000
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "camp-yard",
+   "zone": {
+    "x0": 10030,
+    "z0": 8500,
+    "x1": 10880,
+    "z1": 10030
+   },
+   "arrive": {
+    "x": 8500,
+    "z": 9265,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 3910,
+    "z0": 7429,
+    "x1": 6290,
+    "z1": 8449
+   },
+   "text": "The cook, in his apron. He died holding the counter.\nThere's a ring of keys on his belt. One is tagged OFFICE."
+  },
+  {
+   "zone": {
+    "x0": 5780,
+    "z0": 7259,
+    "x1": 6800,
+    "z1": 8109
+   },
+   "text": "A meat cleaver. He didn't go down without a fight."
+  },
+  {
+   "zone": {
+    "x0": 4760,
+    "z0": 3145,
+    "x1": 7820,
+    "z1": 3910
+   },
+   "text": "Stew, still simmering on the range. Someone kept the fire going.\nIt doesn't smell like food any more."
+  },
+  {
+   "zone": {
+    "x0": 8585,
+    "z0": 11220,
+    "x1": 9520,
+    "z1": 14280
+   },
+   "text": "A fork, driven into the table. Blood across the boards.\nThey turned on each other over dinner."
+  },
+  {
+   "zone": {
+    "x0": 4675,
+    "z0": 11220,
+    "x1": 5610,
+    "z1": 14620
+   },
+   "text": "Plates of stew, half eaten. Flies."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 7650,
+    "x1": 2720,
+    "z1": 9350
+   },
+   "text": "THURS 23. STEW. BREAD. NO SECONDS.\nYesterday."
+  },
+  {
+   "zone": {
+    "x0": 3230,
+    "z0": 6970,
+    "x1": 4250,
+    "z1": 7820
+   },
+   "text": "The serving hatch. The kitchen's through there."
+  }
+ ],
+ "items": [
+  {
+   "step": "office-key",
+   "x": 5100,
+   "y": 0,
+   "z": 7769
+  }
+ ],
+ "spots": [],
+ "entry": "Flies. Hundreds of them.",
+ "notes": [
+  "high in the south-east corner: the tables, the benches over, the cook against the counter",
+  "high in the south-west corner: the length of the hall to the hatch, the door on the right",
+  "high by the kitchen doorway: the last meal on the tables, the fork in the board",
+  "high in the kitchen's south-west corner: the range, the steaming pot, the block"
+ ]
+}

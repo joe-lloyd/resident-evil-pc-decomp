@@ -1,0 +1,231 @@
+{
+ "cameras": [
+  {
+   "from": [
+    2380,
+    -6120,
+    7820
+   ],
+   "to": [
+    7820,
+    -510,
+    19380
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2720,
+    -6120,
+    19380
+   ],
+   "to": [
+    20400,
+    -680,
+    14620
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    31280,
+    -5100,
+    19380
+   ],
+   "to": [
+    17000,
+    -1360,
+    10880
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    22780,
+    -5780,
+    7820
+   ],
+   "to": [
+    32640,
+    -510,
+    16660
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    4420,
+    -6120,
+    8500
+   ],
+   "to": [
+    23800,
+    -510,
+    9860
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 6715,
+   "z0": 11815,
+   "x1": 28305,
+   "z1": 16065,
+   "name": "Truck footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 9469,
+   "z0": 5422,
+   "x1": 10931,
+   "z1": 6863,
+   "name": "Spruce"
+  },
+  {
+   "shape": "circle",
+   "x0": 18675,
+   "z0": 4427,
+   "x1": 20085,
+   "z1": 5816,
+   "name": "Spruce.001"
+  },
+  {
+   "shape": "circle",
+   "x0": 13915,
+   "z0": 21938,
+   "x1": 15325,
+   "z1": 23325,
+   "name": "Spruce.002"
+  },
+  {
+   "shape": "circle",
+   "x0": 26140,
+   "z0": 21073,
+   "x1": 27580,
+   "z1": 22491,
+   "name": "Spruce.003"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 7480,
+  "x1": 32300,
+  "z1": 20060
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "woods",
+   "zone": {
+    "x0": 1700,
+    "z0": 10880,
+    "x1": 2720,
+    "z1": 17000
+   },
+   "arrive": {
+    "x": 4420,
+    "z": 13940,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "camp-gate",
+   "zone": {
+    "x0": 31280,
+    "z0": 10540,
+    "x1": 32300,
+    "z1": 18700
+   },
+   "arrive": {
+    "x": 29410,
+    "z": 18020,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 7990,
+    "z0": 7480,
+    "x1": 10710,
+    "z1": 8840
+   },
+   "text": "QUARANTINE. SICKNESS IN CAMP 4. NO ENTRY. TURN BACK.\nThe bottom half's torn off."
+  },
+  {
+   "zone": {
+    "x0": 21590,
+    "z0": 15980,
+    "x1": 24990,
+    "z1": 17680
+   },
+   "text": "The driver's door is wide open. Blood on the seat, and down the step.\nScratches on the inside of the door."
+  },
+  {
+   "zone": {
+    "x0": 21760,
+    "z0": 16490,
+    "x1": 24480,
+    "z1": 18700
+   },
+   "text": "His lunch, in the mud. He never got to eat it."
+  },
+  {
+   "zone": {
+    "x0": 24990,
+    "z0": 16320,
+    "x1": 26860,
+    "z1": 17850
+   },
+   "text": "Blood in the mud by the wheel. He was coughing it up."
+  },
+  {
+   "zone": {
+    "x0": 26860,
+    "z0": 15640,
+    "x1": 29920,
+    "z1": 17340
+   },
+   "text": "Bootprints, going east. One foot dragging.\nHe walked toward the camp."
+  },
+  {
+   "zone": {
+    "x0": 28050,
+    "z0": 11730,
+    "x1": 29240,
+    "z1": 16150
+   },
+   "text": "The battery's nearly flat. The blinker's still going.\nThe keys are gone from the ignition."
+  },
+  {
+   "zone": {
+    "x0": 5440,
+    "z0": 11900,
+    "x1": 6800,
+    "z1": 15980
+   },
+   "text": "A full load of logs, for the mill. It never got there."
+  }
+ ],
+ "items": [],
+ "spots": [],
+ "entry": "A logging truck, stopped dead in the ruts.",
+ "notes": [
+  "from the north-west corner where the road comes in from the woods: the log ends, the south verge",
+  "from the south-west, up the road: the length of the load, the south verge, the open door far off",
+  "from the south-east ahead of the truck: the grille, the blinker, the open door, the lunch in the mud",
+  "from the north verge, looking east: the cab's far side, the camp sign, the road on to the gate",
+  "from the north-west, along the north verge: the notice on its spruce, the length of the load, the cab"
+ ]
+}

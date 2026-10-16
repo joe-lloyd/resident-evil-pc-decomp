@@ -1,0 +1,367 @@
+{
+ "cameras": [
+  {
+   "from": [
+    4420,
+    -6120,
+    6800
+   ],
+   "to": [
+    20400,
+    -1020,
+    14280
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    31450,
+    -5780,
+    5950
+   ],
+   "to": [
+    13600,
+    -1020,
+    14620
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    20060,
+    -6460,
+    6120
+   ],
+   "to": [
+    19040,
+    0,
+    16320
+   ],
+   "fov": 205
+  },
+  {
+   "from": [
+    6800,
+    -5440,
+    16830
+   ],
+   "to": [
+    0,
+    -1700,
+    7820
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    24140,
+    -5610,
+    5780
+   ],
+   "to": [
+    33660,
+    -1530,
+    12920
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": -4420,
+   "z0": 8500,
+   "x1": 1700,
+   "z1": 8874,
+   "name": "Switch house wall n"
+  },
+  {
+   "shape": "box",
+   "x0": -4420,
+   "z0": 13906,
+   "x1": -2380,
+   "z1": 14280,
+   "name": "Switch house wall s"
+  },
+  {
+   "shape": "box",
+   "x0": -2380,
+   "z0": 13906,
+   "x1": -1020,
+   "z1": 14280,
+   "name": "Switch house wall s.001"
+  },
+  {
+   "shape": "box",
+   "x0": -2380,
+   "z0": 13906,
+   "x1": -1020,
+   "z1": 14280,
+   "name": "Switch house wall s.002"
+  },
+  {
+   "shape": "box",
+   "x0": -1020,
+   "z0": 13906,
+   "x1": 1700,
+   "z1": 14280,
+   "name": "Switch house wall s.003"
+  },
+  {
+   "shape": "box",
+   "x0": -4420,
+   "z0": 8500,
+   "x1": -4046,
+   "z1": 14280,
+   "name": "Switch house wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 1326,
+   "z0": 8500,
+   "x1": 1700,
+   "z1": 10540,
+   "name": "Switch house wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 1326,
+   "z0": 10540,
+   "x1": 1700,
+   "z1": 12070,
+   "name": "Switch house wall e.001"
+  },
+  {
+   "shape": "box",
+   "x0": 1326,
+   "z0": 12070,
+   "x1": 1700,
+   "z1": 14280,
+   "name": "Switch house wall e.002"
+  },
+  {
+   "shape": "box",
+   "x0": -5440,
+   "z0": 680,
+   "x1": 2040,
+   "z1": 884,
+   "name": "Generator hut wall n"
+  },
+  {
+   "shape": "box",
+   "x0": -5440,
+   "z0": 7276,
+   "x1": 2040,
+   "z1": 7480,
+   "name": "Generator hut wall s"
+  },
+  {
+   "shape": "box",
+   "x0": -5440,
+   "z0": 680,
+   "x1": -5236,
+   "z1": 7480,
+   "name": "Generator hut wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 1836,
+   "z0": 680,
+   "x1": 2040,
+   "z1": 7480,
+   "name": "Generator hut wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 8542,
+   "z0": 14832,
+   "x1": 9138,
+   "z1": 15427,
+   "name": "Pylon leg footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 12962,
+   "z0": 14832,
+   "x1": 13558,
+   "z1": 15427,
+   "name": "Pylon leg footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 23842,
+   "z0": 14832,
+   "x1": 24438,
+   "z1": 15427,
+   "name": "Pylon leg footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 28262,
+   "z0": 14832,
+   "x1": 28857,
+   "z1": 15427,
+   "name": "Pylon leg footprint.003"
+  },
+  {
+   "shape": "box",
+   "x0": 17425,
+   "z0": 14620,
+   "x1": 20655,
+   "z1": 16320,
+   "name": "Deer footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 0,
+   "z0": 4505,
+   "x1": 34000,
+   "z1": 4845,
+   "name": "North fence"
+  },
+  {
+   "shape": "circle",
+   "x0": 33235,
+   "z0": 10115,
+   "x1": 33405,
+   "z1": 10285,
+   "name": "Gate post"
+  },
+  {
+   "shape": "circle",
+   "x0": 33235,
+   "z0": 13515,
+   "x1": 33405,
+   "z1": 13685,
+   "name": "Gate post.001"
+  },
+  {
+   "shape": "box",
+   "x0": 33150,
+   "z0": 4675,
+   "x1": 33490,
+   "z1": 10625,
+   "name": "East fence north"
+  },
+  {
+   "shape": "box",
+   "x0": 33150,
+   "z0": 13175,
+   "x1": 33490,
+   "z1": 19125,
+   "name": "East fence south"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 5100,
+  "x1": 32300,
+  "z1": 18700
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "switch",
+   "zone": {
+    "x0": 1700,
+    "z0": 10370,
+    "x1": 2720,
+    "z1": 12240
+   },
+   "arrive": {
+    "x": 4250,
+    "z": 11305,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "platform",
+   "zone": {
+    "x0": 31280,
+    "z0": 10200,
+    "x1": 32300,
+    "z1": 13600
+   },
+   "arrive": {
+    "x": 29410,
+    "z": 11900,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 17340,
+    "z0": 14110,
+    "x1": 20740,
+    "z1": 14790
+   },
+   "text": "A deer, torn open. The dogs have been at it.\nNot long ago. The flies are thick."
+  },
+  {
+   "zone": {
+    "x0": 13770,
+    "z0": 10200,
+    "x1": 15470,
+    "z1": 11730
+   },
+   "text": "A hard hat. ARKLAY POWER. Upside down, with blood in it."
+  },
+  {
+   "zone": {
+    "x0": 15300,
+    "z0": 11730,
+    "x1": 16830,
+    "z1": 13090
+   },
+   "text": "A torch, smashed. The grass is flattened all round here.\nSomeone fought for his life."
+  },
+  {
+   "zone": {
+    "x0": 9520,
+    "z0": 14620,
+    "x1": 12580,
+    "z1": 15980
+   },
+   "text": "The line's dead. A string of insulators has torn loose up there.\nIt swings in the wind."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 8840,
+    "x1": 3060,
+    "z1": 10370
+   },
+   "text": "The switch house. A handprint in blood on the door frame."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "line-gate",
+   "zone": {
+    "x0": 29920,
+    "z0": 13600,
+    "x1": 32300,
+    "z1": 15300
+   }
+  }
+ ],
+ "entry": "The power line. Not a hum from it.",
+ "notes": [
+  "from by the switch house: the track east under the wires, the pylons, the deer",
+  "from by the gate: the track west to the switch house, the hat, the long grass",
+  "from the north fence: down on the deer and its crows, the second pylon",
+  "from between the pole and the first pylon: the switch house door, the generator hut, the blood back to the door",
+  "from the north-east: the open gate into the gondola station"
+ ]
+}

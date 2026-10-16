@@ -1,0 +1,8 @@
+0: \nA radio. It's on. Someone\ncould hear me.
+1: \nThe radio's still on.\nThrough the hiss, a voice\non the police band:\p{0}\n'...Alpha team will fly\nthe Arklay range at\p{0}\ndusk... searching for\nBravo...'\p{0}\nThey're coming. Tonight.
+2: \nThe station log. Every\nhour, to the minute.\p{0}\n0815 POLICE BAND. STARS\nALPHA TO FLY AT DUSK.\nASKED WIND ON RIDGE.\p{0}\n0840 CROWS AT THE GLASS\nAGAIN. HUNDREDS.\p{0}\nHis tea's beside it, cold.\nA crow came through the\p{0}\nwindow and died on his\ndesk.
+3: \nA barograph. The pen is\nstill drawing.\p{0}\nThe pressure's falling.
+4: \nHis bed. Unmade. A photo\nof a woman by the pillow.
+5: \nHis coat's still on the\nhook. Wherever he went, he\nwent in a hurry.
+6: \nA pencil, dropped on the\nfloor.
+7: \nJuly. Every day crossed\noff up to yesterday.

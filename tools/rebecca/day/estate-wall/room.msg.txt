@@ -1,0 +1,8 @@
+0: \nThe Spencer estate.\p{0}\nThere's a light on, up at\nthe house.
+1: \nThe estate's back gate. A\nchain and a padlock.\p{0}\nI'll need the key.
+2: \nNO TRESPASSING. UMBRELLA\nCORP.\p{0}\nUmbrella. Out here?
+3: \nHe tried to climb out over\nthe gate.\p{0}\nSomething on the other\nside got his leg first.
+4: \nHis torch. It's still on.\p{0}\nThe batteries are nearly\ngone.
+5: \nA grey uniform cap. Estate\nsecurity?
+6: \nClaw marks, from the glass\nright down to the ground.\p{0}\nSomething came over this\nwall. From the inside.
+7: \nA shirt, torn on the\nglass. There's blood on\nit.\p{0}\nSomeone tried to get over.\nOr something dragged them.

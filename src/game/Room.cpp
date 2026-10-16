@@ -937,6 +937,7 @@ void load_room_bg_image(void) // 0x004629c0
     display_image(8, g_TimImageBuffer__bitmap, width, height);
     title_setup_texture_pages(8, 1);
     // empty_00470960(8): empty in the original - call dropped
+    BgAnim_Load(g_TimImageBuffer__bitmap, width, height);
 }
 
 // ============================================================================

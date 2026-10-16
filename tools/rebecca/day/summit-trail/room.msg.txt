@@ -1,0 +1,8 @@
+0: \nThe top of the mountain.\nNothing grows up here.\p{0}\nJust rock, and crows.
+1: \nA deer, torn open. The\ncrows have had its eyes.\p{0}\nThey don't fly off when I\ncome close.
+2: \nHis clipboard. Wind speed,\ntemperature, cloud, every\nhour since midnight.\p{0}\nThe last line just stops.\p{0}\nHis cap, his glasses.\nFeathers everywhere.
+3: \nAn instrument screen. The\ndoor's open and the\nthermometer's smashed.
+4: \nBlood, a drop every step.\nSomeone went north along\p{0}\nthe ridge, toward the\nmast.
+5: \nSUMMIT 2104 M. WEATHER\nSTATION. MAST, NO ENTRY.
+6: \nMINE LIFT. NO RIDERS.\p{0}\nI rode it anyway.
+7: \nARKLAY SUMMIT WEATHER\nSTATION. There's a light\non inside.

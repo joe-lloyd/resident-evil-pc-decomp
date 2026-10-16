@@ -1,0 +1,213 @@
+{
+ "cameras": [
+  {
+   "from": [
+    8925,
+    -4165,
+    1955
+   ],
+   "to": [
+    4590,
+    -340,
+    7820
+   ],
+   "fov": 190
+  },
+  {
+   "from": [
+    4675,
+    -4165,
+    7854
+   ],
+   "to": [
+    7990,
+    -850,
+    2210
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    8925,
+    -4080,
+    7905
+   ],
+   "to": [
+    3060,
+    -1190,
+    2720
+   ],
+   "fov": 195
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 1955,
+   "z0": 3060,
+   "x1": 4165,
+   "z1": 7480,
+   "name": "Plinth"
+  },
+  {
+   "shape": "box",
+   "x0": 2125,
+   "z0": 3230,
+   "x1": 3995,
+   "z1": 7310,
+   "name": "Generator footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 3910,
+   "z0": 7089,
+   "x1": 6290,
+   "z1": 8109,
+   "name": "Bench"
+  },
+  {
+   "shape": "box",
+   "x0": 7820,
+   "z0": 2210,
+   "x1": 9010,
+   "z1": 5610,
+   "name": "Cot footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "states": [
+  {
+   "name": "generator-on",
+   "bank": 1,
+   "bit": -1
+  }
+ ],
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 9180,
+  "z1": 8160
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "washout",
+   "zone": {
+    "x0": 4420,
+    "z0": 1700,
+    "x1": 6120,
+    "z1": 2720
+   },
+   "arrive": {
+    "x": 5270,
+    "z": 3400,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "switch",
+   "zone": {
+    "x0": 6460,
+    "z0": 7140,
+    "x1": 7820,
+    "z1": 8160
+   },
+   "arrive": {
+    "x": 7140,
+    "z": 6120,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 2040,
+    "z0": 1700,
+    "x1": 4080,
+    "z1": 2720
+   },
+   "text": "The day tank. The sight glass is empty."
+  },
+  {
+   "zone": {
+    "x0": 5015,
+    "z0": 3060,
+    "x1": 5695,
+    "z1": 4420
+   },
+   "text": "A jerrycan on its side, the cap off. Not a drop in it."
+  },
+  {
+   "zone": {
+    "x0": 3910,
+    "z0": 6630,
+    "x1": 5100,
+    "z1": 7140
+   },
+   "text": "His log. 23 JUL 21.40, TANK LOW, NO ANSWER ON FUEL.\n24 JUL 02.10, DOG ON THE LINE TRACK. BIT ME BAD. LYING DOWN.\nThe last line is just a smear. GEN STOPPED 3.30. CANT STAND."
+  },
+  {
+   "zone": {
+    "x0": 3230,
+    "z0": 7140,
+    "x1": 4250,
+    "z1": 8160
+   },
+   "text": "July 1998. Crossed off up to the 23rd."
+  },
+  {
+   "zone": {
+    "x0": 6800,
+    "z0": 2210,
+    "x1": 7820,
+    "z1": 3910
+   },
+   "text": "His cot. The pillow's soaked through with blood.\nThe flies have found it."
+  },
+  {
+   "zone": {
+    "x0": 4080,
+    "z0": 4420,
+    "x1": 4930,
+    "z1": 6120
+   },
+   "text": "Dead wasps all along the sill."
+  },
+  {
+   "zone": {
+    "x0": 6460,
+    "z0": 6630,
+    "x1": 7820,
+    "z1": 7140
+   },
+   "text": "Oily boot prints, going out the back. To the switch house."
+  }
+ ],
+ "saves": null,
+ "items": [],
+ "spots": [
+  {
+   "step": "generator-on",
+   "zone": {
+    "x0": 3995,
+    "z0": 3230,
+    "x1": 5015,
+    "z1": 4420
+   }
+  }
+ ],
+ "entry": "Cold. It hasn't run for hours.",
+ "notes": [
+  "high in the north-east corner: the generator, the oil, the bench and the back door",
+  "high over the bench: the cot and its pillow, the open door, the emergency lamp",
+  "high in the south-east corner: the generator's panel on E, the window and its wasps"
+ ]
+}

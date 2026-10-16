@@ -1,0 +1,8 @@
+0: \nIt stinks of sickness in\nhere.
+1: \nHe died in his bed. Nobody\neven pulled the blanket\nover his face.
+2: \nThey tied him to the bunk\nwith their belts.\p{0}\nWrists and ankles. Then\nsomething with a hammer.
+3: \nA diary, left open on the\nbunk.\p{0}\n"Mike's fever broke at 3.\nHe doesn't know us."
+4: \nA card game nobody\nfinished. Bottles, all\nempty.
+5: \nA footlocker and a chair,\nshoved back from the door.\p{0}\nThey were holding it shut.
+6: \nThe stove's cold.
+7: \nHis footlocker, open.\nLetters from home. A photo\nof a woman.

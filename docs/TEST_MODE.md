@@ -16,7 +16,7 @@ debug menu's ROOM CHANGE places them. Stages are numbered from 0, as in the
 debug menu, so `rebecca:0:2` is ROOM102.
 
 `rebecca` starts a new game as Rebecca Chambers. She has 88 HP and 6 item
-slots, holding a Beretta with 15 rounds, a First Aid Spray and a Green Herb.
+slots, holding a Beretta with 15 rounds and a clip of 15 rounds.
 She uses Chris's room files. Scenes written for Chris do not expect her as
 the player and can stall.
 
@@ -30,7 +30,7 @@ The game listens on `127.0.0.1:<port>` for one client; a newer connection
 replaces an older one. Test mode also:
 
 - ignores the real keyboard; only keys sent by the client count;
-- keeps running when the window is not in focus;
+- keeps running when the window is not in focus, its sound too;
 - skips the single-instance check, so several games can run side by side;
 - skips every movie, as if its file were missing.
 
@@ -49,11 +49,12 @@ reports raw values; `tools/harness/state.ts` turns them into meanings.
 | `title`, `fmv`, `dbg` | `g_titleMode`, a movie is playing, the F1 debug menu is open |
 | `stage`, `room`, `cam`, `cut` | where the player is |
 | `charModel` | `g_CharacterModelId`; 3 is Rebecca |
-| `player` | `id`, `x`, `y`, `z`, `angle`, `hp`, `maxHp`, `weapon` |
+| `player` | `id`, `x`, `y`, `z`, `angle`, `hp`, `maxHp`, `weapon` (the 1-based slot in hand), `cf` (byte 0xDC: the collision flags `check_room_collision` reads) |
 | `items` | `[id, qty]` for each slot: 6 for Chris and Rebecca, 8 for Jill |
-| `enemies` | `[type, status, x, y, z, hp]` for each entry in `g_EnemiesList` |
-| `msg` | `choice` (`g_menu_choice_id`; 0x80 means a message is open) and `id`, the last message shown |
+| `enemies` | `[type, status, x, y, z, hp]` for each occupied slot of `g_EnemiesList` (status not 0) |
+| `msg` | `choice` (`g_menu_choice_id`; 0x80 means a message is open), `id` (the last message shown), `flags` (`g_message_flags`) and `menu` (`g_openMenuFlag`) |
 | `banks` | script flag banks 0-9 as hex bytes, numbered like `cmd_bit_test` |
+| `bgm` | `state` (`g_BGM_STATE`, 255 for silence) and `ch`: for each of the three BGM channels, `[file, playing, volume]`: the WAV it loaded (`""` for none), `getSndStat` (1 while it plays) and `getSndVol` (-1 is full, -9999 silent) |
 
 Flag `n` of a bank is in 32-bit word `n / 32`, counting from the top bit:
 `0x80000000 >> (n % 32)`.
@@ -72,10 +73,8 @@ One per line. Each is answered with `{"t":"ack","cmd":...,"ok":0|1}`.
 | `flag <bank> <index> <0\|1>` | clear or set a script flag |
 | `shot <path>` | save the next frame's back buffer as a BMP on the game machine |
 
-The back buffer has no pre-rendered background. `tools/harness/snapshot.ts`
-lays the room's `.pak` background under the shot to make a viewable picture. It
-looks in the REB overlay first (`RE1_OVERLAY`, default `/tmp/rae-reb/REB`), then
-in the game data (`RE1_DATA`, default `/tmp/re1-pc`).
+The shot is the whole 640x480 frame, background included.
+`tools/harness/snapshot.ts` fetches it and saves it as a PNG.
 
 ## The harness
 
@@ -89,6 +88,19 @@ and no dependencies.
 - `tests/` holds the tests.
 - `jev.ts` asks Jev, TypeSafe's typed judgment model, for decisions that need
   common sense. It reads text only, so it gets the state, never a picture.
+
+She moves the way a player does. `walkTo` holds forward the whole way, steers
+with taps of left and right while moving, and stops to turn only for a turn
+wider than about 25 degrees. `goTo` keeps the keys down from one waypoint of
+its path to the next. Before each `goTo`, Jev chooses whether she runs (the
+run key held with forward) or walks, from a short account of the way: its
+length, its sharp corners, the live enemies near it and her health. Without
+`TYPESAFE_API_KEY` she runs. Set `HARNESS_TRACE=1` to see each choice and its
+probability.
+
+```
+TYPESAFE_API_KEY=$(ssh vault get typesafe-api-key) OVERLAY=... node tools/harness/tests/day.ts yard shed
+```
 
 ```
 node tools/harness/deploy.ts test-mode       # build the branch and install it

@@ -1,0 +1,266 @@
+{
+ "cameras": [
+  {
+   "from": [
+    30260,
+    -5780,
+    22780
+   ],
+   "to": [
+    11900,
+    0,
+    10880
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    5440,
+    -6120,
+    22950
+   ],
+   "to": [
+    9180,
+    -1360,
+    6800
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    9860,
+    -6120,
+    4080
+   ],
+   "to": [
+    13600,
+    0,
+    20400
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    20060,
+    -5100,
+    19040
+   ],
+   "to": [
+    3060,
+    -2720,
+    7140
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 340,
+   "z0": 1700,
+   "x1": 1700,
+   "z1": 22100,
+   "name": "Mill footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 4420,
+   "z0": 7395,
+   "x1": 5100,
+   "z1": 8245,
+   "name": "Bearing pier"
+  },
+  {
+   "shape": "circle",
+   "x0": 9639,
+   "z0": 3264,
+   "x1": 10081,
+   "z1": 3706,
+   "name": "Sluice post"
+  },
+  {
+   "shape": "circle",
+   "x0": 9639,
+   "z0": 4794,
+   "x1": 10081,
+   "z1": 5236,
+   "name": "Sluice post.001"
+  },
+  {
+   "shape": "box",
+   "x0": 10693,
+   "z0": 5100,
+   "x1": 10897,
+   "z1": 15980,
+   "name": "Dam rail footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 5610,
+   "z0": 3400,
+   "x1": 5780,
+   "z1": 5100,
+   "name": "Bridge rail footprint W"
+  },
+  {
+   "shape": "box",
+   "x0": 7820,
+   "z0": 3400,
+   "x1": 7990,
+   "z1": 5100,
+   "name": "Bridge rail footprint E"
+  },
+  {
+   "shape": "box",
+   "x0": 14440,
+   "z0": 20492,
+   "x1": 20240,
+   "z1": 24048,
+   "name": "Boat footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 1700,
+   "z0": 18615,
+   "x1": 3060,
+   "z1": 21505,
+   "name": "Woodpile footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 3400,
+  "x1": 28050,
+  "z1": 23800
+ },
+ "voids": [
+  {
+   "x0": 1700,
+   "z0": 4250,
+   "x1": 3400,
+   "z1": 11220
+  },
+  {
+   "x0": 4250,
+   "z0": 3400,
+   "x1": 5780,
+   "z1": 5100
+  },
+  {
+   "x0": 7820,
+   "z0": 3400,
+   "x1": 8840,
+   "z1": 5100
+  },
+  {
+   "x0": 10880,
+   "z0": 3400,
+   "x1": 28050,
+   "z1": 15980
+  }
+ ],
+ "doors": [
+  {
+   "to": "sawmill",
+   "zone": {
+    "x0": 1700,
+    "z0": 16320,
+    "x1": 2890,
+    "z1": 18020
+   },
+   "arrive": {
+    "x": 4420,
+    "z": 17170,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "flume",
+   "zone": {
+    "x0": 5780,
+    "z0": 3400,
+    "x1": 7820,
+    "z1": 4420
+   },
+   "arrive": {
+    "x": 6800,
+    "z": 6460,
+    "angle": 3072
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 13260,
+    "z0": 15980,
+    "x1": 17340,
+    "z1": 17340
+   },
+   "text": "A man face down in the reeds. His left sleeve is empty from the elbow.\nThe sawyer. He made it this far."
+  },
+  {
+   "zone": {
+    "x0": 22100,
+    "z0": 15980,
+    "x1": 26180,
+    "z1": 17340
+   },
+   "text": "A hard hat, floating out there. And dead fish, belly up.\nSomething's wrong with the water too."
+  },
+  {
+   "zone": {
+    "x0": 4250,
+    "z0": 6120,
+    "x1": 5950,
+    "z1": 9520
+   },
+   "text": "The water wheel. It drives the mill through that shaft.\nIt's turning, but the mill isn't."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 15300,
+    "x1": 3060,
+    "z1": 16320
+   },
+   "text": "A bloody hand on the mill's back door."
+  },
+  {
+   "zone": {
+    "x0": 5780,
+    "z0": 4420,
+    "x1": 7820,
+    "z1": 5440
+   },
+   "text": "A footbridge over the race. The flume's that way."
+  }
+ ],
+ "items": [],
+ "spots": [
+  {
+   "step": "mill-race",
+   "zone": {
+    "x0": 8840,
+    "z0": 5100,
+    "x1": 10880,
+    "z1": 6460
+   }
+  }
+ ],
+ "entry": "The mill pond. The wheel's still turning.",
+ "notes": [
+  "from the south-east bank: the pond, the reeds and the body, the dam, the wheel against the mill",
+  "from the south-west by the mill: the back door, the blood to the reeds, the wheel, the sluice",
+  "from over the sluice: down the dam and the bank to the reeds and the body",
+  "from the bank looking west: the water wheel turning, the race, the footbridge north"
+ ]
+}

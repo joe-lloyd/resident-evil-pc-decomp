@@ -7,7 +7,7 @@ const WIDTH = 320;
 const HEIGHT = 240;
 
 /** 8 bits per channel to the PS1's 5, rounded the way Capcom's conversion was. */
-function to555(r: number, g: number, b: number): number {
+export function to555(r: number, g: number, b: number): number {
   const ch = (v: number) => Math.min((v + 4) >> 3, 31);
   return (ch(b) << 10) | (ch(g) << 5) | ch(r);
 }

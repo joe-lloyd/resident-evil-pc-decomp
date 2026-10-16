@@ -12,8 +12,15 @@ dist/
 *.png
 # The mountain trail's own renders (our art, not the game's) feed tools/rebecca/new_room.ts.
 !tools/rebecca/rooms/mountain_trail/*.png
+# Her ID card's lettering (card/lettering.py, our own): the overlay build reads it.
+!tools/rebecca/card/rebecca-id-lettering.png
 *.log
 # Runtime state (P8): config.ini is created by the game and rewritten on exit,
 # so it is no longer tracked; re1.lock is the single-instance guard.
 config.ini
-re1.lock
+re1.lock.audit/
+__pycache__/
+# Her items' exported models and baked textures (tools/rebecca/items/render-items.ts makes them).
+tools/rebecca/items/models/
+# Her music rendered to WAV (tools/rebecca/music/render.ts makes them the same every time).
+tools/rebecca/music/renders/

@@ -1,0 +1,8 @@
+0: \nThe smell hits first. Then\nthe flies.
+1: \nThe ranger. What the dogs\nleft of him.\p{0}\nHis keys are still on his\nbelt.
+2: \nA pit scraped in the soil,\nmatted with black hair.\p{0}\nThis is where they sleep.
+3: \nA heavy collar on a broken\nchain. The tag's too\nscratched to read.\p{0}\nThese dogs belonged to\nsomeone.
+4: \nA human skull. It's been\nhere a lot longer than he\nhas.
+5: \nA hiker's jacket, shredded\non the roots.\p{0}\nI don't want to know where\nthe hiker is.
+6: \nA deer's skull, licked\nclean.
+7: \nWater dripping off the\nrock into a puddle. The\npuddle's red.

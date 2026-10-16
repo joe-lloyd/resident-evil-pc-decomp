@@ -1,0 +1,10 @@
+0: \nBlood on the counter.\nGlass on the floor.
+1: \nA kettle on the hotplate.\nStone cold.
+2: \nBlood all over the\ncounter. This is where he\nbandaged her.\p{0}\nThe first aid cabinet's\nbeen emptied.
+3: \nThe window's been smashed\nin from outside. Something\ncame through here.
+4: \nThe keeper. They dragged\nhim into the machine room.\p{0}\nThe wheel's stopped.
+5: \nKeys on a board. SHED.\nGATE. PUMP. One hook's\nempty: DRIVE.
+6: \nHis coat's still on the\nhook. He never left.
+7: \nARKLAY SKYWAY, 1996. Built\nwith the support of the\nUmbrella Corporation.\p{0}\nUmbrella. Again.
+8: \nA CB radio. Static on\nevery channel.
+9: \nThe Skyway's route map.\nThe line, the valley, the\ncreek.

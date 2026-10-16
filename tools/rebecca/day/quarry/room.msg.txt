@@ -1,0 +1,9 @@
+0: \nA quarry. Something's been\nfeeding here.
+1: \nOne of the quarrymen. The\ndogs have been at him.\p{0}\nThey dragged him out from\nbehind the blocks.
+2: \nHis hard hat. His lunch,\nspilled. He was sitting\ndown to eat.
+3: \nQUARRY OFFICE. DANGER,\nEXPLOSIVES.\p{0}\nThe door's padlocked.
+4: \nThe derrick crane. Its\nhook's still swinging over\nthe blocks.
+5: \nCut granite, stacked ready\nto go. Nobody's coming for\nit now.
+6: \nARKLAY GRANITE CO. The\ncrusher's rusted solid.
+7: \nOld rails, running off\neast. ARKLAY MINE.
+8: \nA truck, dead on its rims.

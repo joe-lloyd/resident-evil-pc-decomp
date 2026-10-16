@@ -1,0 +1,28 @@
+// creek (21C), written by day/scripts.ts from day/creek/scene.py: edit the scene, not this file.
+// init procedure 0
+// To valley-path.
+door_aot_set(0, 15300, 3400, 5100, 1020, 0, 15, 48, 4, 0, ROOM_218, 17000, 0, 26180, 1024, UNLOCKED, 1);
+// To lodge.
+door_aot_set(1, 10880, 19720, 1020, 1530, 1, 0, 33, 1, 175, ROOM_21D, 7820, 0, 3655, 2048, 43, 193);
+// To estate-wall.
+door_aot_set(2, 18700, 22780, 4250, 1020, 0, 15, 48, 4, 0, ROOM_21E, 21760, 0, 3910, 3072, UNLOCKED, 1);
+aot_set(3, 10880, 19210, 1360, 2550, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
+aot_set(4, 5780, 16150, 2380, 1190, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
+aot_set(5, 22100, 10200, 4080, 1700, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
+aot_set(6, 11220, 22780, 2720, 1020, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
+aot_set(7, 17340, 16150, 2720, 1870, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
+aot_set(8, 16320, 9010, 2040, 1700, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
+aot_set(9, 10200, 15810, 2380, 1870, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
+enemy(10, 1, 228, 1, 1, 0, 0, 161, 0, 0, 4100, 0, 9200, 0, 0, 0, 0);  // a adder
+enemy(10, 1, 229, 1, 1, 0, 0, 1763, 0, 0, 27900, 0, 10560, 1, 0, 0, 0);  // a adder
+if (ck(FG_ITEM, 196, 0)) {  // greenHerb
+    item_aot_set(10, 3500, 8600, 1200, 1200, 68, 1, 0, 255, 4, 16, 0, 0, 240, 35, 0, 0, 196, 129, 1, 0);
+}
+return;
+
+// main procedure 0
+if (ck(FG_COMMON, 249, 1)) {
+    set(FG_COMMON, 249, 0);
+    message(128, 255, 0);
+}
+return;

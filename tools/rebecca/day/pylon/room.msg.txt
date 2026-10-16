@@ -1,0 +1,5 @@
+0: \nPylon 7. It's a long way\ndown.
+1: \nA hard hat. Someone was\nworking up here.
+2: \nA toolbox, open. Spanners\neverywhere. He left in a\nhurry, or fell.
+3: \nPYLON 7. NO CLIMBING.\p{0}\nNo choice.
+4: \nThe ladder goes down\ninside the tower, all the\nway to the trees.\p{0}\nThere's someone on it, a\nlittle way down. Hanging\p{0}\nby his harness. The crows\nare on him.

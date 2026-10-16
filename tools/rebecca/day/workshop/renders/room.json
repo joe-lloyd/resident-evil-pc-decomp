@@ -1,0 +1,241 @@
+{
+ "cameras": [
+  {
+   "from": [
+    1955,
+    -4420,
+    10965
+   ],
+   "to": [
+    8840,
+    -850,
+    3740
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -4420,
+    1955
+   ],
+   "to": [
+    9180,
+    -850,
+    9010
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    11305,
+    -4420,
+    1955
+   ],
+   "to": [
+    3400,
+    -850,
+    9180
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 1764,
+   "z0": 1779,
+   "x1": 4186,
+   "z1": 3491,
+   "name": "Heavy bench, shoved aside"
+  },
+  {
+   "shape": "box",
+   "x0": 1751,
+   "z0": 3570,
+   "x1": 2941,
+   "z1": 9010,
+   "name": "Workbench"
+  },
+  {
+   "shape": "box",
+   "x0": 10115,
+   "z0": 2040,
+   "x1": 11305,
+   "z1": 2890,
+   "name": "Tool chest"
+  },
+  {
+   "shape": "box",
+   "x0": 7395,
+   "z0": 1785,
+   "x1": 9605,
+   "z1": 2805,
+   "name": "Parts bench"
+  },
+  {
+   "shape": "box",
+   "x0": 4165,
+   "z0": 5950,
+   "x1": 5695,
+   "z1": 6970,
+   "name": "Engine footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 8908,
+   "z0": 9078,
+   "x1": 10982,
+   "z1": 10472,
+   "name": "Spare crate"
+  },
+  {
+   "shape": "box",
+   "x0": 8330,
+   "z0": 9010,
+   "x1": 11560,
+   "z1": 11220,
+   "name": "Log stack footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 5950,
+   "z0": 1802,
+   "x1": 7378,
+   "z1": 3230,
+   "name": "Tyres"
+  },
+  {
+   "shape": "circle",
+   "x0": 10953,
+   "z0": 3723,
+   "x1": 11317,
+   "z1": 4097,
+   "name": "Gas bottle 0"
+  },
+  {
+   "shape": "circle",
+   "x0": 10953,
+   "z0": 4148,
+   "x1": 11317,
+   "z1": 4522,
+   "name": "Gas bottle 1"
+  },
+  {
+   "shape": "circle",
+   "x0": 6902,
+   "z0": 10132,
+   "x1": 7888,
+   "z1": 11118,
+   "name": "Waste oil drum"
+  },
+  {
+   "shape": "box",
+   "x0": 1870,
+   "z0": 9818,
+   "x1": 5100,
+   "z1": 11093,
+   "name": "Mattress footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 11560,
+  "z1": 11220
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "camp-yard",
+   "zone": {
+    "x0": 3740,
+    "z0": 1700,
+    "x1": 5780,
+    "z1": 2550
+   },
+   "arrive": {
+    "x": 4760,
+    "z": 3995,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 8755,
+    "z0": 7905,
+    "x1": 11135,
+    "z1": 9010
+   },
+   "text": "A crate. ARKLAY SKYWAY - SPARE. DRIVE COG NO 2.\nThe gondola's spare cog. It's under a pile of logs.\nI can't move those. Not by hand."
+  },
+  {
+   "zone": {
+    "x0": 3060,
+    "z0": 8670,
+    "x1": 6120,
+    "z1": 9690
+   },
+   "text": "Someone slept here. Bandages, black with blood. A tally scratched in the tin: six days.\nA note: \"Bit on the hand Tues. Can't stay. Don't come looking. Gus.\""
+  },
+  {
+   "zone": {
+    "x0": 6460,
+    "z0": 3230,
+    "x1": 8160,
+    "z1": 4590
+   },
+   "text": "A power cable, cut. It's still live. I'm not touching that."
+  },
+  {
+   "zone": {
+    "x0": 2975,
+    "z0": 3910,
+    "x1": 3910,
+    "z1": 5440
+   },
+   "text": "A vice, a bench, his tools. The lamp's still on."
+  },
+  {
+   "zone": {
+    "x0": 3910,
+    "z0": 7225,
+    "x1": 5950,
+    "z1": 8160
+   },
+   "text": "An engine, hanging on the hoist chains. Nobody's coming back to finish it."
+  },
+  {
+   "zone": {
+    "x0": 3230,
+    "z0": 2040,
+    "x1": 6120,
+    "z1": 3910
+   },
+   "text": "He barred the door from inside. The bar's been broken.\nFrom this side."
+  }
+ ],
+ "items": [
+  {
+   "step": "cog",
+   "x": 2346,
+   "y": -1530,
+   "z": 5440
+  }
+ ],
+ "spots": [],
+ "entry": "Oil and something worse.",
+ "notes": [
+  "high in the south-west corner over Gus's mattress: the door, the engine on the hoist, the cable sparking",
+  "high in the north-west corner by the door: the crate under its logs, the hanging engine, the tyres",
+  "high in the north-east corner: the bench and vice, Gus's mattress, the cable spitting sparks"
+ ]
+}

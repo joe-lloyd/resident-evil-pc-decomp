@@ -1,0 +1,7 @@
+0: \nCandles. Someone lit these\ntoday.
+1: \nAn old miner's helmet with\na carbide lamp on it.
+2: \nA jacket over the chair.\nARKLAY SKYWAY on the\npatch.\p{0}\nHal's.
+3: \nA cot, pulled out. A\nbandage soaked through on\nthe blanket.\p{0}\nHe rested here, then went\non down.
+4: \nThe candles are new. GIANT\nPOWDER on the boxes.\nEmpty.
+5: \nWater's coming through the\nroof. The bucket ran over\nlong ago.
+6: \nA survey of the mine. The\nlevels, the pump and the\nlift.

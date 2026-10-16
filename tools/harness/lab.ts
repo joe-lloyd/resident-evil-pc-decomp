@@ -7,6 +7,9 @@
 // RE1_LAB_USER      Windows user that owns the desktop session (default: joell)
 // RE1_LAB_REPO_DIR  clone of this fork on that machine, with a `fork` remote (default: C:\Users\joell\Tools\re1-decomp)
 import { spawn, execFileSync, type ChildProcess } from 'node:child_process';
+import { rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
 import { GameLink } from './link.ts';
 
 const host = process.env.RE1_LAB_HOST ?? 'jellybingus';
@@ -45,6 +48,42 @@ export function stop(port: number): void {
   `);
 }
 
+const recorder = 'C:\\Users\\joell\\Tools\\re1-record.cmd';
+const recordTarget = 'C:\\Users\\joell\\Tools\\re1-record-target.txt';
+
+/**
+ * Start recording the game window to `remoteFile` (an .mp4 on the game
+ * machine) with ffmpeg's gdigrab, through the scheduled task "RE1 Record" so
+ * it runs in the desktop session the window is in. lab/re1-record.cmd is the
+ * script; it is copied over each time. Needs ffmpeg there (winget Gyan.FFmpeg)
+ * and the game window open. No sound: the machine has no loopback device.
+ */
+export function startRecording(remoteFile: string): void {
+  execFileSync('scp', ['-q', '-o', 'BatchMode=yes', new URL('./lab/re1-record.cmd', import.meta.url).pathname, `${host}:${recorder.replace(/\\/g, '/')}`]);
+  powershell(`
+    Set-Content -Path '${recordTarget}' -Value '${remoteFile}' -NoNewline -Encoding ascii
+    $p = New-ScheduledTaskPrincipal -UserId '${user}' -LogonType Interactive -RunLevel Limited
+    $a = New-ScheduledTaskAction -Execute '${recorder}'
+    Register-ScheduledTask -TaskName 'RE1 Record' -Action $a -Principal $p -Force | Out-Null
+    Start-ScheduledTask -TaskName 'RE1 Record'
+  `);
+}
+
+/**
+ * Stop the recording and rewrite it as a plain MP4 with its index at the
+ * front, so a browser can play it while it downloads. Returns that file.
+ */
+export function stopRecording(remoteFile: string): string {
+  const final = remoteFile.replace(/\.mp4$/i, '-final.mp4');
+  powershell(`
+    Get-Process ffmpeg -ErrorAction SilentlyContinue | Stop-Process -Force
+    Start-Sleep -Seconds 2
+    $ff = (Get-ChildItem "$env:LOCALAPPDATA\\Microsoft\\WinGet\\Packages" -Recurse -Filter ffmpeg.exe | Select-Object -First 1).FullName
+    & $ff -y -hide_banner -loglevel error -i '${remoteFile}' -c copy -movflags +faststart '${final}'
+  `);
+  return final;
+}
+
 /** Forward the game's localhost port to this machine. */
 export function tunnel(port: number): ChildProcess {
   return spawn('ssh', ['-o', 'BatchMode=yes', '-o', 'ExitOnForwardFailure=yes', '-N', '-L', `${port}:127.0.0.1:${port}`, host], {
@@ -58,8 +97,10 @@ export function tunnel(port: number): ChildProcess {
  * replaced. Returns the compiler errors, empty when the build succeeded.
  */
 export function buildAndDeploy(branch: string): string[] {
+  // Only stop games running from this game folder: other folders may be in use.
+  const stopHere = `Get-Process residentevil -ErrorAction SilentlyContinue | Where-Object { $_.Path -like '${gameDir}\\*' } | Stop-Process -Force`;
   const out = powershell(`
-    Get-Process residentevil -ErrorAction SilentlyContinue | Where-Object { $_.Path -like '${gameDir}\\*' } | Stop-Process -Force
+    ${stopHere}
     Set-Location '${repoDir}'
     git fetch -q fork
     git checkout -q -B ${branch} fork/${branch}
@@ -72,7 +113,7 @@ export function buildAndDeploy(branch: string): string[] {
       # A game that is still exiting holds the exe: retry, then prove the copy.
       $built = (Get-FileHash 'bin\\Release\\residentevil.exe').Hash
       for ($i = 0; $i -lt 20; $i++) {
-        Get-Process residentevil -ErrorAction SilentlyContinue | Where-Object { $_.Path -like '${gameDir}\\*' } | Stop-Process -Force
+        ${stopHere}
         Copy-Item 'bin\\Release\\residentevil.exe' '${gameDir}' -Force -ErrorAction SilentlyContinue
         if ((Get-FileHash '${gameDir}\\residentevil.exe').Hash -eq $built) { 'DEPLOYED'; break }
         Start-Sleep 1
@@ -83,10 +124,36 @@ export function buildAndDeploy(branch: string): string[] {
   return lines.includes('DEPLOYED') ? [] : lines;
 }
 
-/** Replace the game folder's `name` overlay (e.g. REB) with a local build of it. */
+/**
+ * Replace the game folder's `name` overlay (e.g. REB) with a local build of
+ * it. It goes over as one archive, about a third of its size and one file
+ * where scp -r sends hundreds, and the old overlay is only removed once the
+ * archive is there.
+ */
 export function deployOverlay(localOverlayDir: string, name = 'REB'): void {
-  powershell(`if (Test-Path '${gameDir}\\${name}') { Remove-Item -Recurse -Force '${gameDir}\\${name}' }`);
-  execFileSync('scp', ['-q', '-r', '-o', 'BatchMode=yes', localOverlayDir, `${host}:${gameDir.replace(/\\/g, '/')}/${name}`]);
+  const archive = path.join(tmpdir(), `${name}-${process.pid}.tgz`);
+  const remote = `${gameDir}\\${name}.upload.tgz`;
+  const unpacked = `${gameDir}\\${name}.upload`;
+  execFileSync('tar', ['czf', archive, '-C', path.dirname(localOverlayDir), path.basename(localOverlayDir)]);
+  try {
+    execFileSync('scp', ['-q', '-o', 'BatchMode=yes', archive, `${host}:${remote.replace(/\\/g, '/')}`]);
+  } finally {
+    rmSync(archive, { force: true });
+  }
+  powershell(`
+    $ErrorActionPreference = 'Stop'
+    if (Test-Path '${unpacked}') { Remove-Item -Recurse -Force '${unpacked}' }
+    New-Item -ItemType Directory '${unpacked}' | Out-Null
+    tar -xzf '${remote}' -C '${unpacked}'
+    if (Test-Path '${gameDir}\\${name}') { Remove-Item -Recurse -Force '${gameDir}\\${name}' }
+    Move-Item '${unpacked}\\${path.basename(localOverlayDir)}' '${gameDir}\\${name}'
+    Remove-Item -Recurse -Force '${unpacked}', '${remote}'
+  `);
+}
+
+/** Delete a file on the game machine, if it is there. */
+export function remove(remotePath: string): void {
+  powershell(`if (Test-Path '${remotePath}') { Remove-Item -Force '${remotePath}' }`);
 }
 
 /** Copy a file from the game machine, e.g. a screenshot taken with shot(). */

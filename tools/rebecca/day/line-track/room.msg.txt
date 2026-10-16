@@ -1,0 +1,10 @@
+0: \nThe power line. Not a hum\nfrom it.
+1: \nThe gate is locked.
+2: \nA deer, torn open. The\ndogs have been at it.\p{0}\nNot long ago. The flies\nare thick.
+3: \nA hard hat. ARKLAY POWER.\nUpside down, with blood in\nit.
+4: \nA torch, smashed. The\ngrass is flattened all\nround here.\p{0}\nSomeone fought for his\nlife.
+5: \nThe line's dead. A string\nof insulators has torn\nloose up there.\p{0}\nIt swings in the wind.
+6: \nThe switch house. A\nhandprint in blood on the\ndoor frame.
+7: \nLINE TRACK. STAFF ONLY.\nThe gondola station's\nthrough the gate.\p{0}\nIts lock is electric, and\ndead.
+8: \nThe gate to the gondola\nstation, open.
+9: \nThe lock buzzes. The gate\nswings open.

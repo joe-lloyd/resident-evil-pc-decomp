@@ -1,0 +1,338 @@
+{
+ "cameras": [
+  {
+   "from": [
+    33830,
+    -6120,
+    21930
+   ],
+   "to": [
+    17000,
+    -510,
+    11050
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    2720,
+    -4590,
+    5100
+   ],
+   "to": [
+    14450,
+    -1530,
+    17000
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    34340,
+    -5100,
+    1530
+   ],
+   "to": [
+    15300,
+    0,
+    15300
+   ],
+   "fov": 210
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 23800,
+   "z0": 14263,
+   "x1": 25840,
+   "z1": 15997,
+   "name": "Rock footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 21675,
+   "z0": 15160,
+   "x1": 23205,
+   "z1": 16460,
+   "name": "Rock footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 25330,
+   "z0": 12342,
+   "x1": 26690,
+   "z1": 13498,
+   "name": "Rock footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 9350,
+   "z0": 18657,
+   "x1": 11050,
+   "z1": 20102,
+   "name": "Rock footprint.003"
+  },
+  {
+   "shape": "box",
+   "x0": 17935,
+   "z0": 3430,
+   "x1": 19465,
+   "z1": 4730,
+   "name": "Rock footprint.004"
+  },
+  {
+   "shape": "box",
+   "x0": 29920,
+   "z0": 18853,
+   "x1": 31960,
+   "z1": 20587,
+   "name": "Rock footprint.005"
+  },
+  {
+   "shape": "box",
+   "x0": 7820,
+   "z0": 3570,
+   "x1": 9180,
+   "z1": 4930,
+   "name": "Leg footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 7820,
+   "z0": 17170,
+   "x1": 9180,
+   "z1": 18530,
+   "name": "Leg footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 21420,
+   "z0": 3570,
+   "x1": 22780,
+   "z1": 4930,
+   "name": "Leg footprint.002"
+  },
+  {
+   "shape": "box",
+   "x0": 21420,
+   "z0": 17170,
+   "x1": 22780,
+   "z1": 18530,
+   "name": "Leg footprint.003"
+  },
+  {
+   "shape": "box",
+   "x0": 10710,
+   "z0": 11135,
+   "x1": 13090,
+   "z1": 12835,
+   "name": "Cage footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 13090,
+   "z0": 11220,
+   "x1": 16320,
+   "z1": 12750,
+   "name": "Stair footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 31450,
+   "z0": 6290,
+   "x1": 31790,
+   "z1": 8670,
+   "name": "Sign footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 21250,
+   "z0": 13430,
+   "x1": 23970,
+   "z1": 15470,
+   "name": "Body footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 25840,
+   "z0": 15300,
+   "x1": 28560,
+   "z1": 16660,
+   "name": "Bicycle footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 2380,
+   "z0": 17680,
+   "x1": 4420,
+   "z1": 17765,
+   "name": "Privy wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 2380,
+   "z0": 19635,
+   "x1": 4420,
+   "z1": 19720,
+   "name": "Privy wall s"
+  },
+  {
+   "shape": "box",
+   "x0": 2380,
+   "z0": 17680,
+   "x1": 2465,
+   "z1": 19720,
+   "name": "Privy wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 4335,
+   "z0": 17680,
+   "x1": 4420,
+   "z1": 18105,
+   "name": "Privy wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 4335,
+   "z0": 18105,
+   "x1": 4420,
+   "z1": 19295,
+   "name": "Privy wall e.001"
+  },
+  {
+   "shape": "box",
+   "x0": 4335,
+   "z0": 19295,
+   "x1": 4420,
+   "z1": 19720,
+   "name": "Privy wall e.002"
+  },
+  {
+   "shape": "box",
+   "x0": 18870,
+   "z0": 18530,
+   "x1": 19890,
+   "z1": 19550,
+   "name": "Barrel footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 4979,
+   "z0": 13418,
+   "x1": 7104,
+   "z1": 15652,
+   "name": "Woodpile"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 3400,
+  "x1": 32300,
+  "z1": 20400
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "washout",
+   "zone": {
+    "x0": 31280,
+    "z0": 9350,
+    "x1": 32300,
+    "z1": 14450
+   },
+   "arrive": {
+    "x": 29410,
+    "z": 11900,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "tower-stairs",
+   "zone": {
+    "x0": 9690,
+    "z0": 11135,
+    "x1": 10710,
+    "z1": 12835
+   },
+   "arrive": {
+    "x": 8160,
+    "z": 11985,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 20910,
+    "z0": 12410,
+    "x1": 24820,
+    "z1": 15980
+   },
+   "text": "A man in a ranger's shirt, smashed on the rocks.\nHe came off the top. Fell, or jumped."
+  },
+  {
+   "zone": {
+    "x0": 9690,
+    "z0": 10455,
+    "x1": 10710,
+    "z1": 11135
+   },
+   "text": "The stair's in a cage. The door's open, the padlock hanging off the hasp.\nHe went up and never locked it behind him."
+  },
+  {
+   "zone": {
+    "x0": 26180,
+    "z0": 14960,
+    "x1": 28560,
+    "z1": 17000
+   },
+   "text": "A bicycle. Its front wheel is still turning in the wind."
+  },
+  {
+   "zone": {
+    "x0": 30430,
+    "z0": 6120,
+    "x1": 31450,
+    "z1": 8840
+   },
+   "text": "ARKLAY FIRE LOOKOUT. ELEV 1610. BUILT 1953."
+  },
+  {
+   "zone": {
+    "x0": 24820,
+    "z0": 3400,
+    "x1": 26860,
+    "z1": 4760
+   },
+   "text": "FIRE DANGER TODAY: HIGH."
+  },
+  {
+   "zone": {
+    "x0": 4335,
+    "z0": 17850,
+    "x1": 5270,
+    "z1": 19550
+   },
+   "text": "The privy. Nobody in it. Thank God."
+  }
+ ],
+ "items": [],
+ "spots": [],
+ "entry": "The tower creaks in the wind.",
+ "notes": [
+  "from where the track comes in: the tower, Walt on the rocks, his bicycle",
+  "from the north-west: the open cage at the stair's foot, the body beyond",
+  "from the north-east by the sign: under the tower to the privy, the woodpile, the body on the rocks"
+ ]
+}

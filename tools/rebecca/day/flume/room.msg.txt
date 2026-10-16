@@ -1,0 +1,8 @@
+0: \nThe flume. It runs all the\nway down the mountain.
+1: \nThe flume. Dry as a bone.
+2: \nA cleat with a rope cut\nthrough. Blood all round\nit.\p{0}\nSomebody took a boat down\nhurt.
+3: \nA cap, caught in the water\nagainst the side.
+4: \nA mitten, snagged on a\nnail. The water's\nfreezing.
+5: \nCAMP 4 FLUME. NO RIDING.\p{0}\nSomebody didn't listen.
+6: \nIt goes all the way down.\nThe trestles get taller\nand taller.\p{0}\nI can't see the bottom for\nthe mist.
+7: \nA duffel bag, packed and\ndropped.

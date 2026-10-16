@@ -1,0 +1,179 @@
+{
+ "cameras": [
+  {
+   "from": [
+    3060,
+    -3825,
+    5270
+   ],
+   "to": [
+    16150,
+    -510,
+    9520
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    25160,
+    -3910,
+    11560
+   ],
+   "to": [
+    10200,
+    -510,
+    6120
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    11900,
+    -3825,
+    11900
+   ],
+   "to": [
+    17340,
+    -340,
+    7820
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    20740,
+    -3910,
+    5440
+   ],
+   "to": [
+    8500,
+    -510,
+    11900
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 11157,
+   "z0": 7042,
+   "x1": 13323,
+   "z1": 8598,
+   "name": "Cart he hid on"
+  },
+  {
+   "shape": "box",
+   "x0": 5780,
+   "z0": 7905,
+   "x1": 7820,
+   "z1": 9265,
+   "name": "Cart in the water 0"
+  },
+  {
+   "shape": "box",
+   "x0": 20310,
+   "z0": 9715,
+   "x1": 22530,
+   "z1": 11365,
+   "name": "Cart in the water 1"
+  },
+  {
+   "shape": "box",
+   "x0": 8670,
+   "z0": 10795,
+   "x1": 10370,
+   "z1": 13005,
+   "name": "Tipped cart footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 14947,
+   "z0": 7916,
+   "x1": 18373,
+   "z1": 10444,
+   "name": "Hal footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 3400,
+  "x1": 25500,
+  "z1": 13600
+ },
+ "voids": [
+  {
+   "x0": 17850,
+   "z0": 3400,
+   "x1": 25500,
+   "z1": 7820
+  }
+ ],
+ "doors": [
+  {
+   "to": "junction",
+   "zone": {
+    "x0": 1700,
+    "z0": 6120,
+    "x1": 2720,
+    "z1": 10880
+   },
+   "arrive": {
+    "x": 4420,
+    "z": 8500,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 14790,
+    "z0": 7990,
+    "x1": 18530,
+    "z1": 10540
+   },
+   "text": "Hal. Face down in the water. Something bit him: his arm's\nbandaged, black under it.\nThere's a key on a chain round his neck."
+  },
+  {
+   "zone": {
+    "x0": 10710,
+    "z0": 6630,
+    "x1": 13770,
+    "z1": 9010
+   },
+   "text": "He hid up on this cart, out of the water. Blanket, lantern.\nThere's blood where he slid off."
+  },
+  {
+   "zone": {
+    "x0": 17340,
+    "z0": 7820,
+    "x1": 23800,
+    "z1": 8840
+   },
+   "text": "DANGER. WINZE. The floor drops away under the water there."
+  }
+ ],
+ "items": [
+  {
+   "step": "op-key",
+   "x": 12410,
+   "y": -1666,
+   "z": 7310
+  }
+ ],
+ "spots": [],
+ "entry": "The water's cold. It's black. I can't see the floor.",
+ "notes": [
+  "from the foot of the decline: the black water, the cart he hid on, Hal floating by the rope",
+  "from the far south-east: Hal at the edge of the deep water, the cart, the way back up",
+  "close on Hal, face down, the key on its chain at his neck, the rope and the DANGER board",
+  "from over the winze: the cart under its web, the carts in the water, the decline"
+ ]
+}

@@ -1,0 +1,196 @@
+{
+ "cameras": [
+  {
+   "from": [
+    6885,
+    -3825,
+    5865
+   ],
+   "to": [
+    2720,
+    -1020,
+    2720
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -3825,
+    1955
+   ],
+   "to": [
+    6120,
+    -1020,
+    5610
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 1734,
+   "z0": 2125,
+   "x1": 2754,
+   "z1": 5695,
+   "name": "Control desk"
+  },
+  {
+   "shape": "box",
+   "x0": 2338,
+   "z0": 5457,
+   "x1": 2932,
+   "z1": 5763,
+   "name": "Heater"
+  },
+  {
+   "shape": "box",
+   "x0": 3315,
+   "z0": 1785,
+   "x1": 4335,
+   "z1": 2499,
+   "name": "Typing stand"
+  },
+  {
+   "shape": "box",
+   "x0": 5662,
+   "z0": 2396,
+   "x1": 7137,
+   "z1": 4573,
+   "name": "Item box"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 7140,
+  "z1": 6120
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "platform",
+   "zone": {
+    "x0": 4420,
+    "z0": 5440,
+    "x1": 5950,
+    "z1": 6120
+   },
+   "arrive": {
+    "x": 5185,
+    "z": 4930,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 5100,
+    "z0": 1700,
+    "x1": 6970,
+    "z1": 2890
+   },
+   "text": "The duty board, in chalk. POWER OFF 4.50. DRIVE COG SHEARED. F3 BLOWN.\nAt the bottom, underlined twice: HAL HAS KEY."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 4080,
+    "x1": 3230,
+    "z1": 4930
+   },
+   "text": "His coffee went over. A photo of a girl with a fish, propped against the glass."
+  },
+  {
+   "zone": {
+    "x0": 3230,
+    "z0": 4080,
+    "x1": 4590,
+    "z1": 5100
+   },
+   "text": "Gauze, soaked through. He dressed something in a hurry.\nA bite, by the look of the first aid box. Everything in it is gone."
+  },
+  {
+   "zone": {
+    "x0": 5440,
+    "z0": 4165,
+    "x1": 7140,
+    "z1": 5015
+   },
+   "text": "The handset is hanging off the hook. The line's dead."
+  },
+  {
+   "zone": {
+    "x0": 5950,
+    "z0": 5015,
+    "x1": 7140,
+    "z1": 5865
+   },
+   "text": "ARKLAY SKYWAY. See the valley the way the eagles do.\nSomeone has scratched out the family's eyes."
+  },
+  {
+   "zone": {
+    "x0": 3570,
+    "z0": 5100,
+    "x1": 4420,
+    "z1": 6120
+   },
+   "text": "A handprint in blood on the door frame. It's still tacky."
+  }
+ ],
+ "saves": {
+  "typewriter": {
+   "x0": 3315,
+   "z0": 1700,
+   "x1": 4335,
+   "z1": 3060
+  },
+  "box": {
+   "x0": 5440,
+   "z0": 3349,
+   "x1": 7140,
+   "z1": 4131
+  },
+  "lid": {
+   "x": 7129,
+   "z": 3485,
+   "y": -1440,
+   "angle": 2048,
+   "scale": 1.0
+  }
+ },
+ "items": [],
+ "spots": [
+  {
+   "step": "gondola-runs",
+   "zone": {
+    "x0": 1700,
+    "z0": 1870,
+    "x1": 3230,
+    "z1": 2720
+   }
+  },
+  {
+   "step": "fit-fuse",
+   "zone": {
+    "x0": 5440,
+    "z0": 2210,
+    "x1": 7140,
+    "z1": 3315
+   }
+  }
+ ],
+ "entry": "The heater's still on. He can't have gone long.",
+ "notes": [
+  "high over the door: the desk under the holed window, the tipped chair, the duty board",
+  "high in the north-west corner: the fuse box, the phone, the poster, the blood to the door"
+ ]
+}

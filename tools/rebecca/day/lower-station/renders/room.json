@@ -1,0 +1,181 @@
+{
+ "cameras": [
+  {
+   "from": [
+    1955,
+    -3995,
+    8245
+   ],
+   "to": [
+    7820,
+    -1020,
+    2890
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    9265,
+    -3995,
+    8245
+   ],
+   "to": [
+    3230,
+    -1020,
+    3230
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    9265,
+    -3995,
+    1955
+   ],
+   "to": [
+    3060,
+    -850,
+    7480
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 3060,
+   "z0": 2550,
+   "x1": 6800,
+   "z1": 3400,
+   "name": "Counter"
+  },
+  {
+   "shape": "box",
+   "x0": 6800,
+   "z0": 6885,
+   "x1": 9350,
+   "z1": 8245,
+   "name": "Keeper's desk"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 9520,
+  "z1": 8500
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "lower-yard",
+   "zone": {
+    "x0": 1700,
+    "z0": 4420,
+    "x1": 2465,
+    "z1": 6120
+   },
+   "arrive": {
+    "x": 3230,
+    "z": 5270,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 6800,
+    "z0": 5865,
+    "x1": 7990,
+    "z1": 6885
+   },
+   "text": "The keeper's log.\n23 JULY. 1610. The estate gardener came up for supplies again. Said the dogs have got out.\n0305. Woman from the lot, bitten by a dog. Bad. Phone's dead. Bandaged her, sent her up in 4 to Hal. He's got the radio.\n0340. Something at the window."
+  },
+  {
+   "zone": {
+    "x0": 8755,
+    "z0": 5865,
+    "x1": 9520,
+    "z1": 6885
+   },
+   "text": "A kettle on the hotplate. Stone cold."
+  },
+  {
+   "zone": {
+    "x0": 3060,
+    "z0": 3400,
+    "x1": 6800,
+    "z1": 4420
+   },
+   "text": "Blood all over the counter. This is where he bandaged her.\nThe first aid cabinet's been emptied."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 2210,
+    "x1": 2890,
+    "z1": 3910
+   },
+   "text": "The window's been smashed in from outside. Something came through here."
+  },
+  {
+   "zone": {
+    "x0": 8500,
+    "z0": 2550,
+    "x1": 9520,
+    "z1": 4590
+   },
+   "text": "The keeper. They dragged him into the machine room.\nThe wheel's stopped."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 1700,
+    "x1": 3060,
+    "z1": 2550
+   },
+   "text": "Keys on a board. SHED. GATE. PUMP. One hook's empty: DRIVE."
+  },
+  {
+   "zone": {
+    "x0": 8670,
+    "z0": 5440,
+    "x1": 9520,
+    "z1": 6630
+   },
+   "text": "His coat's still on the hook. He never left."
+  },
+  {
+   "zone": {
+    "x0": 5440,
+    "z0": 7650,
+    "x1": 6800,
+    "z1": 8500
+   },
+   "text": "ARKLAY SKYWAY, 1996. Built with the support of the Umbrella Corporation.\nUmbrella. Again."
+  },
+  {
+   "zone": {
+    "x0": 7990,
+    "z0": 5865,
+    "x1": 8755,
+    "z1": 6885
+   },
+   "text": "A CB radio. Static on every channel."
+  }
+ ],
+ "items": [],
+ "spots": [],
+ "entry": "Blood on the counter. Glass on the floor.",
+ "notes": [
+  "high in the south-west corner: the bloody counter, the doorway to the machine room and him beyond it",
+  "high in the south-east corner over the desk: the counter, the smashed window, the key board",
+  "high in the north-east corner by the doorway: the desk, the log and the radio, the door out to the yard"
+ ]
+}

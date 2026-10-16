@@ -1,0 +1,6 @@
+0: \nThe smell hits first.
+1: \nThe foreman. He sat at his\ndesk and put the shotgun\nunder his chin.\p{0}\nThe wall behind him is\ncovered in it.
+2: \nThe payroll ledger.\nTwenty-one names.\p{0}\nHe crossed them out, one\nby one. The last ones\p{0}\naren't crossed out. There\nwas nobody left to do it.
+3: \nA safe. It's locked.\p{0}\nA combination dial: three\nnumbers.
+4: \nA map of the camp, drawn\nby hand. Somebody marked a\nred X by the workshop.
+5: \nA desk fan, still running.\nThe power's still on\nsomewhere.

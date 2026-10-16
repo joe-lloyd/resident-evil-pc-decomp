@@ -4,20 +4,59 @@
 //
 //   node tools/rebecca/build.ts <USA dir> <out dir>
 //
-// <USA dir> holds the original Stage1..Stage7 room files and DATA/BIO_CARD.DAT.
+// <USA dir> holds the original Stage1..Stage7 room files, DATA/BIO_CARD.DAT,
+// the character models in enemy/ and players/W31 to W34.EMW.
 // RAE_CLI points at retro-archive-explorer's scripts/cli.mjs, which assembles
 // the room scripts (`rae asm`).
 import { execFileSync } from 'node:child_process';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildTrailRoom, trailRoom, trailRoomFile, trailStart } from './new_room.ts';
+import { buildDayRoom } from './day/room.ts';
+import { buildCardSheet } from './card.ts';
+import { footstepFiles } from './footsteps.ts';
+import { buildArms } from './arms.ts';
+import { filePages } from './files/pages.ts';
+import { buildWalk, walkFileName } from './walks.ts';
+import { readPng } from '../harness/image.ts';
+import { dayRooms, dayStart, walks } from './day/rooms.ts';
+import { people, personModel } from './npc/people.ts';
+import { saveRoomFiles } from './saveroom/patch.ts';
+import { buildIconSheet, globalsCpp, iconRows } from './items/sheet.ts';
+import { itemView, itemViewFiles, menuDataCpp, readItemModel } from './items/tmd.ts';
+import { KEY_ITEMS } from './items/items.ts';
+import { CUES } from './plan/music.ts';
+import { day } from './plan/day.ts';
+import { musicFile, musicTable, setRoomStates } from './music/table.ts';
+import { mapFiles } from './maps/files.ts';
 
 /**
  * Where a new game in REB mode starts (stage counts from 0, as in the debug
  * menu): the mountain trail, near its top, facing down it.
  */
-export const start = { ...trailRoom, ...trailStart };
+export const start = dayStart;
+
+/**
+ * Enemies that are already dead when her game starts: enemy() skips a spawn
+ * whose kill flag (its third argument) is set. Chris's route is thinned for a
+ * medic with a Beretta and one spare clip. In Chapter 1 the Cerberus in 11A
+ * and one zombie in 10A stay as her fights.
+ */
+export const killedAtStart = [
+  48, 49, 50, // ROOM3000 courtyard garden: all three Cerberus
+  113, // ROOM10A0 back passage: one of its two zombies
+  9, 10, 11, // ROOM1010 1F left stairs: all three zombies
+];
+
+/** BioCardLayout offsets (src/game/BioCard.h). */
+const CARD_ENEMY_FLAGS = 0x25c;
+
+/** Set flag `index` of a bank: word index / 32, top bit first, as cmd_bit_op does. */
+function setFlag(card: Uint8Array, bankOffset: number, index: number): void {
+  const at = bankOffset + (index >> 5) * 4;
+  const view = new DataView(card.buffer, card.byteOffset, card.byteLength);
+  view.setUint32(at, (view.getUint32(at, true) | (0x80000000 >>> (index & 31))) >>> 0, true);
+}
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const roomsDir = path.join(here, 'rooms');
@@ -43,25 +82,150 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   card.writeInt16LE(start.x, 0x22c);
   card.writeInt16LE(start.z, 0x22e);
   card.writeInt16LE(start.angle, 0x230);
+  for (const index of killedAtStart) setFlag(card, CARD_ENEMY_FLAGS, index);
+  // Her rooms' music (music/table.ts): each room's state plays its cue's group, or is silent.
+  const renders = path.join(here, 'music', 'renders');
+  const music = musicTable(CUES, day.places, dayRooms, (sketch) => existsSync(path.join(renders, `${sketch}.wav`)));
+  setRoomStates(card, music);
   mkdirSync(path.join(reb, 'DATA'), { recursive: true });
   writeFileSync(path.join(reb, 'DATA', 'BIO_CARD.DAT'), card);
   written.push('DATA/BIO_CARD.DAT');
 
-  // New rooms: the mountain trail, built from the courtyard garden's file.
-  written.push(...buildTrailRoom(baseDir, outDir, raeCli));
+  // Her card on the character select screen, built from the player's own sheet and faces.
+  const dataDir = findFile(baseDir, 'DATA');
+  const sheet = buildCardSheet(
+    readFileSync(findFile(dataDir, 'Select_b.tim')),
+    readFileSync(findFile(dataDir, 'Statface.tim')),
+    readPng(path.join(here, 'card', 'rebecca-id-lettering.png')),
+  );
+  writeFileSync(path.join(reb, 'DATA', 'Select_b.tim'), sheet);
+  written.push('DATA/Select_b.tim');
+
+  // Her knife, shotgun and Magnum: her own unused files, textured from the
+  // player's Jill (arms.ts), saved under the names her weapon table loads
+  // (g_weaponPathTable, 0x004c1ca8: knife w11, shotgun w13, Magnum w14).
+  const players = findFile(baseDir, 'players');
+  const enemy = findFile(baseDir, 'enemy');
+  const arms = buildArms(
+    readFileSync(findFile(enemy, 'CHAR11.EMD')),
+    readFileSync(findFile(enemy, 'CHAR13.EMD')),
+    ['W31.EMW', 'W33.EMW', 'W34.EMW'].map((name) => ({ file: readFileSync(findFile(players, name)) })),
+    [readFileSync(findFile(players, 'W32.EMW'))],
+  );
+  mkdirSync(path.join(reb, 'enemy'), { recursive: true });
+  mkdirSync(path.join(reb, 'players'), { recursive: true });
+  writeFileSync(path.join(reb, 'enemy', 'CHAR13.EMD'), arms.rebecca);
+  written.push('enemy/CHAR13.EMD');
+  ['W11.EMW', 'W13.EMW', 'W14.EMW'].forEach((name, i) => {
+    writeFileSync(path.join(reb, 'players', name), arms.weapons[i]!);
+    written.push(`players/${name}`);
+  });
+  // Her key items' icons over their donors', in the player's own item sheet.
+  const icons = buildIconSheet(readFileSync(findFile(dataDir, 'ITEM_ALL.PIX')), readFileSync(findFile(dataDir, 'STATUS.TIM')), globalsCpp());
+  writeFileSync(path.join(reb, 'DATA', 'ITEM_ALL.PIX'), icons);
+  written.push('DATA/ITEM_ALL.PIX');
+
+  // Her items' own models to examine, over their donors' in ITEM_M2.
+  const viewFile = itemViewFiles(menuDataCpp(), iconRows(globalsCpp()));
+  mkdirSync(path.join(reb, 'ITEM_M2'), { recursive: true });
+  for (const k of KEY_ITEMS) {
+    if (!('own' in k.model)) continue;
+    const m = readItemModel(k.model.own);
+    if (!m) throw new Error(`items/models/${k.model.own}.json is missing: run items/render-items.ts`);
+    const name = viewFile(k.id);
+    if (written.includes(`ITEM_M2/${name}`)) throw new Error(`${k.step}: another item's model is ${name} already`);
+    writeFileSync(path.join(reb, 'ITEM_M2', name), itemView(m.mesh, m.texture));
+    written.push(`ITEM_M2/${name}`);
+  }
+
+  // The walks between her outdoor rooms, and her footsteps on the path.
+  mkdirSync(path.join(reb, 'objspr'), { recursive: true });
+  walks.forEach((slug, n) => {
+    writeFileSync(path.join(reb, 'objspr', walkFileName(n)), buildWalk(path.join(here, 'day', slug, 'renders')));
+    written.push(`objspr/${walkFileName(n)}`);
+  });
+  mkdirSync(path.join(reb, 'sound'), { recursive: true });
+  for (const { name, bytes } of footstepFiles()) {
+    writeFileSync(path.join(reb, 'sound', name), bytes);
+    written.push(`sound/${name}`);
+  }
+  // Her music table, and our renders it plays. RE1's own files, such as the
+  // save room's Bgm_31, stay the player's: the table only names them.
+  writeFileSync(path.join(reb, 'sound', 'music.dat'), musicFile(music));
+  written.push('sound/music.dat');
+  for (const g of music.groups) {
+    if (!g.render) continue;
+    writeFileSync(path.join(reb, 'sound', `${g.file}.wav`), readFileSync(path.join(renders, `${g.render}.wav`)));
+    written.push(`sound/${g.file}.wav`);
+  }
+  const unrendered = CUES.filter((c) => c.kind === 'new' && c.places.length && !music.groups.some((g) => g.cue === c.id));
+  if (unrendered.length) console.warn(`music: no render yet, so silent: ${unrendered.map((c) => c.id).join(', ')}`);
+
+  // The people of her day: the player's own character models with our skins (npc/people.ts).
+  const enemyDir = findFile(baseDir, 'enemy');
+  mkdirSync(path.join(reb, 'enemy'), { recursive: true });
+  for (const person of people) {
+    writeFileSync(path.join(reb, 'enemy', person.model), personModel(readFileSync(findFile(enemyDir, person.model)), person));
+    written.push(`enemy/${person.model}`);
+  }
+
+  // Her files' pages (files/documents.ts), in place of RE1's in her mode
+  // only. The same folder as her items' models above: one name for it, since
+  // Windows doesn't tell ITEM_M2 from item_m2, and no file written twice.
+  mkdirSync(path.join(reb, 'ITEM_M2'), { recursive: true });
+  for (const { name, bytes } of filePages()) {
+    if (written.includes(`ITEM_M2/${name}`)) throw new Error(`a file's page and an item's model are both ${name}`);
+    writeFileSync(path.join(reb, 'ITEM_M2', name), bytes);
+    written.push(`ITEM_M2/${name}`);
+  }
+
+  // Her map screen's pictures (maps/files.ts): her areas, the overview at
+  // each stage and the grid under them, in place of RE1's in her mode only.
+  for (const { name, bytes } of mapFiles()) {
+    if (written.includes(`ITEM_M2/${name}`)) throw new Error(`a map and another file are both ${name}`);
+    writeFileSync(path.join(reb, 'ITEM_M2', name), bytes);
+    written.push(`ITEM_M2/${name}`);
+  }
+
+  // The save room's trapdoor, where she comes up from the crawl space: the
+  // player's own backgrounds with it laid over them (saveroom/patch.ts).
+  const stage1 = findFile(baseDir, 'Stage1');
+  mkdirSync(path.join(reb, 'Stage1'), { recursive: true });
+  for (const { name, bytes } of saveRoomFiles((n) => readFileSync(findFile(stage1, n)))) {
+    writeFileSync(path.join(reb, 'Stage1', name), bytes);
+    written.push(`Stage1/${name}`);
+  }
+
+  // New rooms: the rooms of her day (day/rooms.ts), those rendered so far.
+  for (const room of dayRooms) {
+    if (!existsSync(path.join(here, 'day', room.slug, 'renders', 'room.json'))) {
+      console.warn(`${room.slug}: not rendered yet, left out`);
+      continue;
+    }
+    written.push(...buildDayRoom(room, baseDir, outDir, raeCli));
+  }
 
   // Room scripts: rooms/ROOMsrrv.c replaces that room's init and main scripts.
-  // The new room's script is assembled into its own file above.
-  const scripts = readdirSync(roomsDir).filter((f) => /^ROOM[1-7][0-9A-F]{2}[01]\.c$/i.test(f) && f.slice(0, 8).toUpperCase() !== trailRoomFile);
+  const scripts = readdirSync(roomsDir).filter((f) => /^ROOM[1-7][0-9A-F]{2}[01]\.c$/i.test(f));
   for (const file of scripts) {
     const room = file.slice(0, 8).toUpperCase();
     const stageDir = findFile(baseDir, `Stage${room[4]}`);
     const original = findFile(stageDir, `${room}.RDT`);
     const outStage = path.join(reb, `Stage${room[4]}`);
     mkdirSync(outStage, { recursive: true });
-    execFileSync(process.execPath, [raeCli, 'asm', path.join(roomsDir, file), original, path.join(outStage, `${room}.RDT`)], {
-      stdio: ['ignore', 'ignore', 'inherit'],
-    });
+    const out = path.join(outStage, `${room}.RDT`);
+    const run = (args: string[]) => execFileSync(process.execPath, [raeCli, ...args], { stdio: ['ignore', 'ignore', 'inherit'] });
+    // rooms/ROOMsrrv.msg.txt, if present, replaces the room's messages
+    // (`rae msg` format); it is applied after the scripts.
+    const messages = path.join(roomsDir, `${room}.msg.txt`);
+    if (existsSync(messages)) {
+      const scripted = `${out}.scripts`;
+      run(['asm', path.join(roomsDir, file), original, scripted]);
+      run(['msg-set', messages, scripted, out]);
+      rmSync(scripted);
+    } else {
+      run(['asm', path.join(roomsDir, file), original, out]);
+    }
     written.push(`Stage${room[4]}/${room}.RDT`);
   }
   return written;

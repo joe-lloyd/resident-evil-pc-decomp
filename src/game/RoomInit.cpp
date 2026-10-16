@@ -5,6 +5,8 @@
 #include "FileLoader.h"
 #include "SpriteRenderer.h"
 #include "dc/ItemDescriptions.h"
+#include "RebItems.h"
+#include "RebMaps.h"
 #include "dc/EntityModels.h"    // the arrange wardrobe's two outfit flags
 #include "../system/AssetPath.h"
 #include "TestMode.h"
@@ -191,11 +193,15 @@ unsigned int set_item_description_message(unsigned short descIndex, unsigned sho
         : g_bDcMode ? dc_usa_item_descriptions()
                     : g_ItemDescriptions;
 
+    // Port addition: in her mode, an item a key item of hers takes the place
+    // of has her description (RebItems.cpp).
+    const unsigned char* mine = g_bRebMode ? reb_item_description((unsigned char)(descIndex + 1)) : NULL;
+
     // The original indexes the table unchecked; the entries past the last item
     // are the zero padding that follows it, so an out-of-range id would set a
     // NULL g_MessagePtr and fault in UpdateMessageDisplay. Refuse instead.
-    if (descIndex >= (sizeof(g_ItemDescriptions) / sizeof(g_ItemDescriptions[0])) ||
-        descriptions[descIndex] == NULL) {
+    if (mine == NULL && (descIndex >= (sizeof(g_ItemDescriptions) / sizeof(g_ItemDescriptions[0])) ||
+                         descriptions[descIndex] == NULL)) {
         return 1;
     }
 
@@ -208,7 +214,7 @@ unsigned int set_item_description_message(unsigned short descIndex, unsigned sho
     g_MessageStateCounter = 0;
     g_MessageSpeedUpFlag = 0x80;
     g_lastScanCodeOrMsgID = (DWORD)descIndex;
-    g_MessagePtr = descriptions[descIndex];
+    g_MessagePtr = mine ? (unsigned char*)mine : descriptions[descIndex];
     g_MessageScreenY = 0xba - (short)g_ScreenOffsetY;
 
     return 0;
@@ -291,6 +297,13 @@ void room_action_table_reset(void) {
 // Uses g_StageRoomFlagOffset[stageId % 5] + roomId as the bit index.
 // ============================================================================
 void room_set_visited_flag(unsigned char stageId, unsigned char roomId) {
+    // Port addition: in her mode a room's visit is her own bit (RebMaps.h).
+    // Her room ids run past each stage's own, and RE1's bit for stage 4 room
+    // 0x1E is the first file's "collected" bit (0x82).
+    if (g_bRebMode) {
+        if (const RebMapRoom* r = reb_map_room(stageId % 5, roomId)) Flg_on((int)g_RoomFlags, r->bit);
+        return;
+    }
     Flg_on((int)g_RoomFlags, (unsigned int)g_StageRoomFlagOffset[stageId % 5] + roomId);
 }
 

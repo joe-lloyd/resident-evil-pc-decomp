@@ -1,0 +1,339 @@
+{
+ "cameras": [
+  {
+   "from": [
+    4760,
+    -5780,
+    4250
+   ],
+   "to": [
+    17000,
+    0,
+    17340
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    31280,
+    -6630,
+    2210
+   ],
+   "to": [
+    13600,
+    0,
+    16150
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    28220,
+    -5610,
+    23290
+   ],
+   "to": [
+    13600,
+    0,
+    11050
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    21420,
+    -5440,
+    23460
+   ],
+   "to": [
+    8500,
+    -1020,
+    18360
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    19380,
+    -6460,
+    3910
+   ],
+   "to": [
+    14960,
+    0,
+    18700
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 21845,
+   "z0": 10149,
+   "x1": 23035,
+   "z1": 11339,
+   "name": "Log footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 26605,
+   "z0": 15861,
+   "x1": 27795,
+   "z1": 17051,
+   "name": "Log footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 4080,
+   "z0": 17680,
+   "x1": 6120,
+   "z1": 18530,
+   "name": "Lodge wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 6120,
+   "z0": 17680,
+   "x1": 7820,
+   "z1": 18530,
+   "name": "Lodge wall n.001"
+  },
+  {
+   "shape": "box",
+   "x0": 6120,
+   "z0": 17680,
+   "x1": 7820,
+   "z1": 18530,
+   "name": "Lodge wall n.002"
+  },
+  {
+   "shape": "box",
+   "x0": 7820,
+   "z0": 17680,
+   "x1": 10880,
+   "z1": 18530,
+   "name": "Lodge wall n.003"
+  },
+  {
+   "shape": "box",
+   "x0": 4080,
+   "z0": 23630,
+   "x1": 10880,
+   "z1": 24480,
+   "name": "Lodge wall s"
+  },
+  {
+   "shape": "box",
+   "x0": 4080,
+   "z0": 17680,
+   "x1": 4930,
+   "z1": 24480,
+   "name": "Lodge wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 10030,
+   "z0": 17680,
+   "x1": 10880,
+   "z1": 19720,
+   "name": "Lodge wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 10030,
+   "z0": 19720,
+   "x1": 10880,
+   "z1": 21250,
+   "name": "Lodge wall e.001"
+  },
+  {
+   "shape": "box",
+   "x0": 10030,
+   "z0": 21250,
+   "x1": 10880,
+   "z1": 24480,
+   "name": "Lodge wall e.002"
+  },
+  {
+   "shape": "box",
+   "x0": 4675,
+   "z0": 16575,
+   "x1": 9775,
+   "z1": 17765,
+   "name": "Woodpile footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 12070,
+   "z0": 22100,
+   "x1": 13090,
+   "z1": 23120,
+   "name": "Block footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 11050,
+   "z0": 22950,
+   "x1": 12070,
+   "z1": 23970,
+   "name": "Butt footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 17212,
+   "z0": 9733,
+   "x1": 17467,
+   "z1": 9988,
+   "name": "Sign footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 3400,
+  "z0": 3400,
+  "x1": 28900,
+  "z1": 23800
+ },
+ "voids": [
+  {
+   "x0": 3400,
+   "z0": 11220,
+   "x1": 13430,
+   "z1": 15640
+  },
+  {
+   "x0": 16490,
+   "z0": 11220,
+   "x1": 28900,
+   "z1": 15640
+  }
+ ],
+ "doors": [
+  {
+   "to": "valley-path",
+   "zone": {
+    "x0": 15300,
+    "z0": 3400,
+    "x1": 20400,
+    "z1": 4420
+   },
+   "arrive": {
+    "x": 17680,
+    "z": 5780,
+    "angle": 3072
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "lodge",
+   "zone": {
+    "x0": 10880,
+    "z0": 19720,
+    "x1": 11900,
+    "z1": 21250
+   },
+   "arrive": {
+    "x": 12750,
+    "z": 20485,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "estate-wall",
+   "zone": {
+    "x0": 18700,
+    "z0": 22780,
+    "x1": 22950,
+    "z1": 23800
+   },
+   "arrive": {
+    "x": 20740,
+    "z": 21420,
+    "angle": 1024
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 10880,
+    "z0": 19210,
+    "x1": 12240,
+    "z1": 21760
+   },
+   "text": "The door's padlocked. From the outside.\nThere's light inside. Gouges in the wood, low down."
+  },
+  {
+   "zone": {
+    "x0": 5780,
+    "z0": 16150,
+    "x1": 8160,
+    "z1": 17340
+   },
+   "text": "A lamp's burning in there. There's a smear on the glass."
+  },
+  {
+   "zone": {
+    "x0": 22100,
+    "z0": 10200,
+    "x1": 26180,
+    "z1": 11900
+   },
+   "text": "A dog, drowned against the log. A Doberman.\nIts coat's come away in patches. It has a collar tag: SPENCER KENNELS."
+  },
+  {
+   "zone": {
+    "x0": 11220,
+    "z0": 22780,
+    "x1": 13940,
+    "z1": 23800
+   },
+   "text": "Washing on the line. One shirt is stiff with blood."
+  },
+  {
+   "zone": {
+    "x0": 17340,
+    "z0": 16150,
+    "x1": 20060,
+    "z1": 18020
+   },
+   "text": "An adder, cut in two. A spade beside it."
+  },
+  {
+   "zone": {
+    "x0": 16320,
+    "z0": 9010,
+    "x1": 18360,
+    "z1": 10710
+   },
+   "text": "PRIVATE. SPENCER ESTATE."
+  },
+  {
+   "zone": {
+    "x0": 10200,
+    "z0": 15810,
+    "x1": 12580,
+    "z1": 17680
+   },
+   "text": "Something was dragged down to the water.\nOne boot, in the reeds."
+  }
+ ],
+ "items": [],
+ "entry": "Running water. And a light, across the creek.",
+ "notes": [
+  "from the north bank, west: the creek, the ford, the lodge's lit window across the water",
+  "from the north bank, east: the drowned dog at the log, the ford, the lodge beyond",
+  "from the south bank, east: back across the creek to the path in, the track south",
+  "on the south bank: the lodge's door, padlocked, the drag marks to the water",
+  "from the valley path: down to the ford and over to the far bank"
+ ]
+}

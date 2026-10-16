@@ -1,12 +1,14 @@
 // Rendering.cpp - Frame rendering, present, sprite drawing
 // All functions decompiled from Ghidra with original addresses
 #include "../Globals.h"
+#include "RebFiles.h"
 #include "../platform/platform.h"
 #include "../DebugPrint.h"
 #include "../marni/MarniSystem.h"
 #include "../marni/PSXTexture.h"
 #include "../system/AssetPath.h"
 #include "dc/Items.h"    // lockpick item id (is_lockpick_item)
+#include "RebItems.h"   // her key items' names in her mode
 #include "SpriteRenderer.h"
 #include "TmdRenderer.h"
 #include <cstdlib>
@@ -48,6 +50,7 @@ static PendingSprite g_pendingSprites[MAX_PENDING_SPRITES];
 static int g_pendingSpriteCount = 0;
 
 MarniHandle g_displayImageSRV = MARNI_NULL_HANDLE;
+unsigned int g_displayImageSerial = 0;
 
 // ============================================================================
 // AddTintSprite (0x0046e0a0)
@@ -588,6 +591,8 @@ void OT_InsertPrimitive(void* prim, unsigned int depth)
     }
     if (g_pendingSpriteCount >= MAX_PENDING_SPRITES) return;
 
+    BgAnim_Tick();
+
     CMarniDirect3D* pD3D = (CMarniDirect3D*)g_pMarniDirect3D;
 
     // The display image is a logical-resolution framebuffer (320x240 in game);
@@ -1009,6 +1014,7 @@ void display_image(int slot, void* buffer, int width, int height)
 {
     g_DisplayImageWidth = width;
     g_DisplayImageHeight = height;
+    g_displayImageSerial++;
 
     if (g_displayImageSRV != MARNI_NULL_HANDLE) {
         Marni_DX()->DestroyTexture(g_displayImageSRV);
@@ -1184,6 +1190,14 @@ static const unsigned char** dc_usa_item_names(void)
 
 unsigned char* message_item_name_lookup(unsigned char itemId)
 {
+    // Port addition: in her mode the file slots she fills carry her names
+    // (RebFiles.cpp), and so does an item a key item of hers takes the place
+    // of (RebItems.cpp). Chris's and Jill's games never get here.
+    if (g_bRebMode) {
+        if (const unsigned char* file = reb_file_name(itemId)) return (unsigned char*)file;
+        if (const unsigned char* mine = reb_item_name(itemId)) return (unsigned char*)mine;
+    }
+
     // The Japanese release has its own pair of tables (0x004cd388/0x004cd548,
     // read by its message_item_name_lookup at 0x00491440) holding the names in
     // FONT.TIM's encoding. The USA strings would still draw - the two fonts

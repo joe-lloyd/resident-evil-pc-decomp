@@ -1,0 +1,11 @@
+0: \nThe helicopter.\p{0}\nThis is where we came\ndown.
+1: \nKevin. He's still belted\ninto his seat.\p{0}\nHe flew us out here. He\nstayed with it.
+2: \nThe cargo bay. Rope, a box\nof flares...\p{0}\nA crowbar on the floor.
+3: \nSomeone patched themselves\nup here.\p{0}\nThe medkit's empty. The\ngauze is soaked.
+4: \nOur cases. Somebody took\nwhat they could carry.
+5: \nThe field radio. Someone's\nsmashed it.\p{0}\nOr dropped it, trying.
+6: \nThe tail broke clean off\nwhen she came down.
+7: \nA flare, burnt down to\nnothing.\p{0}\nThey were signalling.\nNobody came.
+8: \nBoot prints in the mud,\nheading east.\p{0}\nThe others walked out.
+9: \nA rotor blade, buried in\nthat trunk.\p{0}\nIf anyone had been\nstanding here...
+10: \nThe trees are snapped off\nand burnt black, all the\nway along.\p{0}\nShe spun before she came\ndown.

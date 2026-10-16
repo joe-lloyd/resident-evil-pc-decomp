@@ -1,0 +1,7 @@
+0: \nA potting shed. The\nlantern's lit.
+1: \nThe estate's spare keys.\nCELLAR, on a red tag.\p{0}\nTwo of the hooks are\nempty.
+2: \nA calendar. July, crossed\noff day by day.\p{0}\nIt stops at the 20th.
+3: \nHis lantern's still lit.\nThe tea's stone cold.
+4: \nA dead rat. Swollen. Its\nfur's falling out.\p{0}\nThe trap didn't get it.\nSomething else did.
+5: \nBone meal. Something's\ngnawed a sack open.
+6: \nHis tools. Clean and in a\nrow.

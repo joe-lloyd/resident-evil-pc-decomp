@@ -1,0 +1,158 @@
+{
+ "cameras": [
+  {
+   "from": [
+    20740,
+    -5100,
+    4420
+   ],
+   "to": [
+    6120,
+    1020,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    -2720,
+    -6120,
+    5440
+   ],
+   "to": [
+    12750,
+    1020,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    17340,
+    -6120,
+    15980
+   ],
+   "to": [
+    11900,
+    5440,
+    11220
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 14176,
+   "z0": 7481,
+   "x1": 15064,
+   "z1": 7989,
+   "name": "Toolbox"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 3400,
+  "z0": 6800,
+  "x1": 18700,
+  "z1": 11900
+ },
+ "voids": [
+  {
+   "x0": 3400,
+   "z0": 8840,
+   "x1": 10200,
+   "z1": 11900
+  },
+  {
+   "x0": 13600,
+   "z0": 8840,
+   "x1": 18700,
+   "z1": 11900
+  }
+ ],
+ "doors": [
+  {
+   "to": "car",
+   "zone": {
+    "x0": 3740,
+    "z0": 6800,
+    "x1": 6460,
+    "z1": 7650
+   },
+   "arrive": {
+    "x": 5440,
+    "z": 7905,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "valley-path",
+   "zone": {
+    "x0": 11050,
+    "z0": 10710,
+    "x1": 12750,
+    "z1": 11900
+   },
+   "arrive": {
+    "x": 11900,
+    "z": 9520,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 12070,
+    "z0": 9520,
+    "x1": 13260,
+    "z1": 10710
+   },
+   "text": "A hard hat. Someone was working up here."
+  },
+  {
+   "zone": {
+    "x0": 13770,
+    "z0": 6970,
+    "x1": 16320,
+    "z1": 8840
+   },
+   "text": "A toolbox, open. Spanners everywhere. He left in a hurry, or fell."
+  },
+  {
+   "zone": {
+    "x0": 10030,
+    "z0": 8840,
+    "x1": 12240,
+    "z1": 9690
+   },
+   "text": "PYLON 7. NO CLIMBING.\nNo choice."
+  },
+  {
+   "zone": {
+    "x0": 11050,
+    "z0": 10030,
+    "x1": 12750,
+    "z1": 10710
+   },
+   "text": "The ladder goes down inside the tower, all the way to the trees.\nThere's someone on it, a little way down. Hanging by his harness. The crows are on him."
+  }
+ ],
+ "saves": null,
+ "items": [],
+ "spots": [],
+ "entry": "Pylon 7. It's a long way down.",
+ "notes": [
+  "from off the east end: the length of the grating to the car, the crows on the arm, the drop",
+  "from out past the car, west: the car's roof and its open hatch, the grating, the landing",
+  "from out over the drop, south-east: the landing, the ladder going down the tower, the lineman hanging below, the forest"
+ ]
+}

@@ -1,0 +1,148 @@
+{
+ "cameras": [
+  {
+   "from": [
+    1904,
+    -3264,
+    1904
+   ],
+   "to": [
+    4930,
+    -1105,
+    3910
+   ],
+   "fov": 205
+  },
+  {
+   "from": [
+    5576,
+    -3264,
+    3876
+   ],
+   "to": [
+    2550,
+    -1105,
+    1870
+   ],
+   "fov": 205
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 1700,
+   "z0": 1700,
+   "x1": 2448,
+   "z1": 4080,
+   "name": "Bench"
+  },
+  {
+   "shape": "box",
+   "x0": 5032,
+   "z0": 1700,
+   "x1": 5780,
+   "z1": 4080,
+   "name": "Bench.001"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 5780,
+  "z1": 4080
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "platform",
+   "zone": {
+    "x0": 2720,
+    "z0": 1700,
+    "x1": 4250,
+    "z1": 2465
+   },
+   "arrive": {
+    "x": 3485,
+    "z": 2975,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "pylon",
+   "zone": {
+    "x0": 4165,
+    "z0": 2380,
+    "x1": 5032,
+    "z1": 3400
+   },
+   "arrive": {
+    "x": 3400,
+    "z": 2975,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 1700,
+    "x1": 3230,
+    "z1": 4080
+   },
+   "text": "Her seat. Soaked through.\nShe sat here bleeding all the way up."
+  },
+  {
+   "zone": {
+    "x0": 3570,
+    "z0": 1785,
+    "x1": 5015,
+    "z1": 2720
+   },
+   "text": "A handbag, spilled. A wallet: a driving licence for a Linda Pryce, Raccoon City.\nThe car keys aren't in it."
+  },
+  {
+   "zone": {
+    "x0": 2550,
+    "z0": 3230,
+    "x1": 4080,
+    "z1": 4080
+   },
+   "text": "A bandage, unwound. Someone dressed a bite on her wrist.\nIt didn't help."
+  },
+  {
+   "zone": {
+    "x0": 2720,
+    "z0": 2465,
+    "x1": 4250,
+    "z1": 3230
+   },
+   "text": "Claw marks on the inside of the door. Handprints on the glass, all the way up.\nShe was trying to get out."
+  },
+  {
+   "zone": {
+    "x0": 4930,
+    "z0": 1700,
+    "x1": 5780,
+    "z1": 4080
+   },
+   "text": "CAR 4. MAX 6."
+  }
+ ],
+ "saves": null,
+ "items": [],
+ "spots": [],
+ "entry": "It's stopped. We're hanging over the trees.\nThere's a pylon right ahead.",
+ "notes": [
+  "high by the door, north-west: the bloody west bench, the spilled bag, the pylon through the south glass",
+  "high in the south-east corner: the clawed door, her bench, the valley through the north glass"
+ ]
+}

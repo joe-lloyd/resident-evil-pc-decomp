@@ -1,0 +1,449 @@
+{
+ "cameras": [
+  {
+   "from": [
+    17680,
+    -6120,
+    27030
+   ],
+   "to": [
+    14620,
+    0,
+    8500
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    31790,
+    -5950,
+    1700
+   ],
+   "to": [
+    15300,
+    -340,
+    19550
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1700,
+    -5610,
+    25160
+   ],
+   "to": [
+    20400,
+    -680,
+    6800
+   ],
+   "fov": 195
+  },
+  {
+   "from": [
+    20400,
+    -6120,
+    1190
+   ],
+   "to": [
+    11900,
+    0,
+    18700
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "circle",
+   "x0": 8883,
+   "z0": 19623,
+   "x1": 13002,
+   "z1": 22885,
+   "name": "Outcrop"
+  },
+  {
+   "shape": "circle",
+   "x0": 19330,
+   "z0": 4887,
+   "x1": 22424,
+   "z1": 7562,
+   "name": "Outcrop.001"
+  },
+  {
+   "shape": "circle",
+   "x0": 28058,
+   "z0": 8468,
+   "x1": 31646,
+   "z1": 11500,
+   "name": "Outcrop.002"
+  },
+  {
+   "shape": "circle",
+   "x0": 2732,
+   "z0": 15657,
+   "x1": 5568,
+   "z1": 17718,
+   "name": "Outcrop.003"
+  },
+  {
+   "shape": "circle",
+   "x0": 12213,
+   "z0": 13654,
+   "x1": 13713,
+   "z1": 14999,
+   "name": "Cairn 0"
+  },
+  {
+   "shape": "circle",
+   "x0": 18293,
+   "z0": 7877,
+   "x1": 19884,
+   "z1": 9129,
+   "name": "Cairn 1"
+  },
+  {
+   "shape": "circle",
+   "x0": 20509,
+   "z0": 15714,
+   "x1": 22132,
+   "z1": 16965,
+   "name": "Cairn 2"
+  },
+  {
+   "shape": "circle",
+   "x0": 17104,
+   "z0": 2941,
+   "x1": 18789,
+   "z1": 4195,
+   "name": "Cairn 3"
+  },
+  {
+   "shape": "box",
+   "x0": 2686,
+   "z0": 4046,
+   "x1": 4080,
+   "z1": 4250,
+   "name": "Hut wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 4080,
+   "z0": 4046,
+   "x1": 6120,
+   "z1": 4250,
+   "name": "Hut wall n.001"
+  },
+  {
+   "shape": "box",
+   "x0": 4080,
+   "z0": 4046,
+   "x1": 6120,
+   "z1": 4250,
+   "name": "Hut wall n.002"
+  },
+  {
+   "shape": "box",
+   "x0": 6120,
+   "z0": 4046,
+   "x1": 9554,
+   "z1": 4250,
+   "name": "Hut wall n.003"
+  },
+  {
+   "shape": "box",
+   "x0": 2686,
+   "z0": 9350,
+   "x1": 5440,
+   "z1": 9554,
+   "name": "Hut wall s"
+  },
+  {
+   "shape": "box",
+   "x0": 5440,
+   "z0": 9350,
+   "x1": 6970,
+   "z1": 9554,
+   "name": "Hut wall s.001"
+  },
+  {
+   "shape": "box",
+   "x0": 6970,
+   "z0": 9350,
+   "x1": 9554,
+   "z1": 9554,
+   "name": "Hut wall s.002"
+  },
+  {
+   "shape": "box",
+   "x0": 2686,
+   "z0": 4046,
+   "x1": 2890,
+   "z1": 9554,
+   "name": "Hut wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 9350,
+   "z0": 4046,
+   "x1": 9554,
+   "z1": 5610,
+   "name": "Hut wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 9350,
+   "z0": 5610,
+   "x1": 9554,
+   "z1": 7820,
+   "name": "Hut wall e.001"
+  },
+  {
+   "shape": "box",
+   "x0": 9350,
+   "z0": 5610,
+   "x1": 9554,
+   "z1": 7820,
+   "name": "Hut wall e.002"
+  },
+  {
+   "shape": "box",
+   "x0": 9350,
+   "z0": 7820,
+   "x1": 9554,
+   "z1": 9554,
+   "name": "Hut wall e.003"
+  },
+  {
+   "shape": "box",
+   "x0": 3145,
+   "z0": 4505,
+   "x1": 9095,
+   "z1": 9095,
+   "name": "Hut inside"
+  },
+  {
+   "shape": "box",
+   "x0": 12368,
+   "z0": 6715,
+   "x1": 13472,
+   "z1": 7565,
+   "name": "Instrument screen"
+  },
+  {
+   "shape": "box",
+   "x0": 22916,
+   "z0": 18666,
+   "x1": 25330,
+   "z1": 18870,
+   "name": "Head house wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 25330,
+   "z0": 18666,
+   "x1": 27030,
+   "z1": 18870,
+   "name": "Head house wall n.001"
+  },
+  {
+   "shape": "box",
+   "x0": 27030,
+   "z0": 18666,
+   "x1": 29784,
+   "z1": 18870,
+   "name": "Head house wall n.002"
+  },
+  {
+   "shape": "box",
+   "x0": 22916,
+   "z0": 24650,
+   "x1": 29784,
+   "z1": 24854,
+   "name": "Head house wall s"
+  },
+  {
+   "shape": "box",
+   "x0": 22916,
+   "z0": 18666,
+   "x1": 23120,
+   "z1": 20910,
+   "name": "Head house wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 22916,
+   "z0": 20910,
+   "x1": 23120,
+   "z1": 22610,
+   "name": "Head house wall w.001"
+  },
+  {
+   "shape": "box",
+   "x0": 22916,
+   "z0": 20910,
+   "x1": 23120,
+   "z1": 22610,
+   "name": "Head house wall w.002"
+  },
+  {
+   "shape": "box",
+   "x0": 22916,
+   "z0": 22610,
+   "x1": 23120,
+   "z1": 24854,
+   "name": "Head house wall w.003"
+  },
+  {
+   "shape": "box",
+   "x0": 29580,
+   "z0": 18666,
+   "x1": 29784,
+   "z1": 24854,
+   "name": "Head house wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 23375,
+   "z0": 19125,
+   "x1": 29325,
+   "z1": 24395,
+   "name": "Head house inside"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 32300,
+  "z1": 25500
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "mine-lift",
+   "zone": {
+    "x0": 25330,
+    "z0": 17680,
+    "x1": 27030,
+    "z1": 18700
+   },
+   "arrive": {
+    "x": 26180,
+    "z": 16490,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "weather",
+   "zone": {
+    "x0": 5440,
+    "z0": 9520,
+    "x1": 6970,
+    "z1": 10540
+   },
+   "arrive": {
+    "x": 6205,
+    "z": 12240,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "mast",
+   "zone": {
+    "x0": 13600,
+    "z0": 1700,
+    "x1": 20400,
+    "z1": 2720
+   },
+   "arrive": {
+    "x": 17000,
+    "z": 4760,
+    "angle": 3072
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 18020,
+    "z0": 11220,
+    "x1": 21760,
+    "z1": 14280
+   },
+   "text": "A deer, torn open. The crows have had its eyes.\nThey don't fly off when I come close."
+  },
+  {
+   "zone": {
+    "x0": 11900,
+    "z0": 7650,
+    "x1": 14450,
+    "z1": 9690
+   },
+   "text": "His clipboard. Wind speed, temperature, cloud, every hour since midnight.\nThe last line just stops.\nHis cap, his glasses. Feathers everywhere."
+  },
+  {
+   "zone": {
+    "x0": 12070,
+    "z0": 6460,
+    "x1": 13770,
+    "z1": 7650
+   },
+   "text": "An instrument screen. The door's open and the thermometer's smashed."
+  },
+  {
+   "zone": {
+    "x0": 14280,
+    "z0": 1700,
+    "x1": 17680,
+    "z1": 5780
+   },
+   "text": "Blood, a drop every step. Someone went north along the ridge, toward the mast."
+  },
+  {
+   "zone": {
+    "x0": 15470,
+    "z0": 12240,
+    "x1": 17170,
+    "z1": 13260
+   },
+   "text": "SUMMIT 2104 M. WEATHER STATION. MAST, NO ENTRY."
+  },
+  {
+   "zone": {
+    "x0": 23290,
+    "z0": 17680,
+    "x1": 25330,
+    "z1": 18700
+   },
+   "text": "MINE LIFT. NO RIDERS.\nI rode it anyway."
+  },
+  {
+   "zone": {
+    "x0": 8160,
+    "z0": 9520,
+    "x1": 9520,
+    "z1": 10540
+   },
+   "text": "ARKLAY SUMMIT WEATHER STATION. There's a light on inside."
+  }
+ ],
+ "items": [],
+ "spots": [],
+ "entry": "The top of the mountain. Nothing grows up here.\nJust rock, and crows.",
+ "notes": [
+  "from the south by the head house: the ridge north, the deer and its crows, the hut, the trail to the mast",
+  "from the north-east: the head house and its headframe, the cairns, the deer",
+  "from the south-west: the instrument screen, the blood north, the mast far off",
+  "from the trail's north end: the hut's door, the screen, the head house far end"
+ ]
+}

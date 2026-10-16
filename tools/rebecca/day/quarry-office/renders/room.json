@@ -1,0 +1,172 @@
+{
+ "cameras": [
+  {
+   "from": [
+    7225,
+    -3740,
+    6205
+   ],
+   "to": [
+    3145,
+    -850,
+    3485
+   ],
+   "fov": 190
+  },
+  {
+   "from": [
+    1955,
+    -3740,
+    1955
+   ],
+   "to": [
+    6630,
+    -680,
+    5015
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 1700,
+   "z0": 2550,
+   "x1": 2550,
+   "z1": 4080,
+   "name": "Bench footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 1708,
+   "z0": 4420,
+   "x1": 2643,
+   "z1": 5780,
+   "name": "Explosives locker"
+  },
+  {
+   "shape": "box",
+   "x0": 6290,
+   "z0": 2975,
+   "x1": 7480,
+   "z1": 5355,
+   "name": "Desk"
+  },
+  {
+   "shape": "box",
+   "x0": 6545,
+   "z0": 5525,
+   "x1": 7395,
+   "z1": 6375,
+   "name": "Coffee table"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 7480,
+  "z1": 6460
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "quarry",
+   "zone": {
+    "x0": 3910,
+    "z0": 1700,
+    "x1": 5440,
+    "z1": 2550
+   },
+   "arrive": {
+    "x": 4675,
+    "z": 3230,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 4250,
+    "x1": 3060,
+    "z1": 5950
+   },
+   "text": "A steel locker, stencilled EXPLOSIVES. KEEP LOCKED.\nIt's padlocked."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 2550,
+    "x1": 3060,
+    "z1": 4080
+   },
+   "text": "A box marked CAPS, and coils of wire. Blasting caps.\nKept well away from the locker."
+  },
+  {
+   "zone": {
+    "x0": 2040,
+    "z0": 1700,
+    "x1": 3825,
+    "z1": 2720
+   },
+   "text": "The time clock is still ticking. The second hand's stuck,\njumping on the same mark over and over."
+  },
+  {
+   "zone": {
+    "x0": 5270,
+    "z0": 3060,
+    "x1": 6324,
+    "z1": 4250
+   },
+   "text": "The foreman's report, half written. The last line just stops."
+  },
+  {
+   "zone": {
+    "x0": 5270,
+    "z0": 4250,
+    "x1": 6324,
+    "z1": 5440
+   },
+   "text": "The shift rosters. Name after name crossed out in red. SICK.\nBy the last one there's hardly anyone left."
+  },
+  {
+   "zone": {
+    "x0": 6120,
+    "z0": 5270,
+    "x1": 7480,
+    "z1": 6460
+   },
+   "text": "The coffee's been on the hot plate for days. It's burnt to tar."
+  },
+  {
+   "zone": {
+    "x0": 3570,
+    "z0": 5610,
+    "x1": 5270,
+    "z1": 6460
+   },
+   "text": "DAYS WITHOUT AN ACCIDENT. Someone wiped the number off\nand wrote a 0."
+  }
+ ],
+ "items": [
+  {
+   "step": "dynamite",
+   "x": 2941,
+   "y": 0,
+   "z": 5100
+  }
+ ],
+ "spots": [],
+ "entry": "Burnt coffee. The hot plate's still on.",
+ "notes": [
+  "high in the south-east corner: the door and the ticking clock, the caps, the explosives locker",
+  "high over the clock: the desk and the rosters, the burnt coffee, the safety board"
+ ]
+}

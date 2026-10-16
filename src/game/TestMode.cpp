@@ -7,6 +7,7 @@
 #include "../platform/platform.h"
 #include "TestMode.h"
 #include "../marni/MarniSystem.h"
+#include "../marni/MarniSound.h"
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
@@ -32,13 +33,21 @@ static int          s_clientSeen = 0;      // plat_test_link_client_id at the la
 static char         s_body[8192];
 static char         s_lastBody[8192];
 
+static int          s_port = 0;
+
 int TestMode_Start(int port)
 {
     if (!plat_test_link_open(port)) return 0;
     s_active = 1;
+    s_port = port;
     memset(s_heldUntil, 0, sizeof(s_heldUntil));
     plat_key_inject_exclusive(TRUE);
     return 1;
+}
+
+int TestMode_Port(void)
+{
+    return s_port;
 }
 
 int TestMode_Active(void)
@@ -113,6 +122,8 @@ static void capture_before_present(void)
     reply("{\"t\":\"ack\",\"cmd\":\"shot\",\"ok\":%d,\"frame\":%u}\n", ok ? 1 : 0, s_frame);
 }
 
+int CharSelect_State(int* front);   // CharacterSelectionScreen.cpp
+
 static void on_command(const char* line)
 {
     char cmd[32] = "";
@@ -156,6 +167,30 @@ static void on_command(const char* line)
     } else if (strcmp(cmd, "room") == 0 && a >= 0 && b >= 0) {
         s_pendingStage = a;
         s_pendingRoom = b;
+    } else if (strcmp(cmd, "pos") == 0 && a >= 0 && a < 0x10000 && b >= 0 && b < 0x10000) {
+        // Stand the player at (x = a, z = b) on the floor, facing c when given,
+        // the way a door's arrival record places her (DoorSystem.cpp).
+        g_playerEntity.scaMatrixData.localMatrix.t[0] = a;
+        g_playerEntity.scaMatrixData.localMatrix.t[2] = b;
+        g_playerEntity.position.x = (short)a;
+        g_playerEntity.position.z = (short)b;
+        if (c >= 0) g_playerEntity.directionAngle = (short)c;
+    } else if (strcmp(cmd, "give") == 0 && a > 0 && a < 256 && b >= 0 && b < 256) {
+        // Put item a, quantity b, in the first empty slot, so a test can start
+        // from a point in the game with what she would carry there.
+        ItemSlot* items = (ItemSlot*)g_ItemSlotsPointer;
+        int capacity = (items == g_RebeccaItemSlots || (g_playerEntity.id & 3) != CHAR_JILL) ? 6 : 8;
+        int slot = 0;
+        while (items != NULL && slot < capacity && items[slot].Id != 0) slot++;
+        if (items == NULL || slot == capacity) {
+            reply("{\"t\":\"ack\",\"cmd\":\"give\",\"ok\":0,\"frame\":%u}\n", s_frame);
+            return;
+        }
+        items[slot].Id = (unsigned char)a;
+        items[slot].qty = (unsigned char)b;
+        // The held-item count (get_item_slot searches only that far) and the
+        // status screen's icons, as a new game sets them up.
+        LoadHeldItemsImages();
     } else if (strcmp(cmd, "flag") == 0 && a >= 0 && b >= 0 && b < 256 && (c == 0 || c == 1)) {
         FlagBank fb = flag_bank(a);
         int byteAt = (b >> 5) * 4;
@@ -177,10 +212,13 @@ static void on_command(const char* line)
 // --- Dev boot -----------------------------------------------------------------
 
 extern void game_start(void);
+extern void SetVideoResolution(int w, int h);   // VideoPlayback.cpp
+extern void setSomeColor(int r, int g, int b);  // 0x00470a50
 
 static int s_bootCharacter = -1;
 static int s_bootStage = -1;
 static int s_bootRoom = -1;
+static int s_bootRoomUsed = 0;   // the start room applies to the boot's own game only
 
 int DevBoot_Configure(const char* spec)
 {
@@ -208,6 +246,17 @@ int DevBoot_Configure(const char* spec)
 int DevBoot_Begin(void)
 {
     if (s_bootCharacter < 0) return 0;
+    // logos_state's video setup, which the boot skips along with the logos:
+    // without it the game draws at 320x240 in the window's top-left corner
+    // and the pre-rendered backgrounds never appear.
+    SetVideoResolution(640, 480);
+    SetVideoResolution(320, 240);
+    setSomeColor(128, 128, 128);
+    // One boot per launch: dying sends the game back through
+    // init_and_start_game, and that must reach the title, not a new game.
+    static int s_booted = 0;
+    if (s_booted) return 0;
+    s_booted = 1;
     g_SelectedCharactedId = (unsigned char)s_bootCharacter;
     // Jill alone has her own room variants; Rebecca walks Chris's rooms.
     if (s_bootCharacter == CHAR_JILL) g_main_state_flags |= MSF_CHAR_VARIANT;
@@ -221,13 +270,14 @@ extern int DebugRoomChange_IsSelectable(int stage, int room);
 
 int DevBoot_StartRoom(int* stage, int* room)
 {
-    if (s_bootCharacter < 0 || s_bootStage < 0) return 0;
+    if (s_bootCharacter < 0 || s_bootStage < 0 || s_bootRoomUsed) return 0;
     if (!DebugRoomChange_IsSelectable(s_bootStage, s_bootRoom)) {
         dbg_printf("[devboot] stage %d room %02X has no room file; using the normal start\n",
                    s_bootStage, s_bootRoom);
         s_bootStage = -1;
         return 0;
     }
+    s_bootRoomUsed = 1;
     *stage = s_bootStage;
     *room = s_bootRoom;
     return 1;
@@ -257,9 +307,10 @@ static void build_state(void)
 
     const PlayerEntity& p = g_playerEntity;
     put("\"player\":{\"id\":%d,\"x\":%d,\"y\":%d,\"z\":%d,\"angle\":%d,\"hp\":%d,"
-        "\"maxHp\":%d,\"weapon\":%d},",
+        "\"maxHp\":%d,\"weapon\":%d,\"cf\":%d},",
         (int)p.id, (int)p.position.x, (int)p.position.y, (int)p.position.z,
-        (int)p.directionAngle, (int)p.health, (int)p.maxHealth, (int)g_EquippedItemId);
+        (int)p.directionAngle, (int)p.health, (int)p.maxHealth, (int)g_EquippedItemId,
+        (int)p.healthStatusFlags);
 
     // Rebecca and Chris carry 6 items, Jill 8.
     const ItemSlot* items = (const ItemSlot*)g_ItemSlotsPointer;
@@ -269,20 +320,33 @@ static void build_state(void)
         put("%s[%d,%d]", i ? "," : "", (int)items[i].Id, (int)items[i].qty);
     }
     put("],\"enemies\":[");
-    int count = g_enemy_count < 30 ? g_enemy_count : 30;
-    for (int i = 0; i < count; i++) {
+    // enemy_set puts each enemy in the slot its script names, so the live ones
+    // are not the first g_enemy_count slots; a door clears every slot's status.
+    bool first = true;
+    for (int i = 0; i < 30; i++) {
         const Entity& e = g_EnemiesList[i];
-        put("%s[%d,%d,%d,%d,%d,%d]", i ? "," : "", (int)e.id, (int)e.status_flags,
+        if (e.status_flags == 0) continue;
+        put("%s[%d,%d,%d,%d,%d,%d]", first ? "" : ",", (int)e.id, (int)e.status_flags,
             (int)e.position.x, (int)e.position.y, (int)e.position.z, (int)e.health);
+        first = false;
     }
-    put("],\"msg\":{\"choice\":%d,\"id\":%d},\"banks\":[",
-        (int)g_menu_choice_id, s_lastMessageId);
+    int selFront = -1;
+    const int selState = CharSelect_State(&selFront);
+    put("],\"msg\":{\"choice\":%d,\"id\":%d,\"flags\":%d,\"menu\":%d},\"sel\":{\"state\":%d,\"front\":%d},\"used\":%d,\"banks\":[",
+        (int)g_menu_choice_id, s_lastMessageId, (int)g_message_flags, (int)g_openMenuFlag, selState, selFront, (int)g_usedItemId);
     for (int bank = 0; bank < 10; bank++) {
         FlagBank fb = flag_bank(bank);
         if (bank) put(",");
         put_hex(fb.data, fb.size);
     }
-    put("]");
+    put("],\"bgm\":{\"state\":%d,\"ch\":[", (int)(unsigned char)g_BGM_STATE);
+    // Each BGM channel: the WAV it loaded ("" for none), playing, and volume.
+    for (int ch = 0; ch < 3; ch++) {
+        const char* file = bgm_channel_file(ch);
+        const int bank = g_SndBank[ch].handle;
+        put("%s[\"%s\",%d,%d]", ch ? "," : "", file ? file : "", getSndStat(bank), bank ? getSndVol(bank) : 0);
+    }
+    put("]}");
 }
 
 void TestMode_Tick(int gameFrame)

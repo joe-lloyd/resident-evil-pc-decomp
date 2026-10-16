@@ -1,0 +1,317 @@
+{
+ "cameras": [
+  {
+   "from": [
+    680,
+    -6120,
+    680
+   ],
+   "to": [
+    18700,
+    0,
+    17000
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    33320,
+    -6120,
+    680
+   ],
+   "to": [
+    13600,
+    0,
+    17000
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    680,
+    -6120,
+    29920
+   ],
+   "to": [
+    18700,
+    -340,
+    11900
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    33320,
+    -6120,
+    29920
+   ],
+   "to": [
+    13600,
+    -340,
+    13600
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    17000,
+    -6460,
+    30430
+   ],
+   "to": [
+    16660,
+    -2040,
+    6800
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 20655,
+   "z0": 4165,
+   "x1": 22525,
+   "z1": 6035,
+   "name": "Footing.002"
+  },
+  {
+   "shape": "box",
+   "x0": 9775,
+   "z0": 4165,
+   "x1": 11645,
+   "z1": 6035,
+   "name": "Footing.003"
+  },
+  {
+   "shape": "circle",
+   "x0": 29770,
+   "z0": 10050,
+   "x1": 30750,
+   "z1": 11030,
+   "name": "Spruce trunk"
+  },
+  {
+   "shape": "circle",
+   "x0": 2965,
+   "z0": 19285,
+   "x1": 3835,
+   "z1": 20155,
+   "name": "Spruce trunk.001"
+  },
+  {
+   "shape": "circle",
+   "x0": 10390,
+   "z0": 26540,
+   "x1": 11370,
+   "z1": 27520,
+   "name": "Spruce trunk.002"
+  },
+  {
+   "shape": "circle",
+   "x0": 27506,
+   "z0": 18156,
+   "x1": 28594,
+   "z1": 19244,
+   "name": "Spruce trunk.003"
+  },
+  {
+   "shape": "box",
+   "x0": 23021,
+   "z0": 23662,
+   "x1": 30359,
+   "z1": 25978,
+   "name": "Fallen log"
+  },
+  {
+   "shape": "circle",
+   "x0": 10344,
+   "z0": 18836,
+   "x1": 11416,
+   "z1": 19891,
+   "name": "Stump"
+  },
+  {
+   "shape": "circle",
+   "x0": 4104,
+   "z0": 24834,
+   "x1": 6932,
+   "z1": 27137,
+   "name": "Mossy rock"
+  },
+  {
+   "shape": "circle",
+   "x0": 27031,
+   "z0": 2062,
+   "x1": 29964,
+   "z1": 4909,
+   "name": "Mossy rock.001"
+  },
+  {
+   "shape": "circle",
+   "x0": 22086,
+   "z0": 10320,
+   "x1": 24174,
+   "z1": 12082,
+   "name": "Mossy rock.002"
+  },
+  {
+   "shape": "circle",
+   "x0": 12426,
+   "z0": 23904,
+   "x1": 14764,
+   "z1": 25746,
+   "name": "Mossy rock.003"
+  },
+  {
+   "shape": "circle",
+   "x0": 18428,
+   "z0": 13838,
+   "x1": 18632,
+   "z1": 14042,
+   "name": "Signpost"
+  },
+  {
+   "shape": "circle",
+   "x0": 6426,
+   "z0": 12036,
+   "x1": 6834,
+   "z1": 12444,
+   "name": "Snag trunk"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 32300,
+  "z1": 28900
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "pylon",
+   "zone": {
+    "x0": 15300,
+    "z0": 3230,
+    "x1": 17000,
+    "z1": 4420
+   },
+   "arrive": {
+    "x": 16320,
+    "z": 6120,
+    "angle": 3072
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "crash",
+   "zone": {
+    "x0": 1700,
+    "z0": 13260,
+    "x1": 2720,
+    "z1": 17340
+   },
+   "arrive": {
+    "x": 4420,
+    "z": 15470,
+    "angle": 0
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "lower-yard",
+   "zone": {
+    "x0": 31280,
+    "z0": 13260,
+    "x1": 32300,
+    "z1": 17340
+   },
+   "arrive": {
+    "x": 29580,
+    "z": 15300,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "creek",
+   "zone": {
+    "x0": 14960,
+    "z0": 27880,
+    "x1": 19040,
+    "z1": 28900
+   },
+   "arrive": {
+    "x": 17000,
+    "z": 26180,
+    "angle": 1024
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 25330,
+    "z0": 17340,
+    "x1": 27540,
+    "z1": 20060
+   },
+   "text": "A hiker. He sat down against the tree and they tore his throat out.\nDogs. The tracks are everywhere."
+  },
+  {
+   "zone": {
+    "x0": 6800,
+    "z0": 12410,
+    "x1": 8500,
+    "z1": 13940
+   },
+   "text": "A strip of green sleeve on a broken branch. A S.T.A.R.S. patch.\nBravo. Someone came through here in the night, running."
+  },
+  {
+   "zone": {
+    "x0": 17340,
+    "z0": 12920,
+    "x1": 19720,
+    "z1": 14280
+   },
+   "text": "ARKLAY TRAIL, west. LOWER STATION, east. CREEK, south.\nSomething's clawed the post."
+  },
+  {
+   "zone": {
+    "x0": 18700,
+    "z0": 17680,
+    "x1": 20400,
+    "z1": 20400
+   },
+   "text": "Paw prints. A lot of them. Big dogs, running south."
+  },
+  {
+   "zone": {
+    "x0": 15130,
+    "z0": 3910,
+    "x1": 17510,
+    "z1": 5100
+   },
+   "text": "The pylon's ladder. There's blood at the foot of it,\ndripping from somewhere up above."
+  }
+ ],
+ "items": [],
+ "spots": [],
+ "entry": "Down. Smoke in the west.\nThat could be the helicopter.",
+ "notes": [
+  "from the north-west corner: the pylon's foot, the fork and its signpost, the hiker beyond",
+  "from the north-east corner: the ladder's foot, the fork, the west path to the smoke, the patch on its branch",
+  "from the south-west corner: the patch on the snag, the fork, the pylon's legs going up",
+  "from the south-east corner: the hiker against his spruce, the dog tracks, the east path",
+  "from the creek path, south: up the path to the pylon and its ladder into the dusk"
+ ]
+}

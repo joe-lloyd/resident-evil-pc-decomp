@@ -1,51 +1,19 @@
 # Rebecca scenario plan
 
-A new scenario mode for this port: Resident Evil 1 from Rebecca Chambers'
-side. It is a loose remix. She meets the same people at roughly the same
-moments as in Chris's game, but takes her own route through the Arklay
-mountains, the mansion, the guardhouse and the lab, with challenges of her
-own.
+A new scenario mode for this port: Rebecca Chambers' own game, played in
+front of Resident Evil. It covers her day alone, from leaving Billy at dawn to
+Chris finding her in the mansion's save room that night, on new maps of our
+own. The story and the places are in `REBECCA_DAY.md`; this file covers how
+the mode is built and tested.
 
 This fork keeps the USA behaviour as the default. Everything here sits behind
 a new `[Game] Mode=REB` and its own asset overlay, the same way `Mode=DC`
 works (see `DC_PORT.md`), so the original game never changes.
 
-## Story outline
+## Story
 
-**Prologue: the mountain.** Dawn on the morning after the training facility.
-Rebecca has just said goodbye to Billy and is walking down the mountain
-towards the mansion. These are new outdoor rooms, because RE1 has nothing like
-them. Billy is not in RE1's data, so the goodbye opens as a text card. A
-cutscene with a new model can come later.
-
-**Acts.** Her route crosses Chris's story at the meetups below. Between them
-she is somewhere Chris never sees, and the remix decides what happens there.
-
-| Area | Room files (Chris variant) | Canon moment to keep or rework |
-| --- | --- | --- |
-| Mansion 1F | save room `room1000`, bar `room10f0` | first meeting with Chris, the piano |
-| Mansion 2F | pillar passage `room20d0`, front of attic `room20e0` | Richard poisoned, the serum |
-| Guardhouse | beehive passage `room4080`, drug storehouse `room4090`, Plant 42 room `room40c0` | V-Jolt, Plant 42 |
-| Lab | emergency tunnel `room5010`, B3 elevator entry `room50c0`, power room `room5110`, main lab entry `room5140`, B3-B4 elevator `room5150` | Wesker, the escape |
-| Mansion return | save room `room6000`, 1F left stairs `room6010`, bar `room60f0`, 2F small library `room7060` | the Hunter attacks |
-
-These are the rooms whose scripts place Rebecca as an NPC in Chris's game,
-read from the US PS1 disc. The names come from the debug room lists in
-`src/game/DebugMenu.cpp`. What each scene does still has to be read from its
-event script.
-
-At each meetup the roles flip: Rebecca is the player and Chris is the NPC.
-Jill's scenario already uses Chris as an NPC (`room5001`, `room5011`), so the
-engine supports that.
-
-**Her challenges.** She is a medic and a chemist, not a soldier:
-
-- mixing puzzles for the serum and V-Jolt, and treating Richard;
-- less health and space: the engine already gives her 88 HP to Chris's 140,
-  6 item slots, and a Beretta with 15 rounds (`RoomInit.cpp:414`,
-  `GameStart.cpp:121`);
-- escort and defend moments, and rooms she must cross before Chris has
-  cleared them.
+See `REBECCA_DAY.md`. An earlier plan remixed Chris's game chapter by
+chapter; that work is on the `chapters-2-6` branch.
 
 ## What the engine already does
 
@@ -118,9 +86,10 @@ Each one ends with something playable, checked by the harness.
    Blender from each camera, converted to `.pak` backgrounds with collision
    and masks. The prologue starts here.
 5. **Arrival and the first meeting.** Her way into the mansion, the route to
-   the save room, and the meeting with Chris as an NPC, plus her first puzzle.
-6. **The other acts,** following the meetup table.
-7. **Her ending,** new lines (text first, then voice), and polish.
+   the save room, and the meeting with Chris as an NPC. Done as a stand-in
+   route through Chris's rooms; her own day replaces it.
+6. **Her day,** act by act, on new maps, in the order `REBECCA_DAY.md` gives.
+7. **Her ending:** the sleep, the meeting, her credits; then polish.
 
 ## Sharing
 

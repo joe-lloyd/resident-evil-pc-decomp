@@ -1,0 +1,391 @@
+{
+ "cameras": [
+  {
+   "from": [
+    1700,
+    -6460,
+    25840
+   ],
+   "to": [
+    17000,
+    -1020,
+    7650
+   ],
+   "fov": 195
+  },
+  {
+   "from": [
+    28900,
+    -6120,
+    25840
+   ],
+   "to": [
+    9350,
+    -680,
+    7650
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    26180,
+    -6800,
+    20230
+   ],
+   "to": [
+    34850,
+    3400,
+    10880
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    15130,
+    -5100,
+    36040
+   ],
+   "to": [
+    14960,
+    -680,
+    22100
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    3060,
+    -7820,
+    30260
+   ],
+   "to": [
+    15980,
+    3060,
+    26860
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "circle",
+   "x0": 22301,
+   "z0": 13459,
+   "x1": 25965,
+   "z1": 16395,
+   "name": "Outcrop"
+  },
+  {
+   "shape": "circle",
+   "x0": 4296,
+   "z0": 17255,
+   "x1": 7203,
+   "z1": 19513,
+   "name": "Outcrop.001"
+  },
+  {
+   "shape": "box",
+   "x0": 14450,
+   "z0": 6800,
+   "x1": 15470,
+   "z1": 7820,
+   "name": "Mast footing"
+  },
+  {
+   "shape": "box",
+   "x0": 18530,
+   "z0": 6800,
+   "x1": 19550,
+   "z1": 7820,
+   "name": "Mast footing.001"
+  },
+  {
+   "shape": "box",
+   "x0": 18530,
+   "z0": 10880,
+   "x1": 19550,
+   "z1": 11900,
+   "name": "Mast footing.002"
+  },
+  {
+   "shape": "box",
+   "x0": 14450,
+   "z0": 10880,
+   "x1": 15470,
+   "z1": 11900,
+   "name": "Mast footing.003"
+  },
+  {
+   "shape": "box",
+   "x0": 13940,
+   "z0": 6264,
+   "x1": 20060,
+   "z1": 6316,
+   "name": "Fence n"
+  },
+  {
+   "shape": "box",
+   "x0": 13914,
+   "z0": 6290,
+   "x1": 13966,
+   "z1": 12410,
+   "name": "Fence w"
+  },
+  {
+   "shape": "box",
+   "x0": 20034,
+   "z0": 6290,
+   "x1": 20086,
+   "z1": 12410,
+   "name": "Fence e"
+  },
+  {
+   "shape": "box",
+   "x0": 13940,
+   "z0": 12385,
+   "x1": 15980,
+   "z1": 12436,
+   "name": "Fence s"
+  },
+  {
+   "shape": "box",
+   "x0": 18020,
+   "z0": 12385,
+   "x1": 20060,
+   "z1": 12436,
+   "name": "Fence s.001"
+  },
+  {
+   "shape": "box",
+   "x0": 2720,
+   "z0": 12240,
+   "x1": 4080,
+   "z1": 13600,
+   "name": "Guy anchor"
+  },
+  {
+   "shape": "box",
+   "x0": 26180,
+   "z0": 3740,
+   "x1": 27540,
+   "z1": 5100,
+   "name": "Guy anchor.001"
+  },
+  {
+   "shape": "box",
+   "x0": 2550,
+   "z0": 2550,
+   "x1": 9350,
+   "z1": 7140,
+   "name": "Equipment cabin"
+  },
+  {
+   "shape": "box",
+   "x0": 6800,
+   "z0": 8670,
+   "x1": 9690,
+   "z1": 13430,
+   "name": "Stores footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 12038,
+   "z0": 22966,
+   "x1": 13417,
+   "z1": 24167,
+   "name": "Cairn 0"
+  },
+  {
+   "shape": "circle",
+   "x0": 12928,
+   "z0": 26184,
+   "x1": 14301,
+   "z1": 27265,
+   "name": "Cairn 1"
+  },
+  {
+   "shape": "circle",
+   "x0": 16243,
+   "z0": 28263,
+   "x1": 17658,
+   "z1": 29333,
+   "name": "Cairn 2"
+  },
+  {
+   "shape": "circle",
+   "x0": 11892,
+   "z0": 30510,
+   "x1": 13116,
+   "z1": 31638,
+   "name": "Cairn 3"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 28900,
+  "z1": 32300
+ },
+ "voids": [
+  {
+   "x0": 28475,
+   "z0": 1700,
+   "x1": 28900,
+   "z1": 22100
+  },
+  {
+   "x0": 1700,
+   "z0": 22100,
+   "x1": 12240,
+   "z1": 32300
+  },
+  {
+   "x0": 16660,
+   "z0": 22100,
+   "x1": 28900,
+   "z1": 32300
+  },
+  {
+   "x0": 1700,
+   "z0": 22100,
+   "x1": 12240,
+   "z1": 25500
+  },
+  {
+   "x0": 16660,
+   "z0": 22100,
+   "x1": 28900,
+   "z1": 25500
+  },
+  {
+   "x0": 1700,
+   "z0": 25500,
+   "x1": 13260,
+   "z1": 28900
+  },
+  {
+   "x0": 17340,
+   "z0": 25500,
+   "x1": 28900,
+   "z1": 28900
+  },
+  {
+   "x0": 1700,
+   "z0": 28900,
+   "x1": 12240,
+   "z1": 32300
+  },
+  {
+   "x0": 16320,
+   "z0": 28900,
+   "x1": 28900,
+   "z1": 32300
+  }
+ ],
+ "doors": [
+  {
+   "to": "summit-trail",
+   "zone": {
+    "x0": 12240,
+    "z0": 31280,
+    "x1": 16320,
+    "z1": 32300
+   },
+   "arrive": {
+    "x": 14280,
+    "z": 29580,
+    "angle": 1024
+   },
+   "walk": true,
+   "touch": true
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 5780,
+    "z0": 10540,
+    "x1": 10200,
+    "z1": 13600
+   },
+   "text": "Engineers' stores. One crate's been forced with a tyre iron.\nTwo first aid boxes, ripped open. The flare case is missing one."
+  },
+  {
+   "zone": {
+    "x0": 6800,
+    "z0": 13600,
+    "x1": 9860,
+    "z1": 15640
+   },
+   "text": "Gauze, wrappers, blood. Somebody patched himself up here, on his knees."
+  },
+  {
+   "zone": {
+    "x0": 27030,
+    "z0": 11220,
+    "x1": 28475,
+    "z1": 14280
+   },
+   "text": "A glove, right at the edge.\nHe's down there on the ledge. Not moving. The crows are on him."
+  },
+  {
+   "zone": {
+    "x0": 4080,
+    "z0": 10880,
+    "x1": 7140,
+    "z1": 13600
+   },
+   "text": "A crow, caught in the guy wire. It flew straight into it."
+  },
+  {
+   "zone": {
+    "x0": 15980,
+    "z0": 12410,
+    "x1": 18020,
+    "z1": 13600
+   },
+   "text": "The gate's open. The padlock chain's been cut.\nDANGER. HIGH VOLTAGE."
+  },
+  {
+   "zone": {
+    "x0": 3570,
+    "z0": 7140,
+    "x1": 7990,
+    "z1": 8160
+   },
+   "text": "ARKLAY TELECOM. AUTHORISED STAFF.\nPadlocked."
+  },
+  {
+   "zone": {
+    "x0": 14110,
+    "z0": 26010,
+    "x1": 15130,
+    "z1": 27370
+   },
+   "text": "A cairn. There's a hand on it, in blood.\nHe came along here, holding himself up."
+  },
+  {
+   "zone": {
+    "x0": 15300,
+    "z0": 29240,
+    "x1": 16320,
+    "z1": 30940
+   },
+   "text": "Straight down, both sides. The crows just hang there in the wind, watching me."
+  }
+ ],
+ "items": [],
+ "spots": [],
+ "entry": "The mast. Its light's still blinking.",
+ "notes": [
+  "from the trail in, south-west: the mast in its fence, the cabin, the crow on the wire",
+  "from the south-east by the brink: the cabin and the forced crates, the mast's foot",
+  "across to the east brink: his glove, the ledge below with him on it, the valley beyond",
+  "from the ridge's south end: the knife-edge walk to the mast, cairns, crows either side",
+  "from over the west drop: the ridge in profile, the crows on the wind, the valley east"
+ ]
+}

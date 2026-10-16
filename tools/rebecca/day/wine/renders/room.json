@@ -1,0 +1,180 @@
+{
+ "cameras": [
+  {
+   "from": [
+    7055,
+    -3196,
+    2465
+   ],
+   "to": [
+    2550,
+    -510,
+    5610
+   ],
+   "fov": 200
+  },
+  {
+   "from": [
+    1955,
+    -3196,
+    5950
+   ],
+   "to": [
+    7140,
+    -850,
+    2550
+   ],
+   "fov": 200
+  }
+ ],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 2720,
+   "z0": 1700,
+   "x1": 7225,
+   "z1": 2312,
+   "name": "North rack footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 7208,
+   "z0": 2380,
+   "x1": 7820,
+   "z1": 6800,
+   "name": "East rack footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 2720,
+   "z0": 6188,
+   "x1": 7225,
+   "z1": 6800,
+   "name": "South rack footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 6290,
+   "z0": 5015,
+   "x1": 6800,
+   "z1": 5525,
+   "name": "Lectern footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 3384,
+   "z0": 5330,
+   "x1": 4436,
+   "z1": 6060,
+   "name": "Wine crate 0"
+  },
+  {
+   "shape": "box",
+   "x0": 4474,
+   "z0": 5357,
+   "x1": 5556,
+   "z1": 6135,
+   "name": "Wine crate 1"
+  },
+  {
+   "shape": "box",
+   "x0": 3865,
+   "z0": 5300,
+   "x1": 4975,
+   "z1": 6124,
+   "name": "Wine crate 2"
+  },
+  {
+   "shape": "box",
+   "x0": 1700,
+   "z0": 1658,
+   "x1": 2720,
+   "z1": 2423,
+   "name": "Empty crates footprint"
+  }
+ ],
+ "anim": {
+  "frames": 16,
+  "ticks": 3
+ },
+ "bounds": {
+  "x0": 1700,
+  "z0": 1700,
+  "x1": 7820,
+  "z1": 6800
+ },
+ "voids": [],
+ "doors": [
+  {
+   "to": "cellar",
+   "zone": {
+    "x0": 1700,
+    "z0": 3400,
+    "x1": 2720,
+    "z1": 5440
+   },
+   "arrive": {
+    "x": 3230,
+    "z": 4420,
+    "angle": 0
+   },
+   "walk": false,
+   "touch": false
+  }
+ ],
+ "checks": [
+  {
+   "zone": {
+    "x0": 3570,
+    "z0": 2312,
+    "x1": 5100,
+    "z1": 3230
+   },
+   "text": "Bloody handprints down the bottles. He tried to get up."
+  },
+  {
+   "zone": {
+    "x0": 2813,
+    "z0": 2312,
+    "x1": 5534,
+    "z1": 4165
+   },
+   "text": "Wine and blood, pooled together. A bottle smashed.\nThis is where it got him."
+  },
+  {
+   "zone": {
+    "x0": 5695,
+    "z0": 4590,
+    "x1": 7225,
+    "z1": 5950
+   },
+   "text": "The cellar book. Tonight's page: one Margaux, ticked.\nHe came down for a bottle."
+  },
+  {
+   "zone": {
+    "x0": 3400,
+    "z0": 5100,
+    "x1": 5610,
+    "z1": 6188
+   },
+   "text": "Crates of wine. SPENCER, stencilled on the side.\nSomeone stuck a candle in a bottle here."
+  },
+  {
+   "zone": {
+    "x0": 6460,
+    "z0": 2380,
+    "x1": 7208,
+    "z1": 3740
+   },
+   "text": "Dusty bottles. Years of them."
+  }
+ ],
+ "saves": null,
+ "items": [],
+ "spots": [],
+ "entry": "The wine store. It smells of wine. And something else.",
+ "notes": [
+  "high in the north-east corner: the pool under the rack, the smear out through the arch",
+  "high by the arch: the racks, the drip, the candle in its bottle, the cellar book"
+ ]
+}

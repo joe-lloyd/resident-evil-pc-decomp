@@ -8,6 +8,8 @@ export interface Image {
   height: number;
   /** Tightly packed rows, top row first, 3 bytes (R, G, B) per pixel. */
   rgb: Uint8Array;
+  /** One byte per pixel, when the image came from a PNG with alpha (decodePng). */
+  alpha?: Uint8Array;
 }
 
 /**
@@ -131,8 +133,9 @@ function paeth(a: number, b: number, c: number): number {
 }
 
 /**
- * Decode a non-interlaced 8 bit PNG (grey, grey + alpha, RGB or RGBA) to RGB.
- * Alpha is dropped, which is right for the opaque renders Blender writes.
+ * Decode a non-interlaced 8 bit PNG (grey, grey + alpha, RGB or RGBA) to RGB,
+ * with its alpha alongside when it has one: Blender's opaque renders have
+ * none, and a render on a transparent film (saveroom/hatch.py) does.
  */
 export function decodePng(data: Uint8Array): Image {
   if (data.length < 8 || PNG_SIGNATURE.some((b, i) => data[i] !== b)) throw new Error('not a PNG file');
@@ -197,6 +200,10 @@ export function decodePng(data: Uint8Array): Image {
     rgb[i * 3] = pixels[s]!;
     rgb[i * 3 + 1] = pixels[grey ? s : s + 1]!;
     rgb[i * 3 + 2] = pixels[grey ? s : s + 2]!;
+  }
+  if (samples === 2 || samples === 4) {
+    const alpha = Uint8Array.from({ length: width * height }, (_, i) => pixels[i * samples + samples - 1]!);
+    return { width, height, rgb, alpha };
   }
   return { width, height, rgb };
 }

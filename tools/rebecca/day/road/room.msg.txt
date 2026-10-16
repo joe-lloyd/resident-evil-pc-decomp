@@ -1,0 +1,9 @@
+0: \nThe forestry road. The\ngate's open.
+1: \nThe chain's been cut. Bolt\ncutters, clean through.\p{0}\nThe padlock is still\nlocked on the end of it.
+2: \nA ranger's clipboard. The\ncheck sheet: GATE 7,\p{0}\nCHAINED AND LOCKED, 23\nJUL, 18.00.\p{0}\nHe never came back for it.
+3: \nA county notice, torn half\naway.\p{0}\n...ARKLAY AREA CLOSED\nUNTIL FURTHER...\p{0}\n...HIKERS... ...DO NOT\nAPPROACH...
+4: \nARKLAY NATIONAL FOREST.\nFOREST ROAD 7.\p{0}\nSomeone's used it for\ntarget practice.
+5: \nGlass from a headlamp, and\nblood. Grey fur.\p{0}\nSomething big ran out in\nfront of whoever drove\nthrough here.
+6: \nPaw prints, crossing the\nroad. Big ones.\p{0}\nThe dogs came down this\nway.
+7: \nA ranger's hat, in the\nditch.
+8: \nA Forest Service road map.\nThe road, the tower, the\nline, the quarry.
