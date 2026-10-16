@@ -189,7 +189,7 @@ def build():
     room.check((X1 - 0.8, 1.2, X1, 1.95), "The candles are new. GIANT POWDER on the boxes. Empty.")
     # Each takes in the floor in front where she stands; they come first in the
     # table, and the jacket's and the drip's zones keep most of theirs.
-    room.save_room(typewriter=(2.05, Y0, 2.55, Y0 + 1.05), box=(3.4, 2.0, X1, 3.27), lid=box_lid)
+    room.save_room(typewriter=(2.05, Y0, 2.75, Y0 + 1.3), box=(3.4, 2.0, X1, 3.27), lid=box_lid)
     room.check((DRIP[0] - 0.25, DRIP[1] - 0.25, DRIP[0] + 0.25, DRIP[1] + 0.25), "Water's coming through the roof. The bucket ran over long ago.")
     room.entry = "Candles. Someone lit these today."
     room.export(anim)
