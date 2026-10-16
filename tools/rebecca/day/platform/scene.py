@@ -32,6 +32,11 @@ west at export to fit the floor in the game's 0.6-19 m.
 
 Moving: the board on its one chain, the car rocking on the cable, a crow
 pecking, grass in the wind, the rope and its stake swinging over the drop.
+
+State "gondola-runs" (Hal's key in the booth, day/events.ts): the new cog
+in, the bullwheel turning, the drive's lamp lit on the wheel house, and the
+car lit inside and rocking on the running cable. It happens out here while
+she is in the booth, so it is the room's loop, not a change played once.
 """
 import math
 import os
@@ -299,10 +304,16 @@ def build():
     reb.prim("cube", "Wheel house roof", mat("tin"), ((wx0 + wx1) / 2, (wy0 + wy1) / 2, 4.3), (wx1 - wx0 + 0.8, wy1 - wy0 + 0.8, 0.08), rot=(0.05, 0, 0))
     wheel = reb.prim("cyl", "Bullwheel rim", mat("rust"), ((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 3.1), (3.2, 3.2, 0.18), segments=40)
     reb.prim("cyl", "Bullwheel hub", mat("iron"), ((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 3.1), (0.5, 0.5, 0.4), segments=20)
-    for i in range(6):
-        a = math.pi * i / 3
-        c = Vector(((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 3.1))
-        kit.rod("Spoke", mat("rust"), c, c + Vector((math.cos(a) * 1.55, math.sin(a) * 1.55, 0)), 0.05)
+    c = Vector(((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 3.1))
+    spokes = [kit.rod("Spoke", mat("rust"), c, c + Vector((math.cos(math.pi * i / 3) * 1.55, math.sin(math.pi * i / 3) * 1.55, 0)), 0.05) for i in range(6)]
+    # Yellow marks round the rim's edge, so the wheel is seen to turn from
+    # the platform, edge on as it is. It turns as one.
+    for i in range(12):
+        a = math.pi * i / 6
+        spokes.append(reb.prim("cube", "Rim mark", mat("yellow paint"), c + Vector((math.cos(a) * 1.61, math.sin(a) * 1.61, 0)), (0.03, 0.42, 0.2), rot=(0, 0, a)))
+    turning = kit.join("Bullwheel", [wheel] + spokes, origin=tuple(c))
+    # The drive's lamp on the wheel house's post, lit once it runs.
+    drive_lamp = reb.prim("cube", "Drive lamp", reb.mat_emit("Drive lamp", (1.0, 0.55, 0.1), 25), (wx1 + 0.1, wy0, 2.6), (0.22, 0.16, 0.26))
     kit.rod("Bullwheel shaft", mat("iron"), ((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 3.1), ((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 1.0), 0.12)
     gear = reb.prim("cube", "Gearbox", mat("green paint"), ((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 0.55), (1.6, 1.2, 1.1), bevel=0.04)
     reb.mask(reb.wall(gear))
@@ -314,6 +325,12 @@ def build():
         a = 2 * math.pi * i / 18
         c = Vector(((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 1.15))
         reb.prim("cube", "Cog tooth", mat("steel"), c + Vector((math.cos(a) * 0.38, math.sin(a) * 0.38, 0)), (0.08, 0.05, 0.12), rot=(0, 0, a))
+    # The new cog's teeth where the old one sheared, once she has fitted it.
+    new_teeth = []
+    for i in range(5, 9):
+        a = 2 * math.pi * i / 18
+        c = Vector(((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 1.15))
+        new_teeth.append(reb.prim("cube", "New cog tooth", mat("steel"), c + Vector((math.cos(a) * 0.38, math.sin(a) * 0.38, 0)), (0.08, 0.05, 0.12), rot=(0, 0, a)))
     for i in range(3):
         reb.prim("cube", "Broken tooth", mat("steel"), ((wx0 + wx1) / 2 + 0.9 + i * 0.2, (wy0 + wy1) / 2 + 0.9, 0.02), (0.08, 0.05, 0.03), rot=(0, 0, rng.uniform(0, 3)))
     kit.splat("Oil under the gearbox", oil, ((wx0 + wx1) / 2 + 0.6, (wy0 + wy1) / 2 + 0.3, 0.0), 0.7, seed=4, stretch=(1.4, 1.0))
@@ -435,6 +452,27 @@ def build():
     anim.sway(grass, amount=0.06)
     anim.flicker(glow, None, depth=0.35, dropouts=2)
     anim.swing(rope_pivot, axis=0, degrees=9)
+
+    lit_inside = [ob.active_material for ob in car_parts if ob.name.startswith(("Car inside", "Car doorway"))]
+
+    def running(on):
+        """The gondola running (Hal's key, in the booth): the new cog in, the
+        drive's lamp and the car's lit."""
+        drive_lamp.hide_render = not on
+        for ob in new_teeth:
+            ob.hide_render = not on
+        for m in lit_inside:
+            bsdf = m.node_tree.nodes["Principled BSDF"]
+            bsdf.inputs["Emission Color"].default_value = (1.0, 0.62, 0.3, 1)
+            bsdf.inputs["Emission Strength"].default_value = 0.3 if on else 0.0
+
+    def run_loop(k):
+        """As it runs: the bullwheel a sixth of a turn round the loop, the car
+        rocking on the moving cable."""
+        turning.rotation_euler = (0, 0, math.pi / 3 * k / anim.frames)
+        pivot.rotation_euler = (math.radians(3.0) * math.sin(anim.phase(k)), math.radians(1.0) * math.sin(anim.phase(k, 2)), 0)
+    running(False)
+    room.state("gondola-runs", running, loop=run_loop, cameras=[0, 2, 3])
 
     # ---- What the game needs.
     room.door("bridge", (3.0, Y0, 6.0, Y0 + 0.6), arrive=(4.6, 3.4), face=(0, 1))
