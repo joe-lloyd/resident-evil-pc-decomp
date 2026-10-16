@@ -15,6 +15,8 @@
 //
 // RE1_BLENDER_HOST  ssh host with Blender and an NVIDIA GPU (default: jellybingus)
 // RE1_BLENDER_EXE   Blender on that host (default: Blender 5.1's install path)
+// RE1_RENDER_MINUTES  time limit for a full render (default: 30); a room with
+//                   long changes of state can need more
 // RE1_BLENDER_DIR   working folder there (default: Documents\Blender\re1-rebecca\day)
 // RE1_WEAR          strength of kit.wear's texture on every surface, 0 for none (default: 1.3)
 // RE1_FILL          an indoor room's fill light, watts per square metre of floor, 0 for none (default: kit's)
@@ -58,7 +60,7 @@ for (const slug of slugs) {
   execFileSync('scp', ['-q', '-o', 'BatchMode=yes', path.join(dir, 'scene.py'), path.join(here, '..', 'blender', 'reb.py'), path.join(here, '..', 'blender', 'kit.py'), `${host}:${remote(work)}/`]);
   const slot = takeSlot(slug);
   const started = Date.now();
-  const limit = (records || (preview && !states) ? 5 : 30) * 60_000;
+  const limit = (records || (preview && !states) ? 5 : Number(process.env.RE1_RENDER_MINUTES ?? 30)) * 60_000;
   try {
     execFileSync('ssh', ['-o', 'BatchMode=yes', host, `cmd /c "set RE1_OUT=${out}&& set RE1_PREVIEW=${preview ? '1' : ''}&& set RE1_RECORDS=${records ? '1' : ''}&& set RE1_STATES=${states ? '1' : ''}&& set RE1_WEAR=${process.env.RE1_WEAR ?? '1.3'}&& set RE1_FILL=${process.env.RE1_FILL ?? ''}&& "${exe}" -b --factory-startup --python-exit-code 1 --python "${work}\\scene.py" > "${work}\\render.log" 2>&1"`], { stdio: 'ignore', timeout: limit });
   } catch (err) {
