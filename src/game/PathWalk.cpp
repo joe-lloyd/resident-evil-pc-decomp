@@ -121,7 +121,8 @@ void WalkTask(void)
     if (s_gateWalk) PlayGate(0);
     unsigned int t = 0;
     unsigned int step = 0;
-    for (unsigned int f = 0; f < frames; f++) {
+    bool skip = false;
+    for (unsigned int f = 0; f < frames && !skip; f++) {
         unpack_pakfile_(s_walk + u32(s_walk + 8 + f * 4), s_frame);
         display_image(8, s_frame + 20, 320, 240);
         g_main_state_flags = (g_main_state_flags & ~MSF_SCREEN_MODE_MASK) | MSF_SCREEN_REBUILD;
@@ -129,10 +130,14 @@ void WalkTask(void)
             if (stepTicks && t >= gateTicks && t % stepTicks == stepTicks / 2) play_sfx(0, (int)(step++ & 1), 0);
             if (s_gateWalk && t == gateTicks + 2 * stepTicks) PlayGate(1);
             Task_sleep(1);
+            // Pressing action or run (0x80, 0x40) skips the rest, as at a door.
+            // Looked at every frame, as DoorSystem does: the pad word holds a
+            // key only on the frame it goes down, and a picture lasts two.
+            if ((g_PlayerPadHeld & 0xC0) != 0 && f > 10) skip = true;
         }
-        // Holding a direction or the run button skips the rest, as at a door.
-        if ((g_PlayerPadHeld & 0xC0) != 0 && f > 10) break;
     }
+    // Skipped before the gate shut: it shuts behind her as she comes out.
+    if (s_gateWalk && t <= gateTicks + 2 * stepTicks) PlayGate(1);
     free(s_walk);
     s_walk = NULL;
     g_main_state_flags = (g_main_state_flags & ~MSF_SCREEN_MODE_MASK) | transitionMode;
