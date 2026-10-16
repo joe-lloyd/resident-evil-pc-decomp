@@ -25,6 +25,7 @@ import { autoFloors, readDepth } from '../../rebecca/day/floors.ts';
 import { changedRects } from '../../rebecca/bganim.ts';
 import { to555 } from '../../rebecca/pak.ts';
 import { EVENT_FLAGS, EVENTS, keyItem } from '../../rebecca/day/events.ts';
+import { lockFlag } from '../../rebecca/day/scripts.ts';
 import { day, inside, nearest, opens, outward, read, walkable, type Rect } from './floor.ts';
 
 const out = process.env.OUT ?? '/tmp/reb-changes-shots';
@@ -100,6 +101,9 @@ function changes(): Change[] {
         cause = { kind: 'event', step: event.step };
         bit = EVENT_FLAGS.get(event.step)!;
       }
+      // A key item on a lock: the lock's flag, as room.ts shows it by.
+      const lock = bit < 0 ? lockFlag(st.name) : undefined;
+      if (lock !== undefined) [bank, bit] = [Bank.locks, lock];
       const lockTo = (read(room.slug)?.doors ?? []).map((d) => bySlug.get(d.to)).find((r) => r && bank === Bank.locks && lockOf(room.slug, r)?.bit === bit);
       if (lockTo) cause = { kind: 'lock', to: lockTo.slug, item: lockOf(room.slug, lockTo)!.item };
       if (!cause) throw new Error(`${room.slug}: nothing in this test causes state ${st.name}`);
