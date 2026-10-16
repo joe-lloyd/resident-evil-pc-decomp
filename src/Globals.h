@@ -1995,6 +1995,10 @@ void door_system_start_animation(void);               // Task_execute(1, FUN_004
 // Port addition (PathWalk.cpp): a door record of this type plays walk number
 // record +0x08 between Rebecca's outdoor rooms instead of a .dor animation.
 #define DOOR_TYPE_WALK 0x30
+// Port addition: a walk's room sound set (record +0x09) for a way through a
+// gate: the path's footsteps, and the walk opens the gate first and shuts it
+// behind her, with RE1's own gate sounds (PathWalk.cpp).
+#define ROOM_SFX_GATE_WALK 16
 bool PathWalk_Start(unsigned char variant);
 void set_fading(int type, int counter);               // 0x0047b980
 int  cmd_bgm_stop_all(void);                                  // 0x00460b80 - stop sound banks

@@ -18,9 +18,14 @@
 //   u8   stepTicks    game frames between footsteps
 //   u32  offset[frameCount]   each picture: a background pak (LZW-packed
 //                             320x240 16 bpp TIM, as the room backgrounds)
+//
+// A walk through a gate (sound byte ROOM_SFX_GATE_WALK) opens it first and
+// shuts it behind her near the end, with RE1's own gate sounds, Dr_gat01 and
+// Dr_gat02, from the player's files.
 // ============================================================================
 #include "../Globals.h"
 #include "../DebugPrint.h"
+#include "../marni/MarniSound.h"
 #include "../platform/platform.h"
 #include "../system/AssetPath.h"
 
@@ -34,6 +39,34 @@ unsigned char* s_walk = NULL;
 size_t s_walkSize = 0;
 // As big as g_TimImageBuffer: unpack_pakfile_ writes the TIM, its picture 20 bytes in.
 unsigned char s_frame[187160 + 20];
+
+// The gate's two sounds, open and shut, for a walk through a gate.
+const char* const kGateFile[2] = { "Dr_gat01", "Dr_gat02" };
+int s_gate[2] = { 0, 0 };
+bool s_gateWalk = false;
+
+void LoadGate(void)
+{
+    for (int i = 0; i < 2; i++) {
+        if (s_gate[i] != 0) destroySndBank(s_gate[i]);
+        char path[260];
+        snprintf(path, sizeof(path), GAME_DATA_ROOT "sound\\%s.wav", kGateFile[i]);
+        findAndOpenFile(path);
+        s_gate[i] = loadSndBankFromWav(path);
+        if (s_gate[i] != 0) {
+            pan_set(s_gate[i], 0);
+            set_volume(s_gate[i], g_roomSfxVolume);
+        }
+    }
+}
+
+void PlayGate(int i)
+{
+    if (s_gate[i] == 0) return;
+    SetSndSlot(s_gate[i], 0);
+    g_soundProbe.room.plays++;
+    g_soundProbe.room.last = kGateFile[i];
+}
 
 unsigned short u16(const unsigned char* p) { return (unsigned short)(p[0] | (p[1] << 8)); }
 unsigned int u32(const unsigned char* p) { return p[0] | (p[1] << 8) | (p[2] << 16) | ((unsigned int)p[3] << 24); }
@@ -84,6 +117,9 @@ void WalkTask(void)
     const unsigned int frames = u16(s_walk + 4);
     const unsigned int ticks = s_walk[6] ? s_walk[6] : 2;
     const unsigned int stepTicks = s_walk[7];
+    // Through a gate, she opens it and the steps wait for it to swing.
+    const unsigned int gateTicks = s_gateWalk ? 30 : 0;
+    if (s_gateWalk) PlayGate(0);
     unsigned int t = 0;
     unsigned int step = 0;
     for (unsigned int f = 0; f < frames; f++) {
@@ -91,7 +127,8 @@ void WalkTask(void)
         display_image(8, s_frame + 20, 320, 240);
         g_main_state_flags = (g_main_state_flags & ~MSF_SCREEN_MODE_MASK) | MSF_SCREEN_REBUILD;
         for (unsigned int k = 0; k < ticks; k++, t++) {
-            if (stepTicks && t % stepTicks == stepTicks / 2) play_sfx(0, (int)(step++ & 1), 0);
+            if (stepTicks && t >= gateTicks && t % stepTicks == stepTicks / 2) play_sfx(0, (int)(step++ & 1), 0);
+            if (s_gateWalk && t == gateTicks + 2 * stepTicks) PlayGate(1);
             Task_sleep(1);
         }
         // Holding a direction or the run button skips the rest, as at a door.
@@ -116,6 +153,8 @@ bool PathWalk_Start(unsigned char variant)
     // the door record's sound row loaded; say so, as the walk has no picture of them.
     dbg_printf("[walk] walk %u, footsteps %s\n", (unsigned int)variant,
                g_RoomSfxBanks[0] != 0 && g_RoomSfxBanks[2] != 0 ? "loaded" : "MISSING");
+    s_gateWalk = g_nextRoomSfxId == ROOM_SFX_GATE_WALK;
+    if (s_gateWalk) LoadGate();
     g_main_state_flags |= MSF_ROOM_TRANSITION;
     Task_execute(1, (void*)WalkTask);
     return true;

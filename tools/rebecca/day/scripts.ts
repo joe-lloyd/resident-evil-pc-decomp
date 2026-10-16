@@ -96,6 +96,8 @@ const BUILT_DOORS: Record<string, { to: string; id: number; zone: Zone; note: st
 const ANIMS = {
   /** The walk down a dark path between outdoor rooms (PathWalk.cpp). */
   walk: { type: 48, variant: 0, sfx: 15, handle: 4 },
+  /** The same walk through a gate: RE1's gate sounds open it and shut it behind her (ROOM_SFX_GATE_WALK). */
+  gateWalk: { type: 48, variant: 0, sfx: 16, handle: 4 },
   /** door00: the mansion's panelled door. */
   mansion: { type: 0, variant: 0, sfx: 0, handle: 4 },
   /** door07: a plank door with a Z brace. */
@@ -152,6 +154,8 @@ const DOOR_STYLE: Record<string, Anim> = {
   'cellar|wine': 'panel',
   'cellar|crawl': 'plank',
 };
+/** The walks that go through a gate, by the rooms they join (either way round). */
+const GATES = new Set(['camp-yard|depot', 'road|washout', 'line-track|platform', 'estate-wall|kennels']);
 /** The ways up and down, by the direction she goes. */
 const CLIMB: Record<string, Anim> = {
   'tower-stairs>tower-top': 'ladderUp',
@@ -207,7 +211,8 @@ function lockFor(from: string, to: string): { item: number; flag: number } | und
 
 /** The door record's animation and lock bytes for a door from one room to another. */
 function doorAnim(from: string, to: string, walk: boolean): string {
-  const a = ANIMS[walk ? 'walk' : (CLIMB[`${from}>${to}`] ?? DOOR_STYLE[[from, to].sort().join('|')] ?? 'mansion')];
+  const pair = [from, to].sort().join('|');
+  const a = ANIMS[walk ? (GATES.has(pair) ? 'gateWalk' : 'walk') : (CLIMB[`${from}>${to}`] ?? DOOR_STYLE[pair] ?? 'mansion')];
   const lock = lockFor(from, to);
   return `${a.variant}, ${a.sfx}, ${a.type}, ${a.handle}, ${lock ? 0x80 | lock.flag : 0}`;
 }

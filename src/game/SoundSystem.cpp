@@ -427,6 +427,9 @@ static const char* g_roomSfx_14[2] = { "Ev_ftn01", "Ev_ftn02" };   // 0x004d0240
 // Port addition: footsteps on a forest path, for the walk between Rebecca's
 // outdoor rooms (PathWalk.cpp). Her overlay supplies the files.
 static const char* g_roomSfx_15[2] = { "St_path01", "St_path02" };
+// Port addition: the same footsteps on a walk through a gate, which PathWalk
+// opens and shuts with RE1's own gate sounds (ROOM_SFX_GATE_WALK).
+static const char* g_roomSfx_16[2] = { "St_path01", "St_path02" };
 
 // --- room_sound_effects table (0x004d0248) ---
 // Indexed by soundTableIndex. Terminated by NULL sentinel.
@@ -447,6 +450,7 @@ static const char** g_roomSoundEffectsTable[] = {
     g_roomSfx_13,  // 0x004d027c: index 13 - Ev_lab01 (Lab elevator door open)
     g_roomSfx_14,  // 0x004d0280: index 14 - Ev_ftn01/02 (Fountain elevetor door open/close)
     g_roomSfx_15,  // port addition: index 15 - St_path01/02 (footsteps on a forest path)
+    g_roomSfx_16,  // port addition: index 16 - the same, on a walk through a gate
     NULL,          // 0x004d0284: terminator
 };
 
