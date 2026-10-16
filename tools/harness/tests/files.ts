@@ -19,6 +19,7 @@ import type { GameState } from '../state.ts';
 import { dayRooms } from '../../rebecca/day/rooms.ts';
 import { BOOKS, DOCUMENTS, type Doc } from '../../rebecca/files/documents.ts';
 import { fileName } from '../../rebecca/files/engine.ts';
+import { KEY_ITEM_FLAGS } from '../../rebecca/items/items.ts';
 import { drawPage, toImage } from '../../rebecca/files/pages.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -43,6 +44,8 @@ const FILE_FLAG_BASE = 0x82;
 const ENEMY_FLAGS = 3;
 const FIRST_KILL_FLAG = 186;
 const LAST_KILL_FLAG = 254;
+/** g_roomItemsFlags: a clear flag is an item taken. */
+const ITEM_FLAGS = 7;
 const flagOn = (s: GameState, bank: number, n: number) => ((s.banks[bank]![(n >> 5) * 4 + 3 - ((n & 31) >> 3)]! >> (7 - (n & 7))) & 1) === 1;
 
 /** The reader draws a page's top 256x192 at (24, 24) of the 320x240 screen (DAT_004d2888); the shot is twice that. */
@@ -140,7 +143,10 @@ try {
   // day has a kill flag in 186-254 (day/foes.ts), and a set one keeps it out
   // of its room.
   for (let flag = FIRST_KILL_FLAG; flag <= LAST_KILL_FLAG; flag++) await link.setFlag(ENEMY_FLAGS, flag, true);
-  // The first room's enemies came in with it: load it again without them.
+  // Key items, too, come before files in a room's table: on Walt's desk the
+  // switch house key takes the action button before his log. Mark them taken.
+  for (const flag of KEY_ITEM_FLAGS) await link.setFlag(ITEM_FLAGS, flag, false);
+  // The first room's enemies and key items came in with it: load it again without them.
   await link.room(first.stage, first.room);
   await settle(link);
   for (const r of results) {
@@ -177,6 +183,12 @@ try {
     } catch (err) {
       r.problems.push((err as Error).message);
       await link.release().catch(() => undefined);
+      // Whatever screen the failure left open, close it, so the next file starts in play.
+      for (let i = 0; i < 4; i++) {
+        await link.tap(Key.run, 3).catch(() => undefined);
+        await link.frames(20).catch(() => undefined);
+      }
+      await settle(link).catch(() => undefined);
     }
     console.log(`${r.problems.length ? 'FAIL' : 'ok  '}  ${r.doc.id}${r.problems.length ? `: ${r.problems.join('; ')}` : ''}`);
   }
