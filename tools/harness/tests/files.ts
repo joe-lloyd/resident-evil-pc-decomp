@@ -140,6 +140,9 @@ try {
   // day has a kill flag in 186-254 (day/foes.ts), and a set one keeps it out
   // of its room.
   for (let flag = FIRST_KILL_FLAG; flag <= LAST_KILL_FLAG; flag++) await link.setFlag(ENEMY_FLAGS, flag, true);
+  // The first room's enemies came in with it: load it again without them.
+  await link.room(first.stage, first.room);
+  await settle(link);
   for (const r of results) {
     const room = bySlug.get(r.doc.room)!;
     try {
