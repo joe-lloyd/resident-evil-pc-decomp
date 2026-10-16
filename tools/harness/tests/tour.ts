@@ -16,6 +16,7 @@ import { faceTowards, headingTo, settle } from '../flows.ts';
 import { dayRooms, kitRooms } from '../../rebecca/day/rooms.ts';
 import { inside, nearest, opens, outward, read, walkable } from './floor.ts';
 import { EVENT_FLAGS } from '../../rebecca/day/events.ts';
+import { CUT_FLAGS } from '../../rebecca/day/cutscenes.ts';
 import { LOCK_FLAGS } from '../../rebecca/day/scripts.ts';
 import { Bank } from '../state.ts';
 
@@ -33,8 +34,10 @@ const failures: string[] = [];
 try {
   await link.waitFor((s) => s.play, "gameplay", 120_000);
   // Every way a puzzle opens, open, and every lock unlocked (the kit rooms'
-  // and the yard shed's 60): puzzles.ts tests them shut.
+  // and the yard shed's 60): puzzles.ts tests them shut. Every cutscene seen,
+  // so none takes her over on the way through: cutscenes.ts plays them.
   for (const f of EVENT_FLAGS.values()) await link.setFlag(Bank.common, f, true);
+  for (const f of CUT_FLAGS.values()) await link.setFlag(Bank.common, f, true);
   for (const f of [...LOCK_FLAGS, 60]) await link.setFlag(Bank.locks, f, true);
   for (const r of rooms) {
     const json = read(r.slug)!;

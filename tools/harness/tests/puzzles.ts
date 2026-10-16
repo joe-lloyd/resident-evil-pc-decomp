@@ -18,6 +18,7 @@ import { headingTo, settle, useItem } from '../flows.ts';
 import { Bank, flag, type GameState } from '../state.ts';
 import { dayRooms } from '../../rebecca/day/rooms.ts';
 import { EVENT_FLAGS, EVENTS, GIVE_FLAGS, keyItem, type RoomEvent } from '../../rebecca/day/events.ts';
+import { CUT_FLAGS } from '../../rebecca/day/cutscenes.ts';
 import { inside, nearest, opens, outward, read, stand, walkable, type Rect } from './floor.ts';
 
 const bySlug = new Map(dayRooms.map((r) => [r.slug, r]));
@@ -52,6 +53,9 @@ const link = session.link;
 const failures: string[] = [];
 try {
   await link.waitFor((s) => s.play, 'gameplay', 120_000);
+  // Every cutscene seen, so none takes her over as she comes and goes:
+  // cutscenes.ts plays them, the gallery's gear loss among them.
+  for (const f of CUT_FLAGS.values()) await link.setFlag(Bank.common, f, true);
   for (const e of events) {
     const room = bySlug.get(e.room)!;
     const zone = spotOf(e)!;
