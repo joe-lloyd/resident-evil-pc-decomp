@@ -111,8 +111,16 @@ const STATUS: Record<string, Status> = {
   'music-loop': 'done',
   'music-test': 'done',
   'music-save': 'done',
-  // Rendered and playing in the game; nobody has listened to it yet.
-  'music-station': 'doing',
+  // A first draft of each, rendered, and seen playing in its rooms by
+  // tests/music.ts, the layers switching as she works. The owner's verdict
+  // on the sound is music-sketches.
+  'music-station': 'done',
+  'music-states': 'done',
+  ...Object.fromEntries(['dawn', 'camp', 'road', 'quarry', 'mine', 'chase', 'summit', 'skyway', 'valley', 'estate'].map((c): [string, Status] => [`music-${c}`, 'done'])),
+  // Rendered, but they score cutscenes, and no cutscene is built to play them.
+  'music-partner': 'doing',
+  'music-hal': 'doing',
+  'music-credits': 'doing',
   'saves-plan': 'done',
   'saves-mode': 'done',
   'saves-names': 'done',
