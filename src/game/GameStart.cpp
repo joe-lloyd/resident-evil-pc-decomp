@@ -4,6 +4,7 @@
 #include "../Globals.h"
 #include "TestMode.h"
 extern void DebugRoomChange_ArmPlacement(void);
+extern void DebugRoomChange_SetStartSpot(int stage, int room, int x, int z, int angle);
 #include "dc/ItemTables.h"
 #include "dc/Items.h"
 #include "../marni/MarniSystem.h"
@@ -438,6 +439,12 @@ void InitializeGame(void)
         // Rebecca's scenario starts in the room its own bio_card.dat names
         // (REB overlay); both stand the player by the room's first door.
         int bootStage, bootRoom;
+        // The card's saved position is where Rebecca's new game stands in the
+        // card's start room; taken before a dev boot replaces the room.
+        if (g_bRebMode && (g_PlayerPosXCopy != 0 || g_PlayerPosZCopy != 0)) {
+            DebugRoomChange_SetStartSpot(g_stageId, g_roomId, g_PlayerPosXCopy,
+                                         g_PlayerPosZCopy, g_PlayerDirAngleCopy);
+        }
         if (DevBoot_StartRoom(&bootStage, &bootRoom)) {
             g_stageId = (unsigned char)bootStage;
             g_roomId = (unsigned char)bootRoom;

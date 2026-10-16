@@ -394,3 +394,15 @@ const char* ResolveAssetRoot(const char* path, char* out, size_t outSize)
     if (n < 0) return path;         // Would not fit: keep the original path.
     return out;
 }
+
+int AssetFileExists(const char* path)
+{
+    char resolved[260];
+    const char* filePath = ResolveAssetRoot(path, resolved, sizeof(resolved));
+    char normalized[260];
+    filePath = plat_normalize_path(filePath, normalized, sizeof(normalized));
+    FILE* fp = fopen(filePath, "rb");
+    if (fp == NULL) return 0;
+    fclose(fp);
+    return 1;
+}

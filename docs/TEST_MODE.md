@@ -73,7 +73,9 @@ One per line. Each is answered with `{"t":"ack","cmd":...,"ok":0|1}`.
 | `shot <path>` | save the next frame's back buffer as a BMP on the game machine |
 
 The back buffer has no pre-rendered background. `tools/harness/snapshot.ts`
-lays the room's `.pak` background under the shot to make a viewable picture.
+lays the room's `.pak` background under the shot to make a viewable picture. It
+looks in the REB overlay first (`RE1_OVERLAY`, default `/tmp/rae-reb/REB`), then
+in the game data (`RE1_DATA`, default `/tmp/re1-pc`).
 
 ## The harness
 
