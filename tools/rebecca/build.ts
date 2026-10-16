@@ -15,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { buildDayRoom } from './day/room.ts';
 import { buildCardSheet } from './card.ts';
 import { footstepFiles } from './footsteps.ts';
+import { ambienceFiles } from './sound/ambience.ts';
 import { floorSounds, groundStepFiles, roomsFile, type RoomSounds } from './sound/ground.ts';
 import { buildArms } from './arms.ts';
 import { filePages } from './files/pages.ts';
@@ -150,8 +151,9 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
     writeFileSync(path.join(reb, 'sound', name), bytes);
     written.push(`sound/${name}`);
   }
-  // Her music table, and our renders it plays. RE1's own files, such as the
-  // save room's Bgm_31, stay the player's: the table only names them.
+  // Her music table, our renders it plays, and the loops made by code
+  // (sound/ambience.ts). RE1's own files, such as the save room's Bgm_31,
+  // stay the player's: the table only names them.
   writeFileSync(path.join(reb, 'sound', 'music.dat'), musicFile(music));
   written.push('sound/music.dat');
   for (const ch of music.groups.flatMap((g) => g.channels)) {
@@ -159,8 +161,13 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
     writeFileSync(path.join(reb, 'sound', `${ch.file}.wav`), readFileSync(path.join(renders, `${ch.render}.wav`)));
     written.push(`sound/${ch.file}.wav`);
   }
+  const loops = [...new Set(music.groups.flatMap((g) => g.channels.flatMap((ch) => (ch?.loop ? [ch.loop] : []))))];
+  for (const { name, bytes } of ambienceFiles(loops)) {
+    writeFileSync(path.join(reb, 'sound', name), bytes);
+    written.push(`sound/${name}`);
+  }
   const unrendered = CUES.filter((c) => c.kind === 'new' && c.places.length).flatMap((c) =>
-    c.channels.filter((ch) => !ch.sketch || !existsSync(path.join(renders, `${ch.sketch}.wav`))).map((ch) => `${c.id} (${ch.what})`));
+    c.channels.filter((ch) => !ch.loop && (!ch.sketch || !existsSync(path.join(renders, `${ch.sketch}.wav`)))).map((ch) => `${c.id} (${ch.what})`));
   if (unrendered.length) console.warn(`music: no render yet, so silent: ${unrendered.join(', ')}`);
 
   // The people of her day: the player's own character models with our skins (npc/people.ts).
