@@ -24,6 +24,7 @@ import { buildMasks, maskPakName } from '../masks.ts';
 import { autoFloors, readDepth } from './floors.ts';
 import { makePak } from '../pak.ts';
 import { composeRoom, model, scaleModel, SLOT, type PointLight, type Vec3 } from '../rdt.ts';
+import { GROUNDS, isGround, stepSlots, type Floors, type Ground } from '../sound/ground.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -54,8 +55,6 @@ interface DayRoomBase {
    * them out from the scene (floors.ts).
    */
   readonly cameraFloor: readonly (Rect | readonly Rect[])[] | 'auto';
-  /** Footstep sound set (the low byte of the footstep zone record; 0x2D is outdoor earth). */
-  readonly footsteps: number;
   /**
    * Item models the room's pick-ups use, in slot order (item_aot_set's model
    * index): a base-game room and the slot its own item_aot_set uses, or one
@@ -81,6 +80,9 @@ interface RoomJson {
   saves?: { lid: { x: number; y: number; z: number; angle: number; scale?: number } } | null;
   /** Where the scene puts the key items she finds here (kit.Room.item). */
   items?: ItemSpot[];
+  /** What the floor is underfoot (kit.Room.ground), and the parts of it that are something else (kit.Room.floor): her footsteps (sound/ground.ts). */
+  ground?: string;
+  floors?: (Rect & { kind: string })[];
 }
 
 /** The item box's lid, the same object in every RE1 save room: model 0 of the mansion's 1F save room. */
@@ -236,9 +238,36 @@ function walkZones(bounds: Rect): Uint8Array {
   return new Writer().u8(1).u8(0).i16(bounds.x0).i16(bounds.z0).i16(bounds.x1).i16(bounds.z1).u16(0x03ff).u16(0).out();
 }
 
-/** One catch-all footstep zone: the scan has no terminator. */
-function footstepZones(sound: number): Uint8Array {
-  return new Writer().u16(1).u16(0).u16(0).u16(0x7fbc).u16(0x7fbc).u16(sound).out();
+/**
+ * The room's floors, as its scene says (renders/room.json). A room.json from
+ * before scenes said is all earth, with a warning: `render.ts --records
+ * <slug>` writes it again.
+ */
+export function roomFloors(slug: string, json: Pick<RoomJson, 'ground' | 'floors'>): Floors {
+  const kind = (k: string | undefined, what: string): Ground => {
+    if (k === undefined || !isGround(k)) throw new Error(`${slug}: ${what} is ${JSON.stringify(k)}, not one of ${GROUNDS.join(', ')}`);
+    return k;
+  };
+  if (json.ground === undefined) {
+    console.warn(`${slug}: room.json says nothing of its floors, so her steps there are all earth (run day/render.ts --records ${slug})`);
+    return { ground: 'earth', parts: [] };
+  }
+  return {
+    ground: kind(json.ground, 'the ground'),
+    parts: (json.floors ?? []).map((f, i) => ({ kind: kind(f.kind, `floor ${i}`), x0: f.x0, z0: f.z0, x1: f.x1, z1: f.z1 })),
+  };
+}
+
+/**
+ * The footstep zones: each part of the floor that is something else, then a
+ * catch-all for the room's own ground, since the scan has no terminator. A
+ * zone's low byte is the footstep set's first slot (sound/ground.ts).
+ */
+function footstepZones(floors: Floors): Uint8Array {
+  const slots = stepSlots(floors);
+  const w = new Writer().u16(floors.parts.length + 1);
+  for (const p of floors.parts) w.u16(p.x0).u16(p.z0).u16(p.x1 - p.x0).u16(p.z1 - p.z0).u16(slots.get(p.kind)!);
+  return w.u16(0).u16(0).u16(0x7fbc).u16(0x7fbc).u16(slots.get(floors.ground)!).out();
 }
 
 /** A script section holding one procedure that only returns; `rae asm` writes the room's own. */
@@ -250,8 +279,8 @@ function findFile(dir: string, name: string): string {
   return path.join(dir, hit);
 }
 
-/** Build the room into `<outDir>/REB/`. Returns the paths written, relative to REB/. */
-export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, raeCli: string): string[] {
+/** Build the room into `<outDir>/REB/`. Returns the paths written, relative to REB/, and the room's floors. */
+export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, raeCli: string): { written: string[]; floors: Floors } {
   const dir = path.join(here, spec.slug);
   const renders = path.join(dir, 'renders');
   const json = JSON.parse(readFileSync(path.join(renders, 'room.json'), 'utf8')) as RoomJson;
@@ -311,6 +340,7 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
     return { from: v(c.from), to: v(c.to), fov: c.fov, maskBlock: masks?.block };
   });
 
+  const underfoot = roomFloors(spec.slug, json);
   const baseRoom = (from: string) => {
     const [stage, file] = from.split('/') as [string, string];
     return readFileSync(findFile(findFile(baseDir, stage), file));
@@ -327,7 +357,7 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
       [SLOT.switchZones]: switchZones(floors, json.bounds),
       [SLOT.collision]: collision(json),
       [SLOT.walkZones]: walkZones(json.bounds),
-      [SLOT.footsteps]: footstepZones(spec.footsteps),
+      [SLOT.footsteps]: footstepZones(underfoot),
       [SLOT.init]: emptyScript(),
       [SLOT.main]: emptyScript(),
       // No event scripts: the donor's belong to its own room. The table is its
@@ -356,5 +386,5 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
   } finally {
     rmSync(work, { recursive: true, force: true });
   }
-  return written;
+  return { written, floors: underfoot };
 }

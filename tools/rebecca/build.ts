@@ -15,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 import { buildDayRoom } from './day/room.ts';
 import { buildCardSheet } from './card.ts';
 import { footstepFiles } from './footsteps.ts';
+import { floorSounds, groundStepFiles, roomsFile, type RoomSounds } from './sound/ground.ts';
 import { buildArms } from './arms.ts';
 import { filePages } from './files/pages.ts';
 import { buildWalk, walkFileName } from './walks.ts';
@@ -198,12 +199,23 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   }
 
   // New rooms: the rooms of her day (day/rooms.ts), those rendered so far.
+  const roomSounds: RoomSounds[] = [];
   for (const room of dayRooms) {
     if (!existsSync(path.join(here, 'day', room.slug, 'renders', 'room.json'))) {
       console.warn(`${room.slug}: not rendered yet, left out`);
       continue;
     }
-    written.push(...buildDayRoom(room, baseDir, outDir, raeCli));
+    const built = buildDayRoom(room, baseDir, outDir, raeCli);
+    written.push(...built.written);
+    roomSounds.push(floorSounds(room.stage, room.room, built.floors));
+  }
+  // Her rooms' own sounds over their slots' rows (sound/ground.ts): her steps
+  // on each floor, RE1's own from the player's files or ours, shipped here.
+  writeFileSync(path.join(reb, 'sound', 'rooms.dat'), roomsFile(roomSounds));
+  written.push('sound/rooms.dat');
+  for (const { name, bytes } of groundStepFiles()) {
+    writeFileSync(path.join(reb, 'sound', name), bytes);
+    written.push(`sound/${name}`);
   }
 
   // Room scripts: rooms/ROOMsrrv.c replaces that room's init and main scripts.
