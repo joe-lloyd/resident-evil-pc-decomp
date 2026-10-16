@@ -13,7 +13,8 @@ Metres, real sizes (reb.UNITS). She walks the flat clearing x 2-18,
 y 2-12.2; the ground falls away beyond it.
 
 Moving: smoke from the stovepipe, the flag, the hazard lights, the grass.
-State "pine" (FG_COMMON 205): the pine dragged off the trail by the winch.
+State "pine" (FG_COMMON 205): the pine dragged off the trail by the winch,
+played as it drags when she works the winch.
 """
 import math
 import os
@@ -24,7 +25,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
-from mathutils import Vector, noise  # noqa: E402
+from mathutils import Euler, Matrix, Vector, noise  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))
 FRAMES = 16
@@ -306,13 +307,24 @@ def build():
     cable = reb.prim("cyl", "Winch line", reb.mat_plain("Cable line", (0.12, 0.11, 0.1), 0.6), (0, 0, 0), (0.05, 0.05, 1.0))
     cable.hide_render = True
 
-    def place_pine(moved):
-        pine.location, pine.rotation_euler = pine_moved if moved else pine_rest
-        hook.hide_render = moved
-        cable.hide_render = not moved
-        if moved:
+    # Where the winch line is made fast round the trunk, in the dragged
+    # pine's place: it rides with the trunk as it swings round.
+    tied = Vector((13.0, 13.1, 0.35))
+    moved_matrix = Matrix.Translation(pine_moved[0]) @ Euler(pine_moved[1]).to_matrix().to_4x4()
+    tied_local = moved_matrix.inverted() @ tied
+
+    def place_pine(t):
+        """t 0: across the trail; 1: dragged clear; between, part way, the line taut."""
+        t = float(t)
+        e = t * t * (3 - 2 * t)   # the winch takes up the slack, drags, and slows as it comes clear
+        (l0, r0), (l1, r1) = pine_rest, pine_moved
+        pine.location = Vector(l0).lerp(Vector(l1), e)
+        pine.rotation_euler = Euler([a + (b - a) * e for a, b in zip(r0, r1)])
+        hook.hide_render = t > 0
+        cable.hide_render = t == 0
+        if t > 0:
             a = Vector(WINCH) + Vector((0.12, 0, -0.1))
-            b = Vector((13.0, 13.1, 0.35))
+            b = (Matrix.Translation(pine.location) @ pine.rotation_euler.to_matrix().to_4x4()) @ tied_local
             cable.location = (a + b) / 2
             cable.scale = (1, 1, (b - a).length)
             cable.rotation_euler = (b - a).to_track_quat("Z", "Y").to_euler()
@@ -472,10 +484,7 @@ def build():
             ob.scale = (s, s * 0.9, s * 0.8)
             m.node_tree.nodes["Principled Volume"].inputs["Density"].default_value = 0.9 * (1 - t) ** 1.5
 
-    def pine_state(moved):
-        place_pine(moved)
-
-    place_pine(False)
+    place_pine(0)
     # The kit's worn, bitty surfaces, as every kit room has.
     kit.wear(float(os.environ.get("RE1_WEAR", "1.3")))
     reb.export(
@@ -492,7 +501,9 @@ def build():
             ],
         },
         anim={"frames": FRAMES, "ticks": 3, "set": pose},
-        states=[{"name": "pine", "bank": 1, "bit": PINE_FLAG, "set": pine_state}],
+        # The pine drags clear as she watches from the winch (camera 3): 12
+        # pictures, 5 game frames each, two seconds behind her line.
+        states=[{"name": "pine", "bank": 1, "bit": PINE_FLAG, "set": place_pine, "motion": {"frames": 12, "ticks": 5}, "cameras": [3]}],
     )
 
 
