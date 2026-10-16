@@ -83,7 +83,7 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   card.writeInt16LE(start.z, 0x22e);
   card.writeInt16LE(start.angle, 0x230);
   for (const index of killedAtStart) setFlag(card, CARD_ENEMY_FLAGS, index);
-  // Her rooms' music (music/table.ts): each room's state plays its cue's group, or is silent.
+  // Her rooms' music (music/table.ts): each room's state starts its cue's channels, or is silent.
   const renders = path.join(here, 'music', 'renders');
   const music = musicTable(CUES, day.places, dayRooms, (sketch) => existsSync(path.join(renders, `${sketch}.wav`)));
   setRoomStates(card, music);
@@ -153,13 +153,14 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   // save room's Bgm_31, stay the player's: the table only names them.
   writeFileSync(path.join(reb, 'sound', 'music.dat'), musicFile(music));
   written.push('sound/music.dat');
-  for (const g of music.groups) {
-    if (!g.render) continue;
-    writeFileSync(path.join(reb, 'sound', `${g.file}.wav`), readFileSync(path.join(renders, `${g.render}.wav`)));
-    written.push(`sound/${g.file}.wav`);
+  for (const ch of music.groups.flatMap((g) => g.channels)) {
+    if (!ch?.render) continue;
+    writeFileSync(path.join(reb, 'sound', `${ch.file}.wav`), readFileSync(path.join(renders, `${ch.render}.wav`)));
+    written.push(`sound/${ch.file}.wav`);
   }
-  const unrendered = CUES.filter((c) => c.kind === 'new' && c.places.length && !music.groups.some((g) => g.cue === c.id));
-  if (unrendered.length) console.warn(`music: no render yet, so silent: ${unrendered.map((c) => c.id).join(', ')}`);
+  const unrendered = CUES.filter((c) => c.kind === 'new' && c.places.length).flatMap((c) =>
+    c.channels.filter((ch) => !ch.sketch || !existsSync(path.join(renders, `${ch.sketch}.wav`))).map((ch) => `${c.id} (${ch.what})`));
+  if (unrendered.length) console.warn(`music: no render yet, so silent: ${unrendered.join(', ')}`);
 
   // The people of her day: the player's own character models with our skins (npc/people.ts).
   const enemyDir = findFile(baseDir, 'enemy');

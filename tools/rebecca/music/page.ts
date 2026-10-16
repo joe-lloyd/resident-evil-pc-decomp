@@ -37,9 +37,9 @@ function page(): string {
       c.places.length ? c.places.map(placeName).join(', ') : '',
       c.cutscenes.length ? `Cutscenes: ${c.cutscenes.map(sceneName).join('; ')}` : '',
     ].filter(Boolean);
-    return `<tr><td><b>${esc(c.title)}</b><br><span class="k k-${c.kind}">${KIND[c.kind]}</span>${c.sketch ? ' <span class="k">sketched</span>' : ''}</td>
+    return `<tr><td><b>${esc(c.title)}</b><br><span class="k k-${c.kind}">${KIND[c.kind]}</span>${c.channels.some((ch) => ch.sketch) ? ' <span class="k">sketched</span>' : ''}</td>
 <td>${esc(c.mood)}<div class="dim">${esc(c.sound)}</div></td>
-<td>${where.map(esc).join('<br>')}<div class="dim">Channels: ${c.channels.map(esc).join('; ')}</div></td></tr>`;
+<td>${where.map(esc).join('<br>')}<div class="dim">Channels: ${c.channels.map((ch) => esc(ch.what)).join('; ')}</div></td></tr>`;
   }).join('\n');
   const fresh = CUES.filter((c) => c.kind === 'new').length;
   return `<!doctype html>
