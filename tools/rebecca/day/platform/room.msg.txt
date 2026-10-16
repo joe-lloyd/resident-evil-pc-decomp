@@ -9,3 +9,6 @@
 8: \nThe drive's gearbox, open.\nThe big cog has sheared:\nfour teeth gone.\p{0}\nA spanner lies in the oil\nwhere it was dropped.
 9: \nThe gearbox, with its new\ncog.
 10: \nThe new cog goes on. I\ntighten it down with the\nspanner.
+11: \nThe wheel's turning. The\ncable runs out over the\ngorge and down.
+12: \nCar 4 is waiting for me.\nWhatever happened in it.
+13: \nIt beats staying up here.\nI'm going down.

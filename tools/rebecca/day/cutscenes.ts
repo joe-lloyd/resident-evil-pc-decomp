@@ -196,6 +196,62 @@ export const CUTSCENES: readonly Cutscene[] = [
       scd('set(FG_COMMON, 36, 0);  // canon: Chris met Rebecca'),
     ],
   },
+  {
+    // The gondola station (day/platform/scene.py), back out of the booth once
+    // Hal's key has turned: the bullwheel runs. The booth is the only way
+    // out to here from the key switch, so she stands at its door. Camera 2,
+    // from in front of the booth, has the car, the wheel house and the valley.
+    id: 'cut-gondola',
+    room: 'platform',
+    trigger: { on: 'step', step: 'gondola-runs' },
+    beats: [
+      place('her', { x: 22355, z: 10710, angle: 3072 }),
+      cut(2),
+      say("The wheel's turning. The cable runs out over the gorge and down."),
+      walk('her', { x: 14500, z: 14500 }),
+      say('Car 4 is waiting for me. Whatever happened in it.'),
+      say("It beats staying up here. I'm going down."),
+    ],
+  },
+  {
+    // The car (day/car/scene.py), stepping in from the platform: it lurches
+    // off, runs, and stops at the pylon with something on its roof. Camera 1
+    // has the clawed door and the valley; 0 the pylon through the south glass.
+    id: 'cut-pylon',
+    room: 'car',
+    trigger: { on: 'enter', from: 'platform' },
+    beats: [
+      cut(1),
+      shake(true),
+      say('The car lurches out over the gorge. Here we go.'),
+      wait(60),
+      shake(false),
+      wait(30),
+      say("It's stopped. We're hanging over the trees."),
+      shake(true),
+      wait(8),
+      shake(false),
+      say('Something just landed on the roof.'),
+      cut(0),
+      wait(20),
+      say("There's a pylon right ahead. A ladder goes down it."),
+    ],
+  },
+  {
+    // The lookout tower's top (day/tower-top/scene.py), up through the hatch
+    // from the stairs. Camera 3, out along the north catwalk, has the smoke
+    // in the valley and the mansion far off.
+    id: 'cut-tower',
+    room: 'tower-top',
+    trigger: { on: 'enter', from: 'tower-stairs' },
+    beats: [
+      cut(3),
+      wait(40),
+      say('From up here I can see the whole valley.'),
+      say("Smoke, down in the trees. That's where our helicopter came down."),
+      say('And past it, a roof. Some big old house out in the forest.'),
+    ],
+  },
 ];
 
 /**
