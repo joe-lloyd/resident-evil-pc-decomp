@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <cstring>          // memcpy, for the DC title sheet assembly
 #include "../system/AssetPath.h"
+extern void game_start(void);
 
 extern void logos_state(void);
 
@@ -748,6 +749,15 @@ void title_state(void)
 
     case 1:
         nullsub_0047eb80();
+        if (g_bRebMode) {
+            // Port addition: Rebecca's scenario has one player and its own
+            // opening, so NEW GAME skips the character select and its movie.
+            g_SelectedCharactedId = CHAR_REBECCA;
+            g_main_state_flags &= ~MSF_CHAR_VARIANT;
+            g_bGameActive = 2;
+            Task_chain((void*)game_start);
+            return;
+        }
         Task_chain((void*)characterSelectionScreen);
 
         // The character select starts the game itself (CharacterSelectionScreen
