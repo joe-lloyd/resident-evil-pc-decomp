@@ -30,6 +30,8 @@ const HEX_CRANK = 30;
 const FIRST_AID_SPRAY = 65;
 const CERBERUS = 2;
 const ADDER = 10;
+/** Crows only peck, and the Beretta takes minutes over them: she runs past. Standing to shoot, the trail's two killed her. */
+export const CROW = 5;
 
 const YARD = {
   pine: { x: 24310, z: 19380, w: 4930, d: 1360 },
@@ -182,7 +184,7 @@ export async function bridge(run: Run): Promise<void> {
   await run.picture('day-bridge-0');
   await heal(run);
   // Adders lie low in the grass and only strike close: walk past them.
-  useFightBack(9000, [ADDER]);
+  useFightBack(9000, [ADDER, CROW]);
   s = await goTo(link, run.dataDirs, 10200, 18700, { radius: 500 });
   run.log(s, 'on the bridge');
   await run.picture('day-bridge-mid');

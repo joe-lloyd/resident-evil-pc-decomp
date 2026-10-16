@@ -334,6 +334,7 @@ export async function face(link: GameLink, angle: number, tolerance = 100): Prom
   const start = await link.state();
   for (let i = 0; i < 40; i++) {
     const s = await throughTransition(link, await link.state());
+    checkAlive(s);
     // A touch door fired as she turned: the angle meant the room she left.
     if (s.stage !== start.stage || s.room !== start.room) return s;
     const turn = turnBetween(s.player.angle, angle);

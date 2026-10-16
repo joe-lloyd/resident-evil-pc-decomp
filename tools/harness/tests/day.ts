@@ -12,7 +12,7 @@
 import path from 'node:path';
 import { fetch, open, startRecording, stopRecording } from '../lab.ts';
 import { useFightBack } from '../flows.ts';
-import { bootFor, play, stretchNames } from '../day.ts';
+import { CROW, bootFor, play, stretchNames } from '../day.ts';
 import { Run } from '../scenario.ts';
 
 const args = process.argv.slice(2);
@@ -24,7 +24,7 @@ const first = args[0] ?? stretchNames[0]!;
 const last = args[1] ?? (args[0] ? first : stretchNames.at(-1)!);
 const overlay = process.env.OVERLAY;
 if (!overlay) throw new Error('set OVERLAY to the REB build folder');
-useFightBack();
+useFightBack(9000, [CROW]);
 const session = await open(Number(process.env.PORT ?? 7802), bootFor(first));
 const record = process.env.RECORD;
 const remoteVideo = record ? `${process.env.RE1_LAB_GAME_DIR ?? 'D:\\Games\\RE1-decomp'}\\${record}.mp4` : undefined;
