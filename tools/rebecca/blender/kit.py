@@ -115,13 +115,30 @@ class Room:
         x0, y0, x1, y1 = zone
         self.spots.append({"step": step, "zone": {"x0": reb.g(x0), "z0": reb.g(y0), "x1": reb.g(x1), "z1": reb.g(y1)}})
 
-    def state(self, step, pose):
+    def state(self, step, pose, motion=None, cameras=None, loop=False):
         """How the room looks once the plan's `step` has happened
-        (day/events.ts): pose(True) makes the change, pose(False) undoes it.
-        Rendered as a second background per camera and shown while the
-        step's flag is set (room.ts looks the flag up). It may not move a
-        mask() object, and the floor's walls stay as they were."""
-        self.states.append({"name": step, "bank": 1, "bit": -1, "set": pose})
+        (day/events.ts, or a key item on a lock: scripts.ts): pose(True)
+        makes the change, pose(False) undoes it. Rendered as a second background per
+        camera and shown while the step's flag is set (room.ts looks the
+        flag up). It may not move a mask() object, and the floor's walls
+        stay as they were.
+
+        motion=(frames, ticks) plays the change as it happens, through
+        `cameras` (default all): pose(t) then poses it part way, t from 0
+        to 1 (True is 1), so it must set things outright rather than move
+        them by a step.
+        loop=True renders the changed room through the scene's Anim too, for
+        a change in moving light; loop=f also calls f(k) on loop frame k, for
+        something that only moves once the change has happened (a wheel the
+        water now turns), f(0) being its rest."""
+        st = {"name": step, "bank": 1, "bit": -1, "set": pose}
+        if motion:
+            st["motion"] = {"frames": motion[0], "ticks": motion[1]}
+        if cameras is not None:
+            st["cameras"] = list(cameras)
+        if loop:
+            st["loop"] = loop
+        self.states.append(st)
 
     def ground(self, kind):
         """What the floor is underfoot, for her footsteps (sound/ground.ts):

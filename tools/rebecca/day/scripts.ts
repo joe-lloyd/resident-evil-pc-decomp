@@ -196,18 +196,20 @@ function lockItem(from: string, to: string): number | undefined {
  * item, so it stays open). The yard's shed door has 60.
  */
 export const LOCK_FLAGS = Array.from({ length: 20 }, (_, i) => 40 + i);
-const locks = new Map<string, { item: number; flag: number }>();
-function lockFor(from: string, to: string): { item: number; flag: number } | undefined {
-  const item = lockItem(from, to);
-  if (item === undefined) return undefined;
-  const key = `${from}>${to}`;
-  if (!locks.has(key)) {
-    const flag = LOCK_FLAGS[locks.size];
+/** Each locked way's key item and lock flag, by `from>to`, numbered in the plan's order so other tools can know them. */
+const LOCKS = new Map(
+  day.links.flatMap((l) => {
+    const item = lockItem(l.from, l.to);
+    return item === undefined ? [] : [{ key: `${l.from}>${l.to}`, item, step: l.opens! }];
+  }).map(({ key, item, step }, i) => {
+    const flag = LOCK_FLAGS[i];
     if (flag === undefined) throw new Error(`no lock flag left for ${key}`);
-    locks.set(key, { item, flag });
-  }
-  return locks.get(key);
-}
+    return [key, { item, flag, step }] as const;
+  }),
+);
+const lockFor = (from: string, to: string) => LOCKS.get(`${from}>${to}`);
+/** The lock flag the plan's step raises by unlocking its way, if it is a key item on a lock. */
+export const lockFlag = (step: string): number | undefined => [...LOCKS.values()].find((l) => l.step === step)?.flag;
 
 /** The door record's animation and lock bytes for a door from one room to another. */
 function doorAnim(from: string, to: string, walk: boolean): string {

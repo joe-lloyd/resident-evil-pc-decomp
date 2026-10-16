@@ -730,7 +730,15 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
     makes, shown while FG_SCENARIO (bank 0) or FG_COMMON (bank 1) flag `bit`
     is set. f(True) poses the change, f(False) undoes it; rendered as
     cam<N>.s-<name>.png. Neither may move a mask() object: masks are cut from
-    frame 0.
+    frame 0. A state may also have
+      "motion": {"frames": F, "ticks": T}: the change as it happens, f(k / F)
+        for k = 1 .. F - 1 rendered as cam<N>.m-<name>.<k>.png, for the
+        state's "cameras" (default all);
+      "loop": True or g: the changed room through the anim's loop, frames
+        1 .. N - 1 as cam<N>.s-<name>.a<k>.png, g(k) posed with each.
+
+    RE1_STATES=1 renders the states alone, over backgrounds already rendered
+    from the same scene.
     """
     os.makedirs(out_dir, exist_ok=True)
     scene = bpy.context.scene
@@ -745,7 +753,8 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
     if anim:
         meta["anim"] = {"frames": anim["frames"], "ticks": anim["ticks"]}
     if states:
-        meta["states"] = [{"name": st["name"], "bank": st["bank"], "bit": st["bit"]} for st in states]
+        meta["states"] = [{k: st[k] for k in ("name", "bank", "bit", "motion", "cameras") if k in st} | ({"loop": True} if st.get("loop") else {}) for st in states]
+    states_only = bool(os.environ.get("RE1_STATES"))
 
     walls = []
     for ob in scene.objects:
@@ -768,22 +777,43 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
     scene.cycles.seed = 0  # every render the same noise, so still parts match frame 0
     scene.cycles.use_animated_seed = False
 
-    def render_all(suffix):
+    def render_all(suffix, only=None):
         for i, cam in enumerate(cams):
+            if only is not None and i not in only:
+                continue
             scene.camera = cam
             scene.render.filepath = os.path.join(out_dir, f"cam{i}{suffix}.png")
             bpy.ops.render.render(write_still=True)
 
-    render_all("")
-    if anim and not preview:
-        for k in range(1, anim["frames"]):
-            anim["set"](k)
-            render_all(f".a{k}")
-        anim["set"](0)
-    for st in states if not preview else ():
+    if not states_only:
+        render_all("")
+        if anim and not preview:
+            for k in range(1, anim["frames"]):
+                anim["set"](k)
+                render_all(f".a{k}")
+            anim["set"](0)
+    for st in states if not preview or states_only else ():
+        name, only = st["name"], st.get("cameras")
         st["set"](True)
-        render_all(f".s-{st['name']}")
+        render_all(f".s-{name}")
+        loop = st.get("loop")
+        if loop and anim:
+            for k in range(1, anim["frames"]):
+                anim["set"](k)
+                if callable(loop):
+                    loop(k)
+                render_all(f".s-{name}.a{k}", only)
+            anim["set"](0)
+            if callable(loop):
+                loop(0)
+        motion = st.get("motion")
+        if motion:
+            for k in range(1, motion["frames"]):
+                st["set"](k / motion["frames"])
+                render_all(f".m-{name}.{k}", only)
         st["set"](False)
+    if states_only:
+        return
 
     # Foreground depth: tagged objects emit their depth, the rest hold out, so
     # they still hide what is behind them. One sample at the pixel centre, so

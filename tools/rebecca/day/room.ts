@@ -19,6 +19,7 @@ import { look } from './look.ts';
 import { keyItemModels, type ItemSpot, type PickupModel } from '../items/items.ts';
 import { ownPickup } from '../items/tmd.ts';
 import { EVENT_FLAGS, itemModelSlots } from './events.ts';
+import { lockFlag } from './scripts.ts';
 import { animFileName, buildAnim, type AnimLayer } from '../bganim.ts';
 import { buildMasks, maskPakName } from '../masks.ts';
 import { autoFloors, readDepth } from './floors.ts';
@@ -74,8 +75,14 @@ interface RoomJson {
   exit?: Rect;
   /** Looping animation: cam<N>.a<k>.png for k = 1 .. frames - 1, cam<N>.png being frame 0. */
   anim?: { frames: number; ticks: number };
-  /** Changes of state: cam<N>.s-<name>.png, shown while the flag is set. Bit -1: the flag of the puzzle step `name` (events.ts). */
-  states?: { name: string; bank: 0 | 1; bit: number }[];
+  /**
+   * Changes of state: cam<N>.s-<name>.png, shown while the flag is set. Bit
+   * -1: the flag of the plan step `name`, a puzzle's (events.ts) or a lock's
+   * (scripts.ts). With `loop`, cam<N>.s-<name>.a<k>.png loop with the room's
+   * anim where rendered; with `motion`, cam<N>.m-<name>.<k>.png play once
+   * as it happens, then the state.
+   */
+  states?: { name: string; bank: 0 | 1 | 2; bit: number; motion?: { frames: number; ticks: number }; loop?: boolean }[];
   /** A save room: where kit.item_box put the item box, whose lid is RE1's own (ITEM_BOX_LID). */
   saves?: { lid: { x: number; y: number; z: number; angle: number; scale?: number } } | null;
   /** Where the scene puts the key items she finds here (kit.Room.item). */
@@ -173,6 +180,16 @@ function zoneRecord(w: Writer, camTo: number, camFrom: number, r: Rect): void {
  * (the engine culls entities outside it), then a trigger into every other
  * camera's floor. The table ends with camFrom 0xFFFF.
  */
+/** The flag that shows a scene's change of state: its own, or the puzzle's (events.ts) or the lock's (scripts.ts) its name is the step of. */
+function stateFlag(slug: string, st: NonNullable<RoomJson['states']>[number]): NonNullable<AnimLayer['when']> {
+  if (st.bit >= 0) return { bank: st.bank, bit: st.bit, value: true };
+  const event = EVENT_FLAGS.get(st.name);
+  if (event !== undefined) return { bank: 1, bit: event, value: true };
+  const lock = lockFlag(st.name);
+  if (lock !== undefined) return { bank: 2, bit: lock, value: true };
+  throw new Error(`${slug}: state ${st.name} is no puzzle step of events.ts and no lock of scripts.ts`);
+}
+
 function switchZones(floors: readonly (Rect | readonly Rect[])[], bounds: Rect): Uint8Array {
   const w = new Writer();
   const margin = 1500;
@@ -324,11 +341,22 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
       for (let k = 1; k < json.anim.frames; k++) frames.push(look(readPng(path.join(renders, `cam${i}.a${k}.png`))));
       layers.push({ frames, ticks: json.anim.ticks });
     }
+    // Each state over the loop, then each one's motion over every state: as
+    // it plays it shows the whole change, so nothing jumps ahead of it.
+    const motions: AnimLayer[] = [];
     for (const st of json.states ?? []) {
-      const bit = st.bit >= 0 ? st.bit : EVENT_FLAGS.get(st.name);
-      if (bit === undefined) throw new Error(`${spec.slug}: state ${st.name} is no puzzle step of events.ts`);
-      layers.push({ frames: [look(readPng(path.join(renders, `cam${i}.s-${st.name}.png`)))], ticks: 0, when: { bank: st.bank, bit, value: true } });
+      const when = stateFlag(spec.slug, st);
+      const shot = (suffix: string) => path.join(renders, `cam${i}.${suffix}.png`);
+      const after = look(readPng(shot(`s-${st.name}`)));
+      const loop = st.loop && json.anim && existsSync(shot(`s-${st.name}.a1`));
+      const frames = loop ? [after, ...Array.from({ length: json.anim!.frames - 1 }, (_, k) => look(readPng(shot(`s-${st.name}.a${k + 1}`))))] : [after];
+      layers.push({ frames, ticks: loop ? json.anim!.ticks : 0, when });
+      if (st.motion && existsSync(shot(`m-${st.name}.1`))) {
+        const between = Array.from({ length: st.motion.frames - 1 }, (_, k) => look(readPng(shot(`m-${st.name}.${k + 1}`))));
+        motions.push({ frames: [...between, after], ticks: st.motion.ticks, when, once: true });
+      }
     }
+    layers.push(...motions);
     const anim = buildAnim(background, layers);
     if (anim) {
       mkdirSync(outMasks, { recursive: true });
