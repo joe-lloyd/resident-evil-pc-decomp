@@ -68,8 +68,9 @@ test("every room script's pickups and checks keep a quarter of their floor clear
   // and the hand-written rooms), in table order by aot id. A pickup must work
   // while it lies there, so it is held to every zone before it. A check or a
   // door is held only to the ones that stay: a pickup over it is gone once
-  // taken (the key on the ore cart, then Hal). A zone set again on the same
-  // floor is the other half of a puzzle spot (its use, then its message).
+  // taken (the key on the ore cart, then Hal). A check set again on the same
+  // floor is the other half of a puzzle spot (its use, then its message). A
+  // pickup never is, so it gets no such pass.
   type Aot = { id: number; pickup: boolean; name: string; zone: Zone };
   const bad: string[] = [];
   for (const slug of readdirSync(here)) {
@@ -87,7 +88,7 @@ test("every room script's pickups and checks keep a quarter of their floor clear
     const same = (p: Zone, q: Zone) => p.x0 === q.x0 && p.z0 === q.z0 && p.x1 === q.x1 && p.z1 === q.z1;
     for (const z of zones) {
       const before = zones.filter((o) => o.id < z.id && (z.pickup || !o.pickup));
-      if (before.some((o) => same(o.zone, z.zone))) continue;
+      if (!z.pickup && before.some((o) => same(o.zone, z.zone))) continue;
       let own = 0;
       let count = 0;
       const step = 50;
