@@ -3,19 +3,21 @@
 // save room music (Bgm_31, the player's own file); the ambience rooms are
 // silent. The mansion's save room keeps RE1's row. Then the scripts switch
 // channels as she works (plan/music.ts): opening the sluice brings the mill
-// in at once and in the camp's other rooms, and her first step into the
-// gallery switches the mine to the chase until she is out at the quarry. In
+// in at once and in the camp's other rooms, the generator brings the hum into
+// the station, the breakers bring the line's hum in at once, the pump stops
+// the mine's water at once, and her first step into the gallery switches the
+// mine to the chase until she is out at the quarry. In
 // Chris's game, RE1's save room still plays RE1's own track. The game
 // reports each BGM channel's file and whether it plays (TestMode.cpp); the
 // harness can't hear, so this is what it checks.
 //
 //   OVERLAY=<REB build> PORT=7801 RE1_LAB_GAME_DIR='D:\Games\RE1-decomp' node tools/harness/tests/music.ts
 import { open } from '../lab.ts';
-import type { GameLink } from '../link.ts';
+import { Key, type GameLink } from '../link.ts';
 import { settle, useItem } from '../flows.ts';
 import { Bank, flag, playingMusic, roomLabel, type GameState } from '../state.ts';
 import { dayRooms } from '../../rebecca/day/rooms.ts';
-import { EVENT_FLAGS, keyItem } from '../../rebecca/day/events.ts';
+import { EVENT_FLAGS, EVENTS, keyItem } from '../../rebecca/day/events.ts';
 import { read, stand } from './floor.ts';
 import { snapshot } from '../snapshot.ts';
 
@@ -92,6 +94,27 @@ async function go(link: GameLink, slug: string): Promise<void> {
   await settle(link, (x) => x.stage === st && x.room === rm);
 }
 
+/** Do a step of day/events.ts in its room as she would: stand at its spot, then use its item or press action. */
+async function work(link: GameLink, step: string): Promise<void> {
+  const e = EVENTS.find((x) => x.step === step)!;
+  await go(link, e.room);
+  const zone = read(e.room)!.spots!.find((sp) => sp.step === step)!.zone;
+  await stand(link, e.room, zone);
+  if (e.use) {
+    const id = keyItem(e.use).id;
+    if (!(await link.state()).items.some((it) => it.id === id)) await link.give(id, 1);
+    await useItem(link, id);
+    // The script waits a second after the status screen closes before it acts.
+    await link.frames(90);
+  } else {
+    await link.tap(Key.action, 3);
+    await link.frames(30);
+  }
+  const [st, rm] = slot(e.room);
+  await settle(link, (x) => x.stage === st && x.room === rm);
+  if (!flag(await link.state(), Bank.common, EVENT_FLAGS.get(step)!)) failures.push(`${step} did not happen`);
+}
+
 // Her mode.
 {
   const [stage, room] = slot(HER_ROOMS[0]![1]);
@@ -99,7 +122,7 @@ async function go(link: GameLink, slug: string): Promise<void> {
   try {
     const link = session.link;
     await settle(link, (s) => s.stage === stage && s.room === room);
-    for (const step of ['mill-race', 'drain']) await link.setFlag(Bank.common, EVENT_FLAGS.get(step)!, false);
+    for (const step of ['mill-race', 'generator-on', 'line-on', 'drain']) await link.setFlag(Bank.common, EVENT_FLAGS.get(step)!, false);
     // This tests her music, not her fights: the pond's zombie would grab her
     // at the sluice. Every enemy of her day has a kill flag in 186-254 of
     // bank 3 (day/foes.ts), and a set one keeps it out of its room.
@@ -115,21 +138,39 @@ async function go(link: GameLink, slug: string): Promise<void> {
     // The sluice: the mill joins at once in the pond, and plays in the sawmill after.
     await go(link, 'pond');
     await expectMusic(link, 'the pond before the sluice', ['Reb_camp', 'Reb_camp_2']);
-    const sluice = read('pond')!.spots!.find((sp) => sp.step === 'mill-race')!.zone;
-    const crank = keyItem('crank').id;
-    if (!(await link.state()).items.some((it) => it.id === crank)) await link.give(crank, 1);
-    await stand(link, 'pond', sluice);
-    await useItem(link, crank);
-    await link.frames(90);
-    const [ps, pr] = slot('pond');
-    await settle(link, (x) => x.stage === ps && x.room === pr);
+    await work(link, 'mill-race');
     await expectMusic(link, 'the pond, the sluice open: the mill joins', ['Reb_camp', 'Reb_camp_1', 'Reb_camp_2']);
-    if (!flag(await link.state(), Bank.common, EVENT_FLAGS.get('mill-race')!)) failures.push('the sluice did not open');
     console.log(`     ${await snapshot(link, shots, 'music-pond-sluice')}`);
     await go(link, 'sawmill');
     await expectMusic(link, 'the sawmill, the mill running', ['Reb_camp', 'Reb_camp_1']);
     await go(link, 'mess');
     await expectMusic(link, 'the mess, out of earshot of the mill', ['Reb_camp']);
+
+    // The generator: the hum joins the station the next time she is there.
+    await work(link, 'generator-on');
+    await expectMusic(link, 'the generator hut, running', ['Reb_road']);
+    await go(link, 'yard');
+    await expectMusic(link, 'the station yard, the power on: the hum joins', ['Reb_station', 'Reb_station_1']);
+    await go(link, 'shed');
+    await expectMusic(link, 'the tool shed, the hum through the door', ['Reb_station', 'Reb_station_1']);
+
+    // The breakers: the line hums at once in the switch house, and on the line track.
+    await work(link, 'line-on');
+    await expectMusic(link, 'the switch house, the breakers up: the line hums', ['Reb_road', 'Reb_road_2']);
+    console.log(`     ${await snapshot(link, shots, 'music-switch-line')}`);
+    await go(link, 'line-track');
+    await expectMusic(link, 'the line track, humming', ['Reb_road', 'Reb_road_2']);
+    await go(link, 'road');
+    await expectMusic(link, 'the forestry road, out of earshot of the line', ['Reb_road']);
+
+    // The pump: the mine's water stops at once in the junction, and in the tunnel.
+    await go(link, 'junction');
+    await expectMusic(link, 'the junction, flooded', ['Reb_mine', 'Reb_mine_1']);
+    await work(link, 'drain');
+    await expectMusic(link, 'the junction, the pump running: the water stops', ['Reb_mine']);
+    console.log(`     ${await snapshot(link, shots, 'music-junction-drain')}`);
+    await go(link, 'tunnel');
+    await expectMusic(link, 'the tunnel, drained', ['Reb_mine']);
 
     // The mine: her first step into the gallery switches its rooms to the chase.
     await go(link, 'gallery');
@@ -142,15 +183,15 @@ async function go(link: GameLink, slug: string): Promise<void> {
     await go(link, 'quarry');
     await expectMusic(link, 'the quarry, out of the mine', ['Reb_quarry', 'Reb_quarry_1']);
     await go(link, 'tunnel');
-    await expectMusic(link, 'the tunnel again: the mine, not the chase', ['Reb_mine', 'Reb_mine_1']);
+    await expectMusic(link, 'the tunnel again: the mine, drained, not the chase', ['Reb_mine']);
 
     // RE1's tracks loop; so does ours. The station's file is 96 s: in the yard
     // past its end, it must still be playing.
     await go(link, 'yard');
-    await expectMusic(link, 'the station yard again', ['Reb_station']);
+    await expectMusic(link, 'the station yard again', ['Reb_station', 'Reb_station_1']);
     const until = Date.now() + 100_000;
     while (Date.now() < until) await link.frames(150);
-    await expectMusic(link, 'the station yard, 100 s on: the loop', ['Reb_station']);
+    await expectMusic(link, 'the station yard, 100 s on: the loop', ['Reb_station', 'Reb_station_1']);
   } finally {
     session.end();
   }
