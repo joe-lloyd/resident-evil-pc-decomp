@@ -357,9 +357,16 @@ static void build_state(void)
     const char* room0 = room_sfx_file(0);
     const char* room1 = room_sfx_file(1);
     const SoundProbe& sp = g_soundProbe;
-    put("]},\"snd\":{\"set\":%d,\"walk\":\"%s\",\"steps\":%u,\"step\":\"%s\",\"door\":%d,\"room\":[\"%s\",\"%s\"],\"sfx\":%u,\"last\":\"%s\"}",
+    put("]},\"snd\":{\"set\":%d,\"walk\":\"%s\",\"steps\":%u,\"step\":\"%s\",\"door\":%d,\"room\":[\"%s\",\"%s\"],\"sfx\":%u,\"last\":\"%s\",\"recent\":[",
         set, walk ? walk : "", sp.step.plays, sp.step.last ? sp.step.last : "", (int)sp.roomSet,
         room0 ? room0 : "", room1 ? room1 : "", sp.room.plays, sp.room.last ? sp.room.last : "");
+    // The last eight room sounds, oldest first: a door or a walk can play several in a frame.
+    const unsigned int n = sp.room.plays < 8 ? sp.room.plays : 8;
+    for (unsigned int i = 0; i < n; i++) {
+        const char* f = sp.room.recent[(sp.room.plays - n + i) % 8];
+        put("%s\"%s\"", i ? "," : "", f ? f : "");
+    }
+    put("]}");
 }
 
 void TestMode_Tick(int gameFrame)

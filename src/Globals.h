@@ -2087,6 +2087,7 @@ const char* emsnd_slot_file(int slot);
 struct SoundProbeBank {
     unsigned int plays;  // sounds that found a loaded bank and started
     const char*  last;   // the WAV the last of them played
+    const char*  recent[8];  // the last eight, the newest at (plays - 1) % 8: a frame can play several
 };
 struct SoundProbe {
     SoundProbeBank step;     // PlayEntitySnd: her footsteps
@@ -2094,6 +2095,7 @@ struct SoundProbe {
     unsigned char  roomSet;  // the room sound set last loaded (a door record's +0x09)
 };
 extern SoundProbe g_soundProbe;
+void sound_probe_note(SoundProbeBank* b, const char* file);
 void LoadHeldItemsImages(void);
 void load_room_bg(void);
 void load_room_bg_image(void);

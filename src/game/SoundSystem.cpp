@@ -21,8 +21,9 @@ SoundProbe g_soundProbe;
 static const char* s_roomSfxFile[2];
 static const char* s_emSndFile[48];
 
-static void sound_probe_note(SoundProbeBank* b, const char* file)
+void sound_probe_note(SoundProbeBank* b, const char* file)
 {
+    b->recent[b->plays % 8] = file;
     b->plays++;
     b->last = file;
 }

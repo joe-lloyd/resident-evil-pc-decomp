@@ -64,8 +64,7 @@ void PlayGate(int i)
 {
     if (s_gate[i] == 0) return;
     SetSndSlot(s_gate[i], 0);
-    g_soundProbe.room.plays++;
-    g_soundProbe.room.last = kGateFile[i];
+    sound_probe_note(&g_soundProbe.room, kGateFile[i]);
 }
 
 unsigned short u16(const unsigned char* p) { return (unsigned short)(p[0] | (p[1] << 8)); }

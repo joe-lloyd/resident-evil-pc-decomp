@@ -52,6 +52,8 @@ export interface Sound {
   /** Sounds played from those two slots since launch, and the last one's WAV. */
   sfx: number;
   last: string;
+  /** The last eight of them (fewer since launch), oldest first: a frame can play several. */
+  recent: string[];
 }
 
 export interface GameState {
@@ -112,6 +114,14 @@ function str(o: Record<string, unknown>, key: string): string {
   const v = o[key];
   if (typeof v !== 'string') throw new ParseError(`${key}: not a string`);
   return v;
+}
+
+function strings(v: unknown, what: string): string[] {
+  if (!Array.isArray(v)) throw new ParseError(`${what}: not a list`);
+  return v.map((s, i) => {
+    if (typeof s !== 'string') throw new ParseError(`${what}[${i}]: not a string`);
+    return s;
+  });
 }
 
 function numbers(v: unknown, what: string, length: number): number[] {
@@ -190,6 +200,7 @@ function parseSound(o: Record<string, unknown>): Sound {
     room: [open, close],
     sfx: num(o, 'sfx'),
     last: str(o, 'last'),
+    recent: o.recent === undefined ? [] : strings(o.recent, 'snd.recent'),
   };
 }
 
