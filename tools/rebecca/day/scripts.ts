@@ -570,7 +570,7 @@ function main(): void {
       }
     }
     const compiled: Compiled[] = scenes.map((sc, n) =>
-      compileScene(sc, n, CUT_FLAGS.get(sc.id)!, { say, check: sceneChecks.get(sc.id), itemAction: (step) => keyActions.get(step), freeAction: () => id++, freeBit: () => bit++ }),
+      compileScene(sc, n, CUT_FLAGS.get(sc.id)!, { say, check: sceneChecks.get(sc.id), itemAction: (step) => keyActions.get(step), freeAction: () => id++, freeBit: () => bit++, arrival: (from) => kit.doors?.find((d) => d.to === from)?.arrive, floor }),
     );
     for (const c of compiled) lines.push(...c.init);
     main.push(...compiled.flatMap((c) => c.main));

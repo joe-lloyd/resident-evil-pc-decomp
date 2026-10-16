@@ -560,13 +560,14 @@ scd {
     set(FG_6, 23, 1);
     return;
 }
+dir_set(0, 0, 0, 0, 4420, 0, 8500);  // her, in from junction
 cutnext(0);
 message(132, 0, 0);  // her
 wait_voice();
-// She walks to (6800, 11000).
+// She walks to (6400, 11200).
 set_entity(ENT_PLAYER, 0);
 anim_begin();
-    anim_pose(2, 6800, 11000, 62);
+    anim_pose(2, 6400, 11200, 62);
 anim_end_release();
 do {
     yield();

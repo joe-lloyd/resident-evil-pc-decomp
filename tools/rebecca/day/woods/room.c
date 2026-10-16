@@ -42,19 +42,21 @@ scd {
     set(FG_6, 23, 1);
     return;
 }
+dir_set(0, 0, 0, 0, 6120, 0, 13770);  // her, in from yard
 cutnext(0);
 message(137, 0, 0);  // her
 wait_voice();
-// She walks to (9800, 11500).
+message(138, 0, 0);  // her
+wait_voice();
+// She walks to (9600, 10600).
 set_entity(ENT_PLAYER, 0);
 anim_begin();
-    anim_pose(2, 9800, 11500, 62);
+    anim_pose(2, 9600, 10600, 62);
 anim_end_release();
 do {
     yield();
 } while (ck(FG_ROOM, 62, 1));
-message(138, 0, 0);  // her
-wait_voice();
+cutnext(4);
 message(139, 0, 0);  // her
 wait_voice();
 set_entity(ENT_ENEMY, 6);
@@ -64,7 +66,7 @@ anim_begin();
 anim_end();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
-    anim_pose(6, 9800, 11500, 62);
+    anim_pose(6, 9600, 10600, 62);
 anim_end();
 do {
     yield();
@@ -135,7 +137,6 @@ anim_begin();
     anim_play(0, 63, 0);
     anim_flags(0, 16);
 anim_end();
-cutnext(1);
 // Dana walks to (14000, 5600).
 set_entity(ENT_ENEMY, 6);
 anim_begin();

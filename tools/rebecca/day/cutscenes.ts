@@ -40,20 +40,21 @@ export const CUTSCENES: readonly Cutscene[] = [
     // The woods (day/woods/scene.py): she comes in from the yard at the west
     // edge. Dana kneels over the drag marks by the flashlight; the drag goes
     // north past the blowdown to the hollow (den), whose way out is at the
-    // north edge. Camera 0 looks up the drag from the south-west, 1 back
-    // down it from the north edge.
+    // north edge. Camera 0 looks up the drag from the south-west; 4, from
+    // over the old blowdown, has the two of them side by side.
     id: 'cut-partner',
     room: 'woods',
-    trigger: { on: 'enter' },
+    trigger: { on: 'enter', from: 'yard' },
     cast: [{ who: 'dana', at: { x: 11300, z: 10000, angle: 1024 }, pose: [9, 24] }],
     beats: [
       cut(0),
       say('The drag marks go on into the trees. So does the blood.'),
-      walk('her', { x: 9800, z: 11500 }),
       say("Someone's up ahead, crouched over the marks."),
+      walk('her', { x: 9600, z: 10600 }),
+      cut(4),
       say('"Hello?"'),
       anim('dana', 0, true),
-      face('dana', { x: 9800, z: 11500 }),
+      face('dana', { x: 9600, z: 10600 }),
       line('dana', '"Don\'t move! ...You\'re not one of them."'),
       line('dana', '"Dana Whitlock, Forest Service. Who are you?"'),
       say('"Rebecca Chambers, S.T.A.R.S. I\'m a medic."'),
@@ -62,7 +63,6 @@ export const CUTSCENES: readonly Cutscene[] = [
       line('dana', '"They dragged him north, into the hollow."'),
       say('"Then I\'m coming with you."'),
       line('dana', '"Stay close. They\'re fast."'),
-      cut(1),
       walk('dana', { x: 14000, z: 5600 }),
       gone('dana'),
       say("She knows these woods. I'd better keep up."),
@@ -75,7 +75,7 @@ export const CUTSCENES: readonly Cutscene[] = [
     // from the east bank.
     id: 'cut-den',
     room: 'den',
-    trigger: { on: 'enter' },
+    trigger: { on: 'enter', from: 'woods' },
     cast: [{ who: 'dana', at: { x: 16000, z: 10600, angle: 1024 }, pose: [9, 24] }],
     beats: [
       cut(0),
@@ -99,11 +99,11 @@ export const CUTSCENES: readonly Cutscene[] = [
     // looks in from the foot of the decline.
     id: 'cut-mine-collapse',
     room: 'gallery',
-    trigger: { on: 'enter' },
+    trigger: { on: 'enter', from: 'junction' },
     beats: [
       cut(0),
       say("The water's cold. It's black. I can't see the floor."),
-      walk('her', { x: 6800, z: 11000 }),
+      walk('her', { x: 6400, z: 11200 }),
       shake(true),
       scd(...LOSS_START),
       wait(25),
@@ -148,7 +148,7 @@ export const CUTSCENES: readonly Cutscene[] = [
     // cockpit.
     id: 'cut-kevin',
     room: 'crash',
-    trigger: { on: 'enter' },
+    trigger: { on: 'enter', from: 'valley-path' },
     beats: [
       cut(7),
       say('The helicopter. This is where we came down.'),

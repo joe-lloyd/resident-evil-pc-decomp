@@ -42,6 +42,7 @@ scd {
     set(FG_6, 23, 1);
     return;
 }
+dir_set(0, 0, 2048, 0, 29750, 0, 14790);  // her, in from valley-path
 cutnext(7);
 message(139, 0, 0);  // her
 wait_voice();

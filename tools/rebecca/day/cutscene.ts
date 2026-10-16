@@ -11,6 +11,7 @@
 // mansion save room's (ROOM1000): letterbox bars and her controls off at the
 // start, both back and the camera free at the end.
 import { EVENT_FLAGS } from './events.ts';
+import type { Floor } from './foes.ts';
 
 /** The people of her day, and Chris at the end: RE1 character models (docs/REBECCA_NPC.md). */
 export const PEOPLE = {
@@ -77,8 +78,8 @@ export const scd = (...lines: string[]): Beat => ({ kind: 'scd', lines });
 
 /** What starts a scene. It runs once: its flag is set as it starts. */
 export type Trigger =
-  /** The first time she comes into the room. */
-  | { readonly on: 'enter' }
+  /** The first time she comes into the room, through its door from `from` (a room slug): she starts at that door's arrival. */
+  | { readonly on: 'enter'; readonly from: string }
   /** Pressing action at the scene's thing to examine: the room's check whose text starts with `check`. */
   | { readonly on: 'check'; readonly check: string }
   /** Walking into a part of the floor. */
@@ -118,6 +119,34 @@ export interface RoomContext {
   readonly itemAction: (step: string) => number | undefined;
   /** A free FG_ROOM bit in word 0 (cleared as the room loads). */
   readonly freeBit: () => number;
+  /** Where she arrives through the room's door from another room, by its slug. */
+  readonly arrival: (from: string) => Spot | undefined;
+  /** The room's floor, which every walk must keep to; RE1's own rooms have no records of it. */
+  readonly floor?: Floor;
+}
+
+/** How far a walker keeps from walls, gaps and doors: her body's reach. */
+const CLEAR = 400;
+
+/**
+ * Whether a straight walk from `a` to `b` keeps to the floor: inside its
+ * edge, clear of walls and gaps, and out of the doors, which would take her
+ * out of the room. A walk is a straight line in the engine, and one that
+ * meets a wall never arrives, so the scene would wait for ever.
+ */
+export function clearWalk(floor: Floor, a: Spot, b: Spot): boolean {
+  const out = (r: Rect, x: number, z: number, pad: number) => x < r.x0 - pad || x > r.x1 + pad || z < r.z0 - pad || z > r.z1 + pad;
+  const n = Math.max(1, Math.ceil(Math.hypot(b.x - a.x, b.z - a.z) / 100));
+  for (let i = 0; i <= n; i++) {
+    const x = a.x + ((b.x - a.x) * i) / n;
+    const z = a.z + ((b.z - a.z) * i) / n;
+    const fb = floor.bounds;
+    if (x < fb.x0 + CLEAR || x > fb.x1 - CLEAR || z < fb.z0 + CLEAR || z > fb.z1 - CLEAR) return false;
+    if (![...floor.walls, ...(floor.voids ?? [])].every((w) => out(w, x, z, CLEAR))) return false;
+    // She may start in a door's reach, having just come in; she must not walk into one.
+    if (i > 0 && !floor.doors.every((d) => out(d.zone, x, z, 0))) return false;
+  }
+  return true;
 }
 
 export interface Compiled {
@@ -242,6 +271,15 @@ export function compileScene(scene: Cutscene, event: number, flag: number, room:
   if (t.on === 'step') ev.push('wait_voice();');
   ev.push('scd {', ...begin.map((l) => `    ${l}`), '    set(FG_STATUS, 15, 0);', '    set(FG_6, 23, 1);', '    return;', '}');
 
+  // Where each walker is, as far as the scene knows, so each walk can be checked.
+  const where = new Map<Who, Spot>((scene.cast ?? []).map((c) => [c.who, c.at]));
+  if (t.on === 'enter') {
+    const at = room.arrival(t.from);
+    if (!at) throw new Error(`${scene.id}: ${scene.room} has no door from ${t.from}`);
+    ev.push(`dir_set(0, 0, ${at.angle ?? 0}, 0, ${at.x}, 0, ${at.z});  // her, in from ${t.from}`);
+    where.set('her', at);
+  }
+
   const entity = (who: Who) => (who === 'her' ? 'set_entity(ENT_PLAYER, 0);' : `set_entity(ENT_ENEMY, ${slotOf(who)});`);
   const waitDone = ['do {', '    yield();', `} while (ck(FG_ROOM, ${DONE_BIT}, 1));`];
   const animBlock = (who: Who, ops: string[]) => [entity(who), 'anim_begin();', ...ops.map((o) => `    ${o}`), who === 'her' ? 'anim_end_release();' : 'anim_end();'];
@@ -252,16 +290,21 @@ export function compileScene(scene: Cutscene, event: number, flag: number, room:
         ev.push(`cutnext(${b.camera});`);
         break;
       case 'place':
+        where.set(b.who, b.at);
         ev.push(
           b.who === 'her'
             ? `dir_set(0, 0, ${b.at.angle ?? 0}, 0, ${b.at.x}, 0, ${b.at.z});  // her`
             : `pos_set(${slotOf(b.who)}, 0, ${b.at.angle ?? 0}, 0, ${b.at.x}, 0, ${b.at.z});  // ${PEOPLE[b.who].name}`,
         );
         break;
-      case 'walk':
+      case 'walk': {
+        const from = where.get(b.who);
+        if (from && room.floor && !clearWalk(room.floor, from, b.to)) throw new Error(`${scene.id}: ${b.who === 'her' ? 'her' : PEOPLE[b.who].name + "'s"} walk from (${from.x}, ${from.z}) to (${b.to.x}, ${b.to.z}) leaves the floor or meets a wall`);
+        where.set(b.who, b.to);
         // anim_pose behaviour 2 walks to the point, 3 runs (npc_scd_02, player_scd_behavior_02).
         ev.push(`// ${b.who === 'her' ? 'She' : PEOPLE[b.who].name} ${b.run ? 'runs' : 'walks'} to (${b.to.x}, ${b.to.z}).`, ...animBlock(b.who, [`anim_pose(${b.run ? 3 : 2}, ${b.to.x}, ${b.to.z}, ${DONE_BIT});`]), ...waitDone);
         break;
+      }
       case 'face':
         ev.push(...animBlock(b.who, [`anim_pose(6, ${b.to.x}, ${b.to.z}, ${DONE_BIT});`]), ...waitDone);
         break;

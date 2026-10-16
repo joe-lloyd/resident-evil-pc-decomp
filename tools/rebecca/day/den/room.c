@@ -39,6 +39,7 @@ scd {
     set(FG_6, 23, 1);
     return;
 }
+dir_set(0, 0, 1024, 0, 15130, 0, 18020);  // her, in from woods
 cutnext(0);
 message(136, 0, 0);  // her
 wait_voice();
