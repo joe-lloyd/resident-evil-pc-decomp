@@ -9,3 +9,7 @@
 8: \nBoot prints in the mud,\nheading east.\p{0}\nThe others walked out.
 9: \nA rotor blade, buried in\nthat trunk.\p{0}\nIf anyone had been\nstanding here...
 10: \nThe trees are snapped off\nand burnt black, all the\nway along.\p{0}\nShe spun before she came\ndown.
+11: \nThe helicopter. This is\nwhere we came down.
+12: \nKevin. He's still belted\ninto his seat.
+13: \nHe flew us out here, and\nhe stayed with her.
+14: \n\oI'm sorry, Kevin. We\nnever came back for you."

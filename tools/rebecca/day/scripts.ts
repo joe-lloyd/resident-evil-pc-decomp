@@ -436,6 +436,7 @@ function main(): void {
     // check's (Hal's operator key on the ore cart), the action button takes
     // the key, and the check has its zone back once the key is taken. Their
     // models come after the supplies' and the map's (room.ts).
+    const keyActions = new Map((kit.items ?? []).map((it, i) => [it.step, id + i]));
     const specSlots = supplyModels(slug).length + mapModels(slug).length;
     lines.push(...keyItemLines(kit.items ?? [], keyFlags, id, specSlots));
     id += kit.items?.length ?? 0;
@@ -569,7 +570,7 @@ function main(): void {
       }
     }
     const compiled: Compiled[] = scenes.map((sc, n) =>
-      compileScene(sc, n, CUT_FLAGS.get(sc.id)!, { say, check: sceneChecks.get(sc.id), freeAction: () => id++, freeBit: () => bit++ }),
+      compileScene(sc, n, CUT_FLAGS.get(sc.id)!, { say, check: sceneChecks.get(sc.id), itemAction: (step) => keyActions.get(step), freeAction: () => id++, freeBit: () => bit++ }),
     );
     for (const c of compiled) lines.push(...c.init);
     main.push(...compiled.flatMap((c) => c.main));

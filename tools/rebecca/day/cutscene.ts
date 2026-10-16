@@ -53,6 +53,8 @@ export type Beat =
   | { readonly kind: 'shake'; readonly on: boolean }
   /** Take a person out of the room. */
   | { readonly kind: 'gone'; readonly who: Person }
+  /** Hand her a key item lying in the room (by its plan step): the game's own pickup screen. */
+  | { readonly kind: 'give'; readonly item: string }
   /** Raw SCD commands, run as the scene reaches them (the mine's gear loss). */
   | { readonly kind: 'scd'; readonly lines: readonly string[] };
 
@@ -70,6 +72,7 @@ export const wait = (frames: number): Beat => ({ kind: 'wait', frames });
 export const fade = (to: 'black' | 'clear'): Beat => ({ kind: 'fade', to });
 export const shake = (on: boolean): Beat => ({ kind: 'shake', on });
 export const gone = (who: Person): Beat => ({ kind: 'gone', who });
+export const give = (item: string): Beat => ({ kind: 'give', item });
 export const scd = (...lines: string[]): Beat => ({ kind: 'scd', lines });
 
 /** What starts a scene. It runs once: its flag is set as it starts. */
@@ -111,6 +114,8 @@ export interface RoomContext {
   readonly check?: { readonly id: number; readonly zone: Rect; readonly message: number };
   /** A free room action id, for a zone trigger. */
   readonly freeAction: () => number;
+  /** The room action id of the pickup of a key item (by its plan step) lying in the room. */
+  readonly itemAction: (step: string) => number | undefined;
   /** A free FG_ROOM bit in word 0 (cleared as the room loads). */
   readonly freeBit: () => number;
 }
@@ -131,6 +136,8 @@ const PERSON_SLOTS = [6, 7] as const;
 const DONE_BIT = 62;
 /** Gestures a person makes while talking, in turn: RE1's people share these (ROOM1000's talk). */
 const TALK = [34, 33, 37, 35] as const;
+/** Where a person who has left the room stands: far off every camera. */
+const OUT_OF_SIGHT = -30000;
 /** The idle loop in the people's built models (npc/people.ts swaps it into 0). */
 const IDLE = 0;
 
@@ -284,9 +291,20 @@ export function compileScene(scene: Cutscene, event: number, flag: number, room:
         ev.push(`set(FG_STATUS, 62, ${b.on ? 0 : 1});`);
         break;
       case 'gone':
-        // Clearing its status frees the slot: the person is no longer drawn or run.
-        ev.push(`eml_state(0, ${slotOf(b.who)}, 3, 0, 0);  // ${PEOPLE[b.who].name} leaves`);
+        // Out of the room: stood far outside every camera. Clearing the slot's
+        // status instead leaves g_enemy_count one too high, and the next shot
+        // reads a slot that isn't there (apply_weapon_damage).
+        ev.push(`pos_set(${slotOf(b.who)}, 0, 0, 0, ${OUT_OF_SIGHT}, 0, ${OUT_OF_SIGHT});  // ${PEOPLE[b.who].name} leaves`);
         break;
+      case 'give': {
+        // As Barry hands Jill the radio (ROOM4080): her controls on for the
+        // pickup screen, which the engine opens as if she had pressed action
+        // at the item, then off again.
+        const id = room.itemAction(b.item);
+        if (id === undefined) throw new Error(`${scene.id}: no ${b.item} lies in ${scene.room}`);
+        ev.push(`// She takes the ${b.item}.`, 'scd {', '    set(FG_6, 23, 0);', `    give_item(${id}, 4, 129);`, '    return;', '}', 'sleep(1);', 'set(FG_6, 23, 1);');
+        break;
+      }
       case 'scd':
         ev.push(...b.lines);
         break;

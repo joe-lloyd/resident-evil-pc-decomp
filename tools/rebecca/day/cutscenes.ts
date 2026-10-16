@@ -5,7 +5,8 @@
 // Positions are game units: a scene's metres times 1700 (blender/reb.py), its
 // x and y becoming x and z. Cameras are numbered as the scene's room.camera
 // calls are.
-import { cut, face, line, say, wait, type Cutscene } from './cutscene.ts';
+import { anim, cut, face, give, gone, line, say, scd, shake, wait, walk, type Cutscene } from './cutscene.ts';
+import { LOSS_START } from './gear.ts';
 
 export const CUTSCENES: readonly Cutscene[] = [
   {
@@ -33,6 +34,131 @@ export const CUTSCENES: readonly Cutscene[] = [
       wait(30),
       say('"Hal? Hal!"'),
       say("The line's dead.\nHe's in the mine, and he has the key."),
+    ],
+  },
+  {
+    // The woods (day/woods/scene.py): she comes in from the yard at the west
+    // edge. Dana kneels over the drag marks by the flashlight; the drag goes
+    // north past the blowdown to the hollow (den), whose way out is at the
+    // north edge. Camera 0 looks up the drag from the south-west, 1 back
+    // down it from the north edge.
+    id: 'cut-partner',
+    room: 'woods',
+    trigger: { on: 'enter' },
+    cast: [{ who: 'dana', at: { x: 11300, z: 10000, angle: 1024 }, pose: [9, 24] }],
+    beats: [
+      cut(0),
+      say('The drag marks go on into the trees. So does the blood.'),
+      walk('her', { x: 9800, z: 11500 }),
+      say("Someone's up ahead, crouched over the marks."),
+      say('"Hello?"'),
+      anim('dana', 0, true),
+      face('dana', { x: 9800, z: 11500 }),
+      line('dana', '"Don\'t move! ...You\'re not one of them."'),
+      line('dana', '"Dana Whitlock, Forest Service. Who are you?"'),
+      say('"Rebecca Chambers, S.T.A.R.S. I\'m a medic."'),
+      line('dana', '"These are my partner\'s tracks. The dogs took him."'),
+      say('"I was at his cabin. I\'m sorry."'),
+      line('dana', '"They dragged him north, into the hollow."'),
+      say('"Then I\'m coming with you."'),
+      line('dana', '"Stay close. They\'re fast."'),
+      cut(1),
+      walk('dana', { x: 14000, z: 5600 }),
+      gone('dana'),
+      say("She knows these woods. I'd better keep up."),
+    ],
+  },
+  {
+    // The hollow (day/den/scene.py): she comes down from the woods at the
+    // south edge. The ranger lies under the lip, his keys by him. Dana is
+    // there first, kneeling by him. Camera 0 looks in from the way down, 2
+    // from the east bank.
+    id: 'cut-den',
+    room: 'den',
+    trigger: { on: 'enter' },
+    cast: [{ who: 'dana', at: { x: 16000, z: 10600, angle: 1024 }, pose: [9, 24] }],
+    beats: [
+      cut(0),
+      say('The smell hits first. Then the flies.'),
+      walk('her', { x: 15200, z: 13600 }),
+      line('dana', '"It\'s him."'),
+      anim('dana', 0, true),
+      face('dana', { x: 15200, z: 13600 }),
+      cut(2),
+      line('dana', '"His truck keys. It\'s parked by the station."'),
+      give('truck-keys'),
+      line('dana', '"Take it. Get help, if there\'s any left."'),
+      say('"Come with me."'),
+      line('dana', '"Not yet. I\'m not leaving him like this."'),
+    ],
+  },
+  {
+    // The flooded gallery (day/gallery/scene.py), the first time in: she
+    // wades down from the junction at the west end, and the floor gives way
+    // under the water (gear.ts: her weapons and healing are gone). Camera 0
+    // looks in from the foot of the decline.
+    id: 'cut-mine-collapse',
+    room: 'gallery',
+    trigger: { on: 'enter' },
+    beats: [
+      cut(0),
+      say("The water's cold. It's black. I can't see the floor."),
+      walk('her', { x: 6800, z: 11000 }),
+      shake(true),
+      scd(...LOSS_START),
+      wait(25),
+      say("The floor's gone under me!"),
+      shake(false),
+      say('My bag, the gun... gone, down there in the dark.'),
+      say("I've got nothing left. Only my hands."),
+    ],
+  },
+  {
+    // The gallery again: Hal on the ore cart, by its south side. The scene
+    // starts as she wades past the half-sunk cart towards him. Camera 3
+    // looks back over the cart from the winze, 0 in from the decline.
+    id: 'cut-hal',
+    room: 'gallery',
+    trigger: { on: 'zone', zone: { x0: 8000, z0: 3400, x1: 10000, z1: 10700 } },
+    cast: [{ who: 'hal', at: { x: 12300, z: 9400, angle: 2048 }, after: { x: 12300, z: 9400, angle: 2048, pose: [4, 29] } }],
+    beats: [
+      cut(3),
+      line('hal', '"Over here... Don\'t come too close."'),
+      walk('her', { x: 10500, z: 9500 }),
+      face('hal', { x: 10500, z: 9500 }),
+      say('"Hal? I\'m Rebecca. We spoke on the phone."'),
+      cut(0),
+      line('hal', '"The medic. Then you know what this bite is."'),
+      say('"Let me look at your arm."'),
+      line('hal', '"It\'s past that. I can feel it in my blood."'),
+      line('hal', '"The drive key. Take it, quick."'),
+      give('op-key'),
+      line('hal', '"Get that car down the mountain. Don\'t stop."'),
+      anim('hal', 9),
+      say('"Hal!"'),
+      anim('hal', 4),
+      wait(30),
+      say("He's gone. There was nothing I could do."),
+    ],
+  },
+  {
+    // Bravo's helicopter (day/crash/scene.py): she comes in from the valley
+    // path at the east edge. Kevin is in the pilot's seat, in the scene.
+    // Camera 7 looks back down the swath to the helicopter, 3 is close on the
+    // cockpit.
+    id: 'cut-kevin',
+    room: 'crash',
+    trigger: { on: 'enter' },
+    beats: [
+      cut(7),
+      say('The helicopter. This is where we came down.'),
+      walk('her', { x: 24500, z: 14000 }),
+      cut(3),
+      wait(30),
+      say("Kevin. He's still belted into his seat."),
+      say('He flew us out here, and he stayed with her.'),
+      say('"I\'m sorry, Kevin. We never came back for you."'),
+      wait(30),
     ],
   },
 ];

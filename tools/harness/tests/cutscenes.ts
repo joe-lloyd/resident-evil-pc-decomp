@@ -114,8 +114,9 @@ async function moves(link: GameLink): Promise<boolean> {
 
 const lines = (c: Cutscene) => c.beats.filter((b) => b.kind === 'say').length;
 
-const first = roomOf(scenes[0]!.room);
-const session = await open(Number(process.env.PORT ?? 7801), `--mode REB --boot rebecca:${first.stage}:${first.room}`);
+// Boot in the ranger's cabin, which has no scene, so none starts before its checkpoint.
+const cabin = roomOf('lookout');
+const session = await open(Number(process.env.PORT ?? 7801), `--mode REB --boot rebecca:${cabin.stage}:${cabin.room}`);
 const link = session.link;
 const failures: string[] = [];
 try {
@@ -157,7 +158,7 @@ try {
         if (messageOnScreen(s)) {
           if (!seen.has(s.messageId)) {
             seen.add(s.messageId);
-            await link.frames(12); // let the text type out
+            await link.frames(30); // let the text type out
             await snapshot(link, dir, name(`line${s.messageId}`));
           }
           await link.tap(Key.action, 3);

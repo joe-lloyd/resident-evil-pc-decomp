@@ -6,3 +6,9 @@
 5: \nA hiker's jacket, shredded\non the roots.\p{0}\nI don't want to know where\nthe hiker is.
 6: \nA deer's skull, licked\nclean.
 7: \nWater dripping off the\nrock into a puddle. The\npuddle's red.
+8: \nThe smell hits first. Then\nthe flies.
+9: \n\oIt's him."
+10: \n\oHis truck keys. It's\nparked by the station."
+11: \n\oTake it. Get help, if\nthere's any left."
+12: \n\oCome with me."
+13: \n\oNot yet. I'm not leaving\nhim like this."

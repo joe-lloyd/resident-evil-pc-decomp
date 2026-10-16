@@ -21,11 +21,55 @@ if (ck(FG_ITEM, 194, 0)) {  // beretta
 if (ck(FG_ITEM, 195, 0)) {  // clip
     item_aot_set(13, 1120, 22200, 1200, 1200, 11, 15, 1, 255, 184, 6, 0, 0, 16, 89, 0, 0, 195, 129, 0, 0);
 }
+// cut-kevin (day/cutscenes.ts): its people, and what starts it. FG_COMMON 120 once it has run.
 return;
 
 // main procedure 0
 if (ck(FG_COMMON, 248, 1)) {
     set(FG_COMMON, 248, 0);
-    message(128, 255, 0);
+}
+if (ck(FG_COMMON, 120, 1)) {
+    set(FG_COMMON, 120, 0);
+    evt_exec(0, 9, 0);
+}
+return;
+
+// event procedure 0
+// cut-kevin (day/cutscenes.ts)
+scd {
+    set(FG_COMMON, 120, 0);
+    set(FG_STATUS, 15, 0);
+    set(FG_6, 23, 1);
+    return;
+}
+cutnext(7);
+message(139, 0, 0);  // her
+wait_voice();
+// She walks to (24500, 14000).
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_pose(2, 24500, 14000, 62);
+anim_end_release();
+do {
+    yield();
+} while (ck(FG_ROOM, 62, 1));
+cutnext(3);
+sleep(30);
+message(140, 0, 0);  // her
+wait_voice();
+message(141, 0, 0);  // her
+wait_voice();
+message(142, 0, 0);  // her
+wait_voice();
+sleep(30);
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_idle();
+anim_end_release();
+scd {
+    set(FG_STATUS, 15, 1);
+    cut_auto(0);
+    set(FG_6, 23, 0);
+    return;
 }
 return;

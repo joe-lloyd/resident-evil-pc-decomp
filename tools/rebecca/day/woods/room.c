@@ -14,13 +14,147 @@ aot_set(7, 11560, 6800, 1870, 1530, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 aot_set(8, 13260, 5100, 3060, 2720, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
 aot_set(9, 20400, 7820, 3570, 3230, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
 aot_set(10, 28220, 19890, 2380, 2550, SCE_MESSAGE, 129, 136, 0, 255, 0, 0, 0);
-enemy(2, 1, 188, 1, 2, 0, 0, 2988, 0, 0, 29600, 0, 4100, 0, 0, 0, 0);  // a cerberus
-enemy(2, 1, 189, 1, 2, 0, 0, 1554, 0, 0, 15660, 0, 22800, 1, 0, 0, 0);  // a cerberus
+if (ck(FG_COMMON, 116, 0)) {
+    enemy(2, 1, 188, 1, 2, 0, 0, 2988, 0, 0, 29600, 0, 4100, 0, 0, 0, 0);  // a cerberus
+    enemy(2, 1, 189, 1, 2, 0, 0, 1554, 0, 0, 15660, 0, 22800, 1, 0, 0, 0);  // a cerberus
+}
+// cut-partner (day/cutscenes.ts): its people, and what starts it. FG_COMMON 116 once it has run.
+if (ck(FG_COMMON, 116, 1)) {
+    enemy(33, 0, 255, 1, 2, 0, 0, 1024, 0, 0, 11300, 0, 10000, 6, 9, 24, 0);  // Dana
+}
 return;
 
 // main procedure 0
 if (ck(FG_COMMON, 209, 1)) {
     set(FG_COMMON, 209, 0);
-    message(128, 255, 0);
+}
+if (ck(FG_COMMON, 116, 1)) {
+    set(FG_COMMON, 116, 0);
+    evt_exec(0, 9, 0);
+}
+return;
+
+// event procedure 0
+// cut-partner (day/cutscenes.ts)
+scd {
+    set(FG_COMMON, 116, 0);
+    set(FG_STATUS, 15, 0);
+    set(FG_6, 23, 1);
+    return;
+}
+cutnext(0);
+message(137, 0, 0);  // her
+wait_voice();
+// She walks to (9800, 11500).
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_pose(2, 9800, 11500, 62);
+anim_end_release();
+do {
+    yield();
+} while (ck(FG_ROOM, 62, 1));
+message(138, 0, 0);  // her
+wait_voice();
+message(139, 0, 0);  // her
+wait_voice();
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_play(0, 62, 0);
+    anim_flags(0, 16);
+anim_end();
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_pose(6, 9800, 11500, 62);
+anim_end();
+do {
+    yield();
+} while (ck(FG_ROOM, 62, 1));
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_play(34, 63, 0);
+    anim_flags(0, 16);
+anim_end();
+message(140, 0, 0);  // Dana
+wait_voice();
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_play(0, 63, 0);
+    anim_flags(0, 16);
+anim_end();
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_play(33, 63, 0);
+    anim_flags(0, 16);
+anim_end();
+message(141, 0, 0);  // Dana
+wait_voice();
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_play(0, 63, 0);
+    anim_flags(0, 16);
+anim_end();
+message(142, 0, 0);  // her
+wait_voice();
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_play(37, 63, 0);
+    anim_flags(0, 16);
+anim_end();
+message(143, 0, 0);  // Dana
+wait_voice();
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_play(0, 63, 0);
+    anim_flags(0, 16);
+anim_end();
+message(144, 0, 0);  // her
+wait_voice();
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_play(35, 63, 0);
+    anim_flags(0, 16);
+anim_end();
+message(145, 0, 0);  // Dana
+wait_voice();
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_play(0, 63, 0);
+    anim_flags(0, 16);
+anim_end();
+message(146, 0, 0);  // her
+wait_voice();
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_play(34, 63, 0);
+    anim_flags(0, 16);
+anim_end();
+message(147, 0, 0);  // Dana
+wait_voice();
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_play(0, 63, 0);
+    anim_flags(0, 16);
+anim_end();
+cutnext(1);
+// Dana walks to (14000, 5600).
+set_entity(ENT_ENEMY, 6);
+anim_begin();
+    anim_pose(2, 14000, 5600, 62);
+anim_end();
+do {
+    yield();
+} while (ck(FG_ROOM, 62, 1));
+pos_set(6, 0, 0, 0, -30000, 0, -30000);  // Dana leaves
+message(148, 0, 0);  // her
+wait_voice();
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_idle();
+anim_end_release();
+scd {
+    set(FG_STATUS, 15, 1);
+    cut_auto(0);
+    set(FG_6, 23, 0);
+    return;
 }
 return;
