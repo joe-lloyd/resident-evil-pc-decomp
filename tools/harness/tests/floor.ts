@@ -1,10 +1,12 @@
 // What the game tests know of a kit room from its scene's records
 // (day/<slug>/renders/room.json) and its script (room.c): where she can walk
 // from where she comes in, and which doors open on the action button.
-// tour.ts and puzzles.ts share it.
+// tour.ts, puzzles.ts and music.ts share it.
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import type { GameLink } from '../link.ts';
+import { faceTowards } from '../flows.ts';
 
 export const day = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', '..', 'rebecca', 'day');
 export type Rect = { x0: number; z0: number; x1: number; z1: number };
@@ -109,4 +111,24 @@ export function outward(json: Json, zone: Rect): [number, number] {
   ];
   const [, dx, dz] = edges.sort((p, q) => p[0] - q[0])[0]!;
   return [cx + dx * 3000, cz + dz * 3000];
+}
+
+/** How far ahead of her the game looks for a zone she is acting on or using an item at (update_player_position). */
+const REACH = 600;
+
+/** Stand her where the point she reaches falls in the spot, facing its middle. */
+export async function stand(link: GameLink, slug: string, zone: Rect): Promise<void> {
+  const json = read(slug)!;
+  const touch = (json.doors ?? []).filter((d) => !opens(slug, d.zone)).map((d) => d.zone);
+  const cx = (zone.x0 + zone.x1) / 2;
+  const cz = (zone.z0 + zone.z1) / 2;
+  const reaches = ([x, z]: [number, number]) => {
+    const d = Math.hypot(cx - x, cz - z) || 1;
+    return inside(zone, x + ((cx - x) / d) * REACH, z + ((cz - z) / d) * REACH);
+  };
+  const at = nearest(walkable(json, touch), cx, cz, reaches);
+  if (!at) throw new Error('nowhere she can walk to reaches its spot');
+  await link.place(at[0], at[1]);
+  await link.frames(6);
+  await faceTowards(link, cx, cz);
 }
