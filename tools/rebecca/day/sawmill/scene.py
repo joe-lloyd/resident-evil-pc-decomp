@@ -685,7 +685,9 @@ def build():
     room.check((sx0, sy0 - 0.7, sx1, sy0), "Blood, thrown across the boards in a long fan.\nThe saw was running when it happened.")
     room.check((bx - 1.6, by + 1.0, bx - 0.6, by + 1.6), "The head saw. There's still a log on the carriage, half cut.\nSomeone threw the belt off to stop the blade.")
     room.check((11.6, SHAFT_Y + 0.6, 13.6, SHAFT_Y + 1.6), "The water wheel's shaft. The belt to the saw's been thrown off.\nThe line shaft for the crane is still belted to it.")
-    room.spot("crane", (tx - 0.9, RAIL_Y[1], tx + 0.9, RAIL_Y[1] + 0.8))  # day/events.ts says what she sees and does here
+    # South of the hook, where the game shows her through camera 0, which sees
+    # the crane run; by the rails it is the saw's close camera, which doesn't.
+    room.spot("crane", (tx - 0.8, RAIL_Y[1] + 1.0, tx + 0.8, RAIL_Y[1] + 1.6))  # day/events.ts says what she sees and does here
     room.check((X1 - 1.0, BACK_DOOR[0] - 0.5, X1, BACK_DOOR[0]), "A bloody hand on the back door's frame.\nHe went out this way.")
     room.check((6.4, Y1 - 0.6, 7.6, Y1), "Board feet cut: Monday 4100. Tuesday 3850. Wednesday 1200.\nThen nothing.")
     room.check((17.0, wb[2], 18.6, wb[2] + 0.6), "Somebody's in the race. Face down, going round and round in the eddy.\nThe tailer. He worked the boards off the saw.")
