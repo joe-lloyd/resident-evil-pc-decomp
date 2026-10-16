@@ -635,62 +635,69 @@ function main(): void {
     writeFileSync(file, next);
     console.log(`${slug}: ways into the kit rooms written`);
   }
-  writeSaveRoomScenes();
+  writeScriptedScenes();
 }
 
 /**
- * The mansion's save room is RE1's own room with a hand-written script
- * (rooms/ROOM1000.c). Its scenes go between markers in that script's init and
- * main and after its last procedure, and their lines after the room's own
- * messages.
+ * Rooms whose scripts are written by hand that hold scenes: the mansion's
+ * save room, RE1's own (rooms/ROOM1000.c), and the ridge. Their scenes go
+ * between markers in the script's init and main and after its last
+ * procedure, and their lines after the room's own messages. `own` counts
+ * those; `action` and `bit` are the first room action id and FG_ROOM bit the
+ * script leaves free.
  */
-const SAVE_SCRIPT = path.join(here, '..', 'rooms', 'ROOM1000.c');
-const SAVE_MESSAGES = path.join(here, '..', 'rooms', 'ROOM1000.msg.txt');
-/** The room's own messages, 0-47, which the scenes' lines follow. */
-const SAVE_OWN_MESSAGES = 48;
-/** Room action ids the hand-written script leaves free, and FG_ROOM bits. */
-const SAVE_FREE_ACTION = 9;
-const SAVE_FREE_BIT = 12;
+const SCRIPTED: Record<string, { file: string; own: number; action: number; bit: number; arrive: Record<string, Arrive> }> = {
+  save: { file: path.join(here, '..', 'rooms', 'ROOM1000'), own: 48, action: 9, bit: 12, arrive: { crawl: GAME_ROOMS.save!.arrive } },
+  ridge: { file: path.join(here, 'ridge', 'room'), own: 3, action: 3, bit: 0, arrive: {} },
+};
 
-function between(text: string, name: string, lines: readonly string[]): string {
+function between(file: string, text: string, name: string, lines: readonly string[]): string {
   const begin = `// ${name} (day/scripts.ts writes these)`;
   const end = `// END ${name}`;
   const at = text.indexOf(begin);
   const stop = text.indexOf(end);
-  if (at < 0 || stop < at) throw new Error(`rooms/ROOM1000.c has no ${begin} ... ${end}`);
+  if (at < 0 || stop < at) throw new Error(`${file} has no ${begin} ... ${end}`);
   return text.slice(0, at) + [begin, ...lines, end].join('\n') + text.slice(stop + end.length);
 }
 
-function writeSaveRoomScenes(): void {
-  const own = readFileSync(SAVE_MESSAGES, 'utf8').split('\n').filter((l) => {
-    const m = /^(\d+):/.exec(l);
-    return m && Number(m[1]) < SAVE_OWN_MESSAGES;
-  });
-  if (own.length !== SAVE_OWN_MESSAGES) throw new Error(`rooms/ROOM1000.msg.txt: expected its own ${SAVE_OWN_MESSAGES} messages, found ${own.length}`);
-  const msgs: string[] = [];
-  const say = (text: string) => 128 + SAVE_OWN_MESSAGES + msgs.push(text) - 1;
-  let action = SAVE_FREE_ACTION;
-  let bit = SAVE_FREE_BIT;
-  const arrive = GAME_ROOMS.save!.arrive;
-  const compiled = scenesIn('save').map((sc, n) =>
-    compileScene(sc, n, CUT_FLAGS.get(sc.id)!, {
-      say,
-      freeAction: () => action++,
-      freeBit: () => bit++,
-      itemAction: () => undefined,
-      arrival: (from) => (from === 'crawl' ? arrive : undefined),
-    }),
-  );
-  let text = readFileSync(SAVE_SCRIPT, 'utf8');
-  text = between(text, 'CUTSCENES INIT', compiled.flatMap((c) => c.init));
-  text = between(text, 'CUTSCENES MAIN', compiled.flatMap((c) => c.main));
-  const events = '// CUTSCENE EVENTS (day/scripts.ts writes these, to the end of the file)';
-  const at = text.indexOf(events);
-  if (at < 0) throw new Error(`rooms/ROOM1000.c has no ${events}`);
-  text = text.slice(0, at) + [events, ...compiled.flatMap((c) => ['', ...c.event])].join('\n') + '\n';
-  writeFileSync(SAVE_SCRIPT, text);
-  writeFileSync(SAVE_MESSAGES, [...own, ...msgs.map((m, i) => message(SAVE_OWN_MESSAGES + i, m))].join('\n') + '\n');
-  console.log(`save: ${compiled.length} scenes written into rooms/ROOM1000.c`);
+function writeScriptedScenes(): void {
+  for (const [slug, room] of Object.entries(SCRIPTED)) {
+    const script = `${room.file}.c`;
+    const messages = `${room.file}.msg.txt`;
+    const own = readFileSync(messages, 'utf8').split('\n').filter((l) => {
+      const m = /^(\d+):/.exec(l);
+      return m && Number(m[1]) < room.own;
+    });
+    if (own.length !== room.own) throw new Error(`${messages}: expected its own ${room.own} messages, found ${own.length}`);
+    const msgs: string[] = [];
+    const say = (text: string) => 128 + room.own + msgs.push(text) - 1;
+    let action = room.action;
+    let bit = room.bit;
+    // A room with a scene record (renders/room.json) has its floor checked.
+    const json = path.join(here, slug, 'renders', 'room.json');
+    const kit = existsSync(json) ? (JSON.parse(readFileSync(json, 'utf8')) as KitJson) : undefined;
+    const floor: Floor | undefined = kit && { bounds: kit.bounds, walls: kit.walls, voids: kit.voids, doors: [] };
+    const compiled = scenesIn(slug).map((sc, n) =>
+      compileScene(sc, n, CUT_FLAGS.get(sc.id)!, {
+        say,
+        freeAction: () => action++,
+        freeBit: () => bit++,
+        itemAction: () => undefined,
+        arrival: (from) => room.arrive[from],
+        floor,
+      }),
+    );
+    let text = readFileSync(script, 'utf8');
+    text = between(script, text, 'CUTSCENES INIT', compiled.flatMap((c) => c.init));
+    text = between(script, text, 'CUTSCENES MAIN', compiled.flatMap((c) => c.main));
+    const events = '// CUTSCENE EVENTS (day/scripts.ts writes these, to the end of the file)';
+    const at = text.indexOf(events);
+    if (at < 0) throw new Error(`${script} has no ${events}`);
+    text = text.slice(0, at) + [events, ...compiled.flatMap((c) => ['', ...c.event])].join('\n') + '\n';
+    writeFileSync(script, text);
+    writeFileSync(messages, [...own, ...msgs.map((m, i) => message(room.own + i, m))].join('\n') + '\n');
+    console.log(`${slug}: ${compiled.length} scenes written into its hand-written script`);
+  }
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) main();

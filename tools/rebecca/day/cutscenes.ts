@@ -252,6 +252,26 @@ export const CUTSCENES: readonly Cutscene[] = [
       say('And past it, a roof. Some big old house out in the forest.'),
     ],
   },
+  {
+    // The ridge (day/ridge/scene.py, a hand-written room) as her day starts:
+    // Billy has just gone into the trees. She walks out between the boulders
+    // towards the edge. Camera 0 looks from the back of the clearing out over
+    // the edge to the valley; 1 from the edge back at the rock face.
+    id: 'cut-opening',
+    room: 'ridge',
+    trigger: { on: 'enter' },
+    beats: [
+      cut(0),
+      place('her', { x: 7000, z: 6200, angle: 3072 }),
+      wait(30),
+      say('July 24th, 1998. 5:40 AM.'),
+      say('The sun is coming up over the Arklay Mountains.'),
+      walk('her', { x: 7000, z: 8400 }),
+      wait(20),
+      say("Billy's gone. It's just me now."),
+      say('The valley first. Then the others.'),
+    ],
+  },
 ];
 
 /**

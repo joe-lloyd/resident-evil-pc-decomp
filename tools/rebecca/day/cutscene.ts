@@ -78,8 +78,12 @@ export const scd = (...lines: string[]): Beat => ({ kind: 'scd', lines });
 
 /** What starts a scene. It runs once: its flag is set as it starts. */
 export type Trigger =
-  /** The first time she comes into the room, through its door from `from` (a room slug): she starts at that door's arrival. */
-  | { readonly on: 'enter'; readonly from: string }
+  /**
+   * The first time she is in the room. Through its door from `from` (a room
+   * slug), she starts at that door's arrival; without one (the ridge, where
+   * her day starts) she stays where she is.
+   */
+  | { readonly on: 'enter'; readonly from?: string }
   /** Pressing action at the scene's thing to examine: the room's check whose text starts with `check`. */
   | { readonly on: 'check'; readonly check: string }
   /** Walking into a part of the floor. */
@@ -273,7 +277,7 @@ export function compileScene(scene: Cutscene, event: number, flag: number, room:
 
   // Where each walker is, as far as the scene knows, so each walk can be checked.
   const where = new Map<Who, Spot>((scene.cast ?? []).map((c) => [c.who, c.at]));
-  if (t.on === 'enter') {
+  if (t.on === 'enter' && t.from !== undefined) {
     const at = room.arrival(t.from);
     if (!at) throw new Error(`${scene.id}: ${scene.room} has no door from ${t.from}`);
     ev.push(`dir_set(0, 0, ${at.angle ?? 0}, 0, ${at.x}, 0, ${at.z});  // her, in from ${t.from}`);

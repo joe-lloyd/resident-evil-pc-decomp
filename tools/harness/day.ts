@@ -6,6 +6,7 @@ import { check, fight, goTo, settle, useFightBack, useItem } from './flows.ts';
 import type { GameLink } from './link.ts';
 import { Run, commonFlag, inRoom } from './scenario.ts';
 import type { GameState } from './state.ts';
+import { CUT_FLAGS } from '../rebecca/day/cutscenes.ts';
 
 export const DAY = {
   trail: { stage: 2, room: 0x12 },
@@ -61,12 +62,14 @@ async function checkUntil(run: Run, zone: { x: number; z: number; w: number; d: 
   return s;
 }
 
-/** The ridge: the opening monologue, then the path east down to the trail. */
+/** FG_COMMON flag of the opening scene on the ridge (rebecca/day/cutscenes.ts). */
+const OPENING = CUT_FLAGS.get('cut-opening')!;
+
+/** The ridge: the opening scene, then the path east down to the trail. */
 export async function ridge(run: Run): Promise<void> {
   const { link } = run;
-  const opening = run.expectMessage(0x80, 'the opening', 60_000);
   let s = await settle(link, (st) => inRoom(st, DAY.ridge));
-  if (!(await opening())) run.fail('the opening monologue never showed');
+  if (!commonFlag(s, OPENING)) run.fail('the opening scene never played');
   run.log(s, 'on the ridge');
   await run.picture('day-ridge');
   s = await goTo(link, run.dataDirs, 12800, 5300, { radius: 400 });
@@ -209,7 +212,7 @@ export interface Checkpoint {
 }
 
 // Flag banks: 1 FG_COMMON, 2 FG_LOCK, 3 FG_ENEMY (set = dead), 7 FG_ITEM (clear = taken).
-const SEEN_RIDGE: FlagSet = [1, 200, true];
+const SEEN_RIDGE: FlagSet = [1, OPENING, true];
 const SEEN_YARD: FlagSet = [1, 202, true];
 const SEEN_CABIN: FlagSet = [1, 201, true];
 const SEEN_SHED: FlagSet = [1, 203, true];

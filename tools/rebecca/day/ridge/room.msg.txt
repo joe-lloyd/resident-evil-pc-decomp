@@ -1,4 +1,7 @@
-0: \nJuly 24th, 1998. 5:40 AM.\p{0}\nThe sun is coming up over\nthe Arklay Mountains.\p{0}\nThe valley first. Then\nthe others.
-1: \nThe trail goes down through\nthe pines.
-2: \nThe training facility is\nstill burning down there.\p{0}\nNo one could have lived\nthrough that.
-3: \nSheer rock. There's no way\nup from here.
+0: \nThe trail goes down through\nthe pines.
+1: \nThe training facility is\nstill burning down there.\p{0}\nNo one could have lived\nthrough that.
+2: \nSheer rock. There's no way\nup from here.
+3: \nJuly 24th, 1998. 5:40 AM.
+4: \nThe sun is coming up over\nthe Arklay Mountains.
+5: \nBilly's gone. It's just me\nnow.
+6: \nThe valley first. Then the\nothers.
