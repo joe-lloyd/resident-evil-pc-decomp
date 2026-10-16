@@ -232,7 +232,12 @@ Built so far, beyond the list above:
 - **Moving backgrounds** (`src/game/BgAnim.cpp`, `tools/rebecca/bganim.ts`):
   Blender renders a loop of frames and any changes of state; the builder keeps
   the 16-pixel tiles that differ from the background, and the engine patches
-  the background texture as the game runs.
+  the background texture as the game runs. A change of state
+  (`kit.Room.state`) is shown while its puzzle's or lock's flag is set; with
+  `motion` it also plays once as it happens, from the moment the flag
+  turns, and with `loop` the changed room moves on in the room's loop (a
+  wheel the water now turns). `tools/harness/tests/changes.ts` works each
+  one in the game and takes pictures before, during and after.
 - **Camera floors worked out from the scene** (`tools/rebecca/day/floors.ts`):
   each half metre of floor goes to the camera that shows her whole, unhidden
   and nearest the middle of the screen. `coverage.ts` prints the map and the
