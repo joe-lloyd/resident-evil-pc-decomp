@@ -12,8 +12,12 @@
 //   through a gate opens and shuts it; the ladder up through the hatch.
 // - Chris's game keeps RE1's own: his steps are RE1's, and no loop plays.
 //
-//   OVERLAY=<REB build> PORT=7811 RE1_LAB_GAME_DIR='D:\Games\RE1-files' node tools/harness/tests/sound.ts
+//   OVERLAY=<REB build> PORT=7811 RE1_LAB_GAME_DIR='D:\Games\RE1-files' node tools/harness/tests/sound.ts [out dir]
+//
+// It saves a picture of her on each floor and through each door in the out
+// dir, /tmp/rebecca-sound-game by default.
 import { open } from '../lab.ts';
+import { snapshot } from '../snapshot.ts';
 import { Key, type GameLink } from '../link.ts';
 import { headingTo, settle } from '../flows.ts';
 import { Bank, roomLabel, type GameState } from '../state.ts';
@@ -31,6 +35,9 @@ import { day, inside, outward, read, walkable, type Json, type Rect } from './fl
 
 const port = Number(process.env.PORT ?? 7811);
 if (!process.env.OVERLAY) throw new Error('set OVERLAY to the REB build folder the game has');
+
+const outDir = process.argv[2] ?? '/tmp/rebecca-sound-game';
+const shot = (link: GameLink, name: string) => snapshot(link, outDir, `sound-${name}`);
 
 const failures: string[] = [];
 const check = (ok: boolean, line: string, why: string) => {
@@ -105,7 +112,7 @@ async function goToRoom(link: GameLink, slug: string): Promise<GameState> {
 }
 
 /** Walk (or run) from (x, z) towards (tx, tz) for `frames`, and say what she stood on and the steps that played. */
-async function steps(link: GameLink, x: number, z: number, tx: number, tz: number, frames: number, pace: 'walk' | 'run'): Promise<{ under: Set<string>; played: number; last: string; at: GameState }> {
+async function steps(link: GameLink, x: number, z: number, tx: number, tz: number, frames: number, pace: 'walk' | 'run', name: string): Promise<{ under: Set<string>; played: number; last: string; at: GameState }> {
   await link.place(x, z, headingTo(x, z, tx, tz));
   let s = await link.frames(6);
   const before = s.sound!.steps;
@@ -115,6 +122,7 @@ async function steps(link: GameLink, x: number, z: number, tx: number, tz: numbe
   for (let k = 0; k < frames; k += 5) {
     s = await link.frames(5);
     under.add(s.sound!.walk);
+    if (k === 20) await shot(link, name);
   }
   await link.release();
   s = await link.frames(4);
@@ -133,7 +141,7 @@ async function footsteps(
   const w = at ?? walkOn(slug, kind, run);
   if (kindAt(floorsOf(slug), w.x, w.z) !== kind || kindAt(floorsOf(slug), w.tx, w.tz) !== kind) throw new Error(`${slug}: (${w.x}, ${w.z}) to (${w.tx}, ${w.tz}) is not all ${kind}`);
   const want = pace === 'run' ? STEP_SETS[kind].run : STEP_SETS[kind].walk;
-  const r = await steps(link, w.x, w.z, w.tx, w.tz, pace === 'run' ? 30 : 45, pace);
+  const r = await steps(link, w.x, w.z, w.tx, w.tz, pace === 'run' ? 30 : 45, pace, `${slug}-${kind}-${pace}`);
   const line = `${what}: ${pace} on ${kind} in ${roomLabel(r.at)}, from (${w.x}, ${w.z}): ${r.played} steps, the last ${r.last || '-'}, under her ${[...r.under].join('/')}`;
   check(r.played > 0 && r.last.toLowerCase() === want.toLowerCase() && [...r.under].every((u) => u.toLowerCase() === STEP_SETS[kind].walk.toLowerCase()), line, `expected ${want}`);
 }
@@ -161,12 +169,16 @@ async function ambience(link: GameLink, what: string, slug: string, want: 'loop'
   let s = await link.frames(30);
   for (let k = 0; k < 10 && key(channels(s).filter(([c]) => c > 0)) !== key(loops); k++) s = await link.frames(15);
   const got = channels(s).filter(([c]) => c > 0);
-  const line = `${what}: ${roomLabel(s)} plays ${channels(s).map(([c, f]) => `${c}:${f}`).join(', ') || 'nothing'} (state ${s.bgm!.state.toString(16)})`;
-  check(key(got) === key(loops), line, `expected loops ${loops.map(([c, f]) => `${c}:${f}`).join(', ') || 'none'}`);
+  // Each loop's file sits 10 dB under the music (sound/ambience.ts); the channel must not lift it over.
+  const vol = (c: number) => s.bgm!.channels[c]!.volume;
+  const music = s.bgm!.channels[0]!.playing ? vol(0) : undefined;
+  const under = got.every(([c]) => music === undefined || vol(c) <= music);
+  const line = `${what}: ${roomLabel(s)} plays ${channels(s).map(([c, f]) => `${c}:${f} at ${vol(c)}`).join(', ') || 'nothing'} (state ${s.bgm!.state.toString(16)})`;
+  check(key(got) === key(loops) && under, line, `expected loops ${loops.map(([c, f]) => `${c}:${f}`).join(', ') || 'none'}, no louder than the music`);
 }
 
 /** Through a door that opens: stand in it, press action, and see what the door played. */
-async function door(link: GameLink, what: string, from: string, to: string, sounds: readonly string[]): Promise<void> {
+async function door(link: GameLink, what: string, from: string, to: string, sounds: readonly string[], target: { stage: number; room: number } = room(to)): Promise<void> {
   await goToRoom(link, from);
   const f = floorsOf(from);
   const d = f.doors!.find((x) => x.to === to)!;
@@ -180,9 +192,9 @@ async function door(link: GameLink, what: string, from: string, to: string, soun
   let s = await link.state();
   let set = -1;
   let files: readonly string[] = [];
-  const target = room(to);
   for (let k = 0; k < 60; k++) {
     s = await link.frames(5);
+    if (k === 3) await shot(link, `${from}-${to}`);
     if (s.sound!.sfx > before) {
       heard.add(s.sound!.last);
       set = s.sound!.door;
@@ -190,9 +202,10 @@ async function door(link: GameLink, what: string, from: string, to: string, soun
     }
     if (s.stage === target.stage && s.room === target.room && s.play && !(s.msf & 0x04000080)) break;
   }
-  await settle(link);
-  const line = `${what}: ${from} to ${to}, sound set ${set} [${files.join(', ')}], played ${[...heard].join(', ') || 'nothing'}`;
-  check(sounds.every((x) => heard.has(x)), line, `expected ${sounds.join(' and ')}`);
+  s = await settle(link);
+  const arrived = s.stage === target.stage && s.room === target.room;
+  const line = `${what}: ${from} to ${to}${arrived ? '' : ` (still in ${roomLabel(s)})`}, sound set ${set} [${files.join(', ')}], played ${[...heard].join(', ') || 'nothing'}`;
+  check(arrived && sounds.every((x) => heard.has(x)), line, `expected ${sounds.join(' and ')}`);
 }
 
 // Her mode.
@@ -229,7 +242,9 @@ async function door(link: GameLink, what: string, from: string, to: string, soun
     await door(link, 'a wooden door', 'bunkhouse', 'camp-yard', ['Dr_wd01']);
     await door(link, 'an iron door', 'junction', 'tunnel', ['Dr_mtl01']);
     await door(link, 'the gate in the estate wall', 'estate-wall', 'kennels', ['Dr_gat01', 'Dr_gat02']);
-    await door(link, 'the ladder up through the hatch', 'tower-stairs', 'tower-top', ['Ladder01']);
+    await door(link, 'the ladder up to the top of the tower', 'tower-stairs', 'tower-top', ['Ladder01']);
+    // Last: the hatch comes up in the mansion's save room, a room of RE1's own.
+    await door(link, 'the hatch up into the save room', 'crawl', 'save', ['Ladder01'], { stage: 0, room: 0 });
   } finally {
     session.end();
   }
@@ -241,7 +256,7 @@ async function door(link: GameLink, what: string, from: string, to: string, soun
   try {
     const link = session.link;
     let s = await settle(link, (x) => x.stage === 0 && x.room === 0);
-    const r = await steps(link, s.player.x, s.player.z, s.player.x, s.player.z + 3000, 40, 'walk');
+    const r = await steps(link, s.player.x, s.player.z, s.player.x, s.player.z + 3000, 40, 'walk', 'chris');
     check(r.played > 0 && /^ft_/i.test(r.last), `Chris in ${roomLabel(r.at)}: ${r.played} steps, the last ${r.last || '-'}, set ${r.at.sound!.set}`, "expected RE1's own step");
     s = await link.frames(30);
     check(channels(s).every(([, f]) => !/^Reb_/i.test(f)), `Chris in ${roomLabel(s)} plays ${channels(s).map(([c, f]) => `${c}:${f}`).join(', ') || 'nothing'}`, 'expected none of hers');
