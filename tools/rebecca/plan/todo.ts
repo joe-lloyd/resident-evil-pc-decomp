@@ -70,9 +70,18 @@ const STATUS: Record<string, Status> = {
   // Worked in the game by tests/puzzles.ts.
   ...Object.fromEntries(['mill-race', 'crane', 'generator-on', 'line-on', 'blast', 'lift-up', 'drain', 'push-rack'].map((s): [string, Status] => [`puzzle-${s}`, 'done'])),
   // Locks written by day/scripts.ts: the tour walks their doors unlocked, but no test uses the key yet.
-  ...Object.fromEntries(['cut-depot', 'cut-chain', 'tower-door', 'pry-lodge', 'open-gate'].map((s): [string, Status] => [`puzzle-${s}`, 'doing'])),
-  // Rendered as a state of the room (kit.Room.state); waiting on the renders and a look in the game.
-  ...Object.fromEntries(['blast', 'push-rack', 'generator-on', 'line-on', 'drain'].map((s): [string, Status] => [`moving-${s}`, 'doing'])),
+  ...Object.fromEntries(['cut-depot', 'tower-door', 'pry-lodge'].map((s): [string, Status] => [`puzzle-${s}`, 'doing'])),
+  // Their keys used on the lock in the game by tests/changes.ts, which sees the lock's flag rise.
+  'puzzle-cut-chain': 'done',
+  'puzzle-open-gate': 'done',
+  // A state of the room (kit.Room.state), seen in the game by tests/changes.ts:
+  // before, as it happens, and after coming back into the room.
+  ...Object.fromEntries(
+    ['winch-pine', 'mill-race', 'generator-on', 'line-on', 'blast', 'drain', 'lift-up', 'gondola-runs', 'push-rack', 'cut-chain', 'open-gate'].map((s): [string, Status] => [`moving-${s}`, 'done']),
+  ),
+  // The crane runs in the sawmill, but the crate and its logs are in the
+  // workshop, out of its reach: the owner decides where the stack belongs.
+  'moving-crane': 'doing',
   ...Object.fromEntries(
     ['truck-keys', 'cutters', 'office-key', 'safe', 'cog', 'jerrycan', 'fuel', 'switch-key', 'quarry-key', 'dynamite', 'op-key', 'fuses', 'crowbar', 'gate-key', 'cellar-key'].map((s): [string, Status] => [`find-${s}`, 'doing']),
   ),
