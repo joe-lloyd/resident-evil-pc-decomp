@@ -5,10 +5,14 @@
 // she comes back into the room. Checks that the change is on screen where the
 // renders put it, and that it stays.
 //
-//   node tools/harness/tests/changes.ts [<state> ...]      (default: every state)
+//   node tools/harness/tests/changes.ts [<state> | <room>:<state> ...]   (default: every state)
+//
+// A change worked in another room (the mill wheel turning in the sawmill once
+// the sluice is open at the pond) has nothing to watch as it happens: its
+// flag is set, and the room is looked at before and after.
 //
 // Pictures go to $OUT (default /tmp/reb-changes-shots), named
-// <state>-<n>-<moment>.png. Look at them: the test can only tell that the
+// <room>-<state>-<n>-<moment>.png. Look at them: the test can only tell that the
 // picture changed where the renders did, not that it reads.
 //
 // Needs the engine and the overlay deployed. Prints a line per change and
@@ -45,9 +49,10 @@ interface RoomJson {
   states?: StateJson[];
 }
 
-/** How a change is caused: an event of events.ts, a key item used on a locked way, or the yard's winch. */
+/** How a change is caused: an event of events.ts, a key item used on a locked way, the yard's winch, or an event in another room. */
 type Cause =
   | { kind: 'event'; step: string }
+  | { kind: 'elsewhere'; step: string; room: string }
   | { kind: 'lock'; to: string; item: number }
   | { kind: 'use'; item: number; zone: Rect };
 
@@ -98,7 +103,7 @@ function changes(): Change[] {
       let bit = st.bit;
       const event = EVENTS.find((e) => e.step === st.name);
       if (event && bit < 0) {
-        cause = { kind: 'event', step: event.step };
+        cause = event.room === room.slug ? { kind: 'event', step: event.step } : { kind: 'elsewhere', step: event.step, room: event.room };
         bit = EVENT_FLAGS.get(event.step)!;
       }
       // A key item on a lock: the lock's flag, as room.ts shows it by.
@@ -192,6 +197,11 @@ async function stand(link: GameLink, c: Change, zone: Rect): Promise<void> {
 /** Do what causes the change, and return the moment it is done: before any line it brings is closed. */
 async function cause(link: GameLink, c: Change): Promise<void> {
   const k = c.cause;
+  if (k.kind === 'elsewhere') {
+    const e = EVENTS.find((x) => x.step === k.step)!;
+    for (const n of [...(e.needs ?? []), e.step]) await link.setFlag(Bank.common, EVENT_FLAGS.get(n)!, true);
+    return;
+  }
   if (k.kind === 'event') {
     const e = EVENTS.find((x) => x.step === k.step)!;
     for (const n of e.needs ?? []) await link.setFlag(Bank.common, EVENT_FLAGS.get(n)!, true);
@@ -248,7 +258,7 @@ function difference(a: Image, b: Image, rects: Change['rects']): number {
 /** Shots are saved on the game machine as they are taken and fetched afterwards, so a quick run of them stays quick. */
 const taken: { remote: string; local: string }[] = [];
 async function shot(link: GameLink, c: Change, i: number, moment: string): Promise<string> {
-  const name = `${c.name}-${i}-${moment}`;
+  const name = `${c.room.slug}-${c.name}-${i}-${moment}`;
   const remote = `${remoteDir}\\${name}.bmp`;
   await link.shot(remote);
   taken.push({ remote, local: path.join(out, `${name}.png`) });
@@ -263,7 +273,7 @@ function fetchShots(): void {
 }
 
 const wanted = process.argv.slice(2);
-const list = changes().filter((c) => !wanted.length || wanted.includes(c.name));
+const list = changes().filter((c) => !wanted.length || wanted.includes(c.name) || wanted.includes(`${c.room.slug}:${c.name}`));
 if (!list.length) throw new Error(`no change named ${wanted.join(', ')}`);
 const first = list[0]!.room;
 const session = await open(Number(process.env.PORT ?? 7801), `--mode REB --boot rebecca:${first.stage}:${first.room}`);
@@ -284,7 +294,7 @@ try {
       const before = await shot(link, c, 0, 'before');
       await cause(link, c);
       // As it happens: a picture every half second for three seconds, closing nothing.
-      for (let k = 1; k <= 6; k++) {
+      for (let k = 1; k <= (c.cause.kind === 'elsewhere' ? 0 : 6); k++) {
         await link.frames(15);
         await shot(link, c, k, 'during');
       }
@@ -299,18 +309,20 @@ try {
       const again = await shot(link, c, 8, 'again');
       fetchShots();
       const [b, a, g] = [before, after, again].map((p) => readPng(p));
+      // A change that moves on in the room's loop (a wheel turning) is never
+      // twice the same picture, so it stays if it still differs from before.
       const moved = difference(b!, a!, c.rects);
-      const kept = difference(a!, g!, c.rects);
+      const kept = difference(b!, g!, c.rects);
       const note = `camera ${c.camera}, ${moved.toFixed(1)} changed, ${kept.toFixed(1)} after coming back`;
       if (moved < 6) throw new Error(`the picture barely changed where the renders do (${note})`);
-      if (kept > moved / 2) throw new Error(`it did not stay changed (${note})`);
-      console.log(`ok    ${c.name} (${c.room.slug}): ${note}`);
+      if (kept < moved / 2) throw new Error(`it did not stay changed (${note})`);
+      console.log(`ok    ${c.room.slug}:${c.name}: ${note}`);
     } catch (err) {
       fetchShots();
       await link.release().catch(() => undefined);
       await settle(link, () => true, 20_000).catch(() => undefined);
-      failures.push(c.name);
-      console.log(`FAIL  ${c.name} (${c.room.slug}): ${err instanceof Error ? err.message : String(err)}`);
+      failures.push(`${c.room.slug}:${c.name}`);
+      console.log(`FAIL  ${c.room.slug}:${c.name}: ${err instanceof Error ? err.message : String(err)}`);
     }
   }
 } finally {
