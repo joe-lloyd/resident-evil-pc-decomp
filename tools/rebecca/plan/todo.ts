@@ -85,6 +85,10 @@ const STATUS: Record<string, Status> = {
   ...Object.fromEntries(
     ['truck-keys', 'cutters', 'office-key', 'safe', 'cog', 'jerrycan', 'fuel', 'switch-key', 'quarry-key', 'dynamite', 'op-key', 'fuses', 'crowbar', 'gate-key', 'cellar-key'].map((s): [string, Status] => [`find-${s}`, 'doing']),
   ),
+  // Played in the game by tests/cutscenes.ts (day/cutscenes.ts). cut-sleep is both the sleep and Chris.
+  ...Object.fromEntries(
+    ['cut-opening', 'cut-phone', 'cut-partner', 'cut-den', 'cut-gondola', 'cut-tower', 'cut-hal', 'cut-mine-collapse', 'cut-pylon', 'cut-kevin', 'cut-sleep', 'cut-chris'].map((s): [string, Status] => [s, 'done']),
+  ),
   'look-trapdoor-sample': 'done',
   'look-filter-sample': 'done',
   'look-reviewed-builders': 'done',
