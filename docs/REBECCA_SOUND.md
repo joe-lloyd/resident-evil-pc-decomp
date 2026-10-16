@@ -69,39 +69,81 @@ rebuild.
 
 RE1's music table gives each room a group of up to three WAV channels. The
 room's state byte turns them on: bit 3 is channel 0, bit 4 channel 1, and
-bit 5 channel 2. Her mode reads its own table from `REB/sound/music.dat`
-(`src/game/RebMusic.cpp`, [REBECCA_MUSIC.md](REBECCA_MUSIC.md)). Each group
-plays her music on channel 0 and leaves channels 1 and 2 free.
+bit 5 channel 2. RE1 itself puts its ambience on these channels: its
+insects loop, `Se_03`, is a channel of two of its groups. Her mode reads its
+own table from `REB/sound/music.dat` (`src/game/RebMusic.cpp`,
+[REBECCA_MUSIC.md](REBECCA_MUSIC.md)).
 
-The ambience uses those two free channels, so the engine needs no change.
+So her loops are channels of her cues, beside the music, and the engine
+needs no change:
 
-- `tools/rebecca/sound/places.ts` gives each place in the plan one loop or
-  none. `plan.test.ts` fails when a place has no decision.
-- `tools/rebecca/music/table.ts` puts a cue's loops on channels 1 and 2, in
-  the order its places first play them. A cue with more than two loops fails
-  the build.
-- Each room's state turns on its cue's music and its own loop, and no other.
-  The station's yard plays the music and the wind. Its woods play the same
-  music and the forest. Because both rooms share a group, the music keeps
-  playing across the door and only the loop changes.
-- A cue with no music yet plays its loops alone.
+- A channel in `tools/rebecca/plan/music.ts` plays a sketch's render or a
+  loop (`loop: 'forest'`), and `in` names the rooms that hear it.
+- `tools/rebecca/music/table.ts` gives the loop's channel the file
+  `Reb_amb_<loop>`, and each room's state turns on the channels its cue
+  plays there. A loop can be any of the three channels.
+- Rooms of one cue share a group, so the music keeps playing across a door
+  and only the loop changes. The station's yard plays the music. Its woods
+  play the same music and the forest, on channel 2.
+- The build writes each loop the table names once, however many cues play it.
+- `checkMusic` holds a cue to three channels, as the engine plays.
 
 Indoor rooms and save rooms play no loop, since the walls keep the weather
 out. RE1's save rooms play only their music.
 
+### One owner for each sound
+
+The music branch gave several cues layers of their own sound: wind, water,
+a mill, a hum, static. A room must not hear one sound twice, so each sound
+has one owner in an area. The rule, which [REBECCA_MUSIC.md](REBECCA_MUSIC.md)
+gives too:
+
+1. When the cue's music has the sound, in its theme or as a layer, no loop
+   plays it.
+2. A sound a step switches stays the music layer that switches, so the
+   switch is heard.
+3. A loop takes a channel the music leaves free, and carries only what the
+   music doesn't.
+4. A cue with no free channel gets no loop.
+
+| Area | Music has | Loop | Rooms with the loop |
+| --- | --- | --- | --- |
+| The dawn | wind, in the theme | none | |
+| The station | wind, in the theme; the generator hum, on with the power | `forest`: leaves and birds | the woods |
+| The camp | the mill, on with the sluice; the pond's water | none: three channels used | |
+| The road and the tower | wind, in the theme and louder up the tower; the line's hum, on with the breakers | none | |
+| The quarry | the wind in the pit | none | |
+| The mine | drips, in the theme; the water, off with the pump | `mine`: the air and the timber | the tunnel, the junction, the gallery, the lift |
+| The summit | high wind, in the theme; static at the mast | none | |
+| The line down | the cable | `gale` | the car, the pylon |
+| The valley | the creek | `dusk`: crickets, a breeze, a bird | the path, the lower yard, the creek |
+| The hollow and the crash | no music | `forest`, `dusk` | the hollow, the crash |
+| The grounds | the organ and the piano | `night`: crickets, the hedges, an owl | the wall, the kennels, the back garden |
+| Under the house | no music | `cellar`: drips, boards above | the cellar, the wine store, the crawl |
+
+The sound branch first had a `wind` loop for the open places and a
+`mill` loop for the sawmill. The music's own wind and mill replaced
+both. The mill loop always played, but the mill should turn only once the
+sluice opens. The mine loop lost its drips into standing water, which went
+on after the pump drained the mine.
+
+A new sound for a place goes on its cue as a channel. Read the cue's theme
+and layers first. The grounds' dogs have no owner yet.
+
 ### The loops
 
-`sound/ambience.ts` makes eight loops from noise and a few synthesised
-calls: `wind`, `gale`, `forest`, `mill`, `mine`, `dusk`, `night` and `cellar`.
-Each loop is 24 seconds, 22050 Hz mono. Its bed is rendered a little long and
-its tail is crossfaded into its head, so the join has no seam. Short events,
-such as a bird or a drip, are laid around the loop, so one that runs past the
-end comes back in at the start. A fixed seed makes every build the same.
+`sound/ambience.ts` makes six loops from noise and a few synthesised
+calls: `gale`, `forest`, `mine`, `dusk`, `night` and `cellar`. Each
+loop is 24 seconds, 22050 Hz mono. Its bed is rendered a little long and its
+tail is crossfaded into its head, so the join has no seam. Short events,
+such as a bird or a drip, are laid around the loop, so one that runs past
+the end comes back in at the start. Each loop has a fixed seed, so every
+build is the same.
 
 Each loop measures -36 dB RMS. RE1's insect loop, `Se_03`, measures -37 dB.
-The station's music measures -26 dB, so the loops sit about 10 dB under it.
-The game plays every channel at the same volume, so the files' own levels
-keep the loops under the music.
+The themes measure about -24 dB and their layers -28 to -34 dB, so the
+loops sit under all of them. The game plays every channel at the same
+volume, so the files' own levels keep the loops under the music.
 
 ## Doors, gates and hatches
 
@@ -159,9 +201,12 @@ It checks these things:
   flooded gallery, the creek's ford, the workshop's concrete, the lift's
   metal, the booth's lino and the gondola car's carpet. The step that plays
   must be that floor's.
-- Eight rooms play exactly the loops the music table gives them, on the
-  channels it gives them, and no louder than the music. The shed and the
-  booth play none.
+- Eleven rooms play exactly the channels the music table gives them, music
+  and loops together, and no loop louder than the music. The yard and the
+  tower top have the music's wind and no loop. The woods, the junction, the
+  car, the valley path and the estate wall play their loop under the music,
+  and the hollow and the cellar play theirs alone. The shed and the booth
+  play no loop.
 - A wooden door and an iron door play their open and shut. The estate wall's
   gate opens and shuts. The road's gate shuts when its walk is skipped. The
   tower's ladder and the crawl's hatch play the ladder.

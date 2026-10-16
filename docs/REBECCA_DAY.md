@@ -182,9 +182,9 @@ and the plan are in [REBECCA_MUSIC.md](REBECCA_MUSIC.md).
 ## Sound
 
 Her steps follow what each scene says is underfoot: our own for earth and
-gravel, RE1's for boards, rock, water and her other floors. Loops of wind,
-forest, the mill, the mine, dusk, night and the cellar play under her music
-on its spare channels. Her doors play RE1's door sounds, and her gates open
+gravel, RE1's for boards, rock, water and her other floors. Loops of the
+gale, the forest, the mine, dusk, night and the cellar play as channels of
+her music, where the music doesn't have that sound already. Her doors play RE1's door sounds, and her gates open
 and shut. How it works is in [REBECCA_SOUND.md](REBECCA_SOUND.md).
 
 ## Scale

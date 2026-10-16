@@ -98,7 +98,7 @@ const STATUS: Record<string, Status> = {
   'maps-test': 'done',
   // Written up in docs/REBECCA_SOUND.md, and proven in the game by
   // tools/harness/tests/sound.ts: her steps on each kind of floor, each
-  // place's loop under its music and none indoors, a wooden and an iron door,
+  // room's music and loops as the table gives them, a wooden and an iron door,
   // a gate walked and one skipped, the ladder and the hatch, Chris's unchanged.
   'sound-footsteps': 'done',
   'sound-ambience': 'done',
