@@ -6,5 +6,5 @@
 5: \nThe top rail's broken.\nBlood on the post.\p{0}\nThis is where he went\nover.
 6: \nSmoke, rising out of the\ntrees in the valley.\nSomething came down there.\p{0}\nBravo's helicopter. And\nfar off, a big house among\nthe trees.
 7: \nFrom up here I can see the\nwhole valley.
-8: \nSmoke, down in the trees.\nThat's where our\nhelicopter came down.
-9: \nAnd past it, a roof. Some\nbig old house out in the\nforest.
+8: \nSmoke in the trees. That's\nwhere we came down.
+9: \nPast it, a roof. A big old\nhouse in the forest.

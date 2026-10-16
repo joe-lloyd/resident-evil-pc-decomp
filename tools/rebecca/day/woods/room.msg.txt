@@ -7,13 +7,13 @@
 6: \nPaw prints either side of\nthe smear. Big ones.\p{0}\nThey dragged him north,\ninto the hollow.
 7: \nA deer. They ate her soft\nparts first.\p{0}\nShe's been here longer\nthan he has.
 8: \nOrange paint on the bark,\nand a 4. A tree marked for\nfelling.\p{0}\nThe logging camp must be\nthat way.
-9: \nThe drag marks go on into\nthe trees. So does the\nblood.
+9: \nThe drag marks go into the\ntrees. So does the blood.
 10: \nSomeone's up ahead,\ncrouched over the marks.
 11: \n\oHello?"
 12: \n\oDon't move! ...You're not\none of them."
 13: \n\oDana Whitlock, Forest\nService. Who are you?"
 14: \n\oRebecca Chambers,\nS.T.A.R.S. I'm a medic."
-15: \n\oThese are my partner's\ntracks. The dogs took\nhim."
+15: \n\oMy partner's tracks. The\ndogs took him."
 16: \n\oI was at his cabin. I'm\nsorry."
 17: \n\oThey dragged him north,\ninto the hollow."
 18: \n\oThen I'm coming with\nyou."
