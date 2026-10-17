@@ -23,6 +23,7 @@ import { lockFlag } from './scripts.ts';
 import { animFileName, buildAnim, type AnimLayer } from '../bganim.ts';
 import { buildMasks, maskPakName } from '../masks.ts';
 import { autoFloors, readDepth } from './floors.ts';
+import { occluders, standableIn } from '../occluders.ts';
 import { makePak } from '../pak.ts';
 import { composeRoom, model, scaleModel, SLOT, type PointLight, type Vec3 } from '../rdt.ts';
 import { GROUNDS, isGround, stepSlots, type Floors, type Ground } from '../sound/ground.ts';
@@ -322,9 +323,16 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
     return existsSync(file) ? readDepth(file) : undefined;
   });
   const floors = spec.cameraFloor === 'auto' ? autoFloors({ ...json, walls: [...json.walls, ...(json.voids ?? [])] }, depths) : spec.cameraFloor;
+  const standable = standableIn(json);
   const cameras = json.cameras.map((c, i) => {
     const background = look(readPng(path.join(renders, `cam${i}.png`)));
-    const depth = depths[i];
+    // The masks: what the scene tags as foreground, and every surface in
+    // front of where she can stand on this camera's floor (occluders.ts).
+    const zall = path.join(renders, `cam${i}.zall.png`);
+    const tagged = depths[i];
+    const camFloor = ([] as Rect[]).concat(floors[i] ?? []);
+    const found = existsSync(zall) ? occluders(c, readDepth(zall), camFloor, standable) : undefined;
+    const depth = found && tagged ? found.map((d, k) => Math.min(d, tagged[k]!)) : (found ?? tagged);
     const masks = depth ? buildMasks(background, depth) : undefined;
     const pak = `RC${stem.slice(4, 7)}${i}.pak`;
     writeFileSync(path.join(outStage, pak), makePak(background));
