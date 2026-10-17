@@ -52,12 +52,13 @@ interface KitJson {
 
 /** Where she stands in a hand-written room on arriving from a kit room, by that room's slug. */
 const BUILT_ARRIVALS: Record<string, Record<string, Arrive>> = {
-  // The yard (x 2-18 m, y 2-12.2 m): in from the forestry road on the truck's
-  // tyre tracks at the west edge, facing east; in from the woods at the
-  // north-east, where the drag marks go into the trees, facing west.
+  // The yard (x 2-18 m, y 2-12.2 m): in from the forestry road at the west
+  // edge, facing east; in from the woods at the north-east, where the drag
+  // marks go into the trees, facing west. Both in the open: the old spots
+  // were inside the room's collision, and she arrived stuck there.
   yard: {
-    road: { x: 6120, z: 18360, angle: 0 },
-    woods: { x: 27200, z: 10880, angle: 2048 },
+    road: { x: 6120, z: 16600, angle: 0 },
+    woods: { x: 28560, z: 10200, angle: 2048 },
   },
   // The bridge: on its far bank (y 15-18 m) from the gondola station, facing
   // back over the bridge; on its near bank from the flume's ride down.

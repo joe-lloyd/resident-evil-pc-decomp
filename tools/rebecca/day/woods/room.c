@@ -1,7 +1,7 @@
 // woods (31A), written by day/scripts.ts from day/woods/scene.py: edit the scene, not this file.
 // init procedure 0
 // To yard.
-door_aot_set(0, 3400, 11900, 1020, 3400, 0, 15, 48, 4, 0, ROOM_315, 27200, 0, 10880, 2048, UNLOCKED, 1);
+door_aot_set(0, 3400, 11900, 1020, 3400, 0, 15, 48, 4, 0, ROOM_315, 28560, 0, 10200, 2048, UNLOCKED, 1);
 // To den.
 door_aot_set(1, 12750, 3400, 4250, 1020, 0, 15, 48, 4, 0, ROOM_31B, 15130, 0, 18020, 1024, UNLOCKED, 1);
 // To logging-road.
