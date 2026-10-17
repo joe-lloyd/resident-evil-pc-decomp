@@ -63,7 +63,7 @@ export function startRecording(remoteFile: string, port: number): void {
   execFileSync('scp', ['-q', '-o', 'BatchMode=yes', new URL('./lab/re1-record.cmd', import.meta.url).pathname, `${host}:${recorder.replace(/\\/g, '/')}`]);
   powershell(`
     $p = New-ScheduledTaskPrincipal -UserId '${user}' -LogonType Interactive -RunLevel Limited
-    $a = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument '/c "${recorder}" "${remoteFile}" "RESIDENT EVIL ${port}"'
+    $a = New-ScheduledTaskAction -Execute '${recorder}' -Argument '"${remoteFile}" "RESIDENT EVIL ${port}"'
     Register-ScheduledTask -TaskName 'RE1 Record ${port}' -Action $a -Principal $p -Force | Out-Null
     Start-ScheduledTask -TaskName 'RE1 Record ${port}'
   `);

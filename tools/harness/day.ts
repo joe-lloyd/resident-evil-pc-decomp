@@ -51,6 +51,8 @@ const SHED = {
   door: { x: 5100, z: 2890, w: 1020, d: 1360 },
   crank: { x: 2805, z: 3145, w: 1105, d: 1360 },
 };
+/** The woods' way back to the yard (woods/room.c door 0). */
+const WOODS_TO_YARD = { x: 3400, z: 11900, w: 1020, d: 3400 };
 const BRIDGE = {
   sign: { x: 5950, z: 27880, w: 8500, d: 1020 },
 };
@@ -137,7 +139,16 @@ export async function dog(run: Run): Promise<void> {
   await run.picture('day-yard-dog');
   const shots = await fight(link);
   s = await settle(link);
-  run.log(s, `killed the dog (${shots} shots)`);
+  if (!inRoom(s, DAY.yard)) {
+    // Going after a dog that hung back took her through the east edge into the woods: back to the yard.
+    run.log(s, 'followed the dog out of the yard; back in');
+    s = await run.door(WOODS_TO_YARD, DAY.yard, 'back into the yard');
+    await fight(link);
+    s = await settle(link);
+  }
+  // God mode keeps her alive past a dog that will not come; the day goes on either way.
+  if (s.enemies.some((e) => e.type === CERBERUS && e.hp > 0)) run.log(s, 'the dog is still standing; on with the day');
+  else run.log(s, `killed the dog (${shots} shots)`);
   await heal(run);
 }
 

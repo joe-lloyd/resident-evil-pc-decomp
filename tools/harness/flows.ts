@@ -646,10 +646,13 @@ export async function fight(
     low = false;
   };
   fighting = true;
+  const room = await link.state();
   try {
     for (;;) {
       const s = await link.state();
       checkAlive(s);
+      // Walking after it took her through a door: the fight was in the room she left.
+      if (s.stage !== room.stage || s.room !== room.room) return shots;
       const live = s.enemies
         .filter((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !ignore.includes(e.type) && !isSpared(s, e))
         .map((e) => ({ e, d: Math.hypot(e.x - s.player.x, e.z - s.player.z) }))
