@@ -564,7 +564,13 @@ async function work(p: Player, g: Goal, reached: Set<string>): Promise<void> {
       break;
     }
     case 'scene':
-      if (g.zone) s = await goTo(link, run.dataDirs, g.zone.x + g.zone.w / 2, g.zone.z + g.zone.d / 2, { radius: 300 });
+      if (g.zone) {
+        // A scene she walks into takes the controls part way: stop walking and let it play.
+        s = await goTo(link, run.dataDirs, g.zone.x + g.zone.w / 2, g.zone.z + g.zone.d / 2, { radius: 300 }).catch(async (err) => {
+          if (!(err instanceof StuckError) || err instanceof DiedError) throw err;
+          return link.state();
+        });
+      }
       s = await settle(link, undefined, 300_000);
       if (g.gets !== undefined && !has(s, g.gets)) {
         // The scene should have handed it over; else it lies there as a pickup.
