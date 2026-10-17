@@ -48,3 +48,16 @@ test('nothing covers her where she cannot stand', () => {
   const out = occluders(cam, frame(chest.z - 2000), floor, () => false);
   assert.equal(out[at], Infinity);
 });
+
+test('a pocket closed off behind a wall is not somewhere she can stand', async () => {
+  const { standableIn } = await import('./occluders.ts');
+  // A room 6 m square with a wall right across it at z 5100: she comes in at the south.
+  const scene = {
+    bounds: { x0: 0, z0: 0, x1: 10200, z1: 10200 },
+    walls: [{ x0: 0, z0: 5000, x1: 10200, z1: 5200 }],
+    doors: [{ arrive: { x: 5100, z: 1700 } }],
+  };
+  const can = standableIn(scene);
+  assert.equal(can(5100, 2500), true);
+  assert.equal(can(5100, 8500), false);
+});

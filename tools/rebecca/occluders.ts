@@ -96,9 +96,66 @@ export function occluders(cam: Camera, all: Float32Array, floor: readonly Rect[]
   return out;
 }
 
-/** Where she can stand in a scene: inside its bounds, clear of its walls and voids by her reach. */
-export function standableIn(scene: { bounds: Rect; walls: readonly Rect[]; voids?: readonly Rect[] }, reach = 300): (x: number, z: number) => boolean {
+/**
+ * Where she can stand in a scene: inside its bounds, clear of its edge, its
+ * walls and voids by her reach, and reachable on foot from a door she comes in by, so
+ * a closed-off pocket behind a wall does not count. Without doors, every
+ * clear spot counts.
+ */
+export function standableIn(
+  scene: { bounds: Rect; walls: readonly Rect[]; voids?: readonly Rect[]; doors?: readonly { arrive: { x: number; z: number } }[] },
+  reach = 300,
+): (x: number, z: number) => boolean {
   const solid = [...scene.walls, ...(scene.voids ?? [])];
   const b = scene.bounds;
-  return (x, z) => x > b.x0 && x < b.x1 && z > b.z0 && z < b.z1 && !solid.some((w) => x > w.x0 - reach && x < w.x1 + reach && z > w.z0 - reach && z < w.z1 + reach);
+  // The room's edge is a wall too, drawn with some thickness: she keeps a little more than her reach from it.
+  const edge = reach * 1.5;
+  const clear = (x: number, z: number) =>
+    x > b.x0 + edge && x < b.x1 - edge && z > b.z0 + edge && z < b.z1 - edge && !solid.some((w) => x > w.x0 - reach && x < w.x1 + reach && z > w.z0 - reach && z < w.z1 + reach);
+  const seeds = (scene.doors ?? []).map((d) => d.arrive);
+  if (!seeds.length) return clear;
+  // Flood the clear floor from each door's arrival, cell by cell.
+  const cell = 170;
+  const cols = Math.ceil((b.x1 - b.x0) / cell);
+  const rows = Math.ceil((b.z1 - b.z0) / cell);
+  const at = (i: number, j: number) => [b.x0 + (i + 0.5) * cell, b.z0 + (j + 0.5) * cell] as const;
+  const reached = new Uint8Array(cols * rows);
+  const queue: number[] = [];
+  for (const s of seeds) {
+    // The nearest clear cell to where the door puts her.
+    let best = -1;
+    let bestD = Infinity;
+    const si = Math.floor((s.x - b.x0) / cell);
+    const sj = Math.floor((s.z - b.z0) / cell);
+    for (let j = Math.max(0, sj - 6); j <= Math.min(rows - 1, sj + 6); j++) {
+      for (let i = Math.max(0, si - 6); i <= Math.min(cols - 1, si + 6); i++) {
+        const [x, z] = at(i, j);
+        const d = Math.hypot(x - s.x, z - s.z);
+        if (d < bestD && clear(x, z)) [best, bestD] = [j * cols + i, d];
+      }
+    }
+    if (best >= 0 && !reached[best]) {
+      reached[best] = 1;
+      queue.push(best);
+    }
+  }
+  while (queue.length) {
+    const k = queue.pop()!;
+    const i = k % cols;
+    const j = (k - i) / cols;
+    for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1]] as const) {
+      const ni = i + di;
+      const nj = j + dj;
+      if (ni < 0 || nj < 0 || ni >= cols || nj >= rows) continue;
+      const nk = nj * cols + ni;
+      if (reached[nk] || !clear(...at(ni, nj))) continue;
+      reached[nk] = 1;
+      queue.push(nk);
+    }
+  }
+  return (x, z) => {
+    const i = Math.floor((x - b.x0) / cell);
+    const j = Math.floor((z - b.z0) / cell);
+    return i >= 0 && j >= 0 && i < cols && j < rows && reached[j * cols + i] === 1 && clear(x, z);
+  };
 }
