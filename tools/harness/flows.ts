@@ -102,6 +102,24 @@ export function useFightBack(range = 9000, ignore: readonly number[] = []): void
   fightBackIgnores = ignore;
 }
 
+/**
+ * Enemies she gave up on: shots in a row that did them no harm (a zombie
+ * through a door or past a wall, one out of the gun's line). She leaves each
+ * alone for a while, matched by room, type and where it stood.
+ */
+const spared: { stage: number; room: number; type: number; x: number; z: number; until: number }[] = [];
+/** Shots in a row without harm before she leaves an enemy be. */
+const FRUITLESS = 4;
+const SPARE_MS = 60_000;
+const isSpared = (s: GameState, e: { type: number; x: number; z: number }) =>
+  spared.some((p) => p.until > Date.now() && p.stage === s.stage && p.room === s.room && p.type === e.type && Math.hypot(p.x - e.x, p.z - e.z) < 3000);
+
+/** Rounds for the gun in her hands, loaded and in clips; 0 with no gun. */
+function rounds(s: GameState): number {
+  if (s.player.weapon <= 0) return 0;
+  return (s.items[s.player.weapon - 1]?.qty ?? 0) + s.items.filter((it) => it.id === CLIP).reduce((n, it) => n + it.qty, 0);
+}
+
 export class StuckError extends Error {
   readonly state: GameState;
   constructor(message: string, state: GameState) {
@@ -203,7 +221,8 @@ export async function walkTo(
         await hold(link, []);
         return s;
       }
-      if (fightBackRange > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !fightBackIgnores.includes(e.type) && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
+      // With nothing to shoot she walks on: no knife fights.
+      if (fightBackRange > 0 && rounds(s) > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !fightBackIgnores.includes(e.type) && !isSpared(s, e) && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
         await hold(link, []);
         await fight(link, { range: fightBackRange + 3000, ignore: fightBackIgnores });
         s = await link.state();
@@ -608,6 +627,7 @@ export async function fight(
   let shots = 0;
   let aiming = false;
   let misses = 0;
+  let fruitless = 0;
   let waitedFrom: { d: number; at: number } | undefined;
   const release = async () => {
     if (aiming) await link.up(Key.aim);
@@ -618,7 +638,7 @@ export async function fight(
       const s = await link.state();
       checkAlive(s);
       const live = s.enemies
-        .filter((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !ignore.includes(e.type))
+        .filter((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !ignore.includes(e.type) && !isSpared(s, e))
         .map((e) => ({ e, d: Math.hypot(e.x - s.player.x, e.z - s.player.z) }))
         .filter((t) => t.d <= range)
         .sort((a, b) => a.d - b.d);
@@ -652,8 +672,8 @@ export async function fight(
       }
       waitedFrom = undefined;
       // player.weapon is the 1-based slot of the gun in hand.
-      const rounds = (s.items[s.player.weapon - 1]?.qty ?? 0) + s.items.filter((it) => it.id === CLIP).reduce((n, it) => n + it.qty, 0);
-      if (rounds === 0) throw new StuckError(`out of ammo with ${live.length} enemies standing`, s);
+      // Out of rounds: leave the rest standing and walk on.
+      if (rounds(s) === 0) return shots;
       if (!LEAPERS.includes(target.type) && d < 1800) {
         // Close enough to grab her: step back before the next shot.
         await release();
@@ -676,6 +696,15 @@ export async function fight(
       const after = await link.frames(16);
       const same = after.enemies.find((e) => e.type === target.type && Math.hypot(e.x - target.x, e.z - target.z) < 2500);
       misses = same && same.hp === before ? misses + 1 : 0;
+      fruitless = same && same.hp === before ? fruitless + 1 : 0;
+      if (fruitless >= FRUITLESS) {
+        // Nothing she fires reaches it: leave it be and get on.
+        spared.push({ stage: s.stage, room: s.room, type: target.type, x: target.x, z: target.z, until: Date.now() + SPARE_MS });
+        if (process.env.HARNESS_TRACE) console.log(`    fight: ${FRUITLESS} shots did type ${target.type} no harm; leaving it`);
+        fruitless = 0;
+        misses = 0;
+        await release();
+      }
     }
   } finally {
     await release();
