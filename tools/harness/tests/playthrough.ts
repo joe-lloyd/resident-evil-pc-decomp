@@ -671,7 +671,8 @@ try {
   for (;;) {
     s = await settle(session.link);
     const left = pool.filter((g) => !done(s, g, reached) && (failed.get(g.id) ?? 0) < 2);
-    const ready = left.filter((g) => g.needs.every((n) => reached.has(n) || done(s, GOALS.find((x) => x.id === n)!, reached)));
+    // The way up into the mansion is one way: she sleeps there once nothing else is left.
+    const ready = left.filter((g) => g.needs.every((n) => reached.has(n) || done(s, GOALS.find((x) => x.id === n)!, reached)) && (g.id !== 'sleep' || left.length === 1));
     if (!ready.length && failed.size && secondWinds-- > 0) {
       run.log(s, `trying again: ${[...failed.keys()].join(', ')}`);
       failed.clear();
