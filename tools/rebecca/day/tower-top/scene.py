@@ -525,9 +525,11 @@ def build():
 
     # ---- What the game needs.
     room.void(P(hx0, hy0)[:2] + P(hx1, hy1)[:2])
-    # Down the hatch: action anywhere round its edge (the strip between it and
-    # the cab wall alone is too narrow to stand in).
-    room.door("tower-stairs", P(hx0 - 0.6, hy0 - 0.5)[:2] + P(hx1, hy1 + 0.5)[:2], arrive=P(-1.9, 0.75)[:2], face=(0, 1), walk=False, touch=False)
+    # Down the hatch: action round its west and south edges (the strip between
+    # it and the cab wall alone is too narrow to stand in). Not on the desk's
+    # side: she stands there to take the key and read the log, and action in
+    # the hatch's zone takes her down it instead.
+    room.door("tower-stairs", P(hx0 - 0.6, hy0)[:2] + P(hx1, hy1 + 0.5)[:2], arrive=P(-1.9, 0.75)[:2], face=(0, 1), walk=False, touch=False)
     room.check(P(fx - 0.8, fy - 0.8)[:2] + P(fx + 0.8, fy + 0.8)[:2], "The fire finder. Its sights are still set on a bearing: 047.\nNorth-east, down in the valley. Where the smoke is.")
     room.check(P(0.2, -CW)[:2] + P(1.2, -CW + 0.9)[:2], "The log. 01.20, SMOKE SIGHTED, NE, BRG 047. AIRCRAFT? RADIOED, NO ANSWER.\n03.00, DOGS AT THE FOOT OF THE TOWER. 04.40, BURNING UP. CANT STOP SCRATCHING.\nThe last line just says: THEY'RE ON THE STAIRS.")
     room.check(P(1.2, -CW)[:2] + P(2.3, -CW + 0.9)[:2], "The radio set's dead. The handset hangs on its cord.")
