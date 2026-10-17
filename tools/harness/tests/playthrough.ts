@@ -170,6 +170,11 @@ class Watch {
     this.link = link;
   }
 
+  /** Pass over the lines so far unread: the harness moved her itself (loading a checkpoint). */
+  skip(): void {
+    this.seen = this.link.history.length;
+  }
+
   /** Look at the lines since the last call. `door` is the door she was going through, if any. */
   look(door?: Door): void {
     const h = this.link.history;
@@ -666,7 +671,7 @@ try {
     for (const id of cp.reached) reached.add(id);
     s = await restore(session.link, cp);
     // Loading put her on her spot by hand: not a jump for the glitch watch.
-    watch.look();
+    watch.skip();
     run.log(s, `${runName}: starting from ${startFrom}${built ? ' (made up from the plan)' : ''}`);
   } else if (quarter && quarter > 1) {
     // No saved end of the quarter before: straight to Act 1's end, then set
@@ -674,7 +679,7 @@ try {
     built = true;
     await reach(session.link, ACT1_END);
     s = await setUpAfter(player, GOALS.slice(0, GOALS.indexOf(pool[0]!)), reached);
-    watch.look();
+    watch.skip();
     run.log(s, `${runName}: set up as if Act 1 and the jobs before it were done (made up from the plan)`);
   } else {
     for (const name of stretchNames) {
