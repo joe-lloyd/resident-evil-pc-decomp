@@ -64,16 +64,30 @@ export function collisionShapes(rdt: Uint8Array, collisionFlags = NEW_GAME_COLLI
   return shapes;
 }
 
-export function blocked(shapes: Shape[], x: number, z: number): boolean {
+export function blocked(shapes: Shape[], x: number, z: number, margin = PLAYER_RADIUS): boolean {
   for (const s of shapes) {
     if (s.kind === 'circle') {
       const cx = (s.xMin + s.xMax) / 2;
       const cz = (s.zMin + s.zMax) / 2;
-      const r = (s.xMax - s.xMin) / 2 + PLAYER_RADIUS;
+      const r = (s.xMax - s.xMin) / 2 + margin;
       if ((x - cx) ** 2 + (z - cz) ** 2 < r * r) return true;
-    } else if (x > s.xMin - PLAYER_RADIUS && x < s.xMax + PLAYER_RADIUS && z > s.zMin - PLAYER_RADIUS && z < s.zMax + PLAYER_RADIUS) {
+    } else if (x > s.xMin - margin && x < s.xMax + margin && z > s.zMin - margin && z < s.zMax + margin) {
       return true;
     }
+  }
+  return false;
+}
+
+/**
+ * Whether the room's collision stands between two points, as a shot sees it:
+ * the engine stops a shot at the room's collision (check_weapon_line_of_sight,
+ * WeaponDamage.cpp), so a zombie behind a partition cannot be hit. The ends
+ * are left out, where the bodies stand against a wall.
+ */
+export function sightBlocked(shapes: Shape[], ax: number, az: number, bx: number, bz: number): boolean {
+  const length = Math.hypot(bx - ax, bz - az);
+  for (let d = 300; d < length - 300; d += 100) {
+    if (blocked(shapes, ax + ((bx - ax) * d) / length, az + ((bz - az) * d) / length, 0)) return true;
   }
   return false;
 }

@@ -1,7 +1,7 @@
 // Reusable ways to get the game somewhere: from launch to a playable room.
 import { choice } from './jev.ts';
 import { Key, type GameLink } from './link.ts';
-import { blocked, loadShapes, planPath } from './room-map.ts';
+import { blocked, loadShapes, planPath, sightBlocked } from './room-map.ts';
 import { MSF, messageOnScreen, screen, type GameState } from './state.ts';
 
 export type Character = 'chris' | 'jill';
@@ -109,10 +109,13 @@ export function useFightBack(range = 9000, ignore: readonly number[] = []): void
  */
 const spared: { stage: number; room: number; type: number; x: number; z: number; until: number }[] = [];
 /** Shots in a row without harm before she leaves an enemy be. */
-const FRUITLESS = 4;
+const FRUITLESS = 5;
 const SPARE_MS = 60_000;
 const isSpared = (s: GameState, e: { type: number; x: number; z: number }) =>
   spared.some((p) => p.until > Date.now() && p.stage === s.stage && p.room === s.room && p.type === e.type && Math.hypot(p.x - e.x, p.z - e.z) < 3000);
+/** A wall or furniture between her and it: no shot she fires can land. */
+const outOfSight = (s: GameState, e: { x: number; z: number }) =>
+  sightBlocked(loadShapes(roomDataDirs, s.stage, s.room, s.player.cf), s.player.x, s.player.z, e.x, e.z);
 
 /** Rounds for the gun in her hands, loaded and in clips; 0 with no gun. */
 function rounds(s: GameState): number {
@@ -222,7 +225,7 @@ export async function walkTo(
         return s;
       }
       // With nothing to shoot she walks on: no knife fights.
-      if (fightBackRange > 0 && rounds(s) > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !fightBackIgnores.includes(e.type) && !isSpared(s, e) && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
+      if (fightBackRange > 0 && rounds(s) > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !fightBackIgnores.includes(e.type) && !isSpared(s, e) && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange && !outOfSight(s, e))) {
         await hold(link, []);
         await fight(link, { range: fightBackRange + 3000, ignore: fightBackIgnores });
         s = await link.state();
@@ -628,10 +631,16 @@ export async function fight(
   let aiming = false;
   let misses = 0;
   let fruitless = 0;
+  let blindSince: number | undefined;
   let waitedFrom: { d: number; at: number } | undefined;
+  // Aiming low (down held with aim): a zombie crouched over a body, or one
+  // crawling, is under a level shot.
+  let low = false;
   const release = async () => {
     if (aiming) await link.up(Key.aim);
+    if (low) await link.up(Key.down);
     aiming = false;
+    low = false;
   };
   try {
     for (;;) {
@@ -649,8 +658,9 @@ export async function fight(
       if (process.env.HARNESS_TRACE) console.log(`    fight type ${target.type} hp ${target.hp} at ${Math.round(d)} off ${off} her hp ${s.player.hp} shots ${shots}`);
 
       // Dogs and Hunters leap about and most shots at them miss until they
-      // close in; zombies walk straight on and can be hit from further away.
-      const shootRange = LEAPERS.includes(target.type) ? 3500 : 7000;
+      // close in; zombies walk straight on and can be hit from further away,
+      // but not across a room: at 5400 four shots in a row did nothing.
+      const shootRange = LEAPERS.includes(target.type) ? 3500 : 4000;
       if (d > shootRange) {
         // Out of reach: wait aimed for it to come, then go to it.
         if (!waitedFrom || d < waitedFrom.d - 500) waitedFrom = { d, at: Date.now() };
@@ -671,7 +681,14 @@ export async function fight(
         continue;
       }
       waitedFrom = undefined;
-      // player.weapon is the 1-based slot of the gun in hand.
+      if (outOfSight(s, target)) {
+        // In range but behind a wall: it has to come round to her first.
+        await release();
+        await link.frames(10);
+        if (Date.now() - (blindSince ??= Date.now()) > 5000) return shots;
+        continue;
+      }
+      blindSince = undefined;
       // Out of rounds: leave the rest standing and walk on.
       if (rounds(s) === 0) return shots;
       if (!LEAPERS.includes(target.type) && d < 1800) {
@@ -682,13 +699,18 @@ export async function fight(
         await link.frames(10);
         continue;
       }
-      if (!aiming || off > 500 || misses >= 3) {
+      const wantLow = fruitless >= 2;
+      if (!aiming || off > 500 || misses >= 3 || wantLow !== low) {
         await release();
         await faceTowards(link, target.x, target.z).catch(() => undefined);
         await link.down(Key.aim);
         aiming = true;
+        if (wantLow) {
+          await link.down(Key.down);
+          low = true;
+        }
         misses = 0;
-        await link.frames(6);
+        await link.frames(wantLow ? 12 : 6);
       }
       const before = target.hp;
       await link.tap(Key.action, 3);
