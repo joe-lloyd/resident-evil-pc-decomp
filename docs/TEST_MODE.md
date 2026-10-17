@@ -20,6 +20,17 @@ slots, holding a Beretta with 15 rounds and a clip of 15 rounds.
 She uses Chris's room files. Scenes written for Chris do not expect her as
 the player and can stall.
 
+## God mode
+
+```
+residentevil.exe --god
+```
+
+For playing a scenario through to check it, not for balance. Her health
+stays full, a death check puts her back on her feet, and every hit she lands
+kills. It works with or without test mode; in test mode, `god 0|1` turns it
+off and on. Windows only for now.
+
 ## Test mode
 
 ```
@@ -45,6 +56,7 @@ reports raw values; `tools/harness/state.ts` turns them into meanings.
 | --- | --- |
 | `frame` | game frames since launch, 30 per second; movies do not advance it |
 | `play` | 1 when game_loop's frame loop ran this frame, so the game is in a room |
+| `god` | 1 while god mode is on |
 | `msf`, `msf2` | `g_main_state_flags` and its second word, hex (`MSF_*` in `src/Globals.h`) |
 | `title`, `fmv`, `dbg` | `g_titleMode`, a movie is playing, the F1 debug menu is open |
 | `stage`, `room`, `cam`, `cut` | where the player is |
@@ -71,6 +83,7 @@ One per line. Each is answered with `{"t":"ack","cmd":...,"ok":0|1}`.
 | `ping <token>` | answered with `{"t":"pong","token":...,"frame":...}` |
 | `room <stage> <room>` | change room like the debug menu; a second ack, `room-start`, comes when it begins |
 | `flag <bank> <index> <0\|1>` | clear or set a script flag |
+| `god <0\|1>` | god mode off or on: her health stays full, a death check puts her back on her feet, and every hit she lands kills |
 | `shot <path>` | save the next frame's back buffer as a BMP on the game machine |
 
 The shot is the whole 640x480 frame, background included.

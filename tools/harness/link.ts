@@ -205,6 +205,11 @@ export class GameLink {
     return this.command(`give ${id} ${qty}`, 'give');
   }
 
+  /** God mode: her health stays full and every hit she lands kills (TestMode.h). */
+  god(on: boolean): Promise<void> {
+    return this.command(`god ${on ? 1 : 0}`, 'god');
+  }
+
   setFlag(bank: number, index: number, on: boolean): Promise<void> {
     return this.command(`flag ${bank} ${index} ${on ? 1 : 0}`, 'flag');
   }

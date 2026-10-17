@@ -24,6 +24,12 @@ void TestMode_NoteMessage(unsigned short msgId);
 // asked for, which needs task context to sleep a frame.
 void TestMode_GameplayFrame(void);
 
+// God mode (port addition): --god, or the test command `god 1`. Her health
+// stays full and a death check never fires, and every hit she lands kills.
+// For playtesting a scenario end to end; off unless asked for.
+void DevCheat_SetGod(int on);
+int  DevCheat_God(void);
+
 // Dev boot (port addition): --boot <chris|jill|rebecca>[:<stage>:<room>]
 // starts a new game straight from launch, skipping the logos, title, character
 // select and opening movie, then moves to the room if one was given. Works with

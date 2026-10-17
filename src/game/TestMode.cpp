@@ -34,6 +34,10 @@ static char         s_body[8192];
 static char         s_lastBody[8192];
 
 static int          s_port = 0;
+static int          s_god = 0;
+
+void DevCheat_SetGod(int on) { s_god = on ? 1 : 0; s_forceState = 1; }
+int  DevCheat_God(void) { return s_god; }
 
 int TestMode_Start(int port)
 {
@@ -191,6 +195,9 @@ static void on_command(const char* line)
         // The held-item count (get_item_slot searches only that far) and the
         // status screen's icons, as a new game sets them up.
         LoadHeldItemsImages();
+    } else if (strcmp(cmd, "god") == 0 && (a == 0 || a == 1)) {
+        DevCheat_SetGod(a);
+        reply("{\"t\":\"ack\",\"cmd\":\"god\",\"ok\":1}\n");
     } else if (strcmp(cmd, "flag") == 0 && a >= 0 && b >= 0 && b < 256 && (c == 0 || c == 1)) {
         FlagBank fb = flag_bank(a);
         int byteAt = (b >> 5) * 4;
@@ -286,6 +293,7 @@ int DevBoot_StartRoom(int* stage, int* room)
 void TestMode_GameplayFrame(void)
 {
     s_gameplayFrame = 1;
+    if (s_god && g_playerEntity.health < g_playerEntity.maxHealth) g_playerEntity.health = g_playerEntity.maxHealth;
     if (s_pendingStage < 0) return;
     int ok = DebugRoomChange_Request(s_pendingStage, s_pendingRoom);
     reply("{\"t\":\"ack\",\"cmd\":\"room-start\",\"ok\":%d,\"frame\":%u}\n", ok, s_frame);
@@ -298,8 +306,8 @@ void TestMode_GameplayFrame(void)
 static void build_state(void)
 {
     s_len = 0;
-    put("\"play\":%d,\"msf\":\"%08x\",\"msf2\":\"%08x\",\"title\":%d,\"fmv\":%d,\"dbg\":%d,",
-        s_gameplayFrame, (unsigned int)g_MainStateFlagBank[0], (unsigned int)g_MainStateFlagBank[1],
+    put("\"play\":%d,\"god\":%d,\"msf\":\"%08x\",\"msf2\":\"%08x\",\"title\":%d,\"fmv\":%d,\"dbg\":%d,",
+        s_gameplayFrame, s_god, (unsigned int)g_MainStateFlagBank[0], (unsigned int)g_MainStateFlagBank[1],
         (int)g_titleMode, plat_video_is_active() ? 1 : 0, g_debugMenuOpen);
     put("\"stage\":%d,\"room\":%d,\"cam\":%d,\"cut\":%d,\"charModel\":%d,",
         (int)g_stageId, (int)g_roomId, (int)g_roomCameraId, (int)g_cutId,

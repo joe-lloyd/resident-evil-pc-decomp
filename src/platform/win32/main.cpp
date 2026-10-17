@@ -111,6 +111,9 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         Config_OverrideGameMode(name);
     }
 
+    // Port addition: --god for playtesting (TestMode.h).
+    if (lpCmdLine && strstr(lpCmdLine, "--god")) DevCheat_SetGod(1);
+
     const char* boot = lpCmdLine ? strstr(lpCmdLine, "--boot") : NULL;
     if (boot != NULL) boot += strspn(boot + strlen("--boot"), " ") + strlen("--boot");
     if (boot != NULL && !DevBoot_Configure(boot)) {

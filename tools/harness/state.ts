@@ -60,6 +60,8 @@ export interface GameState {
   frame: number;
   /** game_loop's inner loop ran this frame: the game is in a room, not a menu screen. */
   play: boolean;
+  /** God mode is on (TestMode.h). */
+  god: boolean;
   msf: number;
   msf2: number;
   title: number;
@@ -145,6 +147,7 @@ function parseGameState(o: Record<string, unknown>): GameState {
   return {
     frame: num(o, 'frame'),
     play: num(o, 'play') !== 0,
+    god: num(o, 'god') === 1,
     msf: parseInt(str(o, 'msf'), 16),
     msf2: parseInt(str(o, 'msf2'), 16),
     title: num(o, 'title'),
