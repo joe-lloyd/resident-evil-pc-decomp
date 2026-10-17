@@ -272,7 +272,13 @@ class Player {
         if (!back || !(await this.through(back))) return false;
         continue;
       }
-      const way = this.way(s, to, via);
+      let way = this.way(s, to, via);
+      if (!way?.length && this.closed.size) {
+        // Shut only by doors that did not open a moment ago: try them again
+        // for real rather than give up while they are marked shut.
+        this.closed.clear();
+        way = this.way(s, to, via);
+      }
       if (!way?.length) return false;
       if (!(await this.through(way[0]!))) continue;
       s = await this.link.state();
