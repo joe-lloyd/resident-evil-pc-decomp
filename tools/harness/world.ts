@@ -33,6 +33,12 @@ export interface Pickup {
   readonly zone: Zone;
 }
 
+/** An item box (SCE_ITEMBOX): her bag on one side, the shared store on the other. */
+export interface Box {
+  readonly room: Slug;
+  readonly zone: Zone;
+}
+
 const SAVE_ROOM = { slug: 'save', stage: 0, room: 0 } as const;
 const rooms = [...dayRooms.map((r) => ({ slug: r.slug, stage: r.stage, room: r.room })), SAVE_ROOM];
 
@@ -55,9 +61,10 @@ const args = (line: string, call: string): string[] | undefined => {
   return m ? m[1]!.split(',').map((a) => a.trim()) : undefined;
 };
 
-function readRoom(slug: Slug): { doors: Door[]; pickups: Pickup[] } {
+function readRoom(slug: Slug): { doors: Door[]; pickups: Pickup[]; boxes: Box[] } {
   const doors: Door[] = [];
   const pickups: Pickup[] = [];
+  const boxes: Box[] = [];
   const text = readFileSync(path.join(dayDir, slug, 'room.c'), 'utf8');
   // Init procedure only: main's doors are rewrites of the same ones.
   for (const line of text.split('\n')) {
@@ -85,20 +92,27 @@ function readRoom(slug: Slug): { doors: Door[]; pickups: Pickup[] } {
       // id, x, z, w, d, item, count, model, 255, 8 placement bytes, flag, ...
       const n = it.map(Number);
       pickups.push({ room: slug, item: n[5]!, flag: n[17]!, zone: { x: n[1]!, z: n[2]!, w: n[3]!, d: n[4]! } });
+      continue;
+    }
+    const aot = args(line, 'aot_set');
+    if (aot?.[5] === 'SCE_ITEMBOX') {
+      const n = aot.map(Number);
+      boxes.push({ room: slug, zone: { x: n[1]!, z: n[2]!, w: n[3]!, d: n[4]! } });
     }
   }
-  return { doors, pickups };
+  return { doors, pickups, boxes };
 }
 
 export interface World {
   readonly doors: readonly Door[];
   readonly pickups: readonly Pickup[];
+  readonly boxes: readonly Box[];
 }
 
 export function loadWorld(): World {
   const slugs = readdirSync(dayDir).filter((f) => existsSync(path.join(dayDir, f, 'room.c')));
   const all = slugs.map(readRoom);
-  return { doors: all.flatMap((r) => r.doors), pickups: all.flatMap((r) => r.pickups) };
+  return { doors: all.flatMap((r) => r.doors), pickups: all.flatMap((r) => r.pickups), boxes: all.flatMap((r) => r.boxes) };
 }
 
 /** The fewest doors from `from` to `to`, leaving out `closed` ones; undefined when there is no way. */

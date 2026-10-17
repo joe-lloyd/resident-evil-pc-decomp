@@ -17,10 +17,10 @@
 // records the window.
 import path from 'node:path';
 import { fetch, open, startRecording, stopRecording } from '../lab.ts';
-import { DiedError, StuckError, approach, check, goTo, settle, useDoor, useFightBack, useItem } from '../flows.ts';
+import { DiedError, StuckError, approach, check, goTo, inControl, settle, useDoor, useFightBack, useItem } from '../flows.ts';
 import { choice } from '../jev.ts';
 import { Key, type GameLink } from '../link.ts';
-import { Bank, flag, type GameState } from '../state.ts';
+import { Bank, flag, screen, type GameState } from '../state.ts';
 import { CROW, STRETCHES, stretchNames } from '../day.ts';
 import { Run } from '../scenario.ts';
 import { loadWorld, route, slugAt, type Door, type Pickup, type Slug, type Zone } from '../world.ts';
@@ -30,6 +30,11 @@ import { read } from './floor.ts';
 
 const world = loadWorld();
 const ADDER = 10;
+/**
+ * She stops to fight only what comes this close: god mode keeps her alive, and
+ * a dog pacing a far corner (the woods' second) would hold her for minutes.
+ */
+const FIGHT_BACK = 2500;
 /** Item ids (rebecca/items/items.ts). */
 const ITEM = {
   rangerKeys: 57, cutters: 28, officeKey: 58, workshopKey: 59, cog: 41, jerrycan: 31, diesel: 32, crank: 30,
@@ -126,6 +131,8 @@ const JUMP = 400;
 class Watch {
   private seen = 0;
   readonly glitches: string[] = [];
+  /** Jumps while a scene had the controls: a scene may cut her to a new spot, so these are for a look, not failures. */
+  readonly sceneCuts: string[] = [];
   private readonly link: GameLink;
   constructor(link: GameLink) {
     this.link = link;
@@ -141,22 +148,25 @@ class Watch {
       const from = slugAt(a.stage, a.room);
       const to = slugAt(b.stage, b.room);
       if (a.stage !== b.stage || a.room !== b.room) {
-        const known = world.doors.some((d) => d.from === from && d.to === to);
-        if (!known) this.note(b, `room ${from ?? label(a)} to ${to ?? label(b)} with no door between them`);
+        const taken = world.doors.find((d) => d.from === from && d.to === to);
+        if (!taken) this.note(b, `room ${from ?? label(a)} to ${to ?? label(b)} with no door between them`);
         else if (door && (door.from !== from || door.to !== to)) this.note(b, `went for ${door.from} > ${door.to}, came out ${from} > ${to}`);
+        else {
+          // Where the door put her, on her first frame in the room, before any scene walks her on.
+          const off = Math.hypot(b.player.x - taken.arrive.x, b.player.z - taken.arrive.z);
+          if (off > 1500) this.note(b, `came through ${from} > ${to} ${Math.round(off)} units from where the door puts her`);
+        }
         continue;
       }
       const frames = Math.max(1, b.frame - a.frame);
       const moved = Math.hypot(b.player.x - a.player.x, b.player.z - a.player.z);
-      if (moved / frames > JUMP && moved > 1500) this.note(b, `jumped ${Math.round(moved)} units in ${frames} frames, (${a.player.x}, ${a.player.z}) to (${b.player.x}, ${b.player.z})`);
+      if (moved / frames > JUMP && moved > 1500) {
+        const what = `jumped ${Math.round(moved)} units in ${frames} frames, (${a.player.x}, ${a.player.z}) to (${b.player.x}, ${b.player.z})`;
+        if (inControl(a) && inControl(b)) this.note(b, what);
+        else this.sceneCuts.push(`${from} f${b.frame}: ${what}`);
+      }
     }
     this.seen = h.length;
-  }
-
-  /** After a door: she should stand near where it puts her, unless a scene took over. */
-  arrived(s: GameState, door: Door): void {
-    const off = Math.hypot(s.player.x - door.arrive.x, s.player.z - door.arrive.z);
-    if (off > 3000) this.note(s, `came through ${door.from} > ${door.to} ${Math.round(off)} units from where the door puts her`);
   }
 
   private note(s: GameState, what: string): void {
@@ -253,12 +263,9 @@ class Player {
       return false;
     }
     if (at !== door.to) this.run.log(s, `went for ${door.to}, came out in ${at}`);
-    else {
-      this.run.log(s, `into ${at}`);
-      this.watch.arrived(s, door);
-    }
+    else this.run.log(s, `into ${at}`);
     // Unarmed after the mine: fighting back would only stand her still.
-    useFightBack(s.player.weapon > 0 ? 9000 : 0, [CROW, ADDER]);
+    useFightBack(s.player.weapon > 0 ? FIGHT_BACK : 0, [CROW, ADDER]);
     return true;
   }
 }
@@ -292,11 +299,64 @@ function done(s: GameState, g: Goal, reached: Set<string>): boolean {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Her bag: six slots, three of them her gun, its clip and her knife at the start
+// ---------------------------------------------------------------------------
+
+const BERETTA = 0x02;
+const CLIP = 0x0b;
+
+/** What the rest of the day still needs from her bag: the items goals use, the keys of doors still locked, her gun. */
+function needed(s: GameState, reached: Set<string>): Set<number> {
+  const keep = new Set<number>([BERETTA, CLIP]);
+  for (const g of GOALS) {
+    if (done(s, g, reached)) continue;
+    if (g.kind === 'event' && g.use !== undefined) keep.add(g.use);
+  }
+  for (const d of world.doors) if (d.lock && !flag(s, Bank.locks, d.lock.flag)) keep.add(d.lock.item);
+  return keep;
+}
+
+const freeSlots = (s: GameState) => s.items.filter((i) => i.id === 0).length;
+
+/**
+ * Make a slot free: to the nearest item box, and put away the first thing she
+ * carries that the day no longer needs. The box screen opens with her bag's
+ * cursor on its first slot; she picks the item, then the box's empty row above
+ * its first item, and they swap (tests/reb-save.ts).
+ */
+async function stash(p: Player, reached: Set<string>): Promise<void> {
+  let s = await p.link.state();
+  const spare = s.items.findIndex((i) => i.id !== 0 && !needed(s, reached).has(i.id));
+  if (spare < 0) throw new StuckError(`her bag is full of things the day still needs: ${s.items.map((i) => i.id).join(', ')}`, s);
+  const near = [...world.boxes].sort((a, b) => (p.way(s, a.room)?.length ?? 99) - (p.way(s, b.room)?.length ?? 99))[0]!;
+  p.run.log(s, `bag full: to the item box in ${near.room} to put away item ${s.items[spare]!.id}`);
+  if (!(await p.goTo(near.room))) throw new StuckError(`no way to the item box in ${near.room}`, s);
+  s = await approach(p.link, near.zone);
+  const id = s.items[spare]!.id;
+  const slot = s.items.findIndex((i) => i.id === id);
+  await p.link.tap(Key.action, 3);
+  s = await p.link.waitFor((st) => screen(st) === 'menu', 'the box screen', 20_000);
+  await p.link.frames(30);
+  const keys = [...Array<number>(slot >> 1).fill(Key.down), ...(slot & 1 ? [Key.right] : []), Key.action, Key.up, Key.action];
+  for (const key of keys) {
+    await p.link.tap(key, 3);
+    await p.link.frames(20);
+  }
+  s = await settle(p.link);
+  if (s.items.some((i) => i.id === id)) throw new StuckError(`item ${id} is still in her bag after the box`, s);
+  p.run.log(s, `put item ${id} in the box`);
+}
+
 /** The room a goal is worked in. */
 const roomFor = (g: Goal): Slug => (g.kind === 'unlock' ? g.from : g.room);
 
 async function work(p: Player, g: Goal, reached: Set<string>): Promise<void> {
   const { link, run } = p;
+  // A pickup, or a scene that hands her something, needs a free slot.
+  if ((g.kind === 'take' && !g.file) || (g.kind === 'scene' && g.gets !== undefined)) {
+    if (freeSlots(await link.state()) === 0) await stash(p, reached);
+  }
   const via = g.kind === 'scene' || g.kind === 'visit' ? g.from : undefined;
   if (!(await p.goTo(roomFor(g), via))) throw new StuckError(`no way to ${roomFor(g)}${via ? ` from ${via}` : ''}`, await link.state());
   let s = await settle(link);
@@ -384,7 +444,7 @@ async function next(p: Player, s: GameState, ready: Goal[]): Promise<Goal> {
 const overlay = process.env.OVERLAY;
 if (!overlay) throw new Error('set OVERLAY to the REB build folder');
 
-useFightBack(9000, [CROW, ADDER]);
+useFightBack(FIGHT_BACK, [CROW, ADDER]);
 const session = await open(Number(process.env.PORT ?? 7811), `--mode REB --god --boot rebecca`);
 const record = process.env.RECORD;
 const remoteVideo = record ? `${process.env.RE1_LAB_GAME_DIR ?? 'D:\\Games\\RE1-decomp'}\\${record}.mp4` : undefined;
@@ -420,7 +480,7 @@ try {
         run.log(s, `done: ${g.id}`);
       } else {
         failed.set(g.id, (failed.get(g.id) ?? 0) + 1);
-        run.log(s, `not done: ${g.id} (try ${failed.get(g.id)})`);
+        run.log(s, `not done: ${g.id} (try ${failed.get(g.id)}); carrying ${s.items.map((i) => i.id).join(', ')}`);
         await run.picture(`play-${g.id}-${failed.get(g.id)}`);
       }
     } catch (err) {
@@ -433,6 +493,7 @@ try {
   for (const [id, n] of failed) if (n >= 2 && !reached.has(id)) run.fail(`gave up on ${id}`);
   if (!reached.has('sleep')) run.fail('the day never reached the save room');
   for (const line of watch.glitches) run.fail(`glitch: ${line}`);
+  for (const line of watch.sceneCuts) console.log(`  scene cut: ${line}`);
   await run.picture('play-end');
   run.finish();
 } catch (err) {
