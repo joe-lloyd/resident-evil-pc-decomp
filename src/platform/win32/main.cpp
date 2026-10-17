@@ -563,10 +563,13 @@ BOOL CreateGameWindow(int nCmdShow)
     
     RegisterClassA(&wc);
     
-    // Create window
+    // Create window. Port addition: a test game's title names its port, so a
+    // recording of one of several games side by side finds its own window.
+    char title[32] = "RESIDENT EVIL";
+    if (TestMode_Active()) snprintf(title, sizeof(title), "RESIDENT EVIL %d", TestMode_Port());
     g_hWnd = CreateWindowExA(dwExStyle,
         "RESIDENT EVIL",
-        "RESIDENT EVIL",
+        title,
         dwStyle,
         winX, winY, winWidth, winHeight,
         NULL, NULL, g_hInstance, NULL);

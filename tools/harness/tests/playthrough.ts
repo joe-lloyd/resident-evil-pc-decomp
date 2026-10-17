@@ -11,7 +11,16 @@
 //
 //   TYPESAFE_API_KEY=$(ssh vault get typesafe-api-key) OVERLAY=<REB build folder> \
 //     RE1_LAB_GAME_DIR='D:\Games\RE1-files' RE1_LAB_REPO_DIR='C:\Users\joell\Tools\re1-files' PORT=7811 \
-//     node tools/harness/tests/playthrough.ts
+//     node tools/harness/tests/playthrough.ts [--quarter <1-4>] [--from <checkpoint.json>]
+//
+// --quarter plays one quarter of the day (QUARTERS) and stops: four can run
+// side by side, each on its own PORT. The first starts from a new game. A
+// later one starts from --from, or else the last quarter's end in SNAPS if a
+// run saved one, or else it plays Act 1 and then sets up what the earlier
+// quarters' jobs give (their flags, keys and items): a start made up from the
+// plan, which the report marks as such. Every run saves a checkpoint to SNAPS
+// (default OUT/snaps) after each job and at its end, so the quarters stitch:
+// each one's start is the one before's end.
 //
 // Without TYPESAFE_API_KEY the next goal is the nearest. RECORD=<name>
 // records the window.
@@ -23,10 +32,20 @@ import { Key, type GameLink } from '../link.ts';
 import { Bank, flag, screen, type GameState } from '../state.ts';
 import { CROW, STRETCHES, stretchNames } from '../day.ts';
 import { Run } from '../scenario.ts';
+import { load, restore, save, take, type Checkpoint } from '../checkpoint.ts';
+import { existsSync, mkdirSync } from 'node:fs';
 import { loadWorld, route, slugAt, type Door, type Pickup, type Slug, type Zone } from '../world.ts';
 import { CUT_FLAGS } from '../../rebecca/day/cutscenes.ts';
 import { EVENT_FLAGS } from '../../rebecca/day/events.ts';
+import { GEAR } from '../../rebecca/day/gear.ts';
 import { read } from './floor.ts';
+import { dayRooms } from '../../rebecca/day/rooms.ts';
+
+const dayRoomOf = (slug: string) => {
+  const r = dayRooms.find((x) => x.slug === slug);
+  if (!r) throw new Error(`no room ${slug}`);
+  return r;
+};
 
 const world = loadWorld();
 const ADDER = 10;
@@ -37,6 +56,7 @@ const ADDER = 10;
 const FIGHT_BACK = 2500;
 /** Item ids (rebecca/items/items.ts). */
 const ITEM = {
+  beretta: 0x02,
   rangerKeys: 57, cutters: 28, officeKey: 58, workshopKey: 59, cog: 41, jerrycan: 31, diesel: 32, crank: 30,
   switchKey: 55, quarryKey: 60, dynamite: 42, operatorKey: 56, fuses: 39, crowbar: 43, gateKey: 52, cellarKey: 53,
 } as const;
@@ -111,6 +131,8 @@ const GOALS: Goal[] = [
   { id: 'keeper-log', needs: ['pylon-down'], kind: 'take', room: 'lower-station', file: true },
   { id: 'kevin', needs: ['pylon-down'], kind: 'scene', room: 'crash', from: 'valley-path', cut: 'cut-kevin' },
   { id: 'crowbar', needs: ['kevin'], kind: 'take', room: 'crash', item: ITEM.crowbar },
+  // Kevin's Beretta: she has had no gun since the mine.
+  { id: 'kevins-gun', needs: ['kevin'], kind: 'take', room: 'crash', item: ITEM.beretta },
   { id: 'pry-lodge', needs: ['crowbar'], kind: 'unlock', from: 'creek', to: 'lodge' },
   { id: 'gate-key', needs: ['pry-lodge'], kind: 'take', room: 'lodge', item: ITEM.gateKey },
   { id: 'gardener-diary', needs: ['pry-lodge'], kind: 'take', room: 'lodge', file: true },
@@ -121,6 +143,14 @@ const GOALS: Goal[] = [
   { id: 'push-rack', needs: ['bulkhead'], kind: 'event', room: 'cellar' },
   { id: 'sleep', needs: ['push-rack'], kind: 'scene', room: 'save', from: 'crawl', cut: 'cut-sleep' },
 ];
+
+/** The day in four, each ending where the next begins: the first goal of each. */
+const QUARTERS = ['gondola-dead', 'cut-depot', 'diary', 'ride'] as const;
+/** The goals of quarter `q` (1-4). */
+function quarterGoals(q: number): Goal[] {
+  const at = (id: string | undefined) => (id ? GOALS.findIndex((g) => g.id === id) : GOALS.length);
+  return GOALS.slice(at(QUARTERS[q - 1]), at(QUARTERS[q]));
+}
 
 // ---------------------------------------------------------------------------
 // Watching for glitches
@@ -415,6 +445,74 @@ async function fetchFromBox(p: Player, reached: Set<string>, id: number, keep: r
   p.run.log(s, `took item ${id} from the box`);
 }
 
+/**
+ * Set the game up as if `earlier` were done, after a real Act 1: each job's
+ * flag raised, what it gives in her bag (what does not fit, in the box), what
+ * it uses spent, and her in the room of the last of them. A start made up
+ * from the plan, for a quarter whose previous quarter has no saved end yet.
+ */
+async function setUpAfter(p: Player, earlier: Goal[], reached: Set<string>): Promise<GameState> {
+  const { link } = p;
+  let s = await settle(link);
+  const bag = s.items.filter((i) => i.id !== 0).map((i) => ({ id: i.id, qty: i.qty }));
+  const spend = (id: number) => {
+    const i = bag.findIndex((b) => b.id === id);
+    if (i >= 0 && --bag[i]!.qty <= 0) bag.splice(i, 1);
+  };
+  for (const g of earlier) {
+    switch (g.kind) {
+      case 'take': {
+        const pick = pickupFor(g);
+        if (!pick) throw new Error(`nothing to take in ${g.room} for ${g.id}`);
+        await link.setFlag(Bank.roomItems, pick.flag, false);
+        if (!g.file) bag.push({ id: pick.item, qty: pick.qty || 1 });
+        break;
+      }
+      case 'event':
+        await link.setFlag(Bank.common, EVENT_FLAGS.get(g.id)!, true);
+        if (g.use !== undefined) spend(g.use);
+        break;
+      case 'unlock': {
+        const d = world.doors.find((x) => x.from === g.from && x.to === g.to)!;
+        if (!d.lock) break;
+        await link.setFlag(Bank.locks, d.lock.flag, true);
+        spend(d.lock.item);
+        break;
+      }
+      case 'scene':
+        await link.setFlag(Bank.common, CUT_FLAGS.get(g.cut)!, true);
+        if (g.gets !== undefined) bag.push({ id: g.gets, qty: 1 });
+        // The mine takes her weapons, rounds and healing (gear.ts).
+        if (g.id === 'mine-collapse') for (let i = bag.length - 1; i >= 0; i--) if (GEAR.includes(bag[i]!.id)) bag.splice(i, 1);
+        break;
+      case 'look':
+        if (g.cut) await link.setFlag(Bank.common, CUT_FLAGS.get(g.cut)!, true);
+        break;
+      case 'visit':
+        break;
+    }
+    reached.add(g.id);
+  }
+  s = await link.state();
+  let boxAt = 0;
+  for (let i = 0; i < Math.max(bag.length, s.items.length); i++) {
+    const it = bag[i];
+    if (i < s.items.length) await link.slot(i, it?.id ?? 0, it?.qty ?? 0);
+    else if (it) {
+      while (s.box[boxAt] && s.box[boxAt]!.id !== 0) boxAt++;
+      await link.boxSlot(boxAt++, it.id, it.qty);
+    }
+  }
+  if (!bag.some((b) => b.id === ITEM.beretta)) await link.unequip();
+  const last = earlier.at(-1)!;
+  const into = world.doors.find((d) => d.to === roomFor(last))!;
+  const room = into.to === 'save' ? { stage: 0, room: 0 } : dayRoomOf(into.to);
+  await link.room(room.stage, room.room);
+  await settle(link);
+  await link.place(into.arrive.x, into.arrive.z, into.arrive.angle);
+  return settle(link);
+}
+
 /** The room a goal is worked in. */
 const roomFor = (g: Goal): Slug => (g.kind === 'unlock' ? g.from : g.room);
 
@@ -437,6 +535,8 @@ async function work(p: Player, g: Goal, reached: Set<string>): Promise<void> {
       const pick = pickupFor(g);
       if (!pick) throw new StuckError(`nothing to take in ${g.room} for ${g.id}`, s);
       for (let i = 0; i < 3 && !done(s, g, reached); i++) s = await check(link, pick.zone);
+      // A gun picked up with nothing in her hands: equip it, as a player would.
+      if (g.item === ITEM.beretta && s.player.weapon === 0 && has(s, ITEM.beretta)) s = await useItem(link, ITEM.beretta);
       break;
     }
     case 'event': {
@@ -515,29 +615,60 @@ async function next(p: Player, s: GameState, ready: Goal[]): Promise<Goal> {
 
 const overlay = process.env.OVERLAY;
 if (!overlay) throw new Error('set OVERLAY to the REB build folder');
+const args = process.argv.slice(2);
+const arg = (name: string) => {
+  const i = args.indexOf(name);
+  return i >= 0 ? args[i + 1] : undefined;
+};
+const quarter = arg('--quarter') ? Number(arg('--quarter')) : undefined;
+if (quarter !== undefined && !(quarter >= 1 && quarter <= 4)) throw new Error('--quarter is 1 to 4');
+const fromFile = arg('--from');
 
 useFightBack(FIGHT_BACK, [CROW, ADDER]);
 const session = await open(Number(process.env.PORT ?? 7811), `--mode REB --god --boot rebecca`);
 const record = process.env.RECORD;
 const remoteVideo = record ? `${process.env.RE1_LAB_GAME_DIR ?? 'D:\\Games\\RE1-decomp'}\\${record}.mp4` : undefined;
-if (remoteVideo) startRecording(remoteVideo);
+if (remoteVideo) startRecording(remoteVideo, session.port);
 const run = new Run(session.link, overlay);
+const snaps = process.env.SNAPS ?? path.join(run.out, 'snaps');
+mkdirSync(snaps, { recursive: true });
 const watch = new Watch(session.link);
 const player = new Player(run, watch);
 const reached = new Set<string>();
 const failed = new Map<string, number>();
 /** Fresh starts on the goals she gave up on, once nothing else is left: a door a zombie held may open later. */
 let secondWinds = 3;
+/** The jobs this run plays: a quarter's, or the whole day's. */
+const pool = quarter ? quarterGoals(quarter) : GOALS;
+/** The start was made up from the plan, not saved from a game. */
+let built = false;
+const runName = quarter ? `quarter ${quarter}` : 'the day';
 try {
   let s = await session.link.waitFor((st) => st.play, 'gameplay', 180_000);
   if (!s.god) run.fail('god mode is off: the exe is older than --god');
-  for (const name of stretchNames) {
-    await STRETCHES[name]!.play(run);
-    watch.look();
+  const previous = quarter && quarter > 1 ? path.join(snaps, `q${quarter - 1}-end.json`) : undefined;
+  const startFrom = fromFile ?? (previous && existsSync(previous) ? previous : undefined);
+  if (startFrom) {
+    const cp: Checkpoint = load(startFrom);
+    built = cp.built ?? false;
+    for (const id of cp.reached) reached.add(id);
+    s = await restore(session.link, cp);
+    run.log(s, `${runName}: starting from ${startFrom}${built ? ' (made up from the plan)' : ''}`);
+  } else {
+    for (const name of stretchNames) {
+      await STRETCHES[name]!.play(run);
+      watch.look();
+    }
+    if (quarter && quarter > 1) {
+      built = true;
+      s = await setUpAfter(player, GOALS.slice(0, GOALS.indexOf(pool[0]!)), reached);
+      run.log(s, `${runName}: after a real Act 1, set up as if the jobs before it were done (made up from the plan)`);
+    }
   }
+  const snapshot = (name: string, st: GameState) => save(path.join(snaps, `${name}.json`), { ...take(st, reached), ...(built ? { built } : {}) });
   for (;;) {
     s = await settle(session.link);
-    const left = GOALS.filter((g) => !done(s, g, reached) && (failed.get(g.id) ?? 0) < 2);
+    const left = pool.filter((g) => !done(s, g, reached) && (failed.get(g.id) ?? 0) < 2);
     const ready = left.filter((g) => g.needs.every((n) => reached.has(n) || done(s, GOALS.find((x) => x.id === n)!, reached)));
     if (!ready.length && failed.size && secondWinds-- > 0) {
       run.log(s, `trying again: ${[...failed.keys()].join(', ')}`);
@@ -557,6 +688,7 @@ try {
       if (done(s, g, reached)) {
         reached.add(g.id);
         run.log(s, `done: ${g.id}`);
+        snapshot(`after-${g.id}`, await settle(session.link));
       } else {
         failed.set(g.id, (failed.get(g.id) ?? 0) + 1);
         run.log(s, `not done: ${g.id} (try ${failed.get(g.id)}); carrying ${s.items.map((i) => i.id).join(', ')}`);
@@ -569,11 +701,15 @@ try {
       await run.picture(`play-${g.id}-stuck-${failed.get(g.id)}`);
     }
   }
-  for (const [id, n] of failed) if (n >= 2 && !reached.has(id)) run.fail(`gave up on ${id}`);
-  if (!reached.has('sleep')) run.fail('the day never reached the save room');
+  const missing = pool.filter((g) => !reached.has(g.id));
+  for (const g of missing) run.fail(`${runName} left ${g.id} undone`);
+  if (!missing.length && quarter) {
+    snapshot(`q${quarter}-end`, await settle(session.link));
+    run.log(s, `${runName} done: its end saved for the next quarter${built ? ' (its start was made up from the plan)' : ''}`);
+  }
   for (const line of watch.glitches) run.fail(`glitch: ${line}`);
   for (const line of watch.sceneCuts) console.log(`  scene cut: ${line}`);
-  await run.picture('play-end');
+  await run.picture(quarter ? `play-q${quarter}-end` : 'play-end');
   run.finish();
 } catch (err) {
   await run.crashed();

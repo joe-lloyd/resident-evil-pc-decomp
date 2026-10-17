@@ -28,6 +28,8 @@ export interface Door {
 export interface Pickup {
   readonly room: Slug;
   readonly item: number;
+  /** How many: rounds in a clip, uses in a key item. */
+  readonly qty: number;
   /** FG_ITEM flag: clear once she has taken it. */
   readonly flag: number;
   readonly zone: Zone;
@@ -91,7 +93,7 @@ function readRoom(slug: Slug): { doors: Door[]; pickups: Pickup[]; boxes: Box[] 
     if (it) {
       // id, x, z, w, d, item, count, model, 255, 8 placement bytes, flag, ...
       const n = it.map(Number);
-      pickups.push({ room: slug, item: n[5]!, flag: n[17]!, zone: { x: n[1]!, z: n[2]!, w: n[3]!, d: n[4]! } });
+      pickups.push({ room: slug, item: n[5]!, qty: n[6]!, flag: n[17]!, zone: { x: n[1]!, z: n[2]!, w: n[3]!, d: n[4]! } });
       continue;
     }
     const aot = args(line, 'aot_set');

@@ -195,6 +195,20 @@ static void on_command(const char* line)
         // The held-item count (get_item_slot searches only that far) and the
         // status screen's icons, as a new game sets them up.
         LoadHeldItemsImages();
+    } else if (strcmp(cmd, "slot") == 0 && a >= 0 && a < 8 && b >= 0 && b < 256 && c >= 0 && c < 256) {
+        // Set one slot of her bag outright, to load a playthrough's snapshot.
+        ItemSlot* items = (ItemSlot*)g_ItemSlotsPointer;
+        if (items) { items[a].Id = (unsigned char)b; items[a].qty = (unsigned char)c; }
+        reply("{\"t\":\"ack\",\"cmd\":\"slot\",\"ok\":%d}\n", items ? 1 : 0);
+    } else if (strcmp(cmd, "boxslot") == 0 && a >= 0 && a < 48 && b >= 0 && b < 256 && c >= 0 && c < 256) {
+        g_itemboxSlots[a].Id = (unsigned char)b;
+        g_itemboxSlots[a].qty = (unsigned char)c;
+        reply("{\"t\":\"ack\",\"cmd\":\"boxslot\",\"ok\":1}\n");
+    } else if (strcmp(cmd, "unequip") == 0) {
+        // Nothing in her hands, as after the mine takes her gear.
+        g_EquippedItemId = 0;
+        g_playerEntity.equippedWeaponId = 0;
+        reply("{\"t\":\"ack\",\"cmd\":\"unequip\",\"ok\":1}\n");
     } else if (strcmp(cmd, "god") == 0 && (a == 0 || a == 1)) {
         DevCheat_SetGod(a);
         reply("{\"t\":\"ack\",\"cmd\":\"god\",\"ok\":1}\n");

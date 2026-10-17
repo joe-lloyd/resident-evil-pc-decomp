@@ -28,7 +28,7 @@ useFightBack(9000, [CROW]);
 const session = await open(Number(process.env.PORT ?? 7802), bootFor(first));
 const record = process.env.RECORD;
 const remoteVideo = record ? `${process.env.RE1_LAB_GAME_DIR ?? 'D:\\Games\\RE1-decomp'}\\${record}.mp4` : undefined;
-if (remoteVideo) startRecording(remoteVideo);
+if (remoteVideo) startRecording(remoteVideo, session.port);
 const run = new Run(session.link, overlay);
 try {
   await play(run, first, last);

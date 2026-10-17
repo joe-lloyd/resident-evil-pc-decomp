@@ -37,7 +37,7 @@ off and on. Windows only for now.
 residentevil.exe --test-port <port> [--boot ...]
 ```
 
-The game listens on `127.0.0.1:<port>` for one client; a newer connection
+The window's title is `RESIDENT EVIL <port>`, so each of several games side by side can be recorded on its own. The game listens on `127.0.0.1:<port>` for one client; a newer connection
 replaces an older one. Test mode also:
 
 - ignores the real keyboard; only keys sent by the client count;
@@ -85,6 +85,9 @@ One per line. Each is answered with `{"t":"ack","cmd":...,"ok":0|1}`.
 | `room <stage> <room>` | change room like the debug menu; a second ack, `room-start`, comes when it begins |
 | `flag <bank> <index> <0\|1>` | clear or set a script flag |
 | `god <0\|1>` | god mode off or on: her health stays full, a death check puts her back on her feet, and every hit she lands kills |
+| `slot <i> <id> <qty>` | set slot `i` of her bag outright |
+| `boxslot <i> <id> <qty>` | set slot `i` of the item box outright |
+| `unequip` | nothing in her hands |
 | `shot <path>` | save the next frame's back buffer as a BMP on the game machine |
 
 The shot is the whole 640x480 frame, background included.

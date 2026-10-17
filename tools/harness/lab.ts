@@ -49,23 +49,23 @@ export function stop(port: number): void {
 }
 
 const recorder = 'C:\\Users\\joell\\Tools\\re1-record.cmd';
-const recordTarget = 'C:\\Users\\joell\\Tools\\re1-record-target.txt';
 
 /**
- * Start recording the game window to `remoteFile` (an .mp4 on the game
- * machine) with ffmpeg's gdigrab, through the scheduled task "RE1 Record" so
- * it runs in the desktop session the window is in. lab/re1-record.cmd is the
- * script; it is copied over each time. Needs ffmpeg there (winget Gyan.FFmpeg)
- * and the game window open. No sound: the machine has no loopback device.
+ * Start recording the window of the test game on `port` to `remoteFile` (an
+ * .mp4 on the game machine) with ffmpeg's gdigrab, through a scheduled task
+ * so it runs in the desktop session the window is in. The window is found by
+ * its title, which names the port, so games side by side record apart.
+ * lab/re1-record.cmd is the script; it is copied over each time. Needs ffmpeg
+ * there (winget Gyan.FFmpeg) and the game window open. No sound: the machine
+ * has no loopback device.
  */
-export function startRecording(remoteFile: string): void {
+export function startRecording(remoteFile: string, port: number): void {
   execFileSync('scp', ['-q', '-o', 'BatchMode=yes', new URL('./lab/re1-record.cmd', import.meta.url).pathname, `${host}:${recorder.replace(/\\/g, '/')}`]);
   powershell(`
-    Set-Content -Path '${recordTarget}' -Value '${remoteFile}' -NoNewline -Encoding ascii
     $p = New-ScheduledTaskPrincipal -UserId '${user}' -LogonType Interactive -RunLevel Limited
-    $a = New-ScheduledTaskAction -Execute '${recorder}'
-    Register-ScheduledTask -TaskName 'RE1 Record' -Action $a -Principal $p -Force | Out-Null
-    Start-ScheduledTask -TaskName 'RE1 Record'
+    $a = New-ScheduledTaskAction -Execute 'cmd.exe' -Argument '/c "${recorder}" "${remoteFile}" "RESIDENT EVIL ${port}"'
+    Register-ScheduledTask -TaskName 'RE1 Record ${port}' -Action $a -Principal $p -Force | Out-Null
+    Start-ScheduledTask -TaskName 'RE1 Record ${port}'
   `);
 }
 
@@ -76,7 +76,10 @@ export function startRecording(remoteFile: string): void {
 export function stopRecording(remoteFile: string): string {
   const final = remoteFile.replace(/\.mp4$/i, '-final.mp4');
   powershell(`
-    Get-Process ffmpeg -ErrorAction SilentlyContinue | Stop-Process -Force
+    # Only this recording's ffmpeg: games side by side each have their own.
+    Get-CimInstance Win32_Process -Filter "Name='ffmpeg.exe'" |
+      Where-Object { $_.CommandLine -like '*${remoteFile}*' } |
+      ForEach-Object { Stop-Process -Id $_.ProcessId -Force }
     Start-Sleep -Seconds 2
     $ff = (Get-ChildItem "$env:LOCALAPPDATA\\Microsoft\\WinGet\\Packages" -Recurse -Filter ffmpeg.exe | Select-Object -First 1).FullName
     & $ff -y -hide_banner -loglevel error -i '${remoteFile}' -c copy -movflags +faststart '${final}'
