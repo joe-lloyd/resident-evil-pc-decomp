@@ -125,6 +125,7 @@ def build():
     rng = random.Random(97)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("rock")
     room.camera((1.5, 1.5, 2.6), (8.5, 7.0, 0.2), 200, "high in the north-west corner: the pump house, the water coming up the flooded way")
     room.camera((12.5, 9.5, 2.6), (5.5, 3.0, 0.9), 200, "high in the south-east corner: the lift cage in its shaft, the adit coming in, the egg sacs")
     room.camera((9.6, 1.4, 2.6), (4.8, 8.6, 0.0), 200, "high on the north wall west of the pump: the flooded way down, Hal's drops into the water")

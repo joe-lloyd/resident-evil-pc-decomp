@@ -343,6 +343,7 @@ def build():
     rng = random.Random(404)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")  # mud, worn paths, puddles too small to wade
     cams = [
         ((10.4, 20.6, 3.9), (10.2, 11.5, 0.2), "from the gate: the body in the mud, the skidder, the fire pit, the bunkhouse beyond"),
         ((5.2, 6.4, 3.3), (15.0, 14.6, 0.3), "from by the office: the fire pit, the skidder's blade, the workshop door"),

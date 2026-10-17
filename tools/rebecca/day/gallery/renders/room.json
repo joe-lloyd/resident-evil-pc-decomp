@@ -105,6 +105,8 @@
   "x1": 25500,
   "z1": 13600
  },
+ "ground": "water",
+ "floors": [],
  "voids": [
   {
    "x0": 17850,
@@ -160,6 +162,7 @@
    "text": "DANGER. WINZE. The floor drops away under the water there."
   }
  ],
+ "saves": null,
  "items": [
   {
    "step": "op-key",

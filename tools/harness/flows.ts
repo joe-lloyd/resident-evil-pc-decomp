@@ -1,7 +1,7 @@
 // Reusable ways to get the game somewhere: from launch to a playable room.
 import { choice } from './jev.ts';
 import { Key, type GameLink } from './link.ts';
-import { blocked, loadShapes, planPath } from './room-map.ts';
+import { blocked, loadShapes, planPath, sightBlocked } from './room-map.ts';
 import { MSF, messageOnScreen, screen, type GameState } from './state.ts';
 
 export type Character = 'chris' | 'jill';
@@ -100,6 +100,30 @@ let fightBackIgnores: readonly number[] = [];
 export function useFightBack(range = 9000, ignore: readonly number[] = []): void {
   fightBackRange = range;
   fightBackIgnores = ignore;
+}
+
+/**
+ * Enemies she gave up on: shots in a row that did them no harm (a zombie
+ * through a door or past a wall, one out of the gun's line). She leaves each
+ * alone for a while, matched by room, type and where it stood.
+ */
+const spared: { stage: number; room: number; type: number; x: number; z: number; until: number }[] = [];
+/** Shots in a row without harm before she leaves an enemy be. */
+const FRUITLESS = 5;
+const SPARE_MS = 60_000;
+const isSpared = (s: GameState, e: { type: number; x: number; z: number }) =>
+  spared.some((p) => p.until > Date.now() && p.stage === s.stage && p.room === s.room && p.type === e.type && Math.hypot(p.x - e.x, p.z - e.z) < 3000);
+/** A wall or furniture between her and it: no shot she fires can land. */
+const outOfSight = (s: GameState, e: { x: number; z: number }) =>
+  sightBlocked(loadShapes(roomDataDirs, s.stage, s.room, s.player.cf), s.player.x, s.player.z, e.x, e.z);
+
+/** A fight is on: its own walks towards the enemy do not start another. */
+let fighting = false;
+
+/** Rounds for the gun in her hands, loaded and in clips; 0 with no gun. */
+function rounds(s: GameState): number {
+  if (s.player.weapon <= 0) return 0;
+  return (s.items[s.player.weapon - 1]?.qty ?? 0) + s.items.filter((it) => it.id === CLIP).reduce((n, it) => n + it.qty, 0);
 }
 
 export class StuckError extends Error {
@@ -203,7 +227,8 @@ export async function walkTo(
         await hold(link, []);
         return s;
       }
-      if (fightBackRange > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !fightBackIgnores.includes(e.type) && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange)) {
+      // With nothing to shoot she walks on: no knife fights.
+      if (!fighting && fightBackRange > 0 && rounds(s) > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !fightBackIgnores.includes(e.type) && !isSpared(s, e) && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange && !outOfSight(s, e))) {
         await hold(link, []);
         await fight(link, { range: fightBackRange + 3000, ignore: fightBackIgnores });
         s = await link.state();
@@ -338,7 +363,9 @@ export async function face(link: GameLink, angle: number, tolerance = 100): Prom
     // A touch door fired as she turned: the angle meant the room she left.
     if (s.stage !== start.stage || s.room !== start.room) return s;
     const turn = turnBetween(s.player.angle, angle);
-    if (Math.abs(turn) <= tolerance) return s;
+    // Standing, she turns 96 a frame and the shortest tap turns her for two
+    // (measured on 17 Oct 2026), so she can only be sure of landing within 100.
+    if (Math.abs(turn) <= Math.max(tolerance, 100)) return s;
     await link.tap(turn > 0 ? Key.right : Key.left, Math.abs(turn) > 600 ? 3 : 1);
     await link.frames(4);
   }
@@ -439,9 +466,10 @@ export async function check(link: GameLink, zone: Zone): Promise<GameState> {
  * Use an item from the status screen, as a player does: open it, move the
  * cursor to the item (it starts on slot 0; slots run two to a row) and pick
  * USE, the first entry of the item's menu. Returns once she has control again,
- * with any message the use opened closed.
+ * with any message the use opened closed; with `wait` false, the moment USE
+ * is pressed, to watch what it does.
  */
-export async function useItem(link: GameLink, id: number): Promise<GameState> {
+export async function useItem(link: GameLink, id: number, wait = true): Promise<GameState> {
   const s = await link.state();
   const slot = s.items.findIndex((it) => it.id === id);
   if (slot < 0) throw new StuckError(`she has no item ${id}`, s);
@@ -459,6 +487,7 @@ export async function useItem(link: GameLink, id: number): Promise<GameState> {
   await link.tap(Key.action, 3); // the item's menu
   await link.frames(15);
   await link.tap(Key.action, 3); // USE
+  if (!wait) return link.state();
   await link.frames(30);
   return settle(link);
 }
@@ -475,9 +504,25 @@ export async function useDoor(
   const start = await link.state();
   const cx = zone.x + zone.w / 2;
   const cz = zone.z + zone.d / 2;
-  const arrived = await approach(link, zone);
+  let arrived = await approach(link, zone);
   if (arrived.stage !== start.stage || arrived.room !== start.room) {
     return settle(link, (st) => st.room === arrived.room && st.stage === arrived.stage);
+  }
+  // A door that fires on the action button only while she stands in its zone
+  // (0x40) is often a strip against a wall, which the path planner's walls,
+  // grown by her whole radius, cover: step straight in from where it left her.
+  const within = (st: GameState) => st.player.x > zone.x && st.player.x < zone.x + zone.w && st.player.z > zone.z && st.player.z < zone.z + zone.d;
+  if (!within(arrived)) {
+    const nearX = Math.min(Math.max(arrived.player.x, zone.x + 150), zone.x + zone.w - 150);
+    const nearZ = Math.min(Math.max(arrived.player.z, zone.z + 150), zone.z + zone.d - 150);
+    arrived = await walkTo(link, nearX, nearZ, { radius: 100, timeoutMs: 5_000 }).catch((err) => {
+      if (err instanceof StuckError && !(err instanceof DiedError)) return err.state;
+      throw err;
+    });
+    if (arrived.stage !== start.stage || arrived.room !== start.room) {
+      return settle(link, (st) => st.room === arrived.room && st.stage === arrived.stage);
+    }
+    await face(link, aimHeading(zone, arrived.player.x, arrived.player.z), 50);
   }
   const deadline = Date.now() + timeoutMs;
   for (;;) {
@@ -588,17 +633,28 @@ export async function fight(
   let shots = 0;
   let aiming = false;
   let misses = 0;
+  let fruitless = 0;
+  let blindSince: number | undefined;
   let waitedFrom: { d: number; at: number } | undefined;
+  // Aiming low (down held with aim): a zombie crouched over a body, or one
+  // crawling, is under a level shot.
+  let low = false;
   const release = async () => {
     if (aiming) await link.up(Key.aim);
+    if (low) await link.up(Key.down);
     aiming = false;
+    low = false;
   };
+  fighting = true;
+  const room = await link.state();
   try {
     for (;;) {
       const s = await link.state();
       checkAlive(s);
+      // Walking after it took her through a door: the fight was in the room she left.
+      if (s.stage !== room.stage || s.room !== room.room) return shots;
       const live = s.enemies
-        .filter((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !ignore.includes(e.type))
+        .filter((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !ignore.includes(e.type) && !isSpared(s, e))
         .map((e) => ({ e, d: Math.hypot(e.x - s.player.x, e.z - s.player.z) }))
         .filter((t) => t.d <= range)
         .sort((a, b) => a.d - b.d);
@@ -609,8 +665,9 @@ export async function fight(
       if (process.env.HARNESS_TRACE) console.log(`    fight type ${target.type} hp ${target.hp} at ${Math.round(d)} off ${off} her hp ${s.player.hp} shots ${shots}`);
 
       // Dogs and Hunters leap about and most shots at them miss until they
-      // close in; zombies walk straight on and can be hit from further away.
-      const shootRange = LEAPERS.includes(target.type) ? 3500 : 7000;
+      // close in; zombies walk straight on and can be hit from further away,
+      // but not across a room: at 5400 four shots in a row did nothing.
+      const shootRange = LEAPERS.includes(target.type) ? 3500 : 4000;
       if (d > shootRange) {
         // Out of reach: wait aimed for it to come, then go to it.
         if (!waitedFrom || d < waitedFrom.d - 500) waitedFrom = { d, at: Date.now() };
@@ -623,17 +680,26 @@ export async function fight(
           }
           await link.frames(6);
         } else {
+          // It is not coming: go to it, round whatever is between them.
           await release();
-          await faceTowards(link, target.x, target.z).catch(() => undefined);
-          await link.tap(Key.up, 12);
-          await link.frames(12);
+          await goTo(link, roomDataDirs, target.x, target.z, { radius: shootRange - 500, pace: 'walk' }).catch((err) => {
+            if (!(err instanceof StuckError) || err instanceof DiedError) throw err;
+          });
+          waitedFrom = undefined;
         }
         continue;
       }
       waitedFrom = undefined;
-      // player.weapon is the 1-based slot of the gun in hand.
-      const rounds = (s.items[s.player.weapon - 1]?.qty ?? 0) + s.items.filter((it) => it.id === CLIP).reduce((n, it) => n + it.qty, 0);
-      if (rounds === 0) throw new StuckError(`out of ammo with ${live.length} enemies standing`, s);
+      if (outOfSight(s, target)) {
+        // In range but behind a wall: it has to come round to her first.
+        await release();
+        await link.frames(10);
+        if (Date.now() - (blindSince ??= Date.now()) > 5000) return shots;
+        continue;
+      }
+      blindSince = undefined;
+      // Out of rounds: leave the rest standing and walk on.
+      if (rounds(s) === 0) return shots;
       if (!LEAPERS.includes(target.type) && d < 1800) {
         // Close enough to grab her: step back before the next shot.
         await release();
@@ -642,13 +708,18 @@ export async function fight(
         await link.frames(10);
         continue;
       }
-      if (!aiming || off > 500 || misses >= 3) {
+      const wantLow = fruitless >= 2;
+      if (!aiming || off > 500 || misses >= 3 || wantLow !== low) {
         await release();
         await faceTowards(link, target.x, target.z).catch(() => undefined);
         await link.down(Key.aim);
         aiming = true;
+        if (wantLow) {
+          await link.down(Key.down);
+          low = true;
+        }
         misses = 0;
-        await link.frames(6);
+        await link.frames(wantLow ? 12 : 6);
       }
       const before = target.hp;
       await link.tap(Key.action, 3);
@@ -656,8 +727,18 @@ export async function fight(
       const after = await link.frames(16);
       const same = after.enemies.find((e) => e.type === target.type && Math.hypot(e.x - target.x, e.z - target.z) < 2500);
       misses = same && same.hp === before ? misses + 1 : 0;
+      fruitless = same && same.hp === before ? fruitless + 1 : 0;
+      if (fruitless >= FRUITLESS) {
+        // Nothing she fires reaches it: leave it be and get on.
+        spared.push({ stage: s.stage, room: s.room, type: target.type, x: target.x, z: target.z, until: Date.now() + SPARE_MS });
+        if (process.env.HARNESS_TRACE) console.log(`    fight: ${FRUITLESS} shots did type ${target.type} no harm; leaving it`);
+        fruitless = 0;
+        misses = 0;
+        await release();
+      }
     }
   } finally {
+    fighting = false;
     await release();
   }
 }

@@ -133,6 +133,7 @@ def build():
     rng = random.Random(404)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("carpet")  # the ribbed rubber mats
     room.camera((1.12, 1.12, 1.92), (2.9, 2.3, 0.65), 205, "high by the door, north-west: the bloody west bench, the spilled bag, the pylon through the south glass")
     room.camera((3.28, 2.28, 1.92), (1.5, 1.1, 0.65), 205, "high in the south-east corner: the clawed door, her bench, the valley through the north glass")
 

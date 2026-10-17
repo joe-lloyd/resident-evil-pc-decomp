@@ -9,11 +9,12 @@
 // area theme whose channels change with what she has done, such as the
 // generator hum joining once the power is on.
 import type { Plan } from './plan.ts';
+import type { Ambience } from '../sound/ambience.ts';
 
 /**
  * - new: we write it.
  * - reuse: RE1's own track, played from the player's own files.
- * - ambience: no music, only the place's own sound.
+ * - ambience: no music, only the place's own sound: its channels are loops.
  */
 export type CueKind = 'new' | 'reuse' | 'ambience';
 
@@ -24,18 +25,33 @@ export type CueKind = 'new' | 'reuse' | 'ambience';
  */
 export type Switched = { readonly on: string } | { readonly off: string };
 
-/** One of a cue's up to three WAV channels: a layer that rooms or steps switch on and off. */
-export interface Channel {
+/**
+ * One of a cue's up to three WAV channels: a layer that rooms or steps switch
+ * on and off. It plays a sketch's render, or a loop made by code
+ * (sound/ambience.ts), or nothing yet. Every ambient sound of a room is one
+ * channel of its cue, so one owner per sound (docs/REBECCA_SOUND.md).
+ */
+export type Channel = {
   readonly what: string;
-  /** The sketch in tools/rebecca/music/sketches that plays it, if there is one. */
-  readonly sketch?: string;
   /** The cue's places it plays in; all of them when absent. */
   readonly in?: readonly string[];
   /** Off until a step, or on until one. */
   readonly switched?: Switched;
-  /** Its render's loudness in dB RMS (music/ps1.ts): RE1's tracks measure -21 to -26, so -24 when absent. A layer under a theme sits lower. */
-  readonly level?: number;
-}
+} & (
+  | {
+      /** The sketch in tools/rebecca/music/sketches that plays it, if there is one. */
+      readonly sketch?: string;
+      /** Its render's loudness in dB RMS (music/ps1.ts): RE1's tracks measure -21 to -26, so -24 when absent. A layer under a theme sits lower. */
+      readonly level?: number;
+      readonly loop?: undefined;
+    }
+  | {
+      /** The loop that plays it, levelled under the music by ambience.ts. */
+      readonly loop: Ambience;
+      readonly sketch?: undefined;
+      readonly level?: undefined;
+    }
+);
 
 /**
  * A cue that takes over other places' music for a while, as their row's
@@ -82,6 +98,8 @@ export const CUES: readonly Cue[] = [
     channels: [
       { what: 'piano, bowed chords and wind', sketch: 'yard' },
       { what: 'the generator hum, once the power is on', sketch: 'station-hum', switched: { on: 'generator-on' }, level: -34 },
+      // The theme has the wind, so the woods' loop is only the leaves and the birds.
+      { what: 'the forest', loop: 'forest', in: ['woods'] },
     ],
   },
   {
@@ -135,6 +153,8 @@ export const CUES: readonly Cue[] = [
     channels: [
       { what: 'the drone, the drips and the far bowed note', sketch: 'mine' },
       { what: 'the water, until the pump drains it', sketch: 'mine-water', in: ['tunnel', 'junction'], switched: { off: 'drain' }, level: -31 },
+      // The theme has the drips and channel 1 the water, so the loop is the air and the timber.
+      { what: 'the air underground and the timber', loop: 'mine', in: ['tunnel', 'junction', 'gallery', 'mine-lift'] },
     ],
   },
   {
@@ -160,7 +180,10 @@ export const CUES: readonly Cue[] = [
     id: 'skyway', title: 'The line down', kind: 'new', places: ['car', 'pylon'], cutscenes: ['cut-gondola', 'cut-pylon'],
     mood: 'Relief that it moves, then dread when it stops.',
     sound: 'The cable and the bullwheel as rhythm, low strings rising.',
-    channels: [{ what: 'the strings over the cable', sketch: 'skyway' }],
+    channels: [
+      { what: 'the strings over the cable', sketch: 'skyway' },
+      { what: 'the gale round the car and the pylon', loop: 'gale' },
+    ],
   },
   {
     id: 'valley', title: 'The valley at dusk', kind: 'new', places: ['valley-path', 'lower-yard', 'lower-station', 'creek'], cutscenes: [],
@@ -169,26 +192,33 @@ export const CUES: readonly Cue[] = [
     channels: [
       { what: 'the theme', sketch: 'valley' },
       { what: 'the creek', sketch: 'valley-creek', in: ['creek'], level: -30 },
+      { what: 'dusk: crickets, a breeze, a bird settling', loop: 'dusk', in: ['valley-path', 'lower-yard', 'creek'] },
     ],
   },
   {
     id: 'quiet', title: 'Only the room', kind: 'ambience', places: ['den', 'crash'], cutscenes: ['cut-kevin'],
     mood: 'The places that should be heard in silence: the ranger in the hollow, Kevin at the controls.',
     sound: 'Wind, a creak. No music.',
-    channels: [{ what: 'the room\'s own sound' }],
+    channels: [
+      { what: 'the forest round the hollow', loop: 'forest', in: ['den'] },
+      { what: 'dusk round the crash', loop: 'dusk', in: ['crash'] },
+    ],
   },
   {
     id: 'estate', title: 'The grounds', kind: 'new', places: ['estate-wall', 'kennels', 'back-garden', 'garden-shed'], cutscenes: [],
     mood: 'The mansion is close. The music starts to sound like RE1\'s own, so she walks into the game the player knows.',
     sound: 'Pipe organ, quiet; low piano; dogs far off.',
-    // VCSL has no dog: the dogs far off are the sound work's (branch reb-sound).
-    channels: [{ what: 'the organ and the piano', sketch: 'estate' }],
+    // VCSL has no dog, and the night loop has none yet: the dogs far off are still to make.
+    channels: [
+      { what: 'the organ and the piano', sketch: 'estate' },
+      { what: 'the night: crickets, the wind in the hedges, an owl', loop: 'night', in: ['estate-wall', 'kennels', 'back-garden'] },
+    ],
   },
   {
     id: 'underneath', title: 'Under the house', kind: 'ambience', places: ['cellar', 'wine', 'crawl'], cutscenes: [],
     mood: 'Dark and close, under the floor of a house she hasn\'t seen. Almost silent.',
     sound: 'Drips, boards above her, her own breathing in the crawl.',
-    channels: [{ what: 'drips' }, { what: 'the house above' }],
+    channels: [{ what: 'drips and the boards of the house above', loop: 'cellar' }],
   },
   {
     id: 'save', title: "RE1's save room", kind: 'reuse',

@@ -220,6 +220,8 @@
   "x1": 16320,
   "z1": 11560
  },
+ "ground": "gravel",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -277,6 +279,7 @@
    "text": "The lean-to. Oil, grease, rags."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [
   {

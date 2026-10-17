@@ -187,6 +187,9 @@ def build():
         samples=256,
         extra={
             "bounds": {"x0": 2000, "z0": 0, "x1": 5000, "z1": 16000},
+            # Underfoot (sound/ground.ts): the dirt path.
+            "ground": "earth",
+            "floors": [],
         },
         anim={"frames": FRAMES, "ticks": 3, "set": pose},
     )

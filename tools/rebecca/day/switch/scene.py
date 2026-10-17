@@ -43,6 +43,8 @@ def build():
     rng = random.Random(43)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("concrete")
+    room.floor((1.15, 1.1, 1.95, 3.7), "metal")  # the tread plate
     room.camera((4.45, 1.15, 2.5), (1.4, 3.3, 0.7), 200, "high in the north-east corner: the breaker board, the sparking contactor, the glove, the isolator lever")
     room.camera((1.25, 3.85, 2.5), (3.9, 1.2, 0.6), 200, "high in the south-west corner: the door from the generator, the open door to the line track")
 

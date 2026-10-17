@@ -151,7 +151,14 @@
   {
    "name": "pine",
    "bank": 1,
-   "bit": 205
+   "bit": 205,
+   "motion": {
+    "frames": 12,
+    "ticks": 5
+   },
+   "cameras": [
+    3
+   ]
   }
  ],
  "bounds": {
@@ -160,6 +167,8 @@
   "x1": 30600,
   "z1": 20740
  },
+ "ground": "earth",
+ "floors": [],
  "exits": [
   {
    "x0": 3400,

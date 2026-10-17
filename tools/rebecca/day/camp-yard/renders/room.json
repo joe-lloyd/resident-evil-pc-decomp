@@ -269,6 +269,8 @@
   "x1": 31280,
   "z1": 31620
  },
+ "ground": "earth",
+ "floors": [],
  "voids": [
   {
    "x0": 1700,
@@ -483,6 +485,7 @@
    "text": "Diesel, leaking from a drum into the mud."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "Camp 4. The gate was shut from inside.",

@@ -111,6 +111,7 @@ def build():
     rng = random.Random(113)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("concrete")  # flagstones
     room.camera((8.75, 5.75, 2.05), (3.0, 2.2, 0.3), 200, "under the vault, south-east: the footman on the flags, the rack, the garden stairs")
     room.camera((1.25, 1.25, 2.05), (7.2, 5.2, 0.3), 200, "under the vault, north-west: the body, the barrels, the red prints to the wine arch")
     room.camera((8.75, 1.25, 2.05), (2.2, 5.0, 0.4), 200, "under the vault, north-east: the rack and the crawl passage past its end, the coal")

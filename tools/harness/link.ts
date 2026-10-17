@@ -205,6 +205,26 @@ export class GameLink {
     return this.command(`give ${id} ${qty}`, 'give');
   }
 
+  /** Set slot `i` of her bag outright. */
+  slot(i: number, id: number, qty: number): Promise<void> {
+    return this.command(`slot ${i} ${id} ${qty}`, 'slot');
+  }
+
+  /** Set slot `i` of the item box outright. */
+  boxSlot(i: number, id: number, qty: number): Promise<void> {
+    return this.command(`boxslot ${i} ${id} ${qty}`, 'boxslot');
+  }
+
+  /** Nothing in her hands. */
+  unequip(): Promise<void> {
+    return this.command('unequip', 'unequip');
+  }
+
+  /** God mode: her health stays full and every hit she lands kills (TestMode.h). */
+  god(on: boolean): Promise<void> {
+    return this.command(`god ${on ? 1 : 0}`, 'god');
+  }
+
   setFlag(bank: number, index: number, on: boolean): Promise<void> {
     return this.command(`flag ${bank} ${index} ${on ? 1 : 0}`, 'flag');
   }

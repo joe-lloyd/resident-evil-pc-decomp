@@ -230,6 +230,16 @@
   "x1": 28900,
   "z1": 32300
  },
+ "ground": "rock",
+ "floors": [
+  {
+   "kind": "gravel",
+   "x0": 1700,
+   "z0": 1700,
+   "x1": 25500,
+   "z1": 17000
+  }
+ ],
  "voids": [
   {
    "x0": 28475,
@@ -378,6 +388,7 @@
    "text": "Straight down, both sides. The crows just hang there in the wind, watching me."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "The mast. Its light's still blinking.",

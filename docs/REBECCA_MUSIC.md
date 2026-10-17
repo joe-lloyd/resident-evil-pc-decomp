@@ -87,13 +87,15 @@ compiled one (`g_BgmNameTable`, `g_BgmRoomData`, `SoundTables.cpp`).
 - **The data.** `tools/rebecca/music/table.ts` works the table out from the
   cues in `plan/music.ts`. Each cue is one group, as in RE1, so rooms with
   the same cue keep the music going through the door. A cue has up to three
-  channels, and each channel is a sketch of its own: the theme, and a layer
-  that some rooms or some step of hers switch on or off. A layer that never
-  switches is mixed into the theme's sketch. A channel plays:
+  channels: the theme, and layers that some rooms or some step of hers
+  switch on or off. A layer that never switches is mixed into the theme's
+  sketch. A channel plays:
   - for `reuse`, RE1's own file under `sound/`, from the player's game;
-  - for `new`, its render, shipped as `sound/Reb_<cue>.wav` on channel 0
+  - for a sketch, its render, shipped as `sound/Reb_<cue>.wav` on channel 0
     and `sound/Reb_<cue>_<n>.wav` on channel n;
-  - nothing for `ambience`, or for a channel with no render yet.
+  - for a loop, the place's own sound made by code, shipped as
+    `sound/Reb_amb_<loop>.wav` ([REBECCA_SOUND.md](REBECCA_SOUND.md));
+  - nothing for a sketch with no render yet.
 - **The state byte.** A room's state (`SoundSystem.cpp` `update_room_bgm`)
   holds the group in bits 0-2, an index into the room's row of four, and
   channels 0-2 in bits 3-5. 0xFF is silence. A room starts with the
@@ -128,7 +130,11 @@ compiled one (`g_BgmNameTable`, `g_BgmRoomData`, `SoundTables.cpp`).
   - the yard, the shed and the footbridge play `Reb_station`, and the shed
     keeps it going through the door;
   - the five save rooms of her day and the mansion's play `Bgm_31`;
-  - the hollow, the mine lift and the summit trail are silent;
+  - the hollow, the crash and the cellar play only their loops, and the
+    woods, the mine, the gondola car, the valley and the estate play theirs
+    under the music;
+  - every room in her mode plays exactly the channels the table gives it
+    for the state the game reports;
   - the yard still plays 100 s on, past the end of its 96 s file.
 
   In Chris's game, RE1's save room plays `Bgm_13` while he meets Rebecca,
@@ -176,9 +182,36 @@ of its group, whichever are on.
   on its own. So the layers are textures with no beat to line up: the hum,
   the water, the wind, the static. The mill thumps, but at its own pace,
   as a machine would.
-- **Ambience is the sound work's.** The cues marked `ambience` stay silent
-  here, and so do the grounds' dogs: VCSL has no dog. Branch `reb-sound`
-  does ambience.
+
+## One owner for each sound
+
+A room hears its cue's group and nothing else: the engine loads channels
+0-2 of one group (`bgm_load_and_start`), and the state byte turns them
+on. So every sound of a place, music or not, is one channel of its cue in
+`plan/music.ts`, and each sound has one owner in an area:
+
+- **The music first.** When a cue's music has a sound, in its theme or as
+  a layer, no loop plays it there. The dawn's, the station's, the road's
+  and the summit's themes have their wind, so none of them gets a wind
+  loop.
+- **A sound a step switches is a music layer.** The mill comes on with the
+  sluice, the hum with the generator and the line with the breakers, and
+  the mine's water stops with the pump. Each is the layer that switches,
+  and no loop doubles it, so the switch is heard.
+- **A loop takes a channel the music leaves free,** after the music's, and
+  plays only in the rooms that hear it (`in`). A loop carries only what
+  the music doesn't: the woods' forest is its leaves and birds, under the
+  station's wind, and the mine's loop is its air and timber, under the
+  music's drips and water.
+- **No channel, no loop.** The camp's three channels are its theme, the
+  mill and the pond's water, so the forest loop doesn't play there.
+
+A new sound for a place goes on its cue. Check the cue's theme and layers
+first; if they don't have it, add a channel. Make it a sketch when it is
+tonal or switches with the music, and a loop in `sound/ambience.ts` when
+it is the place's own noise. Each area's owners are listed in
+[REBECCA_SOUND.md](REBECCA_SOUND.md). The grounds' dogs have no owner yet:
+VCSL has no dog, and the night loop has none.
 
 ## The render step
 

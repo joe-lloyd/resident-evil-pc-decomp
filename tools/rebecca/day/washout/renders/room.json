@@ -166,6 +166,23 @@
   "x1": 32300,
   "z1": 21250
  },
+ "ground": "earth",
+ "floors": [
+  {
+   "kind": "water",
+   "x0": 14790,
+   "z0": 5100,
+   "x1": 18530,
+   "z1": 10710
+  },
+  {
+   "kind": "gravel",
+   "x0": 1700,
+   "z0": 7650,
+   "x1": 32300,
+   "z1": 14450
+  }
+ ],
  "voids": [
   {
    "x0": 11900,
@@ -289,6 +306,7 @@
    "text": "FIRE LOOKOUT. The track climbs west, to the tower."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "Half the road's gone.",

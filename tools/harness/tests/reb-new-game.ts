@@ -20,7 +20,7 @@ const session = await open(Number(process.env.PORT ?? 7801), '--mode OG');
 // RECORD=<name> records the game window to <name>.mp4 and fetches it to $OUT.
 const record = process.env.RECORD;
 const remoteVideo = record ? `${process.env.RE1_LAB_GAME_DIR ?? 'D:\\Games\\RE1-decomp'}\\${record}.mp4` : undefined;
-if (remoteVideo) startRecording(remoteVideo);
+if (remoteVideo) startRecording(remoteVideo, session.port);
 const failures: string[] = [];
 const expect = (ok: boolean, what: string) => {
   if (!ok) failures.push(what);

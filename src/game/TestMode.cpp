@@ -14,6 +14,7 @@
 #include <cstring>
 
 extern int  DebugRoomChange_Request(int stage, int room);
+extern void CountHeldItems(void);   // GameStart.cpp
 
 static int          s_active = 0;
 static unsigned int s_frame = 0;
@@ -34,6 +35,10 @@ static char         s_body[8192];
 static char         s_lastBody[8192];
 
 static int          s_port = 0;
+static int          s_god = 0;
+
+void DevCheat_SetGod(int on) { s_god = on ? 1 : 0; s_forceState = 1; }
+int  DevCheat_God(void) { return s_god; }
 
 int TestMode_Start(int port)
 {
@@ -191,6 +196,25 @@ static void on_command(const char* line)
         // The held-item count (get_item_slot searches only that far) and the
         // status screen's icons, as a new game sets them up.
         LoadHeldItemsImages();
+    } else if (strcmp(cmd, "slot") == 0 && a >= 0 && a < 8 && b >= 0 && b < 256 && c >= 0 && c < 256) {
+        // Set one slot of her bag outright, to load a playthrough's snapshot.
+        ItemSlot* items = (ItemSlot*)g_ItemSlotsPointer;
+        if (items) { items[a].Id = (unsigned char)b; items[a].qty = (unsigned char)c; }
+        // The game searches only the slots it counts as held (get_item_slot): recount, as it does.
+        CountHeldItems();
+        reply("{\"t\":\"ack\",\"cmd\":\"slot\",\"ok\":%d}\n", items ? 1 : 0);
+    } else if (strcmp(cmd, "boxslot") == 0 && a >= 0 && a < 48 && b >= 0 && b < 256 && c >= 0 && c < 256) {
+        g_itemboxSlots[a].Id = (unsigned char)b;
+        g_itemboxSlots[a].qty = (unsigned char)c;
+        reply("{\"t\":\"ack\",\"cmd\":\"boxslot\",\"ok\":1}\n");
+    } else if (strcmp(cmd, "unequip") == 0) {
+        // Nothing in her hands, as after the mine takes her gear.
+        g_EquippedItemId = 0;
+        g_playerEntity.equippedWeaponId = 0;
+        reply("{\"t\":\"ack\",\"cmd\":\"unequip\",\"ok\":1}\n");
+    } else if (strcmp(cmd, "god") == 0 && (a == 0 || a == 1)) {
+        DevCheat_SetGod(a);
+        reply("{\"t\":\"ack\",\"cmd\":\"god\",\"ok\":1}\n");
     } else if (strcmp(cmd, "flag") == 0 && a >= 0 && b >= 0 && b < 256 && (c == 0 || c == 1)) {
         FlagBank fb = flag_bank(a);
         int byteAt = (b >> 5) * 4;
@@ -286,6 +310,7 @@ int DevBoot_StartRoom(int* stage, int* room)
 void TestMode_GameplayFrame(void)
 {
     s_gameplayFrame = 1;
+    if (s_god && g_playerEntity.health < g_playerEntity.maxHealth) g_playerEntity.health = g_playerEntity.maxHealth;
     if (s_pendingStage < 0) return;
     int ok = DebugRoomChange_Request(s_pendingStage, s_pendingRoom);
     reply("{\"t\":\"ack\",\"cmd\":\"room-start\",\"ok\":%d,\"frame\":%u}\n", ok, s_frame);
@@ -298,8 +323,8 @@ void TestMode_GameplayFrame(void)
 static void build_state(void)
 {
     s_len = 0;
-    put("\"play\":%d,\"msf\":\"%08x\",\"msf2\":\"%08x\",\"title\":%d,\"fmv\":%d,\"dbg\":%d,",
-        s_gameplayFrame, (unsigned int)g_MainStateFlagBank[0], (unsigned int)g_MainStateFlagBank[1],
+    put("\"play\":%d,\"god\":%d,\"msf\":\"%08x\",\"msf2\":\"%08x\",\"title\":%d,\"fmv\":%d,\"dbg\":%d,",
+        s_gameplayFrame, s_god, (unsigned int)g_MainStateFlagBank[0], (unsigned int)g_MainStateFlagBank[1],
         (int)g_titleMode, plat_video_is_active() ? 1 : 0, g_debugMenuOpen);
     put("\"stage\":%d,\"room\":%d,\"cam\":%d,\"cut\":%d,\"charModel\":%d,",
         (int)g_stageId, (int)g_roomId, (int)g_roomCameraId, (int)g_cutId,
@@ -318,6 +343,11 @@ static void build_state(void)
     put("\"items\":[");
     for (int i = 0; items != NULL && i < capacity; i++) {
         put("%s[%d,%d]", i ? "," : "", (int)items[i].Id, (int)items[i].qty);
+    }
+    // The item box's 48 slots, shared by every box in the game.
+    put("],\"box\":[");
+    for (int i = 0; i < 48; i++) {
+        put("%s[%d,%d]", i ? "," : "", (int)g_itemboxSlots[i].Id, (int)g_itemboxSlots[i].qty);
     }
     put("],\"enemies\":[");
     // enemy_set puts each enemy in the slot its script names, so the live ones
@@ -345,6 +375,26 @@ static void build_state(void)
         const char* file = bgm_channel_file(ch);
         const int bank = g_SndBank[ch].handle;
         put("%s[\"%s\",%d,%d]", ch ? "," : "", file ? file : "", getSndStat(bank), bank ? getSndVol(bank) : 0);
+    }
+    // Sound: the footstep set under the player and the walk step it loaded,
+    // her steps played and the last one's file; the room sound set and its
+    // two files (a door's open and close), how many played and the last.
+    int set = -1;
+    if (s_gameplayFrame && g_RdtPointer != NULL && g_RdtPointer->footstep_sound_zones != NULL) {
+        set = LookupFootstepZone((short)p.position.x, (short)p.position.z) & 0xFF;
+    }
+    const char* walk = set >= 0 ? emsnd_slot_file(set) : NULL;
+    const char* room0 = room_sfx_file(0);
+    const char* room1 = room_sfx_file(1);
+    const SoundProbe& sp = g_soundProbe;
+    put("]},\"snd\":{\"set\":%d,\"walk\":\"%s\",\"steps\":%u,\"step\":\"%s\",\"door\":%d,\"room\":[\"%s\",\"%s\"],\"sfx\":%u,\"last\":\"%s\",\"recent\":[",
+        set, walk ? walk : "", sp.step.plays, sp.step.last ? sp.step.last : "", (int)sp.roomSet,
+        room0 ? room0 : "", room1 ? room1 : "", sp.room.plays, sp.room.last ? sp.room.last : "");
+    // The last eight room sounds, oldest first: a door or a walk can play several in a frame.
+    const unsigned int n = sp.room.plays < 8 ? sp.room.plays : 8;
+    for (unsigned int i = 0; i < n; i++) {
+        const char* f = sp.room.recent[(sp.room.plays - n + i) % 8];
+        put("%s\"%s\"", i ? "," : "", f ? f : "");
     }
     put("]}");
 }

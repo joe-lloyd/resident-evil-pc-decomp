@@ -179,6 +179,14 @@ and RE1's own save room music at the end, from the player's files. Every
 room and cutscene has a cue in `tools/rebecca/plan/music.ts`. The research
 and the plan are in [REBECCA_MUSIC.md](REBECCA_MUSIC.md).
 
+## Sound
+
+Her steps follow what each scene says is underfoot: our own for earth and
+gravel, RE1's for boards, rock, water and her other floors. Loops of the
+gale, the forest, the mine, dusk, night and the cellar play as channels of
+her music, where the music doesn't have that sound already. Her doors play RE1's door sounds, and her gates open
+and shut. How it works is in [REBECCA_SOUND.md](REBECCA_SOUND.md).
+
 ## Scale
 
 Rebecca stands 2700 game units tall (measured on screen,
@@ -224,7 +232,12 @@ Built so far, beyond the list above:
 - **Moving backgrounds** (`src/game/BgAnim.cpp`, `tools/rebecca/bganim.ts`):
   Blender renders a loop of frames and any changes of state; the builder keeps
   the 16-pixel tiles that differ from the background, and the engine patches
-  the background texture as the game runs.
+  the background texture as the game runs. A change of state
+  (`kit.Room.state`) is shown while its puzzle's or lock's flag is set; with
+  `motion` it also plays once as it happens, from the moment the flag
+  turns, and with `loop` the changed room moves on in the room's loop (a
+  wheel the water now turns). `tools/harness/tests/changes.ts` works each
+  one in the game and takes pictures before, during and after.
 - **Camera floors worked out from the scene** (`tools/rebecca/day/floors.ts`):
   each half metre of floor goes to the camera that shows her whole, unhidden
   and nearest the middle of the screen. `coverage.ts` prints the map and the

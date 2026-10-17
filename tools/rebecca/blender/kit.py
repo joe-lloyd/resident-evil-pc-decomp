@@ -71,6 +71,8 @@ class Room:
         self.spots = []
         self.states = []
         self.entry = None
+        self.underfoot = None
+        self.floors = []
 
     def camera(self, eye, look, fov=190, note=""):
         self.cameras.append({"from": G(*eye), "to": G(*look), "fov": fov})
@@ -113,13 +115,43 @@ class Room:
         x0, y0, x1, y1 = zone
         self.spots.append({"step": step, "zone": {"x0": reb.g(x0), "z0": reb.g(y0), "x1": reb.g(x1), "z1": reb.g(y1)}})
 
-    def state(self, step, pose):
+    def state(self, step, pose, motion=None, cameras=None, loop=False):
         """How the room looks once the plan's `step` has happened
-        (day/events.ts): pose(True) makes the change, pose(False) undoes it.
-        Rendered as a second background per camera and shown while the
-        step's flag is set (room.ts looks the flag up). It may not move a
-        mask() object, and the floor's walls stay as they were."""
-        self.states.append({"name": step, "bank": 1, "bit": -1, "set": pose})
+        (day/events.ts, or a key item on a lock: scripts.ts): pose(True)
+        makes the change, pose(False) undoes it. Rendered as a second background per
+        camera and shown while the step's flag is set (room.ts looks the
+        flag up). It may not move a mask() object, and the floor's walls
+        stay as they were.
+
+        motion=(frames, ticks) plays the change as it happens, through
+        `cameras` (default all): pose(t) then poses it part way, t from 0
+        to 1 (True is 1), so it must set things outright rather than move
+        them by a step.
+        loop=True renders the changed room through the scene's Anim too, for
+        a change in moving light; loop=f also calls f(k) on loop frame k, for
+        something that only moves once the change has happened (a wheel the
+        water now turns), f(0) being its rest."""
+        st = {"name": step, "bank": 1, "bit": -1, "set": pose}
+        if motion:
+            st["motion"] = {"frames": motion[0], "ticks": motion[1]}
+        if cameras is not None:
+            st["cameras"] = list(cameras)
+        if loop:
+            st["loop"] = loop
+        self.states.append(st)
+
+    def ground(self, kind):
+        """What the floor is underfoot, for her footsteps (sound/ground.ts):
+        earth, gravel, boards, rock, water, concrete, metal, lino or carpet.
+        Every room says."""
+        self.underfoot = kind
+
+    def floor(self, rect, kind):
+        """A part of the floor that is another kind underfoot than the room's
+        ground: a boardwalk over mud, a puddle on rock. Where parts overlap,
+        the first one given wins. A room has four kinds at most."""
+        x0, y0, x1, y1 = rect
+        self.floors.append({"kind": kind, "x0": reb.g(x0), "z0": reb.g(y0), "x1": reb.g(x1), "z1": reb.g(y1)})
 
     def void(self, rect):
         """Floor inside the bounds that is not there: a drop, a pit, deep water."""
@@ -145,7 +177,7 @@ class Room:
         for c in self.cameras:
             c["from"] = (c["from"][0] + gx, c["from"][1], c["from"][2] + gz)
             c["to"] = (c["to"][0] + gx, c["to"][1], c["to"][2] + gz)
-        rects = [d["zone"] for d in self.doors] + [c["zone"] for c in self.checks] + [sp["zone"] for sp in self.spots] + self.voids
+        rects = [d["zone"] for d in self.doors] + [c["zone"] for c in self.checks] + [sp["zone"] for sp in self.spots] + self.voids + self.floors
         if self.saves:
             rects += [self.saves["typewriter"], self.saves["box"]]
             self.saves["lid"]["x"] += gx
@@ -243,8 +275,12 @@ class Room:
         print(f"[kit] {len(bpy.data.objects)} objects", flush=True)
         wear(float(os.environ.get("RE1_WEAR", "1.3")))
         x0, y0, x1, y1 = self.bounds
+        if self.underfoot is None:
+            raise ValueError("the room says nothing of its floor: call room.ground(kind)")
         extra = {
             "bounds": {"x0": reb.g(x0), "z0": reb.g(y0), "x1": reb.g(x1), "z1": reb.g(y1)},
+            "ground": self.underfoot,
+            "floors": self.floors,
             "voids": self.voids,
             "doors": self.doors,
             "checks": self.checks,

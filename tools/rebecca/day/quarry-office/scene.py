@@ -41,6 +41,7 @@ def build():
     rng = random.Random(7)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("concrete")
     room.camera((4.25, 3.65, 2.2), (1.85, 2.05, 0.5), 190, "high in the south-east corner: the door and the ticking clock, the caps, the explosives locker")
     room.camera((1.15, 1.15, 2.2), (3.9, 2.95, 0.4), 200, "high over the clock: the desk and the rosters, the burnt coffee, the safety board")
 

@@ -236,6 +236,8 @@
   "x1": 32300,
   "z1": 20400
  },
+ "ground": "earth",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -327,6 +329,7 @@
    "text": "The privy. Nobody in it. Thank God."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "The tower creaks in the wind.",

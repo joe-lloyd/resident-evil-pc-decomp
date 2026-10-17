@@ -151,6 +151,7 @@ def build():
     rng = random.Random(1918)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")  # forest floor
     notes = [
         "from the north-west corner: the pylon's foot, the fork and its signpost, the hiker beyond",
         "from the north-east corner: the ladder's foot, the fork, the west path to the smoke, the patch on its branch",

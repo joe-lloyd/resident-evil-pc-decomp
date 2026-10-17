@@ -132,6 +132,23 @@
   "x1": 25500,
   "z1": 21080
  },
+ "ground": "earth",
+ "floors": [
+  {
+   "kind": "boards",
+   "x0": 8500,
+   "z0": 8500,
+   "x1": 23800,
+   "z1": 19720
+  },
+  {
+   "kind": "boards",
+   "x0": 13600,
+   "z0": 3400,
+   "x1": 15300,
+   "z1": 8500
+  }
+ ],
  "voids": [
   {
    "x0": 3400,
@@ -236,6 +253,9 @@
    "text": "A duffel bag, packed and dropped."
   }
  ],
+ "saves": null,
+ "items": [],
+ "spots": [],
  "entry": "The flume. It runs all the way down the mountain.",
  "notes": [
   "from the path in: the headbox, the deck, the boat, the trough running off the edge into the valley",

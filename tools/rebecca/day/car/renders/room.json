@@ -55,6 +55,8 @@
   "x1": 5780,
   "z1": 4080
  },
+ "ground": "carpet",
+ "floors": [],
  "voids": [],
  "doors": [
   {

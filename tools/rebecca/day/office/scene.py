@@ -65,6 +65,7 @@ def build():
     rng = random.Random(23)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("boards")
     room.camera((4.45, 3.85, 2.3), (2.6, 1.4, 0.6), 200, "high in the south-east corner: the foreman against the wall, the spray, the desk, the stove")
     room.camera((4.45, 1.15, 2.3), (1.7, 3.5, 0.5), 200, "high in the north-east corner over the fan: the safe, the door, the map")
     room.camera((1.15, 3.85, 2.3), (3.9, 1.6, 0.6), 200, "high in the south-west corner over the safe: the desk side on, the empty gun rack, the fan")

@@ -283,6 +283,16 @@
   "x1": 32300,
   "z1": 27200
  },
+ "ground": "rock",
+ "floors": [
+  {
+   "kind": "gravel",
+   "x0": 1700,
+   "z0": 15215,
+   "x1": 28900,
+   "z1": 21335
+  }
+ ],
  "voids": [],
  "doors": [
   {
@@ -408,6 +418,7 @@
    "text": "A truck, dead on its rims."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "A quarry. Something's been feeding here.",

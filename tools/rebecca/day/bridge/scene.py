@@ -302,6 +302,9 @@ def build():
         samples=256,
         extra={
             "bounds": bounds,
+            # Underfoot (sound/ground.ts): the banks' grass and dirt, the deck's planks.
+            "ground": "earth",
+            "floors": [{"kind": "boards", "x0": reb.g(BX0), "z0": reb.g(NEAR - 0.7), "x1": reb.g(BX1), "z1": reb.g(FAR + 0.7)}],
             "exits": [{"x0": reb.g(5.0), "z0": 0, "x1": reb.g(7.0), "z1": reb.g(Y0) + 10}],
             "voids": [
                 {"x0": reb.g(X0) - 2000, "z0": reb.g(NEAR), "x1": reb.g(BX0), "z1": reb.g(FAR)},

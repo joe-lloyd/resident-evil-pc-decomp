@@ -388,6 +388,9 @@ def build():
     rng = random.Random(19)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")  # grass
+    room.floor((8.7, Y0, 10.9, 6.3), "water")  # the water over the road
+    room.floor((X0, ROAD[0], X1, ROAD[1]), "gravel")  # the road
     room.camera(CAMS[0], (8.0, 6.0, -0.6), 200, "from the south-east corner: the road coming in, the barrier, the gully and the pickup, the tower over the trees")
     room.camera(CAMS[1], (11.0, 10.4, -2.9), 205, "from the west lip: down into the gully, the pickup nose-down with its door open, the body in the pool")
     room.camera(CAMS[2], (9.0, 10.0, -0.8), 200, "from the north-west: the path to the generator hut, the adders' rocks, the gully's west bank")

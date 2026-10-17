@@ -18,11 +18,13 @@ import { foeLines, KILL_FLAGS, type Floor } from './foes.ts';
 import { ITEM_FLAGS, SUPPLIES, supplyLines, supplyModels } from './supplies.ts';
 import { mapIn, mapLines, mapModels } from '../maps/pickups.ts';
 import { KEY_ITEM_FLAGS, KEY_ITEMS, keyItemLines, keyItemModels, sameModel, type ItemSpot } from '../items/items.ts';
-import { BAG_SLOTS, GEAR, LOSS_BIT, LOSS_LINE, LOSS_ROOM } from './gear.ts';
+import { BAG_SLOTS, GEAR, LOSS_BIT, LOSS_LINE, LOSS_ROOM, LOSS_START } from './gear.ts';
 import { EVENT_FLAGS, EVENTS, eventsIn, giveModels, GIVE_FLAGS, itemModelSlots, keyItem } from './events.ts';
 import { day } from '../plan/day.ts';
 import { CUES } from '../plan/music.ts';
 import { musicSwitches, musicTable, type StateWrite } from '../music/table.ts';
+import { compileScene, type Compiled } from './cutscene.ts';
+import { CUT_FLAGS, scenesIn } from './cutscenes.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -50,12 +52,13 @@ interface KitJson {
 
 /** Where she stands in a hand-written room on arriving from a kit room, by that room's slug. */
 const BUILT_ARRIVALS: Record<string, Record<string, Arrive>> = {
-  // The yard (x 2-18 m, y 2-12.2 m): in from the forestry road on the truck's
-  // tyre tracks at the west edge, facing east; in from the woods at the
-  // north-east, where the drag marks go into the trees, facing west.
+  // The yard (x 2-18 m, y 2-12.2 m): in from the forestry road at the west
+  // edge, facing east; in from the woods at the north-east, where the drag
+  // marks go into the trees, facing west. Both in the open: the old spots
+  // were inside the room's collision, and she arrived stuck there.
   yard: {
-    road: { x: 6120, z: 18360, angle: 0 },
-    woods: { x: 27200, z: 10880, angle: 2048 },
+    road: { x: 6120, z: 16600, angle: 0 },
+    woods: { x: 28560, z: 10200, angle: 2048 },
   },
   // The bridge: on its far bank (y 15-18 m) from the gondola station, facing
   // back over the bridge; on its near bank from the flume's ride down.
@@ -96,6 +99,8 @@ const BUILT_DOORS: Record<string, { to: string; id: number; zone: Zone; note: st
 const ANIMS = {
   /** The walk down a dark path between outdoor rooms (PathWalk.cpp). */
   walk: { type: 48, variant: 0, sfx: 15, handle: 4 },
+  /** The same walk through a gate: RE1's gate sounds open it and shut it behind her (ROOM_SFX_GATE_WALK). */
+  gateWalk: { type: 48, variant: 0, sfx: 16, handle: 4 },
   /** door00: the mansion's panelled door. */
   mansion: { type: 0, variant: 0, sfx: 0, handle: 4 },
   /** door07: a plank door with a Z brace. */
@@ -152,6 +157,8 @@ const DOOR_STYLE: Record<string, Anim> = {
   'cellar|wine': 'panel',
   'cellar|crawl': 'plank',
 };
+/** The walks that go through a gate, by the rooms they join (either way round). */
+const GATES = new Set(['camp-yard|depot', 'road|washout', 'line-track|platform', 'estate-wall|kennels']);
 /** The ways up and down, by the direction she goes. */
 const CLIMB: Record<string, Anim> = {
   'tower-stairs>tower-top': 'ladderUp',
@@ -192,22 +199,25 @@ function lockItem(from: string, to: string): number | undefined {
  * item, so it stays open). The yard's shed door has 60.
  */
 export const LOCK_FLAGS = Array.from({ length: 20 }, (_, i) => 40 + i);
-const locks = new Map<string, { item: number; flag: number }>();
-function lockFor(from: string, to: string): { item: number; flag: number } | undefined {
-  const item = lockItem(from, to);
-  if (item === undefined) return undefined;
-  const key = `${from}>${to}`;
-  if (!locks.has(key)) {
-    const flag = LOCK_FLAGS[locks.size];
+/** Each locked way's key item and lock flag, by `from>to`, numbered in the plan's order so other tools can know them. */
+const LOCKS = new Map(
+  day.links.flatMap((l) => {
+    const item = lockItem(l.from, l.to);
+    return item === undefined ? [] : [{ key: `${l.from}>${l.to}`, item, step: l.opens! }];
+  }).map(({ key, item, step }, i) => {
+    const flag = LOCK_FLAGS[i];
     if (flag === undefined) throw new Error(`no lock flag left for ${key}`);
-    locks.set(key, { item, flag });
-  }
-  return locks.get(key);
-}
+    return [key, { item, flag, step }] as const;
+  }),
+);
+const lockFor = (from: string, to: string) => LOCKS.get(`${from}>${to}`);
+/** The lock flag the plan's step raises by unlocking its way, if it is a key item on a lock. */
+export const lockFlag = (step: string): number | undefined => [...LOCKS.values()].find((l) => l.step === step)?.flag;
 
 /** The door record's animation and lock bytes for a door from one room to another. */
 function doorAnim(from: string, to: string, walk: boolean): string {
-  const a = ANIMS[walk ? 'walk' : (CLIMB[`${from}>${to}`] ?? DOOR_STYLE[[from, to].sort().join('|')] ?? 'mansion')];
+  const pair = [from, to].sort().join('|');
+  const a = ANIMS[walk ? (GATES.has(pair) ? 'gateWalk' : 'walk') : (CLIMB[`${from}>${to}`] ?? DOOR_STYLE[pair] ?? 'mansion')];
   const lock = lockFor(from, to);
   return `${a.variant}, ${a.sfx}, ${a.type}, ${a.handle}, ${lock ? 0x80 | lock.flag : 0}`;
 }
@@ -221,11 +231,11 @@ const doorKey = (from: string, to: string) => {
 /**
  * Common flags for "she has been here", one per kit room with a first
  * thought; the built rooms use 200-206 and the trail 159. 207-255 hold 49,
- * and there are more kit rooms than that, so the rest come from 109-129, a
- * run no shipped room script and no engine flag uses (the events have
- * 130-158, day/events.ts).
+ * and there are 51 kit rooms, so the rest come from 109-114, a run no shipped
+ * room script and no engine flag uses (the events have 130-158,
+ * day/events.ts; the cutscenes 115-129, day/cutscenes.ts).
  */
-const ENTRY_FLAGS = [...Array.from({ length: 49 }, (_, i) => 207 + i), ...Array.from({ length: 21 }, (_, i) => 109 + i)];
+export const ENTRY_FLAGS = [...Array.from({ length: 49 }, (_, i) => 207 + i), ...Array.from({ length: 6 }, (_, i) => 109 + i)];
 /**
  * How a door fires: a walk on touch; a door that opens on the action button
  * while she stands in its zone (0x40). Without 0x40 the engine tests the
@@ -280,7 +290,9 @@ export function pages(text: string): string[] {
   return out;
 }
 
-const message = (n: number, text: string) => `${n}: ${pages(text).map((p) => `\\n${p}`).join('\\p{0}')}`;
+/** A quote mark that opens speech is the font's opening quote (\\o); a plain one closes it. */
+const quotes = (page: string) => page.replace(/(^|\\n| )"/g, '$1\\o');
+const message = (n: number, text: string) => `${n}: ${pages(text).map((p) => `\\n${quotes(p)}`).join('\\p{0}')}`;
 
 const size = (z: Zone) => `${z.x0}, ${z.z0}, ${z.x1 - z.x0}, ${z.z1 - z.z0}`;
 
@@ -425,10 +437,21 @@ function main(): void {
     // check's (Hal's operator key on the ore cart), the action button takes
     // the key, and the check has its zone back once the key is taken. Their
     // models come after the supplies' and the map's (room.ts).
+    const keyActions = new Map((kit.items ?? []).map((it, i) => [it.step, id + i]));
     const specSlots = supplyModels(slug).length + mapModels(slug).length;
     lines.push(...keyItemLines(kit.items ?? [], keyFlags, id, specSlots));
     id += kit.items?.length ?? 0;
+    // The room's cutscenes (day/cutscenes.ts). One a check starts takes that
+    // check's room action, and writes it itself.
+    const scenes = scenesIn(slug);
+    const sceneChecks = new Map<string, { id: number; zone: Zone; message: number }>();
     for (const c of kit.checks ?? []) {
+      const scene = scenes.find((sc) => sc.trigger.on === 'check' && c.text.startsWith(sc.trigger.check));
+      if (scene) {
+        sceneChecks.set(scene.id, { id: id++, zone: c.zone, message: 128 + msgs.length });
+        msgs.push(c.text);
+        continue;
+      }
       const doc = DOCUMENTS.find((d) => d.room === slug && c.text.startsWith(d.check));
       if (doc) {
         // A document is a file she picks up and reads (files/documents.ts):
@@ -444,7 +467,11 @@ function main(): void {
       lines.push(`aot_set(${id++}, ${size(c.zone)}, SCE_MESSAGE, 129, ${128 + msgs.length}, 0, 255, 0, 0, 0);`);
       msgs.push(c.text);
     }
-    lines.push(...foeLines(slug, floor, killFlags));
+    // A scene she walks into or that greets her has nobody to fight in it:
+    // the room's enemies come once it has run.
+    const calm = scenes.filter((sc) => sc.trigger.on === 'enter' || sc.trigger.on === 'zone').map((sc) => `ck(FG_COMMON, ${CUT_FLAGS.get(sc.id)}, 0)`);
+    const foes = foeLines(slug, floor, killFlags);
+    lines.push(...(calm.length && foes.length ? [`if (${calm.join(' && ')}) {`, ...foes.map((l) => `    ${l}`), '}'] : foes));
     // Supplies keep off the map's floor: a wall to them.
     const mapWall = mapZone ? [{ ...mapZone, shape: 'box' as const }] : [];
     lines.push(...supplyLines(slug, { ...floor, walls: [...floor.walls, ...mapWall] }, itemFlags, id));
@@ -543,6 +570,11 @@ function main(): void {
         bit++;
       }
     }
+    const compiled: Compiled[] = scenes.map((sc, n) =>
+      compileScene(sc, n, CUT_FLAGS.get(sc.id)!, { say, check: sceneChecks.get(sc.id), itemAction: (step) => keyActions.get(step), freeAction: () => id++, freeBit: () => bit++, arrival: (from) => kit.doors?.find((d) => d.to === from)?.arrive, floor }),
+    );
+    for (const c of compiled) lines.push(...c.init);
+    main.push(...compiled.flatMap((c) => c.main));
     // RE1's room action table has 24 slots.
     if (id > 24) throw new Error(`${slug}: ${id} room actions, the table has 24`);
     // Her line on taking the room's map: FG_ROOM marks the map as here when
@@ -557,6 +589,8 @@ function main(): void {
     lines.push(...music.init(slug, entryFlags.get(LOSS_ROOM)));
     lines.push('return;', '', '// main procedure 0');
     const flag = entryFlags.get(slug);
+    // A scene that greets her says her first thought itself.
+    const greeted = scenes.some((sc) => sc.trigger.on === 'enter');
     if (flag !== undefined && slug === LOSS_ROOM) {
       // The mine takes her gear (gear.ts): the room's thought runs on into the loss.
       msgs[0] = `${msgs[0]}\n${LOSS_LINE}`;
@@ -564,14 +598,16 @@ function main(): void {
       // item, so the first visit raises FG_ROOM LOSS_BIT and each try is a
       // block of its own while it is up (room flags clear when a room loads).
       lines.push(
-        `if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, `    set(FG_ROOM, ${LOSS_BIT}, 0);`, '    sys_multi(0);', '}',
+        // With a scene for it, the scene raises the bit when the floor goes (LOSS_START).
+        ...(greeted ? [] : [`if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, ...LOSS_START.map((l) => `    ${l}`), '}']),
         ...GEAR.flatMap((g) => Array.from({ length: BAG_SLOTS }, () => [`if (ck(FG_ROOM, ${LOSS_BIT}, 0) && item_ck(${g})) {`, `    remove_item(${g});`, '}']).flat()),
-        `if (ck(FG_ROOM, ${LOSS_BIT}, 0)) {`, `    set(FG_ROOM, ${LOSS_BIT}, 1);`, '    message(128, 255, 0);', '}',
+        `if (ck(FG_ROOM, ${LOSS_BIT}, 0)) {`, `    set(FG_ROOM, ${LOSS_BIT}, 1);`, ...(greeted ? [] : ['    message(128, 255, 0);']), '}',
       );
     } else if (flag !== undefined) {
-      lines.push(`if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, '    message(128, 255, 0);', '}');
+      lines.push(`if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, ...(greeted ? [] : ['    message(128, 255, 0);']), '}');
     }
     lines.push(...main, 'return;', '');
+    for (const c of compiled) lines.push(...c.event, '');
     writeFileSync(path.join(here, slug, 'room.c'), lines.join('\n'));
     writeFileSync(path.join(here, slug, 'room.msg.txt'), msgs.map((m, i) => message(i, m)).join('\n') + '\n');
     console.log(`${slug}: ${kit.doors?.length ?? 0} doors, ${kit.checks?.length ?? 0} checks${kit.saves ? ', a typewriter and a box' : ''}`);
@@ -599,6 +635,69 @@ function main(): void {
     const next = at >= 0 ? text.slice(0, at) + lines.join('\n') + text.slice(text.indexOf(end) + end.length) : text.replace('\nreturn;\n', `\n${lines.join('\n')}\nreturn;\n`);
     writeFileSync(file, next);
     console.log(`${slug}: ways into the kit rooms written`);
+  }
+  writeScriptedScenes();
+}
+
+/**
+ * Rooms whose scripts are written by hand that hold scenes: the mansion's
+ * save room, RE1's own (rooms/ROOM1000.c), and the ridge. Their scenes go
+ * between markers in the script's init and main and after its last
+ * procedure, and their lines after the room's own messages. `own` counts
+ * those; `action` and `bit` are the first room action id and FG_ROOM bit the
+ * script leaves free.
+ */
+const SCRIPTED: Record<string, { file: string; own: number; action: number; bit: number; arrive: Record<string, Arrive> }> = {
+  save: { file: path.join(here, '..', 'rooms', 'ROOM1000'), own: 48, action: 9, bit: 12, arrive: { crawl: GAME_ROOMS.save!.arrive } },
+  ridge: { file: path.join(here, 'ridge', 'room'), own: 3, action: 3, bit: 0, arrive: {} },
+};
+
+function between(file: string, text: string, name: string, lines: readonly string[]): string {
+  const begin = `// ${name} (day/scripts.ts writes these)`;
+  const end = `// END ${name}`;
+  const at = text.indexOf(begin);
+  const stop = text.indexOf(end);
+  if (at < 0 || stop < at) throw new Error(`${file} has no ${begin} ... ${end}`);
+  return text.slice(0, at) + [begin, ...lines, end].join('\n') + text.slice(stop + end.length);
+}
+
+function writeScriptedScenes(): void {
+  for (const [slug, room] of Object.entries(SCRIPTED)) {
+    const script = `${room.file}.c`;
+    const messages = `${room.file}.msg.txt`;
+    const own = readFileSync(messages, 'utf8').split('\n').filter((l) => {
+      const m = /^(\d+):/.exec(l);
+      return m && Number(m[1]) < room.own;
+    });
+    if (own.length !== room.own) throw new Error(`${messages}: expected its own ${room.own} messages, found ${own.length}`);
+    const msgs: string[] = [];
+    const say = (text: string) => 128 + room.own + msgs.push(text) - 1;
+    let action = room.action;
+    let bit = room.bit;
+    // A room with a scene record (renders/room.json) has its floor checked.
+    const json = path.join(here, slug, 'renders', 'room.json');
+    const kit = existsSync(json) ? (JSON.parse(readFileSync(json, 'utf8')) as KitJson) : undefined;
+    const floor: Floor | undefined = kit && { bounds: kit.bounds, walls: kit.walls, voids: kit.voids, doors: [] };
+    const compiled = scenesIn(slug).map((sc, n) =>
+      compileScene(sc, n, CUT_FLAGS.get(sc.id)!, {
+        say,
+        freeAction: () => action++,
+        freeBit: () => bit++,
+        itemAction: () => undefined,
+        arrival: (from) => room.arrive[from],
+        floor,
+      }),
+    );
+    let text = readFileSync(script, 'utf8');
+    text = between(script, text, 'CUTSCENES INIT', compiled.flatMap((c) => c.init));
+    text = between(script, text, 'CUTSCENES MAIN', compiled.flatMap((c) => c.main));
+    const events = '// CUTSCENE EVENTS (day/scripts.ts writes these, to the end of the file)';
+    const at = text.indexOf(events);
+    if (at < 0) throw new Error(`${script} has no ${events}`);
+    text = text.slice(0, at) + [events, ...compiled.flatMap((c) => ['', ...c.event])].join('\n') + '\n';
+    writeFileSync(script, text);
+    writeFileSync(messages, [...own, ...msgs.map((m, i) => message(room.own + i, m))].join('\n') + '\n');
+    console.log(`${slug}: ${compiled.length} scenes written into its hand-written script`);
   }
 }
 

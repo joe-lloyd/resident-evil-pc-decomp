@@ -220,6 +220,8 @@ def build():
     rng = random.Random(3402)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y_END))
+    room.ground("rock")  # bare granite
+    room.floor((1.0, 1.0, 15.0, 10.0), "gravel")  # the pad
     room.camera((1.0, 15.2, 3.8), (10.0, 4.5, 0.6), 195, "from the trail in, south-west: the mast in its fence, the cabin, the crow on the wire")
     room.camera((17.0, 15.2, 3.6), (5.5, 4.5, 0.4), 200, "from the south-east by the brink: the cabin and the forced crates, the mast's foot")
     room.camera((15.4, 11.9, 4.0), (20.5, 6.4, -2.0), 200, "across to the east brink: his glove, the ledge below with him on it, the valley beyond")

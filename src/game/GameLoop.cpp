@@ -371,7 +371,9 @@ LAB_00480e89:
                 if (((g_main_state_flags2 & MSF2_ATTRACT_DEMO) == 0) &&
                     (g_playerEntity.health < 0))
                 {
-                    g_main_state_flags |= MSF_PLAYER_DEAD;
+                    // Port addition: god mode (TestMode.h) puts her back on her feet.
+                    if (DevCheat_God()) g_playerEntity.health = g_playerEntity.maxHealth;
+                    else g_main_state_flags |= MSF_PLAYER_DEAD;
                 }
             }
             else {

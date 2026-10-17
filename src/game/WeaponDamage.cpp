@@ -5,6 +5,7 @@
 // projectile distance) to find the closest target in range+FOV, then
 // subtracts damage from the enemy's health and sets the hit reaction state.
 #include "../Globals.h"
+#include "TestMode.h"
 #include "../DebugPrint.h"   // dbg_printf
 #include <cstdlib>                   // rand() - MSVC got this via <windows.h>
 #include "entities/EntityCommon.h"   // ENEMY_* / NPC_* type ids
@@ -420,6 +421,7 @@ unsigned char apply_weapon_damage(unsigned int weapon_id)
     }
 
     enemy->health -= damage;
+    if (DevCheat_God()) enemy->health = -1;  // port addition: god mode's one-shot kill (TestMode.h)
 
     if ((g_playerEntityPointer.flags & 0xE0) != 0x20) {
         hitState += (g_playerEntityPointer.flags >> 5);

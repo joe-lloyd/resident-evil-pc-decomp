@@ -8,9 +8,10 @@
 // through the door, and only the channels whose bits differ start or stop. A
 // channel plays a file when it has one:
 // - reuse: RE1's own file under sound/, from the player's own game;
-// - new: our render, music/renders/<sketch>.wav, shipped as sound/Reb_<cue>.wav
-//   for channel 0 and sound/Reb_<cue>_<n>.wav for channel n;
-// - ambience, or a sketch not rendered yet: nothing.
+// - a sketch: our render, music/renders/<sketch>.wav, shipped as
+//   sound/Reb_<cue>.wav for channel 0 and sound/Reb_<cue>_<n>.wav for channel n;
+// - a loop: made by code (sound/ambience.ts), shipped as sound/Reb_amb_<loop>.wav;
+// - a sketch not rendered yet, or neither: nothing.
 // A room whose cue has no file at all is silent.
 //
 // A room's state byte (SoundSystem.cpp update_room_bgm): bits 0-2 pick the
@@ -22,6 +23,7 @@
 // left out, so it keeps RE1's row.
 import type { Cue } from '../plan/music.ts';
 import type { Place } from '../plan/plan.ts';
+import { ambienceFile, type Ambience } from '../sound/ambience.ts';
 
 /** RE1's per-room music state bytes in BIO_CARD.DAT (src/game/BioCard.h roomBgmState): 7 stages of 32 rooms. */
 export const CARD_ROOM_BGM = 0x33c;
@@ -40,12 +42,14 @@ export interface Slot {
   readonly room: number;
 }
 
-export interface GroupChannel {
-  /** The WAV under sound/, without .wav. */
-  readonly file: string;
-  /** Our render to copy in as sound/<file>.wav; absent for RE1's own file. */
-  readonly render?: string;
-}
+/** A channel's WAV under sound/, without .wav, and where build.ts gets it. */
+export type GroupChannel =
+  /** RE1's own file, from the player's own game. */
+  | { readonly file: string; readonly render?: undefined; readonly loop?: undefined }
+  /** Our render, copied in as sound/<file>.wav. */
+  | { readonly file: string; readonly render: string; readonly loop?: undefined }
+  /** A loop made by code, written as sound/<file>.wav. */
+  | { readonly file: string; readonly loop: Ambience; readonly render?: undefined };
 
 export interface Group {
   readonly cue: string;
@@ -96,9 +100,11 @@ export function musicTable(cues: readonly Cue[], places: readonly Place[], rooms
   const group = (c: Cue): number | null => {
     if (groupOf.has(c.id)) return groupOf.get(c.id)!;
     const channels: (GroupChannel | null)[] =
-      c.kind === 'reuse' && c.file ? [{ file: c.file }]
-      : c.kind === 'new' ? c.channels.map((ch, n) => (ch.sketch && rendered(ch.sketch) ? { file: renderedName(c.id, n), render: ch.sketch } : null))
-      : [];
+      c.kind === 'reuse' ? (c.file ? [{ file: c.file }] : [])
+      : c.channels.map((ch, n) =>
+          ch.loop ? { file: ambienceFile(ch.loop), loop: ch.loop }
+          : ch.sketch && rendered(ch.sketch) ? { file: renderedName(c.id, n), render: ch.sketch }
+          : null);
     for (const ch of channels) if (ch && ch.file.length > NAME_MAX) throw new Error(`${c.id}: ${ch.file} is longer than ${NAME_MAX} characters`);
     const n = channels.some(Boolean) ? groups.push({ cue: c.id, channels }) - 1 : null;
     groupOf.set(c.id, n);
@@ -138,6 +144,18 @@ function stateOf(c: Cue, r: Pick<RoomMusic, 'place' | 'group'>, groups: readonly
   let state = 0;
   for (let n = 0; n < files.length; n++) if (files[n] && channelOn(c, n, r.place, happened)) state |= channelBit(n);
   return state;
+}
+
+/**
+ * The files a room plays in a state: [channel, file] for each channel the
+ * state turns on. Bits 0-2 pick the group from the room's row: 0 its cue's,
+ * 1 a takeover's.
+ */
+export function roomChannels(t: MusicTable, r: RoomMusic, state = r.state): [number, string][] {
+  if (state === STATE_SILENT) return [];
+  const g = [r.group, r.takeover][state & 7];
+  if (g === null || g === undefined) return [];
+  return t.groups[g]!.channels.flatMap((ch, n): [number, string][] => (ch && state & channelBit(n) ? [[n, ch.file]] : []));
 }
 
 /** One opcode 0x37: a room's state byte. */

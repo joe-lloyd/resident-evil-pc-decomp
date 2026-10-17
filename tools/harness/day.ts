@@ -6,6 +6,7 @@ import { check, fight, goTo, settle, useFightBack, useItem } from './flows.ts';
 import type { GameLink } from './link.ts';
 import { Run, commonFlag, inRoom } from './scenario.ts';
 import type { GameState } from './state.ts';
+import { CUT_FLAGS } from '../rebecca/day/cutscenes.ts';
 
 export const DAY = {
   trail: { stage: 2, room: 0x12 },
@@ -50,8 +51,10 @@ const SHED = {
   door: { x: 5100, z: 2890, w: 1020, d: 1360 },
   crank: { x: 2805, z: 3145, w: 1105, d: 1360 },
 };
+/** The woods' way back to the yard (woods/room.c door 0). */
+const WOODS_TO_YARD = { x: 3400, z: 11900, w: 1020, d: 3400 };
 const BRIDGE = {
-  sign: { x: 5950, z: 28900, w: 8500, d: 1360 },
+  sign: { x: 5950, z: 27880, w: 8500, d: 1020 },
 };
 
 /** Check a zone until `done` holds, a few tries; returns the last state. */
@@ -61,12 +64,14 @@ async function checkUntil(run: Run, zone: { x: number; z: number; w: number; d: 
   return s;
 }
 
-/** The ridge: the opening monologue, then the path east down to the trail. */
+/** FG_COMMON flag of the opening scene on the ridge (rebecca/day/cutscenes.ts). */
+const OPENING = CUT_FLAGS.get('cut-opening')!;
+
+/** The ridge: the opening scene, then the path east down to the trail. */
 export async function ridge(run: Run): Promise<void> {
   const { link } = run;
-  const opening = run.expectMessage(0x80, 'the opening', 60_000);
   let s = await settle(link, (st) => inRoom(st, DAY.ridge));
-  if (!(await opening())) run.fail('the opening monologue never showed');
+  if (!commonFlag(s, OPENING)) run.fail('the opening scene never played');
   run.log(s, 'on the ridge');
   await run.picture('day-ridge');
   s = await goTo(link, run.dataDirs, 12800, 5300, { radius: 400 });
@@ -134,7 +139,16 @@ export async function dog(run: Run): Promise<void> {
   await run.picture('day-yard-dog');
   const shots = await fight(link);
   s = await settle(link);
-  run.log(s, `killed the dog (${shots} shots)`);
+  if (!inRoom(s, DAY.yard)) {
+    // Going after a dog that hung back took her through the east edge into the woods: back to the yard.
+    run.log(s, 'followed the dog out of the yard; back in');
+    s = await run.door(WOODS_TO_YARD, DAY.yard, 'back into the yard');
+    await fight(link);
+    s = await settle(link);
+  }
+  // God mode keeps her alive past a dog that will not come; the day goes on either way.
+  if (s.enemies.some((e) => e.type === CERBERUS && e.hp > 0)) run.log(s, 'the dog is still standing; on with the day');
+  else run.log(s, `killed the dog (${shots} shots)`);
   await heal(run);
 }
 
@@ -163,7 +177,8 @@ export async function winch(run: Run): Promise<void> {
   else run.fail('using the crank at the winch did nothing');
   s = await link.state();
   if (!commonFlag(s, 205)) run.fail('the pine is not marked as moved');
-  if (s.items.some((it) => it.id === HEX_CRANK)) run.fail('the crank is still in her bag');
+  // She keeps the crank: the pond's sluice takes it too (yard/room.c).
+  if (!s.items.some((it) => it.id === HEX_CRANK)) run.fail('the winch took her crank, and the pond needs it');
   await run.picture('day-yard-pine-moved');
   s = await run.door(YARD.pine, DAY.bridge, 'down the trail past the pine');
 }
@@ -209,7 +224,7 @@ export interface Checkpoint {
 }
 
 // Flag banks: 1 FG_COMMON, 2 FG_LOCK, 3 FG_ENEMY (set = dead), 7 FG_ITEM (clear = taken).
-const SEEN_RIDGE: FlagSet = [1, 200, true];
+const SEEN_RIDGE: FlagSet = [1, OPENING, true];
 const SEEN_YARD: FlagSet = [1, 202, true];
 const SEEN_CABIN: FlagSet = [1, 201, true];
 const SEEN_SHED: FlagSet = [1, 203, true];
@@ -248,6 +263,17 @@ export const STRETCHES: Record<string, { play: (run: Run) => Promise<void>; from
 };
 
 export const stretchNames = Object.keys(STRETCHES);
+
+/**
+ * Act 1 done, as a played Act 1 leaves it: across the gorge, the sign read,
+ * the spray in her bag and the crank with its second use, for the pond.
+ */
+export const ACT1_END: Checkpoint = {
+  room: DAY.bridge,
+  at: { x: 10200, z: 18700, angle: 0xc00 },
+  flags: [...UP_TO_THE_SHED, PINE_MOVED, [1, 204, true], [1, 206, true]],
+  items: [[FIRST_AID_SPRAY, 1], [HEX_CRANK, 1]],
+};
 
 /** The game's launch arguments for a test starting at `stretch`: a new game, or straight into its room. */
 export function bootFor(stretch: string): string {

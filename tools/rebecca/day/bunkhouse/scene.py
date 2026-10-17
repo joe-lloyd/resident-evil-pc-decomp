@@ -80,6 +80,7 @@ def build():
     rng = random.Random(11)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("boards")
     room.camera((11.85, 3.4, 2.05), (4.6, 3.7, 0.2), 200, "high on the east wall over the aisle: the length of the room, the table, the drag to the door")
     room.camera((1.15, 3.5, 2.25), (8.0, 3.2, 0.3), 200, "high on the west wall over the aisle: both rows of bunks, the card table, the stove")
     room.camera((6.45, 5.8, 2.2), (9.4, 2.2, 0.4), 200, "high over the door: the man dead in his bunk, the calendar by the stove")

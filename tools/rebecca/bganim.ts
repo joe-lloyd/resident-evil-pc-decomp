@@ -22,9 +22,14 @@ export interface AnimLayer {
   readonly frames: readonly Image[];
   /** Game frames (30 a second) per animation frame. */
   readonly ticks: number;
-  /** Shown only while FG_SCENARIO (0) or FG_COMMON (1) flag `bit` is `value`. */
-  readonly when?: { readonly bank: 0 | 1; readonly bit: number; readonly value: boolean };
+  /** Shown only while FG_SCENARIO (0), FG_COMMON (1) or lock (2) flag `bit` is `value`. */
+  readonly when?: { readonly bank: 0 | 1 | 2; readonly bit: number; readonly value: boolean };
+  /** Played once from the moment the flag turns to `value`, then hidden: a change as it happens. */
+  readonly once?: boolean;
 }
+
+/** Flags in each bank BgAnim can read. */
+const BANK_BITS = [128, 256, 64] as const;
 
 interface Rect {
   readonly x: number;
@@ -96,10 +101,11 @@ export function buildAnim(base: Image, layers: readonly AnimLayer[]): Uint8Array
   const built: { layer: AnimLayer; frames: Uint16Array[]; rects: Rect[] }[] = [];
   for (const layer of layers) {
     if (layer.frames.length === 0) throw new Error('an animation layer needs at least one frame');
-    if (layer.frames.length > 1 && (layer.ticks < 1 || layer.ticks > 255)) throw new Error(`ticks ${layer.ticks} out of range`);
-    if (layer.when && (layer.when.bit < 0 || layer.when.bit > (layer.when.bank === 0 ? 127 : 255))) {
+    if ((layer.frames.length > 1 || layer.once) && (layer.ticks < 1 || layer.ticks > 255)) throw new Error(`ticks ${layer.ticks} out of range`);
+    if (layer.when && (layer.when.bit < 0 || layer.when.bit >= BANK_BITS[layer.when.bank])) {
       throw new Error(`flag ${layer.when.bank}:${layer.when.bit} out of range`);
     }
+    if (layer.once && !layer.when) throw new Error('a layer played once needs a flag to start it');
     const frames = layer.frames.map(to15);
     const rects = changedRects(base15, frames);
     if (rects.length) built.push({ layer, frames, rects });
@@ -111,7 +117,8 @@ export function buildAnim(base: Image, layers: readonly AnimLayer[]): Uint8Array
   bytes.push(...'RBA1'.split('').map((c) => c.charCodeAt(0)));
   u16(built.length);
   for (const { layer, frames, rects } of built) {
-    bytes.push(layer.when ? layer.when.bank : 0xff, layer.when?.bit ?? 0, layer.when?.value === false ? 0 : 1, frames.length > 1 ? layer.ticks : 0);
+    const value = (layer.when?.value === false ? 0 : 1) | (layer.once ? 2 : 0);
+    bytes.push(layer.when ? layer.when.bank : 0xff, layer.when?.bit ?? 0, value, frames.length > 1 || layer.once ? layer.ticks : 0);
     u16(frames.length);
     for (const f of frames) {
       u16(rects.length);

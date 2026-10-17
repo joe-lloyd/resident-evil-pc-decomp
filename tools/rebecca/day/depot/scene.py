@@ -114,6 +114,7 @@ def build():
     rng = random.Random(61)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("gravel")
     cams = [
         ((9.3, 1.25, 3.3), (4.2, 5.0, 0.3), "from the north-east corner by the gate: the tank, the nozzle dripping, the lean-to"),
         ((9.3, 6.6, 3.2), (6.0, 1.5, 0.3), "from the south-east drums: the dog against the wire, the gate out to the yard"),

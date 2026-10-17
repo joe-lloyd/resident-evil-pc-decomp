@@ -95,6 +95,7 @@ def build():
     rng = random.Random(71)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("concrete")
     room.camera((1.15, 6.45, 2.6), (5.2, 2.2, 0.5), 200, "high in the south-west corner over Gus's mattress: the door, the engine on the hoist, the cable sparking")
     room.camera((1.15, 1.15, 2.6), (5.4, 5.3, 0.5), 200, "high in the north-west corner by the door: the crate under its logs, the hanging engine, the tyres")
     room.camera((6.65, 1.15, 2.6), (2.0, 5.4, 0.5), 200, "high in the north-east corner: the bench and vice, Gus's mattress, the cable spitting sparks")

@@ -69,6 +69,7 @@ def build():
     rng = random.Random(53)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("boards")
     room.camera((5.25, 1.15, 2.15), (2.0, 3.9, 0.5), 200, "high over the washstand: the table and its lamp, the bed, the fireplace, the tools")
     room.camera((1.85, 4.45, 2.15), (4.9, 1.6, 0.6), 200, "high by the fireplace: the table, the pink basin, the door, the key on its hook")
     room.camera((1.15, 1.15, 2.15), (4.7, 4.1, 0.5), 200, "high by the window: the bed, ITCHY on the wall, the pool by the door")

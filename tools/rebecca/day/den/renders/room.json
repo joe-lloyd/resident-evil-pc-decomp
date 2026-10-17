@@ -108,6 +108,8 @@
   "x1": 25500,
   "z1": 20400
  },
+ "ground": "earth",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -192,6 +194,7 @@
    "text": "Water dripping off the rock into a puddle. The puddle's red."
   }
  ],
+ "saves": null,
  "items": [
   {
    "step": "truck-keys",
