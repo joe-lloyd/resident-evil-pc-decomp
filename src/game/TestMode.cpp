@@ -327,6 +327,11 @@ static void build_state(void)
     for (int i = 0; items != NULL && i < capacity; i++) {
         put("%s[%d,%d]", i ? "," : "", (int)items[i].Id, (int)items[i].qty);
     }
+    // The item box's 48 slots, shared by every box in the game.
+    put("],\"box\":[");
+    for (int i = 0; i < 48; i++) {
+        put("%s[%d,%d]", i ? "," : "", (int)g_itemboxSlots[i].Id, (int)g_itemboxSlots[i].qty);
+    }
     put("],\"enemies\":[");
     // enemy_set puts each enemy in the slot its script names, so the live ones
     // are not the first g_enemy_count slots; a door clears every slot's status.

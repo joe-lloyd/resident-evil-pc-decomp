@@ -74,6 +74,8 @@ export interface GameState {
   charModel: number;
   player: Player;
   items: { id: number; qty: number }[];
+  /** The item box's 48 slots; empty from a game too old to say. */
+  box: { id: number; qty: number }[];
   enemies: Enemy[];
   messageChoice: number;
   messageId: number;
@@ -173,6 +175,12 @@ function parseGameState(o: Record<string, unknown>): GameState {
       const [id, qty] = numbers(it, `items[${i}]`, 2);
       return { id, qty };
     }),
+    box: Array.isArray(o.box)
+      ? o.box.map((it: unknown, i: number) => {
+          const [id, qty] = numbers(it, `box[${i}]`, 2);
+          return { id, qty };
+        })
+      : [],
     enemies: o.enemies.map((e, i) => {
       const [type, status, x, y, z, hp] = numbers(e, `enemies[${i}]`, 6);
       return { type, status, x, y, z, hp };

@@ -69,7 +69,8 @@ try {
 
   // The item box: its lid swings open, then the box screen, her bag on the right and the box's list on
   // the left. Pick the spray in her bag (two slots to a row, the cursor on
-  // the first), then the box's empty row above its first item, and swap them.
+  // the first); the box's cursor is on slot 0, and up wraps it to slot 47,
+  // empty in a new game: action swaps them.
   s = await approach(link, BOX);
   await picture(link, 'reb-save-box-shut');
   await link.tap(Key.action, 3);

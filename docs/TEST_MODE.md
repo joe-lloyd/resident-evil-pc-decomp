@@ -63,6 +63,7 @@ reports raw values; `tools/harness/state.ts` turns them into meanings.
 | `charModel` | `g_CharacterModelId`; 3 is Rebecca |
 | `player` | `id`, `x`, `y`, `z`, `angle`, `hp`, `maxHp`, `weapon` (the 1-based slot in hand), `cf` (byte 0xDC: the collision flags `check_room_collision` reads) |
 | `items` | `[id, qty]` for each slot: 6 for Chris and Rebecca, 8 for Jill |
+| `box` | `[id, qty]` for each of the item box's 48 slots |
 | `enemies` | `[type, status, x, y, z, hp]` for each occupied slot of `g_EnemiesList` (status not 0) |
 | `msg` | `choice` (`g_menu_choice_id`; 0x80 means a message is open), `id` (the last message shown), `flags` (`g_message_flags`) and `menu` (`g_openMenuFlag`) |
 | `banks` | script flag banks 0-9 as hex bytes, numbered like `cmd_bit_test` |

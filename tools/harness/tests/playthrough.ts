@@ -339,8 +339,9 @@ const freeSlots = (s: GameState) => s.items.filter((i) => i.id === 0).length;
 /**
  * Make a slot free: to the nearest item box, and put away the first thing she
  * carries that the day no longer needs. The box screen opens with her bag's
- * cursor on its first slot; she picks the item, then the box's empty row above
- * its first item, and they swap (tests/reb-save.ts).
+ * cursor on its first slot and the box's on box slot 0, whatever the box
+ * holds (MainMenu.cpp main_menu and the box states). She picks the item, steps
+ * the box's cursor down to its first empty slot, and action swaps them.
  */
 async function stash(p: Player, reached: Set<string>): Promise<void> {
   let s = await p.link.state();
@@ -352,13 +353,16 @@ async function stash(p: Player, reached: Set<string>): Promise<void> {
   s = await approach(p.link, near.zone);
   const id = s.items[spare]!.id;
   const slot = s.items.findIndex((i) => i.id === id);
+  const empty = s.box.findIndex((b) => b.id === 0);
+  if (empty < 0) throw new StuckError(s.box.length ? 'the item box is full' : 'the game does not report the item box: rebuild the exe', s);
   await p.link.tap(Key.action, 3);
   s = await p.link.waitFor((st) => screen(st) === 'menu', 'the box screen', 20_000);
   await p.link.frames(30);
-  const keys = [...Array<number>(slot >> 1).fill(Key.down), ...(slot & 1 ? [Key.right] : []), Key.action, Key.up, Key.action];
+  // Each step of the box's list slides for 15 frames and drops a key pressed meanwhile.
+  const keys = [...Array<number>(slot >> 1).fill(Key.down), ...(slot & 1 ? [Key.right] : []), Key.action, ...Array<number>(empty).fill(Key.down), Key.action];
   for (const key of keys) {
     await p.link.tap(key, 3);
-    await p.link.frames(20);
+    await p.link.frames(22);
   }
   s = await settle(p.link);
   if (s.items.some((i) => i.id === id)) throw new StuckError(`item ${id} is still in her bag after the box`, s);
