@@ -95,6 +95,7 @@ def build():
     rng = random.Random(131)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("earth")  # clay
     room.camera((1.15, 4.78, 1.5), (7.5, 5.6, 0.2), 195, "from the cellar hole: the south leg, bars of light across the clay, the pipes")
     room.camera((7.85, 4.78, 1.5), (1.5, 5.4, 0.3), 195, "from the corner: back west along the south leg to the cellar's glow")
     room.camera((6.75, 4.3, 1.45), (7.3, 1.4, 1.55), 200, "from the foot of the north leg: up it to the ladder and the hatch")

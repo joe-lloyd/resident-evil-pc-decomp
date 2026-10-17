@@ -119,6 +119,7 @@ def build():
     rng = random.Random(31)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("boards")
     room.camera((6.25, 9.85, 2.45), (2.9, 4.6, 0.6), 200, "high in the south-east corner: the tables, the benches over, the cook against the counter")
     room.camera((1.15, 9.85, 2.45), (4.8, 4.6, 0.6), 200, "high in the south-west corner: the length of the hall to the hatch, the door on the right")
     room.camera((6.25, 3.8, 2.45), (2.6, 8.4, 0.5), 200, "high by the kitchen doorway: the last meal on the tables, the fork in the board")

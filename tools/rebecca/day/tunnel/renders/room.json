@@ -142,6 +142,8 @@
   "x1": 32300,
   "z1": 32300
  },
+ "ground": "rock",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -240,6 +242,7 @@
    "text": "An ore cart, half full. It's been here years."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "The lamps are lit. Someone's been down here.",

@@ -170,6 +170,16 @@
   "x1": 32300,
   "z1": 18700
  },
+ "ground": "earth",
+ "floors": [
+  {
+   "kind": "boards",
+   "x0": 1105,
+   "z0": 10200,
+   "x1": 8500,
+   "z1": 14280
+  }
+ ],
  "voids": [
   {
    "x0": 1105,
@@ -274,6 +284,7 @@
    "text": "The trestle creaks. It's a long way down."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [
   {

@@ -92,6 +92,16 @@
   "x1": 8160,
   "z1": 6800
  },
+ "ground": "lino",
+ "floors": [
+  {
+   "kind": "carpet",
+   "x0": 2635,
+   "z0": 4165,
+   "x1": 4505,
+   "z1": 5355
+  }
+ ],
  "voids": [],
  "doors": [
   {
@@ -176,6 +186,7 @@
    "text": "July. Every day crossed off up to yesterday."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "A radio. It's on. Someone could hear me.",

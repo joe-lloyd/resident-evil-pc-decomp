@@ -35,6 +35,10 @@ floor, x 10.8-13.6 to y -1, x 10.2-13.6 to y -3.6, x 11.4-14.2 to the end.
 The park wall's west face is at x 13.6 south of y -3.6 and x 14.2 north
 of it, with a pier at the step.
 
+State "open-gate" (the lock's flag, scripts.ts): the gate key turns, the
+chain slides off into the gravel and the leaves swing in, the man on the
+spikes going with the west leaf, played as it happens.
+
 Moving: the ivy in the wind, a crow flapping and a crow pecking, the torch
 flickering, the grass, the shirt on the glass flapping, the crow on the
 pier pecking.
@@ -187,6 +191,8 @@ def build():
     rng = random.Random(61)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y_N, X1, Y1), shift=SHIFT)
+    room.ground("earth")  # grass and the track
+    room.floor((X0, 11.8, X1, Y1), "gravel")  # the strip at the wall's foot
     room.camera((12.3, 0.4, 3.9), (9.8, 12.5, 1.4), 200, "from the track in: the gate, the wall, the mansion's roof over it")
     room.camera((2.6, 11.0, 3.0), (12.5, 9.8, 1.4), 200, "along the wall from the west: the ivy, the piers, the man on the gate")
     room.camera((16.6, 10.8, 3.2), (6.0, 10.2, 1.2), 200, "along the wall from the east: the plaque, the gate, the crows on the coping")
@@ -235,12 +241,14 @@ def build():
     kit.text("Plaque words 2", "UMBRELLA CORP.", mat("black"), (px, py - 0.02, 1.52), size=0.058)
     kit.splat("Verdigris", reb.mat_plain("Verdigris", (0.08, 0.2, 0.15), 0.8), (px + 0.2, py - 0.018, 1.45), 0.07, rot=(math.pi / 2, 0, 0), seed=3)
 
-    # ---- The gate: two leaves of spear-topped bars, chained shut.
-    gate_parts = []
+    # ---- The gate: two leaves of spear-topped bars, chained shut. Each leaf
+    # turns on its pier, so the gate can swing open into the grounds.
     gy = WALL_Y + 0.2
     gx0, gx1 = GATE
     mid = (gx0 + gx1) / 2
+    leaves = []
     for leaf in (0, 1):
+        gate_parts = []
         a, b = (gx0, mid - 0.02) if leaf == 0 else (mid + 0.02, gx1)
         n = 7
         for i in range(n):
@@ -255,23 +263,27 @@ def build():
             for k in range(8):
                 t0, t1 = 2 * math.pi * k / 8, 2 * math.pi * (k + 1) / 8
                 gate_parts.append(kit.rod("Scroll", gate_iron, c + Vector((math.cos(t0) * 0.1, 0, math.sin(t0) * 0.1)), c + Vector((math.cos(t1) * 0.1, 0, math.sin(t1) * 0.1)), 0.008, 4))
-    gate = kit.join("Gate", gate_parts)
+        leaves.append(kit.join(f"Gate leaf {leaf}", gate_parts, origin=(gx0 if leaf == 0 else gx1, gy, 0.0)))
+    # It stays a wall once open: the way in is the gate's own zone (room.door).
     reb.wall(reb.prim("cube", "Gate footprint", None, (mid, gy, 0.5), (gx1 - gx0, 0.2, 1.0))).hide_render = True
+    links = []
     for k in range(9):
         t0, t1 = k / 9, (k + 1) / 9
-        kit.rod("Chain", mat("rust"), (mid - 0.15 + 0.3 * t0, gy - 0.05, 1.45 - 0.2 * math.sin(math.pi * t0)), (mid - 0.15 + 0.3 * t1, gy - 0.05, 1.45 - 0.2 * math.sin(math.pi * t1)), 0.015, 5)
-    reb.prim("cube", "Padlock", brass, (mid, gy - 0.08, 1.2), (0.09, 0.04, 0.11), bevel=0.01)
+        links.append(kit.rod("Chain", mat("rust"), (mid - 0.15 + 0.3 * t0, gy - 0.05, 1.45 - 0.2 * math.sin(math.pi * t0)), (mid - 0.15 + 0.3 * t1, gy - 0.05, 1.45 - 0.2 * math.sin(math.pi * t1)), 0.015, 5))
+    gate_chain = kit.join("Gate chain", links, origin=(mid, gy - 0.05, 1.45))
+    padlock = reb.prim("cube", "Padlock", brass, (mid, gy - 0.08, 1.2), (0.09, 0.04, 0.11), bevel=0.01)
 
     # ---- The man on the gate: head down, caught on the spikes, one leg gone; blood down the bars.
     hang = kit.body("Hanging man", (mid - 0.35, gy - 0.32, 3.3), pose="front", top=uniform, legs=uniform, seed=6, missing=("r_foot",))
     hang.rotation_euler = (0.08, math.pi / 2, math.pi / 2)
-    reb.cloth("Torn trouser on a spike", uniform, (mid - 0.42, gy - 0.05, 3.3), (0.12, 0.35), rot=(math.pi / 2, 0, 0.1), cuts=6, lumps=0.02, seed=4)
+    trouser = reb.cloth("Torn trouser on a spike", uniform, (mid - 0.42, gy - 0.05, 3.3), (0.12, 0.35), rot=(math.pi / 2, 0, 0.1), cuts=6, lumps=0.02, seed=4)
     for i in range(5):
         kit.rod(f"Blood down the bars {i}", mat("blood"), (mid - 0.5 + i * 0.1, gy - 0.025, 3.0 - rng.uniform(0, 0.4)), (mid - 0.5 + i * 0.1, gy - 0.025, rng.uniform(0.3, 1.6)), 0.008, 4)
     kit.splat("Pool under him", mat("blood"), (mid - 0.3, gy - 0.6, height(mid, gy - 0.6)), 0.5, seed=8, stretch=(1.4, 0.8))
-    kit.rod("Stump", mat("old blood"), (mid - 0.15, gy - 0.24, 2.86), (mid - 0.15, gy - 0.24, 2.74), 0.065, 8)
+    on_leaf = [hang, trouser] + [ob for ob in bpy.data.objects if ob.name.startswith("Blood down the bars")]
+    on_leaf.append(kit.rod("Stump", mat("old blood"), (mid - 0.15, gy - 0.24, 2.86), (mid - 0.15, gy - 0.24, 2.74), 0.065, 8))
     for i in range(4):
-        kit.rod(f"Drip from the stump {i}", mat("blood"), (mid - 0.15 + rng.uniform(-0.04, 0.04), gy - 0.24, 2.74), (mid - 0.15 + rng.uniform(-0.05, 0.05), gy - 0.24, 2.74 - rng.uniform(0.1, 0.35)), 0.006, 4)
+        on_leaf.append(kit.rod(f"Drip from the stump {i}", mat("blood"), (mid - 0.15 + rng.uniform(-0.04, 0.04), gy - 0.24, 2.74), (mid - 0.15 + rng.uniform(-0.05, 0.05), gy - 0.24, 2.74 - rng.uniform(0.1, 0.35)), 0.006, 4))
     kit.bones("What fell", (mid + 0.3, gy - 0.9, height(mid, gy - 0.9)), spread=0.4, seed=5, skull=False)
     # His torch, where it fell, still on.
     tx, ty = 8.6, 10.6
@@ -298,6 +310,28 @@ def build():
     for i, (x, hd) in enumerate(((5.0, 0.3), (6.3, 3.0), (13.2, 2.2), (15.0, 0.6))):
         crows.append(kit.crow(f"Crow {i}", (x, WALL_Y + 0.25, WALL_H + 0.16), heading=hd))
     pecker, _ = kit.crow("Crow on him", (mid - 0.55, gy - 0.3, 3.36), heading=0.4)
+    # He hangs from the west leaf's spikes, and the crow on him: they go with it.
+    bpy.context.view_layer.update()
+    for ob in on_leaf + [pecker]:
+        world = ob.matrix_world.copy()
+        ob.parent = leaves[0]
+        ob.matrix_world = world
+    chain_rest = [(ob, ob.location.copy(), ob.rotation_euler.copy()) for ob in (gate_chain, padlock)]
+    ground = height(mid, gy - 0.3)
+
+    def open_gate(t):
+        """t 0: chained shut; to 0.3 the unlocked chain slides off the bars
+        into the gravel; then the leaves swing in, into the grounds."""
+        t = float(t)
+        fall = min(1.0, t / 0.3) ** 2
+        for k, (ob, loc, rot) in enumerate(chain_rest):
+            ob.location = loc + Vector((0.1 * fall * (1 - 2 * k), -0.25 * fall, (ground + 0.03 - loc.z) * fall))
+            ob.rotation_euler = (rot.x + 1.4 * fall, rot.y, rot.z + 0.5 * fall * (1 - 2 * k))
+        swing = max(0.0, (t - 0.3) / 0.7)
+        swing = swing * swing * (3 - 2 * swing)
+        leaves[0].rotation_euler = (0, 0, math.radians(78) * swing)
+        leaves[1].rotation_euler = (0, 0, -math.radians(84) * swing)
+    room.state("open-gate", open_gate, motion=(12, 4))
     flapper, flap_wings = kit.crow("Crow taking off", (GATE[1] + 0.4, WALL_Y + 0.2, 5.95), heading=2.6, perched=False)
 
     # ---- The wall path north to the creek: the park wall east of it, glass set in its

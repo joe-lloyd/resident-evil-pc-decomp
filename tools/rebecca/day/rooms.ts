@@ -27,7 +27,6 @@ export const trail: DayRoom = {
     { x0: 0, z0: 0, x1: 9000, z1: 8000 }, // camera 0: the top half, from behind the top
     { x0: 0, z0: 8000, x1: 9000, z1: 22000 }, // camera 1: the lower half, from beyond the foot
   ],
-  footsteps: 0x2d,
 };
 
 /** The ridge: the clearing on the mountain top where the game opens, at dawn. */
@@ -44,7 +43,6 @@ export const ridge: DayRoom = {
     { x: 7000, y: -9000, z: 6500, rgb: [40, 42, 55], radius: 16000 },
   ],
   cameraFloor: 'auto',
-  footsteps: 0x2d,
 };
 
 /** Where a new game stands: on the ridge, near the edge, facing out over the valley (+Z is angle 0xC00). */
@@ -64,7 +62,6 @@ export const lookout: DayRoom = {
     { x: 7650, y: -3570, z: 7140, rgb: [45, 46, 52], radius: 14000 },
   ],
   cameraFloor: 'auto',
-  footsteps: 0x2d,
   itemModels: [
     { from: 'Stage3/ROOM3090.RDT', index: 0 }, // F-Aid Spray
     { from: 'Stage1/ROOM1130.RDT', index: 0 }, // Small Key, as the shed key
@@ -91,7 +88,6 @@ export const yard: DayRoom = {
     { x: 19550, y: -1700, z: 18360, rgb: [60, 35, 10], radius: 5100 },
   ],
   cameraFloor: 'auto',
-  footsteps: 0x2d,
   itemModels: [{ own: 'cutters' }], // the bolt cutters (items/models.py)
 };
 
@@ -109,7 +105,6 @@ export const shed: DayRoom = {
     { x: 3910, y: -2720, z: 3570, rgb: [30, 32, 38], radius: 9000 },
   ],
   cameraFloor: 'auto',
-  footsteps: 0x2d,
   itemModels: [
     { from: 'Stage3/ROOM30A0.RDT', index: 1 }, // Hex Crank, as the winch's crank
     { own: 'jerrycan' }, // the jerrycan (items/models.py)
@@ -131,7 +126,6 @@ export const bridge: DayRoom = {
     { x: 10200, y: 5100, z: 20400, rgb: [30, 34, 34], radius: 30000 },
   ],
   cameraFloor: 'auto',
-  footsteps: 0x2d,
 };
 
 /**
@@ -212,7 +206,6 @@ export const kitRooms: readonly DayRoom[] = KIT_ROOMS.map(([slug, stage, room, h
   hour,
   inside,
   cameraFloor: 'auto',
-  footsteps: 0x2d,
   // The supplies', then the room's map's (maps/pickups.ts).
   itemModels: [...supplyModels(slug), ...mapModels(slug)],
 }));

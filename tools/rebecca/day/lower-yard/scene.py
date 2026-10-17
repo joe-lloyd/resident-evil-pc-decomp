@@ -272,6 +272,8 @@ def build():
     rng = random.Random(1972)
     reb.clear_scene()
     room = kit.Room(bounds=(X_W, Y0, X1, Y1), shift=SHIFT)
+    room.ground("gravel")
+    room.floor((0.5, 9.9, 9.5, 15.0), "concrete")  # the car park's asphalt
     room.camera(CAMS[0], (10.5, 9.0, 0.6), 200, "from the north-west corner: the yard, the booth, the station door and the drinks machine, the sedan")
     room.camera(CAMS[1], (11.5, 5.0, 1.2), 200, "from the south-west, over the car park: the sedan's open door, the station front, the flag")
     room.camera(CAMS[2], (4.5, 11.5, 0.2), 200, "from the station's north corner: the car park and the sedan, the trail head west")

@@ -2,3 +2,16 @@
 1: \nHal. Face down in the\nwater. Something bit him:\nhis arm's\p{0}\nbandaged, black under it.\p{0}\nThere's a key on a chain\nround his neck.
 2: \nHe hid up on this cart,\nout of the water. Blanket,\nlantern.\p{0}\nThere's blood where he\nslid off.
 3: \nDANGER. WINZE. The floor\ndrops away under the water\nthere.
+4: \nCold, black water. I can't\nsee the floor.
+5: \nThe floor's gone under me!
+6: \nMy bag, the gun... gone,\ndown there in the dark.
+7: \nI've got nothing left.\nOnly my hands.
+8: \n\oOver here... Don't come\ntoo close."
+9: \n\oHal? I'm Rebecca. We\nspoke on the phone."
+10: \n\oThe medic. Then you know\nwhat this bite is."
+11: \n\oLet me look at your arm."
+12: \n\oIt's past that. I can\nfeel it in my blood."
+13: \n\oThe drive key. Take it,\nquick."
+14: \n\oGet that car down the\nmountain. Don't stop."
+15: \n\oHal!"
+16: \nHe's gone. There was\nnothing I could do.

@@ -454,6 +454,30 @@
   "x1": 28900,
   "z1": 23800
  },
+ "ground": "gravel",
+ "floors": [
+  {
+   "kind": "concrete",
+   "x0": 3400,
+   "z0": 5610,
+   "x1": 11560,
+   "z1": 22610
+  },
+  {
+   "kind": "boards",
+   "x0": 22100,
+   "z0": 6800,
+   "x1": 27880,
+   "z1": 12580
+  },
+  {
+   "kind": "earth",
+   "x0": 15810,
+   "z0": 3400,
+   "x1": 18190,
+   "z1": 23800
+  }
+ ],
  "voids": [],
  "doors": [
   {
@@ -554,6 +578,7 @@
    "text": "Paw prints, big ones. Heading out to the gate.\nAnd toward the house."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "Kennels.\nAll the runs are empty.",

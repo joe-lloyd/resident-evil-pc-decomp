@@ -185,6 +185,9 @@ def build():
         samples=512,
         extra={
             "bounds": {"x0": reb.g(X0), "z0": reb.g(Y0), "x1": reb.g(X1), "z1": reb.g(Y1)},
+            # Underfoot (sound/ground.ts): the floorboards.
+            "ground": "boards",
+            "floors": [],
             "exit": {"x0": reb.g(X1) - 10, "z0": reb.g(DOOR[0]), "x1": reb.g(X1 + 0.6), "z1": reb.g(DOOR[1])},
             "crank": G(*CRANK),
         },

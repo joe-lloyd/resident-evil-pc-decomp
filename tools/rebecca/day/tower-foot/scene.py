@@ -332,6 +332,7 @@ def build():
     rng = random.Random(61)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")
     room.camera(CAMS[0], (10.0, 6.5, 0.3), 200, "from where the track comes in: the tower, Walt on the rocks, his bicycle")
     room.camera(CAMS[1], (8.5, 10.0, 0.9), 200, "from the north-west: the open cage at the stair's foot, the body beyond")
     room.camera(CAMS[2], (9.0, 9.0, 0.0), 210, "from the north-east by the sign: under the tower to the privy, the woodpile, the body on the rocks")

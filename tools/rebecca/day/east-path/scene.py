@@ -84,6 +84,7 @@ def build():
     rng = random.Random(23)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")  # grass and the dirt path
     room.camera((1.6, 11.6, 3.5), (9.0, 5.0, 0.6), 200, "from the west end by the fence: the path in, the thermos, the cottage set back")
     room.camera((17.8, 3.2, 3.7), (9.0, 10.0, 0.9), 200, "from the north-east corner: the drips going on east, the windsock, the bench and the valley")
     room.camera((10.6, 11.7, 3.0), (9.4, 3.6, 1.1), 200, "from the fence below the cottage: its front, the open door, the hand on the frame")

@@ -209,6 +209,8 @@
   "x1": 20400,
   "z1": 10200
  },
+ "ground": "boards",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -302,6 +304,7 @@
    "text": "His footlocker, open. Letters from home. A photo of a woman."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "It stinks of sickness in here.",

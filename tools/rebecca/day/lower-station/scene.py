@@ -45,6 +45,7 @@ def build():
     rng = random.Random(1640)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("lino")
     room.camera((1.15, 4.85, 2.35), (4.6, 1.7, 0.6), 200, "high in the south-west corner: the bloody counter, the doorway to the machine room and him beyond it")
     room.camera((5.45, 4.85, 2.35), (1.9, 1.9, 0.6), 200, "high in the south-east corner over the desk: the counter, the smashed window, the key board")
     room.camera((5.45, 1.15, 2.35), (1.8, 4.4, 0.5), 200, "high in the north-east corner by the doorway: the desk, the log and the radio, the door out to the yard")

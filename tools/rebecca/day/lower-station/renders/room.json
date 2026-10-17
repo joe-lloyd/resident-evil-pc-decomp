@@ -68,6 +68,8 @@
   "x1": 9520,
   "z1": 8500
  },
+ "ground": "lino",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -170,6 +172,7 @@
    "text": "A CB radio. Static on every channel."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "Blood on the counter. Glass on the floor.",

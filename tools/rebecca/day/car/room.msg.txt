@@ -4,3 +4,7 @@
 3: \nA bandage, unwound.\nSomeone dressed a bite on\nher wrist.\p{0}\nIt didn't help.
 4: \nClaw marks on the inside\nof the door. Handprints on\nthe glass, all the way up.\p{0}\nShe was trying to get out.
 5: \nCAR 4. MAX 6.
+6: \nThe car lurches out over\nthe gorge. Here we go.
+7: \nIt's stopped. We're\nhanging over the trees.
+8: \nSomething just landed on\nthe roof.
+9: \nA pylon, right ahead.\nThere's a ladder down it.

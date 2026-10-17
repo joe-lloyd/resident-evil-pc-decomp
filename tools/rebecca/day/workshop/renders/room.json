@@ -148,6 +148,8 @@
   "x1": 11560,
   "z1": 11220
  },
+ "ground": "concrete",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -223,6 +225,7 @@
    "text": "He barred the door from inside. The bar's been broken.\nFrom this side."
   }
  ],
+ "saves": null,
  "items": [
   {
    "step": "cog",

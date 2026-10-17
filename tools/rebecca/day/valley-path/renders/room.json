@@ -190,6 +190,8 @@
   "x1": 32300,
   "z1": 28900
  },
+ "ground": "earth",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -304,6 +306,7 @@
    "text": "The pylon's ladder. There's blood at the foot of it,\ndripping from somewhere up above."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "Down. Smoke in the west.\nThat could be the helicopter.",

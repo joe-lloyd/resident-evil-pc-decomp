@@ -161,6 +161,16 @@
   "x1": 15810,
   "z1": 15810
  },
+ "ground": "boards",
+ "floors": [
+  {
+   "kind": "lino",
+   "x0": 6290,
+   "z0": 6290,
+   "x1": 14110,
+   "z1": 14110
+  }
+ ],
  "voids": [
   {
    "x0": 7395,
@@ -174,7 +184,7 @@
    "to": "tower-stairs",
    "zone": {
     "x0": 6375,
-    "z0": 7650,
+    "z0": 8500,
     "x1": 10965,
     "z1": 10880
    },
@@ -252,6 +262,7 @@
    "text": "Smoke, rising out of the trees in the valley. Something came down there.\nBravo's helicopter. And far off, a big house among the trees."
   }
  ],
+ "saves": null,
  "items": [
   {
    "step": "switch-key",

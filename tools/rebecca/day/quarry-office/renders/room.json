@@ -71,6 +71,8 @@
   "x1": 7480,
   "z1": 6460
  },
+ "ground": "concrete",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -155,6 +157,7 @@
    "text": "DAYS WITHOUT AN ACCIDENT. Someone wiped the number off\nand wrote a 0."
   }
  ],
+ "saves": null,
  "items": [
   {
    "step": "dynamite",

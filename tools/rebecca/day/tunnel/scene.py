@@ -137,6 +137,7 @@ def build():
     rng = random.Random(53)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("rock")  # the adit's mud and grit
     eyes = [{"eye": e} for e in ((5.5, 18.4, 2.1), (5.6, 11.8, 2.1), (6.5, 8.3, 2.1), (15.6, 9.1, 2.1), (10.2, 8.2, 2.1))]
     room.camera((5.5, 18.4, 2.1), (5.0, 12.0, 0.5), 200, "inside the fall, looking up the adit: the lamps on the cable, the bend, the wrapped man")
     room.camera((5.6, 11.8, 2.1), (5.0, 18.0, 0.4), 200, "at the bend, looking back south: the rails, the tools, the daylight through the gap")

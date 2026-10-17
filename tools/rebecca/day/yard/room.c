@@ -20,14 +20,16 @@ door_aot_set(1, 21080, 12325, 1870, 1020, 1, 0, 7, 1, 0, ROOM_314, 6715, 0, 9180
 // The shed, padlocked: lock 60 (0x80 | 60 = 188) opens with the Small Key.
 door_aot_set(2, 9180, 12410, 1190, 1360, 1, 0, 7, 1, 188, ROOM_316, 4845, 0, 3570, 2048, 61 /* Small Key */, 129);
 // The trail down: the pine blocks it until it is dragged clear.
+// In front of the winch, while the pine is down: the Hex Crank can be used
+// here (item-use bank 9, bit 30 - 27 = 3). Only then: each use spends one of
+// the crank's two, and the pond's sluice needs the other.
 if (ck(FG_COMMON, 205, 1)) {
     aot_set(3, 24310, 19380, 4930, 1360, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
+    aot_set(4, 19210, 17170, 1700, 2380, SCE_USEITEM, 1, 9, 0, 3, 0, 1, 0);
 } else {
     door_aot_set(3, 24310, 19380, 4930, 1360, 0, 15, 48, 4, 0, ROOM_317, 10200, 0, 6120, 3072, UNLOCKED, 1);
 }
-// In front of the winch: the Hex Crank can be used here (item-use bank 9,
-// bit 30 - 27 = 3), and checking it says what it needs.
-aot_set(4, 19210, 17170, 1700, 2380, SCE_USEITEM, 1, 9, 0, 3, 0, 1, 0);
+// Checking the winch says what it needs.
 aot_set(5, 19210, 17170, 1700, 2380, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(6, 14450, 14280, 2210, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);   // the truck's open door
 aot_set(7, 9180, 6120, 2720, 1360, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);     // the station sign
@@ -41,7 +43,8 @@ aot_set(10, 27540, 9860, 2380, 2040, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);   
 // case; testitem would test the item last used, which is none on entering.
 if (ck(FG_ITEM, 246, 0)) {
     if (item_ck(57)) {
-        item_aot_set(13, 11050, 15300, 2550, 1190, 28, 1, 0, 255, 116, 54, 8, 248, 184, 71, 0, 0, 246, 129, 0, 0);
+        // Two uses: the depot's padlock and the road gate's chain each spend one.
+        item_aot_set(13, 11050, 15300, 2550, 1190, 28, 2, 0, 255, 116, 54, 8, 248, 184, 71, 0, 0, 246, 129, 0, 0);
     } else {
         aot_set(13, 11050, 15300, 2550, 1190, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);   // the toolbox, locked
     }
@@ -68,8 +71,8 @@ if (ck(FG_COMMON, 202, 1)) {
 // frame she uses it, and a message opened then is dropped, so the line waits
 // a second (the state word 4 counts seconds; setw restarts it). The pine
 // moves as she says it drags clear: FG_COMMON 205 switches the background.
-// FG_ROOM 10: the crank is on the winch, her line still to come. She keeps
-// the crank: the pond's sluice takes it too (day/events.ts).
+// FG_ROOM 10: the crank is on the winch, her line still to come. The use
+// spends one of the crank's two; the pond's sluice takes the other (day/events.ts).
 if (ck(FG_COMMON, 205, 1)) {
     if (ck(FG_ROOM, 10, 1) && testitem(30 /* Hex Crank */)) {
         set(FG_ROOM, 10, 0);

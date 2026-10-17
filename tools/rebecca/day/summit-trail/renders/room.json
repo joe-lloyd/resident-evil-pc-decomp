@@ -321,6 +321,8 @@
   "x1": 32300,
   "z1": 25500
  },
+ "ground": "rock",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -437,6 +439,7 @@
    "text": "ARKLAY SUMMIT WEATHER STATION. There's a light on inside."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "The top of the mountain. Nothing grows up here.\nJust rock, and crows.",

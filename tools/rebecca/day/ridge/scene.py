@@ -284,6 +284,9 @@ def build():
             # either side, and the cliff edge, which has no object of its own.
             # The west edge stops short of the pines: both cameras lose her there.
             "bounds": {"x0": 3900, "z0": 3000, "x1": 11000, "z1": 10000},
+            # Underfoot (sound/ground.ts): the clearing's earth.
+            "ground": "earth",
+            "floors": [],
             "exit": {"x0": 11000, "z0": 3800, "x1": 13000, "z1": 6800},
         },
     )

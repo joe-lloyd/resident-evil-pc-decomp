@@ -110,6 +110,7 @@ def build():
     rng = random.Random(83)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
+    room.ground("water")  # knee deep over the mud
     room.camera((1.8, 3.1, 2.25), (9.5, 5.6, 0.3), 200, "from the foot of the decline: the black water, the cart he hid on, Hal floating by the rope")
     room.camera((14.8, 6.8, 2.3), (6.0, 3.6, 0.3), 200, "from the far south-east: Hal at the edge of the deep water, the cart, the way back up")
     room.camera((7.0, 7.0, 2.25), (10.2, 4.6, 0.2), 200, "close on Hal, face down, the key on its chain at his neck, the rope and the DANGER board")

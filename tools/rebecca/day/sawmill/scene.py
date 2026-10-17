@@ -6,9 +6,9 @@ at the blade when a sick man came at him. They went into the saw together:
 blood is sprayed in a long fan across the stack of fresh boards on the
 outfeed side, and an arm in a plaid sleeve lies in the sawdust by the
 blade, the sawdust round it soaked dark. Someone threw the drive belt off
-to stop it; it hangs slack from the big pulley. The water wheel still
-turns outside, so its shaft still turns where it comes through the east
-wall, driving nothing. The rest of the sawyer went out the back door: his
+to stop it; it hangs slack from the big pulley. Then someone wound the
+pond's sluice down, and the water wheel outside stopped, and with it the
+shaft where it comes through the east wall. The rest of the sawyer went out the back door: his
 blood and his one hand on the frame lead east, to the mill pond. The log
 crane waits on its overhead track with its tongs hanging, the lamps hang
 dead, and sawdust lies thick over everything. A player should see the
@@ -30,7 +30,7 @@ to the pond gate, x 14.0-19.0, a plank walk 2.2-2.4 m wide (y 9.2-11.6 to
 x 16.2, then y 8.6-10.8) along the south bank of the race. The race comes
 out of the pond through a sluice at x 20.6, y 7.6, runs west along y 7.6-7.8
 a metre below the bank, and turns north under the water wheel, which
-stands against the east wall at y 4.6 and still turns. The water runs dark,
+stands against the east wall at y 4.6, still. The water runs dark,
 and something turns in it: the tailer, the man who took the boards off the
 saw, face down in the eddy above the trash rack, turning slowly round. The
 sawyer's blood runs along the planks to the gate. South of the walk the
@@ -38,9 +38,15 @@ bank drops into a bramble ditch, slabwood dumped in it by the mill, spruce
 beyond. The gate in the split
 rail fence at x 19.0, y 8.7-10.6 is the way to the pond.
 
-Moving: the wheel's shaft and its pulley turning, the crane's tongs and one
-lamp swaying, flies on the arm, dust in the light; out back, the water
-wheel turning, the race's water, the tailer turning in the eddy.
+Moving: the crane's tongs and one lamp swaying, flies on the arm, dust in
+the light; out back, the race's water, the tailer turning in the eddy.
+
+State "mill-race" (the sluice wound open at the pond, day/events.ts): the
+water wheel turning, water pouring off its buckets, and the shaft's pulley
+turning, in the room's loop. It happens at the pond, so nothing plays once.
+State "crane" (worked here once the mill runs): the trolley runs east along
+its track as the hoist winds the tongs up, played as it happens; then the
+tongs swing where it stopped, the mill turning as in "mill-race".
 """
 import math
 import os
@@ -306,6 +312,8 @@ def build():
     rng = random.Random(1972)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X_END, Y1), inside=True)
+    room.ground("earth")  # sawdust
+    room.floor((14.0, 9.0, X_END, 11.0), "boards")  # the plank walk
     room.camera((1.4, 3.0, 3.2), (9.0, 8.4, 0.6), 200, "high in the north-west corner: the log on the carriage, the blade, the blood on the boards")
     room.camera((13.6, 11.8, 3.2), (6.0, 5.4, 0.8), 200, "high in the south-east corner: the board stack's bloody face, the saw, the big doors far off")
     room.camera((13.6, 3.0, 3.3), (5.0, 9.2, 0.6), 200, "high in the north-east corner: the turning pulley, the slack belt, the crane, the mill's length")
@@ -545,9 +553,9 @@ def build():
     for x in (2.6, 6.3, 9.8, 13.2):
         kit.rod("Track hanger", iron, (x, SHAFT_Y, track_z + 0.15), (x, SHAFT_Y, H - 0.3), 0.04)
     tx = 5.4
-    reb.prim("cube", "Trolley", mat("yellow paint"), (tx, SHAFT_Y, track_z - 0.3), (0.6, 0.5, 0.35), bevel=0.02)
-    reb.prim("cube", "Hoist", mat("yellow paint"), (tx, SHAFT_Y, track_z - 0.65), (0.4, 0.45, 0.4), bevel=0.02)
-    kit.text("Crane rating", "5 TON", mat("black"), (tx, SHAFT_Y + 0.23, track_z - 0.65), size=0.09, rot=(math.pi / 2, 0, math.pi))
+    trolley = [reb.prim("cube", "Trolley", mat("yellow paint"), (tx, SHAFT_Y, track_z - 0.3), (0.6, 0.5, 0.35), bevel=0.02),
+               reb.prim("cube", "Hoist", mat("yellow paint"), (tx, SHAFT_Y, track_z - 0.65), (0.4, 0.45, 0.4), bevel=0.02),
+               kit.text("Crane rating", "5 TON", mat("black"), (tx, SHAFT_Y + 0.23, track_z - 0.65), size=0.09, rot=(math.pi / 2, 0, math.pi))]
     tong_pivot = reb.prim("sphere", "Hoist hook", iron, (tx, SHAFT_Y, track_z - 0.85), (0.06, 0.06, 0.06))
     chain = kit.rod("Hoist chain", iron, (0, 0, 0), (0, 0, -1.6), 0.02, 6)
     chain.parent = tong_pivot
@@ -611,17 +619,57 @@ def build():
     wheel, tailer, reeds = race_walk(rng, timber, logs_m, end_m, iron)
 
     anim = kit.Anim(16)
-    anim.spin(wheel, axis=0, turns=1, symmetry=8)
     anim.ripple()
     anim.sway(reeds, amount=0.05)
     rest = tailer.rotation_euler.copy()
     anim.custom(lambda k: setattr(tailer, "rotation_euler", (rest[0], rest[1], rest[2] + 0.45 * math.sin(anim.phase(k)))))
     pulley.rotation_mode = "ZYX"   # spin about its own axis first, then lie it along x
-    anim.spin(pulley, axis=2, turns=1, symmetry=6)
     anim.swing(tong_pivot, axis=0, degrees=3)
     anim.swing(lamps[2], axis=1, degrees=4)
     anim.flies((ax, ay, 0.05), count=10, radius=0.4)
     anim.flies((sx0 + 0.8, sy0 - 0.3, 0.6), count=6, radius=0.4)
+
+    # ---- The mill running once the sluice is open (at the pond), and the crane worked.
+    wheel_rest, pulley_rest = wheel.rotation_euler.copy(), pulley.rotation_euler.copy()
+    foam = reb.mat_surface("Race foam", [(0.0, (0.25, 0.27, 0.27)), (0.6, (0.5, 0.52, 0.52)), (1.0, (0.7, 0.72, 0.72))], scale=10, rough=0.3, bump=0.6)
+    spill = [reb.prim("cube", f"Spill off the buckets {k}", foam, (WHEEL_X + (k - 1) * 0.3, SHAFT_Y - 1.6 - 0.1 * k, 0.3), (0.25, 0.04, 1.6), rot=(0.25, 0, 0)) for k in range(3)]
+
+    def mill(on):
+        for ob in spill:
+            ob.hide_render = not on
+
+    def mill_turns(k):
+        """An eighth of a turn of the wheel a loop and a sixth of the pulley's:
+        the spokes land where the next ones were."""
+        wheel.rotation_euler = (wheel_rest.x + 2 * math.pi / 8 * k / anim.frames, wheel_rest.y, wheel_rest.z)
+        pulley.rotation_euler = (pulley_rest.x, pulley_rest.y, pulley_rest.z + 2 * math.pi / 6 * k / anim.frames)
+    mill(False)
+    room.state("mill-race", mill, loop=mill_turns, cameras=[2, 6, 7])
+
+    trolley_rest = [ob.location.copy() for ob in trolley]
+    pivot_rest = tong_pivot.location.copy()
+    chain_rest = chain.location.copy()
+    tongs_rest = [ob.location.copy() for ob in tongs]
+    run_to = 9.4 - tx
+
+    def crane(t):
+        """t 0: parked; the trolley runs east and the hoist winds the tongs up
+        to 1, with the mill running (the crane needs it)."""
+        t = float(t)
+        mill(t > 0)
+        e = t * t * (3 - 2 * t)
+        for ob, loc in zip(trolley, trolley_rest):
+            ob.location = loc + Vector((run_to * e, 0, 0))
+        tong_pivot.location = pivot_rest + Vector((run_to * e, 0, 0))
+        # The chain winds in from the bottom: its top stays at the hook.
+        chain.scale = (1, 1, 1 - 0.55 * e)
+        chain.location = chain_rest * (1 - 0.55 * e)
+        for ob, loc in zip(tongs, tongs_rest):
+            ob.location = loc + Vector((0, 0, 1.6 * 0.55 * e))
+        # Lagging the trolley, the tongs swing back, and forward as it stops.
+        tong_pivot.rotation_euler = (0, -0.25 * math.sin(math.pi * t), 0)
+    crane(0)
+    room.state("crane", crane, motion=(12, 5), cameras=[0, 2, 3, 6, 7], loop=mill_turns)
 
     # ---- What the game needs.
     room.door("camp-yard", (X0, BIG_DOOR[0], X0 + 0.7, BIG_DOOR[1]), arrive=(2.4, 7.5), face=(1, 0))
@@ -636,12 +684,14 @@ def build():
     room.check((bx - 1.0, by + 1.4, bx + 1.6, by + 2.2), "An arm, in a plaid sleeve. Torn off at the elbow.\nThe sawdust round it is soaked through.")
     room.check((sx0, sy0 - 0.7, sx1, sy0), "Blood, thrown across the boards in a long fan.\nThe saw was running when it happened.")
     room.check((bx - 1.6, by + 1.0, bx - 0.6, by + 1.6), "The head saw. There's still a log on the carriage, half cut.\nSomeone threw the belt off to stop the blade.")
-    room.check((11.6, SHAFT_Y + 0.6, 13.6, SHAFT_Y + 1.6), "The water wheel's shaft. It's still turning.\nThe belt's off, so it isn't driving anything.")
-    room.spot("crane", (tx - 0.9, RAIL_Y[1], tx + 0.9, RAIL_Y[1] + 0.8))  # day/events.ts says what she sees and does here
+    room.check((11.6, SHAFT_Y + 0.6, 13.6, SHAFT_Y + 1.6), "The water wheel's shaft. The belt to the saw's been thrown off.\nThe line shaft for the crane is still belted to it.")
+    # South of the hook, where the game shows her through camera 0, which sees
+    # the crane run; by the rails it is the saw's close camera, which doesn't.
+    room.spot("crane", (tx - 0.8, RAIL_Y[1] + 1.0, tx + 0.8, RAIL_Y[1] + 1.6))  # day/events.ts says what she sees and does here
     room.check((X1 - 1.0, BACK_DOOR[0] - 0.5, X1, BACK_DOOR[0]), "A bloody hand on the back door's frame.\nHe went out this way.")
     room.check((6.4, Y1 - 0.6, 7.6, Y1), "Board feet cut: Monday 4100. Tuesday 3850. Wednesday 1200.\nThen nothing.")
     room.check((17.0, wb[2], 18.6, wb[2] + 0.6), "Somebody's in the race. Face down, going round and round in the eddy.\nThe tailer. He worked the boards off the saw.")
-    room.check((WHEEL_X - 0.4, wa[2], 16.0, wa[2] + 0.6), "The water wheel. The race still runs, so it still turns.")
+    room.check((WHEEL_X - 0.4, wa[2], 16.0, wa[2] + 0.6), "The water wheel. The race turns it, when the pond's sluice is open.")
     room.check((17.8, wb[3] - 0.6, X_END - 0.6, wb[3]), "The sawyer's blood, all along the planks.\nHe was going for the pond.")
     room.entry = "Sawdust, and the smell of blood."
     room.export(anim)

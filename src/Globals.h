@@ -1995,6 +1995,10 @@ void door_system_start_animation(void);               // Task_execute(1, FUN_004
 // Port addition (PathWalk.cpp): a door record of this type plays walk number
 // record +0x08 between Rebecca's outdoor rooms instead of a .dor animation.
 #define DOOR_TYPE_WALK 0x30
+// Port addition: a walk's room sound set (record +0x09) for a way through a
+// gate: the path's footsteps, and the walk opens the gate first and shuts it
+// behind her, with RE1's own gate sounds (PathWalk.cpp).
+#define ROOM_SFX_GATE_WALK 16
 bool PathWalk_Start(unsigned char variant);
 void set_fading(int type, int counter);               // 0x0047b980
 int  cmd_bgm_stop_all(void);                                  // 0x00460b80 - stop sound banks
@@ -2075,6 +2079,23 @@ void LoadRoomRdt(void);
 void update_room_bgm(void);
 // Port addition, for test mode: the WAV BGM channel 0-2 has loaded, or NULL.
 const char* bgm_channel_file(int channel);
+// Port addition, for test mode: the WAV room sound slot 0-1 (the door's or the
+// walk's, load_room_sfx) or entity sound slot 0-47 (g_emSndBanks) has loaded,
+// or NULL; and what played from them (SoundSystem.cpp).
+const char* room_sfx_file(int slot);
+const char* emsnd_slot_file(int slot);
+struct SoundProbeBank {
+    unsigned int plays;  // sounds that found a loaded bank and started
+    const char*  last;   // the WAV the last of them played
+    const char*  recent[8];  // the last eight, the newest at (plays - 1) % 8: a frame can play several
+};
+struct SoundProbe {
+    SoundProbeBank step;     // PlayEntitySnd: her footsteps
+    SoundProbeBank room;     // room sound slots: doors, walks
+    unsigned char  roomSet;  // the room sound set last loaded (a door record's +0x09)
+};
+extern SoundProbe g_soundProbe;
+void sound_probe_note(SoundProbeBank* b, const char* file);
 void LoadHeldItemsImages(void);
 void load_room_bg(void);
 void load_room_bg_image(void);

@@ -670,6 +670,13 @@ def _depth_material():
     m.use_nodes = True
     nodes, links = m.node_tree.nodes, m.node_tree.links
     nodes.remove(nodes["Principled BSDF"])
+    links.new(_depth_emission(nodes, links), nodes["Material Output"].inputs["Surface"])
+    return m
+
+
+def _depth_emission(nodes, links):
+    """Nodes in a material that emit its view-space Z / 16 in game units as
+    R * 256 + G (each / 255); returns the emission's shader output."""
     cam = nodes.new("ShaderNodeCameraData")
     scale = nodes.new("ShaderNodeMath")
     scale.operation = "MULTIPLY"
@@ -703,8 +710,66 @@ def _depth_material():
     em = nodes.new("ShaderNodeEmission")
     em.inputs["Strength"].default_value = 1.0
     links.new(rgb.outputs[0], em.inputs["Color"])
-    links.new(em.outputs["Emission"], nodes["Material Output"].inputs["Surface"])
-    return m
+    return em.outputs["Emission"]
+
+
+def _depth_settings():
+    """One sample at the pixel centre, so no depth is blended across an edge; no light, no mist."""
+    scene = bpy.context.scene
+    for ob in scene.objects:
+        if ob.type == "LIGHT" or ob.name == "Mist":
+            ob.hide_render = True
+    _cycles(1, False, 0.01)
+    scene.cycles.max_bounces = 0
+    scene.render.film_transparent = True
+    scene.render.image_settings.color_mode = "RGBA"
+    scene.view_settings.view_transform = "Raw"
+    scene.render.dither_intensity = 0.0
+
+
+def _all_depth(cams, out_dir):
+    """Every surface's depth, as cam<N>.zall.png: masks.ts works out from it
+    and where she can stand what is in front of her (masks.ts
+    occluders). A cut-out card (a leaf, a fern) emits its depth only where
+    its alpha is. It rewrites the scene's materials, so it runs after every
+    picture."""
+    scene = bpy.context.scene
+    plain = _depth_material()
+    for m in list(bpy.data.materials):
+        if not m.use_nodes or m is plain:
+            continue
+        nodes, links = m.node_tree.nodes, m.node_tree.links
+        out = next((n for n in nodes if n.type == "OUTPUT_MATERIAL" and n.is_active_output), None)
+        if out is None:
+            continue
+        clear = nodes.new("ShaderNodeBsdfTransparent")
+        if out.inputs["Volume"].is_linked and not out.inputs["Surface"].is_linked:
+            # Smoke, mist: a volume with no surface hides nothing she stands behind.
+            for l in list(out.inputs["Volume"].links):
+                links.remove(l)
+            links.new(clear.outputs[0], out.inputs["Surface"])
+            continue
+        bsdf = next((n for n in nodes if n.type == "BSDF_PRINCIPLED"), None)
+        cut = nodes.new("ShaderNodeMixShader")
+        alpha = bsdf.inputs["Alpha"] if bsdf is not None else None
+        if alpha is not None and alpha.is_linked:
+            links.new(alpha.links[0].from_socket, cut.inputs["Fac"])
+        else:
+            cut.inputs["Fac"].default_value = 1.0
+        links.new(clear.outputs[0], cut.inputs[1])
+        links.new(_depth_emission(nodes, links), cut.inputs[2])
+        links.new(cut.outputs[0], out.inputs["Surface"])
+        if out.inputs.get("Volume") is not None:
+            for l in list(out.inputs["Volume"].links):
+                links.remove(l)
+    for ob in scene.objects:
+        if ob.type == "MESH" and not ob.data.materials:
+            ob.data.materials.append(plain)
+    _depth_settings()
+    for i, cam in enumerate(cams):
+        scene.camera = cam
+        scene.render.filepath = os.path.join(out_dir, f"cam{i}.zall.png")
+        bpy.ops.render.render(write_still=True)
 
 
 def _holdout_material():
@@ -730,7 +795,15 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
     makes, shown while FG_SCENARIO (bank 0) or FG_COMMON (bank 1) flag `bit`
     is set. f(True) poses the change, f(False) undoes it; rendered as
     cam<N>.s-<name>.png. Neither may move a mask() object: masks are cut from
-    frame 0.
+    frame 0. A state may also have
+      "motion": {"frames": F, "ticks": T}: the change as it happens, f(k / F)
+        for k = 1 .. F - 1 rendered as cam<N>.m-<name>.<k>.png, for the
+        state's "cameras" (default all);
+      "loop": True or g: the changed room through the anim's loop, frames
+        1 .. N - 1 as cam<N>.s-<name>.a<k>.png, g(k) posed with each.
+
+    RE1_STATES=1 renders the states alone, over backgrounds already rendered
+    from the same scene.
     """
     os.makedirs(out_dir, exist_ok=True)
     scene = bpy.context.scene
@@ -745,7 +818,11 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
     if anim:
         meta["anim"] = {"frames": anim["frames"], "ticks": anim["ticks"]}
     if states:
-        meta["states"] = [{"name": st["name"], "bank": st["bank"], "bit": st["bit"]} for st in states]
+        meta["states"] = [{k: st[k] for k in ("name", "bank", "bit", "motion", "cameras") if k in st} | ({"loop": True} if st.get("loop") else {}) for st in states]
+    states_only = bool(os.environ.get("RE1_STATES"))
+    # RE1_ZALL=1: every surface's depth alone (cam<N>.zall.png), over a room
+    # already rendered from the same scene.
+    zall_only = bool(os.environ.get("RE1_ZALL"))
 
     walls = []
     for ob in scene.objects:
@@ -768,27 +845,51 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
     scene.cycles.seed = 0  # every render the same noise, so still parts match frame 0
     scene.cycles.use_animated_seed = False
 
-    def render_all(suffix):
+    def render_all(suffix, only=None):
         for i, cam in enumerate(cams):
+            if only is not None and i not in only:
+                continue
             scene.camera = cam
             scene.render.filepath = os.path.join(out_dir, f"cam{i}{suffix}.png")
             bpy.ops.render.render(write_still=True)
 
-    render_all("")
-    if anim and not preview:
-        for k in range(1, anim["frames"]):
-            anim["set"](k)
-            render_all(f".a{k}")
-        anim["set"](0)
-    for st in states if not preview else ():
+    if not states_only and not zall_only:
+        render_all("")
+        if anim and not preview:
+            for k in range(1, anim["frames"]):
+                anim["set"](k)
+                render_all(f".a{k}")
+            anim["set"](0)
+    for st in (states if not preview or states_only else ()) if not zall_only else ():
+        name, only = st["name"], st.get("cameras")
         st["set"](True)
-        render_all(f".s-{st['name']}")
+        render_all(f".s-{name}")
+        loop = st.get("loop")
+        if loop and anim:
+            for k in range(1, anim["frames"]):
+                anim["set"](k)
+                if callable(loop):
+                    loop(k)
+                render_all(f".s-{name}.a{k}", only)
+            anim["set"](0)
+            if callable(loop):
+                loop(0)
+        motion = st.get("motion")
+        if motion:
+            for k in range(1, motion["frames"]):
+                st["set"](k / motion["frames"])
+                render_all(f".m-{name}.{k}", only)
         st["set"](False)
+    if states_only:
+        return
 
     # Foreground depth: tagged objects emit their depth, the rest hold out, so
-    # they still hide what is behind them. One sample at the pixel centre, so
-    # no depth is blended across an edge.
+    # they still hide what is behind them.
     masked = [ob for ob in scene.objects if ob.get("re_mask") and ob.type == "MESH"]
+    # Every surface's depth first: the tagged pass below takes the materials away.
+    _all_depth(cams, out_dir)
+    if zall_only:
+        return
     depth_m = _depth_material()
     hold_m = _holdout_material()
     for ob in scene.objects:
@@ -798,15 +899,7 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
         ob.data.materials.append(depth_m if ob in masked else hold_m)
         for poly in ob.data.polygons:
             poly.material_index = 0
-    for ob in scene.objects:
-        if ob.type == "LIGHT" or ob.name == "Mist":
-            ob.hide_render = True
-    _cycles(1, False, 0.01)
-    scene.cycles.max_bounces = 0
-    scene.render.film_transparent = True
-    scene.render.image_settings.color_mode = "RGBA"
-    scene.view_settings.view_transform = "Raw"
-    scene.render.dither_intensity = 0.0
+    _depth_settings()
     for i, cam in enumerate(cams):
         scene.camera = cam
         scene.render.filepath = os.path.join(out_dir, f"cam{i}.depth.png")

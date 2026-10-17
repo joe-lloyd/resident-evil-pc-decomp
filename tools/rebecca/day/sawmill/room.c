@@ -20,9 +20,9 @@ if (ck(FG_ITEM, 188, 0)) {  // clip
 }
 // crane (day/events.ts), FG_COMMON 138 once it has happened.
 if (ck(FG_COMMON, 138, 1)) {
-    aot_set(12, 7650, 8670, 3060, 1360, SCE_USEITEM, 129, 4, 0, 12, 0, 1, 0);   // the action button here raises FG_ROOM 12
+    aot_set(12, 7820, 10370, 2720, 1020, SCE_USEITEM, 129, 4, 0, 12, 0, 1, 0);   // the action button here raises FG_ROOM 12
 } else {
-    aot_set(13, 7650, 8670, 3060, 1360, SCE_MESSAGE, 129, 139, 0, 255, 0, 0, 0);
+    aot_set(13, 7820, 10370, 2720, 1020, SCE_MESSAGE, 129, 139, 0, 255, 0, 0, 0);
 }
 return;
 
@@ -35,7 +35,7 @@ if (ck(FG_COMMON, 138, 1) && ck(FG_ROOM, 12, 0)) {
     set(FG_ROOM, 12, 1);
     if (ck(FG_COMMON, 137, 0)) {
         set(FG_COMMON, 138, 0);
-        aot_set(13, 7650, 8670, 3060, 1360, SCE_MESSAGE, 129, 139, 0, 255, 0, 0, 0);
+        aot_set(13, 7820, 10370, 2720, 1020, SCE_MESSAGE, 129, 139, 0, 255, 0, 0, 0);
         message(140, 255, 0);
     } else {
         message(138, 255, 0);

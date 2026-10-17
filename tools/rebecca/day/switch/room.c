@@ -26,6 +26,9 @@ if (ck(FG_COMMON, 132, 1) && ck(FG_ROOM, 12, 0)) {
     if (ck(FG_COMMON, 131, 0)) {
         set(FG_COMMON, 132, 0);
         aot_set(7, 1700, 2040, 1360, 1870, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
+        tbl37_set(3, 31, 40);   // switch
+        tbl37_set(4, 22, 40);   // line-track
+        bgm_play(2);
         message(135, 255, 0);
     } else {
         message(133, 255, 0);

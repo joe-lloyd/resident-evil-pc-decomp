@@ -71,6 +71,8 @@
   "x1": 6460,
   "z1": 6460
  },
+ "ground": "boards",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -146,6 +148,7 @@
    "text": "His tools. Clean and in a row."
   }
  ],
+ "saves": null,
  "items": [
   {
    "step": "cellar-key",

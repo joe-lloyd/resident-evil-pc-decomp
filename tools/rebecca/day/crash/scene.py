@@ -197,6 +197,7 @@ def build():
     rng = random.Random(23)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X_END, Y1), shift=SHIFT)
+    room.ground("earth")  # grass, mud and ash
     room.camera((16.3, 10.2, 3.1), (8.6, 7.2, 0.9), 200, "from the valley path: the cabin's open side, the tail, the boot prints going out")
     room.camera((1.0, 1.3, 3.9), (10.5, 10.0, 0.0), 195, "from the snapped spruces: the furrow, the nose, the kit scattered beyond")
     room.camera((3.0, 13.4, 3.0), (10.2, 6.8, 0.9), 200, "from the south-west: the open pilot's door, Kevin in his seat, the medkit")

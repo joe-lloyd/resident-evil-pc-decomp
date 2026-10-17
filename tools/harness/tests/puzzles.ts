@@ -14,11 +14,12 @@
 // line per puzzle and exits 1 if any fails.
 import { open } from '../lab.ts';
 import { Key, type GameLink } from '../link.ts';
-import { faceTowards, headingTo, settle, useItem } from '../flows.ts';
+import { headingTo, settle, useItem } from '../flows.ts';
 import { Bank, flag, type GameState } from '../state.ts';
 import { dayRooms } from '../../rebecca/day/rooms.ts';
 import { EVENT_FLAGS, EVENTS, GIVE_FLAGS, keyItem, type RoomEvent } from '../../rebecca/day/events.ts';
-import { inside, nearest, opens, outward, read, walkable, type Rect } from './floor.ts';
+import { CUT_FLAGS } from '../../rebecca/day/cutscenes.ts';
+import { inside, nearest, opens, outward, read, stand, walkable, type Rect } from './floor.ts';
 
 const bySlug = new Map(dayRooms.map((r) => [r.slug, r]));
 const spotOf = (e: RoomEvent): Rect | undefined => read(e.room)?.spots?.find((sp) => sp.step === e.step)?.zone;
@@ -30,26 +31,6 @@ const done = (s: GameState, step: string) => flag(s, Bank.common, EVENT_FLAGS.ge
 
 /** Close whatever she opened (a message, the status screen) and wait for control in this room. */
 const calm = (link: GameLink, room: { stage: number; room: number }) => settle(link, (s) => s.stage === room.stage && s.room === room.room);
-
-/** How far ahead of her the game looks for a zone she is acting on or using an item at (update_player_position). */
-const REACH = 600;
-
-/** Stand her where the point she reaches falls in the spot, facing its middle. */
-async function stand(link: GameLink, slug: string, zone: Rect): Promise<void> {
-  const json = read(slug)!;
-  const touch = (json.doors ?? []).filter((d) => !opens(slug, d.zone)).map((d) => d.zone);
-  const cx = (zone.x0 + zone.x1) / 2;
-  const cz = (zone.z0 + zone.z1) / 2;
-  const reaches = ([x, z]: [number, number]) => {
-    const d = Math.hypot(cx - x, cz - z) || 1;
-    return inside(zone, x + ((cx - x) / d) * REACH, z + ((cz - z) / d) * REACH);
-  };
-  const at = nearest(walkable(json, touch), cx, cz, reaches);
-  if (!at) throw new Error('nowhere she can walk to reaches its spot');
-  await link.place(at[0], at[1]);
-  await link.frames(6);
-  await faceTowards(link, cx, cz);
-}
 
 /** Use the item if the puzzle takes one, else press action; then wait out her line. */
 async function work(link: GameLink, e: RoomEvent, room: { stage: number; room: number }): Promise<GameState> {
@@ -72,6 +53,9 @@ const link = session.link;
 const failures: string[] = [];
 try {
   await link.waitFor((s) => s.play, 'gameplay', 120_000);
+  // Every cutscene seen, so none takes her over as she comes and goes:
+  // cutscenes.ts plays them, the gallery's gear loss among them.
+  for (const f of CUT_FLAGS.values()) await link.setFlag(Bank.common, f, true);
   for (const e of events) {
     const room = bySlug.get(e.room)!;
     const zone = spotOf(e)!;

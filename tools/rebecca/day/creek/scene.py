@@ -176,6 +176,8 @@ def build():
     rng = random.Random(31)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")  # grass and the dirt paths
+    room.floor((FORD[0], 6.6, FORD[1], 9.2), "water")  # the ford
     room.camera((2.8, 2.5, 3.4), (10.0, 10.2, 0.0), 200, "from the north bank, west: the creek, the ford, the lodge's lit window across the water")
     room.camera((18.4, 1.3, 3.9), (8.0, 9.5, 0.0), 200, "from the north bank, east: the drowned dog at the log, the ford, the lodge beyond")
     room.camera((16.6, 13.7, 3.3), (8.0, 6.5, 0.0), 200, "from the south bank, east: back across the creek to the path in, the track south")

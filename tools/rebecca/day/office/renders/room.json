@@ -108,6 +108,8 @@
   "x1": 7820,
   "z1": 6800
  },
+ "ground": "boards",
+ "floors": [],
  "voids": [],
  "doors": [
   {

@@ -229,12 +229,35 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "gondola-runs",
+   "bank": 1,
+   "bit": -1,
+   "cameras": [
+    0,
+    2,
+    3
+   ],
+   "loop": true
+  }
+ ],
  "bounds": {
   "x0": 1020,
   "z0": 3400,
   "x1": 32300,
   "z1": 22100
  },
+ "ground": "concrete",
+ "floors": [
+  {
+   "kind": "earth",
+   "x0": 26520,
+   "z0": 13600,
+   "x1": 32300,
+   "z1": 18360
+  }
+ ],
  "voids": [
   {
    "x0": 26520,
@@ -399,6 +422,7 @@
    "text": "A stake's been pulled out of the rock. The rope hangs down over the edge.\nHis cap. Scrape marks, right to the lip."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [
   {

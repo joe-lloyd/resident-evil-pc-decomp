@@ -62,6 +62,16 @@
   "x1": 7820,
   "z1": 6800
  },
+ "ground": "concrete",
+ "floors": [
+  {
+   "kind": "metal",
+   "x0": 1955,
+   "z0": 1870,
+   "x1": 3315,
+   "z1": 6290
+  }
+ ],
  "voids": [],
  "doors": [
   {
@@ -135,6 +145,7 @@
    "text": "Blood on the door frame. He went out to the line track."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [
   {

@@ -100,6 +100,8 @@
   "x1": 13373,
   "z1": 13373
  },
+ "ground": "boards",
+ "floors": [],
  "voids": [
   {
    "x0": 7650,
@@ -180,6 +182,7 @@
    "text": "Crows on the rail. They don't fly off. They're waiting."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "The wind's stronger up here. The whole tower sways.",

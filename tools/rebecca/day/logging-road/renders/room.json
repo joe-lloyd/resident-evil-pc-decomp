@@ -118,6 +118,8 @@
   "x1": 32300,
   "z1": 20060
  },
+ "ground": "earth",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -218,6 +220,7 @@
    "text": "A full load of logs, for the mill. It never got there."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [],
  "entry": "A logging truck, stopped dead in the ruts.",

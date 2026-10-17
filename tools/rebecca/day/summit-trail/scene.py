@@ -154,6 +154,7 @@ def build():
     rng = random.Random(2104)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("rock")
     room.camera((10.4, 15.9, 3.6), (8.6, 5.0, 0.0), 200, "from the south by the head house: the ridge north, the deer and its crows, the hut, the trail to the mast")
     room.camera((18.7, 1.0, 3.5), (9.0, 11.5, 0.2), 200, "from the north-east: the head house and its headframe, the cairns, the deer")
     room.camera((1.0, 14.8, 3.3), (12.0, 4.0, 0.4), 195, "from the south-west: the instrument screen, the blood north, the mast far off")

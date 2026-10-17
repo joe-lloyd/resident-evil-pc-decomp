@@ -1,7 +1,7 @@
-0: \nThe mill pond. The wheel's\nstill turning.
+0: \nThe mill pond. The wheel's\nstopped.
 1: \nA man face down in the\nreeds. His left sleeve is\nempty from the elbow.\p{0}\nThe sawyer. He made it\nthis far.
 2: \nA hard hat, floating out\nthere. And dead fish,\nbelly up.\p{0}\nSomething's wrong with the\nwater too.
-3: \nThe water wheel. It drives\nthe mill through that\nshaft.\p{0}\nIt's turning, but the mill\nisn't.
+3: \nThe water wheel. It drives\nthe mill through that\nshaft.\p{0}\nIt turns when the sluice\nlets the water down the\nrace.
 4: \nA bloody hand on the\nmill's back door.
 5: \nA footbridge over the\nrace. The flume's that\nway.
 6: \nThe sluice gate, barely\nopen. The sign says open\nmeans the mill runs.\p{0}\nThere's a socket on it for\na crank.

@@ -19,11 +19,14 @@ import { look } from './look.ts';
 import { keyItemModels, type ItemSpot, type PickupModel } from '../items/items.ts';
 import { ownPickup } from '../items/tmd.ts';
 import { EVENT_FLAGS, itemModelSlots } from './events.ts';
+import { lockFlag } from './scripts.ts';
 import { animFileName, buildAnim, type AnimLayer } from '../bganim.ts';
 import { buildMasks, maskPakName } from '../masks.ts';
 import { autoFloors, readDepth } from './floors.ts';
+import { occluders, standableIn } from '../occluders.ts';
 import { makePak } from '../pak.ts';
 import { composeRoom, model, scaleModel, SLOT, type PointLight, type Vec3 } from '../rdt.ts';
+import { GROUNDS, isGround, stepSlots, type Floors, type Ground } from '../sound/ground.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -54,8 +57,6 @@ interface DayRoomBase {
    * them out from the scene (floors.ts).
    */
   readonly cameraFloor: readonly (Rect | readonly Rect[])[] | 'auto';
-  /** Footstep sound set (the low byte of the footstep zone record; 0x2D is outdoor earth). */
-  readonly footsteps: number;
   /**
    * Item models the room's pick-ups use, in slot order (item_aot_set's model
    * index): a base-game room and the slot its own item_aot_set uses, or one
@@ -75,12 +76,21 @@ interface RoomJson {
   exit?: Rect;
   /** Looping animation: cam<N>.a<k>.png for k = 1 .. frames - 1, cam<N>.png being frame 0. */
   anim?: { frames: number; ticks: number };
-  /** Changes of state: cam<N>.s-<name>.png, shown while the flag is set. Bit -1: the flag of the puzzle step `name` (events.ts). */
-  states?: { name: string; bank: 0 | 1; bit: number }[];
+  /**
+   * Changes of state: cam<N>.s-<name>.png, shown while the flag is set. Bit
+   * -1: the flag of the plan step `name`, a puzzle's (events.ts) or a lock's
+   * (scripts.ts). With `loop`, cam<N>.s-<name>.a<k>.png loop with the room's
+   * anim where rendered; with `motion`, cam<N>.m-<name>.<k>.png play once
+   * as it happens, then the state.
+   */
+  states?: { name: string; bank: 0 | 1 | 2; bit: number; motion?: { frames: number; ticks: number }; loop?: boolean }[];
   /** A save room: where kit.item_box put the item box, whose lid is RE1's own (ITEM_BOX_LID). */
   saves?: { lid: { x: number; y: number; z: number; angle: number; scale?: number } } | null;
   /** Where the scene puts the key items she finds here (kit.Room.item). */
   items?: ItemSpot[];
+  /** What the floor is underfoot (kit.Room.ground), and the parts of it that are something else (kit.Room.floor): her footsteps (sound/ground.ts). */
+  ground?: string;
+  floors?: (Rect & { kind: string })[];
 }
 
 /** The item box's lid, the same object in every RE1 save room: model 0 of the mansion's 1F save room. */
@@ -171,6 +181,16 @@ function zoneRecord(w: Writer, camTo: number, camFrom: number, r: Rect): void {
  * (the engine culls entities outside it), then a trigger into every other
  * camera's floor. The table ends with camFrom 0xFFFF.
  */
+/** The flag that shows a scene's change of state: its own, or the puzzle's (events.ts) or the lock's (scripts.ts) its name is the step of. */
+function stateFlag(slug: string, st: NonNullable<RoomJson['states']>[number]): NonNullable<AnimLayer['when']> {
+  if (st.bit >= 0) return { bank: st.bank, bit: st.bit, value: true };
+  const event = EVENT_FLAGS.get(st.name);
+  if (event !== undefined) return { bank: 1, bit: event, value: true };
+  const lock = lockFlag(st.name);
+  if (lock !== undefined) return { bank: 2, bit: lock, value: true };
+  throw new Error(`${slug}: state ${st.name} is no puzzle step of events.ts and no lock of scripts.ts`);
+}
+
 function switchZones(floors: readonly (Rect | readonly Rect[])[], bounds: Rect): Uint8Array {
   const w = new Writer();
   const margin = 1500;
@@ -236,9 +256,36 @@ function walkZones(bounds: Rect): Uint8Array {
   return new Writer().u8(1).u8(0).i16(bounds.x0).i16(bounds.z0).i16(bounds.x1).i16(bounds.z1).u16(0x03ff).u16(0).out();
 }
 
-/** One catch-all footstep zone: the scan has no terminator. */
-function footstepZones(sound: number): Uint8Array {
-  return new Writer().u16(1).u16(0).u16(0).u16(0x7fbc).u16(0x7fbc).u16(sound).out();
+/**
+ * The room's floors, as its scene says (renders/room.json). A room.json from
+ * before scenes said is all earth, with a warning: `render.ts --records
+ * <slug>` writes it again.
+ */
+export function roomFloors(slug: string, json: Pick<RoomJson, 'ground' | 'floors'>): Floors {
+  const kind = (k: string | undefined, what: string): Ground => {
+    if (k === undefined || !isGround(k)) throw new Error(`${slug}: ${what} is ${JSON.stringify(k)}, not one of ${GROUNDS.join(', ')}`);
+    return k;
+  };
+  if (json.ground === undefined) {
+    console.warn(`${slug}: room.json says nothing of its floors, so her steps there are all earth (run day/render.ts --records ${slug})`);
+    return { ground: 'earth', parts: [] };
+  }
+  return {
+    ground: kind(json.ground, 'the ground'),
+    parts: (json.floors ?? []).map((f, i) => ({ kind: kind(f.kind, `floor ${i}`), x0: f.x0, z0: f.z0, x1: f.x1, z1: f.z1 })),
+  };
+}
+
+/**
+ * The footstep zones: each part of the floor that is something else, then a
+ * catch-all for the room's own ground, since the scan has no terminator. A
+ * zone's low byte is the footstep set's first slot (sound/ground.ts).
+ */
+function footstepZones(floors: Floors): Uint8Array {
+  const slots = stepSlots(floors);
+  const w = new Writer().u16(floors.parts.length + 1);
+  for (const p of floors.parts) w.u16(p.x0).u16(p.z0).u16(p.x1 - p.x0).u16(p.z1 - p.z0).u16(slots.get(p.kind)!);
+  return w.u16(0).u16(0).u16(0x7fbc).u16(0x7fbc).u16(slots.get(floors.ground)!).out();
 }
 
 /** A script section holding one procedure that only returns; `rae asm` writes the room's own. */
@@ -250,8 +297,8 @@ function findFile(dir: string, name: string): string {
   return path.join(dir, hit);
 }
 
-/** Build the room into `<outDir>/REB/`. Returns the paths written, relative to REB/. */
-export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, raeCli: string): string[] {
+/** Build the room into `<outDir>/REB/`. Returns the paths written, relative to REB/, and the room's floors. */
+export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, raeCli: string): { written: string[]; floors: Floors } {
   const dir = path.join(here, spec.slug);
   const renders = path.join(dir, 'renders');
   const json = JSON.parse(readFileSync(path.join(renders, 'room.json'), 'utf8')) as RoomJson;
@@ -276,9 +323,16 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
     return existsSync(file) ? readDepth(file) : undefined;
   });
   const floors = spec.cameraFloor === 'auto' ? autoFloors({ ...json, walls: [...json.walls, ...(json.voids ?? [])] }, depths) : spec.cameraFloor;
+  const standable = standableIn(json);
   const cameras = json.cameras.map((c, i) => {
     const background = look(readPng(path.join(renders, `cam${i}.png`)));
-    const depth = depths[i];
+    // The masks: what the scene tags as foreground, and every surface in
+    // front of where she can stand on this camera's floor (occluders.ts).
+    const zall = path.join(renders, `cam${i}.zall.png`);
+    const tagged = depths[i];
+    const camFloor = ([] as Rect[]).concat(floors[i] ?? []);
+    const found = existsSync(zall) ? occluders(c, readDepth(zall), camFloor, standable) : undefined;
+    const depth = found && tagged ? found.map((d, k) => Math.min(d, tagged[k]!)) : (found ?? tagged);
     const masks = depth ? buildMasks(background, depth) : undefined;
     const pak = `RC${stem.slice(4, 7)}${i}.pak`;
     writeFileSync(path.join(outStage, pak), makePak(background));
@@ -295,11 +349,22 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
       for (let k = 1; k < json.anim.frames; k++) frames.push(look(readPng(path.join(renders, `cam${i}.a${k}.png`))));
       layers.push({ frames, ticks: json.anim.ticks });
     }
+    // Each state over the loop, then each one's motion over every state: as
+    // it plays it shows the whole change, so nothing jumps ahead of it.
+    const motions: AnimLayer[] = [];
     for (const st of json.states ?? []) {
-      const bit = st.bit >= 0 ? st.bit : EVENT_FLAGS.get(st.name);
-      if (bit === undefined) throw new Error(`${spec.slug}: state ${st.name} is no puzzle step of events.ts`);
-      layers.push({ frames: [look(readPng(path.join(renders, `cam${i}.s-${st.name}.png`)))], ticks: 0, when: { bank: st.bank, bit, value: true } });
+      const when = stateFlag(spec.slug, st);
+      const shot = (suffix: string) => path.join(renders, `cam${i}.${suffix}.png`);
+      const after = look(readPng(shot(`s-${st.name}`)));
+      const loop = st.loop && json.anim && existsSync(shot(`s-${st.name}.a1`));
+      const frames = loop ? [after, ...Array.from({ length: json.anim!.frames - 1 }, (_, k) => look(readPng(shot(`s-${st.name}.a${k + 1}`))))] : [after];
+      layers.push({ frames, ticks: loop ? json.anim!.ticks : 0, when });
+      if (st.motion && existsSync(shot(`m-${st.name}.1`))) {
+        const between = Array.from({ length: st.motion.frames - 1 }, (_, k) => look(readPng(shot(`m-${st.name}.${k + 1}`))));
+        motions.push({ frames: [...between, after], ticks: st.motion.ticks, when, once: true });
+      }
     }
+    layers.push(...motions);
     const anim = buildAnim(background, layers);
     if (anim) {
       mkdirSync(outMasks, { recursive: true });
@@ -311,6 +376,7 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
     return { from: v(c.from), to: v(c.to), fov: c.fov, maskBlock: masks?.block };
   });
 
+  const underfoot = roomFloors(spec.slug, json);
   const baseRoom = (from: string) => {
     const [stage, file] = from.split('/') as [string, string];
     return readFileSync(findFile(findFile(baseDir, stage), file));
@@ -327,7 +393,7 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
       [SLOT.switchZones]: switchZones(floors, json.bounds),
       [SLOT.collision]: collision(json),
       [SLOT.walkZones]: walkZones(json.bounds),
-      [SLOT.footsteps]: footstepZones(spec.footsteps),
+      [SLOT.footsteps]: footstepZones(underfoot),
       [SLOT.init]: emptyScript(),
       [SLOT.main]: emptyScript(),
       // No event scripts: the donor's belong to its own room. The table is its
@@ -356,5 +422,5 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
   } finally {
     rmSync(work, { recursive: true, force: true });
   }
-  return written;
+  return { written, floors: underfoot };
 }

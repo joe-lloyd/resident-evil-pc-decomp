@@ -140,6 +140,7 @@ def build():
     rng = random.Random(83)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("gravel")
     room.camera((10.0, 1.6, 3.8), (10.0, 12.0, 1.6), 200, "from the yews at the north: the fountain, the house's back, the lit window")
     room.camera((2.4, 2.4, 3.6), (12.5, 11.0, 0.6), 200, "from the north-west: the beds, the fountain, the bulkhead under its lamp")
     room.camera((16.6, 13.4, 3.4), (8.0, 5.0, 0.4), 200, "from under the house, east: the shed, the tipped barrow, the beds")

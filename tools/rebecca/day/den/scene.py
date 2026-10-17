@@ -105,6 +105,7 @@ def build():
     rng = random.Random(24)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
+    room.ground("earth")
     room.camera((8.6, 11.7, 3.3), (9.4, 3.2, 0.6), 200, "from the way down: the hollow, the overhang, the ranger under the lip")
     room.camera((4.6, 5.8, 2.8), (11.2, 11.2, 0.2), 200, "from under the lip in the north-west: the ranger, the jacket on the east bank, the way back up")
     room.camera((14.6, 7.0, 3.6), (5.0, 6.0, 0.3), 200, "from the east bank: the den under the rock, the pit, the bones, the skull")

@@ -33,7 +33,7 @@ import { createServer, type IncomingMessage } from 'node:http';
 import { homedir, tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { CUES } from '../plan/music.ts';
+import { CUES, SKETCHES } from '../plan/music.ts';
 import { adpcmRoundTrip, levelGain, loopedWav, peakDb, rmsDb, RATE, toInt16, toMono22k } from './ps1.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -343,7 +343,7 @@ async function launchChrome(): Promise<{ wsUrl: string; kill: () => Promise<void
 }
 
 /** Render one sketch: Strudel in the browser, then the PS1 treatment and the loop. */
-export async function render(dist: string, sketchFile: string, cache: string): Promise<{ wav: Uint8Array; info: Rendered }> {
+export async function render(dist: string, sketchFile: string, cache: string, level = -24): Promise<{ wav: Uint8Array; info: Rendered }> {
   let result: Buffer | undefined;
   const server = await serve(path.resolve(dist), cache, (b) => (result = b));
   const chrome = await launchChrome();
@@ -367,7 +367,7 @@ export async function render(dist: string, sketchFile: string, cache: string): P
     const mono = toMono22k(floats.subarray(0, meta.frames), floats.subarray(meta.frames));
     const pass = Math.round(meta.cycles / meta.cps * RATE);
     const kept = mono.subarray(0, 2 * pass);
-    const gain = levelGain(kept);
+    const gain = levelGain(kept, level);
     const pcm = adpcmRoundTrip(toInt16(kept, gain));
     // The join: after the loop's last sample the game plays its first, where
     // the endless piece would play the third pass. They should be the same.
@@ -399,12 +399,14 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.error('usage: node tools/rebecca/music/render.ts <@strudel/web 1.2.5 dist folder> [sketch...]');
     process.exit(2);
   }
-  const sketches = names.length ? names : [...new Set(CUES.flatMap((c) => (c.sketch ? [c.sketch] : [])))];
+  const sketches = names.length ? names : SKETCHES;
   const cache = process.env.RE1_MUSIC_CACHE ?? path.join(homedir(), '.cache', 'rebecca-music');
   const out = path.join(here, 'renders');
   mkdirSync(out, { recursive: true });
   for (const s of sketches) {
-    const { wav, info } = await render(dist, path.join(here, 'sketches', `${s}.js`), cache);
+    // A layer under a theme renders quieter than RE1's level (plan/music.ts Channel.level).
+    const level = CUES.flatMap((c) => c.channels).find((ch) => ch.sketch === s)?.level;
+    const { wav, info } = await render(dist, path.join(here, 'sketches', `${s}.js`), cache, level);
     writeFileSync(path.join(out, `${s}.wav`), wav);
     const sec = (n: number) => (n / RATE).toFixed(1);
     console.log(`${s}: ${info.cycles} cycles at ${(info.cps * 60).toFixed(0)} cpm, intro ${sec(info.introFrames)} s then a ${sec(info.loopFrames)} s loop, loop against the next pass ${info.seam.toFixed(1)} steps at most, ${info.rms.toFixed(1)} dB RMS, peak ${info.peak.toFixed(1)} dB, sha256 ${info.sha256}`);

@@ -16,6 +16,21 @@ aot_set(9, 8160, 9520, 1360, 1020, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
 enemy(5, 0, 222, 1, 2, 0, 0, 1392, 0, 0, 13960, 0, 24500, 0, 0, 0, 0);  // a crow
 enemy(5, 0, 223, 1, 2, 0, 0, 2155, 0, 0, 31300, 0, 2400, 1, 0, 0, 0);  // a crow
 enemy(5, 0, 224, 1, 2, 0, 0, 811, 0, 0, 2400, 0, 23480, 2, 0, 0, 0);  // a crow
+// Out of the mine once it has taken her gear: its rooms play their own music again, not chase.
+if (ck(FG_COMMON, 238, 0) && ck(FG_COMMON, 135, 0)) {
+    tbl37_set(4, 27, 8);   // mine-entrance
+    tbl37_set(4, 28, 40);   // tunnel
+    tbl37_set(4, 30, 40);   // junction
+    tbl37_set(4, 31, 40);   // gallery
+    tbl37_set(4, 9, 40);   // mine-lift
+}
+if (ck(FG_COMMON, 238, 0) && ck(FG_COMMON, 135, 1)) {
+    tbl37_set(4, 27, 8);   // mine-entrance
+    tbl37_set(4, 28, 56);   // tunnel
+    tbl37_set(4, 30, 56);   // junction
+    tbl37_set(4, 31, 40);   // gallery
+    tbl37_set(4, 9, 40);   // mine-lift
+}
 return;
 
 // main procedure 0

@@ -20,13 +20,24 @@ slots, holding a Beretta with 15 rounds and a clip of 15 rounds.
 She uses Chris's room files. Scenes written for Chris do not expect her as
 the player and can stall.
 
+## God mode
+
+```
+residentevil.exe --god
+```
+
+For playing a scenario through to check it, not for balance. Her health
+stays full, a death check puts her back on her feet, and every hit she lands
+kills. It works with or without test mode; in test mode, `god 0|1` turns it
+off and on. Windows only for now.
+
 ## Test mode
 
 ```
 residentevil.exe --test-port <port> [--boot ...]
 ```
 
-The game listens on `127.0.0.1:<port>` for one client; a newer connection
+The window's title is `RESIDENT EVIL <port>`, so each of several games side by side can be recorded on its own. The game listens on `127.0.0.1:<port>` for one client; a newer connection
 replaces an older one. Test mode also:
 
 - ignores the real keyboard; only keys sent by the client count;
@@ -45,12 +56,14 @@ reports raw values; `tools/harness/state.ts` turns them into meanings.
 | --- | --- |
 | `frame` | game frames since launch, 30 per second; movies do not advance it |
 | `play` | 1 when game_loop's frame loop ran this frame, so the game is in a room |
+| `god` | 1 while god mode is on |
 | `msf`, `msf2` | `g_main_state_flags` and its second word, hex (`MSF_*` in `src/Globals.h`) |
 | `title`, `fmv`, `dbg` | `g_titleMode`, a movie is playing, the F1 debug menu is open |
 | `stage`, `room`, `cam`, `cut` | where the player is |
 | `charModel` | `g_CharacterModelId`; 3 is Rebecca |
 | `player` | `id`, `x`, `y`, `z`, `angle`, `hp`, `maxHp`, `weapon` (the 1-based slot in hand), `cf` (byte 0xDC: the collision flags `check_room_collision` reads) |
 | `items` | `[id, qty]` for each slot: 6 for Chris and Rebecca, 8 for Jill |
+| `box` | `[id, qty]` for each of the item box's 48 slots |
 | `enemies` | `[type, status, x, y, z, hp]` for each occupied slot of `g_EnemiesList` (status not 0) |
 | `msg` | `choice` (`g_menu_choice_id`; 0x80 means a message is open), `id` (the last message shown), `flags` (`g_message_flags`) and `menu` (`g_openMenuFlag`) |
 | `banks` | script flag banks 0-9 as hex bytes, numbered like `cmd_bit_test` |
@@ -71,6 +84,10 @@ One per line. Each is answered with `{"t":"ack","cmd":...,"ok":0|1}`.
 | `ping <token>` | answered with `{"t":"pong","token":...,"frame":...}` |
 | `room <stage> <room>` | change room like the debug menu; a second ack, `room-start`, comes when it begins |
 | `flag <bank> <index> <0\|1>` | clear or set a script flag |
+| `god <0\|1>` | god mode off or on: her health stays full, a death check puts her back on her feet, and every hit she lands kills |
+| `slot <i> <id> <qty>` | set slot `i` of her bag outright |
+| `boxslot <i> <id> <qty>` | set slot `i` of the item box outright |
+| `unequip` | nothing in her hands |
 | `shot <path>` | save the next frame's back buffer as a BMP on the game machine |
 
 The shot is the whole 640x480 frame, background included.

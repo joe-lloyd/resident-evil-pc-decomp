@@ -32,12 +32,25 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "lift-up",
+   "bank": 1,
+   "bit": -1,
+   "motion": {
+    "frames": 16,
+    "ticks": 6
+   }
+  }
+ ],
  "bounds": {
   "x0": 1700,
   "z0": 1700,
   "x1": 4930,
   "z1": 4335
  },
+ "ground": "metal",
+ "floors": [],
  "voids": [],
  "doors": [
   {
@@ -93,6 +106,7 @@
    "text": "MAX 6 MEN."
   }
  ],
+ "saves": null,
  "items": [],
  "spots": [
   {

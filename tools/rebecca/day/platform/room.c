@@ -7,7 +7,7 @@ door_aot_set(1, 21590, 8670, 1530, 850, 1, 0, 33, 1, 0, ROOM_319, 5185, 0, 4930,
 // To east-path.
 door_aot_set(2, 31280, 14620, 1020, 3740, 0, 15, 48, 4, 0, ROOM_517, 4420, 0, 12750, 0, UNLOCKED, 1);
 // To line-track.
-door_aot_set(3, 1020, 10200, 1020, 3400, 0, 15, 48, 4, 0, ROOM_516, 29410, 0, 11900, 2048, UNLOCKED, 1);
+door_aot_set(3, 1020, 10200, 1020, 3400, 0, 16, 48, 4, 0, ROOM_516, 29410, 0, 11900, 2048, UNLOCKED, 1);
 // To car.
 if (ck(FG_COMMON, 141, 1)) {
     aot_set(4, 10540, 17680, 1700, 1020, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
@@ -29,6 +29,7 @@ if (ck(FG_COMMON, 139, 1)) {
 } else {
     aot_set(12, 2890, 15980, 4250, 3400, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
 }
+// cut-gondola (day/cutscenes.ts): its people, and what starts it. FG_COMMON 122 once it has run.
 return;
 
 // main procedure 0
@@ -50,5 +51,46 @@ if (ck(FG_COMMON, 139, 1)) {
         aot_set(12, 2890, 15980, 4250, 3400, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
         message(138, 255, 0);
     }
+}
+if (ck(FG_COMMON, 122, 1) && ck(FG_COMMON, 141, 0)) {
+    set(FG_COMMON, 122, 0);
+    evt_exec(0, 9, 0);
+}
+return;
+
+// event procedure 0
+// cut-gondola (day/cutscenes.ts)
+wait_voice();
+scd {
+    set(FG_COMMON, 122, 0);
+    set(FG_STATUS, 15, 0);
+    set(FG_6, 23, 1);
+    return;
+}
+dir_set(0, 0, 3072, 0, 22355, 0, 10710);  // her
+cutnext(2);
+message(139, 0, 0);  // her
+wait_voice();
+// She walks to (14500, 14500).
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_pose(2, 14500, 14500, 62);
+anim_end_release();
+do {
+    yield();
+} while (ck(FG_ROOM, 62, 1));
+message(140, 0, 0);  // her
+wait_voice();
+message(141, 0, 0);  // her
+wait_voice();
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_idle();
+anim_end_release();
+scd {
+    set(FG_STATUS, 15, 1);
+    cut_auto(0);
+    set(FG_6, 23, 0);
+    return;
 }
 return;
