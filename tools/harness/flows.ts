@@ -332,6 +332,10 @@ async function throughTransition(link: GameLink, s: GameState): Promise<GameStat
 /** Turn on the spot until facing `angle` (within `tolerance`), re-reading each step. */
 export async function face(link: GameLink, angle: number, tolerance = 100): Promise<GameState> {
   const start = await link.state();
+  // A one-frame tap can come and go between two of the game's frames over
+  // the tunnel and turn her not at all: each tap that did nothing makes the next one longer.
+  let small = 1;
+  let last = -1;
   for (let i = 0; i < 40; i++) {
     const s = await throughTransition(link, await link.state());
     checkAlive(s);
@@ -339,7 +343,9 @@ export async function face(link: GameLink, angle: number, tolerance = 100): Prom
     if (s.stage !== start.stage || s.room !== start.room) return s;
     const turn = turnBetween(s.player.angle, angle);
     if (Math.abs(turn) <= tolerance) return s;
-    await link.tap(turn > 0 ? Key.right : Key.left, Math.abs(turn) > 600 ? 3 : 1);
+    if (s.player.angle === last) small = Math.min(small + 1, 3);
+    last = s.player.angle;
+    await link.tap(turn > 0 ? Key.right : Key.left, Math.abs(turn) > 600 ? 3 : small);
     await link.frames(4);
   }
   throw new StuckError(`could not face ${angle}`, await link.state());
