@@ -166,7 +166,8 @@ export async function winch(run: Run): Promise<void> {
   else run.fail('using the crank at the winch did nothing');
   s = await link.state();
   if (!commonFlag(s, 205)) run.fail('the pine is not marked as moved');
-  if (s.items.some((it) => it.id === HEX_CRANK)) run.fail('the crank is still in her bag');
+  // She keeps the crank: the pond's sluice takes it too (yard/room.c).
+  if (!s.items.some((it) => it.id === HEX_CRANK)) run.fail('the winch took her crank, and the pond needs it');
   await run.picture('day-yard-pine-moved');
   s = await run.door(YARD.pine, DAY.bridge, 'down the trail past the pine');
 }
