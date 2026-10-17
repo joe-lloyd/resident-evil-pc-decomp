@@ -16,9 +16,9 @@
 // --quarter plays one quarter of the day (QUARTERS) and stops: four can run
 // side by side, each on its own PORT. The first starts from a new game. A
 // later one starts from --from, or else the last quarter's end in SNAPS if a
-// run saved one, or else it plays Act 1 and then sets up what the earlier
-// quarters' jobs give (their flags, keys and items): a start made up from the
-// plan, which the report marks as such. Every run saves a checkpoint to SNAPS
+// run saved one, or else from Act 1's end (day.ts ACT1_END) set up with what
+// the earlier quarters' jobs give (their flags, keys and items): a start made
+// up from the plan, which the report marks as such. Every run saves a checkpoint to SNAPS
 // (default OUT/snaps) after each job and at its end, so the quarters stitch:
 // each one's start is the one before's end.
 //
@@ -30,7 +30,7 @@ import { DiedError, StuckError, approach, check, goTo, inControl, settle, useDoo
 import { choice } from '../jev.ts';
 import { Key, type GameLink } from '../link.ts';
 import { Bank, flag, screen, type GameState } from '../state.ts';
-import { CROW, STRETCHES, stretchNames } from '../day.ts';
+import { ACT1_END, CROW, STRETCHES, reach, stretchNames } from '../day.ts';
 import { Run } from '../scenario.ts';
 import { load, restore, save, take, type Checkpoint } from '../checkpoint.ts';
 import { existsSync, mkdirSync } from 'node:fs';
@@ -446,7 +446,7 @@ async function fetchFromBox(p: Player, reached: Set<string>, id: number, keep: r
 }
 
 /**
- * Set the game up as if `earlier` were done, after a real Act 1: each job's
+ * Set the game up as if `earlier` were done, from Act 1 done: each job's
  * flag raised, what it gives in her bag (what does not fit, in the box), what
  * it uses spent, and her in the room of the last of them. A start made up
  * from the plan, for a quarter whose previous quarter has no saved end yet.
@@ -654,15 +654,17 @@ try {
     for (const id of cp.reached) reached.add(id);
     s = await restore(session.link, cp);
     run.log(s, `${runName}: starting from ${startFrom}${built ? ' (made up from the plan)' : ''}`);
+  } else if (quarter && quarter > 1) {
+    // No saved end of the quarter before: straight to Act 1's end, then set
+    // up as if the jobs before this quarter were done.
+    built = true;
+    await reach(session.link, ACT1_END);
+    s = await setUpAfter(player, GOALS.slice(0, GOALS.indexOf(pool[0]!)), reached);
+    run.log(s, `${runName}: set up as if Act 1 and the jobs before it were done (made up from the plan)`);
   } else {
     for (const name of stretchNames) {
       await STRETCHES[name]!.play(run);
       watch.look();
-    }
-    if (quarter && quarter > 1) {
-      built = true;
-      s = await setUpAfter(player, GOALS.slice(0, GOALS.indexOf(pool[0]!)), reached);
-      run.log(s, `${runName}: after a real Act 1, set up as if the jobs before it were done (made up from the plan)`);
     }
   }
   const snapshot = (name: string, st: GameState) => save(path.join(snaps, `${name}.json`), { ...take(st, reached), ...(built ? { built } : {}) });

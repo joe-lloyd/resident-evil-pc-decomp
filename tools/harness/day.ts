@@ -264,6 +264,17 @@ export const STRETCHES: Record<string, { play: (run: Run) => Promise<void>; from
 
 export const stretchNames = Object.keys(STRETCHES);
 
+/**
+ * Act 1 done, as a played Act 1 leaves it: across the gorge, the sign read,
+ * the spray in her bag and the crank with its second use, for the pond.
+ */
+export const ACT1_END: Checkpoint = {
+  room: DAY.bridge,
+  at: { x: 10200, z: 18700, angle: 0xc00 },
+  flags: [...UP_TO_THE_SHED, PINE_MOVED, [1, 204, true], [1, 206, true]],
+  items: [[FIRST_AID_SPRAY, 1], [HEX_CRANK, 1]],
+};
+
 /** The game's launch arguments for a test starting at `stretch`: a new game, or straight into its room. */
 export function bootFor(stretch: string): string {
   const from = STRETCHES[stretch]?.from;
