@@ -117,6 +117,9 @@ const isSpared = (s: GameState, e: { type: number; x: number; z: number }) =>
 const outOfSight = (s: GameState, e: { x: number; z: number }) =>
   sightBlocked(loadShapes(roomDataDirs, s.stage, s.room, s.player.cf), s.player.x, s.player.z, e.x, e.z);
 
+/** A fight is on: its own walks towards the enemy do not start another. */
+let fighting = false;
+
 /** Rounds for the gun in her hands, loaded and in clips; 0 with no gun. */
 function rounds(s: GameState): number {
   if (s.player.weapon <= 0) return 0;
@@ -225,7 +228,7 @@ export async function walkTo(
         return s;
       }
       // With nothing to shoot she walks on: no knife fights.
-      if (fightBackRange > 0 && rounds(s) > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !fightBackIgnores.includes(e.type) && !isSpared(s, e) && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange && !outOfSight(s, e))) {
+      if (!fighting && fightBackRange > 0 && rounds(s) > 0 && s.enemies.some((e) => e.hp > 0 && e.type < FIRST_NPC_TYPE && !fightBackIgnores.includes(e.type) && !isSpared(s, e) && Math.hypot(e.x - s.player.x, e.z - s.player.z) < fightBackRange && !outOfSight(s, e))) {
         await hold(link, []);
         await fight(link, { range: fightBackRange + 3000, ignore: fightBackIgnores });
         s = await link.state();
@@ -642,6 +645,7 @@ export async function fight(
     aiming = false;
     low = false;
   };
+  fighting = true;
   try {
     for (;;) {
       const s = await link.state();
@@ -673,10 +677,12 @@ export async function fight(
           }
           await link.frames(6);
         } else {
+          // It is not coming: go to it, round whatever is between them.
           await release();
-          await faceTowards(link, target.x, target.z).catch(() => undefined);
-          await link.tap(Key.up, 12);
-          await link.frames(12);
+          await goTo(link, roomDataDirs, target.x, target.z, { radius: shootRange - 500, pace: 'walk' }).catch((err) => {
+            if (!(err instanceof StuckError) || err instanceof DiedError) throw err;
+          });
+          waitedFrom = undefined;
         }
         continue;
       }
@@ -729,6 +735,7 @@ export async function fight(
       }
     }
   } finally {
+    fighting = false;
     await release();
   }
 }
