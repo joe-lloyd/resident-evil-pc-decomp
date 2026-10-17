@@ -266,7 +266,24 @@ class Player {
     else this.run.log(s, `into ${at}`);
     // Unarmed after the mine: fighting back would only stand her still.
     useFightBack(s.player.weapon > 0 ? FIGHT_BACK : 0, [CROW, ADDER]);
+    await this.scavenge();
     return true;
+  }
+
+  /** Low on rounds with a slot free: take a clip lying in this room, as a player would. */
+  async scavenge(): Promise<void> {
+    let s = await this.link.state();
+    const ammo = s.items.filter((i) => i.id === CLIP).reduce((n, i) => n + i.qty, 0) + (s.items[s.player.weapon - 1]?.qty ?? 0);
+    if (s.player.weapon <= 0 || ammo >= 30 || freeSlots(s) === 0) return;
+    const clip = world.pickups.find((p) => p.room === here(s) && p.item === CLIP && flag(s, Bank.roomItems, p.flag));
+    if (!clip) return;
+    try {
+      for (let i = 0; i < 3 && flag(s, Bank.roomItems, clip.flag); i++) s = await check(this.link, clip.zone);
+      this.run.log(s, flag(s, Bank.roomItems, clip.flag) ? 'could not take the clip here' : `took a clip (${ammo} rounds before)`);
+    } catch (err) {
+      if (!(err instanceof StuckError) || err instanceof DiedError) throw err;
+      this.run.log(err.state, `could not reach the clip: ${err.message}`);
+    }
   }
 }
 
