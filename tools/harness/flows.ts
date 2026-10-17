@@ -479,9 +479,25 @@ export async function useDoor(
   const start = await link.state();
   const cx = zone.x + zone.w / 2;
   const cz = zone.z + zone.d / 2;
-  const arrived = await approach(link, zone);
+  let arrived = await approach(link, zone);
   if (arrived.stage !== start.stage || arrived.room !== start.room) {
     return settle(link, (st) => st.room === arrived.room && st.stage === arrived.stage);
+  }
+  // A door that fires on the action button only while she stands in its zone
+  // (0x40) is often a strip against a wall, which the path planner's walls,
+  // grown by her whole radius, cover: step straight in from where it left her.
+  const within = (st: GameState) => st.player.x > zone.x && st.player.x < zone.x + zone.w && st.player.z > zone.z && st.player.z < zone.z + zone.d;
+  if (!within(arrived)) {
+    const nearX = Math.min(Math.max(arrived.player.x, zone.x + 150), zone.x + zone.w - 150);
+    const nearZ = Math.min(Math.max(arrived.player.z, zone.z + 150), zone.z + zone.d - 150);
+    arrived = await walkTo(link, nearX, nearZ, { radius: 100, timeoutMs: 5_000 }).catch((err) => {
+      if (err instanceof StuckError && !(err instanceof DiedError)) return err.state;
+      throw err;
+    });
+    if (arrived.stage !== start.stage || arrived.room !== start.room) {
+      return settle(link, (st) => st.room === arrived.room && st.stage === arrived.stage);
+    }
+    await face(link, aimHeading(zone, arrived.player.x, arrived.player.z), 50);
   }
   const deadline = Date.now() + timeoutMs;
   for (;;) {

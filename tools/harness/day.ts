@@ -52,7 +52,7 @@ const SHED = {
   crank: { x: 2805, z: 3145, w: 1105, d: 1360 },
 };
 const BRIDGE = {
-  sign: { x: 5950, z: 28900, w: 8500, d: 1360 },
+  sign: { x: 5950, z: 27880, w: 8500, d: 1020 },
 };
 
 /** Check a zone until `done` holds, a few tries; returns the last state. */
