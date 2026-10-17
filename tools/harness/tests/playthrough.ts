@@ -126,10 +126,7 @@ const JUMP = 400;
 class Watch {
   private seen = 0;
   readonly glitches: string[] = [];
-  private readonly link: GameLink;
-  constructor(link: GameLink) {
-    this.link = link;
-  }
+  constructor(private readonly link: GameLink) {}
 
   /** Look at the lines since the last call. `door` is the door she was going through, if any. */
   look(door?: Door): void {
@@ -185,12 +182,7 @@ class Player {
   private closed = new Set<Door>();
   private progress = '';
 
-  readonly run: Run;
-  readonly watch: Watch;
-  constructor(run: Run, watch: Watch) {
-    this.run = run;
-    this.watch = watch;
-  }
+  constructor(readonly run: Run, readonly watch: Watch) {}
 
   get link(): GameLink {
     return this.run.link;
