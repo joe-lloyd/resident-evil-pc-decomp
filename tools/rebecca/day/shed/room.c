@@ -15,11 +15,14 @@ if (ck(FG_ITEM, 243, 0)) {
 }
 aot_set(2, 2805, 1955, 935, 1105, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);   // the chainsaw in pieces
 aot_set(3, 3740, 1700, 2040, 850, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);   // the pegboard
-aot_set(4, 4420, 4420, 1530, 425, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);   // the fuel cans
 // By the fuel cans: an empty jerrycan (JERRYCAN, item 31), model slot 1 at
-// (4590, 0, 4845). FG_ITEM 244: still there.
+// (4590, 0, 4845). FG_ITEM 244: still there. The fuel cans' message lies
+// inside the jerrycan's zone and came first, so action never reached the
+// jerrycan: the message is there only once the jerrycan is taken.
 if (ck(FG_ITEM, 244, 0)) {
     item_aot_set(5, 3910, 4165, 1360, 1360, 31, 1, 1, 255, 238, 17, 0, 0, 237, 18, 0, 0, 244, 129, 0, 0);
+} else {
+    aot_set(4, 4420, 4420, 1530, 425, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);   // the fuel cans
 }
 // On the bench by the nail can: the ranger's spare fuses (FUSES, item 39),
 // model slot 2 at (2414, -1564, 4335). FG_ITEM 245: still there.

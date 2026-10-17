@@ -191,8 +191,12 @@ const zoneOf = (r: { x0: number; z0: number; x1: number; z1: number }): Zone => 
 const has = (s: GameState, item: number) => s.items.some((it) => it.id === item);
 
 class Player {
-  /** Doors that did not open, until something changes: a flag raised or an item got. */
-  private closed = new Set<Door>();
+  /**
+   * Doors that did not open, and when: shut until something changes (a flag
+   * raised, an item got) or a minute passes, since a zombie in the doorway
+   * stops a door as surely as a lock.
+   */
+  private closed = new Map<Door, number>();
   private progress = '';
 
   readonly run: Run;
@@ -211,6 +215,7 @@ class Player {
     const now = [s.banks[Bank.common], s.banks[Bank.locks], s.items.map((i) => i.id).join(',')].join('|');
     if (now !== this.progress) this.closed.clear();
     this.progress = now;
+    for (const [d, at] of this.closed) if (Date.now() - at > 60_000) this.closed.delete(d);
   }
 
   /** The way from where she is to `to`, through `via` last when given; undefined when every way is shut. */
@@ -259,7 +264,7 @@ class Player {
     const at = here(s);
     if (at === here(before)) {
       this.run.log(s, `the way to ${door.to} did not open`);
-      this.closed.add(door);
+      this.closed.set(door, Date.now());
       return false;
     }
     if (at !== door.to) this.run.log(s, `went for ${door.to}, came out in ${at}`);
@@ -475,6 +480,8 @@ const watch = new Watch(session.link);
 const player = new Player(run, watch);
 const reached = new Set<string>();
 const failed = new Map<string, number>();
+/** Fresh starts on the goals she gave up on, once nothing else is left: a door a zombie held may open later. */
+let secondWinds = 3;
 try {
   let s = await session.link.waitFor((st) => st.play, 'gameplay', 180_000);
   if (!s.god) run.fail('god mode is off: the exe is older than --god');
@@ -485,8 +492,13 @@ try {
   for (;;) {
     s = await settle(session.link);
     const left = GOALS.filter((g) => !done(s, g, reached) && (failed.get(g.id) ?? 0) < 2);
-    if (!left.length) break;
     const ready = left.filter((g) => g.needs.every((n) => reached.has(n) || done(s, GOALS.find((x) => x.id === n)!, reached)));
+    if (!ready.length && failed.size && secondWinds-- > 0) {
+      run.log(s, `trying again: ${[...failed.keys()].join(', ')}`);
+      failed.clear();
+      continue;
+    }
+    if (!left.length) break;
     if (!ready.length) {
       run.fail(`stuck: nothing left she can do; still to do ${left.map((g) => g.id).join(', ')}`);
       break;
