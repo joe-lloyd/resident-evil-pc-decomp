@@ -338,7 +338,9 @@ export async function face(link: GameLink, angle: number, tolerance = 100): Prom
     // A touch door fired as she turned: the angle meant the room she left.
     if (s.stage !== start.stage || s.room !== start.room) return s;
     const turn = turnBetween(s.player.angle, angle);
-    if (Math.abs(turn) <= tolerance) return s;
+    // Standing, she turns 96 a frame and the shortest tap turns her for two
+    // (measured on 17 Oct 2026), so she can only be sure of landing within 100.
+    if (Math.abs(turn) <= Math.max(tolerance, 100)) return s;
     await link.tap(turn > 0 ? Key.right : Key.left, Math.abs(turn) > 600 ? 3 : 1);
     await link.frames(4);
   }
