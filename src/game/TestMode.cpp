@@ -14,6 +14,7 @@
 #include <cstring>
 
 extern int  DebugRoomChange_Request(int stage, int room);
+extern void CountHeldItems(void);   // GameStart.cpp
 
 static int          s_active = 0;
 static unsigned int s_frame = 0;
@@ -199,6 +200,8 @@ static void on_command(const char* line)
         // Set one slot of her bag outright, to load a playthrough's snapshot.
         ItemSlot* items = (ItemSlot*)g_ItemSlotsPointer;
         if (items) { items[a].Id = (unsigned char)b; items[a].qty = (unsigned char)c; }
+        // The game searches only the slots it counts as held (get_item_slot): recount, as it does.
+        CountHeldItems();
         reply("{\"t\":\"ack\",\"cmd\":\"slot\",\"ok\":%d}\n", items ? 1 : 0);
     } else if (strcmp(cmd, "boxslot") == 0 && a >= 0 && a < 48 && b >= 0 && b < 256 && c >= 0 && c < 256) {
         g_itemboxSlots[a].Id = (unsigned char)b;
