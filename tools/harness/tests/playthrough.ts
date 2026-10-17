@@ -78,9 +78,11 @@ const GOALS: Goal[] = [
   { id: 'cut-depot', needs: ['cutters'], kind: 'unlock', from: 'camp-yard', to: 'depot' },
   { id: 'jerrycan', needs: [], kind: 'take', room: 'shed', item: ITEM.jerrycan },
   { id: 'fuel', needs: ['cut-depot', 'jerrycan'], kind: 'event', room: 'depot', use: ITEM.jerrycan },
+  // The filled can is left standing by the tank, to pick up.
+  { id: 'diesel', needs: ['fuel'], kind: 'take', room: 'depot', item: ITEM.diesel },
   // Act 2, west.
   { id: 'cut-chain', needs: ['cutters'], kind: 'unlock', from: 'road', to: 'washout' },
-  { id: 'generator-on', needs: ['cut-chain', 'fuel'], kind: 'event', room: 'generator', use: ITEM.diesel },
+  { id: 'generator-on', needs: ['cut-chain', 'diesel'], kind: 'event', room: 'generator', use: ITEM.diesel },
   { id: 'tower-door', needs: ['cut-chain', 'truck-keys'], kind: 'unlock', from: 'tower-foot', to: 'tower-stairs' },
   { id: 'tower-view', needs: ['tower-door'], kind: 'scene', room: 'tower-top', from: 'tower-stairs', cut: 'cut-tower' },
   { id: 'switch-key', needs: ['tower-view'], kind: 'take', room: 'tower-top', item: ITEM.switchKey },
@@ -341,37 +343,76 @@ function needed(s: GameState, reached: Set<string>): Set<number> {
 
 const freeSlots = (s: GameState) => s.items.filter((i) => i.id === 0).length;
 
-/**
- * Make a slot free: to the nearest item box, and put away the first thing she
- * carries that the day no longer needs. The box screen opens with her bag's
- * cursor on its first slot and the box's on box slot 0, whatever the box
- * holds (MainMenu.cpp main_menu and the box states). She picks the item, steps
- * the box's cursor down to its first empty slot, and action swaps them.
- */
-async function stash(p: Player, reached: Set<string>): Promise<void> {
-  let s = await p.link.state();
-  const spare = s.items.findIndex((i) => i.id !== 0 && !needed(s, reached).has(i.id));
-  if (spare < 0) throw new StuckError(`her bag is full of things the day still needs: ${s.items.map((i) => i.id).join(', ')}`, s);
+/** The items a goal itself uses: an event's item, a lock's key. */
+function wants(g: Goal): number[] {
+  if (g.kind === 'event' && g.use !== undefined) return [g.use];
+  if (g.kind === 'unlock') {
+    const d = world.doors.find((x) => x.from === g.from && x.to === g.to);
+    return d?.lock ? [d.lock.item] : [];
+  }
+  return [];
+}
+
+/** To the nearest item box, standing at it. */
+async function toBox(p: Player): Promise<GameState> {
+  const s = await p.link.state();
   const near = [...world.boxes].sort((a, b) => (p.way(s, a.room)?.length ?? 99) - (p.way(s, b.room)?.length ?? 99))[0]!;
-  p.run.log(s, `bag full: to the item box in ${near.room} to put away item ${s.items[spare]!.id}`);
   if (!(await p.goTo(near.room))) throw new StuckError(`no way to the item box in ${near.room}`, s);
-  s = await approach(p.link, near.zone);
-  const id = s.items[spare]!.id;
-  const slot = s.items.findIndex((i) => i.id === id);
-  const empty = s.box.findIndex((b) => b.id === 0);
-  if (empty < 0) throw new StuckError(s.box.length ? 'the item box is full' : 'the game does not report the item box: rebuild the exe', s);
+  return approach(p.link, near.zone);
+}
+
+/**
+ * Swap bag slot `bag` with box slot `box` at the box she stands at. The box
+ * screen opens with her bag's cursor on its first slot and the box's on box
+ * slot 0, whatever the box holds (MainMenu.cpp main_menu and the box states).
+ * She picks the bag slot (an empty one takes from the box), steps the box's
+ * cursor down to the slot, and action swaps them.
+ */
+async function swapAtBox(p: Player, bag: number, box: number): Promise<GameState> {
   await p.link.tap(Key.action, 3);
-  s = await p.link.waitFor((st) => screen(st) === 'menu', 'the box screen', 20_000);
+  await p.link.waitFor((st) => screen(st) === 'menu', 'the box screen', 20_000);
   await p.link.frames(30);
   // Each step of the box's list slides for 15 frames and drops a key pressed meanwhile.
-  const keys = [...Array<number>(slot >> 1).fill(Key.down), ...(slot & 1 ? [Key.right] : []), Key.action, ...Array<number>(empty).fill(Key.down), Key.action];
+  const keys = [...Array<number>(bag >> 1).fill(Key.down), ...(bag & 1 ? [Key.right] : []), Key.action, ...Array<number>(box).fill(Key.down), Key.action];
   for (const key of keys) {
     await p.link.tap(key, 3);
     await p.link.frames(22);
   }
-  s = await settle(p.link);
-  if (s.items.some((i) => i.id === id)) throw new StuckError(`item ${id} is still in her bag after the box`, s);
+  return settle(p.link);
+}
+
+/**
+ * Make a slot free, as a player does at the item box: put away something the
+ * day no longer needs, or else something the job in hand (`keep`) does not.
+ */
+async function stash(p: Player, reached: Set<string>, keep: readonly number[]): Promise<void> {
+  let s = await p.link.state();
+  const later = needed(s, reached);
+  const pick = (ok: (id: number) => boolean) => s.items.findIndex((i) => i.id !== 0 && i.id !== BERETTA && i.id !== CLIP && ok(i.id));
+  let spare = pick((id) => !later.has(id));
+  if (spare < 0) spare = pick((id) => !keep.includes(id));
+  if (spare < 0) throw new StuckError(`her bag is full of things this job needs: ${s.items.map((i) => i.id).join(', ')}`, s);
+  const id = s.items[spare]!.id;
+  p.run.log(s, `bag full: to the item box to put away item ${id}`);
+  s = await toBox(p);
+  const empty = s.box.findIndex((b) => b.id === 0);
+  if (empty < 0) throw new StuckError(s.box.length ? 'the item box is full' : 'the game does not report the item box: rebuild the exe', s);
+  s = await swapAtBox(p, s.items.findIndex((i) => i.id === id), empty);
+  if (has(s, id)) throw new StuckError(`item ${id} is still in her bag after the box`, s);
   p.run.log(s, `put item ${id} in the box`);
+}
+
+/** Take item `id` back out of the item box, making room first if her bag is full. */
+async function fetchFromBox(p: Player, reached: Set<string>, id: number, keep: readonly number[]): Promise<void> {
+  let s = await p.link.state();
+  if (freeSlots(s) === 0) await stash(p, reached, keep);
+  p.run.log(s, `to the item box for item ${id}`);
+  s = await toBox(p);
+  const at = s.box.findIndex((b) => b.id === id);
+  if (at < 0) throw new StuckError(`item ${id} is not in the item box`, s);
+  s = await swapAtBox(p, s.items.findIndex((i) => i.id === 0), at);
+  if (!has(s, id)) throw new StuckError(`item ${id} is still in the box`, s);
+  p.run.log(s, `took item ${id} from the box`);
 }
 
 /** The room a goal is worked in. */
@@ -379,9 +420,14 @@ const roomFor = (g: Goal): Slug => (g.kind === 'unlock' ? g.from : g.room);
 
 async function work(p: Player, g: Goal, reached: Set<string>): Promise<void> {
   const { link, run } = p;
+  // What the job uses, back from the item box if she left it there.
+  for (const id of wants(g)) {
+    const now = await link.state();
+    if (!has(now, id) && now.box.some((b) => b.id === id)) await fetchFromBox(p, reached, id, wants(g));
+  }
   // A pickup, or a scene that hands her something, needs a free slot.
   if ((g.kind === 'take' && !g.file) || (g.kind === 'scene' && g.gets !== undefined)) {
-    if (freeSlots(await link.state()) === 0) await stash(p, reached);
+    if (freeSlots(await link.state()) === 0) await stash(p, reached, wants(g));
   }
   const via = g.kind === 'scene' || g.kind === 'visit' ? g.from : undefined;
   if (!(await p.goTo(roomFor(g), via))) throw new StuckError(`no way to ${roomFor(g)}${via ? ` from ${via}` : ''}`, await link.state());
