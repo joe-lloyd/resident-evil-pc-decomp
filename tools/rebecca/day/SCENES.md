@@ -6,6 +6,9 @@ and records what the game needs. The plan says what each room is for
 `booth/scene.py` (an interior) and `platform/scene.py` (an exterior) are the
 models to copy.
 
+Before building an existing scene, restore its rendered inputs with
+`node tools/rebecca/assets.ts pull` from the repo root.
+
 ## The standard
 
 - **Story first.** Before any geometry, write the scene's docstring: what
@@ -45,6 +48,8 @@ models to copy.
    most 5% lost. Move or add a camera if not.
 4. Render it fully: `node tools/rebecca/day/render.ts <slug>` (a few minutes).
    This writes `day/<slug>/renders/`.
+5. After copying renders back from jellybingus, save them to Forgejo with
+   `node tools/rebecca/assets.ts push`.
 
 ## Space and the game's rules
 
