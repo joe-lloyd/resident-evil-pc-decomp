@@ -88,6 +88,8 @@ One per line. Each is answered with `{"t":"ack","cmd":...,"ok":0|1}`.
 | `slot <i> <id> <qty>` | set slot `i` of her bag outright |
 | `boxslot <i> <id> <qty>` | set slot `i` of the item box outright |
 | `unequip` | nothing in her hands |
+| `equip <slot>` | equip the 1-based bag slot, or 0 for none |
+| `keyboard <0\|1>` | 1 gives the physical keyboard control, 0 returns to scripted keys |
 | `shot <path>` | save the next frame's back buffer as a BMP on the game machine |
 
 The shot is the whole 640x480 frame, background included.
@@ -123,3 +125,5 @@ TYPESAFE_API_KEY=$(ssh vault get typesafe-api-key) OVERLAY=... node tools/harnes
 node tools/harness/deploy.ts test-mode       # build the branch and install it
 node tools/harness/tests/rebecca-boot.ts     # run one test
 ```
+
+Playthrough notes can also be captured without a test link. See [Capture playthrough feedback](FEEDBACK.md).
