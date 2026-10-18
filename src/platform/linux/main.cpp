@@ -14,6 +14,8 @@
 #include <unistd.h>
 
 #include "Globals.h"
+#include "game/Feedback.h"
+#include "game/TestMode.h"
 #include "platform/platform.h"
 #include "system/AssetPath.h"
 #include "system/ConfigFile.h"
@@ -57,7 +59,11 @@ int main(int argc, char** argv)
     int pressCount = 0;
 
     for (int i = 1; i < argc; ++i) {
-        if (strcmp(argv[i], "--capture") == 0 && i + 1 < argc) {
+        if (strcmp(argv[i], "--feedback") == 0) {
+            Feedback_Enable();
+        } else if (strcmp(argv[i], "--mode") == 0 && i + 1 < argc) {
+            Config_OverrideGameMode(argv[++i]);
+        } else if (strcmp(argv[i], "--capture") == 0 && i + 1 < argc) {
             capturePath = argv[++i];
             if (i + 1 < argc && argv[i + 1][0] != '-') captureFrame = atoi(argv[++i]);
         } else if (strcmp(argv[i], "--press") == 0 && i + 2 < argc && pressCount < 16) {
@@ -194,6 +200,16 @@ int main(int argc, char** argv)
                 break;
             case SDL_KEYDOWN:
                 plat_key_event(e.key.keysym.scancode, TRUE);
+                if (Feedback_Key(e.key.keysym.scancode == SDL_SCANCODE_F9 ? VK_F9 : 0, e.key.repeat != 0)) {
+                    if (e.key.keysym.sym == SDLK_RETURN) plat_text_input_event(13);
+                    if (e.key.keysym.sym == SDLK_ESCAPE) plat_text_input_event(27);
+                    if (e.key.keysym.sym == SDLK_BACKSPACE) plat_text_input_event(8);
+                    if (e.key.keysym.sym == SDLK_TAB) plat_text_input_event(9);
+                }
+                break;
+            case SDL_TEXTINPUT:
+                for (const unsigned char* c = (const unsigned char*)e.text.text; *c; c++)
+                    plat_text_input_event(*c);
                 break;
             case SDL_KEYUP:
                 plat_key_event(e.key.keysym.scancode, FALSE);

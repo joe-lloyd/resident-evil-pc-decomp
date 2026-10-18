@@ -2,6 +2,8 @@
 // WindowProc (0x00441170), OnKeyDown (0x00497830)
 #include "Globals.h"
 #include "game/TestMode.h"
+#include "game/Feedback.h"
+#include "platform/platform.h"
 #include <mmsystem.h>
 
 // ============================================================================
@@ -82,6 +84,15 @@ void OnKeyDown(HWND hwnd, WPARAM wparam)
 // ============================================================================
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+    // Port addition: consume editor events before the original F9/debug handlers.
+    if ((msg == WM_KEYDOWN || msg == WM_KEYUP) &&
+        plat_text_input_key((int)wParam, msg == WM_KEYDOWN)) return 0;
+    if (msg == WM_KEYDOWN && Feedback_Key((int)wParam, (lParam & (1L << 30)) != 0)) return 0;
+    if (msg == WM_CHAR && plat_text_input_active()) {
+        plat_text_input_event((int)wParam);
+        return 0;
+    }
+
     // 0x0044119c: Check if Marni Direct3D handles this message first
     if (g_pMarniDirect3D != NULL) {
         // Call vtable[5] -> HandleWindowMessage (0x00448b60)

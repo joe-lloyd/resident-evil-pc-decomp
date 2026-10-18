@@ -8,6 +8,7 @@
 // key. The second bit is why the OptionsMenu rebinding scan works, so it is
 // tracked per virtual key here rather than derived from SDL's own edge state.
 #include "../platform.h"
+#include <time.h>
 
 #include <SDL2/SDL.h>
 
@@ -23,6 +24,31 @@
 
 #include <string>
 #include <unordered_map>
+
+// Port addition: feedback editor input, no original address.
+static BOOL s_textActive = FALSE;
+static unsigned char s_textQueue[256];
+static unsigned int s_textRead = 0, s_textWrite = 0;
+static unsigned char s_textSuppressed[256];
+
+BOOL plat_text_input_active(void) { return s_textActive; }
+BOOL plat_text_input_key(int vk, BOOL down)
+{
+    BOOL consumed = s_textActive || s_textSuppressed[vk & 255];
+    if (!down) s_textSuppressed[vk & 255] = 0;
+    return consumed;
+}
+void plat_text_input_event(int c)
+{
+    if (!s_textActive || c <= 0 || c > 126) return;
+    if (s_textWrite - s_textRead < sizeof(s_textQueue))
+        s_textQueue[s_textWrite++ % sizeof(s_textQueue)] = (unsigned char)c;
+}
+int plat_text_input_read(void)
+{
+    if (s_textRead == s_textWrite) return 0;
+    return s_textQueue[s_textRead++ % sizeof(s_textQueue)];
+}
 
 // ---------------------------------------------------------------------------
 // Keyboard
@@ -73,6 +99,12 @@ int plat_key_state(int vk)
 
     SDL_Scancode sc = VkToScancode(vk);
     int down = (sc != SDL_SCANCODE_UNKNOWN) ? s_keyDown[sc] : 0;
+    if (s_textActive) return 0;
+    if (s_textSuppressed[vk]) {
+        if (!down) s_textSuppressed[vk] = 0;
+        s_keyPrev[vk] = (unsigned char)down;
+        return 0;
+    }
     int edge = (down && !s_keyPrev[vk]) ? 1 : 0;
     s_keyPrev[vk] = (unsigned char)down;
 
@@ -359,4 +391,30 @@ void plat_window_destroy(HWND window)
 void plat_cursor_show(BOOL show)
 {
     SDL_ShowCursor(show ? SDL_ENABLE : SDL_DISABLE);
+}
+
+void plat_text_input(BOOL on)
+{
+    s_textActive = on;
+    s_textRead = s_textWrite = 0;
+    for (int vk = 0; vk < 256; vk++) {
+        SDL_Scancode sc = VkToScancode(vk);
+        s_textSuppressed[vk] = sc != SDL_SCANCODE_UNKNOWN ? s_keyDown[sc] : 0;
+    }
+    if (on) SDL_StartTextInput(); else SDL_StopTextInput();
+    plat_key_flush();
+}
+BOOL plat_mkdir_new(const char* path)
+{
+    char norm[4096];
+    return mkdir(plat_normalize_path(path, norm, sizeof(norm)), 0755) == 0;
+}
+
+void plat_wall_time(char* iso, size_t isoSize, char* stamp, size_t stampSize)
+{
+    time_t now = time(NULL);
+    struct tm utc;
+    gmtime_r(&now, &utc);
+    strftime(iso, isoSize, "%Y-%m-%dT%H:%M:%SZ", &utc);
+    strftime(stamp, stampSize, "%Y%m%d-%H%M%S", &utc);
 }

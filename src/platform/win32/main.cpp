@@ -4,6 +4,7 @@
 
 #include "Globals.h"
 #include "game/TestMode.h"
+#include "game/Feedback.h"
 #include "system/AssetPath.h"
 #include "system/ConfigFile.h"
 
@@ -110,6 +111,8 @@ int PASCAL WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         sscanf(mode + strlen("--mode "), "%15s", name);
         Config_OverrideGameMode(name);
     }
+
+    if (lpCmdLine && strstr(lpCmdLine, "--feedback")) Feedback_Enable();
 
     // Port addition: --god for playtesting (TestMode.h).
     if (lpCmdLine && strstr(lpCmdLine, "--god")) DevCheat_SetGod(1);
