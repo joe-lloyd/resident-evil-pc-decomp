@@ -9,7 +9,8 @@ in the game's ASCII font. Type up to 240 printable ASCII characters. Backspace
 deletes, Tab cycles clipping, drawn-over, item, enemy, text, and other.
 Enter saves an empty or filled note. Escape cancels. Both resume gameplay.
 F9 repeats do nothing while the box is open. Keys held when the box closes
-stay blocked until release. Game tasks and input updates stop during editing.
+stay blocked until release. Game tasks and input updates stop during editing. The test link still answers
+state and ping; commands that mutate the frozen game return `ok:0`.
 
 Each saved mark lives under the configured `config.ini [Save] Path`:
 
@@ -21,7 +22,8 @@ feedback/20261018-140506/
 
 Folder times are UTC. A second mark in the same second gets a `-01` suffix.
 The image contains the completed frame before the editor draws. It uses the
-same renderer readback as the test link's `shot` command. `shot.rgba` starts
+renderer's `CaptureBackbufferToRGBA()` call, which the test link's
+`SaveBitmapToFile()` path also uses. `shot.rgba` starts
 with `RE1CAP <width> <height>\n`, followed by RGBA bytes, top row first.
 The page command converts it to `shot.png` and embeds that PNG in the page.
 Cancel writes no files. A write failure keeps the editor open so Enter can
@@ -73,7 +75,7 @@ Restore boots the captured character and content mode over the test link,
 then adapts `state` through `checkpoint.take()` and `checkpoint.restore()`.
 It restores banks 1, 2, 3, and 7, the bag and box, room, x/z position, angle,
 and equipped weapon slot. The game stays running and the physical keyboard
-regains control. `PORT` selects the test port, default 7880.
+regains control. `PORT` selects the test port, default 7811.
 
 This has the existing checkpoint semantics. It re-enters the room and runs
 its scripts. It does not rewind the VM, camera, health, animation frame,

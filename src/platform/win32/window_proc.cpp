@@ -85,9 +85,9 @@ void OnKeyDown(HWND hwnd, WPARAM wparam)
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     // Port addition: consume editor events before the original F9/debug handlers.
+    if (msg == WM_KEYDOWN && Feedback_Key((int)wParam, (lParam & (1L << 30)) != 0)) return 0;
     if ((msg == WM_KEYDOWN || msg == WM_KEYUP) &&
         plat_text_input_key((int)wParam, msg == WM_KEYDOWN)) return 0;
-    if (msg == WM_KEYDOWN && Feedback_Key((int)wParam, (lParam & (1L << 30)) != 0)) return 0;
     if (msg == WM_CHAR && plat_text_input_active()) {
         plat_text_input_event((int)wParam);
         return 0;
@@ -128,7 +128,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
             } else {
                 // Window activated
                 g_bWindowFocused = TRUE;
-                ResumePausedSounds();
+                if (!Feedback_IsOpen()) ResumePausedSounds();
             }
             break;
         

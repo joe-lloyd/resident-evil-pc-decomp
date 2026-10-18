@@ -43,5 +43,5 @@ int  DevBoot_Begin(void);
 int  DevBoot_StartRoom(int* stage, int* room);
 
 // Port addition: complete state JSON shared by the test link and feedback.
-// Valid until the next call, including a TestMode_Tick.
+// Valid until the next call, including a TestMode_Tick. NULL on overflow.
 const char* GameState_Json(void);

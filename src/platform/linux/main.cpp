@@ -199,7 +199,7 @@ int main(int argc, char** argv)
                 break;
             case SDL_KEYDOWN:
                 plat_key_event(e.key.keysym.scancode, TRUE);
-                if (Feedback_Key(e.key.keysym.scancode == SDL_SCANCODE_F9 ? VK_F9 : 0, e.key.repeat != 0)) {
+                if (Feedback_Key(e.key.keysym.scancode == SDL_SCANCODE_F9 ? VK_F9 : (e.key.keysym.sym == SDLK_ESCAPE ? VK_ESCAPE : 0), e.key.repeat != 0)) {
                     if (e.key.keysym.sym == SDLK_RETURN) plat_text_input_event(13);
                     if (e.key.keysym.sym == SDLK_ESCAPE) plat_text_input_event(27);
                     if (e.key.keysym.sym == SDLK_BACKSPACE) plat_text_input_event(8);

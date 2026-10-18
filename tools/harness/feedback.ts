@@ -65,6 +65,19 @@ export function readFeedback(entry: string): Feedback {
 /** Same four banks, slot order, weapon and spot as a playthrough checkpoint. */
 export function feedbackCheckpoint(note: Feedback): Checkpoint { return take(note.state, []); }
 
+/** Map the engine's character ids, including Rebecca at 3, to DevBoot names. */
+export function feedbackBoot(note: Feedback): string {
+  let character: string;
+  switch (note.state.player.id & 3) {
+    case 0: character = 'chris'; break;
+    case 1: character = 'jill'; break;
+    case 3: character = 'rebecca'; break;
+    default: throw new Error('feedback: unsupported character');
+  }
+  if (!['OG', 'DC', 'SATURN', 'DS', 'REB'].includes(note.mode)) throw new Error('feedback: unsupported mode');
+  return `--mode ${note.mode} --boot ${character}`;
+}
+
 function screenshot(entry: string): string {
   const png = path.join(entry, 'shot.png');
   if (existsSync(png)) return readFileSync(png).toString('base64');
@@ -145,9 +158,7 @@ async function main(): Promise<void> {
     // lab.ts reads its default at module load. Rebecca's playtest lives here.
     process.env.RE1_LAB_GAME_DIR ??= 'D:\\Games\\RE1-files';
     const { open } = await import('./lab.ts');
-    const character = ['chris', 'jill', 'rebecca'][note.state.player.id & 3];
-    if (!character || !['OG', 'DC', 'SATURN', 'DS', 'REB'].includes(note.mode)) throw new Error('feedback: unsupported mode or character');
-    const session = await open(Number(process.env.PORT ?? 7880), `--mode ${note.mode} --boot ${character}`);
+    const session = await open(Number(process.env.PORT ?? 7811), feedbackBoot(note));
     let restored = false;
     try {
       await restore(session.link, feedbackCheckpoint(note));

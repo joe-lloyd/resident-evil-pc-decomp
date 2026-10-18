@@ -42,7 +42,7 @@ std::string quote(const std::string& text)
 
 bool save()
 {
-    if (pixels.empty()) { error = "Capture failed. Esc cancels."; return false; }
+    if (pixels.empty() || state.empty()) { error = "Capture failed. Esc cancels."; return false; }
     if (!directory[0]) {
         char root[1024];
         snprintf(root, sizeof(root), "%sfeedback", GetSaveRoot());
@@ -99,7 +99,13 @@ int Feedback_IsOpen(void) { return open || requested; }
 
 int Feedback_Key(int vk, int repeat)
 {
-    if (Feedback_IsOpen()) return 1;
+    if (requested) {
+        // A transition can prevent the requested present. Esc must work even
+        // while the movie pump owns the loop and no game frames are running.
+        if (vk == VK_ESCAPE) { requested = false; plat_text_input(FALSE); }
+        return 1;
+    }
+    if (open) return 1;
     if (!(enabled || g_bRebMode) || vk != VK_F9) return 0;
     // F9 belongs to feedback whenever enabled, including the title and movies.
     if (!repeat && g_playingGameFlag && !plat_video_is_active()) {
@@ -113,6 +119,10 @@ int Feedback_Key(int vk, int repeat)
 
 void Feedback_BeforePresent(void)
 {
+    if (requested && (!g_playingGameFlag || plat_video_is_active())) {
+        requested = false;
+        plat_text_input(FALSE);
+    }
     if (!(enabled || g_bRebMode) || open || !g_playingGameFlag || plat_video_is_active()) return;
     DWORD now = plat_time_ms();
     if (samples == 0 || now - lastSample >= 250 || requested) {
@@ -126,7 +136,8 @@ void Feedback_BeforePresent(void)
     open = true;
     capturedAt = now;
     plat_wall_time(wallTime, sizeof(wallTime), stamp, sizeof(stamp));
-    state = GameState_Json();
+    const char* json = GameState_Json();
+    state = json ? json : "";
     void* rgba = NULL;
     MarniDX* dx = Marni_DX();
     pixels.clear();
@@ -140,6 +151,10 @@ void Feedback_BeforePresent(void)
 
 int Feedback_Frame(void)
 {
+    if (requested && (!g_playingGameFlag || plat_video_is_active() || (g_main_state_flags & MSF_FMV_REQUEST))) {
+        requested = false;
+        plat_text_input(FALSE);
+    }
     if (!open) return 0;
     bool close = false;
     for (int c; (c = plat_text_input_read()) != 0;) {
@@ -154,7 +169,7 @@ int Feedback_Frame(void)
         // suppressed by the platform until released, including Enter/Escape.
         plat_text_input(FALSE);
         open = false;
-        Marni_DX()->DestroyTexture(frozen);
+        if (Marni_DX()) Marni_DX()->DestroyTexture(frozen);
         frozen = MARNI_NULL_HANDLE;
         pixels.clear();
         ResumePausedSounds();

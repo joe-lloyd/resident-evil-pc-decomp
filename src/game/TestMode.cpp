@@ -142,6 +142,10 @@ static void on_command(const char* line)
             break;
         }
     }
+    if (Feedback_IsOpen() && strcmp(cmd, "state") != 0 && strcmp(cmd, "ping") != 0) {
+        reply("{\"t\":\"ack\",\"cmd\":\"%s\",\"ok\":0,\"frame\":%u}\n", cmd, s_frame);
+        return;
+    }
     int a = -1, b = -1, c = -1;
     sscanf(rest, "%i %i %i", &a, &b, &c);
 
@@ -416,6 +420,8 @@ const char* GameState_Json(void)
         put("%s\"%s\"", i ? "," : "", f ? f : "");
     }
     put("]}");
+    // Do not persist or send a truncated JSON document.
+    if (s_len >= (int)sizeof(s_body)) return NULL;
     static char json[8500]; // Port addition: includes the shared body and test-link envelope.
     snprintf(json, sizeof(json), "{\"t\":\"state\",\"frame\":%u,%s}", s_frame, s_body);
     return json;
@@ -423,8 +429,9 @@ const char* GameState_Json(void)
 
 void TestMode_Tick(int gameFrame)
 {
-    if (!s_active || Feedback_IsOpen()) return;
-    if (gameFrame) s_frame++;
+    if (!s_active) return;
+    const bool editing = Feedback_IsOpen() != 0;
+    if (gameFrame && !editing) s_frame++;
     plat_test_link_poll(on_command);
 
     // A new client starts clean: nothing held from the last one, and a state
@@ -436,7 +443,7 @@ void TestMode_Tick(int gameFrame)
     }
 
     DWORD now = plat_time_ms();
-    for (int vk = 0; vk < 256; vk++) {
+    for (int vk = 0; !editing && vk < 256; vk++) {
         if (s_heldUntil[vk] != 0 && s_heldUntil[vk] != kHeldForever && now >= s_heldUntil[vk]) {
             s_heldUntil[vk] = 0;
         }
@@ -444,7 +451,8 @@ void TestMode_Tick(int gameFrame)
     }
 
     const char* json = GameState_Json();
-    if (gameFrame) s_gameplayFrame = 0;
+    if (gameFrame && !editing) s_gameplayFrame = 0;
+    if (!json) return;
     if (s_forceState || strcmp(s_body, s_lastBody) != 0) {
         plat_test_link_send(json);
         plat_test_link_send("\n");

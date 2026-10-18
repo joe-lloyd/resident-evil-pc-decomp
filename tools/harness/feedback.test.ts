@@ -5,7 +5,7 @@ import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } f
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
-import { feedbackCheckpoint, readFeedback } from './feedback.ts';
+import { feedbackBoot, feedbackCheckpoint, readFeedback } from './feedback.ts';
 import { readPng } from './image.ts';
 
 const fixture = new URL('./fixtures/feedback/', import.meta.url).pathname;
@@ -45,6 +45,7 @@ test('page CLI escapes notes, plots room collision and path, and leaves an after
       'data-after="20261018-140506"', 'After: awaiting proof',
     ]) assert.ok(html.includes(text), `missing ${text}`);
     assert.ok(!html.includes('9999,9999'), 'do not join trails across rooms');
+    assert.ok(!html.includes('1234,5678'), 'omit samples older than ten seconds');
     assert.deepEqual([...readPng(path.join(entry, 'shot.png')).rgb], [255, 0, 0]);
   } finally { rmSync(dir, { recursive: true, force: true }); }
 });
@@ -70,4 +71,12 @@ test('rejects malformed note metadata at the boundary', () => {
     writeFileSync(path.join(dir, 'note.json'), '{"version":1,"kind":"oops"}');
     assert.throws(() => readFeedback(dir), /feedback/);
   } finally { rmSync(dir, { recursive: true, force: true }); }
+});
+
+test('Rebecca restore uses character id 3 and produces the actual lab boot arguments', () => {
+  const note = readFeedback(entry);
+  assert.equal(note.state.player.id, 3);
+  assert.equal(feedbackBoot(note), '--mode REB --boot rebecca');
+  assert.equal(feedbackBoot({ ...note, mode: 'OG', state: { ...note.state, player: { ...note.state.player, id: 0 } } }), '--mode OG --boot chris');
+  assert.throws(() => feedbackBoot({ ...note, state: { ...note.state, player: { ...note.state.player, id: 2 } } }), /character/);
 });
