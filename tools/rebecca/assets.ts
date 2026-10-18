@@ -65,7 +65,13 @@ if (command === 'pull') {
   copy(cache, root, list);
   process.stdout.write(`Restored ${list.length} assets from ${cache}\n`);
 } else {
-  const list = files(git(root, 'ls-files', '--others', '--ignored', '--exclude-standard', '-z', '--', 'tools/rebecca')).filter(isAsset);
+  const list: string[] = [];
+  for (const file of files(git(root, 'ls-files', '--others', '--ignored', '--exclude-standard', '-z', '--', 'tools/rebecca'))) {
+    if (isAsset(file)) list.push(file);
+    else if (!/(^|\/)__pycache__\/|^tools\/rebecca\/music\/renders\/|\.log$/.test(file)) {
+      throw new Error(`Unrecognized ignored file: ${file}. Add its asset path to assets.ts before pushing.`);
+    }
+  }
   // This lettering is already tracked in the game repo. Mirror it as well.
   const lettering = 'tools/rebecca/card/rebecca-id-lettering.png';
   if (existsSync(path.join(root, lettering)) && !list.includes(lettering)) list.push(lettering);
