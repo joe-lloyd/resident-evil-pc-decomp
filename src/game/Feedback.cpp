@@ -95,7 +95,7 @@ bool save()
 }
 
 void Feedback_Enable(void) { enabled = true; }
-int Feedback_IsOpen(void) { return open || requested; }
+int Feedback_IsOpen(void) { return open; }
 
 int Feedback_Key(int vk, int repeat)
 {

@@ -216,7 +216,10 @@ static void on_command(const char* line)
         // Port addition: checkpoints carry a bag slot, counted from one.
         const ItemSlot* items = (const ItemSlot*)g_ItemSlotsPointer;
         int capacity = (items == g_RebeccaItemSlots || (g_playerEntity.id & 3) != CHAR_JILL) ? 6 : 8;
-        if (!items || a > capacity || (a && (items[a - 1].Id == 0 || (items[a - 1].Id > 0x0d && items[a - 1].Id != 0x6f && items[a - 1].Id != 0x70)))) {
+        int id = items && a > 0 && a <= capacity ? items[a - 1].Id : ITEM_NONE;
+        // The item-action menu's predicate, MainMenu.cpp: mode 2, action 0.
+        bool weapon = id != ITEM_NONE && (id < ITEM_CLIP || id > ITEM_NON_INFINITE_MAX);
+        if (!items || a > capacity || (a && !weapon)) {
             reply("{\"t\":\"ack\",\"cmd\":\"equip\",\"ok\":0,\"frame\":%u}\n", s_frame);
             return;
         }

@@ -2,7 +2,9 @@
 
 Feedback is on in Rebecca mode, including `--mode REB`. Add `--feedback` to
 use it in another mode. The plain USA game keeps its original F9 behavior.
-No test link or debug setting is needed to record notes.
+When feedback is enabled, F9 belongs to capture everywhere and no longer
+opens the return-to-title or exit dialog. Use the window close control to
+exit. No test link or debug setting is needed to record notes.
 
 During gameplay, press F9. The next completed frame freezes under a text box
 in the game's ASCII font. Type up to 240 printable ASCII characters. Backspace

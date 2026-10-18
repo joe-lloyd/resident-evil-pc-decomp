@@ -75,9 +75,10 @@ export async function restore(link: GameLink, cp: Checkpoint): Promise<GameState
     const now = s.box[i];
     if (!now || now.id !== id || now.qty !== qty) await link.boxSlot(i, id, qty);
   }
+  if (cp.weapon === 0) await link.unequip();
   await link.room(cp.stage, cp.room);
   await settle(link, (st) => st.stage === cp.stage && st.room === cp.room);
   await link.place(cp.at.x, cp.at.z, cp.at.angle);
-  await link.equip(cp.weapon);
+  if (cp.weapon !== 0) await link.equip(cp.weapon);
   return settle(link, (st) => st.stage === cp.stage && st.room === cp.room);
 }
