@@ -91,6 +91,16 @@ void plat_key_event(int scancode, BOOL down)
 {
     if (scancode < 0 || scancode >= SDL_NUM_SCANCODES) return;
     s_keyDown[scancode] = down ? 1 : 0;
+    if (!down) {
+        // A new press after release must work even when no game polling ran
+        // between the events, as with a debug key held through editor close.
+        for (int vk = 0; vk < 256; vk++) {
+            if (s_textSuppressed[vk] && VkToScancode(vk) == scancode) {
+                s_textSuppressed[vk] = 0;
+                s_keyPrev[vk] = 0;
+            }
+        }
+    }
 }
 
 int plat_key_state(int vk)

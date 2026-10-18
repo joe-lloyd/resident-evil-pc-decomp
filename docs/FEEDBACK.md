@@ -93,3 +93,17 @@ python3 tests/check_platform_boundary.py
 The committed fixture has a one-pixel PNG and a handwritten state. The tests
 exercise the page CLI, raw-to-PNG conversion, escaping, room collision parsing,
 path filtering, and the checkpoint adapter's literal output.
+
+`tests/feedback_input.cpp` exercises the Linux platform text queue and held-key
+release behavior without a window. On a Mac with SDL headers:
+
+```sh
+clang++ -std=c++17 -Isrc -I/path/to/includes tests/feedback_input.cpp \
+  src/platform/linux/platform.cpp -Wl,-dead_strip -o /tmp/feedback-input
+/tmp/feedback-input
+```
+
+The include folder must contain `SDL2/SDL.h`. The test replaces SDL's text
+start/stop calls. It does not exercise SDL event delivery or the game loop.
+On Linux, use `-ffunction-sections -Wl,--gc-sections` in place of
+`-Wl,-dead_strip`.
