@@ -4,6 +4,9 @@
 //
 //   node tools/rebecca/build.ts <USA dir> <out dir>
 //
+// First restore the rendered inputs: node tools/rebecca/assets.ts pull
+// See assets.ts for the private Forgejo repo and cache settings.
+//
 // <USA dir> holds the original Stage1..Stage7 room files, DATA/BIO_CARD.DAT,
 // the character models in enemy/ and players/W31 to W34.EMW.
 // RAE_CLI points at retro-archive-explorer's scripts/cli.mjs, which assembles
