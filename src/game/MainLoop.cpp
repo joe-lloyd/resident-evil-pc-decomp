@@ -2,6 +2,7 @@
 // Original function: main_loop at 0x00428eb0 (Ghidra)
 // Adapted from Ghidra decompilation
 #include "Globals.h"
+#include "Feedback.h"
 #include "../system/AssetPath.h"
 
 // 0x00470750 - declared in SpriteRenderer.h; the signature must match that
@@ -33,6 +34,9 @@ static RectDrawDesc g_LetterboxBarBottom = { 0x60000000, -164,   92, 328,  38, 0
 // ============================================================================
 int main_loop(void)
 {
+    // Port addition: the feedback editor owns this frame, before input or tasks.
+    if (Feedback_Frame()) return 1;
+
     SetFrameRateMode(g_bGameActive != 0);
 
     // 0x00428ed1: Initialize game on first run

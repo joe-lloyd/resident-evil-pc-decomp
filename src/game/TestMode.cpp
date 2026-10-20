@@ -6,6 +6,7 @@
 #include "../Globals.h"
 #include "../platform/platform.h"
 #include "TestMode.h"
+#include "Feedback.h"
 #include "../marni/MarniSystem.h"
 #include "../marni/MarniSound.h"
 #include <cstdarg>
@@ -141,6 +142,10 @@ static void on_command(const char* line)
             break;
         }
     }
+    if (Feedback_IsOpen() && strcmp(cmd, "state") != 0 && strcmp(cmd, "ping") != 0) {
+        reply("{\"t\":\"ack\",\"cmd\":\"%s\",\"ok\":0,\"frame\":%u}\n", cmd, s_frame);
+        return;
+    }
     int a = -1, b = -1, c = -1;
     sscanf(rest, "%i %i %i", &a, &b, &c);
 
@@ -207,6 +212,26 @@ static void on_command(const char* line)
         g_itemboxSlots[a].Id = (unsigned char)b;
         g_itemboxSlots[a].qty = (unsigned char)c;
         reply("{\"t\":\"ack\",\"cmd\":\"boxslot\",\"ok\":1}\n");
+    } else if (strcmp(cmd, "equip") == 0 && a >= 0 && a <= 8 && g_playerEntity.jointsStructs != NULL) {
+        // Port addition: checkpoints carry a bag slot, counted from one.
+        const ItemSlot* items = (const ItemSlot*)g_ItemSlotsPointer;
+        int capacity = (items == g_RebeccaItemSlots || (g_playerEntity.id & 3) != CHAR_JILL) ? 6 : 8;
+        int id = items && a > 0 && a <= capacity ? items[a - 1].Id : ITEM_NONE;
+        // The item-action menu's predicate, MainMenu.cpp: mode 2, action 0.
+        bool weapon = id != ITEM_NONE && (id < ITEM_CLIP || id > ITEM_NON_INFINITE_MAX);
+        if (!items || a > capacity || (a && !weapon)) {
+            reply("{\"t\":\"ack\",\"cmd\":\"equip\",\"ok\":0,\"frame\":%u}\n", s_frame);
+            return;
+        }
+        g_EquippedItemId = (unsigned char)a;
+        extern void menu_update_equipped_weapon(void); // 0x00463ec0
+        menu_update_equipped_weapon();
+        LoadEquippedWeaponAnimation(g_playerEntity.equippedWeaponId, 0x0e,
+                                   (unsigned int)g_animationBuffer, (unsigned int)&g_animObjectBuffer);
+    } else if (strcmp(cmd, "keyboard") == 0 && (a == 0 || a == 1)) {
+        // A restored feedback mark can be explored by hand with the link open.
+        memset(s_heldUntil, 0, sizeof(s_heldUntil));
+        plat_key_inject_exclusive(a ? FALSE : TRUE);
     } else if (strcmp(cmd, "unequip") == 0) {
         // Nothing in her hands, as after the mine takes her gear.
         g_EquippedItemId = 0;
@@ -320,7 +345,7 @@ void TestMode_GameplayFrame(void)
 
 // --- State ------------------------------------------------------------------
 
-static void build_state(void)
+const char* GameState_Json(void)
 {
     s_len = 0;
     put("\"play\":%d,\"god\":%d,\"msf\":\"%08x\",\"msf2\":\"%08x\",\"title\":%d,\"fmv\":%d,\"dbg\":%d,",
@@ -332,10 +357,11 @@ static void build_state(void)
 
     const PlayerEntity& p = g_playerEntity;
     put("\"player\":{\"id\":%d,\"x\":%d,\"y\":%d,\"z\":%d,\"angle\":%d,\"hp\":%d,"
-        "\"maxHp\":%d,\"weapon\":%d,\"cf\":%d},",
+        "\"maxHp\":%d,\"weapon\":%d,\"cf\":%d,\"anim\":[%d,%d,%d],\"action\":[%d,%d,%d,%d]},",
         (int)p.id, (int)p.position.x, (int)p.position.y, (int)p.position.z,
         (int)p.directionAngle, (int)p.health, (int)p.maxHealth, (int)g_EquippedItemId,
-        (int)p.healthStatusFlags);
+        (int)p.healthStatusFlags, (int)p.animationId, (int)p.attackAnim, (int)p.animation_frame_id,
+        (int)p.animationId, (int)p.animFrameId, (int)p.action_behavior, (int)p.action_state);
 
     // Rebecca and Chris carry 6 items, Jill 8.
     const ItemSlot* items = (const ItemSlot*)g_ItemSlotsPointer;
@@ -397,12 +423,18 @@ static void build_state(void)
         put("%s\"%s\"", i ? "," : "", f ? f : "");
     }
     put("]}");
+    // Do not persist or send a truncated JSON document.
+    if (s_len >= (int)sizeof(s_body)) return NULL;
+    static char json[8500]; // Port addition: includes the shared body and test-link envelope.
+    snprintf(json, sizeof(json), "{\"t\":\"state\",\"frame\":%u,%s}", s_frame, s_body);
+    return json;
 }
 
 void TestMode_Tick(int gameFrame)
 {
     if (!s_active) return;
-    if (gameFrame) s_frame++;
+    const bool editing = Feedback_IsOpen() != 0;
+    if (gameFrame && !editing) s_frame++;
     plat_test_link_poll(on_command);
 
     // A new client starts clean: nothing held from the last one, and a state
@@ -414,21 +446,19 @@ void TestMode_Tick(int gameFrame)
     }
 
     DWORD now = plat_time_ms();
-    for (int vk = 0; vk < 256; vk++) {
+    for (int vk = 0; !editing && vk < 256; vk++) {
         if (s_heldUntil[vk] != 0 && s_heldUntil[vk] != kHeldForever && now >= s_heldUntil[vk]) {
             s_heldUntil[vk] = 0;
         }
         plat_key_inject(vk, s_heldUntil[vk] != 0);
     }
 
-    build_state();
-    if (gameFrame) s_gameplayFrame = 0;
+    const char* json = GameState_Json();
+    if (gameFrame && !editing) s_gameplayFrame = 0;
+    if (!json) return;
     if (s_forceState || strcmp(s_body, s_lastBody) != 0) {
-        char head[64];
-        snprintf(head, sizeof(head), "{\"t\":\"state\",\"frame\":%u,", s_frame);
-        plat_test_link_send(head);
-        plat_test_link_send(s_body);
-        plat_test_link_send("}\n");
+        plat_test_link_send(json);
+        plat_test_link_send("\n");
         memcpy(s_lastBody, s_body, sizeof(s_body));
         s_forceState = 0;
     }

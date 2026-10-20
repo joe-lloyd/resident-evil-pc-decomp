@@ -7,7 +7,7 @@
 // RE1_LAB_USER      Windows user that owns the desktop session (default: joell)
 // RE1_LAB_REPO_DIR  clone of this fork on that machine, with a `fork` remote (default: C:\Users\joell\Tools\re1-decomp)
 import { spawn, execFileSync, type ChildProcess } from 'node:child_process';
-import { rmSync } from 'node:fs';
+import { mkdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { GameLink } from './link.ts';
@@ -167,7 +167,7 @@ export function fetch(remotePath: string, localPath: string): void {
 export interface Session {
   link: GameLink;
   port: number;
-  end: () => void;
+  end: (stopGame?: boolean) => void;
 }
 
 /** Launch, tunnel and connect. Task Scheduler takes up to about 40 s to start the game. */
@@ -180,15 +180,50 @@ export async function open(port: number, extraArgs = ''): Promise<Session> {
     return {
       link,
       port,
-      end: () => {
+      end: (stopGame = true) => {
         link.close();
         ssh.kill();
-        stop(port);
+        if (stopGame) stop(port);
       },
     };
   } catch (err) {
     ssh.kill();
     stop(port);
     throw err;
+  }
+}
+
+/** Fetch every feedback entry from the configured save folder as one archive. */
+export function pullFeedback(localDir: string): void {
+  const feedbackGameDir = (process.env.RE1_LAB_GAME_DIR ?? 'D:\\Games\\RE1-files').replace(/'/g, "''");
+  const remote = powershell(String.raw`
+    $ErrorActionPreference = 'Stop'
+    $game = '${feedbackGameDir}'
+    $save = ''
+    $base = $game
+    $section = ''
+    foreach ($line in Get-Content (Join-Path $game 'config.ini')) {
+      if ($line -match '^\s*\[([^]]+)\]') { $section = $Matches[1] }
+      elseif ($line -match '^\s*Path\s*=\s*(.*?)\s*$') {
+        if ($section -eq 'Save') { $save = $Matches[1] }
+        if ($section -eq 'Assets' -and $Matches[1]) { $base = $Matches[1] }
+      }
+    }
+    if (-not [IO.Path]::IsPathRooted($base)) { $base = Join-Path $game $base }
+    if (-not $save) { $save = Join-Path $base 'SAVE' }
+    elseif (-not [IO.Path]::IsPathRooted($save)) { $save = Join-Path $game $save }
+    $archive = Join-Path $env:TEMP 're1-feedback-${process.pid}.tar'
+    tar -cf $archive -C $save feedback
+    if ($LASTEXITCODE -ne 0) { throw 'feedback archive failed' }
+    $archive
+  `).trim();
+  const archive = path.join(tmpdir(), `re1-feedback-${process.pid}.tar`);
+  mkdirSync(localDir, { recursive: true });
+  try {
+    fetch(remote, archive);
+    execFileSync('tar', ['xf', archive, '--strip-components=1', '-C', localDir]);
+  } finally {
+    rmSync(archive, { force: true });
+    remove(remote);
   }
 }

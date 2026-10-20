@@ -5,6 +5,7 @@
 //
 // This file is one of the few places allowed to include <windows.h> directly.
 #include "../platform.h"
+#include <time.h>
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -18,6 +19,31 @@
 // than pulled in through Globals.h: that header redefines OutputDebugStringA
 // (see the fail-fast note in src/DebugPrint.h) and would break plat_debug_output.
 extern DWORD g_CachedWaveOutVolume;
+
+// Port addition: feedback editor input, no original address.
+static BOOL s_textActive = FALSE;
+static unsigned char s_textQueue[256];
+static unsigned int s_textRead = 0, s_textWrite = 0;
+static unsigned char s_textSuppressed[256];
+
+BOOL plat_text_input_active(void) { return s_textActive; }
+BOOL plat_text_input_key(int vk, BOOL down)
+{
+    BOOL consumed = s_textActive || s_textSuppressed[vk & 255];
+    if (!down) s_textSuppressed[vk & 255] = 0;
+    return consumed;
+}
+void plat_text_input_event(int c)
+{
+    if (!s_textActive || c <= 0 || c > 126) return;
+    if (s_textWrite - s_textRead < sizeof(s_textQueue))
+        s_textQueue[s_textWrite++ % sizeof(s_textQueue)] = (unsigned char)c;
+}
+int plat_text_input_read(void)
+{
+    if (s_textRead == s_textWrite) return 0;
+    return s_textQueue[s_textRead++ % sizeof(s_textQueue)];
+}
 
 // ---------------------------------------------------------------------------
 // Keyboard
@@ -74,6 +100,12 @@ void plat_key_inject(int vk, BOOL down)
 
 int plat_key_state(int vk)
 {
+    const int physical = (int)GetAsyncKeyState(vk);
+    if (s_textActive) return 0;
+    if (s_textSuppressed[vk & 255]) {
+        if (!(physical & 0x8000)) s_textSuppressed[vk & 255] = 0;
+        return 0;
+    }
     if (s_injectExclusive) {
         return s_injected[vk & 0xFF] ? (int)0x8000 : 0;
     }
@@ -90,7 +122,7 @@ int plat_key_state(int vk)
             }
         }
     }
-    return (int)GetAsyncKeyState(vk);
+    return physical;
 }
 
 void plat_key_event(int keycode, BOOL down)
@@ -340,4 +372,23 @@ void plat_window_destroy(HWND window)
 void plat_cursor_show(BOOL show)
 {
     ShowCursor(show);
+}
+
+void plat_text_input(BOOL on)
+{
+    s_textActive = on;
+    s_textRead = s_textWrite = 0;
+    for (int vk = 0; vk < 256; vk++)
+        s_textSuppressed[vk] = (GetAsyncKeyState(vk) & 0x8000) ? 1 : 0;
+    plat_key_flush();
+}
+BOOL plat_mkdir_new(const char* path) { return CreateDirectoryA(path, NULL); }
+
+void plat_wall_time(char* iso, size_t isoSize, char* stamp, size_t stampSize)
+{
+    time_t now = time(NULL);
+    struct tm utc;
+    gmtime_s(&utc, &now);
+    strftime(iso, isoSize, "%Y-%m-%dT%H:%M:%SZ", &utc);
+    strftime(stamp, stampSize, "%Y%m%d-%H%M%S", &utc);
 }

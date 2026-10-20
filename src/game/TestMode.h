@@ -41,3 +41,7 @@ int  DevBoot_Begin(void);
 // The room a dev boot starts in, if the spec named one. InitializeGame uses it
 // in place of the new-game start room.
 int  DevBoot_StartRoom(int* stage, int* room);
+
+// Port addition: complete state JSON shared by the test link and feedback.
+// Valid until the next call, including a TestMode_Tick. NULL on overflow.
+const char* GameState_Json(void);

@@ -10,6 +10,7 @@
 // Original class: CMarniDirect3D at vtable 0x004af230, size 0x21DC
 // Original functions referenced by address in comments.
 
+#include "../game/Feedback.h"
 #include <cstdlib>                   // malloc/free - MSVC got this via <windows.h>
 #include "../platform/platform.h"
 #include "MarniSystem.h"
@@ -245,6 +246,7 @@ static int VTable_Present(void* self)
     CMarniDirect3D* pD3D = (CMarniDirect3D*)self;
     if (!pD3D || !pD3D->m_isInitialized) return 1;
     if (g_MarniBeforePresent) g_MarniBeforePresent();
+    Feedback_BeforePresent();
     pD3D->m_pDX->Present();
     return 1;
 }
