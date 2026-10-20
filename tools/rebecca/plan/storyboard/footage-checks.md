@@ -21,6 +21,8 @@ I extracted and viewed these frames from the original quarter videos. Times belo
 | 4 | 152 | Crash | The burning helicopter and Rebecca at the crash site |
 | 4 | 861 | Save room | Rebecca and Chris during the ending scene |
 
+The remaining visits use log-constrained background matches and were not all inspected by eye. Entries have half-second precision, and outdoor fades can shift a match by a few seconds. The door lead-in keeps those entrances inside the clips.
+
 Two initial checks did not show a room background. Quarter 1 at 1627 seconds showed the item menu during the workshop pickup. Quarter 2 at 68 seconds showed a dark door transition into the depot. Those samples do not count as confirmed room views.
 
 The mansion save room has no camera render to match. I inspected quarter 4 from 825 seconds onward, then again at half-second intervals from 842 seconds. At 844 seconds the ladder transition is still visible. The first room frame appears at 844.5 seconds. The explicit override keeps the entry thought and the complete ending before the capture's idle tail.
@@ -31,7 +33,7 @@ Quarter 2 and quarter 4 logs report a failed glitch check on checkpoint restore.
 
 ## Published checks
 
-The rebuilt [storyboard](https://home.arpa/research/rebecca-storyboard/) has 142 players with posters and `preload="none"`. The MP4 files total 288,724,724 bytes, or 275.35 MiB. All 142 MP4 URLs and 142 poster URLs return HTTP 200 with the expected MIME type. Full GET and byte-range GET checks pass for clips from every quarter. Range requests return HTTP 206 and the requested 1,024 bytes.
+The rebuilt [storyboard](https://home.arpa/research/rebecca-storyboard/) has 142 players with posters and `preload="none"`. The MP4 files total 286,780,117 bytes, or 273.49 MiB. All 142 MP4 URLs and 142 poster URLs return HTTP 200 with the expected MIME type. Full GET and byte-range GET checks pass for clips from every quarter. Range requests return HTTP 206 and the requested 1,024 bytes.
 
 I played and sought the cabin clip from quarter 1, tower top from quarter 2, gallery from quarter 3 and save room from quarter 4 in the published page. Every player reported 640 by 480, decoded frames, an advancing playback time and no media error. Changing scenes paused the previous player. The weather station's no-footage scene has no player.
 
@@ -42,3 +44,5 @@ The source checks pass: 27 plan, supply, enemy and storyboard tests, including 1
 ## Review correction
 
 The evidence review caught ridge intro frames in the first quarter 4 booth clip. The matcher had compared only rooms in the logged route, which omitted the boot intro. It now keeps the ridge render as a competing match. The regenerated booth clip starts at 29.967 seconds and its first room match is at 33 seconds. I viewed the first six seconds of the rebuilt clip. They show the door and then the booth, with no ridge footage. A source test protects that checked start. The same comparison refined several outdoor fades. Every other clip still starts before its earlier matched entry frame, so those changes retain the room entrances.
+
+The final duration check exposed millisecond rounding in packet-copy seeks. A rounded-down keyframe time could select the preceding GOP and add a second of lead-in. Seeking one millisecond past the stored time fixes that, and 46 affected clips were regenerated. All 142 published clips then loaded metadata in the browser at 640 by 480. Every duration differs from its manifest span by less than one second. The timestamped check includes the corrected booth clip.

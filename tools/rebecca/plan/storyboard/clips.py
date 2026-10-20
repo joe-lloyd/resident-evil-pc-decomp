@@ -144,14 +144,18 @@ def cut(args):
     total = 0
     for clip in manifest['clips']:
         target = args.publish / clip['file']
-        run('ffmpeg', '-y', '-v', 'error', '-ss', clip['start'], '-i', sources[clip['quarter']],
+        # Manifest milliseconds may round a 30 fps keyframe down. Seek just
+        # after that instant, or the demuxer can choose the previous GOP.
+        seek = f"{clip['start'] + .001:.6f}"
+        run('ffmpeg', '-y', '-v', 'error', '-ss', seek, '-i', sources[clip['quarter']],
             '-t', round(clip['end'] - clip['start'], 3), '-map', '0:v:0', '-c', 'copy',
             '-avoid_negative_ts', 'make_zero', '-movflags', '+faststart', target)
         run('ffmpeg', '-y', '-v', 'error', '-ss', clip['posterTime'], '-i', sources[clip['quarter']],
             '-frames:v', 1, '-q:v', 3, args.publish / clip['poster'])
         info = probe(target)
         stream = info['streams'][0]
-        if stream['codec_name'] != 'h264' or stream['width'] != 640 or float(info['format']['duration']) <= 0:
+        duration = float(info['format']['duration'])
+        if stream['codec_name'] != 'h264' or stream['width'] != 640 or duration <= 0 or abs(duration - (clip['end'] - clip['start'])) >= 1:
             raise ValueError(f"Invalid clip: {target}")
         total += target.stat().st_size
         print(f"{clip['file']}: {float(info['format']['duration']):.1f}s", flush=True)

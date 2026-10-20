@@ -84,7 +84,7 @@ scp tools/rebecca/plan/storyboard/clips.py tools/rebecca/plan/storyboard/clips.j
 ssh pi-server 'sudo -n python3 /tmp/rebecca-room-clips/clips.py cut /tmp/rebecca-room-clips/clips.json /opt/homelab/cert-setup/dashboard/research/rebecca-whole-day /opt/homelab/cert-setup/dashboard/research/rebecca-storyboard'
 ```
 
-The sources are already 640 by 480 H.264. Cutting copies their video packets without another lossy encode and moves each MP4 index to the front. Each clip starts on a source keyframe at least three seconds before the matched room entry. It ends when the next room first appears. This small overlap keeps the doors visible. The final packet of every source is truncated from recorder shutdown, so each quarter's last clip stops at a complete keyframe before the damaged tail. The omitted tail is idle footage after the last logged action.
+The sources are already 640 by 480 H.264. Cutting copies their video packets without another lossy encode and moves each MP4 index to the front. Each clip starts on a source keyframe at least three seconds before the matched room entry. The cutter seeks one millisecond past the stored start so a rounded timestamp cannot select the previous keyframe. It ends when the next room first appears. This small overlap keeps the doors visible. The final packet of every source is truncated from recorder shutdown, so each quarter's last clip stops at a complete keyframe before the damaged tail. The omitted tail is idle footage after the last logged action.
 
 Rebuild and publish the page with the commands above after updating `clips.json`. Publish without `--delete` so the generated page does not remove `clips/`. Video files and posters stay on the server and must not enter git.
 
@@ -94,7 +94,7 @@ The recording has 142 visits in 53 of the 58 rooms. Flume, line track, weather s
 
 Quarter 2 and quarter 4 logs finish with `FAIL` because the glitch watch flagged the checkpoint restore. They still reach their final goals. The source logs remain the authority for what happened. These recordings do not prove that every scene, animation or fight is correct.
 
-The clip check notes in `footage-checks.md` list the inspected frames and the room-entry check for the ending.
+The clip check notes in `footage-checks.md` list the inspected frames and the room-entry check for the ending. Other visits rely on automated matches constrained by the logs. Outdoor fades make exact boundaries uncertain by a few seconds, so clips keep a door lead-in.
 
 Check the published media through the owner's HTTPS route:
 
