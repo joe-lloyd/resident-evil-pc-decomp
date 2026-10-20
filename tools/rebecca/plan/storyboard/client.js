@@ -73,6 +73,7 @@
     const target = document.getElementById(id);
     const valid = target && (target.classList.contains('view') || target.classList.contains('scene'));
     const selected = valid ? target : document.querySelector('#flow');
+    for (const video of document.querySelectorAll('video')) if (!selected.contains(video)) video.pause();
     for (const el of document.querySelectorAll('.view,.scene')) el.hidden = el !== selected;
     for (const a of document.querySelectorAll('.views a')) {
       if (a.hash === `#${selected.id}`) a.setAttribute('aria-current', 'page');

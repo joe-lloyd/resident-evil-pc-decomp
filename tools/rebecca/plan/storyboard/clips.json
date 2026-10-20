@@ -1,0 +1,3646 @@
+{
+  "recorded": "2026-10-17",
+  "method": "Run logs, refined by 2 fps background matches",
+  "timing": "Wall-clock capture, scale 1, log offset -4 seconds. First sustained room match sets entry. Three-second door lead-in rounded back to a source keyframe. Final damaged packet excluded at the preceding complete keyframe.",
+  "quarters": [
+    {
+      "quarter": 1,
+      "log": "q1/log-1.txt",
+      "logSha256": "66ecaaefdcb9113e4778366fd2ee36218513b649bea5c7f89bc0ccc939f905c7",
+      "sourceVideo": "q1/reb-q1-1.mp4",
+      "video": "q1.mp4",
+      "sha256": "e3c03b010ed70689eac3cda8d914f2dd986f0164872d1fce75eb004e9f8cdd46",
+      "result": "PASS",
+      "failures": [],
+      "scale": 1,
+      "offset": -4,
+      "manualEntries": [],
+      "duration": 1634.533333
+    },
+    {
+      "quarter": 2,
+      "log": "q2/log-chain2.txt",
+      "logSha256": "269b6f2e5a565b69f5cb5dd2b2862d1b7b2925d85d67d93684fb7cadd60b67de",
+      "sourceVideo": "q2/reb-q2-chain2.mp4",
+      "video": "q2.mp4",
+      "sha256": "13b1f686a3504a024c1561d95e656da0db6f0d1f87233d0d6606255d50d2a7f7",
+      "result": "FAIL",
+      "failures": [
+        "glitch: workshop f1185: jumped 2071 units in 1 frames, (4760, 3995) to (3331, 5494)"
+      ],
+      "scale": 1,
+      "offset": -4,
+      "manualEntries": [],
+      "duration": 723.4
+    },
+    {
+      "quarter": 3,
+      "log": "q3/log-chain3.txt",
+      "logSha256": "6b69e74764cce69cd8937bac216bdeba922b347e05bc8cc9315f3c606b806f2d",
+      "sourceVideo": "q3/reb-q3-chain3.mp4",
+      "video": "q3.mp4",
+      "sha256": "d17b7978c919ca3868ba80b76205bdd23f2e5c27d94009d84ab40ea884c379de",
+      "result": "PASS",
+      "failures": [],
+      "scale": 1,
+      "offset": -4,
+      "manualEntries": [],
+      "duration": 888.633333
+    },
+    {
+      "quarter": 4,
+      "log": "q4/log-chain3.txt",
+      "logSha256": "77c726df18af95fd3b2207df0f48cec201d1e1811e6f29117467115f86ffdcb4",
+      "sourceVideo": "q4/reb-q4-chain3.mp4",
+      "video": "q4.mp4",
+      "sha256": "b183d22c858702f0cd3bd10ff07d96a55dd094d3e70b2551f73ba869f8717161",
+      "result": "FAIL",
+      "failures": [
+        "glitch: booth f1242: jumped 2565 units in 1 frames, (5185, 4930) to (3411, 3077)"
+      ],
+      "scale": 1,
+      "offset": -4,
+      "manualEntries": [
+        {
+          "room": "save",
+          "start": 844.5,
+          "poster": 861,
+          "note": "Original save room has no camera render. Entrance checked by eye at half-second intervals."
+        }
+      ],
+      "duration": 884.833333
+    }
+  ],
+  "clips": [
+    {
+      "room": "ridge",
+      "quarter": 1,
+      "visit": 1,
+      "start": 0.0,
+      "end": 26.5,
+      "roomStart": 0,
+      "posterTime": 25.0,
+      "file": "clips/ridge-q1-v01.mp4",
+      "poster": "clips/ridge-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 23,
+          "room": "ridge",
+          "what": "on the ridge"
+        }
+      ]
+    },
+    {
+      "room": "trail",
+      "quarter": 1,
+      "visit": 1,
+      "start": 23.5,
+      "end": 43.0,
+      "roomStart": 26.5,
+      "posterTime": 36.5,
+      "file": "clips/trail-q1-v01.mp4",
+      "poster": "clips/trail-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 34,
+          "room": "trail",
+          "what": "down the path to the trail"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 1,
+      "visit": 1,
+      "start": 39.767,
+      "end": 80.0,
+      "roomStart": 43.0,
+      "posterTime": 43.0,
+      "file": "clips/yard-q1-v01.mp4",
+      "poster": "clips/yard-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 48,
+          "room": "yard",
+          "what": "down to the ranger station"
+        },
+        {
+          "t": 48,
+          "room": "yard",
+          "what": "at the ranger station"
+        },
+        {
+          "t": 61,
+          "room": "yard",
+          "what": "the pine blocks the trail down"
+        },
+        {
+          "t": 70,
+          "room": "yard",
+          "what": "the winch has no crank"
+        }
+      ]
+    },
+    {
+      "room": "cabin",
+      "quarter": 1,
+      "visit": 1,
+      "start": 76.367,
+      "end": 132.0,
+      "roomStart": 80.0,
+      "posterTime": 80.0,
+      "file": "clips/cabin-q1-v01.mp4",
+      "poster": "clips/cabin-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 86,
+          "room": "cabin",
+          "what": "into the ranger's cabin"
+        },
+        {
+          "t": 101,
+          "room": "cabin",
+          "what": "listened to the radio"
+        },
+        {
+          "t": 108,
+          "room": "cabin",
+          "what": "took the logbook: the crank is in the shed"
+        },
+        {
+          "t": 118,
+          "room": "cabin",
+          "what": "took the First Aid Spray"
+        },
+        {
+          "t": 125,
+          "room": "cabin",
+          "what": "took the shed key"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 1,
+      "visit": 2,
+      "start": 128.1,
+      "end": 171.5,
+      "roomStart": 132.0,
+      "posterTime": 132.0,
+      "file": "clips/yard-q1-v02.mp4",
+      "poster": "clips/yard-q1-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 134,
+          "room": "yard",
+          "what": "out to the yard"
+        },
+        {
+          "t": 156,
+          "room": "yard",
+          "what": "killed the dog (2 shots)"
+        }
+      ]
+    },
+    {
+      "room": "shed",
+      "quarter": 1,
+      "visit": 1,
+      "start": 167.933,
+      "end": 194.5,
+      "roomStart": 171.5,
+      "posterTime": 179.5,
+      "file": "clips/shed-q1-v01.mp4",
+      "poster": "clips/shed-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 176,
+          "room": "shed",
+          "what": "unlocked the shed and went in"
+        },
+        {
+          "t": 186,
+          "room": "shed",
+          "what": "took the winch crank"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 1,
+      "visit": 3,
+      "start": 191.4,
+      "end": 216.5,
+      "roomStart": 194.5,
+      "posterTime": 200.0,
+      "file": "clips/yard-q1-v03.mp4",
+      "poster": "clips/yard-q1-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 196,
+          "room": "yard",
+          "what": "out of the shed"
+        },
+        {
+          "t": 211,
+          "room": "yard",
+          "what": "cranked the winch"
+        }
+      ]
+    },
+    {
+      "room": "bridge",
+      "quarter": 1,
+      "visit": 1,
+      "start": 212.533,
+      "end": 253.0,
+      "roomStart": 216.5,
+      "posterTime": 218.5,
+      "file": "clips/bridge-q1-v01.mp4",
+      "poster": "clips/bridge-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 223,
+          "room": "bridge",
+          "what": "down the trail past the pine"
+        },
+        {
+          "t": 231,
+          "room": "bridge",
+          "what": "on the bridge"
+        },
+        {
+          "t": 245,
+          "room": "bridge",
+          "what": "across the gorge: the valley trail sign"
+        },
+        {
+          "t": 248,
+          "room": "bridge",
+          "what": "goal: gondola-dead (visit in platform)"
+        }
+      ]
+    },
+    {
+      "room": "platform",
+      "quarter": 1,
+      "visit": 1,
+      "start": 249.4,
+      "end": 279.5,
+      "roomStart": 253.0,
+      "posterTime": 253.5,
+      "file": "clips/platform-q1-v01.mp4",
+      "poster": "clips/platform-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 258,
+          "room": "platform",
+          "what": "into platform"
+        },
+        {
+          "t": 260,
+          "room": "platform",
+          "what": "done: gondola-dead"
+        },
+        {
+          "t": 264,
+          "room": "platform",
+          "what": "goal: duty-board (look in booth)"
+        }
+      ]
+    },
+    {
+      "room": "booth",
+      "quarter": 1,
+      "visit": 1,
+      "start": 275.733,
+      "end": 350.0,
+      "roomStart": 279.5,
+      "posterTime": 288.5,
+      "file": "clips/booth-q1-v01.mp4",
+      "poster": "clips/booth-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 284,
+          "room": "booth",
+          "what": "into booth"
+        },
+        {
+          "t": 296,
+          "room": "booth",
+          "what": "done: duty-board"
+        },
+        {
+          "t": 300,
+          "room": "booth",
+          "what": "goal: hal-phone (look in booth)"
+        },
+        {
+          "t": 335,
+          "room": "booth",
+          "what": "done: hal-phone"
+        },
+        {
+          "t": 339,
+          "room": "booth",
+          "what": "goal: meet-partner (scene in woods)"
+        }
+      ]
+    },
+    {
+      "room": "platform",
+      "quarter": 1,
+      "visit": 2,
+      "start": 346.933,
+      "end": 363.5,
+      "roomStart": 350.0,
+      "posterTime": 350.0,
+      "file": "clips/platform-q1-v02.mp4",
+      "poster": "clips/platform-q1-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 352,
+          "room": "platform",
+          "what": "into platform"
+        }
+      ]
+    },
+    {
+      "room": "bridge",
+      "quarter": 1,
+      "visit": 2,
+      "start": 359.967,
+      "end": 380.0,
+      "roomStart": 363.5,
+      "posterTime": 368.0,
+      "file": "clips/bridge-q1-v02.mp4",
+      "poster": "clips/bridge-q1-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 366,
+          "room": "bridge",
+          "what": "into bridge"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 1,
+      "visit": 4,
+      "start": 376.667,
+      "end": 389.5,
+      "roomStart": 380.0,
+      "posterTime": 385.0,
+      "file": "clips/yard-q1-v04.mp4",
+      "poster": "clips/yard-q1-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 382,
+          "room": "yard",
+          "what": "into yard"
+        }
+      ]
+    },
+    {
+      "room": "woods",
+      "quarter": 1,
+      "visit": 1,
+      "start": 386.033,
+      "end": 420.0,
+      "roomStart": 389.5,
+      "posterTime": 393.0,
+      "file": "clips/woods-q1-v01.mp4",
+      "poster": "clips/woods-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 417,
+          "room": "woods",
+          "what": "into woods"
+        },
+        {
+          "t": 421,
+          "room": "woods",
+          "what": "done: meet-partner"
+        },
+        {
+          "t": 425,
+          "room": "woods",
+          "what": "goal: truck-keys (scene in den)"
+        }
+      ]
+    },
+    {
+      "room": "den",
+      "quarter": 1,
+      "visit": 1,
+      "start": 416.167,
+      "end": 462.0,
+      "roomStart": 420.0,
+      "posterTime": 429.0,
+      "file": "clips/den-q1-v01.mp4",
+      "poster": "clips/den-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 449,
+          "room": "den",
+          "what": "into den"
+        },
+        {
+          "t": 452,
+          "room": "den",
+          "what": "done: truck-keys"
+        },
+        {
+          "t": 456,
+          "room": "den",
+          "what": "goal: cutters (take in yard)"
+        },
+        {
+          "t": 456,
+          "room": "den",
+          "what": "bag full: to the item box to put away item 1"
+        }
+      ]
+    },
+    {
+      "room": "woods",
+      "quarter": 1,
+      "visit": 2,
+      "start": 458.567,
+      "end": 475.0,
+      "roomStart": 462.0,
+      "posterTime": 472.0,
+      "file": "clips/woods-q1-v02.mp4",
+      "poster": "clips/woods-q1-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 466,
+          "room": "woods",
+          "what": "into woods"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 1,
+      "visit": 5,
+      "start": 471.733,
+      "end": 489.0,
+      "roomStart": 475.0,
+      "posterTime": 475.5,
+      "file": "clips/yard-q1-v05.mp4",
+      "poster": "clips/yard-q1-v05.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 477,
+          "room": "yard",
+          "what": "into yard"
+        }
+      ]
+    },
+    {
+      "room": "cabin",
+      "quarter": 1,
+      "visit": 2,
+      "start": 485.167,
+      "end": 519.0,
+      "roomStart": 489.0,
+      "posterTime": 494.0,
+      "file": "clips/cabin-q1-v02.mp4",
+      "poster": "clips/cabin-q1-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 491,
+          "room": "cabin",
+          "what": "into lookout"
+        },
+        {
+          "t": 503,
+          "room": "cabin",
+          "what": "put item 1 in the box"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 1,
+      "visit": 6,
+      "start": 516.0,
+      "end": 542.0,
+      "roomStart": 519.0,
+      "posterTime": 526.5,
+      "file": "clips/yard-q1-v06.mp4",
+      "poster": "clips/yard-q1-v06.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 521,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 533,
+          "room": "yard",
+          "what": "done: cutters"
+        },
+        {
+          "t": 537,
+          "room": "yard",
+          "what": "goal: quarantine (take in logging-road)"
+        }
+      ]
+    },
+    {
+      "room": "woods",
+      "quarter": 1,
+      "visit": 3,
+      "start": 538.033,
+      "end": 602.5,
+      "roomStart": 542.0,
+      "posterTime": 545.5,
+      "file": "clips/woods-q1-v03.mp4",
+      "poster": "clips/woods-q1-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 547,
+          "room": "woods",
+          "what": "into woods"
+        }
+      ]
+    },
+    {
+      "room": "logging-road",
+      "quarter": 1,
+      "visit": 1,
+      "start": 598.967,
+      "end": 632.0,
+      "roomStart": 602.5,
+      "posterTime": 609.5,
+      "file": "clips/logging-road-q1-v01.mp4",
+      "poster": "clips/logging-road-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 606,
+          "room": "logging-road",
+          "what": "into logging-road"
+        },
+        {
+          "t": 617,
+          "room": "logging-road",
+          "what": "done: quarantine"
+        },
+        {
+          "t": 620,
+          "room": "logging-road",
+          "what": "goal: office-key (take in mess)"
+        },
+        {
+          "t": 620,
+          "room": "logging-road",
+          "what": "bag full: to the item box to put away item 65"
+        }
+      ]
+    },
+    {
+      "room": "woods",
+      "quarter": 1,
+      "visit": 4,
+      "start": 628.5,
+      "end": 652.0,
+      "roomStart": 632.0,
+      "posterTime": 634.0,
+      "file": "clips/woods-q1-v04.mp4",
+      "poster": "clips/woods-q1-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 636,
+          "room": "woods",
+          "what": "into woods"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 1,
+      "visit": 7,
+      "start": 648.2,
+      "end": 665.0,
+      "roomStart": 652.0,
+      "posterTime": 654.5,
+      "file": "clips/yard-q1-v07.mp4",
+      "poster": "clips/yard-q1-v07.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 654,
+          "room": "yard",
+          "what": "into yard"
+        }
+      ]
+    },
+    {
+      "room": "cabin",
+      "quarter": 1,
+      "visit": 3,
+      "start": 661.333,
+      "end": 695.5,
+      "roomStart": 665.0,
+      "posterTime": 671.0,
+      "file": "clips/cabin-q1-v03.mp4",
+      "poster": "clips/cabin-q1-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 667,
+          "room": "cabin",
+          "what": "into lookout"
+        },
+        {
+          "t": 680,
+          "room": "cabin",
+          "what": "put item 65 in the box"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 1,
+      "visit": 8,
+      "start": 692.4,
+      "end": 701.0,
+      "roomStart": 695.5,
+      "posterTime": 695.5,
+      "file": "clips/yard-q1-v08.mp4",
+      "poster": "clips/yard-q1-v08.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 697,
+          "room": "yard",
+          "what": "into yard"
+        }
+      ]
+    },
+    {
+      "room": "woods",
+      "quarter": 1,
+      "visit": 5,
+      "start": 697.2,
+      "end": 721.0,
+      "roomStart": 701.0,
+      "posterTime": 703.5,
+      "file": "clips/woods-q1-v05.mp4",
+      "poster": "clips/woods-q1-v05.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 706,
+          "room": "woods",
+          "what": "into woods"
+        }
+      ]
+    },
+    {
+      "room": "logging-road",
+      "quarter": 1,
+      "visit": 2,
+      "start": 717.733,
+      "end": 740.0,
+      "roomStart": 721.0,
+      "posterTime": 728.5,
+      "file": "clips/logging-road-q1-v02.mp4",
+      "poster": "clips/logging-road-q1-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 723,
+          "room": "logging-road",
+          "what": "into logging-road"
+        }
+      ]
+    },
+    {
+      "room": "camp-gate",
+      "quarter": 1,
+      "visit": 1,
+      "start": 736.8,
+      "end": 753.0,
+      "roomStart": 740.0,
+      "posterTime": 751.0,
+      "file": "clips/camp-gate-q1-v01.mp4",
+      "poster": "clips/camp-gate-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 743,
+          "room": "camp-gate",
+          "what": "into camp-gate"
+        }
+      ]
+    },
+    {
+      "room": "camp-yard",
+      "quarter": 1,
+      "visit": 1,
+      "start": 749.067,
+      "end": 782.0,
+      "roomStart": 753.0,
+      "posterTime": 768.0,
+      "file": "clips/camp-yard-q1-v01.mp4",
+      "poster": "clips/camp-yard-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 760,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        }
+      ]
+    },
+    {
+      "room": "mess",
+      "quarter": 1,
+      "visit": 1,
+      "start": 778.3,
+      "end": 923.5,
+      "roomStart": 782.0,
+      "posterTime": 782.0,
+      "file": "clips/mess-q1-v01.mp4",
+      "poster": "clips/mess-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 785,
+          "room": "mess",
+          "what": "into mess"
+        },
+        {
+          "t": 813,
+          "room": "mess",
+          "what": "done: office-key"
+        },
+        {
+          "t": 817,
+          "room": "mess",
+          "what": "goal: calendar (take in bunkhouse)"
+        },
+        {
+          "t": 841,
+          "room": "mess",
+          "what": "the way to camp-yard did not open"
+        },
+        {
+          "t": 842,
+          "room": "mess",
+          "what": "stuck on calendar: no way to bunkhouse"
+        },
+        {
+          "t": 845,
+          "room": "mess",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 847,
+          "room": "mess",
+          "what": "stuck on letters: no way to office"
+        },
+        {
+          "t": 849,
+          "room": "mess",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 851,
+          "room": "mess",
+          "what": "stuck on letters: no way to office"
+        },
+        {
+          "t": 854,
+          "room": "mess",
+          "what": "goal: calendar (take in bunkhouse)"
+        },
+        {
+          "t": 856,
+          "room": "mess",
+          "what": "stuck on calendar: no way to bunkhouse"
+        },
+        {
+          "t": 858,
+          "room": "mess",
+          "what": "goal: mill-race (event in pond)"
+        },
+        {
+          "t": 860,
+          "room": "mess",
+          "what": "stuck on mill-race: no way to pond"
+        },
+        {
+          "t": 863,
+          "room": "mess",
+          "what": "goal: mill-race (event in pond)"
+        },
+        {
+          "t": 864,
+          "room": "mess",
+          "what": "stuck on mill-race: no way to pond"
+        },
+        {
+          "t": 867,
+          "room": "mess",
+          "what": "trying again: calendar, letters, mill-race"
+        },
+        {
+          "t": 869,
+          "room": "mess",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 871,
+          "room": "mess",
+          "what": "stuck on letters: no way to office"
+        },
+        {
+          "t": 873,
+          "room": "mess",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 875,
+          "room": "mess",
+          "what": "stuck on letters: no way to office"
+        },
+        {
+          "t": 877,
+          "room": "mess",
+          "what": "goal: calendar (take in bunkhouse)"
+        },
+        {
+          "t": 879,
+          "room": "mess",
+          "what": "stuck on calendar: no way to bunkhouse"
+        },
+        {
+          "t": 882,
+          "room": "mess",
+          "what": "goal: calendar (take in bunkhouse)"
+        },
+        {
+          "t": 884,
+          "room": "mess",
+          "what": "stuck on calendar: no way to bunkhouse"
+        },
+        {
+          "t": 886,
+          "room": "mess",
+          "what": "goal: mill-race (event in pond)"
+        },
+        {
+          "t": 888,
+          "room": "mess",
+          "what": "stuck on mill-race: no way to pond"
+        },
+        {
+          "t": 891,
+          "room": "mess",
+          "what": "goal: mill-race (event in pond)"
+        },
+        {
+          "t": 893,
+          "room": "mess",
+          "what": "stuck on mill-race: no way to pond"
+        },
+        {
+          "t": 895,
+          "room": "mess",
+          "what": "trying again: letters, calendar, mill-race"
+        },
+        {
+          "t": 897,
+          "room": "mess",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 899,
+          "room": "mess",
+          "what": "stuck on letters: no way to office"
+        },
+        {
+          "t": 902,
+          "room": "mess",
+          "what": "goal: calendar (take in bunkhouse)"
+        }
+      ]
+    },
+    {
+      "room": "camp-yard",
+      "quarter": 1,
+      "visit": 2,
+      "start": 919.967,
+      "end": 959.5,
+      "roomStart": 923.5,
+      "posterTime": 924.0,
+      "file": "clips/camp-yard-q1-v02.mp4",
+      "poster": "clips/camp-yard-q1-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 926,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        }
+      ]
+    },
+    {
+      "room": "bunkhouse",
+      "quarter": 1,
+      "visit": 1,
+      "start": 956.433,
+      "end": 999.0,
+      "roomStart": 959.5,
+      "posterTime": 969.5,
+      "file": "clips/bunkhouse-q1-v01.mp4",
+      "poster": "clips/bunkhouse-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 963,
+          "room": "bunkhouse",
+          "what": "into bunkhouse"
+        },
+        {
+          "t": 972,
+          "room": "bunkhouse",
+          "what": "done: calendar"
+        },
+        {
+          "t": 976,
+          "room": "bunkhouse",
+          "what": "goal: safe (take in office)"
+        },
+        {
+          "t": 976,
+          "room": "bunkhouse",
+          "what": "bag full: to the item box to put away item 30"
+        }
+      ]
+    },
+    {
+      "room": "camp-yard",
+      "quarter": 1,
+      "visit": 3,
+      "start": 995.2,
+      "end": 1022.5,
+      "roomStart": 999.0,
+      "posterTime": 1007.5,
+      "file": "clips/camp-yard-q1-v03.mp4",
+      "poster": "clips/camp-yard-q1-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 1001,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        }
+      ]
+    },
+    {
+      "room": "office",
+      "quarter": 1,
+      "visit": 1,
+      "start": 1018.733,
+      "end": 1086.5,
+      "roomStart": 1022.5,
+      "posterTime": 1022.5,
+      "file": "clips/office-q1-v01.mp4",
+      "poster": "clips/office-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 1026,
+          "room": "office",
+          "what": "into office"
+        },
+        {
+          "t": 1036,
+          "room": "office",
+          "what": "put item 30 in the box"
+        },
+        {
+          "t": 1048,
+          "room": "office",
+          "what": "done: safe"
+        },
+        {
+          "t": 1052,
+          "room": "office",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 1062,
+          "room": "office",
+          "what": "done: letters"
+        },
+        {
+          "t": 1066,
+          "room": "office",
+          "what": "goal: mill-race (event in pond)"
+        },
+        {
+          "t": 1066,
+          "room": "office",
+          "what": "to the item box for item 30"
+        },
+        {
+          "t": 1077,
+          "room": "office",
+          "what": "took item 30 from the box"
+        }
+      ]
+    },
+    {
+      "room": "camp-yard",
+      "quarter": 1,
+      "visit": 4,
+      "start": 1083.433,
+      "end": 1102.5,
+      "roomStart": 1086.5,
+      "posterTime": 1087.0,
+      "file": "clips/camp-yard-q1-v04.mp4",
+      "poster": "clips/camp-yard-q1-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 1088,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        }
+      ]
+    },
+    {
+      "room": "sawmill",
+      "quarter": 1,
+      "visit": 1,
+      "start": 1098.733,
+      "end": 1163.0,
+      "roomStart": 1102.5,
+      "posterTime": 1102.5,
+      "file": "clips/sawmill-q1-v01.mp4",
+      "poster": "clips/sawmill-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 1106,
+          "room": "sawmill",
+          "what": "into sawmill"
+        }
+      ]
+    },
+    {
+      "room": "pond",
+      "quarter": 1,
+      "visit": 1,
+      "start": 1159.367,
+      "end": 1200.0,
+      "roomStart": 1163.0,
+      "posterTime": 1175.0,
+      "file": "clips/pond-q1-v01.mp4",
+      "poster": "clips/pond-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 1167,
+          "room": "pond",
+          "what": "into pond"
+        },
+        {
+          "t": 1186,
+          "room": "pond",
+          "what": "done: mill-race"
+        },
+        {
+          "t": 1190,
+          "room": "pond",
+          "what": "goal: crane (event in sawmill)"
+        }
+      ]
+    },
+    {
+      "room": "sawmill",
+      "quarter": 1,
+      "visit": 2,
+      "start": 1196.1,
+      "end": 1562.0,
+      "roomStart": 1200.0,
+      "posterTime": 1200.0,
+      "file": "clips/sawmill-q1-v02.mp4",
+      "poster": "clips/sawmill-q1-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 1202,
+          "room": "sawmill",
+          "what": "into sawmill"
+        },
+        {
+          "t": 1344,
+          "room": "sawmill",
+          "what": "could not reach the clip: could not face 1904"
+        },
+        {
+          "t": 1482,
+          "room": "sawmill",
+          "what": "stuck on crane: could not face 3137"
+        },
+        {
+          "t": 1487,
+          "room": "sawmill",
+          "what": "goal: crane (event in sawmill)"
+        },
+        {
+          "t": 1527,
+          "room": "sawmill",
+          "what": "stuck on crane: could not face 3170"
+        },
+        {
+          "t": 1530,
+          "room": "sawmill",
+          "what": "trying again: letters, crane"
+        },
+        {
+          "t": 1531,
+          "room": "sawmill",
+          "what": "goal: crane (event in sawmill)"
+        },
+        {
+          "t": 1547,
+          "room": "sawmill",
+          "what": "done: crane"
+        },
+        {
+          "t": 1551,
+          "room": "sawmill",
+          "what": "goal: cog (take in workshop)"
+        }
+      ]
+    },
+    {
+      "room": "camp-yard",
+      "quarter": 1,
+      "visit": 5,
+      "start": 1558.267,
+      "end": 1585.0,
+      "roomStart": 1562.0,
+      "posterTime": 1568.0,
+      "file": "clips/camp-yard-q1-v05.mp4",
+      "poster": "clips/camp-yard-q1-v05.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 1564,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        }
+      ]
+    },
+    {
+      "room": "workshop",
+      "quarter": 1,
+      "visit": 1,
+      "start": 1581.333,
+      "end": 1633.5,
+      "roomStart": 1585.0,
+      "posterTime": 1596.0,
+      "file": "clips/workshop-q1-v01.mp4",
+      "poster": "clips/workshop-q1-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 1589,
+          "room": "workshop",
+          "what": "into workshop"
+        },
+        {
+          "t": 1617,
+          "room": "workshop",
+          "what": "could not take the clip here"
+        },
+        {
+          "t": 1631,
+          "room": "workshop",
+          "what": "done: cog"
+        },
+        {
+          "t": 1637,
+          "room": "workshop",
+          "what": "quarter 1 done: its end saved for the next quarter"
+        }
+      ]
+    },
+    {
+      "room": "workshop",
+      "quarter": 2,
+      "visit": 2,
+      "start": 28.833,
+      "end": 49.0,
+      "roomStart": 32.0,
+      "posterTime": 38.5,
+      "file": "clips/workshop-q2-v02.mp4",
+      "poster": "clips/workshop-q2-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 36,
+          "room": "workshop",
+          "what": "quarter 2: starting from /tmp/rebplan/quarters/snaps/q1-end.json"
+        },
+        {
+          "t": 38,
+          "room": "workshop",
+          "what": "goal: cut-depot (unlock in camp-yard)"
+        }
+      ]
+    },
+    {
+      "room": "camp-yard",
+      "quarter": 2,
+      "visit": 6,
+      "start": 45.4,
+      "end": 68.5,
+      "roomStart": 49.0,
+      "posterTime": 58.5,
+      "file": "clips/camp-yard-q2-v06.mp4",
+      "poster": "clips/camp-yard-q2-v06.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 51,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        }
+      ]
+    },
+    {
+      "room": "depot",
+      "quarter": 2,
+      "visit": 1,
+      "start": 64.633,
+      "end": 79.0,
+      "roomStart": 68.5,
+      "posterTime": 77.0,
+      "file": "clips/depot-q2-v01.mp4",
+      "poster": "clips/depot-q2-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 72,
+          "room": "depot",
+          "what": "into depot"
+        },
+        {
+          "t": 72,
+          "room": "depot",
+          "what": "done: cut-depot"
+        },
+        {
+          "t": 76,
+          "room": "depot",
+          "what": "goal: cut-chain (unlock in road)"
+        }
+      ]
+    },
+    {
+      "room": "camp-yard",
+      "quarter": 2,
+      "visit": 7,
+      "start": 75.067,
+      "end": 94.0,
+      "roomStart": 79.0,
+      "posterTime": 81.5,
+      "file": "clips/camp-yard-q2-v07.mp4",
+      "poster": "clips/camp-yard-q2-v07.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 84,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        }
+      ]
+    },
+    {
+      "room": "camp-gate",
+      "quarter": 2,
+      "visit": 2,
+      "start": 90.133,
+      "end": 108.5,
+      "roomStart": 94.0,
+      "posterTime": 94.0,
+      "file": "clips/camp-gate-q2-v02.mp4",
+      "poster": "clips/camp-gate-q2-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 96,
+          "room": "camp-gate",
+          "what": "into camp-gate"
+        }
+      ]
+    },
+    {
+      "room": "logging-road",
+      "quarter": 2,
+      "visit": 3,
+      "start": 104.7,
+      "end": 118.0,
+      "roomStart": 108.5,
+      "posterTime": 113.5,
+      "file": "clips/logging-road-q2-v03.mp4",
+      "poster": "clips/logging-road-q2-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 111,
+          "room": "logging-road",
+          "what": "into logging-road"
+        }
+      ]
+    },
+    {
+      "room": "woods",
+      "quarter": 2,
+      "visit": 6,
+      "start": 114.833,
+      "end": 136.0,
+      "roomStart": 118.0,
+      "posterTime": 126.0,
+      "file": "clips/woods-q2-v06.mp4",
+      "poster": "clips/woods-q2-v06.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 122,
+          "room": "woods",
+          "what": "into woods"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 2,
+      "visit": 9,
+      "start": 132.367,
+      "end": 157.5,
+      "roomStart": 136.0,
+      "posterTime": 138.0,
+      "file": "clips/yard-q2-v09.mp4",
+      "poster": "clips/yard-q2-v09.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 140,
+          "room": "yard",
+          "what": "into yard"
+        }
+      ]
+    },
+    {
+      "room": "road",
+      "quarter": 2,
+      "visit": 1,
+      "start": 153.8,
+      "end": 176.0,
+      "roomStart": 157.5,
+      "posterTime": 164.5,
+      "file": "clips/road-q2-v01.mp4",
+      "poster": "clips/road-q2-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 162,
+          "room": "road",
+          "what": "into road"
+        }
+      ]
+    },
+    {
+      "room": "washout",
+      "quarter": 2,
+      "visit": 1,
+      "start": 172.1,
+      "end": 199.0,
+      "roomStart": 176.0,
+      "posterTime": 176.5,
+      "file": "clips/washout-q2-v01.mp4",
+      "poster": "clips/washout-q2-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 180,
+          "room": "washout",
+          "what": "into washout"
+        },
+        {
+          "t": 180,
+          "room": "washout",
+          "what": "done: cut-chain"
+        },
+        {
+          "t": 184,
+          "room": "washout",
+          "what": "goal: tower-door (unlock in tower-foot)"
+        }
+      ]
+    },
+    {
+      "room": "tower-foot",
+      "quarter": 2,
+      "visit": 1,
+      "start": 195.7,
+      "end": 226.5,
+      "roomStart": 199.0,
+      "posterTime": 211.0,
+      "file": "clips/tower-foot-q2-v01.mp4",
+      "poster": "clips/tower-foot-q2-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 203,
+          "room": "tower-foot",
+          "what": "into tower-foot"
+        }
+      ]
+    },
+    {
+      "room": "tower-stairs",
+      "quarter": 2,
+      "visit": 1,
+      "start": 223.1,
+      "end": 247.0,
+      "roomStart": 226.5,
+      "posterTime": 226.5,
+      "file": "clips/tower-stairs-q2-v01.mp4",
+      "poster": "clips/tower-stairs-q2-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 231,
+          "room": "tower-stairs",
+          "what": "into tower-stairs"
+        },
+        {
+          "t": 231,
+          "room": "tower-stairs",
+          "what": "done: tower-door"
+        },
+        {
+          "t": 235,
+          "room": "tower-stairs",
+          "what": "goal: tower-view (scene in tower-top)"
+        }
+      ]
+    },
+    {
+      "room": "tower-top",
+      "quarter": 2,
+      "visit": 1,
+      "start": 243.367,
+      "end": 343.0,
+      "roomStart": 247.0,
+      "posterTime": 255.0,
+      "file": "clips/tower-top-q2-v01.mp4",
+      "poster": "clips/tower-top-q2-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 257,
+          "room": "tower-top",
+          "what": "into tower-top"
+        },
+        {
+          "t": 276,
+          "room": "tower-top",
+          "what": "took a clip (16 rounds before)"
+        },
+        {
+          "t": 280,
+          "room": "tower-top",
+          "what": "done: tower-view"
+        },
+        {
+          "t": 284,
+          "room": "tower-top",
+          "what": "goal: switch-key (take in tower-top)"
+        },
+        {
+          "t": 310,
+          "room": "tower-top",
+          "what": "done: switch-key"
+        },
+        {
+          "t": 314,
+          "room": "tower-top",
+          "what": "goal: walt-log (take in tower-top)"
+        },
+        {
+          "t": 324,
+          "room": "tower-top",
+          "what": "done: walt-log"
+        },
+        {
+          "t": 328,
+          "room": "tower-top",
+          "what": "goal: jerrycan (take in shed)"
+        }
+      ]
+    },
+    {
+      "room": "tower-stairs",
+      "quarter": 2,
+      "visit": 2,
+      "start": 339.1,
+      "end": 356.0,
+      "roomStart": 343.0,
+      "posterTime": 343.0,
+      "file": "clips/tower-stairs-q2-v02.mp4",
+      "poster": "clips/tower-stairs-q2-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 345,
+          "room": "tower-stairs",
+          "what": "into tower-stairs"
+        }
+      ]
+    },
+    {
+      "room": "tower-foot",
+      "quarter": 2,
+      "visit": 2,
+      "start": 352.333,
+      "end": 365.0,
+      "roomStart": 356.0,
+      "posterTime": 356.0,
+      "file": "clips/tower-foot-q2-v02.mp4",
+      "poster": "clips/tower-foot-q2-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 358,
+          "room": "tower-foot",
+          "what": "into tower-foot"
+        }
+      ]
+    },
+    {
+      "room": "washout",
+      "quarter": 2,
+      "visit": 2,
+      "start": 361.067,
+      "end": 385.0,
+      "roomStart": 365.0,
+      "posterTime": 372.5,
+      "file": "clips/washout-q2-v02.mp4",
+      "poster": "clips/washout-q2-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 370,
+          "room": "washout",
+          "what": "into washout"
+        }
+      ]
+    },
+    {
+      "room": "road",
+      "quarter": 2,
+      "visit": 2,
+      "start": 382.0,
+      "end": 396.0,
+      "roomStart": 385.0,
+      "posterTime": 393.5,
+      "file": "clips/road-q2-v02.mp4",
+      "poster": "clips/road-q2-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 388,
+          "room": "road",
+          "what": "into road"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 2,
+      "visit": 10,
+      "start": 392.7,
+      "end": 411.5,
+      "roomStart": 396.0,
+      "posterTime": 398.5,
+      "file": "clips/yard-q2-v10.mp4",
+      "poster": "clips/yard-q2-v10.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 401,
+          "room": "yard",
+          "what": "into yard"
+        }
+      ]
+    },
+    {
+      "room": "shed",
+      "quarter": 2,
+      "visit": 2,
+      "start": 407.6,
+      "end": 434.0,
+      "roomStart": 411.5,
+      "posterTime": 420.5,
+      "file": "clips/shed-q2-v02.mp4",
+      "poster": "clips/shed-q2-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 413,
+          "room": "shed",
+          "what": "into shed"
+        },
+        {
+          "t": 422,
+          "room": "shed",
+          "what": "done: jerrycan"
+        },
+        {
+          "t": 426,
+          "room": "shed",
+          "what": "goal: fuel (event in depot)"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 2,
+      "visit": 11,
+      "start": 430.067,
+      "end": 441.5,
+      "roomStart": 434.0,
+      "posterTime": 434.0,
+      "file": "clips/yard-q2-v11.mp4",
+      "poster": "clips/yard-q2-v11.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 436,
+          "room": "yard",
+          "what": "into yard"
+        }
+      ]
+    },
+    {
+      "room": "woods",
+      "quarter": 2,
+      "visit": 7,
+      "start": 437.767,
+      "end": 464.5,
+      "roomStart": 441.5,
+      "posterTime": 448.0,
+      "file": "clips/woods-q2-v07.mp4",
+      "poster": "clips/woods-q2-v07.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 446,
+          "room": "woods",
+          "what": "into woods"
+        }
+      ]
+    },
+    {
+      "room": "logging-road",
+      "quarter": 2,
+      "visit": 4,
+      "start": 460.8,
+      "end": 483.5,
+      "roomStart": 464.5,
+      "posterTime": 473.5,
+      "file": "clips/logging-road-q2-v04.mp4",
+      "poster": "clips/logging-road-q2-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 467,
+          "room": "logging-road",
+          "what": "into logging-road"
+        }
+      ]
+    },
+    {
+      "room": "camp-gate",
+      "quarter": 2,
+      "visit": 3,
+      "start": 480.167,
+      "end": 495.0,
+      "roomStart": 483.5,
+      "posterTime": 493.5,
+      "file": "clips/camp-gate-q2-v03.mp4",
+      "poster": "clips/camp-gate-q2-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 486,
+          "room": "camp-gate",
+          "what": "into camp-gate"
+        }
+      ]
+    },
+    {
+      "room": "camp-yard",
+      "quarter": 2,
+      "visit": 8,
+      "start": 491.833,
+      "end": 506.0,
+      "roomStart": 495.0,
+      "posterTime": 497.5,
+      "file": "clips/camp-yard-q2-v08.mp4",
+      "poster": "clips/camp-yard-q2-v08.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 500,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        }
+      ]
+    },
+    {
+      "room": "depot",
+      "quarter": 2,
+      "visit": 2,
+      "start": 502.6,
+      "end": 548.5,
+      "roomStart": 506.0,
+      "posterTime": 506.0,
+      "file": "clips/depot-q2-v02.mp4",
+      "poster": "clips/depot-q2-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 509,
+          "room": "depot",
+          "what": "into depot"
+        },
+        {
+          "t": 526,
+          "room": "depot",
+          "what": "done: fuel"
+        },
+        {
+          "t": 529,
+          "room": "depot",
+          "what": "goal: diesel (take in depot)"
+        },
+        {
+          "t": 541,
+          "room": "depot",
+          "what": "done: diesel"
+        },
+        {
+          "t": 544,
+          "room": "depot",
+          "what": "goal: generator-on (event in generator)"
+        }
+      ]
+    },
+    {
+      "room": "camp-yard",
+      "quarter": 2,
+      "visit": 9,
+      "start": 545.5,
+      "end": 563.0,
+      "roomStart": 548.5,
+      "posterTime": 559.5,
+      "file": "clips/camp-yard-q2-v09.mp4",
+      "poster": "clips/camp-yard-q2-v09.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 553,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        }
+      ]
+    },
+    {
+      "room": "camp-gate",
+      "quarter": 2,
+      "visit": 4,
+      "start": 559.267,
+      "end": 577.5,
+      "roomStart": 563.0,
+      "posterTime": 567.5,
+      "file": "clips/camp-gate-q2-v04.mp4",
+      "poster": "clips/camp-gate-q2-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 565,
+          "room": "camp-gate",
+          "what": "into camp-gate"
+        }
+      ]
+    },
+    {
+      "room": "logging-road",
+      "quarter": 2,
+      "visit": 5,
+      "start": 573.533,
+      "end": 586.0,
+      "roomStart": 577.5,
+      "posterTime": 585.0,
+      "file": "clips/logging-road-q2-v05.mp4",
+      "poster": "clips/logging-road-q2-v05.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 580,
+          "room": "logging-road",
+          "what": "into logging-road"
+        }
+      ]
+    },
+    {
+      "room": "woods",
+      "quarter": 2,
+      "visit": 8,
+      "start": 582.467,
+      "end": 605.0,
+      "roomStart": 586.0,
+      "posterTime": 588.5,
+      "file": "clips/woods-q2-v08.mp4",
+      "poster": "clips/woods-q2-v08.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 591,
+          "room": "woods",
+          "what": "into woods"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 2,
+      "visit": 12,
+      "start": 602.0,
+      "end": 626.5,
+      "roomStart": 605.0,
+      "posterTime": 611.0,
+      "file": "clips/yard-q2-v12.mp4",
+      "poster": "clips/yard-q2-v12.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 609,
+          "room": "yard",
+          "what": "into yard"
+        }
+      ]
+    },
+    {
+      "room": "road",
+      "quarter": 2,
+      "visit": 3,
+      "start": 622.9,
+      "end": 641.5,
+      "roomStart": 626.5,
+      "posterTime": 632.0,
+      "file": "clips/road-q2-v03.mp4",
+      "poster": "clips/road-q2-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 629,
+          "room": "road",
+          "what": "into road"
+        }
+      ]
+    },
+    {
+      "room": "washout",
+      "quarter": 2,
+      "visit": 3,
+      "start": 638.467,
+      "end": 666.0,
+      "roomStart": 641.5,
+      "posterTime": 641.5,
+      "file": "clips/washout-q2-v03.mp4",
+      "poster": "clips/washout-q2-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 644,
+          "room": "washout",
+          "what": "into washout"
+        }
+      ]
+    },
+    {
+      "room": "generator",
+      "quarter": 2,
+      "visit": 1,
+      "start": 662.067,
+      "end": 709.0,
+      "roomStart": 666.0,
+      "posterTime": 672.5,
+      "file": "clips/generator-q2-v01.mp4",
+      "poster": "clips/generator-q2-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 670,
+          "room": "generator",
+          "what": "into generator"
+        },
+        {
+          "t": 686,
+          "room": "generator",
+          "what": "done: generator-on"
+        },
+        {
+          "t": 690,
+          "room": "generator",
+          "what": "goal: line-on (event in switch)"
+        }
+      ]
+    },
+    {
+      "room": "switch",
+      "quarter": 2,
+      "visit": 1,
+      "start": 705.967,
+      "end": 722.367,
+      "roomStart": 709.0,
+      "posterTime": 713.5,
+      "file": "clips/switch-q2-v01.mp4",
+      "poster": "clips/switch-q2-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 712,
+          "room": "switch",
+          "what": "into switch"
+        },
+        {
+          "t": 720,
+          "room": "switch",
+          "what": "done: line-on"
+        },
+        {
+          "t": 726,
+          "room": "switch",
+          "what": "quarter 2 done: its end saved for the next quarter"
+        }
+      ]
+    },
+    {
+      "room": "switch",
+      "quarter": 3,
+      "visit": 2,
+      "start": 28.233,
+      "end": 75.5,
+      "roomStart": 32.0,
+      "posterTime": 32.0,
+      "file": "clips/switch-q3-v02.mp4",
+      "poster": "clips/switch-q3-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 36,
+          "room": "switch",
+          "what": "quarter 3: starting from /tmp/rebplan/quarters/snaps/q2-end.json"
+        },
+        {
+          "t": 38,
+          "room": "switch",
+          "what": "goal: fit-cog (event in platform)"
+        },
+        {
+          "t": 66,
+          "room": "switch",
+          "what": "the way to line-track did not open"
+        }
+      ]
+    },
+    {
+      "room": "generator",
+      "quarter": 3,
+      "visit": 2,
+      "start": 71.633,
+      "end": 88.0,
+      "roomStart": 75.5,
+      "posterTime": 79.0,
+      "file": "clips/generator-q3-v02.mp4",
+      "poster": "clips/generator-q3-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 77,
+          "room": "generator",
+          "what": "into generator"
+        }
+      ]
+    },
+    {
+      "room": "washout",
+      "quarter": 3,
+      "visit": 4,
+      "start": 84.133,
+      "end": 107.0,
+      "roomStart": 88.0,
+      "posterTime": 88.5,
+      "file": "clips/washout-q3-v04.mp4",
+      "poster": "clips/washout-q3-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 90,
+          "room": "washout",
+          "what": "into washout"
+        }
+      ]
+    },
+    {
+      "room": "road",
+      "quarter": 3,
+      "visit": 4,
+      "start": 103.5,
+      "end": 117.0,
+      "roomStart": 107.0,
+      "posterTime": 114.0,
+      "file": "clips/road-q3-v04.mp4",
+      "poster": "clips/road-q3-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 109,
+          "room": "road",
+          "what": "into road"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 3,
+      "visit": 13,
+      "start": 113.333,
+      "end": 135.5,
+      "roomStart": 117.0,
+      "posterTime": 127.5,
+      "file": "clips/yard-q3-v13.mp4",
+      "poster": "clips/yard-q3-v13.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 122,
+          "room": "yard",
+          "what": "into yard"
+        }
+      ]
+    },
+    {
+      "room": "bridge",
+      "quarter": 3,
+      "visit": 3,
+      "start": 132.267,
+      "end": 152.0,
+      "roomStart": 135.5,
+      "posterTime": 146.0,
+      "file": "clips/bridge-q3-v03.mp4",
+      "poster": "clips/bridge-q3-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 138,
+          "room": "bridge",
+          "what": "into bridge"
+        }
+      ]
+    },
+    {
+      "room": "platform",
+      "quarter": 3,
+      "visit": 3,
+      "start": 148.667,
+      "end": 189.0,
+      "roomStart": 152.0,
+      "posterTime": 152.0,
+      "file": "clips/platform-q3-v03.mp4",
+      "poster": "clips/platform-q3-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 154,
+          "room": "platform",
+          "what": "into platform"
+        },
+        {
+          "t": 172,
+          "room": "platform",
+          "what": "done: fit-cog"
+        },
+        {
+          "t": 176,
+          "room": "platform",
+          "what": "goal: quarry-key (take in cottage)"
+        }
+      ]
+    },
+    {
+      "room": "east-path",
+      "quarter": 3,
+      "visit": 1,
+      "start": 185.333,
+      "end": 203.0,
+      "roomStart": 189.0,
+      "posterTime": 199.5,
+      "file": "clips/east-path-q3-v01.mp4",
+      "poster": "clips/east-path-q3-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 195,
+          "room": "east-path",
+          "what": "into east-path"
+        }
+      ]
+    },
+    {
+      "room": "cottage",
+      "quarter": 3,
+      "visit": 1,
+      "start": 199.867,
+      "end": 253.5,
+      "roomStart": 203.0,
+      "posterTime": 207.5,
+      "file": "clips/cottage-q3-v01.mp4",
+      "poster": "clips/cottage-q3-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 211,
+          "room": "cottage",
+          "what": "into cottage"
+        },
+        {
+          "t": 220,
+          "room": "cottage",
+          "what": "done: quarry-key"
+        },
+        {
+          "t": 224,
+          "room": "cottage",
+          "what": "goal: diary (take in cottage)"
+        },
+        {
+          "t": 237,
+          "room": "cottage",
+          "what": "done: diary"
+        },
+        {
+          "t": 240,
+          "room": "cottage",
+          "what": "goal: rosters (take in quarry-office)"
+        }
+      ]
+    },
+    {
+      "room": "east-path",
+      "quarter": 3,
+      "visit": 2,
+      "start": 249.733,
+      "end": 272.0,
+      "roomStart": 253.5,
+      "posterTime": 260.0,
+      "file": "clips/east-path-q3-v02.mp4",
+      "poster": "clips/east-path-q3-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 255,
+          "room": "east-path",
+          "what": "into east-path"
+        }
+      ]
+    },
+    {
+      "room": "quarry",
+      "quarter": 3,
+      "visit": 1,
+      "start": 268.133,
+      "end": 283.5,
+      "roomStart": 272.0,
+      "posterTime": 272.0,
+      "file": "clips/quarry-q3-v01.mp4",
+      "poster": "clips/quarry-q3-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 270,
+          "room": "quarry",
+          "what": "into quarry"
+        }
+      ]
+    },
+    {
+      "room": "quarry-office",
+      "quarter": 3,
+      "visit": 1,
+      "start": 280.267,
+      "end": 329.0,
+      "roomStart": 283.5,
+      "posterTime": 297.5,
+      "file": "clips/quarry-office-q3-v01.mp4",
+      "poster": "clips/quarry-office-q3-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 291,
+          "room": "quarry-office",
+          "what": "into quarry-office"
+        },
+        {
+          "t": 299,
+          "room": "quarry-office",
+          "what": "done: rosters"
+        },
+        {
+          "t": 303,
+          "room": "quarry-office",
+          "what": "goal: dynamite (take in quarry-office)"
+        },
+        {
+          "t": 314,
+          "room": "quarry-office",
+          "what": "done: dynamite"
+        },
+        {
+          "t": 318,
+          "room": "quarry-office",
+          "what": "goal: blast (event in mine-entrance)"
+        }
+      ]
+    },
+    {
+      "room": "quarry",
+      "quarter": 3,
+      "visit": 2,
+      "start": 325.167,
+      "end": 347.0,
+      "roomStart": 329.0,
+      "posterTime": 329.0,
+      "file": "clips/quarry-q3-v02.mp4",
+      "poster": "clips/quarry-q3-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 331,
+          "room": "quarry",
+          "what": "into quarry"
+        }
+      ]
+    },
+    {
+      "room": "mine-entrance",
+      "quarter": 3,
+      "visit": 1,
+      "start": 343.467,
+      "end": 379.5,
+      "roomStart": 347.0,
+      "posterTime": 353.5,
+      "file": "clips/mine-entrance-q3-v01.mp4",
+      "poster": "clips/mine-entrance-q3-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 350,
+          "room": "mine-entrance",
+          "what": "into mine-entrance"
+        },
+        {
+          "t": 370,
+          "room": "mine-entrance",
+          "what": "done: blast"
+        },
+        {
+          "t": 373,
+          "room": "mine-entrance",
+          "what": "goal: mine-map (take in mine-office)"
+        }
+      ]
+    },
+    {
+      "room": "tunnel",
+      "quarter": 3,
+      "visit": 1,
+      "start": 375.767,
+      "end": 406.5,
+      "roomStart": 379.5,
+      "posterTime": 396.0,
+      "file": "clips/tunnel-q3-v01.mp4",
+      "poster": "clips/tunnel-q3-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 388,
+          "room": "tunnel",
+          "what": "into tunnel"
+        }
+      ]
+    },
+    {
+      "room": "mine-office",
+      "quarter": 3,
+      "visit": 1,
+      "start": 403.4,
+      "end": 432.0,
+      "roomStart": 406.5,
+      "posterTime": 406.5,
+      "file": "clips/mine-office-q3-v01.mp4",
+      "poster": "clips/mine-office-q3-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 410,
+          "room": "mine-office",
+          "what": "into mine-office"
+        },
+        {
+          "t": 417,
+          "room": "mine-office",
+          "what": "done: mine-map"
+        },
+        {
+          "t": 421,
+          "room": "mine-office",
+          "what": "goal: drain (event in junction)"
+        }
+      ]
+    },
+    {
+      "room": "tunnel",
+      "quarter": 3,
+      "visit": 2,
+      "start": 428.067,
+      "end": 446.0,
+      "roomStart": 432.0,
+      "posterTime": 435.0,
+      "file": "clips/tunnel-q3-v02.mp4",
+      "poster": "clips/tunnel-q3-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 434,
+          "room": "tunnel",
+          "what": "into tunnel"
+        }
+      ]
+    },
+    {
+      "room": "junction",
+      "quarter": 3,
+      "visit": 1,
+      "start": 442.233,
+      "end": 473.0,
+      "roomStart": 446.0,
+      "posterTime": 457.5,
+      "file": "clips/junction-q3-v01.mp4",
+      "poster": "clips/junction-q3-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 450,
+          "room": "junction",
+          "what": "into junction"
+        },
+        {
+          "t": 463,
+          "room": "junction",
+          "what": "done: drain"
+        },
+        {
+          "t": 466,
+          "room": "junction",
+          "what": "goal: mine-collapse (scene in gallery)"
+        }
+      ]
+    },
+    {
+      "room": "gallery",
+      "quarter": 3,
+      "visit": 1,
+      "start": 469.033,
+      "end": 584.5,
+      "roomStart": 473.0,
+      "posterTime": 486.0,
+      "file": "clips/gallery-q3-v01.mp4",
+      "poster": "clips/gallery-q3-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 488,
+          "room": "gallery",
+          "what": "into gallery"
+        },
+        {
+          "t": 492,
+          "room": "gallery",
+          "what": "done: mine-collapse"
+        },
+        {
+          "t": 496,
+          "room": "gallery",
+          "what": "goal: op-key (scene in gallery)"
+        },
+        {
+          "t": 541,
+          "room": "gallery",
+          "what": "done: op-key"
+        },
+        {
+          "t": 544,
+          "room": "gallery",
+          "what": "goal: lift-up (event in mine-lift)"
+        },
+        {
+          "t": 569,
+          "room": "gallery",
+          "what": "the way to junction did not open"
+        }
+      ]
+    },
+    {
+      "room": "junction",
+      "quarter": 3,
+      "visit": 2,
+      "start": 580.667,
+      "end": 589.5,
+      "roomStart": 584.5,
+      "posterTime": 585.0,
+      "file": "clips/junction-q3-v02.mp4",
+      "poster": "clips/junction-q3-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 582,
+          "room": "junction",
+          "what": "into junction"
+        }
+      ]
+    },
+    {
+      "room": "mine-lift",
+      "quarter": 3,
+      "visit": 1,
+      "start": 586.033,
+      "end": 613.5,
+      "roomStart": 589.5,
+      "posterTime": 601.5,
+      "file": "clips/mine-lift-q3-v01.mp4",
+      "poster": "clips/mine-lift-q3-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 597,
+          "room": "mine-lift",
+          "what": "into mine-lift"
+        },
+        {
+          "t": 605,
+          "room": "mine-lift",
+          "what": "done: lift-up"
+        },
+        {
+          "t": 609,
+          "room": "mine-lift",
+          "what": "goal: summit (visit in summit-trail)"
+        }
+      ]
+    },
+    {
+      "room": "summit-trail",
+      "quarter": 3,
+      "visit": 1,
+      "start": 609.867,
+      "end": 631.0,
+      "roomStart": 613.5,
+      "posterTime": 615.5,
+      "file": "clips/summit-trail-q3-v01.mp4",
+      "poster": "clips/summit-trail-q3-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 619,
+          "room": "summit-trail",
+          "what": "into summit-trail"
+        },
+        {
+          "t": 621,
+          "room": "summit-trail",
+          "what": "done: summit"
+        },
+        {
+          "t": 624,
+          "room": "summit-trail",
+          "what": "goal: fuses (take in shed)"
+        }
+      ]
+    },
+    {
+      "room": "mine-lift",
+      "quarter": 3,
+      "visit": 2,
+      "start": 627.533,
+      "end": 642.5,
+      "roomStart": 631.0,
+      "posterTime": 635.0,
+      "file": "clips/mine-lift-q3-v02.mp4",
+      "poster": "clips/mine-lift-q3-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 634,
+          "room": "mine-lift",
+          "what": "into mine-lift"
+        }
+      ]
+    },
+    {
+      "room": "junction",
+      "quarter": 3,
+      "visit": 3,
+      "start": 639.467,
+      "end": 652.0,
+      "roomStart": 642.5,
+      "posterTime": 648.5,
+      "file": "clips/junction-q3-v03.mp4",
+      "poster": "clips/junction-q3-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 644,
+          "room": "junction",
+          "what": "into junction"
+        }
+      ]
+    },
+    {
+      "room": "tunnel",
+      "quarter": 3,
+      "visit": 3,
+      "start": 648.5,
+      "end": 681.5,
+      "roomStart": 652.0,
+      "posterTime": 664.5,
+      "file": "clips/tunnel-q3-v03.mp4",
+      "poster": "clips/tunnel-q3-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 658,
+          "room": "tunnel",
+          "what": "into tunnel"
+        }
+      ]
+    },
+    {
+      "room": "mine-entrance",
+      "quarter": 3,
+      "visit": 2,
+      "start": 677.8,
+      "end": 695.5,
+      "roomStart": 681.5,
+      "posterTime": 692.0,
+      "file": "clips/mine-entrance-q3-v02.mp4",
+      "poster": "clips/mine-entrance-q3-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 684,
+          "room": "mine-entrance",
+          "what": "into mine-entrance"
+        }
+      ]
+    },
+    {
+      "room": "quarry",
+      "quarter": 3,
+      "visit": 3,
+      "start": 692.267,
+      "end": 711.0,
+      "roomStart": 695.5,
+      "posterTime": 703.0,
+      "file": "clips/quarry-q3-v03.mp4",
+      "poster": "clips/quarry-q3-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 697,
+          "room": "quarry",
+          "what": "into quarry"
+        }
+      ]
+    },
+    {
+      "room": "east-path",
+      "quarter": 3,
+      "visit": 3,
+      "start": 707.067,
+      "end": 730.0,
+      "roomStart": 711.0,
+      "posterTime": 718.5,
+      "file": "clips/east-path-q3-v03.mp4",
+      "poster": "clips/east-path-q3-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 715,
+          "room": "east-path",
+          "what": "into east-path"
+        }
+      ]
+    },
+    {
+      "room": "platform",
+      "quarter": 3,
+      "visit": 4,
+      "start": 726.933,
+      "end": 747.5,
+      "roomStart": 730.0,
+      "posterTime": 740.0,
+      "file": "clips/platform-q3-v04.mp4",
+      "poster": "clips/platform-q3-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 732,
+          "room": "platform",
+          "what": "into platform"
+        }
+      ]
+    },
+    {
+      "room": "bridge",
+      "quarter": 3,
+      "visit": 4,
+      "start": 743.567,
+      "end": 761.0,
+      "roomStart": 747.5,
+      "posterTime": 752.0,
+      "file": "clips/bridge-q3-v04.mp4",
+      "poster": "clips/bridge-q3-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 749,
+          "room": "bridge",
+          "what": "into bridge"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 3,
+      "visit": 14,
+      "start": 757.467,
+      "end": 779.0,
+      "roomStart": 761.0,
+      "posterTime": 771.0,
+      "file": "clips/yard-q3-v14.mp4",
+      "poster": "clips/yard-q3-v14.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 766,
+          "room": "yard",
+          "what": "into yard"
+        }
+      ]
+    },
+    {
+      "room": "shed",
+      "quarter": 3,
+      "visit": 3,
+      "start": 775.233,
+      "end": 803.5,
+      "roomStart": 779.0,
+      "posterTime": 788.0,
+      "file": "clips/shed-q3-v03.mp4",
+      "poster": "clips/shed-q3-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 781,
+          "room": "shed",
+          "what": "into shed"
+        },
+        {
+          "t": 790,
+          "room": "shed",
+          "what": "done: fuses"
+        },
+        {
+          "t": 793,
+          "room": "shed",
+          "what": "goal: fit-fuse (event in booth)"
+        }
+      ]
+    },
+    {
+      "room": "yard",
+      "quarter": 3,
+      "visit": 15,
+      "start": 799.8,
+      "end": 813.5,
+      "roomStart": 803.5,
+      "posterTime": 803.5,
+      "file": "clips/yard-q3-v15.mp4",
+      "poster": "clips/yard-q3-v15.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 806,
+          "room": "yard",
+          "what": "into yard"
+        }
+      ]
+    },
+    {
+      "room": "bridge",
+      "quarter": 3,
+      "visit": 5,
+      "start": 810.4,
+      "end": 829.5,
+      "roomStart": 813.5,
+      "posterTime": 814.0,
+      "file": "clips/bridge-q3-v05.mp4",
+      "poster": "clips/bridge-q3-v05.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 815,
+          "room": "bridge",
+          "what": "into bridge"
+        }
+      ]
+    },
+    {
+      "room": "platform",
+      "quarter": 3,
+      "visit": 5,
+      "start": 826.367,
+      "end": 845.5,
+      "roomStart": 829.5,
+      "posterTime": 837.5,
+      "file": "clips/platform-q3-v05.mp4",
+      "poster": "clips/platform-q3-v05.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 832,
+          "room": "platform",
+          "what": "into platform"
+        }
+      ]
+    },
+    {
+      "room": "booth",
+      "quarter": 3,
+      "visit": 2,
+      "start": 841.533,
+      "end": 887.467,
+      "roomStart": 845.5,
+      "posterTime": 854.5,
+      "file": "clips/booth-q3-v02.mp4",
+      "poster": "clips/booth-q3-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 848,
+          "room": "booth",
+          "what": "into booth"
+        },
+        {
+          "t": 863,
+          "room": "booth",
+          "what": "done: fit-fuse"
+        },
+        {
+          "t": 866,
+          "room": "booth",
+          "what": "goal: gondola-runs (event in booth)"
+        },
+        {
+          "t": 886,
+          "room": "booth",
+          "what": "done: gondola-runs"
+        },
+        {
+          "t": 891,
+          "room": "booth",
+          "what": "quarter 3 done: its end saved for the next quarter"
+        }
+      ]
+    },
+    {
+      "room": "booth",
+      "quarter": 4,
+      "visit": 3,
+      "start": 18.967,
+      "end": 48.5,
+      "roomStart": 22.0,
+      "posterTime": 33.5,
+      "file": "clips/booth-q4-v03.mp4",
+      "poster": "clips/booth-q4-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 37,
+          "room": "booth",
+          "what": "quarter 4: starting from /tmp/rebplan/quarters/snaps/q3-end.json"
+        },
+        {
+          "t": 38,
+          "room": "booth",
+          "what": "goal: ride (scene in car)"
+        }
+      ]
+    },
+    {
+      "room": "platform",
+      "quarter": 4,
+      "visit": 6,
+      "start": 44.8,
+      "end": 70.5,
+      "roomStart": 48.5,
+      "posterTime": 48.5,
+      "file": "clips/platform-q4-v06.mp4",
+      "poster": "clips/platform-q4-v06.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 60,
+          "room": "platform",
+          "what": "into platform"
+        }
+      ]
+    },
+    {
+      "room": "car",
+      "quarter": 4,
+      "visit": 1,
+      "start": 66.9,
+      "end": 101.5,
+      "roomStart": 70.5,
+      "posterTime": 72.5,
+      "file": "clips/car-q4-v01.mp4",
+      "poster": "clips/car-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 84,
+          "room": "car",
+          "what": "into car"
+        },
+        {
+          "t": 88,
+          "room": "car",
+          "what": "done: ride"
+        },
+        {
+          "t": 92,
+          "room": "car",
+          "what": "goal: pylon-down (visit in valley-path)"
+        }
+      ]
+    },
+    {
+      "room": "pylon",
+      "quarter": 4,
+      "visit": 1,
+      "start": 97.533,
+      "end": 118.0,
+      "roomStart": 101.5,
+      "posterTime": 109.5,
+      "file": "clips/pylon-q4-v01.mp4",
+      "poster": "clips/pylon-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 105,
+          "room": "pylon",
+          "what": "into pylon"
+        }
+      ]
+    },
+    {
+      "room": "valley-path",
+      "quarter": 4,
+      "visit": 1,
+      "start": 114.933,
+      "end": 139.0,
+      "roomStart": 118.0,
+      "posterTime": 118.0,
+      "file": "clips/valley-path-q4-v01.mp4",
+      "poster": "clips/valley-path-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 123,
+          "room": "valley-path",
+          "what": "into valley-path"
+        },
+        {
+          "t": 125,
+          "room": "valley-path",
+          "what": "done: pylon-down"
+        },
+        {
+          "t": 128,
+          "room": "valley-path",
+          "what": "goal: kevin (scene in crash)"
+        }
+      ]
+    },
+    {
+      "room": "crash",
+      "quarter": 4,
+      "visit": 1,
+      "start": 135.467,
+      "end": 232.0,
+      "roomStart": 139.0,
+      "posterTime": 142.5,
+      "file": "clips/crash-q4-v01.mp4",
+      "poster": "clips/crash-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 152,
+          "room": "crash",
+          "what": "into crash"
+        },
+        {
+          "t": 156,
+          "room": "crash",
+          "what": "done: kevin"
+        },
+        {
+          "t": 160,
+          "room": "crash",
+          "what": "goal: crowbar (take in crash)"
+        },
+        {
+          "t": 172,
+          "room": "crash",
+          "what": "done: crowbar"
+        },
+        {
+          "t": 176,
+          "room": "crash",
+          "what": "goal: kevins-gun (take in crash)"
+        },
+        {
+          "t": 193,
+          "room": "crash",
+          "what": "done: kevins-gun"
+        },
+        {
+          "t": 196,
+          "room": "crash",
+          "what": "goal: pry-lodge (unlock in creek)"
+        }
+      ]
+    },
+    {
+      "room": "valley-path",
+      "quarter": 4,
+      "visit": 2,
+      "start": 228.067,
+      "end": 247.5,
+      "roomStart": 232.0,
+      "posterTime": 240.0,
+      "file": "clips/valley-path-q4-v02.mp4",
+      "poster": "clips/valley-path-q4-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 236,
+          "room": "valley-path",
+          "what": "into valley-path"
+        }
+      ]
+    },
+    {
+      "room": "creek",
+      "quarter": 4,
+      "visit": 1,
+      "start": 244.333,
+      "end": 271.0,
+      "roomStart": 247.5,
+      "posterTime": 259.5,
+      "file": "clips/creek-q4-v01.mp4",
+      "poster": "clips/creek-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 252,
+          "room": "creek",
+          "what": "into creek"
+        }
+      ]
+    },
+    {
+      "room": "lodge",
+      "quarter": 4,
+      "visit": 1,
+      "start": 267.367,
+      "end": 318.5,
+      "roomStart": 271.0,
+      "posterTime": 275.5,
+      "file": "clips/lodge-q4-v01.mp4",
+      "poster": "clips/lodge-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 274,
+          "room": "lodge",
+          "what": "into lodge"
+        },
+        {
+          "t": 274,
+          "room": "lodge",
+          "what": "done: pry-lodge"
+        },
+        {
+          "t": 278,
+          "room": "lodge",
+          "what": "goal: gate-key (take in lodge)"
+        },
+        {
+          "t": 289,
+          "room": "lodge",
+          "what": "done: gate-key"
+        },
+        {
+          "t": 293,
+          "room": "lodge",
+          "what": "goal: gardener-diary (take in lodge)"
+        },
+        {
+          "t": 306,
+          "room": "lodge",
+          "what": "done: gardener-diary"
+        },
+        {
+          "t": 310,
+          "room": "lodge",
+          "what": "goal: open-gate (unlock in estate-wall)"
+        }
+      ]
+    },
+    {
+      "room": "creek",
+      "quarter": 4,
+      "visit": 2,
+      "start": 314.8,
+      "end": 328.0,
+      "roomStart": 318.5,
+      "posterTime": 323.5,
+      "file": "clips/creek-q4-v02.mp4",
+      "poster": "clips/creek-q4-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 325,
+          "room": "creek",
+          "what": "into creek"
+        }
+      ]
+    },
+    {
+      "room": "estate-wall",
+      "quarter": 4,
+      "visit": 1,
+      "start": 324.1,
+      "end": 353.0,
+      "roomStart": 328.0,
+      "posterTime": 342.5,
+      "file": "clips/estate-wall-q4-v01.mp4",
+      "poster": "clips/estate-wall-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 335,
+          "room": "estate-wall",
+          "what": "into estate-wall"
+        }
+      ]
+    },
+    {
+      "room": "kennels",
+      "quarter": 4,
+      "visit": 1,
+      "start": 349.933,
+      "end": 465.0,
+      "roomStart": 353.0,
+      "posterTime": 353.5,
+      "file": "clips/kennels-q4-v01.mp4",
+      "poster": "clips/kennels-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 358,
+          "room": "kennels",
+          "what": "into kennels"
+        },
+        {
+          "t": 358,
+          "room": "kennels",
+          "what": "done: open-gate"
+        },
+        {
+          "t": 362,
+          "room": "kennels",
+          "what": "goal: cellar-key (take in garden-shed)"
+        }
+      ]
+    },
+    {
+      "room": "back-garden",
+      "quarter": 4,
+      "visit": 1,
+      "start": 461.667,
+      "end": 482.0,
+      "roomStart": 465.0,
+      "posterTime": 471.0,
+      "file": "clips/back-garden-q4-v01.mp4",
+      "poster": "clips/back-garden-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 470,
+          "room": "back-garden",
+          "what": "into back-garden"
+        }
+      ]
+    },
+    {
+      "room": "garden-shed",
+      "quarter": 4,
+      "visit": 1,
+      "start": 479.0,
+      "end": 508.0,
+      "roomStart": 482.0,
+      "posterTime": 493.0,
+      "file": "clips/garden-shed-q4-v01.mp4",
+      "poster": "clips/garden-shed-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 485,
+          "room": "garden-shed",
+          "what": "into garden-shed"
+        },
+        {
+          "t": 494,
+          "room": "garden-shed",
+          "what": "done: cellar-key"
+        },
+        {
+          "t": 498,
+          "room": "garden-shed",
+          "what": "goal: bulkhead (unlock in back-garden)"
+        }
+      ]
+    },
+    {
+      "room": "back-garden",
+      "quarter": 4,
+      "visit": 2,
+      "start": 504.1,
+      "end": 532.0,
+      "roomStart": 508.0,
+      "posterTime": 518.0,
+      "file": "clips/back-garden-q4-v02.mp4",
+      "poster": "clips/back-garden-q4-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 510,
+          "room": "back-garden",
+          "what": "into back-garden"
+        }
+      ]
+    },
+    {
+      "room": "cellar",
+      "quarter": 4,
+      "visit": 1,
+      "start": 528.133,
+      "end": 604.0,
+      "roomStart": 532.0,
+      "posterTime": 532.0,
+      "file": "clips/cellar-q4-v01.mp4",
+      "poster": "clips/cellar-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 535,
+          "room": "cellar",
+          "what": "into cellar"
+        },
+        {
+          "t": 568,
+          "room": "cellar",
+          "what": "took a clip (1 rounds before)"
+        },
+        {
+          "t": 568,
+          "room": "cellar",
+          "what": "done: bulkhead"
+        },
+        {
+          "t": 572,
+          "room": "cellar",
+          "what": "goal: push-rack (event in cellar)"
+        },
+        {
+          "t": 584,
+          "room": "cellar",
+          "what": "done: push-rack"
+        },
+        {
+          "t": 587,
+          "room": "cellar",
+          "what": "goal: keeper-log (take in lower-station)"
+        }
+      ]
+    },
+    {
+      "room": "back-garden",
+      "quarter": 4,
+      "visit": 3,
+      "start": 600.033,
+      "end": 613.5,
+      "roomStart": 604.0,
+      "posterTime": 608.5,
+      "file": "clips/back-garden-q4-v03.mp4",
+      "poster": "clips/back-garden-q4-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 601,
+          "room": "back-garden",
+          "what": "into back-garden"
+        }
+      ]
+    },
+    {
+      "room": "kennels",
+      "quarter": 4,
+      "visit": 2,
+      "start": 610.4,
+      "end": 627.0,
+      "roomStart": 613.5,
+      "posterTime": 620.5,
+      "file": "clips/kennels-q4-v02.mp4",
+      "poster": "clips/kennels-q4-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 616,
+          "room": "kennels",
+          "what": "into kennels"
+        }
+      ]
+    },
+    {
+      "room": "estate-wall",
+      "quarter": 4,
+      "visit": 2,
+      "start": 623.533,
+      "end": 651.5,
+      "roomStart": 627.0,
+      "posterTime": 631.0,
+      "file": "clips/estate-wall-q4-v02.mp4",
+      "poster": "clips/estate-wall-q4-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 629,
+          "room": "estate-wall",
+          "what": "into estate-wall"
+        }
+      ]
+    },
+    {
+      "room": "creek",
+      "quarter": 4,
+      "visit": 3,
+      "start": 648.0,
+      "end": 664.5,
+      "roomStart": 651.5,
+      "posterTime": 662.0,
+      "file": "clips/creek-q4-v03.mp4",
+      "poster": "clips/creek-q4-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 654,
+          "room": "creek",
+          "what": "into creek"
+        }
+      ]
+    },
+    {
+      "room": "valley-path",
+      "quarter": 4,
+      "visit": 3,
+      "start": 661.4,
+      "end": 676.5,
+      "roomStart": 664.5,
+      "posterTime": 669.5,
+      "file": "clips/valley-path-q4-v03.mp4",
+      "poster": "clips/valley-path-q4-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 669,
+          "room": "valley-path",
+          "what": "into valley-path"
+        }
+      ]
+    },
+    {
+      "room": "lower-yard",
+      "quarter": 4,
+      "visit": 1,
+      "start": 672.633,
+      "end": 695.5,
+      "roomStart": 676.5,
+      "posterTime": 683.0,
+      "file": "clips/lower-yard-q4-v01.mp4",
+      "poster": "clips/lower-yard-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 681,
+          "room": "lower-yard",
+          "what": "into lower-yard"
+        }
+      ]
+    },
+    {
+      "room": "lower-station",
+      "quarter": 4,
+      "visit": 1,
+      "start": 691.533,
+      "end": 726.5,
+      "roomStart": 695.5,
+      "posterTime": 699.5,
+      "file": "clips/lower-station-q4-v01.mp4",
+      "poster": "clips/lower-station-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 699,
+          "room": "lower-station",
+          "what": "into lower-station"
+        },
+        {
+          "t": 708,
+          "room": "lower-station",
+          "what": "took a clip (15 rounds before)"
+        },
+        {
+          "t": 716,
+          "room": "lower-station",
+          "what": "done: keeper-log"
+        },
+        {
+          "t": 719,
+          "room": "lower-station",
+          "what": "goal: sleep (scene in save)"
+        }
+      ]
+    },
+    {
+      "room": "lower-yard",
+      "quarter": 4,
+      "visit": 2,
+      "start": 722.6,
+      "end": 740.5,
+      "roomStart": 726.5,
+      "posterTime": 737.0,
+      "file": "clips/lower-yard-q4-v02.mp4",
+      "poster": "clips/lower-yard-q4-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 733,
+          "room": "lower-yard",
+          "what": "into lower-yard"
+        }
+      ]
+    },
+    {
+      "room": "valley-path",
+      "quarter": 4,
+      "visit": 4,
+      "start": 737.367,
+      "end": 752.5,
+      "roomStart": 740.5,
+      "posterTime": 743.0,
+      "file": "clips/valley-path-q4-v04.mp4",
+      "poster": "clips/valley-path-q4-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 745,
+          "room": "valley-path",
+          "what": "into valley-path"
+        }
+      ]
+    },
+    {
+      "room": "creek",
+      "quarter": 4,
+      "visit": 4,
+      "start": 748.933,
+      "end": 765.5,
+      "roomStart": 752.5,
+      "posterTime": 758.0,
+      "file": "clips/creek-q4-v04.mp4",
+      "poster": "clips/creek-q4-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 755,
+          "room": "creek",
+          "what": "into creek"
+        }
+      ]
+    },
+    {
+      "room": "estate-wall",
+      "quarter": 4,
+      "visit": 3,
+      "start": 762.2,
+      "end": 781.5,
+      "roomStart": 765.5,
+      "posterTime": 778.0,
+      "file": "clips/estate-wall-q4-v03.mp4",
+      "poster": "clips/estate-wall-q4-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 770,
+          "room": "estate-wall",
+          "what": "into estate-wall"
+        }
+      ]
+    },
+    {
+      "room": "kennels",
+      "quarter": 4,
+      "visit": 3,
+      "start": 777.567,
+      "end": 794.5,
+      "roomStart": 781.5,
+      "posterTime": 790.5,
+      "file": "clips/kennels-q4-v03.mp4",
+      "poster": "clips/kennels-q4-v03.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 783,
+          "room": "kennels",
+          "what": "into kennels"
+        }
+      ]
+    },
+    {
+      "room": "back-garden",
+      "quarter": 4,
+      "visit": 4,
+      "start": 790.833,
+      "end": 812.5,
+      "roomStart": 794.5,
+      "posterTime": 801.0,
+      "file": "clips/back-garden-q4-v04.mp4",
+      "poster": "clips/back-garden-q4-v04.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 797,
+          "room": "back-garden",
+          "what": "into back-garden"
+        }
+      ]
+    },
+    {
+      "room": "cellar",
+      "quarter": 4,
+      "visit": 2,
+      "start": 808.567,
+      "end": 825.0,
+      "roomStart": 812.5,
+      "posterTime": 812.5,
+      "file": "clips/cellar-q4-v02.mp4",
+      "poster": "clips/cellar-q4-v02.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 814,
+          "room": "cellar",
+          "what": "into cellar"
+        }
+      ]
+    },
+    {
+      "room": "crawl",
+      "quarter": 4,
+      "visit": 1,
+      "start": 821.4,
+      "end": 844.5,
+      "roomStart": 825.0,
+      "posterTime": 836.0,
+      "file": "clips/crawl-q4-v01.mp4",
+      "poster": "clips/crawl-q4-v01.jpg",
+      "note": "",
+      "events": [
+        {
+          "t": 830,
+          "room": "crawl",
+          "what": "into crawl"
+        }
+      ]
+    },
+    {
+      "room": "save",
+      "quarter": 4,
+      "visit": 1,
+      "start": 840.8,
+      "end": 883.8,
+      "roomStart": 844.5,
+      "posterTime": 861,
+      "file": "clips/save-q4-v01.mp4",
+      "poster": "clips/save-q4-v01.jpg",
+      "note": "Original save room has no camera render. Entrance checked by eye at half-second intervals.",
+      "events": [
+        {
+          "t": 880,
+          "room": "save",
+          "what": "into save"
+        },
+        {
+          "t": 884,
+          "room": "save",
+          "what": "done: sleep"
+        },
+        {
+          "t": 889,
+          "room": "save",
+          "what": "quarter 4 done: its end saved for the next quarter"
+        }
+      ]
+    }
+  ],
+  "noFootage": [
+    "flume",
+    "line-track",
+    "weather",
+    "mast",
+    "wine"
+  ]
+}

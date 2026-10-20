@@ -82,3 +82,38 @@ test('the ending keeps its written lines alongside inherited control messages', 
   assert.ok(save?.cuts.some((c) => c.beats.some((b) => b.kind === 'say' && b.text === '"Freeze!"')));
   assert.equal(board.scenes.reduce((n, s) => n + s.msgs.length, 0), 574);
 });
+
+test('each recorded visit has its own player and each room card shows coverage', () => {
+  const html = renderStoryboard(board);
+  assert.equal(board.scenes.filter((s) => s.clips.length).length, 53);
+  assert.equal(html.split('<video controls preload="none"').length - 1, 142);
+  for (const scene of board.scenes) {
+    for (const clip of scene.clips) {
+      assert.ok(html.includes(`src="${clip.file}" type="video/mp4"`), clip.file);
+      assert.ok(html.includes(`poster="${clip.poster}"`), clip.poster);
+    }
+  }
+  assert.deepEqual(board.scenes.filter((s) => !s.clips.length).map((s) => s.place.id), ['flume', 'line-track', 'weather', 'mast', 'wine']);
+  assert.equal(html.split('No footage of this room in the four-quarter recording.').length - 1, 5);
+  assert.ok(html.includes('15 recorded clips'), 'repeated room visits remain visible on cards');
+});
+
+test('visit labels keep logged actions and distinguish the cabin plan id from its recording slug', () => {
+  const cabin = board.scenes.find((s) => s.place.id === 'cabin');
+  assert.ok(cabin && cabin.clips.length > 1);
+  assert.ok(cabin.clips.some((c) => c.events.some((e) => e.what === 'took the shed key')));
+  const html = renderStoryboard(board);
+  assert.ok(html.includes('took the shed key'));
+  assert.ok(html.includes('Quarter 4 · Visit 1'));
+  assert.ok(html.includes('https://home.arpa/research/rebecca-whole-day/'));
+  assert.ok(!html.includes('older room layout'));
+});
+
+test('the recording manifest rejects bad spans and unsafe asset paths', async () => {
+  const { parseFootage } = await import('./storyboard/footage.ts');
+  const visit = { room: 'ridge', quarter: 1, visit: 1, start: 0, end: 30, file: 'clips/ridge-q1-v01.mp4', poster: 'clips/ridge-q1-v01.jpg', note: '', events: [{ t: 23, what: 'on the ridge' }] };
+  assert.equal(parseFootage({ clips: [visit], noFootage: [] }).clips[0]?.end, 30);
+  assert.throws(() => parseFootage({ clips: [{ ...visit, end: 0 }], noFootage: [] }), /Invalid clip span/);
+  assert.throws(() => parseFootage({ clips: [{ ...visit, file: '../bad.mp4' }], noFootage: [] }), /Invalid clip path/);
+  assert.throws(() => parseFootage({ clips: [visit, visit], noFootage: [] }), /Duplicate clip file/);
+});

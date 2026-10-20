@@ -1,0 +1,1943 @@
+{
+  "recorded": "2026-10-17",
+  "rooms": [
+    {
+      "room": "ridge",
+      "slug": "ridge",
+      "id": "313"
+    },
+    {
+      "room": "trail",
+      "slug": "trail",
+      "id": "312"
+    },
+    {
+      "room": "yard",
+      "slug": "yard",
+      "id": "315"
+    },
+    {
+      "room": "cabin",
+      "slug": "lookout",
+      "id": "314"
+    },
+    {
+      "room": "shed",
+      "slug": "shed",
+      "id": "316"
+    },
+    {
+      "room": "bridge",
+      "slug": "bridge",
+      "id": "317"
+    },
+    {
+      "room": "platform",
+      "slug": "platform",
+      "id": "318"
+    },
+    {
+      "room": "booth",
+      "slug": "booth",
+      "id": "319"
+    },
+    {
+      "room": "woods",
+      "slug": "woods",
+      "id": "31A"
+    },
+    {
+      "room": "den",
+      "slug": "den",
+      "id": "31B"
+    },
+    {
+      "room": "logging-road",
+      "slug": "logging-road",
+      "id": "31C"
+    },
+    {
+      "room": "camp-gate",
+      "slug": "camp-gate",
+      "id": "31D"
+    },
+    {
+      "room": "camp-yard",
+      "slug": "camp-yard",
+      "id": "31E"
+    },
+    {
+      "room": "bunkhouse",
+      "slug": "bunkhouse",
+      "id": "31F"
+    },
+    {
+      "room": "office",
+      "slug": "office",
+      "id": "412"
+    },
+    {
+      "room": "mess",
+      "slug": "mess",
+      "id": "413"
+    },
+    {
+      "room": "depot",
+      "slug": "depot",
+      "id": "414"
+    },
+    {
+      "room": "workshop",
+      "slug": "workshop",
+      "id": "415"
+    },
+    {
+      "room": "sawmill",
+      "slug": "sawmill",
+      "id": "416"
+    },
+    {
+      "room": "pond",
+      "slug": "pond",
+      "id": "417"
+    },
+    {
+      "room": "flume",
+      "slug": "flume",
+      "id": "418"
+    },
+    {
+      "room": "road",
+      "slug": "road",
+      "id": "419"
+    },
+    {
+      "room": "washout",
+      "slug": "washout",
+      "id": "41A"
+    },
+    {
+      "room": "generator",
+      "slug": "generator",
+      "id": "41B"
+    },
+    {
+      "room": "tower-foot",
+      "slug": "tower-foot",
+      "id": "41C"
+    },
+    {
+      "room": "tower-stairs",
+      "slug": "tower-stairs",
+      "id": "41D"
+    },
+    {
+      "room": "tower-top",
+      "slug": "tower-top",
+      "id": "41E"
+    },
+    {
+      "room": "switch",
+      "slug": "switch",
+      "id": "41F"
+    },
+    {
+      "room": "line-track",
+      "slug": "line-track",
+      "id": "516"
+    },
+    {
+      "room": "east-path",
+      "slug": "east-path",
+      "id": "517"
+    },
+    {
+      "room": "cottage",
+      "slug": "cottage",
+      "id": "518"
+    },
+    {
+      "room": "quarry",
+      "slug": "quarry",
+      "id": "519"
+    },
+    {
+      "room": "quarry-office",
+      "slug": "quarry-office",
+      "id": "51A"
+    },
+    {
+      "room": "mine-entrance",
+      "slug": "mine-entrance",
+      "id": "51B"
+    },
+    {
+      "room": "tunnel",
+      "slug": "tunnel",
+      "id": "51C"
+    },
+    {
+      "room": "mine-office",
+      "slug": "mine-office",
+      "id": "51D"
+    },
+    {
+      "room": "junction",
+      "slug": "junction",
+      "id": "51E"
+    },
+    {
+      "room": "gallery",
+      "slug": "gallery",
+      "id": "51F"
+    },
+    {
+      "room": "mine-lift",
+      "slug": "mine-lift",
+      "id": "509"
+    },
+    {
+      "room": "summit-trail",
+      "slug": "summit-trail",
+      "id": "213"
+    },
+    {
+      "room": "weather",
+      "slug": "weather",
+      "id": "214"
+    },
+    {
+      "room": "mast",
+      "slug": "mast",
+      "id": "215"
+    },
+    {
+      "room": "car",
+      "slug": "car",
+      "id": "216"
+    },
+    {
+      "room": "pylon",
+      "slug": "pylon",
+      "id": "217"
+    },
+    {
+      "room": "valley-path",
+      "slug": "valley-path",
+      "id": "218"
+    },
+    {
+      "room": "lower-yard",
+      "slug": "lower-yard",
+      "id": "219"
+    },
+    {
+      "room": "lower-station",
+      "slug": "lower-station",
+      "id": "21A"
+    },
+    {
+      "room": "crash",
+      "slug": "crash",
+      "id": "21B"
+    },
+    {
+      "room": "creek",
+      "slug": "creek",
+      "id": "21C"
+    },
+    {
+      "room": "lodge",
+      "slug": "lodge",
+      "id": "21D"
+    },
+    {
+      "room": "estate-wall",
+      "slug": "estate-wall",
+      "id": "21E"
+    },
+    {
+      "room": "kennels",
+      "slug": "kennels",
+      "id": "21F"
+    },
+    {
+      "room": "back-garden",
+      "slug": "back-garden",
+      "id": "110"
+    },
+    {
+      "room": "garden-shed",
+      "slug": "garden-shed",
+      "id": "119"
+    },
+    {
+      "room": "cellar",
+      "slug": "cellar",
+      "id": "11D"
+    },
+    {
+      "room": "wine",
+      "slug": "wine",
+      "id": "11E"
+    },
+    {
+      "room": "crawl",
+      "slug": "crawl",
+      "id": "11F"
+    },
+    {
+      "room": "save",
+      "slug": "save",
+      "id": "100"
+    }
+  ],
+  "quarters": [
+    {
+      "quarter": 1,
+      "log": "q1/log-1.txt",
+      "logSha256": "66ecaaefdcb9113e4778366fd2ee36218513b649bea5c7f89bc0ccc939f905c7",
+      "sourceVideo": "q1/reb-q1-1.mp4",
+      "video": "q1.mp4",
+      "sha256": "e3c03b010ed70689eac3cda8d914f2dd986f0164872d1fce75eb004e9f8cdd46",
+      "result": "PASS",
+      "failures": [],
+      "scale": 1,
+      "offset": -4,
+      "manualEntries": [],
+      "events": [
+        {
+          "t": 23,
+          "room": "ridge",
+          "what": "on the ridge"
+        },
+        {
+          "t": 34,
+          "room": "trail",
+          "what": "down the path to the trail"
+        },
+        {
+          "t": 48,
+          "room": "yard",
+          "what": "down to the ranger station"
+        },
+        {
+          "t": 48,
+          "room": "yard",
+          "what": "at the ranger station"
+        },
+        {
+          "t": 61,
+          "room": "yard",
+          "what": "the pine blocks the trail down"
+        },
+        {
+          "t": 70,
+          "room": "yard",
+          "what": "the winch has no crank"
+        },
+        {
+          "t": 86,
+          "room": "cabin",
+          "what": "into the ranger's cabin"
+        },
+        {
+          "t": 101,
+          "room": "cabin",
+          "what": "listened to the radio"
+        },
+        {
+          "t": 108,
+          "room": "cabin",
+          "what": "took the logbook: the crank is in the shed"
+        },
+        {
+          "t": 118,
+          "room": "cabin",
+          "what": "took the First Aid Spray"
+        },
+        {
+          "t": 125,
+          "room": "cabin",
+          "what": "took the shed key"
+        },
+        {
+          "t": 134,
+          "room": "yard",
+          "what": "out to the yard"
+        },
+        {
+          "t": 156,
+          "room": "yard",
+          "what": "killed the dog (2 shots)"
+        },
+        {
+          "t": 176,
+          "room": "shed",
+          "what": "unlocked the shed and went in"
+        },
+        {
+          "t": 186,
+          "room": "shed",
+          "what": "took the winch crank"
+        },
+        {
+          "t": 196,
+          "room": "yard",
+          "what": "out of the shed"
+        },
+        {
+          "t": 211,
+          "room": "yard",
+          "what": "cranked the winch"
+        },
+        {
+          "t": 223,
+          "room": "bridge",
+          "what": "down the trail past the pine"
+        },
+        {
+          "t": 231,
+          "room": "bridge",
+          "what": "on the bridge"
+        },
+        {
+          "t": 245,
+          "room": "bridge",
+          "what": "across the gorge: the valley trail sign"
+        },
+        {
+          "t": 248,
+          "room": "bridge",
+          "what": "goal: gondola-dead (visit in platform)"
+        },
+        {
+          "t": 258,
+          "room": "platform",
+          "what": "into platform"
+        },
+        {
+          "t": 260,
+          "room": "platform",
+          "what": "done: gondola-dead"
+        },
+        {
+          "t": 264,
+          "room": "platform",
+          "what": "goal: duty-board (look in booth)"
+        },
+        {
+          "t": 284,
+          "room": "booth",
+          "what": "into booth"
+        },
+        {
+          "t": 296,
+          "room": "booth",
+          "what": "done: duty-board"
+        },
+        {
+          "t": 300,
+          "room": "booth",
+          "what": "goal: hal-phone (look in booth)"
+        },
+        {
+          "t": 335,
+          "room": "booth",
+          "what": "done: hal-phone"
+        },
+        {
+          "t": 339,
+          "room": "booth",
+          "what": "goal: meet-partner (scene in woods)"
+        },
+        {
+          "t": 352,
+          "room": "platform",
+          "what": "into platform"
+        },
+        {
+          "t": 366,
+          "room": "bridge",
+          "what": "into bridge"
+        },
+        {
+          "t": 382,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 417,
+          "room": "woods",
+          "what": "into woods"
+        },
+        {
+          "t": 421,
+          "room": "woods",
+          "what": "done: meet-partner"
+        },
+        {
+          "t": 425,
+          "room": "woods",
+          "what": "goal: truck-keys (scene in den)"
+        },
+        {
+          "t": 449,
+          "room": "den",
+          "what": "into den"
+        },
+        {
+          "t": 452,
+          "room": "den",
+          "what": "done: truck-keys"
+        },
+        {
+          "t": 456,
+          "room": "den",
+          "what": "goal: cutters (take in yard)"
+        },
+        {
+          "t": 456,
+          "room": "den",
+          "what": "bag full: to the item box to put away item 1"
+        },
+        {
+          "t": 466,
+          "room": "woods",
+          "what": "into woods"
+        },
+        {
+          "t": 477,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 491,
+          "room": "cabin",
+          "what": "into lookout"
+        },
+        {
+          "t": 503,
+          "room": "cabin",
+          "what": "put item 1 in the box"
+        },
+        {
+          "t": 521,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 533,
+          "room": "yard",
+          "what": "done: cutters"
+        },
+        {
+          "t": 537,
+          "room": "yard",
+          "what": "goal: quarantine (take in logging-road)"
+        },
+        {
+          "t": 547,
+          "room": "woods",
+          "what": "into woods"
+        },
+        {
+          "t": 606,
+          "room": "logging-road",
+          "what": "into logging-road"
+        },
+        {
+          "t": 617,
+          "room": "logging-road",
+          "what": "done: quarantine"
+        },
+        {
+          "t": 620,
+          "room": "logging-road",
+          "what": "goal: office-key (take in mess)"
+        },
+        {
+          "t": 620,
+          "room": "logging-road",
+          "what": "bag full: to the item box to put away item 65"
+        },
+        {
+          "t": 636,
+          "room": "woods",
+          "what": "into woods"
+        },
+        {
+          "t": 654,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 667,
+          "room": "cabin",
+          "what": "into lookout"
+        },
+        {
+          "t": 680,
+          "room": "cabin",
+          "what": "put item 65 in the box"
+        },
+        {
+          "t": 697,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 706,
+          "room": "woods",
+          "what": "into woods"
+        },
+        {
+          "t": 723,
+          "room": "logging-road",
+          "what": "into logging-road"
+        },
+        {
+          "t": 743,
+          "room": "camp-gate",
+          "what": "into camp-gate"
+        },
+        {
+          "t": 760,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        },
+        {
+          "t": 785,
+          "room": "mess",
+          "what": "into mess"
+        },
+        {
+          "t": 813,
+          "room": "mess",
+          "what": "done: office-key"
+        },
+        {
+          "t": 817,
+          "room": "mess",
+          "what": "goal: calendar (take in bunkhouse)"
+        },
+        {
+          "t": 841,
+          "room": "mess",
+          "what": "the way to camp-yard did not open"
+        },
+        {
+          "t": 842,
+          "room": "mess",
+          "what": "stuck on calendar: no way to bunkhouse"
+        },
+        {
+          "t": 845,
+          "room": "mess",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 847,
+          "room": "mess",
+          "what": "stuck on letters: no way to office"
+        },
+        {
+          "t": 849,
+          "room": "mess",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 851,
+          "room": "mess",
+          "what": "stuck on letters: no way to office"
+        },
+        {
+          "t": 854,
+          "room": "mess",
+          "what": "goal: calendar (take in bunkhouse)"
+        },
+        {
+          "t": 856,
+          "room": "mess",
+          "what": "stuck on calendar: no way to bunkhouse"
+        },
+        {
+          "t": 858,
+          "room": "mess",
+          "what": "goal: mill-race (event in pond)"
+        },
+        {
+          "t": 860,
+          "room": "mess",
+          "what": "stuck on mill-race: no way to pond"
+        },
+        {
+          "t": 863,
+          "room": "mess",
+          "what": "goal: mill-race (event in pond)"
+        },
+        {
+          "t": 864,
+          "room": "mess",
+          "what": "stuck on mill-race: no way to pond"
+        },
+        {
+          "t": 867,
+          "room": "mess",
+          "what": "trying again: calendar, letters, mill-race"
+        },
+        {
+          "t": 869,
+          "room": "mess",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 871,
+          "room": "mess",
+          "what": "stuck on letters: no way to office"
+        },
+        {
+          "t": 873,
+          "room": "mess",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 875,
+          "room": "mess",
+          "what": "stuck on letters: no way to office"
+        },
+        {
+          "t": 877,
+          "room": "mess",
+          "what": "goal: calendar (take in bunkhouse)"
+        },
+        {
+          "t": 879,
+          "room": "mess",
+          "what": "stuck on calendar: no way to bunkhouse"
+        },
+        {
+          "t": 882,
+          "room": "mess",
+          "what": "goal: calendar (take in bunkhouse)"
+        },
+        {
+          "t": 884,
+          "room": "mess",
+          "what": "stuck on calendar: no way to bunkhouse"
+        },
+        {
+          "t": 886,
+          "room": "mess",
+          "what": "goal: mill-race (event in pond)"
+        },
+        {
+          "t": 888,
+          "room": "mess",
+          "what": "stuck on mill-race: no way to pond"
+        },
+        {
+          "t": 891,
+          "room": "mess",
+          "what": "goal: mill-race (event in pond)"
+        },
+        {
+          "t": 893,
+          "room": "mess",
+          "what": "stuck on mill-race: no way to pond"
+        },
+        {
+          "t": 895,
+          "room": "mess",
+          "what": "trying again: letters, calendar, mill-race"
+        },
+        {
+          "t": 897,
+          "room": "mess",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 899,
+          "room": "mess",
+          "what": "stuck on letters: no way to office"
+        },
+        {
+          "t": 902,
+          "room": "mess",
+          "what": "goal: calendar (take in bunkhouse)"
+        },
+        {
+          "t": 926,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        },
+        {
+          "t": 963,
+          "room": "bunkhouse",
+          "what": "into bunkhouse"
+        },
+        {
+          "t": 972,
+          "room": "bunkhouse",
+          "what": "done: calendar"
+        },
+        {
+          "t": 976,
+          "room": "bunkhouse",
+          "what": "goal: safe (take in office)"
+        },
+        {
+          "t": 976,
+          "room": "bunkhouse",
+          "what": "bag full: to the item box to put away item 30"
+        },
+        {
+          "t": 1001,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        },
+        {
+          "t": 1026,
+          "room": "office",
+          "what": "into office"
+        },
+        {
+          "t": 1036,
+          "room": "office",
+          "what": "put item 30 in the box"
+        },
+        {
+          "t": 1048,
+          "room": "office",
+          "what": "done: safe"
+        },
+        {
+          "t": 1052,
+          "room": "office",
+          "what": "goal: letters (take in office)"
+        },
+        {
+          "t": 1062,
+          "room": "office",
+          "what": "done: letters"
+        },
+        {
+          "t": 1066,
+          "room": "office",
+          "what": "goal: mill-race (event in pond)"
+        },
+        {
+          "t": 1066,
+          "room": "office",
+          "what": "to the item box for item 30"
+        },
+        {
+          "t": 1077,
+          "room": "office",
+          "what": "took item 30 from the box"
+        },
+        {
+          "t": 1088,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        },
+        {
+          "t": 1106,
+          "room": "sawmill",
+          "what": "into sawmill"
+        },
+        {
+          "t": 1167,
+          "room": "pond",
+          "what": "into pond"
+        },
+        {
+          "t": 1186,
+          "room": "pond",
+          "what": "done: mill-race"
+        },
+        {
+          "t": 1190,
+          "room": "pond",
+          "what": "goal: crane (event in sawmill)"
+        },
+        {
+          "t": 1202,
+          "room": "sawmill",
+          "what": "into sawmill"
+        },
+        {
+          "t": 1344,
+          "room": "sawmill",
+          "what": "could not reach the clip: could not face 1904"
+        },
+        {
+          "t": 1482,
+          "room": "sawmill",
+          "what": "stuck on crane: could not face 3137"
+        },
+        {
+          "t": 1487,
+          "room": "sawmill",
+          "what": "goal: crane (event in sawmill)"
+        },
+        {
+          "t": 1527,
+          "room": "sawmill",
+          "what": "stuck on crane: could not face 3170"
+        },
+        {
+          "t": 1530,
+          "room": "sawmill",
+          "what": "trying again: letters, crane"
+        },
+        {
+          "t": 1531,
+          "room": "sawmill",
+          "what": "goal: crane (event in sawmill)"
+        },
+        {
+          "t": 1547,
+          "room": "sawmill",
+          "what": "done: crane"
+        },
+        {
+          "t": 1551,
+          "room": "sawmill",
+          "what": "goal: cog (take in workshop)"
+        },
+        {
+          "t": 1564,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        },
+        {
+          "t": 1589,
+          "room": "workshop",
+          "what": "into workshop"
+        },
+        {
+          "t": 1617,
+          "room": "workshop",
+          "what": "could not take the clip here"
+        },
+        {
+          "t": 1631,
+          "room": "workshop",
+          "what": "done: cog"
+        },
+        {
+          "t": 1637,
+          "room": "workshop",
+          "what": "quarter 1 done: its end saved for the next quarter"
+        }
+      ]
+    },
+    {
+      "quarter": 2,
+      "log": "q2/log-chain2.txt",
+      "logSha256": "269b6f2e5a565b69f5cb5dd2b2862d1b7b2925d85d67d93684fb7cadd60b67de",
+      "sourceVideo": "q2/reb-q2-chain2.mp4",
+      "video": "q2.mp4",
+      "sha256": "13b1f686a3504a024c1561d95e656da0db6f0d1f87233d0d6606255d50d2a7f7",
+      "result": "FAIL",
+      "failures": [
+        "glitch: workshop f1185: jumped 2071 units in 1 frames, (4760, 3995) to (3331, 5494)"
+      ],
+      "scale": 1,
+      "offset": -4,
+      "manualEntries": [],
+      "events": [
+        {
+          "t": 36,
+          "room": "workshop",
+          "what": "quarter 2: starting from /tmp/rebplan/quarters/snaps/q1-end.json"
+        },
+        {
+          "t": 38,
+          "room": "workshop",
+          "what": "goal: cut-depot (unlock in camp-yard)"
+        },
+        {
+          "t": 51,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        },
+        {
+          "t": 72,
+          "room": "depot",
+          "what": "into depot"
+        },
+        {
+          "t": 72,
+          "room": "depot",
+          "what": "done: cut-depot"
+        },
+        {
+          "t": 76,
+          "room": "depot",
+          "what": "goal: cut-chain (unlock in road)"
+        },
+        {
+          "t": 84,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        },
+        {
+          "t": 96,
+          "room": "camp-gate",
+          "what": "into camp-gate"
+        },
+        {
+          "t": 111,
+          "room": "logging-road",
+          "what": "into logging-road"
+        },
+        {
+          "t": 122,
+          "room": "woods",
+          "what": "into woods"
+        },
+        {
+          "t": 140,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 162,
+          "room": "road",
+          "what": "into road"
+        },
+        {
+          "t": 180,
+          "room": "washout",
+          "what": "into washout"
+        },
+        {
+          "t": 180,
+          "room": "washout",
+          "what": "done: cut-chain"
+        },
+        {
+          "t": 184,
+          "room": "washout",
+          "what": "goal: tower-door (unlock in tower-foot)"
+        },
+        {
+          "t": 203,
+          "room": "tower-foot",
+          "what": "into tower-foot"
+        },
+        {
+          "t": 231,
+          "room": "tower-stairs",
+          "what": "into tower-stairs"
+        },
+        {
+          "t": 231,
+          "room": "tower-stairs",
+          "what": "done: tower-door"
+        },
+        {
+          "t": 235,
+          "room": "tower-stairs",
+          "what": "goal: tower-view (scene in tower-top)"
+        },
+        {
+          "t": 257,
+          "room": "tower-top",
+          "what": "into tower-top"
+        },
+        {
+          "t": 276,
+          "room": "tower-top",
+          "what": "took a clip (16 rounds before)"
+        },
+        {
+          "t": 280,
+          "room": "tower-top",
+          "what": "done: tower-view"
+        },
+        {
+          "t": 284,
+          "room": "tower-top",
+          "what": "goal: switch-key (take in tower-top)"
+        },
+        {
+          "t": 310,
+          "room": "tower-top",
+          "what": "done: switch-key"
+        },
+        {
+          "t": 314,
+          "room": "tower-top",
+          "what": "goal: walt-log (take in tower-top)"
+        },
+        {
+          "t": 324,
+          "room": "tower-top",
+          "what": "done: walt-log"
+        },
+        {
+          "t": 328,
+          "room": "tower-top",
+          "what": "goal: jerrycan (take in shed)"
+        },
+        {
+          "t": 345,
+          "room": "tower-stairs",
+          "what": "into tower-stairs"
+        },
+        {
+          "t": 358,
+          "room": "tower-foot",
+          "what": "into tower-foot"
+        },
+        {
+          "t": 370,
+          "room": "washout",
+          "what": "into washout"
+        },
+        {
+          "t": 388,
+          "room": "road",
+          "what": "into road"
+        },
+        {
+          "t": 401,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 413,
+          "room": "shed",
+          "what": "into shed"
+        },
+        {
+          "t": 422,
+          "room": "shed",
+          "what": "done: jerrycan"
+        },
+        {
+          "t": 426,
+          "room": "shed",
+          "what": "goal: fuel (event in depot)"
+        },
+        {
+          "t": 436,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 446,
+          "room": "woods",
+          "what": "into woods"
+        },
+        {
+          "t": 467,
+          "room": "logging-road",
+          "what": "into logging-road"
+        },
+        {
+          "t": 486,
+          "room": "camp-gate",
+          "what": "into camp-gate"
+        },
+        {
+          "t": 500,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        },
+        {
+          "t": 509,
+          "room": "depot",
+          "what": "into depot"
+        },
+        {
+          "t": 526,
+          "room": "depot",
+          "what": "done: fuel"
+        },
+        {
+          "t": 529,
+          "room": "depot",
+          "what": "goal: diesel (take in depot)"
+        },
+        {
+          "t": 541,
+          "room": "depot",
+          "what": "done: diesel"
+        },
+        {
+          "t": 544,
+          "room": "depot",
+          "what": "goal: generator-on (event in generator)"
+        },
+        {
+          "t": 553,
+          "room": "camp-yard",
+          "what": "into camp-yard"
+        },
+        {
+          "t": 565,
+          "room": "camp-gate",
+          "what": "into camp-gate"
+        },
+        {
+          "t": 580,
+          "room": "logging-road",
+          "what": "into logging-road"
+        },
+        {
+          "t": 591,
+          "room": "woods",
+          "what": "into woods"
+        },
+        {
+          "t": 609,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 629,
+          "room": "road",
+          "what": "into road"
+        },
+        {
+          "t": 644,
+          "room": "washout",
+          "what": "into washout"
+        },
+        {
+          "t": 670,
+          "room": "generator",
+          "what": "into generator"
+        },
+        {
+          "t": 686,
+          "room": "generator",
+          "what": "done: generator-on"
+        },
+        {
+          "t": 690,
+          "room": "generator",
+          "what": "goal: line-on (event in switch)"
+        },
+        {
+          "t": 712,
+          "room": "switch",
+          "what": "into switch"
+        },
+        {
+          "t": 720,
+          "room": "switch",
+          "what": "done: line-on"
+        },
+        {
+          "t": 726,
+          "room": "switch",
+          "what": "quarter 2 done: its end saved for the next quarter"
+        }
+      ]
+    },
+    {
+      "quarter": 3,
+      "log": "q3/log-chain3.txt",
+      "logSha256": "6b69e74764cce69cd8937bac216bdeba922b347e05bc8cc9315f3c606b806f2d",
+      "sourceVideo": "q3/reb-q3-chain3.mp4",
+      "video": "q3.mp4",
+      "sha256": "d17b7978c919ca3868ba80b76205bdd23f2e5c27d94009d84ab40ea884c379de",
+      "result": "PASS",
+      "failures": [],
+      "scale": 1,
+      "offset": -4,
+      "manualEntries": [],
+      "events": [
+        {
+          "t": 36,
+          "room": "switch",
+          "what": "quarter 3: starting from /tmp/rebplan/quarters/snaps/q2-end.json"
+        },
+        {
+          "t": 38,
+          "room": "switch",
+          "what": "goal: fit-cog (event in platform)"
+        },
+        {
+          "t": 66,
+          "room": "switch",
+          "what": "the way to line-track did not open"
+        },
+        {
+          "t": 77,
+          "room": "generator",
+          "what": "into generator"
+        },
+        {
+          "t": 90,
+          "room": "washout",
+          "what": "into washout"
+        },
+        {
+          "t": 109,
+          "room": "road",
+          "what": "into road"
+        },
+        {
+          "t": 122,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 138,
+          "room": "bridge",
+          "what": "into bridge"
+        },
+        {
+          "t": 154,
+          "room": "platform",
+          "what": "into platform"
+        },
+        {
+          "t": 172,
+          "room": "platform",
+          "what": "done: fit-cog"
+        },
+        {
+          "t": 176,
+          "room": "platform",
+          "what": "goal: quarry-key (take in cottage)"
+        },
+        {
+          "t": 195,
+          "room": "east-path",
+          "what": "into east-path"
+        },
+        {
+          "t": 211,
+          "room": "cottage",
+          "what": "into cottage"
+        },
+        {
+          "t": 220,
+          "room": "cottage",
+          "what": "done: quarry-key"
+        },
+        {
+          "t": 224,
+          "room": "cottage",
+          "what": "goal: diary (take in cottage)"
+        },
+        {
+          "t": 237,
+          "room": "cottage",
+          "what": "done: diary"
+        },
+        {
+          "t": 240,
+          "room": "cottage",
+          "what": "goal: rosters (take in quarry-office)"
+        },
+        {
+          "t": 255,
+          "room": "east-path",
+          "what": "into east-path"
+        },
+        {
+          "t": 270,
+          "room": "quarry",
+          "what": "into quarry"
+        },
+        {
+          "t": 291,
+          "room": "quarry-office",
+          "what": "into quarry-office"
+        },
+        {
+          "t": 299,
+          "room": "quarry-office",
+          "what": "done: rosters"
+        },
+        {
+          "t": 303,
+          "room": "quarry-office",
+          "what": "goal: dynamite (take in quarry-office)"
+        },
+        {
+          "t": 314,
+          "room": "quarry-office",
+          "what": "done: dynamite"
+        },
+        {
+          "t": 318,
+          "room": "quarry-office",
+          "what": "goal: blast (event in mine-entrance)"
+        },
+        {
+          "t": 331,
+          "room": "quarry",
+          "what": "into quarry"
+        },
+        {
+          "t": 350,
+          "room": "mine-entrance",
+          "what": "into mine-entrance"
+        },
+        {
+          "t": 370,
+          "room": "mine-entrance",
+          "what": "done: blast"
+        },
+        {
+          "t": 373,
+          "room": "mine-entrance",
+          "what": "goal: mine-map (take in mine-office)"
+        },
+        {
+          "t": 388,
+          "room": "tunnel",
+          "what": "into tunnel"
+        },
+        {
+          "t": 410,
+          "room": "mine-office",
+          "what": "into mine-office"
+        },
+        {
+          "t": 417,
+          "room": "mine-office",
+          "what": "done: mine-map"
+        },
+        {
+          "t": 421,
+          "room": "mine-office",
+          "what": "goal: drain (event in junction)"
+        },
+        {
+          "t": 434,
+          "room": "tunnel",
+          "what": "into tunnel"
+        },
+        {
+          "t": 450,
+          "room": "junction",
+          "what": "into junction"
+        },
+        {
+          "t": 463,
+          "room": "junction",
+          "what": "done: drain"
+        },
+        {
+          "t": 466,
+          "room": "junction",
+          "what": "goal: mine-collapse (scene in gallery)"
+        },
+        {
+          "t": 488,
+          "room": "gallery",
+          "what": "into gallery"
+        },
+        {
+          "t": 492,
+          "room": "gallery",
+          "what": "done: mine-collapse"
+        },
+        {
+          "t": 496,
+          "room": "gallery",
+          "what": "goal: op-key (scene in gallery)"
+        },
+        {
+          "t": 541,
+          "room": "gallery",
+          "what": "done: op-key"
+        },
+        {
+          "t": 544,
+          "room": "gallery",
+          "what": "goal: lift-up (event in mine-lift)"
+        },
+        {
+          "t": 569,
+          "room": "gallery",
+          "what": "the way to junction did not open"
+        },
+        {
+          "t": 582,
+          "room": "junction",
+          "what": "into junction"
+        },
+        {
+          "t": 597,
+          "room": "mine-lift",
+          "what": "into mine-lift"
+        },
+        {
+          "t": 605,
+          "room": "mine-lift",
+          "what": "done: lift-up"
+        },
+        {
+          "t": 609,
+          "room": "mine-lift",
+          "what": "goal: summit (visit in summit-trail)"
+        },
+        {
+          "t": 619,
+          "room": "summit-trail",
+          "what": "into summit-trail"
+        },
+        {
+          "t": 621,
+          "room": "summit-trail",
+          "what": "done: summit"
+        },
+        {
+          "t": 624,
+          "room": "summit-trail",
+          "what": "goal: fuses (take in shed)"
+        },
+        {
+          "t": 634,
+          "room": "mine-lift",
+          "what": "into mine-lift"
+        },
+        {
+          "t": 644,
+          "room": "junction",
+          "what": "into junction"
+        },
+        {
+          "t": 658,
+          "room": "tunnel",
+          "what": "into tunnel"
+        },
+        {
+          "t": 684,
+          "room": "mine-entrance",
+          "what": "into mine-entrance"
+        },
+        {
+          "t": 697,
+          "room": "quarry",
+          "what": "into quarry"
+        },
+        {
+          "t": 715,
+          "room": "east-path",
+          "what": "into east-path"
+        },
+        {
+          "t": 732,
+          "room": "platform",
+          "what": "into platform"
+        },
+        {
+          "t": 749,
+          "room": "bridge",
+          "what": "into bridge"
+        },
+        {
+          "t": 766,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 781,
+          "room": "shed",
+          "what": "into shed"
+        },
+        {
+          "t": 790,
+          "room": "shed",
+          "what": "done: fuses"
+        },
+        {
+          "t": 793,
+          "room": "shed",
+          "what": "goal: fit-fuse (event in booth)"
+        },
+        {
+          "t": 806,
+          "room": "yard",
+          "what": "into yard"
+        },
+        {
+          "t": 815,
+          "room": "bridge",
+          "what": "into bridge"
+        },
+        {
+          "t": 832,
+          "room": "platform",
+          "what": "into platform"
+        },
+        {
+          "t": 848,
+          "room": "booth",
+          "what": "into booth"
+        },
+        {
+          "t": 863,
+          "room": "booth",
+          "what": "done: fit-fuse"
+        },
+        {
+          "t": 866,
+          "room": "booth",
+          "what": "goal: gondola-runs (event in booth)"
+        },
+        {
+          "t": 886,
+          "room": "booth",
+          "what": "done: gondola-runs"
+        },
+        {
+          "t": 891,
+          "room": "booth",
+          "what": "quarter 3 done: its end saved for the next quarter"
+        }
+      ]
+    },
+    {
+      "quarter": 4,
+      "log": "q4/log-chain3.txt",
+      "logSha256": "77c726df18af95fd3b2207df0f48cec201d1e1811e6f29117467115f86ffdcb4",
+      "sourceVideo": "q4/reb-q4-chain3.mp4",
+      "video": "q4.mp4",
+      "sha256": "b183d22c858702f0cd3bd10ff07d96a55dd094d3e70b2551f73ba869f8717161",
+      "result": "FAIL",
+      "failures": [
+        "glitch: booth f1242: jumped 2565 units in 1 frames, (5185, 4930) to (3411, 3077)"
+      ],
+      "scale": 1,
+      "offset": -4,
+      "manualEntries": [
+        {
+          "room": "save",
+          "start": 844.5,
+          "poster": 861,
+          "note": "Original save room has no camera render. Entrance checked by eye at half-second intervals."
+        }
+      ],
+      "events": [
+        {
+          "t": 37,
+          "room": "booth",
+          "what": "quarter 4: starting from /tmp/rebplan/quarters/snaps/q3-end.json"
+        },
+        {
+          "t": 38,
+          "room": "booth",
+          "what": "goal: ride (scene in car)"
+        },
+        {
+          "t": 60,
+          "room": "platform",
+          "what": "into platform"
+        },
+        {
+          "t": 84,
+          "room": "car",
+          "what": "into car"
+        },
+        {
+          "t": 88,
+          "room": "car",
+          "what": "done: ride"
+        },
+        {
+          "t": 92,
+          "room": "car",
+          "what": "goal: pylon-down (visit in valley-path)"
+        },
+        {
+          "t": 105,
+          "room": "pylon",
+          "what": "into pylon"
+        },
+        {
+          "t": 123,
+          "room": "valley-path",
+          "what": "into valley-path"
+        },
+        {
+          "t": 125,
+          "room": "valley-path",
+          "what": "done: pylon-down"
+        },
+        {
+          "t": 128,
+          "room": "valley-path",
+          "what": "goal: kevin (scene in crash)"
+        },
+        {
+          "t": 152,
+          "room": "crash",
+          "what": "into crash"
+        },
+        {
+          "t": 156,
+          "room": "crash",
+          "what": "done: kevin"
+        },
+        {
+          "t": 160,
+          "room": "crash",
+          "what": "goal: crowbar (take in crash)"
+        },
+        {
+          "t": 172,
+          "room": "crash",
+          "what": "done: crowbar"
+        },
+        {
+          "t": 176,
+          "room": "crash",
+          "what": "goal: kevins-gun (take in crash)"
+        },
+        {
+          "t": 193,
+          "room": "crash",
+          "what": "done: kevins-gun"
+        },
+        {
+          "t": 196,
+          "room": "crash",
+          "what": "goal: pry-lodge (unlock in creek)"
+        },
+        {
+          "t": 236,
+          "room": "valley-path",
+          "what": "into valley-path"
+        },
+        {
+          "t": 252,
+          "room": "creek",
+          "what": "into creek"
+        },
+        {
+          "t": 274,
+          "room": "lodge",
+          "what": "into lodge"
+        },
+        {
+          "t": 274,
+          "room": "lodge",
+          "what": "done: pry-lodge"
+        },
+        {
+          "t": 278,
+          "room": "lodge",
+          "what": "goal: gate-key (take in lodge)"
+        },
+        {
+          "t": 289,
+          "room": "lodge",
+          "what": "done: gate-key"
+        },
+        {
+          "t": 293,
+          "room": "lodge",
+          "what": "goal: gardener-diary (take in lodge)"
+        },
+        {
+          "t": 306,
+          "room": "lodge",
+          "what": "done: gardener-diary"
+        },
+        {
+          "t": 310,
+          "room": "lodge",
+          "what": "goal: open-gate (unlock in estate-wall)"
+        },
+        {
+          "t": 325,
+          "room": "creek",
+          "what": "into creek"
+        },
+        {
+          "t": 335,
+          "room": "estate-wall",
+          "what": "into estate-wall"
+        },
+        {
+          "t": 358,
+          "room": "kennels",
+          "what": "into kennels"
+        },
+        {
+          "t": 358,
+          "room": "kennels",
+          "what": "done: open-gate"
+        },
+        {
+          "t": 362,
+          "room": "kennels",
+          "what": "goal: cellar-key (take in garden-shed)"
+        },
+        {
+          "t": 470,
+          "room": "back-garden",
+          "what": "into back-garden"
+        },
+        {
+          "t": 485,
+          "room": "garden-shed",
+          "what": "into garden-shed"
+        },
+        {
+          "t": 494,
+          "room": "garden-shed",
+          "what": "done: cellar-key"
+        },
+        {
+          "t": 498,
+          "room": "garden-shed",
+          "what": "goal: bulkhead (unlock in back-garden)"
+        },
+        {
+          "t": 510,
+          "room": "back-garden",
+          "what": "into back-garden"
+        },
+        {
+          "t": 535,
+          "room": "cellar",
+          "what": "into cellar"
+        },
+        {
+          "t": 568,
+          "room": "cellar",
+          "what": "took a clip (1 rounds before)"
+        },
+        {
+          "t": 568,
+          "room": "cellar",
+          "what": "done: bulkhead"
+        },
+        {
+          "t": 572,
+          "room": "cellar",
+          "what": "goal: push-rack (event in cellar)"
+        },
+        {
+          "t": 584,
+          "room": "cellar",
+          "what": "done: push-rack"
+        },
+        {
+          "t": 587,
+          "room": "cellar",
+          "what": "goal: keeper-log (take in lower-station)"
+        },
+        {
+          "t": 601,
+          "room": "back-garden",
+          "what": "into back-garden"
+        },
+        {
+          "t": 616,
+          "room": "kennels",
+          "what": "into kennels"
+        },
+        {
+          "t": 629,
+          "room": "estate-wall",
+          "what": "into estate-wall"
+        },
+        {
+          "t": 654,
+          "room": "creek",
+          "what": "into creek"
+        },
+        {
+          "t": 669,
+          "room": "valley-path",
+          "what": "into valley-path"
+        },
+        {
+          "t": 681,
+          "room": "lower-yard",
+          "what": "into lower-yard"
+        },
+        {
+          "t": 699,
+          "room": "lower-station",
+          "what": "into lower-station"
+        },
+        {
+          "t": 708,
+          "room": "lower-station",
+          "what": "took a clip (15 rounds before)"
+        },
+        {
+          "t": 716,
+          "room": "lower-station",
+          "what": "done: keeper-log"
+        },
+        {
+          "t": 719,
+          "room": "lower-station",
+          "what": "goal: sleep (scene in save)"
+        },
+        {
+          "t": 733,
+          "room": "lower-yard",
+          "what": "into lower-yard"
+        },
+        {
+          "t": 745,
+          "room": "valley-path",
+          "what": "into valley-path"
+        },
+        {
+          "t": 755,
+          "room": "creek",
+          "what": "into creek"
+        },
+        {
+          "t": 770,
+          "room": "estate-wall",
+          "what": "into estate-wall"
+        },
+        {
+          "t": 783,
+          "room": "kennels",
+          "what": "into kennels"
+        },
+        {
+          "t": 797,
+          "room": "back-garden",
+          "what": "into back-garden"
+        },
+        {
+          "t": 814,
+          "room": "cellar",
+          "what": "into cellar"
+        },
+        {
+          "t": 830,
+          "room": "crawl",
+          "what": "into crawl"
+        },
+        {
+          "t": 880,
+          "room": "save",
+          "what": "into save"
+        },
+        {
+          "t": 884,
+          "room": "save",
+          "what": "done: sleep"
+        },
+        {
+          "t": 889,
+          "room": "save",
+          "what": "quarter 4 done: its end saved for the next quarter"
+        }
+      ]
+    }
+  ]
+}

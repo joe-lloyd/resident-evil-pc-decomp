@@ -1,0 +1,40 @@
+# Footage checks
+
+The sources are the four videos at [the whole-day recording](https://home.arpa/research/rebecca-whole-day/), recorded on 17 October 2026. All four SHA-256 hashes match the surviving local attempt videos. `recording-events.json` records those hashes and each log's hash.
+
+The room order and action labels come from the matching run logs. The entry stamps are late when a room starts with dialogue or a cutscene. Background comparison at two samples per second refines those entries. The capture uses wall-clock timestamps, so the scale remains 1. The initial log offset is minus four seconds. Matching refines that approximate offset separately at each entrance.
+
+I extracted and viewed these frames from the original quarter videos. Times below are video seconds, not log seconds.
+
+| Quarter | Video time | Room | What the frame shows |
+| --- | --- | --- | --- |
+| 1 | 18 | Ridge | Rebecca at the tree during the opening scene |
+| 1 | 30 | Trail | Rebecca on the forest path, with the ranger-station line |
+| 1 | 82 | Cabin | Rebecca by the cabin door during the entry dialogue |
+| 1 | 417 | Woods | Rebecca in the clearing with the blood on the ground |
+| 2 | 276 | Tower top | Rebecca on the lookout balcony above the smoking valley |
+| 2 | 682 | Generator | Rebecca beside the generator and electrical panel |
+| 3 | 488 | Gallery | The mine gallery with water, rails and the lit table |
+| 3 | 601 | Mine lift | Rebecca at the mine lift gate |
+| 3 | 859 | Booth | Rebecca at the gondola control desk |
+| 4 | 84 | Car | Rebecca inside the gondola car |
+| 4 | 152 | Crash | The burning helicopter and Rebecca at the crash site |
+| 4 | 861 | Save room | Rebecca and Chris during the ending scene |
+
+Two initial checks did not show a room background. Quarter 1 at 1627 seconds showed the item menu during the workshop pickup. Quarter 2 at 68 seconds showed a dark door transition into the depot. Those samples do not count as confirmed room views.
+
+The mansion save room has no camera render to match. I inspected quarter 4 from 825 seconds onward, then again at half-second intervals from 842 seconds. At 844 seconds the ladder transition is still visible. The first room frame appears at 844.5 seconds. The explicit override keeps the entry thought and the complete ending before the capture's idle tail.
+
+The source capture ended mid-packet in every quarter. An ffmpeg decode of the final three seconds reports an invalid NAL unit at the tail. Cutting stops each final clip at a complete source keyframe at least a second before the source duration. This removes idle tail footage after the last action without re-encoding the video.
+
+Quarter 2 and quarter 4 logs report a failed glitch check on checkpoint restore. The export preserves those failures. Reaching the final goal does not turn those runs into clean test passes.
+
+## Published checks
+
+The rebuilt [storyboard](https://home.arpa/research/rebecca-storyboard/) has 142 players with posters and `preload="none"`. The MP4 files total 286,753,452 bytes, or 273.47 MiB. All 142 MP4 URLs and 142 poster URLs return HTTP 200 with the expected MIME type. Full GET and byte-range GET checks pass for clips from every quarter. Range requests return HTTP 206 and the requested 1,024 bytes.
+
+I played and sought the cabin clip from quarter 1, tower top from quarter 2, gallery from quarter 3 and save room from quarter 4 in the published page. Every player reported 640 by 480, decoded frames, an advancing playback time and no media error. Changing scenes paused the previous player. The weather station's no-footage scene has no player.
+
+Desktop at 1,280 pixels and mobile at 390 pixels show the visit labels, posters and controls. The mobile videos occupy one column at 358 pixels with no page overflow. The shared navigation and research index card remain. All four quarters' final clips pass an ffmpeg decode with `-xerror` after the damaged source tails are removed.
+
+The source checks pass: 26 plan, supply, enemy and storyboard tests, including 11 storyboard tests. Strict TypeScript checks and the platform boundary check pass. `verify-clips.py` repeats the published HTTP checks.
