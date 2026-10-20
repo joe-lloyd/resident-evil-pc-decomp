@@ -1,7 +1,8 @@
 // node --test tools/rebecca/day/supplies.test.ts
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { ITEM_FLAGS, supplyLines, supplyModels } from './supplies.ts';
+import { ITEM_FLAGS, SUPPLIES, supplyLines, supplyModels } from './supplies.ts';
+import { day } from '../plan/day.ts';
 import type { Floor } from './foes.ts';
 
 const floor: Floor = {
@@ -32,4 +33,13 @@ test('each pickup has its own flag, kept while the item is there, and the model 
 
 test('the flags stay clear of the rest of her day: 230-247, and the save room\'s 22', () => {
   assert.ok(ITEM_FLAGS.every((f) => f < 230 && f !== 22));
+});
+
+
+test('the optional summit supply step offers ammunition and a first aid spray', () => {
+  const step = day.steps.find((s) => s.id === 'supplies')!;
+  const slug = day.places.find((p) => p.id === step.at)!.room ?? step.at;
+  assert.equal(step.kind, 'find');
+  assert.ok(SUPPLIES[slug]!.includes('clip'));
+  assert.ok(SUPPLIES[slug]!.includes('spray'));
 });

@@ -31,7 +31,7 @@ const SPREAD: Record<string, readonly Supply[]> = {
   sawmill: ['clip'],
   'tower-top': ['clip'],
   'quarry-office': ['greenHerb'],
-  mast: ['greenHerb'],
+  mast: ['greenHerb', 'clip', 'spray'],
   'lower-station': ['clip'],
   crash: ['beretta', 'clip'],
   creek: ['greenHerb'],
