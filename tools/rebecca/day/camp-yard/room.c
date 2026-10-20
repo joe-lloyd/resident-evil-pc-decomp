@@ -30,8 +30,4 @@ enemy(17, 0, 194, 1, 2, 0, 0, 1889, 0, 0, 12600, 0, 9880, 2, 0, 0, 0);  // a zom
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 213, 1)) {
-    set(FG_COMMON, 213, 0);
-    message(128, 255, 0);
-}
 return;

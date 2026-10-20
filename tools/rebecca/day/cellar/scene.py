@@ -324,7 +324,6 @@ def build():
     room.spot("push-rack", (rx1, ry0, rx1 + 0.6, CRAWL[0]))  # day/events.ts says what she sees and does here
     room.check((7.6, Y0, X1, 2.2), "Coal, under the chute.")
     room.check((2.8, Y1 - 1.1, 7.0, Y1), "Barrels. Someone's lit a candle on one of them.")
-    room.entry = "Candles. Someone's down here."
     room.export(anim, samples=128)
 
 

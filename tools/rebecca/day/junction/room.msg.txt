@@ -1,4 +1,4 @@
-0: \nThe roof is covered in egg\nsacs.
+0: \n...
 1: \nBlack water, right to the\nroof.
 2: \nThe lift cage. LIFT TO\nSURFACE. The cable goes up\ninto the dark.
 3: \nThe way down goes under\nthe water. It's black.\p{0}\nHis blood goes right to\nthe edge. He went in.

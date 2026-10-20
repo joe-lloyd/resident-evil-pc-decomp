@@ -1,4 +1,4 @@
-0: \nThe smell hits first. Then\nthe flies.
+0: \n...
 1: \nThe ranger. What the dogs\nleft of him.\p{0}\nHis keys are still on his\nbelt.
 2: \nA pit scraped in the soil,\nmatted with black hair.\p{0}\nThis is where they sleep.
 3: \nA heavy collar on a broken\nchain. The tag's too\nscratched to read.\p{0}\nThese dogs belonged to\nsomeone.

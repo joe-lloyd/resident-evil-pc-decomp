@@ -628,7 +628,6 @@ def build():
     room.check((tank_c[0] - 1.1, tank_c[1] - 0.9, tank_c[0] + 1.1, tank_c[1] - 0.4), "The generator's fuel tank. The gauge reads empty.\nI knock on it. Hollow.")
     room.check((1.8, 9.1, 3.4, 10.1), "A snake's shed skin, on the warm stone.\nAdders. I'll keep out of the long grass.")
     room.check((X0, 7.7, 2.2, 8.7), "FIRE LOOKOUT. The track climbs west, to the tower.")
-    room.entry = "Half the road's gone."
     room.export(anim)
 
 

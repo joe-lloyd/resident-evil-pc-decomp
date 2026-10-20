@@ -1,4 +1,4 @@
-0: \nThe tower creaks in the\nwind.
+0: \n...
 1: \nA man in a ranger's shirt,\nsmashed on the rocks.\p{0}\nHe came off the top. Fell,\nor jumped.
 2: \nThe stair's in a cage. The\ndoor's open, the padlock\nhanging off the hasp.\p{0}\nHe went up and never\nlocked it behind him.
 3: \nA bicycle. Its front wheel\nis still turning in the\nwind.

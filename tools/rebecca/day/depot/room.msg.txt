@@ -1,4 +1,4 @@
-0: \nDiesel. The whole place\nreeks of it.
+0: \n...
 1: \nThe fuel ledger. Gallons\nin, gallons out, signed\nevery day.\p{0}\nThe last entries are a\nmess. Then they stop.
 2: \nA dog. Not a camp dog: a\nbig one, its hide torn\nopen in strips.\p{0}\nIt dug in under the wire.\nSomebody shot it.
 3: \nA snake's skin, shed.\nAnother by the tank.\p{0}\nAdders. They like the warm\ndrums.

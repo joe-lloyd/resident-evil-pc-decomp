@@ -21,8 +21,4 @@ if (ck(FG_ITEM, 198, 0)) {  // greenHerb
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 249, 1)) {
-    set(FG_COMMON, 249, 0);
-    message(128, 255, 0);
-}
 return;

@@ -1,4 +1,4 @@
-0: \nThe door isn't locked.\p{0}\o"Hello? Ranger?"\p{0}\nNo one. But the lamp is\nstill lit.
+0: \n...
 1: \nA field radio, still on.\nUnder the static, voices.\p{0}\n"...Bravo team, come in.\nBravo, respond..."\p{0}\n"...Alpha goes in after\ndark. Over..."\p{0}\nI try the handset. Only\nstatic comes back.
 2: \nThe blanket's half on the\nfloor. He got up fast.
 3: \nThe stove is still warm.\nHe was here this morning.

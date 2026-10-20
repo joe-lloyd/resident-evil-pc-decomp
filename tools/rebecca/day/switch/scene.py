@@ -232,7 +232,6 @@ def build():
     room.check((X0 + 0.4, 2.5, X0 + 1.0, 3.1), "A lineman's rubber glove. It's melted.")
     room.check((lx - 0.3, Y1 - 0.9, lx + 0.7, Y1), "MAIN ISOLATOR, SKYWAY LINE. The lever's down, and padlocked.\nNo power reaches the gondola until this goes up.")
     room.check((X1 - 0.6, EDOOR[0] - 0.4, X1, EDOOR[0]), "Blood on the door frame. He went out to the line track.")
-    room.entry = "It smells of burnt rubber."
     room.export(anim)
 
 

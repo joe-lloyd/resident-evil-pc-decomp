@@ -1,4 +1,4 @@
-0: \nHalf the road's gone.
+0: \n...
 1: \nA pickup, nose-down in the\ngully. ARKLAY TIMBER CO.,\nCAMP 4.\p{0}\nHe drove straight through\nthe barrier in the dark.
 2: \nDown in the pool, face\ndown. A logger, in his\norange vest.\p{0}\nHe got out of the truck,\nand no further.
 3: \nThe culvert's choked with\nbranches. The creek's\p{0}\ncoming over the road\ninstead.

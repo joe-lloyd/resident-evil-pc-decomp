@@ -486,7 +486,6 @@ def build():
     room.check((17.9, 3.6, 18.5, 5.2), "ARKLAY FIRE LOOKOUT. ELEV 1610. BUILT 1953.")
     room.check((14.6, 2.0, 15.8, 2.8), "FIRE DANGER TODAY: HIGH.")
     room.check((px + 0.55, py - 0.5, px + 1.1, py + 0.5), "The privy. Nobody in it. Thank God.")
-    room.entry = "The tower creaks in the wind."
     room.export(anim)
 
 

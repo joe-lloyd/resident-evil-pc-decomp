@@ -598,7 +598,6 @@ def build():
     room.check((11.0, 5.6, 12.8, 7.6), "An ore cart, tipped over. Silver ore, dull and grey.")
     room.check((cx - 0.9, DECK[2] + 0.6, cx + 0.7, cy - 0.05), "Another cart, on its side on the trestle.\nThe web runs from it right down into the ravine.")
     room.check((X_W + 0.7, DECK[2], -1.6, DECK[2] + 0.6), "The trestle creaks. It's a long way down.")
-    room.entry = "Webs. Thick ones."
     room.export(anim)
 
 

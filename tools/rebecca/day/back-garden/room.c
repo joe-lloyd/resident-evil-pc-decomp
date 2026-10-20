@@ -16,8 +16,4 @@ enemy(17, 0, 235, 1, 2, 0, 0, 120, 0, 0, 6140, 0, 22460, 0, 0, 0, 0);  // a zomb
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 253, 1)) {
-    set(FG_COMMON, 253, 0);
-    message(128, 255, 0);
-}
 return;

@@ -26,10 +26,6 @@ if (ck(FG_COMMON, 130, 0) && ck(FG_ITEM, 247, 0)) {  // diesel, left here
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 217, 1)) {
-    set(FG_COMMON, 217, 0);
-    message(128, 255, 0);
-}
 if (ck(FG_COMMON, 130, 1)) {
     if (ck(FG_ROOM, 12, 1) && testitem(31)) {
         set(FG_ROOM, 12, 0);

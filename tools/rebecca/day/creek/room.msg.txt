@@ -1,4 +1,4 @@
-0: \nRunning water. And a\nlight, across the creek.
+0: \n...
 1: \nThe door's padlocked. From\nthe outside.\p{0}\nThere's light inside.\nGouges in the wood, low\ndown.
 2: \nA lamp's burning in there.\nThere's a smear on the\nglass.
 3: \nA dog, drowned against the\nlog. A Doberman.\p{0}\nIts coat's come away in\npatches. It has a collar\ntag: SPENCER KENNELS.

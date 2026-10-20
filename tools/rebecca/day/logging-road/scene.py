@@ -402,7 +402,6 @@ def build():
     room.check((15.8, TY + 1.0, 17.6, TY + 2.0), "Bootprints, going east. One foot dragging.\nHe walked toward the camp.")
     room.check((FX - 0.1, TY - 1.3, FX + 0.6, TY + 1.3), "The battery's nearly flat. The blinker's still going.\nThe keys are gone from the ignition.")
     room.check((TAIL - 0.8, TY - 1.2, TAIL, TY + 1.2), "A full load of logs, for the mill. It never got there.")
-    room.entry = "A logging truck, stopped dead in the ruts."
     room.export(anim)
 
 

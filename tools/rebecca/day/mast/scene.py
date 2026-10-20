@@ -504,7 +504,6 @@ def build():
     room.check((CABIN[0] + 0.6, CABIN[3], CABIN[0] + 3.2, CABIN[3] + 0.6), "ARKLAY TELECOM. AUTHORISED STAFF.\nPadlocked.")
     room.check((8.3, 15.3, 8.9, 16.1), "A cairn. There's a hand on it, in blood.\nHe came along here, holding himself up.")
     room.check((9.0, 17.2, 9.6, 18.2), "Straight down, both sides. The crows just hang there in the wind, watching me.")
-    room.entry = "The mast. Its light's still blinking."
     room.export(anim)
 
 

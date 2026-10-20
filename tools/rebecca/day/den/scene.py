@@ -347,7 +347,6 @@ def build():
     room.check((X1 - 1.9, 8.4, X1, 10.2), "A hiker's jacket, shredded on the roots.\nI don't want to know where the hiker is.")
     room.check((4.8, 4.6, 6.0, 5.8), "A deer's skull, licked clean.")
     room.check((8.9, 3.6, 10.0, 4.6), "Water dripping off the rock into a puddle. The puddle's red.")
-    room.entry = "The smell hits first. Then the flies."
     room.export(anim)
 
 

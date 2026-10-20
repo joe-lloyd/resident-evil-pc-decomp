@@ -447,7 +447,6 @@ def build():
     room.check((7.8, 3.0, 9.6, 4.6), "Paw prints either side of the smear. Big ones.\nThey dragged him north, into the hollow.")
     room.check((12.0, 4.6, 14.1, 6.5), "A deer. They ate her soft parts first.\nShe's been here longer than he has.")
     room.check((16.6, 11.7, 18.0, 13.2), "Orange paint on the bark, and a 4. A tree marked for felling.\nThe logging camp must be that way.")
-    room.entry = "The drag marks go on into the trees. So does the blood."
     room.export(anim)
 
 

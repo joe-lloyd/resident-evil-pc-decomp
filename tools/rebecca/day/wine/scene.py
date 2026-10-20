@@ -250,7 +250,6 @@ def build():
     room.check((lx - 0.5, ly - 0.4, lx + 0.4, ly + 0.4), "The cellar book. Tonight's page: one Margaux, ticked.\nHe came down for a bottle.")
     room.check((2.0, Y1 - 1.0, 3.3, Y1 - 0.36), "Crates of wine. SPENCER, stencilled on the side.\nSomeone stuck a candle in a bottle here.")
     room.check((X1 - 0.8, 1.4, X1 - 0.36, 2.2), "Dusty bottles. Years of them.")
-    room.entry = "The wine store. It smells of wine. And something else."
     room.export(anim, samples=128)
 
 

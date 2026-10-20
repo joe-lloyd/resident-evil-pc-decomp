@@ -5,8 +5,7 @@
 // is padlocked. The key hangs by the cabin door. Once she has it, a Cerberus
 // comes out of the trees.
 //
-// Game units are metres * 1700 (scene.py). Flags: FG_COMMON 202 she has been
-// here before; FG_COMMON 205 the pine is dragged clear (the background shows
+// Game units are metres * 1700 (scene.py). Flags: FG_COMMON 205 the pine is dragged clear (the background shows
 // it moved while this is set, src/game/BgAnim.cpp); FG_ITEM 242 clear once she
 // has the shed key; FG_LOCK 60 the shed's padlock is open; FG_ENEMY 200 the
 // dog is dead. ck(bank, n, 1) is true while flag n is clear.
@@ -72,10 +71,6 @@ if (ck(FG_COMMON, 126, 1) && ck(FG_STATUS, 15, 1) && ck(FG_ITEM, 242, 1)) {
     evt_exec(0, 9, 0);
 }
 // END CUTSCENES MAIN
-if (ck(FG_COMMON, 202, 1)) {
-    set(FG_COMMON, 202, 0);
-    message(128, 255, 0);
-}
 // The crank used at the winch. The status screen is still closing on the
 // frame she uses it, and a message opened then is dropped, so the line waits
 // a second (the state word 4 counts seconds; setw restarts it). The pine

@@ -1,6 +1,6 @@
 // Write the scripts and messages of the rooms built with blender/kit.py from
-// what their scenes record (renders/room.json: doors, things to check, the
-// thought on first coming in). A door from A to B lands her where B's door
+// what their scenes record (renders/room.json: doors, things to check, any
+// explicitly allowed entry thought). A door from A to B lands her where B's door
 // back to A says to arrive; the hand-written rooms give their arrivals in
 // BUILT_ARRIVALS. A door to a room not rendered yet is left out.
 //
@@ -26,6 +26,10 @@ import { compileScene, type Compiled } from './cutscene.ts';
 import { CUT_FLAGS, scenesIn } from './cutscenes.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
+
+/** Standalone entry thoughts need a named story reason. None are allowed. */
+export const ENTRY_THOUGHT_ALLOWLIST: Readonly<Record<string, string>> = {};
+
 
 type Zone = { x0: number; z0: number; x1: number; z1: number };
 type Arrive = { x: number; z: number; angle: number };
@@ -257,6 +261,7 @@ function readKit(slug: string): KitJson | undefined {
   const file = path.join(here, slug, 'renders', 'room.json');
   if (!existsSync(file)) return undefined;
   const json = JSON.parse(readFileSync(file, 'utf8')) as KitJson;
+  if (json.entry && !ENTRY_THOUGHT_ALLOWLIST[slug]) throw new Error(`${slug}: entry thought is not allowed; use a check or cutscene`);
   return json.doors ? json : undefined;
 }
 

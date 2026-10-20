@@ -39,10 +39,6 @@ if (ck(FG_COMMON, 115, 1)) {
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 208, 1)) {
-    set(FG_COMMON, 208, 0);
-    message(128, 255, 0);
-}
 if (ck(FG_COMMON, 140, 1)) {
     if (ck(FG_ROOM, 12, 1) && testitem(39)) {
         set(FG_ROOM, 12, 0);

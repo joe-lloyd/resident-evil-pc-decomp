@@ -1,4 +1,4 @@
-0: \nThe mill pond. The wheel's\nstopped.
+0: \n...
 1: \nA man face down in the\nreeds. His left sleeve is\nempty from the elbow.\p{0}\nThe sawyer. He made it\nthis far.
 2: \nA hard hat, floating out\nthere. And dead fish,\nbelly up.\p{0}\nSomething's wrong with the\nwater too.
 3: \nThe water wheel. It drives\nthe mill through that\nshaft.\p{0}\nIt turns when the sluice\nlets the water down the\nrace.

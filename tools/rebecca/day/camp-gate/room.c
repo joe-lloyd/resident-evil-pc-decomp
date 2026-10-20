@@ -19,10 +19,6 @@ if (ck(FG_ITEM, 249, 0)) {
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 212, 1)) {
-    set(FG_COMMON, 212, 0);
-    message(128, 255, 0);
-}
 if (ck(FG_ROOM, 12, 0) && ck(FG_ITEM, 249, 1)) {
     set(FG_ROOM, 12, 1);
     message(135, 255, 0);

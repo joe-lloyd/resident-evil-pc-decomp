@@ -13,8 +13,4 @@ if (ck(FG_ITEM, 204, 0)) {  // spray
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 109, 1)) {
-    set(FG_COMMON, 109, 0);
-    message(128, 255, 0);
-}
 return;

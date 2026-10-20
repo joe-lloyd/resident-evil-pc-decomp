@@ -1,4 +1,4 @@
-0: \nThe cage creaks under me.
+0: \n...
 1: \nThe cage won't move.
 2: \nA miner's cap lamp, dead.\nThe strap's snapped.\p{0}\nThere's an old smear of\nblood across the plates.
 3: \nMAX 6 MEN.

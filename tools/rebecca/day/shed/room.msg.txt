@@ -1,4 +1,4 @@
-0: \nThe ranger's tool shed.\p{0}\nIt smells of oil and\nsawdust.
+0: \n...
 1: \nHis chainsaw, in pieces.\p{0}\nHe tried to fix it first,\nthen gave up on it.
 2: \nSaws, a hammer, spanners.\nNothing that will shift\na tree.
 3: \nFuel cans. Both empty.

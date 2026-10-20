@@ -383,7 +383,6 @@ def build():
     room.check((5.6, 8.6, 7.4, 9.4), "The line's dead. A string of insulators has torn loose up there.\nIt swings in the wind.")
     room.spot("line-gate", (X1 - 1.4, 8.0, X1, 9.0))  # day/events.ts says what she sees and does here
     room.check((X0, 5.2, X0 + 0.8, SWITCH_DOOR[0] - 0.1), "The switch house. A handprint in blood on the door frame.")
-    room.entry = "The power line. Not a hum from it."
     room.export(anim)
 
 

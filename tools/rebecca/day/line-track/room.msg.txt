@@ -1,4 +1,4 @@
-0: \nThe power line. Not a hum\nfrom it.
+0: \n...
 1: \nThe gate is locked.
 2: \nA deer, torn open. The\ndogs have been at it.\p{0}\nNot long ago. The flies\nare thick.
 3: \nA hard hat. ARKLAY POWER.\nUpside down, with blood in\nit.

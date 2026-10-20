@@ -1,8 +1,7 @@
 // The ranger's tool shed (ROOM3160), inside. The winch's crank is on the
 // workbench beside the chainsaw he gave up on.
 //
-// Game units are metres * 1700 (scene.py). FG_COMMON 203: she has been in
-// before. FG_ITEM 243: the crank is still on the bench (bit set = still there);
+// Game units are metres * 1700 (scene.py). FG_ITEM 243: the crank is still on the bench (bit set = still there);
 // 244 and 245 the jerrycan and the fuses. Her key items' names are
 // items/items.ts.
 // init procedure 0
@@ -32,8 +31,4 @@ if (ck(FG_ITEM, 245, 0)) {
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 203, 1)) {
-    set(FG_COMMON, 203, 0);
-    message(128, 255, 0);
-}
 return;

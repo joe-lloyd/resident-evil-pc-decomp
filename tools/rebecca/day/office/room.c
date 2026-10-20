@@ -27,8 +27,4 @@ if (ck(FG_ITEM, 184, 0)) {  // ribbons
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 215, 1)) {
-    set(FG_COMMON, 215, 0);
-    message(128, 255, 0);
-}
 return;

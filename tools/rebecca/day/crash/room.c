@@ -25,9 +25,6 @@ if (ck(FG_ITEM, 197, 0)) {  // greenHerb
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 248, 1)) {
-    set(FG_COMMON, 248, 0);
-}
 if (ck(FG_COMMON, 120, 1) && ck(FG_STATUS, 15, 1)) {
     set(FG_COMMON, 120, 0);
     evt_exec(0, 9, 0);

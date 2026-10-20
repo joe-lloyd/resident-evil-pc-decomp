@@ -1,4 +1,4 @@
-0: \nCamp 4. The gate was shut\nfrom inside.
+0: \n...
 1: \nCAMP 4. QUARANTINE. BY\nORDER.\p{0}\nPainted by hand. The paint\nran before it dried.
 2: \nA logger, face down in the\nmud. A peavey is driven\ninto his back.\p{0}\nThat wasn't done by\nanything sick.
 3: \nThey burned something\nhere. Mattress springs.\nAnd bones.\p{0}\nOne log is still smoking.

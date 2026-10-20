@@ -292,7 +292,6 @@ def build():
     room.check((4.4, 13.2, 6.3, 15.8), "A pick and a shovel, dropped. Whoever worked here ran.")
     room.check((16.8, 7.6, 18.3, 9.6), "Drops of blood along the rails, on toward the workings.\nHal came this way.")
     room.check((12.9, 7.6, 14.4, 9.6), "An ore cart, half full. It's been here years.")
-    room.entry = "The lamps are lit. Someone's been down here."
     room.export(anim)
 
 

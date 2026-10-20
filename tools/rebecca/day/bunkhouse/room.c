@@ -23,8 +23,4 @@ if (ck(FG_ITEM, 182, 0)) {  // redHerb
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 214, 1)) {
-    set(FG_COMMON, 214, 0);
-    message(128, 255, 0);
-}
 return;

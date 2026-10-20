@@ -1,4 +1,4 @@
-0: \nBurnt coffee. The hot\nplate's still on.
+0: \n...
 1: \nA steel locker, stencilled\nEXPLOSIVES. KEEP LOCKED.\p{0}\nIt's padlocked.
 2: \nA box marked CAPS, and\ncoils of wire. Blasting\ncaps.\p{0}\nKept well away from the\nlocker.
 3: \nThe time clock is still\nticking. The second hand's\nstuck,\p{0}\njumping on the same mark\nover and over.

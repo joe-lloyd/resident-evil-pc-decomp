@@ -1,4 +1,4 @@
-0: \nPylon 7. It's a long way\ndown.
+0: \n...
 1: \nA hard hat. Someone was\nworking up here.
 2: \nA toolbox, open. Spanners\neverywhere. He left in a\nhurry, or fell.
 3: \nPYLON 7. NO CLIMBING.\p{0}\nNo choice.

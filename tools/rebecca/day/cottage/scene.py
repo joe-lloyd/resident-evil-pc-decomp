@@ -312,7 +312,6 @@ def build():
     room.check((1.4, 3.4, 2.4, Y1), "He dragged the chair to the window and sat watching the path.\nBinoculars. Cold coffee.")
     room.check((X0, Y0, X0 + 1.2, Y0 + 2.1), "The bed's been slept in, or tried. Blood on the pillow.")
     room.check((d1, Y1 - 0.6, X1, Y1), "Fishing rods, a creel, waders. A man who liked quiet.")
-    room.entry = "The radio's still on."
     room.export(anim)
 
 

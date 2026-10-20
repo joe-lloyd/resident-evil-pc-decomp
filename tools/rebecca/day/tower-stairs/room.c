@@ -13,8 +13,4 @@ enemy(5, 0, 210, 1, 2, 0, 0, 3971, 0, 0, 7387, 0, 4327, 1, 0, 0, 0);  // a crow
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 226, 1)) {
-    set(FG_COMMON, 226, 0);
-    message(128, 255, 0);
-}
 return;

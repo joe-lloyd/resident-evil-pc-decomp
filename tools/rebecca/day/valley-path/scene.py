@@ -369,7 +369,6 @@ def build():
     room.check((sx - 0.7, sy - 0.6, sx + 0.7, sy + 0.2), "ARKLAY TRAIL, west. LOWER STATION, east. CREEK, south.\nSomething's clawed the post.")
     room.check((11.0, 10.4, 12.0, 12.0), "Paw prints. A lot of them. Big dogs, running south.")
     room.check((lx - 0.6, ly + 0.2, lx + 0.8, ly + 0.9), "The pylon's ladder. There's blood at the foot of it,\ndripping from somewhere up above.")
-    room.entry = "Down. Smoke in the west.\nThat could be the helicopter."
     room.export(anim)
 
 

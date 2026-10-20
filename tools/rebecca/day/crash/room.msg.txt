@@ -1,4 +1,4 @@
-0: \nThe helicopter.\p{0}\nThis is where we came\ndown.
+0: \n...
 1: \nKevin. He's still belted\ninto his seat.\p{0}\nHe flew us out here. He\nstayed with it.
 2: \nThe cargo bay. Rope, a box\nof flares...\p{0}\nA crowbar on the floor.
 3: \nSomeone patched themselves\nup here.\p{0}\nThe medkit's empty. The\ngauze is soaked.

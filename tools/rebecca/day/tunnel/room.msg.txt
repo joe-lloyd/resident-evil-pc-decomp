@@ -1,4 +1,4 @@
-0: \nThe lamps are lit.\nSomeone's been down here.
+0: \n...
 1: \nSomeone, wrapped up tight\nin web against the rock.\p{0}\nOne boot sticks out. I'm\nnot cutting it open.
 2: \nOFFICE, painted on the\nplanks. There's\p{0}\ncandlelight under the\ndoor.
 3: \nA pick and a shovel,\ndropped. Whoever worked\nhere ran.

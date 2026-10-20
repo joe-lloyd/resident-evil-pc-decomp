@@ -33,8 +33,4 @@ if (ck(FG_COMMON, 118, 0) && ck(FG_COMMON, 135, 1)) {
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 232, 1)) {
-    set(FG_COMMON, 232, 0);
-    message(128, 255, 0);
-}
 return;

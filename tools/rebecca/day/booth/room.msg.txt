@@ -1,4 +1,4 @@
-0: \nThe heater's still on. He\ncan't have gone long.
+0: \n...
 1: \nThe duty board, in chalk.\nPOWER OFF 4.50. DRIVE COG\nSHEARED. F3 BLOWN.\p{0}\nAt the bottom, underlined\ntwice: HAL HAS KEY.
 2: \nHis coffee went over. A\nphoto of a girl with a\p{0}\nfish, propped against the\nglass.
 3: \nGauze, soaked through. He\ndressed something in a\nhurry.\p{0}\nA bite, by the look of the\nfirst aid box. Everything\nin it is gone.

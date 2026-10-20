@@ -531,7 +531,6 @@ def build():
     room.check((6.5, 9.0, 8.6, 10.0), "A grey uniform cap. Estate security?")
     room.check((PARK[1][0] - 0.8, -5.3, PARK[1][0], -4.4), "Claw marks, from the glass right down to the ground.\nSomething came over this wall. From the inside.")
     room.check((PARK[0][0] - 0.8, -3.0, PARK[0][0], -2.0), "A shirt, torn on the glass. There's blood on it.\nSomeone tried to get over. Or something dragged them.")
-    room.entry = "The Spencer estate.\nThere's a light on, up at the house."
     room.export(anim, samples=128)
 
 

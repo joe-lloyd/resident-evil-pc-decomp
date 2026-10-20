@@ -317,7 +317,6 @@ def build():
     room.check((4.0, 10.5, 6.0, Y1), "A bench with a view of the whole valley. A little plaque:\nFOR THE ONES WHO BUILT THE SKYWAY.")
     room.check((13.8, 10.0, 15.4, 11.6), "The station's windsock. It's blowing hard off the valley.")
     room.check((5.0, 4.2, 6.2, 5.4), "The axe is still in the block. Somebody's woodpile, somebody's washing.")
-    room.entry = "Blood on the path. He came this way."
     room.export(anim)
 
 

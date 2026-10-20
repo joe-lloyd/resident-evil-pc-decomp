@@ -1,4 +1,4 @@
-0: \nA ranger station.\p{0}\nSmoke from the chimney.\nSomeone's here. Or was.
+0: \n...
 1: \nA pine has come down across\nthe trail.\p{0}\nIt's far too heavy to move\nby hand.
 2: \nA winch on the truck's\nbumper.\p{0}\nThe crank handle is\nmissing.
 3: \nThe driver's door is open.\nNo keys.\p{0}\nThe hazard lights are still\non. The battery's nearly\ndead.

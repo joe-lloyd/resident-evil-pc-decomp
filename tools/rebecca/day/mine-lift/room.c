@@ -20,9 +20,6 @@ if (ck(FG_COMMON, 136, 1)) {
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 239, 1)) {
-    set(FG_COMMON, 239, 0);
-}
 if (ck(FG_COMMON, 136, 1) && ck(FG_ROOM, 12, 0)) {
     set(FG_ROOM, 12, 1);
     if (ck(FG_COMMON, 131, 0)) {
