@@ -9,7 +9,7 @@ import { day } from '../plan/day.ts';
 import { SAVES } from '../plan/saves.ts';
 
 /** Item id, how many, its model (a room of the player's game and the slot in its item model table), and the byte RE1 gives each after 129. */
-const KINDS = {
+export const SUPPLY_KINDS = {
   clip: { id: 11, qty: 15, model: { from: 'Stage1/ROOM1020.RDT', index: 2 }, act: 0 },
   greenHerb: { id: 68, qty: 1, model: { from: 'Stage1/ROOM1090.RDT', index: 0 }, act: 1 },
   redHerb: { id: 67, qty: 1, model: { from: 'Stage1/ROOM10C0.RDT', index: 1 }, act: 1 },
@@ -19,7 +19,7 @@ const KINDS = {
   // A pack of three, as RE1 lays them by its typewriters.
   ribbons: { id: 47, qty: 3, model: { from: 'Stage3/ROOM30E0.RDT', index: 2 }, act: 0 },
 } as const;
-export type Supply = keyof typeof KINDS;
+export type Supply = keyof typeof SUPPLY_KINDS;
 
 const SPREAD: Record<string, readonly Supply[]> = {
   booth: ['greenHerb'],
@@ -61,7 +61,7 @@ export const ITEM_FLAGS = Array.from({ length: 50 }, (_, i) => 180 + i);
 
 /** The item models a room needs for its supplies, in the slot order the pickups use. */
 export function supplyModels(slug: string): { from: string; index: number }[] {
-  return [...new Set(SUPPLIES[slug] ?? [])].map((k) => KINDS[k].model);
+  return [...new Set(SUPPLIES[slug] ?? [])].map((k) => SUPPLY_KINDS[k].model);
 }
 
 const ZONE = 1200;
@@ -102,7 +102,7 @@ export function supplyLines(slug: string, floor: Floor, flags: number[], id: num
   const at = spots(floor, kinds.length);
   if (at.length < kinds.length) throw new Error(`${slug}: room for ${at.length} of ${kinds.length} supplies`);
   return kinds.flatMap((kind, i) => {
-    const k = KINDS[kind];
+    const k = SUPPLY_KINDS[kind];
     const p = at[i]!;
     const flag = flags.shift();
     if (flag === undefined) throw new Error(`${slug}: no item flag left`);
