@@ -367,7 +367,6 @@ def build():
     room.check((hx0 - 0.8, HUT_DOOR[0] - 0.3, hx0, HUT_DOOR[1] + 0.3), "The door won't stay shut.\nThere's a lamp lit on the desk. A feed chart on the wall.")
     room.check((11.3, 10.6, 13.1, 11.4), "A water trough. The water's pink.")
     room.check((7.5, 5.5, 9.5, 8.5), "Paw prints, big ones. Heading out to the gate.\nAnd toward the house.")
-    room.entry = "Kennels.\nAll the runs are empty."
     room.export(anim, samples=128)
 
 

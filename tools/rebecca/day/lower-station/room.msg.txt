@@ -1,4 +1,4 @@
-0: \nBlood on the counter.\nGlass on the floor.
+0: \n...
 1: \nA kettle on the hotplate.\nStone cold.
 2: \nBlood all over the\ncounter. This is where he\nbandaged her.\p{0}\nThe first aid cabinet's\nbeen emptied.
 3: \nThe window's been smashed\nin from outside. Something\ncame through here.

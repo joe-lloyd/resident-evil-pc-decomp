@@ -12,8 +12,4 @@ aot_set(7, 6630, 5950, 1530, 850, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 241, 1)) {
-    set(FG_COMMON, 241, 0);
-    message(128, 255, 0);
-}
 return;

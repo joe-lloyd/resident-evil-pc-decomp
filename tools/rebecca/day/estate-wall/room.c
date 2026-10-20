@@ -16,8 +16,4 @@ enemy(5, 0, 231, 1, 2, 0, 0, 2530, 0, 0, 27900, 0, 19825, 1, 0, 0, 0);  // a cro
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 251, 1)) {
-    set(FG_COMMON, 251, 0);
-    message(128, 255, 0);
-}
 return;

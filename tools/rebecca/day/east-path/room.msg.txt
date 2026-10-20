@@ -1,4 +1,4 @@
-0: \nBlood on the path. He came\nthis way.
+0: \n...
 1: \nA thermos, dropped on the\npath. The coffee's long\ndried.\p{0}\nThe cup rolled off into\nthe grass.
 2: \nBlood, drop after drop,\nfrom the station. He was\nbleeding as he walked.
 3: \nA bloody hand on the door\nframe. He went in.

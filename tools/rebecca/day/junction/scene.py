@@ -393,7 +393,6 @@ def build():
     room.check((d0, EDGE - 1.2, d1, EDGE - 0.6), "The way down goes under the water. It's black.\nHis blood goes right to the edge. He went in.")
     room.check((9.9, 3.6, 10.4, 5.2), "A dog, one of the big ones, wrapped up in web.\nSomething down here eats them.")
     room.check((5.4, 5.6, 7.4, 6.8), "Egg sacs, all over the roof. That one's split open.")
-    room.entry = "The roof is covered in egg sacs."
     room.export(anim)
 
 

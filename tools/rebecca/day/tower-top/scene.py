@@ -537,7 +537,6 @@ def build():
     room.check(P(CW - 1.0, -1.6)[:2] + P(CW - 0.7, 0.3)[:2], "His cot. Blood on the canvas, and scratch marks in the wall.\nHe tore at himself.")
     room.check(P(CATWALK - 0.7, 0.8)[:2] + P(CATWALK, 2.2)[:2], "The top rail's broken. Blood on the post.\nThis is where he went over.")
     room.check(P(CW + 0.2, -CATWALK)[:2] + P(CATWALK, -1.0)[:2], "Smoke, rising out of the trees in the valley. Something came down there.\nBravo's helicopter. And far off, a big house among the trees.")
-    room.entry = "The lookout. You can see half the mountain from here."
     room.export(anim)
 
 

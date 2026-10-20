@@ -331,7 +331,6 @@ def build():
     room.check((TABLES[0] + 0.45, 6.6, TABLES[0] + 1.0, 8.6), "Plates of stew, half eaten. Flies.")
     room.check((X0, 4.5, X0 + 0.6, 5.5), "THURS 23. STEW. BREAD. NO SECONDS.\nYesterday.")
     room.check((1.9, 4.1, 2.5, 4.6), "The serving hatch. The kitchen's through there.")
-    room.entry = "Flies. Hundreds of them."
     # Many scenes share the render machine's GPU: keep each frame cheap.
     scene = bpy.context.scene
     scene.render.use_persistent_data = True

@@ -14,7 +14,7 @@ import { LAYOUT } from './layout.ts';
 import { PATHS } from './paths.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const inside = new Set([...kitRooms.filter((r) => r.inside).map((r) => r.slug), 'lookout', 'shed', 'save']);
+const inside = new Set([...kitRooms.filter((r) => 'inside' in r && r.inside).map((r) => r.slug), 'lookout', 'shed', 'save']);
 
 type Rect = { x0: number; z0: number; x1: number; z1: number };
 interface RoomJson {

@@ -1,4 +1,4 @@
-0: \nKennels.\p{0}\nAll the runs are empty.
+0: \n...
 1: \nThe gate's been torn off\nits hinges. From the\ninside.
 2: \nTheir handler. What's left\nof him.\p{0}\nHis catch-pole is snapped\nin two.
 3: \nA chain, snapped at the\ncollar end.\p{0}\nWhatever was on it pulled\nuntil it broke.

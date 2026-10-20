@@ -369,7 +369,6 @@ def build():
     room.check((1.75, 2.3, 2.3, 3.2), "A vice, a bench, his tools. The lamp's still on.")
     room.check((2.3, 4.25, 3.5, 4.8), "An engine, hanging on the hoist chains. Nobody's coming back to finish it.")
     room.check((1.9, 1.2, 3.6, 2.3), "He barred the door from inside. The bar's been broken.\nFrom this side.")
-    room.entry = "Oil and something worse."
     scene = bpy.context.scene
     scene.render.use_persistent_data = True
     room.export(anim, samples=160)

@@ -1,41 +1,32 @@
-// Her weapons through the day (the plan's row weapons-plan): she starts with
-// her knife and her Beretta with a spare clip (src/game/GameStart.cpp); the
-// mine takes everything she fights and heals with; a gun again from Kevin at
-// the crash (supplies.ts, the crash's Beretta).
-//
-// The loss happens the first time she wades into the flooded gallery: the
-// floor gives way under the black water. scripts.ts makes her first thought
-// there the loss: the weapon in her hands drops (sys_multi 0, RE1's own
-// "clear the equipped weapon"), then each gear item she carries goes. Her key
-// items stay, or the gondola could not be finished.
+// Her weapons through the day: she starts with her knife, Beretta and a
+// spare clip. The gallery scare keeps them. At the crawl's narrow turn,
+// before the mansion hatch, she leaves her pack and long weapons behind.
+// Only the Beretta, item 0x02, and its loaded rounds stay, with her key items.
+// The scene unequips her current weapon before removing inventory entries.
 
-/**
- * Slots in her case (BioCardLayout.itemsSlots). remove_item takes the first
- * slot holding an item, and a script has no loop, so the loss tries each item
- * this many times: two sprays, or a clip in two slots, all go.
- */
+/** Six case slots. remove_item removes the first match, so try every slot. */
 export const BAG_SLOTS = 6;
-
-/**
- * The FG_ROOM bit up while the loss happens, in word 0 below the events'
- * bits (scripts.ts counts those from 12; the engine uses 0 and 29-31).
- */
-export const LOSS_BIT = 11;
-
-/** The room where the mine takes her gear. */
-export const LOSS_ROOM = 'gallery';
-
-/** What she says when it happens, after the room's own first thought. */
-export const LOSS_LINE = "The floor's gone under me! My bag, the gun... gone, down there in the dark.";
 
 const range = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, i) => a + i);
 
 /**
- * What the mine takes: the weapons and their rounds (RE1's items 0x01-0x12),
- * the first aid spray (0x41) and the herbs and their mixes (0x43-0x4B). Not
- * the ids her key items borrow (items.ts), which fall outside these.
+ * Gear left under the floor: every weapon and spare round in 0x01-0x12
+ * except the Beretta at 0x02, sprays at 0x41, and herbs and mixes at
+ * 0x43-0x4B. The Beretta entry and its loaded count are never touched.
+ * Key items use other ids and stay with her.
  */
-export const GEAR: readonly number[] = [...range(0x01, 0x12), 0x41, ...range(0x43, 0x4b)];
+export const GEAR: readonly number[] = [...range(0x01, 0x12).filter((id) => id !== 0x02), 0x41, ...range(0x43, 0x4b)];
 
-/** What starts the loss: the bit up (the room's main takes each item while it is), and the weapon out of her hands. */
-export const LOSS_START = [`set(FG_ROOM, ${LOSS_BIT}, 0);`, 'sys_multi(0);'] as const;
+/**
+ * Event-script SCD blocks. Each item gets its own block, so no conditional
+ * or SCD length byte overflows. Run inside cut-leave-gear, once, with her
+ * controls off. No room-main loop can remove supplies on a later visit.
+ */
+export const LEAVE_GEAR = [
+  'scd {', '    sys_multi(0);', '    return;', '}',
+  ...GEAR.flatMap((id) => [
+    'scd {',
+    ...Array.from({ length: BAG_SLOTS }, () => [`    if (item_ck(${id})) {`, `        remove_item(${id});`, '    }']).flat(),
+    '    return;', '}',
+  ]),
+];

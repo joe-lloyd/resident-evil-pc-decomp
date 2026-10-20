@@ -346,7 +346,6 @@ def build():
     room.check((8.1, 2.6, 8.5, 4.0), "A dog. Not a camp dog: a big one, its hide torn open in strips.\nIt dug in under the wire. Somebody shot it.")
     room.check((3.9, 2.0, 4.8, 2.8), "A snake's skin, shed. Another by the tank.\nAdders. They like the warm drums.")
     room.check((X0 + 0.2, 4.6, 2.6, 5.0), "The lean-to. Oil, grease, rags.")
-    room.entry = "Diesel. The whole place reeks of it."
     scene = bpy.context.scene
     scene.render.use_persistent_data = True
     scene.cycles.volume_step_rate = 4.0

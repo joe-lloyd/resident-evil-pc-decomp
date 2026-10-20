@@ -362,7 +362,6 @@ def build():
     room.check((fx - fr - 0.6, fy - fr - 0.6, fx + fr + 0.6, fy + fr + 0.6), "The fountain's still running. There's no one left to turn it off.")
     room.check((12.0, 7.0, 14.2, 9.3), "The gardener's barrow, tipped over. Seedlings, spilled.\nHe never finished.")
     room.check((10.8, 12.6, 12.0, Y1), "The lamp's lit. The moths found it.")
-    room.entry = "The back of the mansion.\nThe house is dark."
     room.export(anim, samples=128)
 
 

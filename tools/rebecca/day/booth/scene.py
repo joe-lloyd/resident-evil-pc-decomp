@@ -268,7 +268,6 @@ def build():
     room.check((X1 - 0.7, 2.95, X1, 3.45), "ARKLAY SKYWAY. See the valley the way the eagles do.\nSomeone has scratched out the family's eyes.")
     room.check((DOOR[0] - 0.5, Y1 - 0.6, DOOR[0], Y1), "A handprint in blood on the door frame. It's still tacky.")
     room.save_room(typewriter=(1.95, Y0, 2.55, 1.8), box=(X1 - 1.0, 1.97, X1, 2.43), lid=box_lid)
-    room.entry = "The heater's still on. He can't have gone long."
     room.export(anim)
 
 

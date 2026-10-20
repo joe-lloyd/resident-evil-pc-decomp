@@ -330,7 +330,6 @@ def build():
     room.check((7.0, 11.0, 8.2, 11.8), "CAMP 4 FLUME. NO RIDING.\nSomebody didn't listen.")
     room.check((CATWALK[0], Y0, CATWALK[1], 3.0), "It goes all the way down. The trestles get taller and taller.\nI can't see the bottom for the mist.")
     room.check((5.6, 9.0, 6.8, 9.8), "A duffel bag, packed and dropped.")
-    room.entry = "The flume. It runs all the way down the mountain."
     room.export(anim)
 
 

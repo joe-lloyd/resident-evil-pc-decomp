@@ -764,7 +764,6 @@ def build():
     room.check((10.4, 11.8, 11.2, 14.2), "The skidder. Its blade is down in the mud, the chokers still on the logs.\nThe key's gone.")
     room.check((5.6, 2.6, 9.8, 4.0), "Laundry on the line. Nobody's coming for it.")
     room.check((15.8, 11.6, 18.0, 13.6), "Diesel, leaking from a drum into the mud.")
-    room.entry = "Camp 4. The gate was shut from inside."
     # Many scenes share the render machine's GPU: keep each frame cheap.
     scene = bpy.context.scene
     scene.render.use_persistent_data = True

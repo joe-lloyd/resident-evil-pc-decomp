@@ -1,4 +1,4 @@
-0: \nThe mast. Its light's\nstill blinking.
+0: \n...
 1: \nEngineers' stores. One\ncrate's been forced with a\ntyre iron.\p{0}\nTwo first aid boxes,\nripped open. The flare\ncase is missing one.
 2: \nGauze, wrappers, blood.\nSomebody patched himself\nup here, on his knees.
 3: \nA glove, right at the\nedge.\p{0}\nHe's down there on the\nledge. Not moving. The\ncrows are on him.

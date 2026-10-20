@@ -13,10 +13,7 @@ aot_set(6, 4930, 1700, 850, 2380, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 243, 1)) {
-    set(FG_COMMON, 243, 0);
-}
-if (ck(FG_COMMON, 123, 1)) {
+if (ck(FG_COMMON, 123, 1) && ck(FG_STATUS, 15, 1)) {
     set(FG_COMMON, 123, 0);
     evt_exec(0, 9, 0);
 }

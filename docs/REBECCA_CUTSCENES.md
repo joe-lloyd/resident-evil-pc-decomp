@@ -88,7 +88,7 @@ A scene runs once. Its FG_COMMON flag is set as it starts.
 | `shake(on)` | Shake the screen, or stop. |
 | `gone(person)` | Take a person out of the room. |
 | `give(step)` | Hand her a key item lying in the room, by its plan step, with the game's own pickup screen. |
-| `scd(...lines)` | Raw script lines, run as the scene reaches them. The mine's gear loss uses this. |
+| `scd(...lines)` | Raw script lines, run as the scene reaches them. The crawl's gear loss uses this. |
 
 Positions are game units: a scene's metres times 1700, its x and y becoming x
 and z. An angle of 0 faces +X, 1024 faces -Z, 2048 faces -X and 3072 faces +Z.
@@ -167,13 +167,31 @@ flag uses. They take them in the order of `CUTSCENES`.
 `cut-sleep` is both tracker rows `cut-sleep` and `cut-chris`. FG_COMMON 36 is
 RE1's own "Chris met Rebecca", which `cut-sleep` sets as the old meeting did.
 
-## Not made yet
+## The added scenes
 
-- `cut-dog`: the yard's dog would attack her during the lines, since a
-  scene's line doesn't pause the game. It needs the dog held still for the
-  scene, for example by clearing its status bit with `cmd_enemy_prop_set` and
-  setting it again at the end.
-- `cut-mine-chase`: the plan has no chase yet. It needs a pursuer in the
-  mine and a route to the lift.
-- `cut-credits`: her credits are a screen of their own after the meeting, not
-  an event script.
+- `cut-dog`, flag 126, starts in the yard once she takes the shed key.
+  Camera 1 looks down the cabin front. The dog spawns after her lines, so
+  its AI cannot attack her while she reads. Its old kill flag stays 200.
+- `cut-mine-chase`, flag 127, finishes the escape at the mine lift after
+  the collapse and Hal's scene. She runs into the cage and turns towards
+  the junction. The junction's existing spinners supply the playable
+  run. There is no staged pursuit across room loads.
+- `cut-credits`, flag 128, follows Chris's departure in the save room.
+  These are brief message cards over a fade. A separate credits screen,
+  scrolling names, a credits music transition and a return to the title
+  still need support outside the current scene format.
+
+Entry scenes may name `requires`, story flags that must have their requested
+state before the scene starts. They also wait until the letterbox from any
+previous scene clears. The credits use the meeting's completion flag 36,
+not its start flag 121, so they cannot interrupt Chris.
+
+- `cut-leave-gear`, flag 129, spans the north leg of the crawl before the
+  ladder. Camera 2 looks up the passage. She leaves her pack at the narrow
+  turn and walks to the hatch. Item 0x02 and its loaded count are untouched;
+  all other weapons, spare ammo and healing leave her six inventory slots.
+  Key items stay. The floor and door checks validate the short walk.
+
+The gallery keeps its floor scare and Hal. It no longer removes anything.
+Kevin's redundant Beretta pickup is a green herb; the crash still has a clip.
+These added scenes and the late loss have not been played in the game.

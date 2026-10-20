@@ -364,7 +364,6 @@ def build():
     # In front of the door, which takes its own zone.
     room.check((DOOR[0], Y0 + 0.45, DOOR[1], Y0 + 0.9), "Claw marks on the inside of the door. Handprints on the glass, all the way up.\nShe was trying to get out.")
     room.check((X1 - 0.5, Y0, X1, Y1), "CAR 4. MAX 6.")
-    room.entry = "It's stopped. We're hanging over the trees.\nThere's a pylon right ahead."
     room.export(anim)
 
 

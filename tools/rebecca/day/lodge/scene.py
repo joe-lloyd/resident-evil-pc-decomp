@@ -280,7 +280,6 @@ def build():
     room.check((1.1, Y0, 2.6, Y0 + 0.7), "Seed trays. Everything in them has died.")
     room.check((3.9, 1.8, 4.9, 2.6), "This is where it happened. Someone called Scott.")
     room.save_room(typewriter=(3.25, Y0, 4.0, 1.75), box=(1.95, 3.45, 3.17, Y1), lid=box_lid)
-    room.entry = "Someone left the lamp burning."
     room.export(anim, samples=128)
 
 

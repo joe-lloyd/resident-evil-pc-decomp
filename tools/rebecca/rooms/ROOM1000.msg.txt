@@ -56,3 +56,8 @@
 55: \n\oChris Redfield, Alpha.\nWhere's the rest of you?"
 56: \n\oI don't know. We got\nseparated."
 57: \n\oStay here. It's safe.\nI'll check the house."
+58: \nFor now, I can rest.
+59: \nREBECCA'S DAY
+60: \nA Resident Evil scenario.
+61: \nOriginal game by CAPCOM.
+62: \nThank you for playing.

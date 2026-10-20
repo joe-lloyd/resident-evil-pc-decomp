@@ -401,7 +401,6 @@ def build():
     room.check((X0, C[1] - 0.6, X0 + 0.7, C[1] + 0.5), "The outside stair. It's torn off at the top and hanging over the drop.\nCLOSED. No kidding.")
     room.check((X1 - 0.7, C[1] + 1.0, X1, C[1] + 2.6), "Down on the rocks at the foot, a man lying very still.\nThat's a long way down.")
     room.check((X0, Y0, X1, Y0 + 0.6), "Crows on the rail. They don't fly off. They're waiting.")
-    room.entry = "The wind's stronger up here. The whole tower sways."
     room.export(anim)
 
 

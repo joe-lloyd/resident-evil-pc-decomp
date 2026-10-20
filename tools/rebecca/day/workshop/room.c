@@ -17,8 +17,4 @@ if (ck(FG_ITEM, 187, 0)) {  // clip
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 218, 1)) {
-    set(FG_COMMON, 218, 0);
-    message(128, 255, 0);
-}
 return;

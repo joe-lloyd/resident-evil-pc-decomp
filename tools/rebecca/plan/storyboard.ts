@@ -14,8 +14,8 @@ import { dayRooms } from '../day/rooms.ts';
 import { CUTSCENES } from '../day/cutscenes.ts';
 import type { Beat } from '../day/cutscene.ts';
 import { FOES, FOE_KINDS } from '../day/foes.ts';
-import { SUPPLIES, SUPPLY_KINDS } from '../day/supplies.ts';
-import { GEAR, LOSS_ROOM } from '../day/gear.ts';
+import { SUPPLIES, SUPPLY_KINDS, type Supply } from '../day/supplies.ts';
+import { GEAR } from '../day/gear.ts';
 import { EVENTS } from '../day/events.ts';
 import { KEY_ITEMS } from '../items/items.ts';
 import { DOCUMENTS, type Page } from '../files/documents.ts';
@@ -83,17 +83,17 @@ export interface Missing {
   room: string | null; priority: number; title: string; detail: string;
 }
 
-function supplyKind(name: string): ItemKind {
+function supplyKind(name: Supply): ItemKind {
   switch (name) {
-    case 'clip': return 'ammo';
+    case 'clip': case 'rounds': return 'ammo';
     case 'greenHerb': case 'redHerb': case 'spray': return 'heal';
-    case 'beretta': return 'weapon';
     case 'ribbons': return 'ribbons';
-    default: throw new Error(`Unknown supply ${name}`);
   }
 }
-const supplyName: Record<string, string> = {
-  clip: 'Handgun rounds', greenHerb: 'Green herb', redHerb: 'Red herb', spray: 'First aid spray', beretta: 'Beretta', ribbons: 'Ink ribbons',
+const isSupply = (name: string): name is Supply => name in SUPPLY_KINDS;
+const isRounds = (kind: Supply) => kind === 'clip' || kind === 'rounds';
+const supplyName: Record<Supply, string> = {
+  clip: 'Handgun rounds', rounds: 'Loose handgun rounds', greenHerb: 'Green herb', redHerb: 'Red herb', spray: 'First aid spray', ribbons: 'Ink ribbons',
 };
 
 function pickups(place: Place, script: string): StoryItem[] {
@@ -108,7 +108,7 @@ function pickups(place: Place, script: string): StoryItem[] {
     const spec = SUPPLY_KINDS[kind];
     const found = claim(spec.id);
     result.push({ id: `supply-${index}`, room: place.id, act: place.act, name: supplyName[kind], kind: supplyKind(kind), qty: spec.qty,
-      rounds: kind === 'clip' || kind === 'beretta' ? spec.qty : 0, placed: found !== undefined, source: 'supplies', step: '', detail: `day/supplies.ts · ${kind}${found && found.qty !== spec.qty ? ` · script quantity differs: ${found.qty}` : ''}` });
+      rounds: isRounds(kind) ? spec.qty : 0, placed: found !== undefined, source: 'supplies', step: '', detail: `day/supplies.ts · ${kind}${found && found.qty !== spec.qty ? ` · script quantity differs: ${found.qty}` : ''}` });
   }
   for (const key of KEY_ITEMS) {
     const step = day.steps.find((s) => s.id === key.step);
@@ -129,10 +129,10 @@ function pickups(place: Place, script: string): StoryItem[] {
       placed: found !== undefined, source: 'map', step: map.step, detail: mapIn(slug)?.found ?? '' });
   }
   for (const [flag, a] of actual) {
-    const supply = Object.entries(SUPPLY_KINDS).find(([, k]) => k.id === a.item);
+    const supply = Object.keys(SUPPLY_KINDS).filter(isSupply).find((kind) => SUPPLY_KINDS[kind].id === a.item);
     const label = script.match(new RegExp(`\\b${a.item}\\s*\\/\\*\\s*([^*]+)\\*\\/`))?.[1]?.trim();
-    result.push({ id: `pickup-${flag}`, room: place.id, act: place.act, name: supply ? supplyName[supply[0]] ?? supply[0] : label ?? `Item ${a.item}`, kind: supply ? supplyKind(supply[0]) : 'key',
-      qty: a.qty, rounds: supply && (supply[0] === 'clip' || supply[0] === 'beretta') ? a.qty : 0,
+    result.push({ id: `pickup-${flag}`, room: place.id, act: place.act, name: supply ? supplyName[supply] : label ?? `Item ${a.item}`, kind: supply ? supplyKind(supply) : 'key',
+      qty: a.qty, rounds: supply && isRounds(supply) ? a.qty : 0,
       placed: true, source: 'script', step: '', detail: `Hand-written script · item ${a.item} · flag ${flag}` });
   }
   return result;
@@ -192,7 +192,8 @@ export function buildStoryboard() {
     const cuts = CUTSCENES.filter((c) => c.room === slug);
     const entry = cuts.some((c) => c.trigger.on === 'enter') ? '' : /message\(128,\s*255,\s*0\)/.test(script) ? msgs.find((m) => m.n === 0)?.text ?? evidence.entry : '';
     const enemies = FOES[slug]?.map(([kind, count]) => ({ kind, count })) ?? Object.entries(FOE_KINDS).flatMap(([kind, k]) => {
-      const count = calls(script, 'enemy').filter((a) => Number(a[0]) === k.id).length;
+      // A cutscene can repeat a room's spawn call for the same enemy and kill flag.
+      const count = new Set(calls(script, 'enemy').filter((a) => Number(a[0]) === k.id).map((a) => a.join(','))).size;
       return count ? [{ kind, count }] : [];
     });
     return { place, slug, script, msgs, evidence, images, entry, enemies, cuts, clips: footage.clips.filter((c) => c.room === place.id), steps: day.steps.filter((s) => s.at === place.id),
@@ -303,7 +304,7 @@ export function renderStoryboard(board: Storyboard): string {
     <div class="scene-top"><div><div class="gallery">${s.images.length ? s.images.map((image, n) => `<figure><img src="img/${s.slug}-${image.replace('.png', '.jpg')}" alt="${esc(s.place.name)} · camera ${n + 1}" loading="lazy" width="640" height="480"><figcaption>Camera ${n + 1}</figcaption></figure>`).join('') : `<div class="placeholder"><h3>${s.place.existing ? 'Original mansion save room' : 'Planned scene'}</h3><p>${esc(s.place.there)}</p><p>${esc(s.place.story)}</p></div>`}</div><p class="hint">Swipe or scroll to see each camera.</p></div>
     <div class="goals">${edit(s.place.id, 'main goal', main, 'edit', 'Main goal')}${edit(s.place.id, 'secondary goal', secondary, 'edit', 'Secondary goal')}${edit(s.place.id, 'scene notes', '', 'note', 'Scene notes')}<p class="hint">Edits save in this browser. Copy them when you are ready to send them back.</p></div></div>
     ${renderClips(s.clips, s.place.name)}
-    <div class="facts-grid"><section><h3>Rebecca here</h3><p>${esc(s.place.story || 'No new story beat planned.')}</p><p>${s.place.id === 'ridge' ? `Starts with ${board.items.filter((i) => i.source === 'start').map((i) => `${i.name}${i.rounds ? ` · ${i.rounds} rounds` : ''}`).join(', ')}.` : s.place.id === LOSS_ROOM ? `The mine takes her weapons, rounds and healing. Her keys stay. Removed item ids: ${GEAR.join(', ')}.` : s.place.act >= 3 ? 'After the mine she has no combat gear until Kevin’s Beretta at the helicopter. Pickups and spending decide what remains.' : 'She can still have her starting handgun and knife until the gallery collapse. The mountain branches can be visited in different orders.'}</p><p>Keys needed by local steps: ${esc(needs.map(stepLabel).join('; ') || 'None listed')}.</p><p>Knows from required clues: ${esc(known.map(stepLabel).join('; ') || 'No explicit learned prerequisite')}.</p><p class="hint">This is a plan state. Inventory and current HP depend on the route, pickups and combat. Her bag has six slots.</p></section>
+    <div class="facts-grid"><section><h3>Rebecca here</h3><p>${esc(s.place.story || 'No new story beat planned.')}</p><p>${s.place.id === 'ridge' ? `Starts with ${board.items.filter((i) => i.source === 'start').map((i) => `${i.name}${i.rounds ? ` · ${i.rounds} rounds` : ''}`).join(', ')}.` : s.place.id === 'crawl' ? `She leaves her pack at the narrow turn and keeps only the pistol. Her keys stay. Removed item ids: ${GEAR.join(', ')}.` : s.place.id === 'save' ? 'She arrives with the pistol and her keys, which is all she has when the main game starts.' : 'She carries everything she has picked up until the crawl space under the mansion. The mountain branches can be visited in different orders.'}</p><p>Keys needed by local steps: ${esc(needs.map(stepLabel).join('; ') || 'None listed')}.</p><p>Knows from required clues: ${esc(known.map(stepLabel).join('; ') || 'No explicit learned prerequisite')}.</p><p class="hint">This is a plan state. Inventory and current HP depend on the route, pickups and combat. Her bag has six slots.</p></section>
     <section><h3>Risk and rewards</h3><p>${s.enemies.length ? s.enemies.map((e) => `${e.count} ${e.kind}`).join(', ') : 'No enemy spawns listed'}. Enemy HP is not given in foes.ts.</p><p>Health risk: ${s.enemies.length ? `${s.enemies.reduce((n, e) => n + e.count, 0)} attackers can spend her health and ammunition` : 'no placed attackers'}. Current HP depends on earlier combat.</p><p>Planned threat: ${esc(s.place.enemies || 'None')}.</p><p>Moves: ${esc(s.place.moves || 'None listed')}.</p><p>${save ? esc(save.props) : s.place.id === 'save' ? 'Original typewriter and shared item box.' : 'No save point here.'}</p><p>Music: ${esc(cues.map((c) => `${c.title}: ${c.sound}`).join('\n') || 'No cue listed')}.</p></section></div>
     <section><h3>What is needed to leave</h3><p>Local prerequisites: ${esc(required.map(stepLabel).join('; ') || 'None')}.</p><ul class="exits">${day.links.filter((l) => l.from === s.place.id || l.to === s.place.id).map((l) => {
       const to = l.from === s.place.id ? l.to : l.from;
@@ -321,7 +322,7 @@ export function renderStoryboard(board: Storyboard): string {
   <nav class="toolbar" aria-label="Storyboard"><div class="views"><a href="#flow">Flow</a><a href="#audit">Dialogue audit <span>${board.audit.length}</span></a><a href="#items">Items and balance</a><a href="#missing">Missing <span>${board.missing.length}</span></a></div><div class="edit-tools"><button id="copy">Copy my edits</button><button id="clear">Clear edits</button><span id="save-status" role="status" aria-live="polite">Edits stay in this browser</span></div></nav>
   <main><section id="flow" class="view"><div class="section-title"><div><h2>The whole day</h2><p>Cards follow the plan's order. The mountain branches have no single play order. Open a scene, then use its exits to walk your own route.</p></div><div class="flow-tools"><label>Act <select id="act-filter"><option value="all">All acts</option>${day.acts.map((a) => `<option value="${a.n}">${a.n} · ${esc(a.title)}</option>`).join('')}</select></label><button id="map-toggle" aria-pressed="false">Show branches</button></div></div><p id="map-key" hidden>Solid lines are open paths. Gold lines need a step. Dotted purple lines are shortcuts. Faded cards belong to the next or previous act. Scroll the map to follow a spoke. Open a card for each exit's lock and key.</p>${cards}</section>
   <section id="audit" class="view" hidden><h2>Dialogue audit · ${board.audit.length} entry thoughts</h2><p>These messages pause Rebecca on her first visit without an entry cutscene. Leave a note to cut the line, move it to a check, or write it into a cutscene. Rooms greeted by an entry cutscene are excluded, as in scripts.ts.</p>${board.audit.map((a) => `<article class="audit-row" data-audit="${a.room}"><h3><a href="#scene-${a.room}">${esc(roomName(a.room))}</a> <small>${esc(a.room)}</small></h3>${dialogue(a.room, 'message 0', a.text, 'Standalone entry thought')}</article>`).join('')}</section>
-  <section id="items" class="view" hidden><h2>Items and balance</h2><p>${board.items.length} rows include starting kit, supplies, key items, files, maps and the original save room's pickup. Missing placements do not enter the act totals.</p><div class="table-scroll"><table><thead><tr><th>Act</th><th>Rounds</th><th>Green herbs</th><th>Red herbs</th><th>Sprays</th><th>Enemies</th><th>First check</th></tr></thead><tbody>${board.balance.map((b) => `<tr><td>${b.act}</td><td>${b.rounds}</td><td>${b.green}</td><td>${b.red}</td><td>${b.sprays}</td><td>${b.enemies}</td><td>${esc(b.finding)}</td></tr>`).join('')}</tbody></table></div><p class="flag">Act 2 loses carried combat gear and healing in the gallery. She must cross the mine and return to the gondola with whatever remains accessible after that loss. Act totals cannot prove that route is survivable.</p><p>Counts include the hand-written trail, yard and bridge spawns. foes.ts has no HP values. A red herb cannot heal alone. Starved means fewer than 3 rounds per enemy; flooded means more than 10. These are review prompts, not damage estimates. Avoided enemies, herb mixing and route order change the result.</p>${itemTable(board.items)}</section>
+  <section id="items" class="view" hidden><h2>Items and balance</h2><p>${board.items.length} rows include starting kit, supplies, key items, files, maps and the original save room's pickup. Missing placements do not enter the act totals.</p><div class="table-scroll"><table><thead><tr><th>Act</th><th>Rounds</th><th>Green herbs</th><th>Red herbs</th><th>Sprays</th><th>Enemies</th><th>First check</th></tr></thead><tbody>${board.balance.map((b) => `<tr><td>${b.act}</td><td>${b.rounds}</td><td>${b.green}</td><td>${b.red}</td><td>${b.sprays}</td><td>${b.enemies}</td><td>${esc(b.finding)}</td></tr>`).join('')}</tbody></table></div><p class="flag">She keeps her gear for the whole day and leaves all of it except the pistol in the crawl space under the mansion. Act totals cannot prove a route is survivable.</p><p>Counts include the hand-written trail, yard and bridge spawns. foes.ts has no HP values. A red herb cannot heal alone. Starved means fewer than 3 rounds per enemy; flooded means more than 10. These are review prompts, not damage estimates. Avoided enemies, herb mixing and route order change the result.</p>${itemTable(board.items)}</section>
   <section id="missing" class="view" hidden><h2>Missing to finish the game · ${board.missing.length}</h2><p>Required placements and unbuilt rooms come first, then route work and the ending, unwritten scenes, polish and missing review renders. Tracker rows marked under way still need proof in the game. Plan labels alone do not mark a built room as missing.</p><ol class="missing-list">${board.missing.map((m) => `<li>${m.room ? `<a href="#scene-${m.room}">${esc(m.title)}</a>` : esc(m.title)}<small>${esc(m.detail)}</small></li>`).join('')}</ol></section>${scenes}</main>
   <dialog id="export-dialog"><h2>Your edits</h2><p id="copy-result">Copy this markdown and paste it back to the agent.</p><textarea id="export-text" readonly aria-label="Edits markdown" rows="14"></textarea><button id="close-export">Close</button></dialog><dialog id="clear-dialog"><h2>Clear saved edits?</h2><p>This removes the notes and goal edits saved by this storyboard in this browser.</p><button id="confirm-clear">Clear all edits</button><button id="cancel-clear">Keep edits</button></dialog>
   <script id="storyboard-data" type="application/json">${data}</script><script>${read(join(HERE, 'storyboard/client.js'))}</script></body></html>`;

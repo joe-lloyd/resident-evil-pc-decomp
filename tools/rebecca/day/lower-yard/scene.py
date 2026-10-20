@@ -577,7 +577,6 @@ def build():
     room.check((fx - 0.6, fy - 0.6, fx + 0.6, fy + 0.6), "The flag's still up. Nobody took it down for the night.")
     room.check((gx - 0.6, 7.4, gx + 0.6, 8.2), "A child's shoe, set on the post.\nSomeone found it in the lane and left it where it'd be seen.")
     room.check((-4.2, 10.0, -3.0, 10.75), "The fence is broken through.\nSomething big went through it, low down.")
-    room.entry = "The bottom of the gondola. Someone left their car door open."
     room.export(anim)
 
 

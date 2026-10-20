@@ -402,7 +402,6 @@ def build():
     room.check((LOGGER[0] - 0.6, LOGGER[1] + 1.0, LOGGER[0] + 1.6, LOGGER[1] + 2.0), "A logger, dead over the logs they piled up. The crows have had his eyes.")
     room.check((13.2, 6.6, 15.0, 7.8), "The camp truck, shoved out of the gate.\nBloody hands all over the inside of the door. Someone wanted out.")
     room.check((5.2, 4.6, 8.6, 7.0), "The barricade. Logs, sandbags, spikes. Pulled down, or pushed.")
-    room.entry = "They shut themselves in. It didn't help."
     room.export(anim)
 
 

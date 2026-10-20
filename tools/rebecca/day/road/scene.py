@@ -338,7 +338,6 @@ def build():
     room.check((10.2, 6.8, 11.8, 8.0), "Glass from a headlamp, and blood. Grey fur.\nSomething big ran out in front of a truck here.")
     room.check((12.8, 3.5, 15.6, 10.5), "Paw prints, crossing the road. Big ones.\nThe dogs came down this way.")
     room.check((9.0, Y1 - 0.8, 10.2, Y1), "A ranger's hat, in the ditch.")
-    room.entry = "The forestry road. The gate's chained shut."
     room.export(anim)
 
 

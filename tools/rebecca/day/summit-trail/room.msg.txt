@@ -1,4 +1,4 @@
-0: \nThe top of the mountain.\nNothing grows up here.\p{0}\nJust rock, and crows.
+0: \n...
 1: \nA deer, torn open. The\ncrows have had its eyes.\p{0}\nThey don't fly off when I\ncome close.
 2: \nHis clipboard. Wind speed,\ntemperature, cloud, every\nhour since midnight.\p{0}\nThe last line just stops.\p{0}\nHis cap, his glasses.\nFeathers everywhere.
 3: \nAn instrument screen. The\ndoor's open and the\nthermometer's smashed.

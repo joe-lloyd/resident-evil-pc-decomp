@@ -414,7 +414,6 @@ def build():
     room.check((RACE_NS[1], 3.6, RACE_NS[1] + 1.0, 5.6), "The water wheel. It drives the mill through that shaft.\nIt turns when the sluice lets the water down the race.")
     room.check((MILL_X, BACK_DOOR[0] - 0.6, MILL_X + 0.8, BACK_DOOR[0]), "A bloody hand on the mill's back door.")
     room.check((BRIDGE[0], Y0 + 0.6, BRIDGE[1], Y0 + 1.2), "A footbridge over the race. The flume's that way.")
-    room.entry = "The mill pond. The wheel's stopped."
     room.export(anim)
 
 

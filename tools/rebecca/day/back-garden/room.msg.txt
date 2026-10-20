@@ -1,4 +1,4 @@
-0: \nThe back of the mansion.\p{0}\nThe house is dark.
+0: \n...
 1: \nThe back door's been\nboarded over. From out\nhere.\p{0}\nKEEP OUT.
 2: \nOne of the maids.\nSomething dragged her into\nthe hedge.\p{0}\nShe came from the cellar\ndoors. She was running.
 3: \nA shoe. Hers, I think.

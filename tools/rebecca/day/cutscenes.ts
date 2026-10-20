@@ -5,8 +5,8 @@
 // Positions are game units: a scene's metres times 1700 (blender/reb.py), its
 // x and y becoming x and z. Cameras are numbered as the scene's room.camera
 // calls are.
-import { anim, cut, face, fade, give, gone, line, place, say, scd, shake, wait, walk, type Cutscene } from './cutscene.ts';
-import { LOSS_START } from './gear.ts';
+import { anim, cut, face, fade, give, gone, line, place, say, scd, shake, wait, walk, run, type Cutscene } from './cutscene.ts';
+import { LEAVE_GEAR } from './gear.ts';
 
 export const CUTSCENES: readonly Cutscene[] = [
   {
@@ -95,7 +95,7 @@ export const CUTSCENES: readonly Cutscene[] = [
   {
     // The flooded gallery (day/gallery/scene.py), the first time in: she
     // wades down from the junction at the west end, and the floor gives way
-    // under the water (gear.ts: her weapons and healing are gone). Camera 0
+    // under the water. She keeps her gear. Camera 0
     // looks in from the foot of the decline; 1, from the far south-east,
     // has her in the water as the floor goes.
     id: 'cut-mine-collapse',
@@ -107,12 +107,11 @@ export const CUTSCENES: readonly Cutscene[] = [
       walk('her', { x: 6400, z: 11200 }),
       cut(1),
       shake(true),
-      scd(...LOSS_START),
       wait(25),
       say("The floor's gone under me!"),
       shake(false),
-      say('My bag, the gun... gone, down there in the dark.'),
-      say("I've got nothing left. Only my hands."),
+      say('My foot caught on a rail. I can stand.'),
+      say('Someone is still down here. I have to find him.'),
     ],
   },
   {
@@ -272,6 +271,90 @@ export const CUTSCENES: readonly Cutscene[] = [
       wait(20),
       say("Billy's gone. It's just me now."),
       say('The valley first. Then the others.'),
+    ],
+  },
+  {
+    // Yard camera 1 looks along the cabin front. Her arrival from the cabin
+    // is at its porch steps. The dog starts at the cabin's far corner, as
+    // the hand-written yard script has always placed it.
+    id: 'cut-dog',
+    room: 'yard',
+    trigger: { on: 'enter' },
+    requires: [{ bank: 'FG_ITEM', flag: 242, set: false }],
+    beats: [
+      place('her', { x: 22015, z: 13515, angle: 3072 }),
+      cut(1),
+      face('her', { x: 29750, z: 5100 }),
+      wait(15),
+      say('Something is coming round the cabin.'),
+      say('"Stay back!"'),
+      // No dog AI runs during the lines. The next visit uses the same
+      // spawn in yard/room.c, with the same persistent kill flag.
+      scd('scd {', '    enemy(2, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);', '    return;', '}'),
+    ],
+  },
+  {
+    // The existing junction spinners are the pursuers on the playable run
+    // from the gallery to the lift. The cage is too small for a pursuer.
+    // mine-lift/scene.py: camera 1 faces the junction through the gate;
+    // camera 0 faces the controls. The short run stays inside the cage.
+    id: 'cut-mine-chase',
+    room: 'mine-lift',
+    trigger: { on: 'enter', from: 'junction' },
+    requires: [
+      { bank: 'FG_COMMON', flag: 118, set: true },
+      { bank: 'FG_COMMON', flag: 119, set: true },
+    ],
+    beats: [
+      cut(1),
+      run('her', { x: 3315, z: 2500 }),
+      face('her', { x: 3315, z: 5000 }),
+      say('They cannot fit through the cage.'),
+      say('More of them in the dark. I cannot stay here.'),
+      cut(0),
+      face('her', { x: 4500, z: 3000 }),
+      say('The lift controls. Up to the surface.'),
+    ],
+  },
+  {
+    // RE1's save room, camera 0 and the resting place from cut-sleep.
+    // Flag 36 is set only after Chris leaves. The compiler also waits for
+    // the letterbox to clear, so the meeting finishes before these begin.
+    id: 'cut-credits',
+    room: 'save',
+    trigger: { on: 'enter' },
+    requires: [{ bank: 'FG_COMMON', flag: 36, set: true }],
+    beats: [
+      cut(0),
+      wait(60),
+      say('For now, I can rest.'),
+      fade('black'),
+      say("REBECCA'S DAY"),
+      say('A Resident Evil scenario.'),
+      say('Original game by CAPCOM.'),
+      say('Thank you for playing.'),
+      wait(60),
+      fade('clear'),
+    ],
+  },
+  {
+    // crawl/scene.py: the passage turns north at x 6.4-8 m. Camera 2
+    // looks up that leg to the ladder. This zone spans the leg before the
+    // ladder door. Her short walk ends below the ladder footprint.
+    id: 'cut-leave-gear',
+    room: 'crawl',
+    trigger: { on: 'zone', zone: { x0: 10880, z0: 6460, x1: 13600, z1: 7480 } },
+    beats: [
+      cut(2),
+      place('her', { x: 12240, z: 6800, angle: 1024 }),
+      say('The beams are too close. My pack keeps catching.'),
+      say('I have to leave it here. Just take the pistol.'),
+      fade('black'),
+      scd(...LEAVE_GEAR),
+      wait(20),
+      fade('clear'),
+      walk('her', { x: 12240, z: 5440 }),
+      say('The hatch. Almost there.'),
     ],
   },
 ];

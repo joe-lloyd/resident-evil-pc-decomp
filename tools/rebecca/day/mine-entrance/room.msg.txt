@@ -1,4 +1,4 @@
-0: \nWebs. Thick ones.
+0: \n...
 1: \nThe gap's too tight for\nme,\p{0}\nand the rocks over it are\nloose.
 2: \nA gap under the rocks,\ninto the dark. Webs over\nit.\p{0}\nThere's blood on the post.\nSomeone squeezed through.
 3: \nA blasting plunger, pushed\nhome. Whoever fired it\p{0}\ndropped their hard hat and\nran.

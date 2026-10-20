@@ -405,7 +405,6 @@ def build():
     room.check((9.1, 7.2, 10.1, 7.8), "SUMMIT 2104 M. WEATHER STATION. MAST, NO ENTRY.")
     room.check((HEAD_DOOR[0] - 1.2, ey0 - 0.6, HEAD_DOOR[0], ey0), "MINE LIFT. NO RIDERS.\nI rode it anyway.")
     room.check((hx1 - 0.8, hy1, hx1, hy1 + 0.6), "ARKLAY SUMMIT WEATHER STATION. There's a light on inside.")
-    room.entry = "The top of the mountain. Nothing grows up here.\nJust rock, and crows."
     room.export(anim)
 
 

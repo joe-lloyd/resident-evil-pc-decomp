@@ -388,7 +388,6 @@ def build():
     room.check((10.2, 9.5, 11.8, 10.6), "An adder, cut in two. A spade beside it.")
     room.check((9.6, 5.3, 10.8, 6.3), "PRIVATE. SPENCER ESTATE.")
     room.check((6.0, 9.3, 7.4, 10.4), "Something was dragged down to the water.\nOne boot, in the reeds.")
-    room.entry = "Running water. And a light, across the creek."
     room.export(anim, samples=128)
 
 

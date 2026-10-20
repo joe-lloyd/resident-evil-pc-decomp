@@ -5,8 +5,7 @@
 // is padlocked. The key hangs by the cabin door. Once she has it, a Cerberus
 // comes out of the trees.
 //
-// Game units are metres * 1700 (scene.py). Flags: FG_COMMON 202 she has been
-// here before; FG_COMMON 205 the pine is dragged clear (the background shows
+// Game units are metres * 1700 (scene.py). Flags: FG_COMMON 205 the pine is dragged clear (the background shows
 // it moved while this is set, src/game/BgAnim.cpp); FG_ITEM 242 clear once she
 // has the shed key; FG_LOCK 60 the shed's padlock is open; FG_ENEMY 200 the
 // dog is dead. ck(bank, n, 1) is true while flag n is clear.
@@ -51,9 +50,12 @@ if (ck(FG_ITEM, 246, 0)) {
 }
 // The dog comes out of the trees once she has the key: from behind the
 // cabin's far corner, so she sees it come round before it reaches her.
-if (ck(FG_ITEM, 242, 1)) {
+if (ck(FG_ITEM, 242, 1) && ck(FG_COMMON, 126, 0)) {
     enemy(2 /* Cerberus */, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);
 }
+// CUTSCENES INIT (day/scripts.ts writes these)
+// cut-dog (day/cutscenes.ts): its people, and what starts it. FG_COMMON 126 once it has run.
+// END CUTSCENES INIT
 // KIT DOORS (day/scripts.ts writes these)
 // West along the tyre tracks to the forestry road.
 door_aot_set(11, 3400, 16320, 1020, 4080, 0, 15, 48, 4, 0, ROOM_419, 29580, 0, 11900, 2048, UNLOCKED, 1);
@@ -63,10 +65,12 @@ door_aot_set(12, 29580, 7650, 1020, 5100, 0, 15, 48, 4, 0, ROOM_31A, 6120, 0, 13
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 202, 1)) {
-    set(FG_COMMON, 202, 0);
-    message(128, 255, 0);
+// CUTSCENES MAIN (day/scripts.ts writes these)
+if (ck(FG_COMMON, 126, 1) && ck(FG_STATUS, 15, 1) && ck(FG_ITEM, 242, 1)) {
+    set(FG_COMMON, 126, 0);
+    evt_exec(0, 9, 0);
 }
+// END CUTSCENES MAIN
 // The crank used at the winch. The status screen is still closing on the
 // frame she uses it, and a message opened then is dropped, so the line waits
 // a second (the state word 4 counts seconds; setw restarts it). The pine
@@ -86,5 +90,45 @@ if (ck(FG_COMMON, 205, 1)) {
         door_aot_set(3, 24310, 19380, 4930, 1360, 0, 15, 48, 4, 0, ROOM_317, 10200, 0, 6120, 3072, UNLOCKED, 1);
         message(136, 255, 0);
     }
+}
+return;
+
+// CUTSCENE EVENTS (day/scripts.ts writes these, to the end of the file)
+
+// event procedure 0
+// cut-dog (day/cutscenes.ts)
+scd {
+    set(FG_COMMON, 126, 0);
+    set(FG_STATUS, 15, 0);
+    set(FG_6, 23, 1);
+    return;
+}
+dir_set(0, 0, 3072, 0, 22015, 0, 13515);  // her
+cutnext(1);
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_pose(6, 29750, 5100, 62);
+anim_end_release();
+do {
+    yield();
+} while (ck(FG_ROOM, 62, 1));
+sleep(15);
+message(138, 0, 0);  // her
+wait_voice();
+message(139, 0, 0);  // her
+wait_voice();
+scd {
+    enemy(2, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);
+    return;
+}
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_idle();
+anim_end_release();
+scd {
+    set(FG_STATUS, 15, 1);
+    cut_auto(0);
+    set(FG_6, 23, 0);
+    return;
 }
 return;

@@ -53,7 +53,7 @@ export const day: Plan = {
     },
     {
       n: 4, title: 'The mansion', time: 'Night',
-      summary: 'In through the cellar doors, under the floor, and up through a hatch into the save room. Too tired to go on, she sits against the wall and falls asleep. Footsteps wake her, and Chris walks in.',
+      summary: 'In through the cellar doors and under the floor. At the narrow turn she leaves her pack and keeps only her pistol before climbing through the hatch into the save room. Too tired to go on, she sits against the wall and falls asleep. Footsteps wake her, and Chris walks in.',
     },
   ],
   places: [
@@ -269,8 +269,8 @@ export const day: Plan = {
 
     // Act 4.
     step(4, 'push-rack', 'cellar', 'do', ['bulkhead'], 'Push the rack aside: a crawl passage'),
-    step(4, 'wine-aid', 'wine', 'find', ['bulkhead'], 'A first aid spray', { optional: true }),
-    step(4, 'hatch', 'crawl', 'do', ['push-rack'], 'Up through the hatch'),
+    step(4, 'wine-aid', 'wine', 'find', ['bulkhead'], 'A green herb', { optional: true }),
+    step(4, 'hatch', 'crawl', 'do', ['push-rack'], 'Leave her pack at the narrow turn, keep her pistol, then climb through the hatch'),
     step(4, 'sleep', 'save', 'do', ['hatch'], 'Too tired to go on, she falls asleep'),
     step(4, 'chris', 'save', 'learn', ['sleep'], 'Footsteps. Chris walks in', { built: true }),
     step(4, 'credits', 'save', 'goal', ['chris'], 'Her credits'),

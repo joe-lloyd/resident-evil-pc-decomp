@@ -1,4 +1,4 @@
-0: \nCandles. Someone's down\nhere.
+0: \n...
 1: \nA low passage. The rack's\nend is jammed across it.
 2: \nOne of the footmen.\nSomething's been... eating\nhim.\p{0}\nIt's not long gone.
 3: \nA silver tray. Broken\nglasses. He was bringing\nsomething down.

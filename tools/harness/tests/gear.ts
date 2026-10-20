@@ -1,22 +1,15 @@
-// Her weapons through the day (rebecca/day/gear.ts), in the game:
-//   - a new game starts her with her Beretta in hand, a spare clip and her knife;
-//   - the first time she wades into the flooded gallery the mine takes her
-//     weapons, rounds and healing, two of a kind as well as one, and the gun
-//     leaves her hands, but not her key items;
-//   - at the crash she picks up Kevin's Beretta.
-//
-//   node tools/harness/tests/gear.ts
-//
-// Needs the engine and the overlay deployed (see mountain-trail.ts), in the
-// Rebecca game folder: RE1_LAB_GAME_DIR='D:\Games\RE1-files' PORT=7811.
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
+// Her kit through the day, checked in the game. The gallery scare keeps
+// every slot. At the narrow crawl turn she leaves all gear except her
+// Beretta and its loaded rounds. Key items stay and a repeat removes nothing.
+// Run with the Windows lab and the current overlay: node tools/harness/tests/gear.ts
 import { open } from '../lab.ts';
-import { Key } from '../link.ts';
-import { faceTowards, headingTo, settle } from '../flows.ts';
+import { settle } from '../flows.ts';
 import type { GameState } from '../state.ts';
 import { dayRooms } from '../../rebecca/day/rooms.ts';
-import { day, nearest, read, walkable } from './floor.ts';
+import { GEAR } from '../../rebecca/day/gear.ts';
+import { KEY_ITEMS } from '../../rebecca/items/items.ts';
+import { CUT_FLAGS } from '../../rebecca/day/cutscenes.ts';
+import { Bank } from '../state.ts';
 
 const BERETTA = 0x02;
 const CLIP = 0x0b;
@@ -33,17 +26,6 @@ const expect = (ok: boolean, what: string) => {
 const ids = (s: GameState) => s.items.map((it) => it.id).filter((id) => id !== 0);
 const room = (slug: string) => dayRooms.find((r) => r.slug === slug)!;
 
-/** Where a room's script lays down item `id`: its pickup model's position (item_aot_set's bytes 9-14). */
-function lying(slug: string, id: number): { x: number; z: number } {
-  const c = readFileSync(path.join(day, slug, 'room.c'), 'utf8');
-  for (const m of c.matchAll(/item_aot_set\(([^)]*)\)/g)) {
-    const a = m[1]!.replace(/\/\*.*?\*\//g, '').split(',').map((t) => Number(t.trim()));
-    const word = (lo: number, hi: number) => ((a[lo]! | (a[hi]! << 8)) << 16) >> 16;
-    if (a[5] === id) return { x: word(9, 10), z: word(13, 14) };
-  }
-  throw new Error(`${slug} lays down no item ${id}`);
-}
-
 const session = await open(Number(process.env.PORT ?? 7801), '--mode REB --boot rebecca:2:18');
 const link = session.link;
 try {
@@ -54,35 +36,40 @@ try {
   expect([BERETTA, CLIP, KNIFE].every((id) => ids(s).includes(id)), `she starts with her Beretta, a clip and her knife (has ${ids(s).join(', ')})`);
   expect(s.player.weapon !== 0, 'she starts with a gun in her hands');
 
-  // Two sprays, in two slots: the mine takes both (remove_item takes one slot
-  // at a time). With her knife, Beretta and clip that fills her six slots.
-  for (const id of [SPRAY, SPRAY, COG]) await link.give(id, 1);
+  // Exact slot contents include repeated healing and a key item.
+  const kit = [{ id: BERETTA, qty: 7 }, { id: CLIP, qty: 15 }, { id: KNIFE, qty: 0 },
+    { id: SPRAY, qty: 1 }, { id: SPRAY, qty: 1 }, { id: COG, qty: 1 }];
+  await link.unequip();
+  for (const [i, it] of kit.entries()) await link.slot(i, it.id, it.qty);
   const gallery = room('gallery');
   await link.room(gallery.stage, gallery.room);
   s = await settle(link, (st) => st.stage === gallery.stage && st.room === gallery.room, 30_000);
-  expect(ids(s).join(',') === String(COG), `the gallery leaves her only her key item (has ${ids(s).join(', ')})`);
-  expect(s.player.weapon === 0, 'and nothing in her hands');
+  expect(JSON.stringify(s.items.map(({ id, qty }) => ({ id, qty }))) === JSON.stringify(kit), 'the gallery keeps every item and loaded round');
 
-  // Coming back does not take anything again.
+  // Try every removable id in every slot, including duplicate stacks.
+  const crawl = room('crawl');
+  for (const id of GEAR) {
+    await link.room(crawl.stage, crawl.room);
+    await settle(link, (st) => st.stage === crawl.stage && st.room === crawl.room, 30_000);
+    await link.place(3740, 8840);
+    await link.unequip();
+    const keys = KEY_ITEMS.slice(0, 1).map((k) => k.id);
+    await link.slot(0, BERETTA, 7);
+    await link.slot(1, keys[0]!, 1);
+    for (let i = 2; i < 6; i++) await link.slot(i, id, 3);
+    await link.setFlag(Bank.common, CUT_FLAGS.get('cut-leave-gear')!, false);
+    await link.place(12240, 6800);
+    s = await settle(link, (st) => st.stage === crawl.stage && st.room === crawl.room, 40_000);
+    expect(!ids(s).includes(id), `the crawl removes every copy of item ${id}`);
+    expect(s.items.some((it) => it.id === BERETTA && it.qty === 7), 'the pistol keeps its seven loaded rounds');
+    expect(ids(s).includes(keys[0]!), 'the key item stays');
+  }
   await link.give(GREEN_HERB, 1);
-  await link.room(gallery.stage, gallery.room);
-  s = await settle(link, (st) => st.stage === gallery.stage && st.room === gallery.room, 30_000);
-  expect(ids(s).includes(GREEN_HERB), 'the second time in, the gallery takes nothing');
+  await link.place(12240, 6800);
+  await link.frames(60);
+  s = await link.state();
+  expect(ids(s).includes(GREEN_HERB), 'crossing the turn again takes nothing');
 
-  const crash = room('crash');
-  await link.room(crash.stage, crash.room);
-  await settle(link, (st) => st.stage === crash.stage && st.room === crash.room, 30_000);
-  const gun = lying('crash', BERETTA);
-  // Stand a step from it, so the point she reaches with action falls on it.
-  const cells = walkable(read('crash')!, []);
-  const at = nearest(cells, gun.x, gun.z, ([x, z]) => Math.hypot(x - gun.x, z - gun.z) > 350 && Math.hypot(x - gun.x, z - gun.z) < 700) ?? [gun.x - 500, gun.z];
-  await link.place(at[0], at[1], headingTo(at[0], at[1], gun.x, gun.z));
-  await link.frames(6);
-  await faceTowards(link, gun.x, gun.z);
-  await link.tap(Key.action, 3);
-  await link.frames(30);
-  s = await settle(link, (st) => st.stage === crash.stage && st.room === crash.room, 30_000);
-  expect(ids(s).includes(BERETTA), `Kevin's Beretta at the crash (has ${ids(s).join(', ')})`);
 } finally {
   session.end();
 }

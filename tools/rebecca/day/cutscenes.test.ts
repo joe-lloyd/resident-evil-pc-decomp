@@ -8,17 +8,19 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
+import { CUTSCENES as PLANNED } from '../plan/todo.ts';
+import { compileScene } from './cutscene.ts';
 import { CUT_FLAGS, CUTSCENES } from './cutscenes.ts';
 import { pages } from './scripts.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const script = (room: string) => (room === 'save' ? path.join(here, '..', 'rooms', 'ROOM1000.c') : path.join(here, room, 'room.c'));
 
-test("each scene's flag is set in its own room and used in no other", () => {
+test("each scene's flag is set in its own room and set in no other", () => {
   const users = new Map<number, Set<string>>();
   const rooms = [...readdirSync(here).filter((d) => existsSync(script(d))), 'save'];
   for (const room of rooms) {
-    for (const m of readFileSync(script(room), 'utf8').matchAll(/FG_COMMON, (\d+)/g)) {
+    for (const m of readFileSync(script(room), 'utf8').matchAll(/set\(FG_COMMON, (\d+), 0\)/g)) {
       const n = Number(m[1]);
       users.set(n, (users.get(n) ?? new Set()).add(room));
     }
@@ -43,4 +45,27 @@ test('every line of a scene fits the message box: one page, two lines', () => {
     }),
   );
   assert.deepEqual(long, []);
+});
+
+
+test('every planned cutscene has a script, with Chris included in the sleep scene', () => {
+  const made = new Set([...CUTSCENES.map((c) => c.id), 'cut-chris']);
+  assert.deepEqual(PLANNED.map(([id]) => id).filter((id) => !made.has(id)), []);
+});
+
+test('entry scenes wait for their story flags and for the previous scene to finish', () => {
+  for (const id of ['cut-dog', 'cut-mine-chase', 'cut-credits']) {
+    const c = CUTSCENES.find((s) => s.id === id)!;
+    const result = compileScene(c, 0, CUT_FLAGS.get(id)!, {
+      say: () => 128, freeAction: () => 0, freeBit: () => 12,
+      itemAction: () => undefined, arrival: () => ({ x: 3315, z: 2805 }),
+    });
+    const main = result.main.join('\n');
+    assert.ok(main.includes('ck(FG_STATUS, 15, 1)'));
+    for (const r of c.requires!) assert.ok(main.includes(`ck(${r.bank}, ${r.flag}, ${r.set ? 0 : 1})`));
+    if (id === 'cut-dog') {
+      const event = result.event.join('\n');
+      assert.ok(event.lastIndexOf('wait_voice();') < event.indexOf('enemy(2,'));
+    }
+  }
 });

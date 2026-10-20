@@ -1,4 +1,4 @@
-0: \nA quarry. Something's been\nfeeding here.
+0: \n...
 1: \nOne of the quarrymen. The\ndogs have been at him.\p{0}\nThey dragged him out from\nbehind the blocks.
 2: \nHis hard hat. His lunch,\nspilled. He was sitting\ndown to eat.
 3: \nQUARRY OFFICE. DANGER,\nEXPLOSIVES.\p{0}\nThe door's padlocked.

@@ -301,7 +301,6 @@ def build():
     room.check((6.9, 3.7, 8.2, 4.8), "A footlocker and a chair, shoved back from the door.\nThey were holding it shut.")
     room.check((5.8, 1.85, 7.0, 2.4), "The stove's cold.")
     room.check((1.3, 2.3, 2.8, 2.8), "His footlocker, open. Letters from home. A photo of a woman.")
-    room.entry = "It stinks of sickness in here."
     # Many scenes share the render machine's GPU: keep each frame cheap.
     scene = bpy.context.scene
     scene.render.use_persistent_data = True

@@ -228,7 +228,6 @@ def build():
     room.check((1.8, 2.7, 2.6, 3.3), "A dead rat. Swollen. Its fur's falling out.\nThe trap didn't get it. Something else did.")
     room.check((2.6, 2.9, X1, Y1), "Bone meal. Something's gnawed a sack open.")
     room.check((1.3, Y1 - 0.6, 2.9, Y1), "His tools. Clean and in a row.")
-    room.entry = "A potting shed. The lantern's lit."
     room.export(anim, samples=128)
 
 

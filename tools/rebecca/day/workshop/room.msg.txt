@@ -1,4 +1,4 @@
-0: \nOil and something worse.
+0: \n...
 1: \nA crate. ARKLAY SKYWAY -\nSPARE. DRIVE COG NO 2.\p{0}\nThe gondola's spare cog.\nIt's under a pile of logs.\p{0}\nI can't move those. Not by\nhand.
 2: \nSomeone slept here.\nBandages, black with\p{0}\nblood. A tally scratched\nin the tin: six days.\p{0}\nA note: \oBit on the hand\nTues. Can't stay. Don't\ncome looking. Gus."
 3: \nA power cable, cut. It's\nstill live. I'm not\ntouching that.

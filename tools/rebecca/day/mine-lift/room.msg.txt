@@ -1,7 +1,10 @@
-0: \nThe cage creaks under me.
+0: \n...
 1: \nThe cage won't move.
 2: \nA miner's cap lamp, dead.\nThe strap's snapped.\p{0}\nThere's an old smear of\nblood across the plates.
 3: \nMAX 6 MEN.
 4: \nThe cage controls. UP and\nDOWN.\p{0}\nThe lever's dead without\npower up top.
 5: \nThe cage controls. The\nlight by UP is lit.
 6: \nI press UP. The cage\njolts, and starts to\nclimb.
+7: \nThey cannot fit through\nthe cage.
+8: \nMore of them in the dark.\nI cannot stay here.
+9: \nThe lift controls. Up to\nthe surface.

@@ -231,7 +231,6 @@ def build():
     room.check((X1 - 0.5, 3.2, X1, 3.9), "His coat's still on the hook. He never left.")
     room.check((3.2, Y1 - 0.5, 4.0, Y1), "ARKLAY SKYWAY, 1996. Built with the support of the Umbrella Corporation.\nUmbrella. Again.")
     room.check((4.7, 3.45, 5.15, 4.05), "A CB radio. Static on every channel.")
-    room.entry = "Blood on the counter. Glass on the floor."
     room.export(anim)
 
 

@@ -19,9 +19,4 @@ enemy(5, 0, 254, 1, 2, 0, 0, 1024, 0, 0, 2900, 0, 9600, 1, 0, 0, 0);
 return;
 
 // main procedure 0
-// Her first thought on the way down (FG_COMMON 159 clear until then).
-if (ck(FG_COMMON, 159, 1)) {
-    set(FG_COMMON, 159, 0);
-    message(130, 255, 0);
-}
 return;

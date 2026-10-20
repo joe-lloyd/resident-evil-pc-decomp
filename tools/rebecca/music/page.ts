@@ -106,7 +106,7 @@ ol li,ul li{margin:.35em 0}
 <li><b>No AI music generators.</b> None can render the same track twice from a file we keep, and their terms don't give us clean rights.</li>
 <li><b>Render to WAV the same way every time,</b> then make it sound like a 1996 PlayStation: 22 kHz, mono, a little crushed.</li>
 <li><b>The game plays it.</b> RE1 plays music from plain WAV files, and her mode's folder is searched first. It plays an intro once and loops the rest, and up to three layers per room. Her mode reads its own music table from her folder, so Chris's and Jill's games stay as they are.</li>
-<li><b>The layers react.</b> Room scripts switch them as she works: the generator hum joins the station, the mill joins the camp, the line hums once the breakers close, and the mine's water stops once the pump runs. When the mine takes her gear, its rooms switch to the chase until she is out.</li>
+<li><b>The layers react.</b> Room scripts switch them as she works: the generator hum joins the station, the mill joins the camp, the line hums once the breakers close, and the mine's water stops once the pump runs. When the gallery floor gives way, its rooms switch to the chase until she is out.</li>
 </ul>
 
 <h2>Where every piece goes</h2>
