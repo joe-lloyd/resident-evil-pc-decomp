@@ -27,12 +27,26 @@
       const edit = edits.get(keyOf(el));
       el.value = edit ? edit.value : el.dataset.mode === 'edit' ? el.dataset.old : '';
       el.classList.toggle('edited', Boolean(edit));
+      el.parentElement.querySelector('.source-warning')?.remove();
+      if (edit && edit.old !== el.dataset.old) {
+        const warning = document.createElement('small');
+        warning.className = 'source-warning';
+        warning.textContent = 'Source changed since this edit. Copy includes both source versions.';
+        el.after(warning);
+      }
     }
+  }
+  function savedStatus() {
+    const stale = [...edits].filter(([key, e]) => {
+      const current = fields.find((el) => keyOf(el) === key);
+      return !current || current.dataset.old !== e.old;
+    }).length;
+    return edits.size ? `${edits.size} edits saved here${stale ? ` · ${stale} need source review` : ''}` : 'Edits stay in this browser';
   }
   function save() {
     try {
       localStorage.setItem(storageKey, JSON.stringify([...edits.values()]));
-      status.textContent = edits.size ? `${edits.size} edits saved here` : 'Edits stay in this browser';
+      status.textContent = savedStatus();
     } catch {
       status.textContent = 'Storage is full or blocked. Copy your edits now.';
     }
@@ -52,7 +66,7 @@
     save();
   });
   fillFields();
-  if (edits.size) status.textContent = `${edits.size} edits saved here`;
+  if (edits.size) status.textContent = savedStatus();
 
   function showView() {
     const id = location.hash.slice(1) || 'flow';
@@ -88,7 +102,11 @@
       rooms.get(edit.room).push(edit);
     }
     if (!edits.size) return '# Rebecca\'s day edits\n\nNo edits yet.\n';
-    return '# Rebecca\'s day edits\n\n' + [...rooms].map(([room, rows]) => `## ${room}\n\n` + rows.map((e) => `### ${e.field}\n\nOld value:\n${quote(e.old || 'Empty')}\n\n${e.mode === 'edit' ? 'New value' : 'Note'}:\n${quote(e.value)}\n`).join('\n')).join('\n');
+    return '# Rebecca\'s day edits\n\n' + [...rooms].map(([room, rows]) => `## ${room}\n\n` + rows.map((e) => {
+      const current = fields.find((el) => el.dataset.room === e.room && el.dataset.field === e.field);
+      const change = !current ? '\nSource warning: this field is no longer on the page.\n' : current.dataset.old !== e.old ? `\nCurrent source value:\n${quote(current.dataset.old || 'Empty')}\n` : '';
+      return `### ${e.field}\n\nOld value:\n${quote(e.old || 'Empty')}\n${change}\n${e.mode === 'edit' ? 'New value' : 'Note'}:\n${quote(e.value)}\n`;
+    }).join('\n')).join('\n');
   }
   const exportDialog = document.querySelector('#export-dialog');
   document.querySelector('#copy').addEventListener('click', async () => {

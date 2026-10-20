@@ -8,7 +8,7 @@ import { CUTSCENES } from '../day/cutscenes.ts';
 import { SUPPLIES, SUPPLY_KINDS } from '../day/supplies.ts';
 import { DOCUMENTS } from '../files/documents.ts';
 import { MAP_ITEMS } from './maps.ts';
-import { buildStoryboard, renderStoryboard } from './storyboard.ts';
+import { buildStoryboard, messages, renderStoryboard } from './storyboard.ts';
 
 const board = buildStoryboard();
 
@@ -66,4 +66,19 @@ test('starting kit, loaded gun and hand-written enemy spawns enter the balance',
   assert.deepEqual(board.balance.map((b) => [b.act, b.rounds, b.enemies]), [[1, 30, 8], [2, 60, 36], [3, 45, 11], [4, 15, 1]]);
   assert.equal(board.items.find((i) => i.room === 'crash' && i.kind === 'weapon')?.rounds, 15);
   assert.equal(board.items.find((i) => i.room === 'cabin' && i.kind === 'ribbons')?.name, 'Ink ribbons');
+});
+
+
+test('message decoding keeps opening quotes and identifies control-only rows', () => {
+  assert.deepEqual(messages('0: \\n\\oHello!"\\p{0}\\n\\o"Stay here."'), [
+    { n: 0, raw: '\\n\\oHello!"\\p{0}\\n\\o"Stay here."', text: '"Hello!"\n\n\n"Stay here."' },
+  ]);
+  assert.equal(messages('0: \\s{0}\\n\\s{2}\\d{70}')[0]?.text, 'Timing controls only. No written words in this source message.');
+});
+
+test('the ending keeps its written lines alongside inherited control messages', () => {
+  const save = board.scenes.find((s) => s.place.id === 'save');
+  assert.ok(save?.msgs.some((m) => m.text === '"Freeze!"'));
+  assert.ok(save?.cuts.some((c) => c.beats.some((b) => b.kind === 'say' && b.text === '"Freeze!"')));
+  assert.equal(board.scenes.reduce((n, s) => n + s.msgs.length, 0), 574);
 });
