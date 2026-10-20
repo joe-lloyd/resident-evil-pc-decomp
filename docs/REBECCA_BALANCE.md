@@ -12,8 +12,9 @@ spawn totals in day/foes.ts. No new enemies are added.
 
 The act 3 starting count includes the 15 rounds loaded in Kevin's old
 Beretta pickup. Its replacement is a green herb, beside the existing clip.
-Her own pistol now survives the gallery, so there is no replacement gun
-and no midgame inventory reset to compensate for.
+She keeps her own pistol all day and leaves the rest of her gear in the
+crawl space, so there is no replacement gun and no midgame inventory reset
+to compensate for.
 
 Act 2 has eleven zombies, four dogs and three spinners. Those eighteen
 larger enemies get a budget of 4.17 new rounds each, up from 3.33. The

@@ -50,21 +50,20 @@ test('supply quantities, file and map totals match their source tables', () => {
   assert.equal(board.items.filter((i) => i.room === 'cabin' && i.kind === 'ribbons').reduce((n, i) => n + i.qty, 0), 3);
 });
 
-test('the audit excludes entry cutscenes and includes the hand-written cabin', () => {
-  assert.ok(board.audit.some((a) => a.room === 'cabin' && a.text.includes('The door isn\'t locked.')));
-  for (const room of ['ridge', 'woods', 'gallery', 'crash', 'save']) assert.ok(!board.audit.some((a) => a.room === room), room);
+test('no room stops her for an entry thought', () => {
+  assert.deepEqual(board.audit.map((a) => a.room), []);
 });
 
-test('the tracker exposes unwritten scenes, an unmapped reward and missing art', () => {
-  for (const id of ['cut-credits', 'cut-dog', 'cut-mine-chase']) assert.ok(board.missing.some((m) => m.detail.includes(id)), id);
+test('the tracker drops written scenes and keeps an unmapped reward and missing art', () => {
+  for (const id of ['cut-credits', 'cut-dog', 'cut-mine-chase']) assert.ok(!board.missing.some((m) => m.detail.includes(id)), id);
   assert.ok(!board.missing.some((m) => m.detail.includes('cut-chris')), 'Chris is written inside cut-sleep');
   assert.ok(board.missing.some((m) => m.room === 'mast' && m.detail.includes('supplies has no matching pickup step')));
   assert.ok(board.missing.some((m) => m.room === 'save' && m.title.startsWith('Render')));
 });
 
 test('starting kit, loaded gun and hand-written enemy spawns enter the balance', () => {
-  assert.deepEqual(board.balance.map((b) => [b.act, b.rounds, b.enemies]), [[1, 30, 8], [2, 60, 36], [3, 45, 11], [4, 15, 1]]);
-  assert.equal(board.items.find((i) => i.room === 'crash' && i.kind === 'weapon')?.rounds, 15);
+  assert.deepEqual(board.balance.map((b) => [b.act, b.rounds, b.enemies]), [[1, 30, 8], [2, 75, 36], [3, 30, 11], [4, 5, 1]]);
+  assert.deepEqual(board.items.filter((i) => i.kind === 'weapon').map((i) => `${i.name} ${i.source}`), ['Beretta start', 'Knife start']);
   assert.equal(board.items.find((i) => i.room === 'cabin' && i.kind === 'ribbons')?.name, 'Ink ribbons');
 });
 
@@ -80,7 +79,7 @@ test('the ending keeps its written lines alongside inherited control messages', 
   const save = board.scenes.find((s) => s.place.id === 'save');
   assert.ok(save?.msgs.some((m) => m.text === '"Freeze!"'));
   assert.ok(save?.cuts.some((c) => c.beats.some((b) => b.kind === 'say' && b.text === '"Freeze!"')));
-  assert.equal(board.scenes.reduce((n, s) => n + s.msgs.length, 0), 574);
+  assert.equal(board.scenes.reduce((n, s) => n + s.msgs.length, 0), 587);
 });
 
 test('each recorded visit has its own player and each room card shows coverage', () => {
