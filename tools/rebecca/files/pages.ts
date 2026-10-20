@@ -10,7 +10,7 @@
 // Everything here draws from documents.ts with our own font (font.ts) and
 // our own art. Nothing is copied from the game's pages.
 import { lzwPack, to555 } from '../pak.ts';
-import type { Image } from '../harness/image.ts';
+import type { Image } from '../../harness/image.ts';
 import { ADVANCE, GLYPH_H, glyph } from './font.ts';
 import { DOCUMENTS, type Calendar, type Doc, type MineMap, type Notice, type Page, type Paper, type Roster } from './documents.ts';
 

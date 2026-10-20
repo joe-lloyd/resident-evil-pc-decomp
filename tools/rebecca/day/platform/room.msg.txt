@@ -1,4 +1,4 @@
-0: \nA gondola station. Down\nthe mountain, into the\nvalley.\p{0}\nIf it ran.
+0: \n...
 1: \nThe gondola's dead.
 2: \nThe smear ends at the\nrail. The crows are at\nsomething caught on it.\p{0}\nA strip of plaid shirt.
 3: \nCar 4. The door has been\nforced from inside. The\nglass is smeared red.

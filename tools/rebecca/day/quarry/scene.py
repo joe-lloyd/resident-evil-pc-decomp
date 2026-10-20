@@ -523,7 +523,6 @@ def build():
     room.check((cx0, cy1, cx1, cy1 + 0.7), "ARKLAY GRANITE CO. The crusher's rusted solid.")
     room.check((17.6, 4.6, X1, 5.6), "Old rails, running off east. ARKLAY MINE.")
     room.check((13.0, 13.8, X1, 14.5), "A truck, dead on its rims.")
-    room.entry = "A quarry. Something's been feeding here."
     room.export(anim)
 
 

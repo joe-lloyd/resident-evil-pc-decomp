@@ -245,7 +245,6 @@ def build():
     room.check((X1 - 1.3, 2.5, X1 - 0.68, 3.2), "The shift rosters. Name after name crossed out in red. SICK.\nBy the last one there's hardly anyone left.")
     room.check((X1 - 0.8, Y1 - 0.7, X1, Y1), "The coffee's been on the hot plate for days. It's burnt to tar.")
     room.check((2.1, Y1 - 0.5, 3.1, Y1), "DAYS WITHOUT AN ACCIDENT. Someone wiped the number off\nand wrote a 0.")
-    room.entry = "Burnt coffee. The hot plate's still on."
     room.export(anim)
 
 

@@ -1,4 +1,4 @@
-// Rebecca's day, sketch: the mine, unarmed, running for the lift.
+// Rebecca's day, sketch: the mine, running through the dark for the lift.
 // A driving low ostinato, timpani, metal hits, a bowed cluster above.
 // Only CC0 sounds (VCSL) and Strudel's own synths, pinned to one commit.
 samples('https://raw.githubusercontent.com/felixroos/dough-samples/9eacfc86ec4393e68a463ff52b01c19cfaa77f38/vcsl.json')

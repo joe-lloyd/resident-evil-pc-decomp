@@ -131,8 +131,7 @@ const GOALS: Goal[] = [
   { id: 'keeper-log', needs: ['pylon-down'], kind: 'take', room: 'lower-station', file: true },
   { id: 'kevin', needs: ['pylon-down'], kind: 'scene', room: 'crash', from: 'valley-path', cut: 'cut-kevin' },
   { id: 'crowbar', needs: ['kevin'], kind: 'take', room: 'crash', item: ITEM.crowbar },
-  // Kevin's Beretta: she has had no gun since the mine.
-  { id: 'kevins-gun', needs: ['kevin'], kind: 'take', room: 'crash', item: ITEM.beretta },
+  { id: 'kevins-ammo', needs: ['kevin'], kind: 'take', room: 'crash', item: 0x0b },
   { id: 'pry-lodge', needs: ['crowbar'], kind: 'unlock', from: 'creek', to: 'lodge' },
   { id: 'gate-key', needs: ['pry-lodge'], kind: 'take', room: 'lodge', item: ITEM.gateKey },
   { id: 'gardener-diary', needs: ['pry-lodge'], kind: 'take', room: 'lodge', file: true },
@@ -141,7 +140,8 @@ const GOALS: Goal[] = [
   { id: 'bulkhead', needs: ['cellar-key'], kind: 'unlock', from: 'back-garden', to: 'cellar' },
   // Act 4.
   { id: 'push-rack', needs: ['bulkhead'], kind: 'event', room: 'cellar' },
-  { id: 'sleep', needs: ['push-rack'], kind: 'scene', room: 'save', from: 'crawl', cut: 'cut-sleep' },
+  { id: 'leave-gear', needs: ['push-rack'], kind: 'scene', room: 'crawl', from: 'cellar', cut: 'cut-leave-gear', zone: { x: 10880, z: 6460, w: 2720, d: 1020 } },
+  { id: 'sleep', needs: ['leave-gear'], kind: 'scene', room: 'save', from: 'crawl', cut: 'cut-sleep' },
 ];
 
 /** The day in four, each ending where the next begins: the first goal of each. */
@@ -312,7 +312,7 @@ class Player {
     }
     if (at !== door.to) this.run.log(s, `went for ${door.to}, came out in ${at}`);
     else this.run.log(s, `into ${at}`);
-    // Unarmed after the mine: fighting back would only stand her still.
+    // Fight back only with a weapon in hand.
     useFightBack(s.player.weapon > 0 ? FIGHT_BACK : 0, [CROW, ADDER]);
     await this.scavenge();
     return true;
@@ -493,8 +493,8 @@ async function setUpAfter(p: Player, earlier: Goal[], reached: Set<string>): Pro
       case 'scene':
         await link.setFlag(Bank.common, CUT_FLAGS.get(g.cut)!, true);
         if (g.gets !== undefined) bag.push({ id: g.gets, qty: 1 });
-        // The mine takes her weapons, rounds and healing (gear.ts).
-        if (g.id === 'mine-collapse') for (let i = bag.length - 1; i >= 0; i--) if (GEAR.includes(bag[i]!.id)) bag.splice(i, 1);
+        // Under the mansion floor she leaves all gear except the pistol.
+        if (g.id === 'leave-gear') for (let i = bag.length - 1; i >= 0; i--) if (GEAR.includes(bag[i]!.id)) bag.splice(i, 1);
         break;
       case 'look':
         if (g.cut) await link.setFlag(Bank.common, CUT_FLAGS.get(g.cut)!, true);

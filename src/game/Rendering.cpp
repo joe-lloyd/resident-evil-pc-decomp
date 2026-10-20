@@ -2,6 +2,7 @@
 // All functions decompiled from Ghidra with original addresses
 #include "../Globals.h"
 #include "RebFiles.h"
+#include "Feedback.h"
 #include "../platform/platform.h"
 #include "../DebugPrint.h"
 #include "../marni/MarniSystem.h"
@@ -51,6 +52,32 @@ static int g_pendingSpriteCount = 0;
 
 MarniHandle g_displayImageSRV = MARNI_NULL_HANDLE;
 unsigned int g_displayImageSerial = 0;
+
+// Port addition: draw the frozen image and editor through the game's ASCII
+// font. No task, scene pass, game clock, or present callback runs here.
+void RenderFeedbackFrame(MarniHandle frozen, const char* const* lines, int count)
+{
+    MarniDX* dx = Marni_DX();
+    if (!dx) return;
+    DWORD w = 0, h = 0;
+    dx->GetBackBufferSize(&w, &h);
+    dx->Clear(0, 0, 0, 1);
+    if (frozen) dx->DrawSprite(0, 0, (float)w, (float)h, 0, 0, 1, 1, 0xFFFFFFFF, frozen, MARNI_SAMPLER_POINT, MARNI_BLEND_DISABLE);
+    float sx, sy;
+    MarniGetRenderScale(&sx, &sy);
+    dx->DrawRect((int)(16 * sx), (int)(28 * sy), (int)(288 * sx), (int)((count * 12 + 16) * sy), 0xF0101010);
+    g_pendingSpriteCount = 0;
+    for (int i = 0; i < count; i++) {
+        snprintf(PRINT_TEXT_BUFFER, sizeof(PRINT_TEXT_BUFFER), "%s", lines[i]);
+        PrintText8x8(24, (short)(36 + i * 12), 0, 0);
+    }
+    for (int i = 0; i < g_pendingSpriteCount; i++) {
+        const PendingSprite& p = g_pendingSprites[i];
+        if (p.valid) dx->DrawSprite(p.x, p.y, p.w, p.h, p.u0, p.v0, p.u1, p.v1, p.color, p.tex);
+    }
+    g_pendingSpriteCount = 0;
+    dx->Present();
+}
 
 // ============================================================================
 // AddTintSprite (0x0046e0a0)

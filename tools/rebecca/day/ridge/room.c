@@ -24,7 +24,7 @@ return;
 
 // main procedure 0
 // CUTSCENES MAIN (day/scripts.ts writes these)
-if (ck(FG_COMMON, 125, 1)) {
+if (ck(FG_COMMON, 125, 1) && ck(FG_STATUS, 15, 1)) {
     set(FG_COMMON, 125, 0);
     evt_exec(0, 9, 0);
 }

@@ -490,7 +490,6 @@ def build():
     room.check((8.5, Y0, 11.5, 3.2), "ARKLAY SKYWAY. UPPER STATION. ELEV 1840.")
     room.check((7.2, 5.8, 9.4, 6.8), "OUT OF SERVICE.")
     room.check((19.4, WALK[1][3] - 0.6, X_END - 0.6, WALK[1][3]), "A stake's been pulled out of the rock. The rope hangs down over the edge.\nHis cap. Scrape marks, right to the lip.")
-    room.entry = "A gondola station. Down the mountain, into the valley.\nIf it ran."
     room.export(anim)
 
 

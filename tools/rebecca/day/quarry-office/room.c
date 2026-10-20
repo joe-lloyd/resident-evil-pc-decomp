@@ -15,14 +15,10 @@ if (ck(FG_ITEM, 236, 0)) {
 }
 aot_set(7, 6120, 5270, 1360, 1190, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 aot_set(8, 3570, 5610, 1700, 850, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
-if (ck(FG_ITEM, 190, 0)) {  // greenHerb
-    item_aot_set(9, 2820, 4860, 1200, 1200, 68, 1, 0, 255, 92, 13, 0, 0, 84, 21, 0, 0, 190, 129, 1, 0);
+if (ck(FG_ITEM, 191, 0)) {  // greenHerb
+    item_aot_set(9, 2820, 4860, 1200, 1200, 68, 1, 0, 255, 92, 13, 0, 0, 84, 21, 0, 0, 191, 129, 1, 0);
 }
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 233, 1)) {
-    set(FG_COMMON, 233, 0);
-    message(128, 255, 0);
-}
 return;

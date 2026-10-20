@@ -274,7 +274,6 @@ def build():
     # strip in front of the desk to the letters on it.
     room.save_room(typewriter=(2.0, 3.15, 2.45, Y1), box=(3.6, 3.2, X1, Y1), lid=box_lid)
     room.check((3.6, 1.55, X1, 2.2), "A desk fan, still running. The power's still on somewhere.")
-    room.entry = "The smell hits first."
     # Many scenes share the render machine's GPU: keep each frame cheap.
     scene = bpy.context.scene
     scene.render.use_persistent_data = True

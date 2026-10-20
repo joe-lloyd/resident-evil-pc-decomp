@@ -200,6 +200,16 @@ export class GameLink {
     return this.command(`pos ${x} ${z}${angle === undefined ? '' : ` ${angle}`}`, 'pos');
   }
 
+  /** Equip the saved bag slot, counted from one; 0 puts the weapon away. */
+  equip(slot: number): Promise<void> {
+    return this.command(`equip ${slot}`, 'equip');
+  }
+
+  /** Give the physical keyboard control after a feedback restore. */
+  keyboard(on: boolean): Promise<void> {
+    return this.command(`keyboard ${on ? 1 : 0}`, 'keyboard');
+  }
+
   /** Put an item in her first empty slot. */
   give(id: number, qty: number): Promise<void> {
     return this.command(`give ${id} ${qty}`, 'give');

@@ -264,7 +264,6 @@ def build():
     room.check((hx - 1.3, hy - 0.5, hx + 0.9, hy + 1.0), "Hal. Face down in the water. Something bit him: his arm's\nbandaged, black under it.\nThere's a key on a chain round his neck.")
     room.check((cx - 0.9, cy - 0.7, cx + 0.9, cy + 0.7), "He hid up on this cart, out of the water. Blanket, lantern.\nThere's blood where he slid off.")
     room.check((dx0 - 0.3, dy1, dx0 + 3.5, dy1 + 0.6), "DANGER. WINZE. The floor drops away under the water there.")
-    room.entry = "The water's cold. It's black. I can't see the floor."
     room.export(anim)
 
 

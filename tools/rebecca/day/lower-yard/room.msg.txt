@@ -1,4 +1,4 @@
-0: \nThe bottom of the gondola.\nSomeone left their car\ndoor open.
+0: \n...
 1: \nA burgundy sedan. The\ndriver's door is wide\p{0}\nopen, the light's still\non.\p{0}\nBlood on the seat. The\nkeys are in the ignition.\p{0}\nHer other shoe.
 2: \nTICKETS. The window's\nsmashed in. Claw marks on\nthe boards.
 3: \nA handcart of sacks.\nSPENCER ESTATE.\p{0}\nFertiliser, rat poison,\nchain.

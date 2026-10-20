@@ -1,4 +1,4 @@
-0: \nFlies. Hundreds of them.
+0: \n...
 1: \nThe cook, in his apron. He\ndied holding the counter.\p{0}\nThere's a ring of keys on\nhis belt. One is tagged\nOFFICE.
 2: \nA meat cleaver. He didn't\ngo down without a fight.
 3: \nStew, still simmering on\nthe range. Someone kept\nthe fire going.\p{0}\nIt doesn't smell like food\nany more.

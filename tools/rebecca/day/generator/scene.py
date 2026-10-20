@@ -275,7 +275,6 @@ def build():
     room.check((cot_x0 - 0.6, cot_y0, cot_x0, cot_y0 + 1.0), "His cot. The pillow's soaked through with blood.\nThe flies have found it.")
     room.check((X0 + 1.4, WINDOW[0], X0 + 1.9, WINDOW[1]), "Dead wasps all along the sill.")
     room.check((SDOOR[0], Y1 - 0.9, SDOOR[1], Y1 - 0.6), "Oily boot prints, going out the back. To the switch house.")
-    room.entry = "Cold. It hasn't run for hours."
     room.export(anim)
 
 

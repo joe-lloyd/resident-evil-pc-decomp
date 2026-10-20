@@ -261,7 +261,6 @@ def build():
     room.check((5.2, SOUTH[0], 6.2, SOUTH[0] + 0.7), "Rat poison. The rats ate it all anyway.")
     room.check((3.0, SOUTH[0], 5.0, SOUTH[1]), "Footsteps, overhead. Slow ones.\nKeep going.")
     room.check((X1 - 0.6, SOUTH[0], X1, SOUTH[1]), "Pipes. Cobwebs. Rat droppings. Lovely.")
-    room.entry = "Under the house.\nI can hear someone walking around up there."
     room.export(anim, samples=128)
 
 

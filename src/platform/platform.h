@@ -217,3 +217,16 @@ BOOL plat_single_instance_check(void);
 // Windows implements these in system/CrashLog.cpp; see crash.cpp here.
 void crashlog_install(void);
 void crashlog_mark(const char* step);
+
+// Port addition: feedback text entry. ASCII text plus Backspace, Tab, Enter,
+// Escape. Events stay in the platform queue and never enter gameplay polling.
+void plat_text_input(BOOL on);
+BOOL plat_text_input_active(void);
+// Consume editor key events, including repeats held through closing the box.
+BOOL plat_text_input_key(int vk, BOOL down);
+void plat_text_input_event(int character);
+int  plat_text_input_read(void); // 0 when empty
+// UTC ISO time and a filesystem-safe timestamp, both from the same instant.
+void plat_wall_time(char* iso, size_t isoSize, char* stamp, size_t stampSize);
+// Unlike plat_mkdir, fails if the directory already exists.
+BOOL plat_mkdir_new(const char* path);

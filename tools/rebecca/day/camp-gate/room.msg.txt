@@ -1,4 +1,4 @@
-0: \nThey shut themselves in.\nIt didn't help.
+0: \n...
 1: \nSICK - KEEP OUT. Painted\nin a hurry, the paint\nstill running.
 2: \nLOGGING CAMP 4. Someone's\nclawed the sign.\p{0}\nThe gate's hanging open.
 3: \nThe outside of the gate is\nclawed to splinters.\p{0}\nSomething wanted in.

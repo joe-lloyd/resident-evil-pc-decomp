@@ -164,14 +164,12 @@ branch `reb-look`.
     only the first part's modifiers to the whole and dropped the rest. It
     now makes each part's modifiers real first. A room re-rendered after
     this shows bevels it was meant to have but never had.
-25. **What the mine takes, and where.** The plan says the mine takes
-    everything. I read that as her weapons, rounds, sprays and herbs, not
-    her key items: the cog, the fuses and the fuel are still needed for the
-    gondola. It happens the first time she wades into the flooded gallery,
-    as part of her thought there, with no cutscene yet (row
-    `cut-mine-collapse`). From there she has no gun until Kevin's Beretta
-    at the crash: the summit, the gondola, the pylon and the valley path
-    are unarmed, Cerberus included. Her knife goes too.
+25. **Gear loss design changed on 20 October.** The gallery now keeps
+    every item. She leaves her pack at the narrow turn of the crawl under
+    the mansion, before its hatch. All weapons, spare ammo and healing go
+    except the Beretta at item 0x02 and its loaded rounds. Key items stay.
+    The crash's redundant gun is now a green herb beside the existing clip.
+    The new late loss still needs play-testing.
 
 ## Waiting on you
 

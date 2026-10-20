@@ -2,8 +2,7 @@
 // plank footbridge over a gorge; adders in the near bank's long grass; the
 // valley trail going on down from the far bank. Act 1 ends at its sign.
 //
-// Game units are metres * 1700 (scene.py). FG_COMMON 204: she has been here
-// before. FG_COMMON 206: she has read the valley trail sign (the end of Act 1
+// Game units are metres * 1700 (scene.py). FG_COMMON 206: she has read the valley trail sign (the end of Act 1
 // for now). cmpb(16, 0, n) holds on the frame she presses action at zone n - 1.
 // Outdoor doors walk rather than open: door bytes 0, 15, 48 play walk 0 with
 // the footsteps of sound row 15 (src/game/PathWalk.cpp).
@@ -28,10 +27,6 @@ door_aot_set(5, 6800, 29580, 6800, 1020, 0, 15, 48, 4, 0, ROOM_318, 5440, 0, 578
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 204, 1)) {
-    set(FG_COMMON, 204, 0);
-    message(128, 255, 0);
-}
 if (ck(FG_COMMON, 206, 1) && cmpb(16, 0, 2)) {
     set(FG_COMMON, 206, 0);
 }

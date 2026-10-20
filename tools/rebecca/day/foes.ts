@@ -21,14 +21,14 @@ export interface Floor {
 }
 
 /** Entity id (cmd_enemy_set operand 1), behaviour byte, and collision records, as RE1 places each kind. */
-const KINDS = {
+export const FOE_KINDS = {
   zombie: { id: 17, behavior: 0, sca: 2 },
   cerberus: { id: 2, behavior: 1, sca: 2 },
   crow: { id: 5, behavior: 0, sca: 2 },
   adder: { id: 10, behavior: 1, sca: 1 },
   spinner: { id: 3, behavior: 2, sca: 2 },
 } as const;
-export type Kind = keyof typeof KINDS;
+export type Kind = keyof typeof FOE_KINDS;
 
 /** What each kit room holds, from the plan. */
 export const FOES: Record<string, readonly (readonly [Kind, number])[]> = {
@@ -115,7 +115,7 @@ export const facing = (from: { x: number; z: number }, to: { x: number; z: numbe
 export function foeLines(slug: string, floor: Floor, flags: number[], slot = 0): string[] {
   const lines: string[] = [];
   for (const [kind, count] of FOES[slug] ?? []) {
-    const k = KINDS[kind];
+    const k = FOE_KINDS[kind];
     const spots = place(floor, count);
     if (spots.length < count) throw new Error(`${slug}: room for ${spots.length} of ${count} ${kind}s`);
     for (const p of spots) {

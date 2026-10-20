@@ -18,8 +18,8 @@ aot_set(6, 3740, 3145, 1530, 1275, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(7, 1700, 2890, 1700, 3230, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
 aot_set(8, 6460, 2040, 1360, 1275, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
 aot_set(9, 5270, 3910, 850, 850, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
-if (ck(FG_ITEM, 191, 0)) {  // ribbons
-    item_aot_set(10, 4860, 3160, 1200, 1200, 47, 3, 0, 255, 84, 21, 0, 0, 176, 14, 0, 0, 191, 129, 0, 0);
+if (ck(FG_ITEM, 192, 0)) {  // ribbons
+    item_aot_set(10, 4860, 3160, 1200, 1200, 47, 3, 0, 255, 84, 21, 0, 0, 176, 14, 0, 0, 192, 129, 0, 0);
 }
 if (ck(FG_ITEM, 251, 0)) {
     set(FG_ROOM, 12, 0);
@@ -27,10 +27,6 @@ if (ck(FG_ITEM, 251, 0)) {
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 236, 1)) {
-    set(FG_COMMON, 236, 0);
-    message(128, 255, 0);
-}
 if (ck(FG_ROOM, 12, 0) && ck(FG_ITEM, 251, 1)) {
     set(FG_ROOM, 12, 1);
     message(134, 255, 0);

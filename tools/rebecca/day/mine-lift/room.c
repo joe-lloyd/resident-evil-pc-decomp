@@ -16,13 +16,10 @@ if (ck(FG_COMMON, 136, 1)) {
 } else {
     aot_set(5, 3910, 2499, 1020, 1037, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 }
+// cut-mine-chase (day/cutscenes.ts): its people, and what starts it. FG_COMMON 127 once it has run.
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 239, 1)) {
-    set(FG_COMMON, 239, 0);
-    message(128, 255, 0);
-}
 if (ck(FG_COMMON, 136, 1) && ck(FG_ROOM, 12, 0)) {
     set(FG_ROOM, 12, 1);
     if (ck(FG_COMMON, 131, 0)) {
@@ -33,5 +30,60 @@ if (ck(FG_COMMON, 136, 1) && ck(FG_ROOM, 12, 0)) {
     } else {
         message(132, 255, 0);
     }
+}
+if (ck(FG_COMMON, 127, 1) && ck(FG_STATUS, 15, 1) && ck(FG_COMMON, 118, 0) && ck(FG_COMMON, 119, 0)) {
+    set(FG_COMMON, 127, 0);
+    evt_exec(0, 9, 0);
+}
+return;
+
+// event procedure 0
+// cut-mine-chase (day/cutscenes.ts)
+scd {
+    set(FG_COMMON, 127, 0);
+    set(FG_STATUS, 15, 0);
+    set(FG_6, 23, 1);
+    return;
+}
+dir_set(0, 0, 1024, 0, 3315, 0, 2805);  // her, in from junction
+cutnext(1);
+// She runs to (3315, 2500).
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_pose(3, 3315, 2500, 62);
+anim_end_release();
+do {
+    yield();
+} while (ck(FG_ROOM, 62, 1));
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_pose(6, 3315, 5000, 62);
+anim_end_release();
+do {
+    yield();
+} while (ck(FG_ROOM, 62, 1));
+message(135, 0, 0);  // her
+wait_voice();
+message(136, 0, 0);  // her
+wait_voice();
+cutnext(0);
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_pose(6, 4500, 3000, 62);
+anim_end_release();
+do {
+    yield();
+} while (ck(FG_ROOM, 62, 1));
+message(137, 0, 0);  // her
+wait_voice();
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_idle();
+anim_end_release();
+scd {
+    set(FG_STATUS, 15, 1);
+    cut_auto(0);
+    set(FG_6, 23, 0);
+    return;
 }
 return;

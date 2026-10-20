@@ -171,13 +171,13 @@ of its group, whichever are on.
 - **The chase.** A cue can take over another cue's rooms as the second
   group of their rows (`Takeover`). The chase takes over the mine's five
   rooms when the floor gives way, on her first step into the gallery
-  (`day/gear.ts`). The gallery's init sets the five to 0x09: group 1, the
+  (`day/cutscenes.ts`). The gallery's init sets the five to 0x09: group 1, the
   chase, channel 0. Room scripts run their init before the engine picks the
   room's music (`room_set`, then `update_room_bgm`), so the gallery plays
   the chase from the moment she walks in. Through the mine the chase goes
   on, one group. The quarry and the summit trail, the two ways out, set the
-  mine's rooms back to their own states, drained or not, once her gear is
-  gone. The owner has still to settle this placement.
+  mine's rooms back to their own states, drained or not, once the gallery
+  scare has happened. She keeps her gear through the mine.
 - **Layers don't start in step.** Each channel is its own file and loops
   on its own. So the layers are textures with no beat to line up: the hum,
   the water, the wind, the static. The mill thumps, but at its own pace,

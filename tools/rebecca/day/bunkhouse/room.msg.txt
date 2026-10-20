@@ -1,4 +1,4 @@
-0: \nIt stinks of sickness in\nhere.
+0: \n...
 1: \nHe died in his bed. Nobody\neven pulled the blanket\nover his face.
 2: \nThey tied him to the bunk\nwith their belts.\p{0}\nWrists and ankles. Then\nsomething with a hammer.
 3: \nA diary, left open on the\nbunk.\p{0}\n\oMike's fever broke at 3.\nHe doesn't know us."

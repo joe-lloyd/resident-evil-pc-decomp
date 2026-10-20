@@ -1,4 +1,4 @@
-0: \nThe flume. It runs all the\nway down the mountain.
+0: \n...
 1: \nThe flume. Dry as a bone.
 2: \nA cleat with a rope cut\nthrough. Blood all round\nit.\p{0}\nSomebody took a boat down\nhurt.
 3: \nA cap, caught in the water\nagainst the side.

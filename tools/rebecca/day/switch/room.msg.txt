@@ -1,4 +1,4 @@
-0: \nIt smells of burnt rubber.
+0: \n...
 1: \nA contactor, burnt black.\nIt's still sparking off\nthe batteries.\p{0}\nThere's a scorched\nhandprint beside it.
 2: \nA lineman's rubber glove.\nIt's melted.
 3: \nMAIN ISOLATOR, SKYWAY\nLINE. The lever's down,\nand padlocked.\p{0}\nNo power reaches the\ngondola until this goes\nup.

@@ -54,7 +54,7 @@ const failures: string[] = [];
 try {
   await link.waitFor((s) => s.play, 'gameplay', 120_000);
   // Every cutscene seen, so none takes her over as she comes and goes:
-  // cutscenes.ts plays them, the gallery's gear loss among them.
+  // cutscenes.ts plays them, the gallery's floor scare among them.
   for (const f of CUT_FLAGS.values()) await link.setFlag(Bank.common, f, true);
   for (const e of events) {
     const room = bySlug.get(e.room)!;

@@ -1,4 +1,4 @@
-0: \nIt's stopped. We're\nhanging over the trees.\p{0}\nThere's a pylon right\nahead.
+0: \n...
 1: \nHer seat. Soaked through.\p{0}\nShe sat here bleeding all\nthe way up.
 2: \nA handbag, spilled. A\nwallet: a driving licence\p{0}\nfor a Linda Pryce, Raccoon\nCity.\p{0}\nThe car keys aren't in it.
 3: \nA bandage, unwound.\nSomeone dressed a bite on\nher wrist.\p{0}\nIt didn't help.

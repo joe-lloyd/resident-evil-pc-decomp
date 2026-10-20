@@ -1,4 +1,4 @@
-0: \nThe radio's still on.
+0: \n...
 1: \nThe first aid tin,\nemptied. Bandage wrappers\neverywhere.\p{0}\nHe did what he could with\nit.
 2: \nA key on a hook by the\ndoor. The tag says QUARRY\nOFFICE.\p{0}\nThe bolt's drawn and the\nbar's off the door.\p{0}\nHe locked himself in, then\nthought better of it.
 3: \nThe sink is full of\ntowels. They're soaked\nthrough.\p{0}\nThe water's pink.

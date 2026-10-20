@@ -366,7 +366,6 @@ def build():
     room.check((8.1, 4.1, 9.6, 5.2), "A toolbox, open. Spanners everywhere. He left in a hurry, or fell.")
     room.check((5.9, 5.2, 7.2, 5.7), "PYLON 7. NO CLIMBING.\nNo choice.")
     room.check((hx0, hy0 - 0.4, hx1, hy0), "The ladder goes down inside the tower, all the way to the trees.\nThere's someone on it, a little way down. Hanging by his harness. The crows are on him.")
-    room.entry = "Pylon 7. It's a long way down."
     room.export(anim)
 
 

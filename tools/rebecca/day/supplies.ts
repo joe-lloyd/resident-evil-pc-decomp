@@ -1,25 +1,25 @@
 // Ammunition, herbs and first aid sprays through her day's kit rooms: RE1's
 // own items with RE1's own pickup models, copied from the rooms of the
-// player's game that hold them. A first spread, before the day is balanced:
-// a few clips for the Beretta, herbs where she would be hurt, a spray now
-// and then. scripts.ts writes the pickups into the rooms' init scripts and
+// player's game that hold them. Act 2 has five clips for eighteen larger
+// enemies, with birds and snakes left to avoid. She keeps her gear until
+// the crawl. The cellar has five rounds and the wine store one herb. scripts.ts writes the pickups into the rooms' init scripts and
 // rooms.ts gives each room the models it needs.
 import { freeFloor, type Floor } from './foes.ts';
 import { day } from '../plan/day.ts';
 import { SAVES } from '../plan/saves.ts';
 
 /** Item id, how many, its model (a room of the player's game and the slot in its item model table), and the byte RE1 gives each after 129. */
-const KINDS = {
+export const SUPPLY_KINDS = {
   clip: { id: 11, qty: 15, model: { from: 'Stage1/ROOM1020.RDT', index: 2 }, act: 0 },
+  // Five loose handgun rounds for the single cellar zombie.
+  rounds: { id: 11, qty: 5, model: { from: 'Stage1/ROOM1020.RDT', index: 2 }, act: 0 },
   greenHerb: { id: 68, qty: 1, model: { from: 'Stage1/ROOM1090.RDT', index: 0 }, act: 1 },
   redHerb: { id: 67, qty: 1, model: { from: 'Stage1/ROOM10C0.RDT', index: 1 }, act: 1 },
   spray: { id: 65, qty: 1, model: { from: 'Stage3/ROOM3090.RDT', index: 0 }, act: 0 },
-  // Kevin's sidearm, loaded: her gun again after the mine took hers (gear.ts).
-  beretta: { id: 2, qty: 15, model: { from: 'Stage1/ROOM1060.RDT', index: 2 }, act: 0 },
   // A pack of three, as RE1 lays them by its typewriters.
   ribbons: { id: 47, qty: 3, model: { from: 'Stage3/ROOM30E0.RDT', index: 2 }, act: 0 },
 } as const;
-export type Supply = keyof typeof KINDS;
+export type Supply = keyof typeof SUPPLY_KINDS;
 
 const SPREAD: Record<string, readonly Supply[]> = {
   booth: ['greenHerb'],
@@ -31,14 +31,16 @@ const SPREAD: Record<string, readonly Supply[]> = {
   sawmill: ['clip'],
   'tower-top': ['clip'],
   'quarry-office': ['greenHerb'],
-  mast: ['greenHerb'],
+  // The optional summit detour is the plan's ammunition and spray reward.
+  mast: ['greenHerb', 'clip', 'spray'],
+  cottage: ['greenHerb'],
   'lower-station': ['clip'],
-  crash: ['beretta', 'clip'],
+  crash: ['clip', 'greenHerb'],
   creek: ['greenHerb'],
   lodge: ['spray', 'redHerb'],
   kennels: ['greenHerb'],
-  cellar: ['clip'],
-  wine: ['spray'],
+  cellar: ['rounds'],
+  wine: ['greenHerb'],
 };
 
 /**
@@ -61,7 +63,7 @@ export const ITEM_FLAGS = Array.from({ length: 50 }, (_, i) => 180 + i);
 
 /** The item models a room needs for its supplies, in the slot order the pickups use. */
 export function supplyModels(slug: string): { from: string; index: number }[] {
-  return [...new Set(SUPPLIES[slug] ?? [])].map((k) => KINDS[k].model);
+  return [...new Set(SUPPLIES[slug] ?? [])].map((k) => SUPPLY_KINDS[k].model);
 }
 
 const ZONE = 1200;
@@ -102,7 +104,7 @@ export function supplyLines(slug: string, floor: Floor, flags: number[], id: num
   const at = spots(floor, kinds.length);
   if (at.length < kinds.length) throw new Error(`${slug}: room for ${at.length} of ${kinds.length} supplies`);
   return kinds.flatMap((kind, i) => {
-    const k = KINDS[kind];
+    const k = SUPPLY_KINDS[kind];
     const p = at[i]!;
     const flag = flags.shift();
     if (flag === undefined) throw new Error(`${slug}: no item flag left`);

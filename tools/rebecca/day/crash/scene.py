@@ -505,7 +505,6 @@ def build():
     room.check((14.5, 7.3, 16.4, 9.3), "Boot prints in the mud, heading east.\nThe others walked out.")
     room.check((18.9, WALK[1][1], 20.0, WALK[1][1] + 0.6), "A rotor blade, buried in that trunk.\nIf anyone had been standing here...")
     room.check((X1 + 0.2, WALK[0][3] - 0.6, 18.6, WALK[0][3]), "The trees are snapped off and burnt black, all the way along.\nShe spun before she came down.")
-    room.entry = "The helicopter.\nThis is where we came down."
     room.export(anim, samples=128)
 
 

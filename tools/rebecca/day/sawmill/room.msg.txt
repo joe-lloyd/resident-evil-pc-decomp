@@ -1,4 +1,4 @@
-0: \nSawdust, and the smell of\nblood.
+0: \n...
 1: \nAn arm, in a plaid sleeve.\nTorn off at the elbow.\p{0}\nThe sawdust round it is\nsoaked through.
 2: \nBlood, thrown across the\nboards in a long fan.\p{0}\nThe saw was running when\nit happened.
 3: \nThe head saw. There's\nstill a log on the\ncarriage, half cut.\p{0}\nSomeone threw the belt off\nto stop the blade.

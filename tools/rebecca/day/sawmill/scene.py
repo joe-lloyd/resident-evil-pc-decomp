@@ -693,7 +693,6 @@ def build():
     room.check((17.0, wb[2], 18.6, wb[2] + 0.6), "Somebody's in the race. Face down, going round and round in the eddy.\nThe tailer. He worked the boards off the saw.")
     room.check((WHEEL_X - 0.4, wa[2], 16.0, wa[2] + 0.6), "The water wheel. The race turns it, when the pond's sluice is open.")
     room.check((17.8, wb[3] - 0.6, X_END - 0.6, wb[3]), "The sawyer's blood, all along the planks.\nHe was going for the pond.")
-    room.entry = "Sawdust, and the smell of blood."
     room.export(anim)
 
 

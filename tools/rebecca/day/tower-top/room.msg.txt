@@ -1,4 +1,4 @@
-0: \nThe lookout. You can see\nhalf the mountain from\nhere.
+0: \n...
 1: \nThe fire finder. Its\nsights are still set on a\nbearing: 047.\p{0}\nNorth-east, down in the\nvalley. Where the smoke\nis.
 2: \nThe radio set's dead. The\nhandset hangs on its cord.
 3: \nA board of keys by the\ndoor. One tag says SWITCH\nHOUSE.

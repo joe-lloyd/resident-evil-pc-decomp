@@ -15,8 +15,4 @@ enemy(3, 2, 218, 1, 2, 0, 0, 4073, 0, 0, 7670, 0, 15490, 0, 0, 0, 0);  // a spin
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 235, 1)) {
-    set(FG_COMMON, 235, 0);
-    message(128, 255, 0);
-}
 return;

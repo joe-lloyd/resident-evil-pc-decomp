@@ -38,7 +38,7 @@ for (const r of dayRooms) {
       figs.push(`<figure><img src="img/${name}" width="320" height="240" loading="lazy" alt=""><figcaption>${esc(caption)}</figcaption></figure>`);
     }
   });
-  sections.push(`<section id="${r.slug}"><h2>${esc(placeName.get(r.slug) ?? r.slug)} <small>${r.slug}, ${r.hour}${r.inside ? ', inside' : ''}</small></h2><div class="grid">${figs.join('')}</div></section>`);
+  sections.push(`<section id="${r.slug}"><h2>${esc(placeName.get(r.slug) ?? r.slug)} <small>${r.slug}, ${'hour' in r ? r.hour : 'custom light'}${'inside' in r && r.inside ? ', inside' : ''}</small></h2><div class="grid">${figs.join('')}</div></section>`);
 }
 
 const html = `<!doctype html>

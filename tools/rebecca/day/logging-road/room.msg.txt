@@ -1,4 +1,4 @@
-0: \nA logging truck, stopped\ndead in the ruts.
+0: \n...
 1: \nThe driver's door is wide\nopen. Blood on the seat,\nand down the step.\p{0}\nScratches on the inside of\nthe door.
 2: \nHis lunch, in the mud. He\nnever got to eat it.
 3: \nBlood in the mud by the\nwheel. He was coughing it\nup.

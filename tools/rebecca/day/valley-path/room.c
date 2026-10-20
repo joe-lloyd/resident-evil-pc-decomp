@@ -17,8 +17,4 @@ enemy(2, 1, 227, 1, 2, 0, 0, 3172, 0, 0, 2400, 0, 2400, 0, 0, 0, 0);  // a cerbe
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 245, 1)) {
-    set(FG_COMMON, 245, 0);
-    message(128, 255, 0);
-}
 return;

@@ -259,7 +259,6 @@ def build():
     room.spot("lift-up", (X1 - 0.6, 1.47, X1, 2.08))  # day/events.ts says what she sees and does here
     room.check((X0 + 0.4, 1.47, X1 - 0.6, 2.08), "A miner's cap lamp, dead. The strap's snapped.\nThere's an old smear of blood across the plates.")
     room.check((X0, 1.47, X0 + 0.4, 2.08), "MAX 6 MEN.")
-    room.entry = "The cage creaks under me."
     room.export(anim)
 
 

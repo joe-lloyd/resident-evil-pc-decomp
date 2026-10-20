@@ -18,8 +18,4 @@ enemy(10, 1, 208, 1, 1, 0, 0, 616, 0, 0, 22800, 0, 20420, 1, 0, 0, 0);  // a add
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 223, 1)) {
-    set(FG_COMMON, 223, 0);
-    message(128, 255, 0);
-}
 return;
