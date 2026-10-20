@@ -1,0 +1,116 @@
+(() => {
+  'use strict';
+  const storageKey = 'rebecca-storyboard-edits-v1';
+  const status = document.querySelector('#save-status');
+  const fields = [...document.querySelectorAll('textarea[data-field]')];
+  const keyOf = (el) => JSON.stringify([el.dataset.room, el.dataset.field]);
+  let edits = new Map();
+  let stored = [];
+  try {
+    const value = JSON.parse(localStorage.getItem(storageKey) || '[]');
+    if (!Array.isArray(value)) throw new Error('Saved edits are not a list');
+    for (const row of value) {
+      if (!row || typeof row !== 'object' || !['room', 'field', 'old', 'value', 'mode'].every((k) => typeof row[k] === 'string') || !['edit', 'note'].includes(row.mode)) throw new Error('Invalid saved edit');
+    }
+    stored = value;
+    edits = new Map(stored.map((e) => [JSON.stringify([e.room, e.field]), e]));
+  } catch {
+    status.textContent = 'Saved edits could not be read. Copy before clearing.';
+  }
+  function fitGoal(el) {
+    if (!el.closest('.goals')) return;
+    el.style.height = 'auto';
+    el.style.height = `${Math.max(86, el.scrollHeight + 2)}px`;
+  }
+  function fillFields() {
+    for (const el of fields) {
+      const edit = edits.get(keyOf(el));
+      el.value = edit ? edit.value : el.dataset.mode === 'edit' ? el.dataset.old : '';
+      el.classList.toggle('edited', Boolean(edit));
+    }
+  }
+  function save() {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify([...edits.values()]));
+      status.textContent = edits.size ? `${edits.size} edits saved here` : 'Edits stay in this browser';
+    } catch {
+      status.textContent = 'Storage is full or blocked. Copy your edits now.';
+    }
+  }
+  for (const el of fields) el.addEventListener('input', () => {
+    const key = keyOf(el);
+    const previous = edits.get(key);
+    if (el.value === (el.dataset.mode === 'edit' ? el.dataset.old : '')) edits.delete(key);
+    else edits.set(key, { room: el.dataset.room, field: el.dataset.field, old: previous?.old ?? el.dataset.old, value: el.value, mode: el.dataset.mode });
+    // Audit rows and scene rows share the same edit, as do both item tables.
+    for (const other of fields) if (other !== el && keyOf(other) === key) {
+      other.value = el.value;
+      other.classList.toggle('edited', edits.has(key));
+    }
+    el.classList.toggle('edited', edits.has(key));
+    fitGoal(el);
+    save();
+  });
+  fillFields();
+  if (edits.size) status.textContent = `${edits.size} edits saved here`;
+
+  function showView() {
+    const id = location.hash.slice(1) || 'flow';
+    const target = document.getElementById(id);
+    const valid = target && (target.classList.contains('view') || target.classList.contains('scene'));
+    const selected = valid ? target : document.querySelector('#flow');
+    for (const el of document.querySelectorAll('.view,.scene')) el.hidden = el !== selected;
+    for (const a of document.querySelectorAll('.views a')) {
+      if (a.hash === `#${selected.id}`) a.setAttribute('aria-current', 'page');
+      else a.removeAttribute('aria-current');
+    }
+    for (const el of selected.querySelectorAll('.goals textarea')) fitGoal(el);
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', showView);
+  showView();
+  document.querySelector('#act-filter').addEventListener('change', (event) => {
+    for (const el of document.querySelectorAll('.act')) el.hidden = event.target.value !== 'all' && el.dataset.act !== event.target.value;
+  });
+  document.querySelector('#map-toggle').addEventListener('click', (event) => {
+    const enabled = event.currentTarget.getAttribute('aria-pressed') !== 'true';
+    event.currentTarget.setAttribute('aria-pressed', String(enabled));
+    event.currentTarget.textContent = enabled ? 'Show play order' : 'Show branches';
+    document.querySelector('#map-key').hidden = !enabled;
+    for (const el of document.querySelectorAll('.branch-map')) el.hidden = !enabled;
+    for (const el of document.querySelectorAll('.route-cards')) el.hidden = enabled;
+  });
+  const quote = (s) => s.split('\n').map((line) => `> ${line}`).join('\n');
+  function markdown() {
+    const rooms = new Map();
+    for (const edit of edits.values()) {
+      if (!rooms.has(edit.room)) rooms.set(edit.room, []);
+      rooms.get(edit.room).push(edit);
+    }
+    if (!edits.size) return '# Rebecca\'s day edits\n\nNo edits yet.\n';
+    return '# Rebecca\'s day edits\n\n' + [...rooms].map(([room, rows]) => `## ${room}\n\n` + rows.map((e) => `### ${e.field}\n\nOld value:\n${quote(e.old || 'Empty')}\n\n${e.mode === 'edit' ? 'New value' : 'Note'}:\n${quote(e.value)}\n`).join('\n')).join('\n');
+  }
+  const exportDialog = document.querySelector('#export-dialog');
+  document.querySelector('#copy').addEventListener('click', async () => {
+    const content = markdown();
+    document.querySelector('#export-text').value = content;
+    exportDialog.showModal();
+    try {
+      await navigator.clipboard.writeText(content);
+      document.querySelector('#copy-result').textContent = 'Copied. Paste this markdown back to the agent.';
+    } catch {
+      document.querySelector('#copy-result').textContent = 'Clipboard is blocked. Select and copy the markdown below.';
+      document.querySelector('#export-text').select();
+    }
+  });
+  document.querySelector('#close-export').addEventListener('click', () => exportDialog.close());
+  const clearDialog = document.querySelector('#clear-dialog');
+  document.querySelector('#clear').addEventListener('click', () => clearDialog.showModal());
+  document.querySelector('#cancel-clear').addEventListener('click', () => clearDialog.close());
+  document.querySelector('#confirm-clear').addEventListener('click', () => {
+    edits.clear();
+    fillFields();
+    save();
+    clearDialog.close();
+  });
+})();
