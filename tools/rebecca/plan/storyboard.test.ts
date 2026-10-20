@@ -117,3 +117,8 @@ test('the recording manifest rejects bad spans and unsafe asset paths', async ()
   assert.throws(() => parseFootage({ clips: [{ ...visit, file: '../bad.mp4' }], noFootage: [] }), /Invalid clip path/);
   assert.throws(() => parseFootage({ clips: [visit, visit], noFootage: [] }), /Duplicate clip file/);
 });
+
+test('quarter four booth footage starts after the unlogged ridge intro', () => {
+  const booth = board.scenes.find((s) => s.place.id === 'booth');
+  assert.deepEqual(booth?.clips.filter((c) => c.quarter === 4).map((c) => c.start), [29.967]);
+});

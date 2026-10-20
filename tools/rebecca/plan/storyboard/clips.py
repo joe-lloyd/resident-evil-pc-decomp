@@ -65,7 +65,9 @@ def index(args):
             current = max(0, bisect.bisect_right(log_starts, f / 2) - 1)
             # The log fixes the visit order. An entry scene may precede its log
             # stamp, so compare the current room and the next two rooms.
-            allowed = {v['room'] for v in visits[current:current + 3]}
+            # The boot intro is unlogged in quarters 2 to 4. Keep its ridge
+            # render in the comparison so it cannot become a false room match.
+            allowed = {'ridge'} | {v['room'] for v in visits[current:current + 3]}
             indices = [i for i, name in enumerate(names) if name in allowed]
             if not indices:
                 matches.append(None)
