@@ -79,7 +79,7 @@ const CLUT = new Uint16Array(256);
   for (const [m, r] of Object.entries(RAMPS) as [Material, (typeof RAMPS)[Material]][]) {
     BASES.set(m, at);
     for (let i = 0; i < r.n; i++) {
-      const [cr, cg, cb] = mix(r.dark as RGB, r.light as RGB, r.n === 1 ? 1 : i / (r.n - 1));
+      const [cr, cg, cb] = mix(r.dark as RGB, r.light as RGB, i / (r.n - 1));
       // A colour that rounds to black would read as see-through: keep it off zero.
       CLUT[at + i] = ps1(Math.max(8, cr), Math.max(8, cg), Math.max(8, cb));
     }
