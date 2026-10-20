@@ -1,11 +1,11 @@
-0: \nThe water's cold. It's\nblack. I can't see the\nfloor.\p{0}\nThe floor's gone under me!\nMy bag, the gun... gone,\ndown there in the dark.
+0: \nThe water's cold. It's\nblack. I can't see the\nfloor.
 1: \nHal. Face down in the\nwater. Something bit him:\nhis arm's\p{0}\nbandaged, black under it.\p{0}\nThere's a key on a chain\nround his neck.
 2: \nHe hid up on this cart,\nout of the water. Blanket,\nlantern.\p{0}\nThere's blood where he\nslid off.
 3: \nDANGER. WINZE. The floor\ndrops away under the water\nthere.
 4: \nCold, black water. I can't\nsee the floor.
 5: \nThe floor's gone under me!
-6: \nMy bag, the gun... gone,\ndown there in the dark.
-7: \nI've got nothing left.\nOnly my hands.
+6: \nMy foot caught on a rail.\nI can stand.
+7: \nSomeone is still down\nhere. I have to find him.
 8: \n\oOver here... Don't come\ntoo close."
 9: \n\oHal? I'm Rebecca. We\nspoke on the phone."
 10: \n\oThe medic. Then you know\nwhat this bite is."

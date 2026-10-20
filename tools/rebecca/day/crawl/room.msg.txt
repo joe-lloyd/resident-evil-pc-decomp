@@ -3,3 +3,6 @@
 2: \nRat poison. The rats ate\nit all anyway.
 3: \nFootsteps, overhead. Slow\nones.\p{0}\nKeep going.
 4: \nPipes. Cobwebs. Rat\ndroppings. Lovely.
+5: \nThe beams are too close.\nMy pack keeps catching.
+6: \nI have to leave it here.\nJust take the pistol.
+7: \nThe hatch. Almost there.

@@ -55,8 +55,8 @@ const STATUS: Record<string, Status> = {
   // Seen in the game by tests/items.ts: her case, each item lying in its room, each one checked.
   'items-icons': 'done',
   'items-models': 'done',
-  // Seen in the game by tests/gear.ts: her start kit, the loss in the gallery, Kevin's gun.
-  'weapons-plan': 'done',
+  // The late loss still needs tests/gear.ts in the game.
+  'weapons-plan': 'doing',
   // Built; waiting on the renders and a look.
   'look-dead': 'doing',
   'look-vehicles': 'doing',
@@ -220,13 +220,14 @@ export const CUTSCENES: readonly [string, string][] = [
   ['cut-gondola', 'The gondola starts: the bullwheel, the car leaving'],
   ['cut-tower', 'From the tower: Bravo\'s smoke and the mansion\'s roof'],
   ['cut-hal', "Hal's last minutes on the ore cart: the key, then the bite takes him"],
-  ['cut-mine-collapse', 'The mine floor gives way: she loses her gear'],
-  ['cut-mine-chase', 'Chased through the mine, unarmed, to the lift'],
+  ['cut-mine-collapse', 'The mine floor gives way: she catches herself and keeps her gear'],
+  ['cut-mine-chase', 'Escape through the dark mine to the lift'],
   ['cut-pylon', 'The car stops at the pylon, something on the roof'],
   ['cut-kevin', 'Kevin dead at the controls of Bravo\'s helicopter'],
   ['cut-sleep', 'In the save room: too tired, she sits down and sleeps'],
   ['cut-chris', 'She wakes: footsteps, Chris walks in'],
   ['cut-credits', 'Her credits'],
+  ['cut-leave-gear', 'At the narrow crawl turn, leave the pack and keep the pistol'],
 ];
 
 export function sections(plan: Plan, facts: Facts): Section[] {
@@ -307,7 +308,7 @@ export function sections(plan: Plan, facts: Facts): Section[] {
       blurb: 'What she picks up: placed in its room, with a model to see there and an icon for her inventory.',
       items: [
         row('items-plan', 'Every key item planned, and checked that it can be had before it is needed'),
-        row('weapons-plan', 'Her weapons through the day', 'A knife and a handgun with a few rounds; the mine takes everything; a gun again from Kevin at the crash'),
+        row('weapons-plan', 'Her weapons through the day', 'A knife and a handgun with a few rounds; keep her gear through the mine; leave everything but the pistol and its loaded rounds under the mansion floor'),
         row('items-models', 'Models for the new key items: lying in the room and examined', 'Seven of her own (items/models.py, items/tmd.ts); the keys keep their donors\''),
         row('items-icons', 'Inventory icons and names for the new key items'),
         row('items-supplies', 'Ammunition, herbs and first aid sprays placed through the day'),

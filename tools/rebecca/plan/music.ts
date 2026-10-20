@@ -55,12 +55,12 @@ export type Channel = {
 
 /**
  * A cue that takes over other places' music for a while, as their row's
- * second group: from the mine taking her gear on her first step into the
- * gallery (day/gear.ts), until she walks into one of `until`.
+ * second group: from the floor scare on her first step into the
+ * gallery, until she walks into one of `until`.
  */
 export interface Takeover {
   readonly places: readonly string[];
-  readonly from: 'gear-lost';
+  readonly from: 'mine-collapse';
   readonly until: readonly string[];
 }
 
@@ -158,14 +158,13 @@ export const CUES: readonly Cue[] = [
     ],
   },
   {
-    id: 'chase', title: 'Unarmed', kind: 'new', places: [], cutscenes: ['cut-mine-collapse', 'cut-mine-chase'],
-    mood: 'She has lost her gear and something is coming. The only fast piece in the game. A script switches the mine rooms to it once the floor gives way.',
+    id: 'chase', title: 'The escape', kind: 'new', places: [], cutscenes: ['cut-mine-collapse', 'cut-mine-chase'],
+    mood: 'The floor has given way and something is coming. The only fast piece in the game. A script switches the mine rooms to it once the floor gives way.',
     sound: 'A driving low ostinato, timpani, metal hits, a bowed cluster above.',
     channels: [{ what: 'the ostinato, the timpani, the metal and the cluster', sketch: 'chase' }],
     // The floor gives way in the gallery; the chase runs until she is out of
-    // the mine, at the quarry or up the lift at the summit. The owner has
-    // still to settle this.
-    takesOver: { places: ['mine-entrance', 'tunnel', 'junction', 'gallery', 'mine-lift'], from: 'gear-lost', until: ['quarry', 'summit-trail'] },
+    // the mine, at the quarry or up the lift at the summit. She keeps her gear through the scare.
+    takesOver: { places: ['mine-entrance', 'tunnel', 'junction', 'gallery', 'mine-lift'], from: 'mine-collapse', until: ['quarry', 'summit-trail'] },
   },
   {
     id: 'summit', title: 'The summit', kind: 'new', places: ['summit-trail', 'weather', 'mast'], cutscenes: [],
@@ -215,7 +214,7 @@ export const CUES: readonly Cue[] = [
     ],
   },
   {
-    id: 'underneath', title: 'Under the house', kind: 'ambience', places: ['cellar', 'wine', 'crawl'], cutscenes: [],
+    id: 'underneath', title: 'Under the house', kind: 'ambience', places: ['cellar', 'wine', 'crawl'], cutscenes: ['cut-leave-gear'],
     mood: 'Dark and close, under the floor of a house she hasn\'t seen. Almost silent.',
     sound: 'Drips, boards above her, her own breathing in the crawl.',
     channels: [{ what: 'drips and the boards of the house above', loop: 'cellar' }],

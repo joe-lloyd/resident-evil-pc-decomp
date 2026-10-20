@@ -14,8 +14,6 @@ export const SUPPLY_KINDS = {
   greenHerb: { id: 68, qty: 1, model: { from: 'Stage1/ROOM1090.RDT', index: 0 }, act: 1 },
   redHerb: { id: 67, qty: 1, model: { from: 'Stage1/ROOM10C0.RDT', index: 1 }, act: 1 },
   spray: { id: 65, qty: 1, model: { from: 'Stage3/ROOM3090.RDT', index: 0 }, act: 0 },
-  // Kevin's sidearm, loaded: her gun again after the mine took hers (gear.ts).
-  beretta: { id: 2, qty: 15, model: { from: 'Stage1/ROOM1060.RDT', index: 2 }, act: 0 },
   // A pack of three, as RE1 lays them by its typewriters.
   ribbons: { id: 47, qty: 3, model: { from: 'Stage3/ROOM30E0.RDT', index: 2 }, act: 0 },
 } as const;
@@ -33,7 +31,7 @@ const SPREAD: Record<string, readonly Supply[]> = {
   'quarry-office': ['greenHerb'],
   mast: ['greenHerb', 'clip', 'spray'],
   'lower-station': ['clip'],
-  crash: ['beretta', 'clip'],
+  crash: ['clip', 'greenHerb'],
   creek: ['greenHerb'],
   lodge: ['spray', 'redHerb'],
   kennels: ['greenHerb'],

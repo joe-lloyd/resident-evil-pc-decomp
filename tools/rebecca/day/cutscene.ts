@@ -56,7 +56,7 @@ export type Beat =
   | { readonly kind: 'gone'; readonly who: Person }
   /** Hand her a key item lying in the room (by its plan step): the game's own pickup screen. */
   | { readonly kind: 'give'; readonly item: string }
-  /** Raw SCD commands, run as the scene reaches them (the mine's gear loss). */
+  /** Raw SCD commands, run as the scene reaches them (the crawl's gear loss). */
   | { readonly kind: 'scd'; readonly lines: readonly string[] };
 
 export const cut = (camera: number): Beat => ({ kind: 'cut', camera });

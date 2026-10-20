@@ -18,7 +18,6 @@ import { foeLines, KILL_FLAGS, type Floor } from './foes.ts';
 import { ITEM_FLAGS, SUPPLIES, supplyLines, supplyModels } from './supplies.ts';
 import { mapIn, mapLines, mapModels } from '../maps/pickups.ts';
 import { KEY_ITEM_FLAGS, KEY_ITEMS, keyItemLines, keyItemModels, sameModel, type ItemSpot } from '../items/items.ts';
-import { BAG_SLOTS, GEAR, LOSS_BIT, LOSS_LINE, LOSS_ROOM, LOSS_START } from './gear.ts';
 import { EVENT_FLAGS, EVENTS, eventsIn, giveModels, GIVE_FLAGS, itemModelSlots, keyItem } from './events.ts';
 import { day } from '../plan/day.ts';
 import { CUES } from '../plan/music.ts';
@@ -306,7 +305,7 @@ const stateLines = (writes: readonly StateWrite[]) => writes.map((w) => `tbl37_s
 function musicLines() {
   const { steps, takeovers } = musicSwitches(CUES, musicTable(CUES, day.places, dayRooms, () => true));
   for (const st of steps) if (!EVENT_FLAGS.has(st.step)) throw new Error(`music switches at ${st.step}, which no room's script does (day/events.ts)`);
-  for (const t of takeovers) if (!t.start.some((w) => w.slug === LOSS_ROOM)) throw new Error(`${t.cue} starts where the mine takes her gear, ${LOSS_ROOM}, which it does not play in`);
+  for (const t of takeovers) if (!t.start.some((w) => w.slug === 'gallery')) throw new Error(`${t.cue} does not include the gallery where the floor scare starts`);
   return {
     /** What a step does to the music as it happens, in the room it happens in. */
     step(step: string, slug: string): string[] {
@@ -316,23 +315,23 @@ function musicLines() {
     },
     /**
      * A room's init, before the engine picks the music (room_set runs it before
-     * update_room_bgm): where the mine takes her gear, the takeover starts on
+     * update_room_bgm): at the gallery scare, the takeover starts on
      * her first way in; where it ends, the rooms get their own music back.
      */
-    init(slug: string, lossFlag: number | undefined): string[] {
+    init(slug: string, scareFlag: number | undefined): string[] {
       const out: string[] = [];
       for (const t of takeovers) {
-        if (slug === LOSS_ROOM) {
-          out.push(`// The floor is about to give way (day/gear.ts): the mine plays ${t.cue} until she is out of it.`, `if (ck(FG_COMMON, ${lossFlag}, 1)) {`, ...stateLines(t.start).map((l) => `    ${l}`), '}');
+        if (slug === 'gallery') {
+          out.push(`// The floor is about to give way (day/cutscenes.ts): the mine plays ${t.cue} until she is out of it.`, `if (ck(FG_COMMON, ${scareFlag}, 1)) {`, ...stateLines(t.start).map((l) => `    ${l}`), '}');
         }
         if (t.ends.includes(slug)) {
-          const lost = `ck(FG_COMMON, ${lossFlag}, 0)`;
-          out.push(`// Out of the mine once it has taken her gear: its rooms play their own music again, not ${t.cue}.`);
-          if (t.back.step === undefined) out.push(`if (${lost}) {`, ...stateLines(t.back.after).map((l) => `    ${l}`), '}');
+          const scared = `ck(FG_COMMON, ${scareFlag}, 0)`;
+          out.push(`// Out of the mine after the gallery scare: its rooms play their own music again, not ${t.cue}.`);
+          if (t.back.step === undefined) out.push(`if (${scared}) {`, ...stateLines(t.back.after).map((l) => `    ${l}`), '}');
           else {
             const f = EVENT_FLAGS.get(t.back.step)!;
-            out.push(`if (${lost} && ck(FG_COMMON, ${f}, 0)) {`, ...stateLines(t.back.after).map((l) => `    ${l}`), '}');
-            out.push(`if (${lost} && ck(FG_COMMON, ${f}, 1)) {`, ...stateLines(t.back.before).map((l) => `    ${l}`), '}');
+            out.push(`if (${scared} && ck(FG_COMMON, ${f}, 0)) {`, ...stateLines(t.back.after).map((l) => `    ${l}`), '}');
+            out.push(`if (${scared} && ck(FG_COMMON, ${f}, 1)) {`, ...stateLines(t.back.before).map((l) => `    ${l}`), '}');
           }
         }
       }
@@ -348,7 +347,7 @@ function main(): void {
     return k ? [[r.slug, k] as const] : [];
   }));
   // Each kit room's first-thought flag, handed out in room order, so a room
-  // can test another's (the mine's loss, music below).
+  // can test another's visit.
   const entryFlags = new Map<string, number>();
   {
     const free = [...ENTRY_FLAGS];
@@ -586,24 +585,12 @@ function main(): void {
       main.push(`if (ck(FG_ROOM, ${b}, 0) && ck(FG_ITEM, ${mapHere.flag}, 1)) {`, `    set(FG_ROOM, ${b}, 1);`, `    message(${say(mapHere.found)}, 255, 0);`, '}');
     }
     if (bit > 29) throw new Error(`${slug}: its events need FG_ROOM bits up to ${bit - 1}, past the engine's from 29`);
-    lines.push(...music.init(slug, entryFlags.get(LOSS_ROOM)));
+    lines.push(...music.init(slug, CUT_FLAGS.get('cut-mine-collapse')));
     lines.push('return;', '', '// main procedure 0');
     const flag = entryFlags.get(slug);
     // A scene that greets her says her first thought itself.
     const greeted = scenes.some((sc) => sc.trigger.on === 'enter');
-    if (flag !== undefined && slug === LOSS_ROOM) {
-      // The mine takes her gear (gear.ts): the room's thought runs on into the loss.
-      msgs[0] = `${msgs[0]}\n${LOSS_LINE}`;
-      // An if block holds 255 bytes at most, too few for every try at every
-      // item, so the first visit raises FG_ROOM LOSS_BIT and each try is a
-      // block of its own while it is up (room flags clear when a room loads).
-      lines.push(
-        // With a scene for it, the scene raises the bit when the floor goes (LOSS_START).
-        ...(greeted ? [] : [`if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, ...LOSS_START.map((l) => `    ${l}`), '}']),
-        ...GEAR.flatMap((g) => Array.from({ length: BAG_SLOTS }, () => [`if (ck(FG_ROOM, ${LOSS_BIT}, 0) && item_ck(${g})) {`, `    remove_item(${g});`, '}']).flat()),
-        `if (ck(FG_ROOM, ${LOSS_BIT}, 0)) {`, `    set(FG_ROOM, ${LOSS_BIT}, 1);`, ...(greeted ? [] : ['    message(128, 255, 0);']), '}',
-      );
-    } else if (flag !== undefined) {
+    if (flag !== undefined) {
       lines.push(`if (ck(FG_COMMON, ${flag}, 1)) {`, `    set(FG_COMMON, ${flag}, 0);`, ...(greeted ? [] : ['    message(128, 255, 0);']), '}');
     }
     lines.push(...main, 'return;', '');
