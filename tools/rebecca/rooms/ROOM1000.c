@@ -18,6 +18,7 @@ tbl37_set(0, 0, 9);
 if (ck(FG_COMMON, 121, 1)) {
     enemy(32, 0, 255, 1, 2, 0, 0, 0, 0, 0, -30000, 0, -30000, 6, 0, 0, 0);  // Chris
 }
+// cut-credits (day/cutscenes.ts): its people, and what starts it. FG_COMMON 128 once it has run.
 // END CUTSCENES INIT
 return;
 
@@ -30,9 +31,13 @@ if (ck(FG_COMMON, 121, 1) && ck(FG_ROOM, 13, 1)) {
     }
     set(FG_ROOM, 12, 0);
 }
-if (ck(FG_COMMON, 121, 1) && ck(FG_ROOM, 13, 0)) {
+if (ck(FG_COMMON, 121, 1) && ck(FG_STATUS, 15, 1) && ck(FG_ROOM, 13, 0)) {
     set(FG_COMMON, 121, 0);
     evt_exec(0, 9, 0);
+}
+if (ck(FG_COMMON, 128, 1) && ck(FG_STATUS, 15, 1) && ck(FG_COMMON, 36, 0)) {
+    set(FG_COMMON, 128, 0);
+    evt_exec(0, 9, 1);
 }
 // END CUTSCENES MAIN
 return;
@@ -157,6 +162,45 @@ do {
 } while (ck(FG_ROOM, 62, 1));
 pos_set(6, 0, 0, 0, -30000, 0, -30000);  // Chris leaves
 set(FG_COMMON, 36, 0);  // canon: Chris met Rebecca
+set_entity(ENT_PLAYER, 0);
+anim_begin();
+    anim_idle();
+anim_end_release();
+scd {
+    set(FG_STATUS, 15, 1);
+    cut_auto(0);
+    set(FG_6, 23, 0);
+    return;
+}
+return;
+
+// event procedure 1
+// cut-credits (day/cutscenes.ts)
+scd {
+    set(FG_COMMON, 128, 0);
+    set(FG_STATUS, 15, 0);
+    set(FG_6, 23, 1);
+    return;
+}
+cutnext(0);
+sleep(60);
+message(186, 0, 0);  // her
+wait_voice();
+timer_setup(2, 0, 1, 7, 0);
+sleep(120);
+timer_setup(2, 0, 0, 7, 0);
+message(187, 0, 0);  // her
+wait_voice();
+message(188, 0, 0);  // her
+wait_voice();
+message(189, 0, 0);  // her
+wait_voice();
+message(190, 0, 0);  // her
+wait_voice();
+sleep(60);
+timer_setup(2, 0, 255, 7, 0);
+sleep(150);
+timer_setup(2, 0, 0, 7, 0);
 set_entity(ENT_PLAYER, 0);
 anim_begin();
     anim_idle();

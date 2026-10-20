@@ -8,3 +8,5 @@
 7: \nBlood, and drag marks into\nthe trees.\p{0}\nThe paw prints are bigger\nthan any dog's.\p{0}\nI'm not going in there.
 8: \nThe crank fits.\p{0}\nThe cable takes the strain.\nSlowly, the pine drags\noff the trail.
 9: \nA toolbox, bolted into the\ntruck bed. Locked.\p{0}\nThe ranger will have had\nthe key on him.
+10: \nSomething is coming round\nthe cabin.
+11: \n\oStay back!"

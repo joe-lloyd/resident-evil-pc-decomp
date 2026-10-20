@@ -649,6 +649,7 @@ function main(): void {
  */
 const SCRIPTED: Record<string, { file: string; own: number; action: number; bit: number; arrive: Record<string, Arrive> }> = {
   save: { file: path.join(here, '..', 'rooms', 'ROOM1000'), own: 48, action: 9, bit: 12, arrive: { crawl: GAME_ROOMS.save!.arrive } },
+  yard: { file: path.join(here, 'yard', 'room'), own: 10, action: 14, bit: 12, arrive: {} },
   ridge: { file: path.join(here, 'ridge', 'room'), own: 3, action: 3, bit: 0, arrive: {} },
 };
 

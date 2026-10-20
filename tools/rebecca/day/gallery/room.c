@@ -539,7 +539,7 @@ if (ck(FG_ROOM, 11, 0) && item_ck(75)) {
 if (ck(FG_ROOM, 11, 0)) {
     set(FG_ROOM, 11, 1);
 }
-if (ck(FG_COMMON, 118, 1)) {
+if (ck(FG_COMMON, 118, 1) && ck(FG_STATUS, 15, 1)) {
     set(FG_COMMON, 118, 0);
     evt_exec(0, 9, 0);
 }

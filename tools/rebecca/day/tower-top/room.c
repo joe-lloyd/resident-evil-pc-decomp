@@ -29,7 +29,7 @@ return;
 if (ck(FG_COMMON, 227, 1)) {
     set(FG_COMMON, 227, 0);
 }
-if (ck(FG_COMMON, 124, 1)) {
+if (ck(FG_COMMON, 124, 1) && ck(FG_STATUS, 15, 1)) {
     set(FG_COMMON, 124, 0);
     evt_exec(0, 9, 0);
 }

@@ -5,3 +5,6 @@
 4: \nThe cage controls. UP and\nDOWN.\p{0}\nThe lever's dead without\npower up top.
 5: \nThe cage controls. The\nlight by UP is lit.
 6: \nI press UP. The cage\njolts, and starts to\nclimb.
+7: \nThey cannot fit through\nthe cage.
+8: \nNo gun. I have to keep\nmoving.
+9: \nThe lift controls. Up to\nthe surface.

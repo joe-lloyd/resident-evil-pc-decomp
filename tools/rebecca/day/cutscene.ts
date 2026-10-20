@@ -105,6 +105,8 @@ export interface Cutscene {
   /** The room's slug (day/rooms.ts), or 'save' for the mansion's save room. */
   readonly room: string;
   readonly trigger: Trigger;
+  /** Story flags needed before an entry scene can start. Item flags clear when taken. */
+  readonly requires?: readonly { readonly bank: 'FG_COMMON' | 'FG_ITEM'; readonly flag: number; readonly set: boolean }[];
   readonly cast?: readonly Cast[];
   readonly beats: readonly Beat[];
   /** For a check trigger: what examining the thing says once the scene has run. */
@@ -237,7 +239,7 @@ export function compileScene(scene: Cutscene, event: number, flag: number, room:
   switch (t.on) {
     case 'enter':
     case 'step': {
-      const when = [`ck(FG_COMMON, ${flag}, 1)`];
+      const when = [`ck(FG_COMMON, ${flag}, 1)`, 'ck(FG_STATUS, 15, 1)', ...(scene.requires ?? []).map((r) => `ck(${r.bank}, ${r.flag}, ${r.set ? 0 : 1})`)];
       if (t.on === 'step') {
         const f = EVENT_FLAGS.get(t.step);
         if (f === undefined) throw new Error(`${scene.id}: no puzzle step ${t.step} in events.ts`);

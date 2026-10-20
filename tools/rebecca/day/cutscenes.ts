@@ -5,7 +5,7 @@
 // Positions are game units: a scene's metres times 1700 (blender/reb.py), its
 // x and y becoming x and z. Cameras are numbered as the scene's room.camera
 // calls are.
-import { anim, cut, face, fade, give, gone, line, place, say, scd, shake, wait, walk, type Cutscene } from './cutscene.ts';
+import { anim, cut, face, fade, give, gone, line, place, say, scd, shake, wait, walk, run, type Cutscene } from './cutscene.ts';
 import { LOSS_START } from './gear.ts';
 
 export const CUTSCENES: readonly Cutscene[] = [
@@ -272,6 +272,70 @@ export const CUTSCENES: readonly Cutscene[] = [
       wait(20),
       say("Billy's gone. It's just me now."),
       say('The valley first. Then the others.'),
+    ],
+  },
+  {
+    // Yard camera 1 looks along the cabin front. Her arrival from the cabin
+    // is at its porch steps. The dog starts at the cabin's far corner, as
+    // the hand-written yard script has always placed it.
+    id: 'cut-dog',
+    room: 'yard',
+    trigger: { on: 'enter' },
+    requires: [{ bank: 'FG_ITEM', flag: 242, set: false }],
+    beats: [
+      place('her', { x: 22015, z: 13515, angle: 3072 }),
+      cut(1),
+      face('her', { x: 29750, z: 5100 }),
+      wait(15),
+      say('Something is coming round the cabin.'),
+      say('"Stay back!"'),
+      // No dog AI runs during the lines. The next visit uses the same
+      // spawn in yard/room.c, with the same persistent kill flag.
+      scd('scd {', '    enemy(2, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);', '    return;', '}'),
+    ],
+  },
+  {
+    // The existing junction spinners are the pursuers on the playable run
+    // from the gallery to the lift. The cage is too small for a pursuer.
+    // mine-lift/scene.py: camera 1 faces the junction through the gate;
+    // camera 0 faces the controls. The short run stays inside the cage.
+    id: 'cut-mine-chase',
+    room: 'mine-lift',
+    trigger: { on: 'enter', from: 'junction' },
+    requires: [
+      { bank: 'FG_COMMON', flag: 118, set: true },
+      { bank: 'FG_COMMON', flag: 119, set: true },
+    ],
+    beats: [
+      cut(1),
+      run('her', { x: 3315, z: 2500 }),
+      face('her', { x: 3315, z: 5000 }),
+      say('They cannot fit through the cage.'),
+      say('No gun. I have to keep moving.'),
+      cut(0),
+      face('her', { x: 4500, z: 3000 }),
+      say('The lift controls. Up to the surface.'),
+    ],
+  },
+  {
+    // RE1's save room, camera 0 and the resting place from cut-sleep.
+    // Flag 36 is set only after Chris leaves. The compiler also waits for
+    // the letterbox to clear, so the meeting finishes before these begin.
+    id: 'cut-credits',
+    room: 'save',
+    trigger: { on: 'enter' },
+    requires: [{ bank: 'FG_COMMON', flag: 36, set: true }],
+    beats: [
+      cut(0),
+      wait(60),
+      say('For now, I can rest.'),
+      fade('black'),
+      say("REBECCA'S DAY"),
+      say('A Resident Evil scenario.'),
+      say('Original game by CAPCOM.'),
+      say('Thank you for playing.'),
+      wait(60),
+      fade('clear'),
     ],
   },
 ];

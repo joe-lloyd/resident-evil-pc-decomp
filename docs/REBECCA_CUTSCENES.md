@@ -167,13 +167,23 @@ flag uses. They take them in the order of `CUTSCENES`.
 `cut-sleep` is both tracker rows `cut-sleep` and `cut-chris`. FG_COMMON 36 is
 RE1's own "Chris met Rebecca", which `cut-sleep` sets as the old meeting did.
 
-## Not made yet
+## The last three scenes
 
-- `cut-dog`: the yard's dog would attack her during the lines, since a
-  scene's line doesn't pause the game. It needs the dog held still for the
-  scene, for example by clearing its status bit with `cmd_enemy_prop_set` and
-  setting it again at the end.
-- `cut-mine-chase`: the plan has no chase yet. It needs a pursuer in the
-  mine and a route to the lift.
-- `cut-credits`: her credits are a screen of their own after the meeting, not
-  an event script.
+- `cut-dog`, flag 126, starts in the yard once she takes the shed key.
+  Camera 1 looks down the cabin front. The dog spawns after her lines, so
+  its AI cannot attack her while she reads. Its old kill flag stays 200.
+- `cut-mine-chase`, flag 127, finishes the escape at the mine lift after
+  the collapse and Hal's scene. She runs into the cage and turns towards
+  the junction. The junction's existing spinners supply the playable
+  unarmed run. There is no staged pursuit across room loads.
+- `cut-credits`, flag 128, follows Chris's departure in the save room.
+  These are brief message cards over a fade. A separate credits screen,
+  scrolling names, a credits music transition and a return to the title
+  still need support outside the current scene format.
+
+Entry scenes may name `requires`, story flags that must have their requested
+state before the scene starts. They also wait until the letterbox from any
+previous scene clears. The credits use the meeting's completion flag 36,
+not its start flag 121, so they cannot interrupt Chris.
+
+These three scenes have not been played in the game.

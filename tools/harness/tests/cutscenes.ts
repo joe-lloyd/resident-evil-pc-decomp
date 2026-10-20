@@ -131,6 +131,7 @@ try {
       // The checkpoint: in its room, the scene not yet run.
       await link.setFlag(Bank.common, CUT_FLAGS.get(c.id)!, false);
       if (c.trigger.on === 'step') await link.setFlag(Bank.common, EVENT_FLAGS.get(c.trigger.step)!, false);
+      for (const r of c.requires ?? []) await link.setFlag(r.bank === 'FG_ITEM' ? Bank.item : Bank.common, r.flag, r.set);
       // A scene that starts as she comes in starts with the jump itself.
       if (c.trigger.on !== 'enter') {
         await link.room(at.stage, at.room);
