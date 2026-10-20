@@ -1,6 +1,8 @@
 // node --test tools/rebecca/day/supplies.test.ts
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
+import { existsSync, readFileSync } from 'node:fs';
+import { FOES } from './foes.ts';
 import { ITEM_FLAGS, SUPPLIES, supplyLines, supplyModels } from './supplies.ts';
 import { day } from '../plan/day.ts';
 import type { Floor } from './foes.ts';
@@ -42,4 +44,20 @@ test('the optional summit supply step offers ammunition and a first aid spray', 
   assert.equal(step.kind, 'find');
   assert.ok(SUPPLIES[slug]!.includes('clip'));
   assert.ok(SUPPLIES[slug]!.includes('spray'));
+});
+
+test('the generated budget is scarce but covers larger foes without paying for every bird and snake', () => {
+  const rounds = (act: number) => day.places.filter((p) => p.act === act).reduce((sum, p) => {
+    const file = new URL(`./${p.room ?? p.id}/room.c`, import.meta.url);
+    if (!existsSync(file)) return sum;
+    return sum + [...readFileSync(file, 'utf8').matchAll(/item_aot_set\(([^;]*)\);/g)].reduce((n, m) => {
+      const a = m[1]!.replace(/\/\*.*?\*\//g, '').split(',').map(Number);
+      return n + (a[5] === 11 ? a[6]! : 0);
+    }, 0);
+  }, 0);
+  const larger = day.places.filter((p) => p.act === 2).flatMap((p) => FOES[p.room ?? p.id] ?? [])
+    .reduce((n, [kind, count]) => n + (kind === 'crow' || kind === 'adder' ? 0 : count), 0);
+  assert.ok(rounds(2) >= larger * 3 && rounds(2) <= larger * 5);
+  assert.ok(rounds(4) >= 3 && rounds(4) <= 5);
+  assert.ok(!Object.values(SUPPLIES).flat().some((k) => String(k) === 'beretta'));
 });
