@@ -2,16 +2,18 @@
 
 The ranger left in a hurry. Breakfast is half eaten, a chair lies where it
 fell, the rifle is gone from its rack, and the east window is smashed in with
-blood on the sill. The stove is still warm and the lamp still burns. The radio
-on the desk hisses with S.T.A.R.S. chatter. His keys hang by the door. His
-typewriter stands on a table in the corner by the window, and the item box
-at the bunk's foot: she saves here.
+blood on the sill. The pot-belly stove is still warm and the lamp still
+burns. The radio on the desk hisses with S.T.A.R.S. chatter. His logbook
+lies open on the corner table. The shed key hangs on a board along the wall
+from the door, past his hat. His typewriter stands on the desk under the
+north window, and the item box at the bunk's foot: she saves here. The
+floor is tracked with mud and grit, and the rug is kicked up at a corner.
 
 Metres, real sizes (reb.UNITS turns them into game units): the floor is
 x 2.0-7.0, y 2.0-6.0, the ceiling 2.45 up. The door is in the south wall.
 
 Moving (reb.export anim): the lamp flame and its light, the fire behind the
-stove's grate, the radio's signal lamp, and the curtain at the broken window.
+stove's mica door, the radio's signal lamp, and the curtain at the broken window.
 """
 import math
 import os
@@ -19,9 +21,10 @@ import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
-from mathutils import Vector  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))
 
@@ -64,7 +67,7 @@ def build():
     blood = reb.mat_plain("Blood", (0.12, 0.005, 0.005), rough=0.25)
     beans = reb.mat_surface("Beans", [(0.0, (0.35, 0.12, 0.04)), (1.0, (0.5, 0.2, 0.06))], scale=60, bump=0.8)
     enamel = reb.mat_plain("Enamel", (0.55, 0.6, 0.62), rough=0.35)
-    wool = reb.mat_stripes("Wool blanket", [(0.3, 0.07, 0.05), (0.3, 0.07, 0.05), (0.05, 0.05, 0.05), (0.42, 0.33, 0.15)], across=10)
+    wool = reb.mat_surface("Stained army blanket", [(0.0, (0.045, 0.04, 0.025)), (0.4, (0.11, 0.105, 0.06)), (0.65, (0.22, 0.205, 0.13)), (1.0, (0.29, 0.27, 0.18))], scale=7, rough=0.98, bump=0.35)
     rug = reb.mat_stripes("Rag rug", [(0.28, 0.12, 0.08), (0.12, 0.16, 0.2), (0.36, 0.3, 0.2), (0.15, 0.1, 0.08)], across=14, axis="Y")
     ticking = reb.mat_stripes("Ticking", [(0.5, 0.48, 0.42), (0.2, 0.22, 0.3)], across=40)
     curtain_m = reb.mat_stripes("Curtain", [(0.32, 0.1, 0.06), (0.32, 0.1, 0.06), (0.45, 0.38, 0.22), (0.12, 0.1, 0.06)], across=24, axis="Y")
@@ -212,20 +215,22 @@ def build():
     reb.prim("cyl", "Mic base", black, (3.15, 2.52, 0.775), (0.09, 0.09, 0.025))
     reb.prim("cyl", "Mic stem", iron, (3.15, 2.52, 0.86), (0.012, 0.012, 0.16))
     reb.prim("sphere", "Mic head", iron, (3.15, 2.5, 0.95), (0.05, 0.06, 0.07))
-    # The logbook lying open, papers, a pencil, a mug, an ashtray.
+    # A pencil, a mug and an ashtray on the desk.
+    # The logbook lies open on the corner table by the broken window, among
+    # the papers he cleared off the desk to type.
     for side in (-1, 1):
-        reb.prim("cube", "Logbook page", paper, (3.47 + side * 0.11, 2.45, 0.768 + 0.004), (0.21, 0.29, 0.012), rot=(0, side * 0.06, 0.08))
-    reb.prim("cube", "Logbook cover", reb.mat_plain("Ledger cloth", (0.12, 0.08, 0.06)), (3.47, 2.45, 0.763), (0.46, 0.31, 0.006), rot=(0, 0, 0.08))
+        reb.prim("cube", "Logbook page", paper, (6.45 + side * 0.11, 2.27, 0.732), (0.21, 0.29, 0.012), rot=(0, side * 0.06, 0.08))
+    reb.prim("cube", "Logbook cover", reb.mat_plain("Ledger cloth", (0.12, 0.08, 0.06)), (6.45, 2.27, 0.723), (0.46, 0.31, 0.006), rot=(0, 0, 0.08))
     for i in range(6):
-        reb.prim("cube", "Paper", paper, (rng.uniform(2.95, 3.85), rng.uniform(2.2, 2.68), 0.762 + i * 0.002), (0.21, 0.28, 0.002), rot=(0, 0, rng.uniform(-0.6, 0.6)))
+        reb.prim("cube", "Paper", paper, (rng.uniform(6.2, 6.8), rng.uniform(2.12, 2.32), 0.721 + i * 0.002), (0.21, 0.28, 0.002), rot=(0, 0, rng.uniform(-0.6, 0.6)))
     reb.prim("cyl", "Pencil", reb.mat_plain("Pencil", (0.7, 0.55, 0.1)), (3.3, 2.66, 0.768), (0.008, 0.008, 0.17), rot=(0, math.pi / 2, 0.4))
-    reb.prim("cyl", "Mug", enamel, (3.78, 2.3, 0.81), (0.085, 0.085, 0.1), segments=20)
-    reb.prim("cyl", "Coffee", reb.mat_plain("Coffee", (0.04, 0.02, 0.01), 0.1), (3.78, 2.3, 0.85), (0.075, 0.075, 0.005))
+    reb.prim("cyl", "Mug", enamel, (3.15, 2.22, 0.81), (0.085, 0.085, 0.1), segments=20)
+    reb.prim("cyl", "Coffee", reb.mat_plain("Coffee", (0.04, 0.02, 0.01), 0.1), (3.15, 2.22, 0.85), (0.075, 0.075, 0.005))
     reb.prim("cyl", "Ashtray", glass, (3.62, 2.64, 0.77), (0.12, 0.12, 0.025), segments=20)
     for i in range(4):
         reb.prim("cyl", "Butt", reb.mat_plain("Butt", (0.75, 0.65, 0.5)), (3.62 + rng.uniform(-0.03, 0.03), 2.64 + rng.uniform(-0.03, 0.03), 0.79), (0.008, 0.008, 0.035), rot=(math.pi / 2, 0, rng.uniform(0, 3)))
-    # The desk chair, tucked in under the desk so nothing on it is out of reach.
-    chair_at, chair_turn = (3.62, 2.62), math.pi
+    # Set beside the desk. Its back clears the top and leaves the aisle open.
+    chair_at, chair_turn = (4.18, 2.63), -math.pi / 2
     def chair(name, at, turn, tipped=False):
         parts = []
         c, s = math.cos(turn), math.sin(turn)
@@ -316,7 +321,52 @@ def build():
     # The chairs: one pulled out, one knocked over.
     chair("Table chair", (3.75, 4.05), -math.pi / 2 + 0.25)
     chair("Fallen chair", (5.45, 4.55), 2.6, tipped=True)
-    rugm = reb.cloth("Rug", rug, (4.45, 4.15, 0.004), (2.0, 1.3), cuts=12, lumps=0.006, seed=3)
+    # The rag rug, rucked and kicked: its south-west corner, toward the
+    # door, is folded back over itself, its hessian backing showing.
+    rugm = reb.cloth("Rug", rug, (4.45, 4.15, 0.004), (2.0, 1.3), cuts=24, lumps=0.018, seed=3)
+    flap = set()
+    for v in rugm.data.vertices:
+        f = -v.co.x + v.co.y - 0.8
+        if f > 0:
+            v.co.x += f
+            v.co.y -= f
+            v.co.z = 0.018 + 0.05 * max(0.0, 1 - f / 0.08) + 0.006 * noise.noise(v.co * 9)
+            flap.add(v.index)
+    rugm.data.materials.append(reb.mat_surface("Rug backing", [(0.0, (0.12, 0.1, 0.07)), (1.0, (0.22, 0.18, 0.12))], scale=60, rough=1, bump=0.4))
+    for poly in rugm.data.polygons:
+        if all(i in flap for i in poly.vertices):
+            poly.material_index = 1
+    rugm.data.update()
+    # Mud carried in from the yard, grit and bark from the firewood.
+    dirt = reb.mat_surface("Tracked floor dirt", [(0.0, (0.025, 0.019, 0.012)), (1.0, (0.085, 0.065, 0.035))], scale=65, rough=1, bump=0.12)
+    # Grime worn into the boards themselves, in broad patches that follow
+    # no board: the floor material darkens where a noise in room space says.
+    room_space = bpy.data.objects.new("Room space", None)
+    bpy.context.scene.collection.objects.link(room_space)
+    nodes, links = boards.node_tree.nodes, boards.node_tree.links
+    bsdf = nodes["Principled BSDF"]
+    coords = nodes.new("ShaderNodeTexCoord")
+    coords.object = room_space
+    patches = nodes.new("ShaderNodeTexNoise")
+    patches.inputs["Scale"].default_value = 1.3
+    patches.inputs["Detail"].default_value = 4
+    links.new(coords.outputs["Object"], patches.inputs["Vector"])
+    amount = nodes.new("ShaderNodeMapRange")
+    amount.interpolation_type = "SMOOTHSTEP"
+    amount.inputs["From Min"].default_value, amount.inputs["From Max"].default_value = 0.38, 0.6
+    amount.inputs["To Min"].default_value, amount.inputs["To Max"].default_value = 0.0, 0.85
+    links.new(patches.outputs["Fac"], amount.inputs["Value"])
+    dirty = nodes.new("ShaderNodeMix")
+    dirty.data_type = "RGBA"
+    links.new(amount.outputs["Result"], dirty.inputs["Factor"])
+    links.new(bsdf.inputs["Base Color"].links[0].from_socket, dirty.inputs["A"])
+    dirty.inputs["B"].default_value = (0.03, 0.022, 0.014, 1)
+    links.new(dirty.outputs["Result"], bsdf.inputs["Base Color"])
+    for i, (x, y) in enumerate(((3.8, 5.65), (4.02, 5.4), (3.78, 5.12), (4.0, 4.94), (3.6, 4.7), (3.4, 4.45), (5.0, 5.6), (5.25, 5.3), (5.6, 5.05))):
+        kit.splat(f"Tracked dirt {i}", dirt, (x, y, 0.002), 0.11, stretch=(0.65, 1.5), lumps=0.6, seed=80 + i)
+    for i in range(60):
+        x, y = (rng.uniform(2.2, 5.85), rng.uniform(5.55, 5.95)) if i < 35 else (rng.uniform(2.1, 3.0), rng.uniform(5.0, 5.9))
+        reb.prim("cube", "Bark and grit", dirt, (x, y, 0.008), (rng.uniform(0.015, 0.06), 0.015, 0.01), rot=(0, 0, rng.uniform(0, math.pi)))
 
     # The bunk on the east wall: a rumpled blanket half off it, a pillow, boots.
     bx0, bx1, by0, by1 = 6.05, 6.95, 4.2, 6.0
@@ -330,29 +380,84 @@ def build():
         reb.prim("cube", "Boot", reb.mat_plain("Leather", (0.08, 0.05, 0.03), 0.6), (bxp, byp, 0.06 if i else 0.15), (0.11, 0.28, 0.12) if i else (0.11, 0.12, 0.3), rot=(0, 0, rz) if not i else (math.pi / 2 * 0.95, 0, rz), bevel=0.02)
     # The item box at the bunk's foot, RE1's own shrunk to a footlocker: the game puts its lid on.
     box_lid = kit.item_box("Item box", (6.5, 3.905), (0, -1), scale=0.65)
-    # The typing table in the north-east corner, by the broken window: his
-    # typewriter, a report half typed. Where she saves; the game puts the
-    # ink ribbons beside it.
-    # Not masked: it stands in the corner, where she can't get behind it, and
-    # a mask would draw its top over the ribbons the game puts on it.
-    solid(kit.table("Typing table", pine, (6.52, 2.24, 0.0), size=(0.85, 0.42, 0.72)), masked=False)
-    kit.typewriter("Typewriter", (6.42, 2.24, 0.72))
+    # The corner table, by the broken window: the logbook and his papers.
+    solid(kit.table("Corner table", pine, (6.52, 2.24, 0.0), size=(0.85, 0.42, 0.72)), masked=False)
+    # His typewriter on the desk under the north window, where she saves.
+    kit.typewriter("Typewriter", (3.62, 2.24, 0.76), rot=0.0)
+    reb.spot("Typewriter light", (3.6, 2.9, 2.15), (3.62, 2.24, 0.85), 12, (1.0, 0.81, 0.55), 48, 0.6, 0.2)
 
-    # The stove against the west wall, fire behind its grate, the kettle on top.
-    sx, sy = 2.42, 4.7
-    solid(reb.prim("cube", "Stove", iron, (sx, sy, 0.45), (0.5, 0.6, 0.6), bevel=0.02))
-    for dx in (-0.2, 0.2):
-        for dy in (-0.24, 0.24):
-            reb.mask(reb.prim("cube", "Stove leg", iron, (sx + dx, sy + dy, 0.075), (0.05, 0.05, 0.15)))
-    reb.prim("cube", "Stove door", iron, (sx + 0.255, sy, 0.43), (0.02, 0.32, 0.3), bevel=0.01)
+    # The stove against the west wall: a cast-iron pot-belly on splayed legs
+    # and a stone hearth, the fire glowing through the mica in its door, a
+    # kettle on the top, the flue straight up through the roof, and a tin
+    # heat shield on the logs behind it, sooted black.
+    sx, sy = 2.5, 4.7
+    cast = reb.mat_surface("Stove casting", [(0.0, (0.02, 0.019, 0.018)), (0.7, (0.05, 0.047, 0.043)), (1.0, (0.1, 0.06, 0.035))], scale=40, rough=0.75, bump=0.3)
+    stone = reb.mat_surface("Hearth stone", [(0.0, (0.07, 0.065, 0.055)), (1.0, (0.2, 0.19, 0.16))], scale=9, rough=0.95, bump=0.5)
+    # The hearth is a pad she can step on: only the stove itself blocks her.
+    reb.prim("cube", "Stone hearth", stone, (sx + 0.06, sy, 0.02), (0.9, 1.0, 0.04), bevel=0.012)
+    shield = reb.mat_surface("Heat shield", [(0.0, (0.015, 0.014, 0.012)), (0.6, (0.05, 0.047, 0.042)), (1.0, (0.12, 0.11, 0.1))], scale=6, rough=0.6, bump=0.1)
+    reb.prim("cube", "Heat shield", shield, (X0 + 0.02, sy, 0.85), (0.012, 0.95, 1.5))
+    for dz in (0.12, 1.58):
+        reb.prim("cube", "Shield rail", iron, (X0 + 0.03, sy, dz), (0.02, 0.97, 0.03))
+
+    def lathe(name, m, profile, segments=28):
+        """A round casting: `profile` is (radius, height) from the bottom up."""
+        verts, faces = [], []
+        for r_, z in profile:
+            for i in range(segments):
+                a = 2 * math.pi * i / segments
+                verts.append((sx + r_ * math.cos(a), sy + r_ * math.sin(a), z))
+        for j in range(len(profile) - 1):
+            for i in range(segments):
+                a, b = j * segments + i, j * segments + (i + 1) % segments
+                faces.append((a, b, b + segments, a + segments))
+        faces.append(tuple(range(segments - 1, -1, -1)))
+        faces.append(tuple(range((len(profile) - 1) * segments, len(profile) * segments)))
+        return reb.mesh_object(name, verts, faces, m)
+
+    for dx in (-1, 1):
+        for dy in (-1, 1):
+            reb.mask(kit.rod("Stove leg", cast, (sx + dx * 0.15, sy + dy * 0.15, 0.3), (sx + dx * 0.22, sy + dy * 0.22, 0.05), 0.028))
+            reb.prim("sphere", "Stove foot", cast, (sx + dx * 0.225, sy + dy * 0.225, 0.05), (0.07, 0.07, 0.05), segments=10)
+    solid(lathe("Stove belly", cast, [(0.2, 0.26), (0.24, 0.3), (0.27, 0.4), (0.31, 0.5), (0.33, 0.6), (0.32, 0.7), (0.28, 0.8), (0.22, 0.87), (0.2, 0.9)]))
+    for z, r_ in ((0.29, 0.255), (0.6, 0.345), (0.9, 0.225)):
+        reb.prim("cyl", "Stove band", iron, (sx, sy, z), (2 * r_, 2 * r_, 0.035), segments=28)
+    reb.prim("cyl", "Stove collar", cast, (sx, sy, 0.95), (0.42, 0.42, 0.1), segments=28)
+    reb.prim("cyl", "Stove top", cast, (sx, sy, 1.01), (0.56, 0.56, 0.03), segments=28)
+    reb.prim("cyl", "Lid ring", iron, (sx + 0.1, sy + 0.08, 1.03), (0.18, 0.18, 0.012), segments=20)
+    # The fuel door on the belly's front, toward the room: a cast frame, the
+    # glowing mica window behind a grille, a hinge and a coil-spring handle.
+    face = (0, math.pi / 2, 0)
+    reb.prim("cyl", "Fire door", cast, (sx + 0.325, sy, 0.6), (0.3, 0.3, 0.04), rot=face, segments=24)
+    reb.prim("cyl", "Fire door rim", iron, (sx + 0.34, sy, 0.6), (0.31, 0.31, 0.012), rot=face, segments=24)
     fire_m = reb.mat_emit("Embers", (1.0, 0.35, 0.08), 18)
+    reb.prim("cyl", "Mica window", fire_m, (sx + 0.347, sy, 0.6), (0.19, 0.19, 0.006), rot=face, segments=20)
     for i in range(4):
-        reb.prim("cube", "Grate glow", fire_m, (sx + 0.262, sy - 0.09 + i * 0.06, 0.38), (0.004, 0.025, 0.1))
-    fire = reb.point("Stove fire", (sx + 0.33, sy, 0.38), 6, (1.0, 0.4, 0.12), 0.05)
-    reb.prim("cyl", "Stovepipe", iron, (sx - 0.05, sy, 1.6), (0.15, 0.15, 1.7))
-    reb.prim("cyl", "Pipe collar", iron, (sx - 0.05, sy, H - 0.02), (0.24, 0.24, 0.04))
-    reb.prim("sphere", "Kettle", enamel, (sx + 0.05, sy + 0.12, 0.8), (0.2, 0.2, 0.15), segments=20)
-    reb.prim("cyl", "Kettle spout", enamel, (sx + 0.15, sy + 0.12, 0.83), (0.025, 0.025, 0.12), rot=(0, 1.0, 0))
+        kit.rod("Door grille", iron, (sx + 0.355, sy - 0.075 + i * 0.05, 0.52), (sx + 0.355, sy - 0.075 + i * 0.05, 0.68), 0.006)
+    reb.prim("cyl", "Door hinge", iron, (sx + 0.33, sy - 0.165, 0.6), (0.035, 0.035, 0.16), segments=10)
+    kit.rod("Door handle", iron, (sx + 0.35, sy + 0.12, 0.6), (sx + 0.42, sy + 0.17, 0.6), 0.012)
+    reb.prim("cyl", "Handle spring", reb.mat_metal("Nickel", (0.5, 0.48, 0.45), 0.3), (sx + 0.43, sy + 0.18, 0.6), (0.035, 0.035, 0.07), rot=(math.pi / 2, 0, 0.6), segments=10)
+    # The ash door below it and its draught spinner, the ash spilled on the hearth.
+    reb.prim("cube", "Ash door", cast, (sx + 0.235, sy, 0.33), (0.04, 0.22, 0.1), bevel=0.01)
+    reb.prim("cyl", "Draught spinner", iron, (sx + 0.26, sy, 0.33), (0.07, 0.07, 0.015), rot=face, segments=12)
+    kit.splat("Spilled ash", reb.mat_plain("Ash", (0.16, 0.15, 0.14), 1), (sx + 0.33, sy + 0.05, 0.042), 0.12, stretch=(1.4, 0.8), seed=6)
+    fire = reb.point("Stove fire", (sx + 0.45, sy, 0.6), 6, (1.0, 0.4, 0.12), 0.05)
+    # The flue, straight up, joints and a damper handle, through a collar in the roof.
+    reb.prim("cyl", "Stovepipe", cast, (sx, sy, (1.02 + H) / 2), (0.15, 0.15, H - 1.02))
+    for z in (1.12, 1.5, 1.95):
+        reb.prim("cyl", "Pipe joint", iron, (sx, sy, z), (0.17, 0.17, 0.04))
+    kit.rod("Damper handle", iron, (sx, sy, 1.3), (sx + 0.15, sy + 0.04, 1.3), 0.01)
+    reb.prim("cyl", "Pipe collar", iron, (sx, sy, H - 0.02), (0.26, 0.26, 0.04))
+    kit.splat("Soot up the shield", reb.mat_plain("Soot", (0.01, 0.009, 0.008), 1), (X0 + 0.03, sy, 1.25), 0.3, rot=(0, math.pi / 2, 0), stretch=(1.6, 0.8), seed=4)
+    # The kettle on the top plate, dented enamel and a wire handle.
+    kx, ky, kz = sx + 0.1, sy + 0.08, 1.04
+    reb.prim("sphere", "Kettle", enamel, (kx, ky, kz + 0.08), (0.24, 0.24, 0.17), segments=20)
+    reb.prim("cyl", "Kettle lid", enamel, (kx, ky, kz + 0.16), (0.12, 0.12, 0.02))
+    reb.prim("sphere", "Kettle lid knob", black, (kx, ky, kz + 0.18), (0.03, 0.03, 0.03))
+    kit.rod("Kettle spout", enamel, (kx + 0.1, ky, kz + 0.07), (kx + 0.19, ky, kz + 0.15), 0.016)
+    for i in range(10):
+        a, b = i * math.pi / 10, (i + 1) * math.pi / 10
+        kit.rod("Kettle handle", iron, (kx, ky + 0.1 * math.cos(a), kz + 0.12 + 0.13 * math.sin(a)), (kx, ky + 0.1 * math.cos(b), kz + 0.12 + 0.13 * math.sin(b)), 0.006)
     # Firewood stacked beside it.
     for i in range(16):
         layer, k = divmod(i, 5)
@@ -363,17 +468,17 @@ def build():
         reb.prim("cyl", "Peg", pine, (x, Y1 - 0.06, 1.75), (0.03, 0.03, 0.12), rot=(math.pi / 2, 0, 0))
     reb.prim("cyl", "Hat brim", felt, (4.6, Y1 - 0.14, 1.8), (0.36, 0.36, 0.015), rot=(0.35, 0, 0), segments=24)
     reb.prim("cyl", "Hat crown", felt, (4.6, Y1 - 0.13, 1.86), (0.19, 0.19, 0.13), rot=(0.35, 0, 0), segments=24)
-    reb.prim("cube", "Key board", pine, (3.28, Y1 - 0.015, 1.45), (0.24, 0.02, 0.14), bevel=0.004)
+    reb.prim("cube", "Key board", pine, (5.65, Y1 - 0.015, 1.45), (0.3, 0.035, 0.22), bevel=0.008)
     for i in range(3):
-        reb.prim("cyl", "Key hook", brass, (3.2 + i * 0.08, Y1 - 0.04, 1.42), (0.008, 0.008, 0.04), rot=(math.pi / 2, 0, 0))
-    # The rifle rack, empty, and an opened box of cartridges below it.
+        reb.prim("cyl", "Key hook", brass, (5.57 + i * 0.08, Y1 - 0.055, 1.42), (0.012, 0.012, 0.06), rot=(math.pi / 2, 0, 0))
+    # The rifle rack west of the door, empty, an opened box of cartridges below it.
     for z in (1.25, 1.55):
-        for x in (5.15, 5.85):
+        for x in (2.75, 3.3):
             reb.prim("cube", "Rack bracket", dark, (x, Y1 - 0.05, z), (0.06, 0.1, 0.05))
-    reb.prim("cube", "Rack shelf", dark, (5.5, Y1 - 0.09, 0.95), (0.7, 0.18, 0.03))
-    reb.prim("cube", "Cartridge box", reb.mat_plain("Cardboard", (0.4, 0.25, 0.1)), (5.4, Y1 - 0.09, 0.995), (0.14, 0.09, 0.06))
+    reb.prim("cube", "Rack shelf", dark, (3.02, Y1 - 0.09, 0.95), (0.6, 0.18, 0.03))
+    reb.prim("cube", "Cartridge box", reb.mat_plain("Cardboard", (0.4, 0.25, 0.1)), (2.92, Y1 - 0.09, 0.995), (0.14, 0.09, 0.06))
     for i in range(6):
-        reb.prim("cyl", "Cartridge", brass, (5.55 + i * 0.025, Y1 - 0.08 + rng.uniform(-0.03, 0.03), 0.975), (0.012, 0.012, 0.06), rot=(math.pi / 2, 0, rng.uniform(-0.4, 0.4)))
+        reb.prim("cyl", "Cartridge", brass, (3.07 + i * 0.025, Y1 - 0.08 + rng.uniform(-0.03, 0.03), 0.975), (0.012, 0.012, 0.06), rot=(math.pi / 2, 0, rng.uniform(-0.4, 0.4)))
     # A calendar for July 1998 on the south wall.
     reb.prim("cube", "Calendar", paper, (X0 + 0.005, 3.2, 1.6), (0.006, 0.32, 0.42))
     reb.prim("cube", "Calendar picture", reb.mat_surface("Calendar picture", [(0.0, (0.15, 0.3, 0.2)), (1.0, (0.4, 0.5, 0.6))], scale=12), (X0 + 0.01, 3.2, 1.72), (0.004, 0.28, 0.16))
