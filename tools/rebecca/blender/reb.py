@@ -33,6 +33,9 @@ from mathutils import Vector, noise
 
 
 UNITS = 1700.0
+# How far a camera sees, in metres, when its record gives no clip_end.
+# kit.backdrop raises it so every camera reaches the far ranges.
+CLIP_END = 400.0
 
 
 def g(metres):
@@ -279,10 +282,12 @@ def trunks(name, mat, bases):
         rng = random.Random(round(base.x * 977) + round(base.y * 131))
         lean = _lean(base)
         r = h * 0.03
-        rings = [(0.0, r * 1.25), (0.08, r), (0.45, r * 0.7), (0.85, r * 0.25)]
+        # The first ring is a metre underground, so on a slope the flare
+        # goes into the earth on every side instead of ending in a disc.
+        rings = [(-1.0 / h, r * 1.3), (0.0, r * 1.25), (0.08, r), (0.45, r * 0.7), (0.85, r * 0.25)]
         k0 = len(verts)
         for i, (t, rr) in enumerate(rings):
-            c = Vector(base) + Vector((0, 0, h * t)) + lean * h * t + Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.04 * i
+            c = Vector(base) + Vector((0, 0, h * t)) + lean * h * max(t, 0.0) + Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.04 * max(i - 1, 0)
             for s in range(7):
                 a = 2 * math.pi * s / 7
                 verts.append((c.x + math.cos(a) * rr * rng.uniform(0.85, 1.1), c.y + math.sin(a) * rr * rng.uniform(0.85, 1.1), c.z))
@@ -629,7 +634,7 @@ def add_camera(i, cam):
     data.sensor_width = 32.0
     data.lens = cam["fov"] / 10.0
     data.clip_start = 0.1
-    data.clip_end = cam.get("clip_end", 400)
+    data.clip_end = cam.get("clip_end", CLIP_END)
     ob = bpy.data.objects.new(f"Room camera {i}", data)
     bpy.context.scene.collection.objects.link(ob)
     eye = game_to_blender(cam["from"])

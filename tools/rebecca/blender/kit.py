@@ -307,11 +307,19 @@ def mat(name):
         return _mats[name]
     s = reb.mat_surface
     m = {
-        "blood": lambda: _glossy("Blood", (0.12, 0.004, 0.003), 0.15),
+        # Blood soaked into what it fell on: dark, matte and patchy, never
+        # glossy paint (STYLE: the owner's review). "old blood" is browner.
+        "blood": lambda: s("Blood", [(0.2, (0.04, 0.012, 0.008)), (0.45, (0.075, 0.018, 0.011)), (0.62, (0.11, 0.035, 0.02)), (0.8, (0.06, 0.03, 0.02))], scale=40, detail=6, rough=0.95, bump=0.1),
         "old blood": lambda: s("Old blood", [(0.0, (0.05, 0.008, 0.005)), (1.0, (0.14, 0.03, 0.015))], scale=14, rough=0.55, bump=0.2),
         "grime": lambda: s("Grime", [(0.0, (0.03, 0.025, 0.02)), (1.0, (0.08, 0.065, 0.05))], scale=9, rough=0.9, bump=0.2),
         "mud": lambda: s("Mud", [(0.0, (0.05, 0.035, 0.02)), (1.0, (0.13, 0.09, 0.055))], scale=5, rough=0.6, bump=0.5),
         "dirt": lambda: s("Dirt", [(0.0, (0.1, 0.075, 0.05)), (1.0, (0.2, 0.15, 0.1))], scale=6, bump=0.6),
+        # Bare, trodden path: packed brown earth with grit, no grass on it.
+        "trodden dirt": lambda: s("Trodden dirt", [(0.0, (0.03, 0.023, 0.016)), (0.35, (0.07, 0.052, 0.034)), (0.55, (0.1, 0.075, 0.05)), (0.75, (0.065, 0.05, 0.035)), (1.0, (0.15, 0.125, 0.095))], scale=11, detail=14, bump=0.8),
+        # Ground under grass tufts: green-brown, so gaps between tufts read as more grass, not bald earth.
+        "grassed earth": lambda: s("Grassed earth", [(0.0, (0.03, 0.035, 0.015)), (0.35, (0.05, 0.065, 0.025)), (0.65, (0.07, 0.085, 0.03)), (1.0, (0.09, 0.08, 0.04))], scale=4, detail=10, bump=0.4),
+        # Wet tyre ruts: darker, slicker mud.
+        "ruts": lambda: s("Rut mud", [(0.0, (0.018, 0.013, 0.009)), (0.5, (0.04, 0.03, 0.02)), (1.0, (0.065, 0.05, 0.034))], scale=7, rough=0.75, bump=0.7),
         "grass": lambda: s("Meadow", [(0.0, (0.06, 0.08, 0.025)), (0.5, (0.13, 0.15, 0.05)), (1.0, (0.2, 0.18, 0.09))], scale=1.5, bump=0.4),
         # Stones a few centimetres across: finer than this averages away at 320 x 240.
         "gravel": lambda: s("Gravel", [(0.0, (0.08, 0.075, 0.065)), (0.4, (0.2, 0.19, 0.17)), (0.6, (0.26, 0.25, 0.22)), (1.0, (0.36, 0.34, 0.3))], scale=9, bump=1.0),
@@ -1502,6 +1510,7 @@ def forest(rng, height, keep_out, area, count=70, spacing=1.6, tall=(11, 19), fe
             live.append((base, h))
     reb.mesh_object("Spruces", tv, tf, mat("needles"))
     reb.trunks("Spruce trunks", mat("bark"), bases)
+    tree_roots(rng, bases, height, keep_out)
     fv, ff = [], []
     for _ in range(ferns):
         x, y = rng.uniform(area[0], area[2]), rng.uniform(area[1], area[3])
@@ -1892,3 +1901,751 @@ def _sky(horizon, zenith, strength, sun):
     mix.inputs["B"].default_value = (*[min(1.0, c * 1.2) for c in sun.data.color], 1)
     links.new(mix.outputs["Result"], bg.inputs["Color"])
     bg.inputs["Strength"].default_value = strength
+
+
+# ---------------------------------------------------------------------------
+# The RE0 look outdoors (day/SCENES.md, "The look")
+#
+# Every exterior that sees the horizon gets the same sky and land, after the
+# Resident Evil Zero ending: a big overcast sky of grey-blue and lilac cloud
+# with a warm glow at one edge, long low rolling ranges fading into haze, and
+# dense pine forest running down every slope into mist. In a scene script:
+#
+#     kit.time_light("morning")                       # the light on the room
+#     kit.overcast_sky()                              # what the cameras see of the sky
+#     land = kit.backdrop(eye=(6, -2, 3), toward=(0, 1))
+#
+#     path = [(2, 0), (5, 8), (6, 18)]
+#     on_path = kit.dirt_path("Path", path, height, width=1.6)
+#     kit.grass_ground(rng, (-10, -10, 20, 30), height, keep_out=on_path)
+#     kit.forest(rng, height, lambda x, y: on_path(x, y, 1.5), (-20, -20, 30, 40))  # trees come with roots
+#     kit.rocks("Rocks", rng, [(8, 4, 0.6), (1, 9, 0.4)], height)
+#     kit.ruts("Ruts", [(0, 2), (6, 5), (14, 6)], height)
+#     kit.rough_log("Fallen pine", (1, 2, -0.1), (6, 3, 0.1), 0.35)
+#     kit.splat("Blood", kit.mat("blood"), (4, 4, 0.002), 0.4)  # blood soaks in
+#     kit.spencer_mansion((x, y, z), heading=0.2, far=True)
+#
+# backdrop() also raises every camera's far plane to see it.
+# ---------------------------------------------------------------------------
+
+# The air between a camera and the land. backdrop() sets it; air() reads it.
+AIR = {
+    "scale": 3600.0,              # metres to fade 63% of the way into the haze
+    "most": 0.86,                 # the haze never quite hides the land
+    "near": (0.2, 0.23, 0.28),    # grey-blue air over the near slopes
+    "far": (0.37, 0.36, 0.44),    # lilac-grey over the far ranges, darker than the sky
+    "warm": (0.92, 0.78, 0.6),    # toward the sun's glow
+    "mist": (0.6, 0.61, 0.64),    # the mist lying in the valleys
+    "mist_top": -60.0,            # z (metres) the mist reaches up to
+    "mist_from": 120.0,           # no valley mist nearer the camera than this
+    "glow": (1.0, 0.0, 0.08),     # direction of the sun's glow (unit, z up)
+}
+
+
+def _nmath(nodes, links, op, a, b=None, clamp=False):
+    n = nodes.new("ShaderNodeMath")
+    n.operation = op
+    n.use_clamp = clamp
+    for i, v in enumerate((a, b)):
+        if v is None:
+            continue
+        if isinstance(v, bpy.types.NodeSocket):
+            links.new(v, n.inputs[i])
+        else:
+            n.inputs[i].default_value = v
+    return n.outputs[0]
+
+
+def _smooth(nodes, links, value, lo, hi):
+    """0 at `lo`, 1 at `hi`, smoothly, clamped."""
+    n = nodes.new("ShaderNodeMapRange")
+    n.interpolation_type = "SMOOTHSTEP"
+    n.inputs["From Min"].default_value, n.inputs["From Max"].default_value = lo, hi
+    links.new(value, n.inputs["Value"])
+    return n.outputs["Result"]
+
+
+def _mix(nodes, links, fac, a, b):
+    """Colour a to b by fac; each may be a socket or a value."""
+    m = nodes.new("ShaderNodeMix")
+    m.data_type = "RGBA"
+    sock = {s.identifier: s for s in m.inputs}
+    for name, value in (("Factor_Float", fac), ("A_Color", a), ("B_Color", b)):
+        if isinstance(value, bpy.types.NodeSocket):
+            links.new(value, sock[name])
+        else:
+            sock[name].default_value = value if name == "Factor_Float" else (*value, 1)
+    return next(s for s in m.outputs if s.identifier == "Result_Color")
+
+
+def _glow_dir(glow=None):
+    """The glow's direction: `glow` (dx, dy) on the floor, or the sun's
+    heading, kept a few degrees above the horizon so it sits at the edge."""
+    if glow is None:
+        sun = bpy.data.objects.get("Sun") or bpy.data.objects.get("Moon")
+        d = sun.matrix_world.to_quaternion() @ Vector((0, 0, 1)) if sun else Vector((1, 0, 0))
+        glow = (d.x, d.y)
+    v = Vector((glow[0], glow[1], 0))
+    v = v.normalized() if v.length > 1e-6 else Vector((1, 0, 0))
+    v.z = 0.1
+    return v.normalized()
+
+
+def air(m, most=None):
+    """Put the air between the cameras and a far material: the further, the
+    more it fades to grey-blue and then lilac haze, warmer toward the sun's
+    glow, and low ground lies in banks of mist. Only camera rays see it, so
+    it lights nothing. Returns m. backdrop() does this to its own land."""
+    if m.get("air"):
+        return m
+    m["air"] = True
+    m["worn"] = True
+    nodes, links = m.node_tree.nodes, m.node_tree.links
+    out = next(n for n in nodes if n.type == "OUTPUT_MATERIAL" and n.is_active_output)
+    surface = out.inputs["Surface"].links[0].from_socket
+    dist = nodes.new("ShaderNodeCameraData").outputs["View Distance"]
+    geo = nodes.new("ShaderNodeNewGeometry")
+    sep = nodes.new("ShaderNodeSeparateXYZ")
+    links.new(geo.outputs["Position"], sep.inputs[0])
+    haze = _nmath(nodes, links, "MULTIPLY", _nmath(nodes, links, "SUBTRACT", 1.0, _nmath(nodes, links, "EXPONENT", _nmath(nodes, links, "DIVIDE", dist, -AIR["scale"]))), AIR["most"] if most is None else most)
+    colour = _mix(nodes, links, _smooth(nodes, links, dist, 800, 9000), AIR["near"], AIR["far"])
+    # Warmer looking toward the glow: Incoming points back at the camera.
+    toward = nodes.new("ShaderNodeVectorMath")
+    toward.operation = "DOT_PRODUCT"
+    links.new(geo.outputs["Incoming"], toward.inputs[0])
+    toward.inputs[1].default_value = tuple(-c for c in AIR["glow"])
+    warm = _nmath(nodes, links, "POWER", _nmath(nodes, links, "MAXIMUM", toward.outputs["Value"], 0.0), 4.0)
+    colour = _mix(nodes, links, _nmath(nodes, links, "MULTIPLY", warm, 0.6), colour, AIR["warm"])
+    # Mist in banks: its top rises and falls, so it is never a flat lake.
+    banks = nodes.new("ShaderNodeTexNoise")
+    banks.inputs["Scale"].default_value = 0.004
+    banks.inputs["Detail"].default_value = 3
+    links.new(geo.outputs["Position"], banks.inputs["Vector"])
+    top = _nmath(nodes, links, "ADD", sep.outputs["Z"], _nmath(nodes, links, "MULTIPLY", _nmath(nodes, links, "SUBTRACT", banks.outputs["Fac"], 0.5), -120.0))
+    low = _nmath(nodes, links, "SUBTRACT", 1.0, _smooth(nodes, links, top, AIR["mist_top"] - 110, AIR["mist_top"]))
+    mist = _nmath(nodes, links, "MULTIPLY", low, _nmath(nodes, links, "MULTIPLY", _smooth(nodes, links, dist, AIR["mist_from"], AIR["mist_from"] * 6), 0.82))
+    colour = _mix(nodes, links, mist, colour, _mix(nodes, links, _nmath(nodes, links, "MULTIPLY", warm, 0.4), AIR["mist"], AIR["warm"]))
+    total = _nmath(nodes, links, "SUBTRACT", 1.0, _nmath(nodes, links, "MULTIPLY", _nmath(nodes, links, "SUBTRACT", 1.0, haze), _nmath(nodes, links, "SUBTRACT", 1.0, mist)))
+    gate = _nmath(nodes, links, "MULTIPLY", total, nodes.new("ShaderNodeLightPath").outputs["Is Camera Ray"])
+    glow = nodes.new("ShaderNodeEmission")
+    links.new(colour, glow.inputs["Color"])
+    both = nodes.new("ShaderNodeMixShader")
+    links.new(gate, both.inputs["Fac"])
+    links.new(surface, both.inputs[1])
+    links.new(glow.outputs[0], both.inputs[2])
+    links.new(both.outputs[0], out.inputs["Surface"])
+    return m
+
+
+def overcast_sky(glow=None, brightness=1.0):
+    """What the cameras see of the sky: heavy, layered overcast, dark
+    grey-blue cores with lilac edges, thinning to haze at the horizon, and a
+    warm sun glow breaking through at one edge (toward `glow` (dx, dy) on the
+    floor; the sun's heading if None). Call after time_light: the light on
+    the room stays the hour's, only camera rays see this."""
+    d = _glow_dir(glow)
+    AIR["glow"] = tuple(d)
+    world = bpy.context.scene.world
+    nodes, links = world.node_tree.nodes, world.node_tree.links
+    out = next(n for n in nodes if n.type == "OUTPUT_WORLD")
+    light = out.inputs["Surface"].links[0].from_socket
+    tc = nodes.new("ShaderNodeTexCoord").outputs["Generated"]
+    sep = nodes.new("ShaderNodeSeparateXYZ")
+    links.new(tc, sep.inputs[0])
+    up = sep.outputs["Z"]
+    sky = reb.ramp(nodes, links, _nmath(nodes, links, "DIVIDE", up, 0.45, clamp=True),
+                   [(0.0, (0.5, 0.48, 0.55)), (0.12, (0.42, 0.42, 0.52)), (0.5, (0.3, 0.33, 0.44)), (1.0, (0.2, 0.23, 0.33))]).outputs["Color"]
+    # The clouds lie on a flat layer overhead, so they close up into long
+    # streaks low down, as overcast does.
+    flat = nodes.new("ShaderNodeVectorMath")
+    flat.operation = "DIVIDE"
+    links.new(tc, flat.inputs[0])
+    lift = nodes.new("ShaderNodeCombineXYZ")
+    for k in "XYZ":
+        links.new(_nmath(nodes, links, "ADD", _nmath(nodes, links, "MAXIMUM", up, 0.0), 0.12), lift.inputs[k])
+    links.new(lift.outputs[0], flat.inputs[1])
+
+    def layer(scale, stretch, offset, detail):
+        mp = nodes.new("ShaderNodeMapping")
+        mp.inputs["Scale"].default_value = stretch
+        mp.inputs["Location"].default_value = offset
+        links.new(flat.outputs[0], mp.inputs["Vector"])
+        n = nodes.new("ShaderNodeTexNoise")
+        n.inputs["Scale"].default_value = scale
+        n.inputs["Detail"].default_value = detail
+        n.inputs["Roughness"].default_value = 0.6
+        links.new(mp.outputs[0], n.inputs["Vector"])
+        return n.outputs["Fac"]
+
+    big = layer(0.9, (0.45, 1.0, 0.0), (0.0, 0.0, 0.0), 6)
+    small = layer(2.6, (0.6, 1.0, 0.0), (3.1, 7.7, 0.0), 8)
+    body = _nmath(nodes, links, "ADD", _nmath(nodes, links, "MULTIPLY", big, 0.7), _nmath(nodes, links, "MULTIPLY", small, 0.3))
+    cover = _smooth(nodes, links, body, 0.26, 0.46)
+    # Thick cores dark grey-blue, thin edges lit lilac.
+    core = _smooth(nodes, links, body, 0.4, 0.64)
+    cloud = _mix(nodes, links, core, (0.68, 0.62, 0.72), (0.12, 0.14, 0.21))
+    sky = _mix(nodes, links, cover, sky, cloud)
+    # The glow: broad and warm, a brighter heart where the sun breaks through.
+    toward = nodes.new("ShaderNodeVectorMath")
+    toward.operation = "DOT_PRODUCT"
+    links.new(tc, toward.inputs[0])
+    toward.inputs[1].default_value = tuple(d)
+    facing = _nmath(nodes, links, "MAXIMUM", toward.outputs["Value"], 0.0)
+    broad = _nmath(nodes, links, "POWER", facing, 8.0)
+    heart = _nmath(nodes, links, "POWER", facing, 60.0)
+    thin = _nmath(nodes, links, "SUBTRACT", 1.0, _nmath(nodes, links, "MULTIPLY", core, 0.7))
+    sky = _mix(nodes, links, _nmath(nodes, links, "MULTIPLY", broad, _nmath(nodes, links, "MULTIPLY", thin, 0.7)), sky, (1.0, 0.84, 0.64))
+    sky = _mix(nodes, links, _nmath(nodes, links, "MULTIPLY", heart, 0.85, clamp=True), sky, (1.0, 0.95, 0.85))
+    # Low down everything goes into the haze; below the horizon is mist.
+    horizon = _mix(nodes, links, _nmath(nodes, links, "MULTIPLY", broad, 0.6), (0.5, 0.48, 0.56), AIR["warm"])
+    sky = _mix(nodes, links, _nmath(nodes, links, "SUBTRACT", 1.0, _smooth(nodes, links, up, -0.01, 0.05)), sky, horizon)
+    bg = nodes.new("ShaderNodeBackground")
+    links.new(sky, bg.inputs["Color"])
+    bg.inputs["Strength"].default_value = brightness
+    pick = nodes.new("ShaderNodeMixShader")
+    links.new(nodes.new("ShaderNodeLightPath").outputs["Is Camera Ray"], pick.inputs["Fac"])
+    links.new(light, pick.inputs[1])
+    links.new(bg.outputs[0], pick.inputs[2])
+    links.new(pick.outputs[0], out.inputs["Surface"])
+
+
+# The ranges a camera near the ground sees, nearest first: how far off each
+# one's crest runs (metres), how deep it is, how high its crest stands above
+# eye level (degrees), and how much that rolls (degrees). Long, low and
+# rounded; each a little higher than the one before, so every layer shows
+# over the one in front of it.
+RANGES = [
+    {"at": 1100, "depth": 600, "rise": 1.2, "roll": 1.4},
+    {"at": 2600, "depth": 1200, "rise": 2.0, "roll": 1.3},
+    {"at": 5000, "depth": 1900, "rise": 2.8, "roll": 1.2},
+    {"at": 8800, "depth": 2800, "rise": 3.4, "roll": 1.0},
+    {"at": 13500, "depth": 3200, "rise": 3.8, "roll": 0.8},
+]
+
+
+def _crest(rise, deg):
+    """A range's crest rise at `deg` from the view's centre: a number, or a
+    list of (degrees, rise) points eased between."""
+    if not isinstance(rise, (list, tuple)):
+        return rise
+    if deg <= rise[0][0]:
+        return rise[0][1]
+    for (a0, r0), (a1, r1) in zip(rise, rise[1:]):
+        if deg <= a1:
+            t = (deg - a0) / (a1 - a0)
+            return r0 + (r1 - r0) * t * t * (3 - 2 * t)
+    return rise[-1][1]
+
+
+def backdrop(eye, toward=(0.0, 1.0), spread=160, ranges=None, below=-70.0, near=60.0, forest_to=2200.0,
+             trees=None, keep_out=None, shape=None, terraces=(), mist=40.0, seed=7, rng=None):
+    """The land beyond a scene, out to the far ranges, for every camera near
+    `eye` (x, y, z in metres) looking within `spread` degrees of `toward`
+    (dx, dy; 360 for all round). Rolling ranges (RANGES unless `ranges`
+    is given, each {"at", "depth", "rise", "roll"} and optionally "seed" and
+    "span": (from, to) degrees either side of `toward`, for a spur; "rise"
+    may be [(degrees from `toward`, rise), ...] to shape a crest; "wander"
+    scales how far it strays toward and away, 1 by default) stand on
+    a valley floor `below` metres under the eye and deepening with distance.
+    Pines cover every slope from `near` out to `forest_to` metres; beyond
+    that the canopy is in the land's colour. Mist lies `mist` metres deep
+    over the floor. keep_out(x, y): no tree there. shape(x, y, z) -> z: the
+    scene's own change to the land. terraces: [(x, y, radius)], each
+    flattened to the land's own height at its centre, for a house to stand
+    on. Returns the land's height(x, y) so a scene can stand things on it."""
+    rng = rng or random.Random(seed)
+    ex, ey, ez = eye
+    heading = math.atan2(toward[0], toward[1])
+    half = math.radians(spread) / 2
+    ranges = RANGES if ranges is None else ranges
+    far = max(r["at"] + r["depth"] for r in ranges) + 500
+    reb.CLIP_END = max(reb.CLIP_END, far * 1.2)
+
+    def floor(d):
+        return ez + below - 90.0 * (1.0 - math.exp(-max(0.0, d - near) / 2500.0))
+
+    AIR["mist_top"] = ez + below + mist
+    AIR["mist_from"] = max(80.0, near * 2)
+
+    def natural(x, y):
+        dx, dy = x - ex, y - ey
+        d = max(1.0, math.hypot(dx, dy))
+        rel = math.atan2(math.sin(math.atan2(dx, dy) - heading), math.cos(math.atan2(dx, dy) - heading))
+        base = floor(d)
+        z = base
+        for k, r in enumerate(ranges):
+            s = r.get("seed", k * 3.7 + seed)
+            depth = r["depth"]
+            along = rel * r["at"]
+            # The range wanders toward and away, so it is not an arc round her.
+            centre = r["at"] + r.get("wander", 1.0) * (0.22 * depth * math.sin(along / (1.3 * depth) + s) + 0.12 * depth * noise.noise(Vector((along / depth, s, 0.5))))
+            t = (d - centre) / depth
+            if abs(t) >= 1.0:
+                continue
+            # Rolling: long, round swells along the crest, no peaks.
+            roll = r["roll"] * (noise.noise(Vector((along / (1.6 * depth), s, 3.1))) + 0.4 * math.sin(along / (0.7 * depth) + 2 * s))
+            crest = ez + d * math.tan(math.radians(_crest(r["rise"], math.degrees(rel)) + roll))
+            if "span" in r:
+                a0, a1 = (math.radians(v) for v in r["span"])
+                fade = min(1.0, max(0.0, (rel - a0) / 0.12), max(0.0, (a1 - rel) / 0.12))
+                crest = base + (crest - base) * fade * fade * (3 - 2 * fade)
+            relief = crest - base
+            if relief <= 0:
+                continue
+            profile = (0.5 + 0.5 * math.cos(math.pi * t)) ** 0.8
+            lumps = 0.07 * relief * profile * noise.noise(Vector((x / (0.25 * depth), y / (0.25 * depth), s)))
+            z = max(z, base + relief * profile + lumps)
+        z += 3.0 * noise.noise(Vector((x * 0.02, y * 0.02, 11)))
+        return shape(x, y, z) if shape else z
+
+    flats = [(tx, ty, r, natural(tx, ty)) for tx, ty, r in terraces]
+
+    def height(x, y):
+        z = natural(x, y)
+        for tx, ty, r, tz in flats:
+            k = max(0.0, min(1.0, (r - math.hypot(x - tx, y - ty)) / (0.45 * r)))
+            z += (tz - z) * k * k * (3 - 2 * k)
+        return z
+
+    # The land: rows spread out with distance, each row as wide as the view.
+    rows = 320
+    cols = max(60, int(spread * 2.4))
+    v, f = [], []
+    for j in range(rows + 1):
+        d = near * 0.7 * (far / (near * 0.7)) ** (j / rows)
+        for i in range(cols + 1):
+            a = heading - half + 2 * half * i / cols
+            x, y = ex + math.sin(a) * d, ey + math.cos(a) * d
+            v.append((x, y, height(x, y)))
+    for j in range(rows):
+        for i in range(cols):
+            k = j * (cols + 1) + i
+            f.append((k, k + 1, k + cols + 2, k + cols + 1))
+    land = reb.mesh_object("Backdrop land", v, f, air(_canopy_material()))
+    land.visible_shadow = True
+
+    # Pines over every slope, layered so each band takes its own shade.
+    if trees is None:
+        trees = int(min(160000, half * (forest_to ** 2 - near ** 2) / 42.0))
+    layers = [([], []) for _ in range(3)]
+    for _ in range(trees):
+        d = math.sqrt(rng.uniform(near ** 2, forest_to ** 2))
+        a = heading + rng.uniform(-half, half)
+        x, y = ex + math.sin(a) * d, ey + math.cos(a) * d
+        if keep_out and keep_out(x, y):
+            continue
+        z = height(x, y) - 0.5
+        h = rng.uniform(13, 24)
+        tv, tf = layers[0 if d < 500 else 1 if d < 1200 else 2]
+        lean = (rng.uniform(-0.3, 0.3), rng.uniform(-0.3, 0.3))
+        # Three ragged tiers, each branch tip at its own reach and droop, so
+        # no crown is a clean cone.
+        for tier in range(3):
+            k = len(tv)
+            tv.append((x + lean[0], y + lean[1], z + h * (0.62 + tier * 0.19)))
+            for s in range(7):
+                b = math.tau * s / 7 + tier + rng.uniform(-0.25, 0.25)
+                radius = h * (0.2 - tier * 0.045) * rng.uniform(0.7, 1.15)
+                tv.append((x + math.cos(b) * radius, y + math.sin(b) * radius, z + h * (0.08 + tier * 0.24 + rng.uniform(-0.04, 0.03))))
+            tf.extend((k, k + 1 + s, k + 1 + (s + 1) % 7) for s in range(7))
+    shades = (((0.008, 0.02, 0.012), (0.04, 0.068, 0.036)),
+              ((0.01, 0.022, 0.015), (0.044, 0.072, 0.04)),
+              ((0.012, 0.025, 0.018), (0.05, 0.078, 0.046)))
+    for i, (tv, tf) in enumerate(layers):
+        if tf:
+            reb.mesh_object(f"Backdrop pines {i}", tv, tf, air(_pine_shades(f"Backdrop pine {i}", *shades[i])), smooth=False)
+    return height
+
+
+def _pine_shades(name, dark, light):
+    """Each tier of each far pine a shade of its own: at this range a crown
+    is a pixel or two, and cut-out needles would only be noise."""
+    m, nodes, links, bsdf = reb.nodes_material(name)
+    bsdf.inputs["Roughness"].default_value = 0.95
+    geo = nodes.new("ShaderNodeNewGeometry")
+    col = reb.ramp(nodes, links, geo.outputs["Random Per Island"], [(0.0, dark), (1.0, light)])
+    links.new(col.outputs["Color"], bsdf.inputs["Base Color"])
+    return m
+
+
+def _canopy_material():
+    """The far land: unbroken pine canopy, crowns speckled dark and light."""
+    m, nodes, links, bsdf = reb.nodes_material("Backdrop canopy")
+    bsdf.inputs["Roughness"].default_value = 1.0
+    pos = nodes.new("ShaderNodeNewGeometry").outputs["Position"]
+    broad = nodes.new("ShaderNodeTexNoise")
+    broad.inputs["Scale"].default_value = 0.004
+    broad.inputs["Detail"].default_value = 6
+    links.new(pos, broad.inputs["Vector"])
+    crowns = nodes.new("ShaderNodeTexVoronoi")
+    crowns.inputs["Scale"].default_value = 0.12
+    links.new(pos, crowns.inputs["Vector"])
+    base = reb.ramp(nodes, links, broad.outputs["Fac"], [(0.3, (0.01, 0.022, 0.014)), (0.7, (0.04, 0.062, 0.032))])
+    speck = _smooth(nodes, links, crowns.outputs["Distance"], 0.1, 0.6)
+    links.new(_mix(nodes, links, _nmath(nodes, links, "MULTIPLY", speck, 0.7), base.outputs["Color"], (0.004, 0.008, 0.006)), bsdf.inputs["Base Color"])
+    return m
+
+
+def path_distance(x, y, paths):
+    """Distance in metres from (x, y) to the nearest segment of any path."""
+    p = Vector((x, y))
+    nearest = float("inf")
+    for path in paths:
+        for a, b in zip(path, path[1:]):
+            a, b = Vector(a), Vector(b)
+            d = b - a
+            t = max(0.0, min(1.0, (p - a).dot(d) / max(d.length_squared, 1e-9)))
+            nearest = min(nearest, (p - a - d * t).length)
+    return nearest
+
+
+def _smooth_line(points, step=0.25):
+    """A Catmull-Rom curve through `points`, sampled every `step` metres:
+    paths and ruts bend instead of kinking at each point."""
+    pts = [Vector((p[0], p[1])) for p in points]
+    if len(pts) < 2:
+        return pts
+    pts = [pts[0] * 2 - pts[1], *pts, pts[-1] * 2 - pts[-2]]
+    out = []
+    for i in range(1, len(pts) - 2):
+        p0, p1, p2, p3 = pts[i - 1], pts[i], pts[i + 1], pts[i + 2]
+        n = max(1, int((p2 - p1).length / step))
+        for k in range(n):
+            t = k / n
+            out.append(0.5 * (2 * p1 + (p2 - p0) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t * t + (3 * p1 - p0 - 3 * p2 + p3) * t ** 3))
+    out.append(pts[-2])
+    return out
+
+
+def _ribbon(line, height, half_width, lift, across=4, edge=0.25, seed=0.0):
+    """Verts and faces of a strip on the ground along `line`, `across`
+    quads wide so it follows the ground's camber; half_width(i, p) at each
+    point, its edges ragged by `edge`."""
+    v, f = [], []
+    for i, p in enumerate(line):
+        a, b = line[max(0, i - 1)], line[min(len(line) - 1, i + 1)]
+        d = (b - a).normalized() if (b - a).length > 1e-6 else Vector((0, 1))
+        side = Vector((-d.y, d.x))
+        w = half_width(i, p)
+        left = w * (1 + edge * (noise.noise(Vector((p.x * 1.3, p.y * 1.3, seed))) + 0.5 * noise.noise(Vector((p.x * 4.1, p.y * 4.1, seed + 2)))))
+        right = w * (1 + edge * (noise.noise(Vector((p.x * 1.3, p.y * 1.3, seed + 5))) + 0.5 * noise.noise(Vector((p.x * 4.1, p.y * 4.1, seed + 7)))))
+        for j in range(across + 1):
+            s = j / across
+            c = p + side * (-left + (left + right) * s)
+            v.append((c.x, c.y, height(c.x, c.y) + lift))
+    for i in range(len(line) - 1):
+        for j in range(across):
+            k = i * (across + 1) + j
+            f.append((k, k + 1, k + across + 2, k + across + 1))
+    return v, f
+
+
+def dirt_path(name, path, height, width=1.4, m=None, taper=0.0):
+    """A bare, trodden dirt path along `path` [(x, y), ...], curving through
+    the points, `width` metres across with ragged edges; `taper` metres at
+    its start narrow it to nothing, where it begins in a clearing. Returns
+    on_path(x, y, margin=0): True on the path, or within `margin` metres of
+    it. Grass takes on_path as it is, so tufts lean in at the ragged edge;
+    give trees and rocks a margin. Run a path on past the edge of every
+    camera: a path must never just stop."""
+    line = _smooth_line(path)
+    run = [0.0]
+    for a, b in zip(line, line[1:]):
+        run.append(run[-1] + (b - a).length)
+
+    def half(i, p):
+        k = min(1.0, run[i] / taper) if taper else 1.0
+        return width / 2 * (k * k * (3 - 2 * k))
+    v, f = _ribbon(line, height, half, 0.012, edge=0.4, seed=3.3)
+    reb.mesh_object(name, v, f, m or mat("trodden dirt"))
+    pts = [tuple(p) for p in line]
+    return lambda x, y, margin=0.0: path_distance(x, y, [pts]) < width / 2 * 0.85 + margin
+
+
+def grass_ground(rng, area, height, keep_out=None, per_m2=26, m=None):
+    """Grass over all of `area` (x0, y0, x1, y1) but where keep_out(x, y),
+    dense enough to leave no bald patch: lay the ground under it with
+    mat("grassed earth"). Returns the object, for Anim.sway."""
+    x0, y0, x1, y1 = area
+    count = int((x1 - x0) * (y1 - y0) * per_m2)
+
+    def where(r):
+        for _ in range(50):
+            x, y = r.uniform(x0, x1), r.uniform(y0, y1)
+            if not (keep_out and keep_out(x, y)):
+                return x, y
+        return x, y
+
+    return meadow(rng, count, where, height, m)
+
+
+def tree_roots(rng, bases, height, keep_out=lambda x, y: False):
+    """Root flares that run down into the ground round each trunk in
+    `bases` [(Vector base, height)], with grass and needles at the foot, so
+    no tree stands on a disc or hovers on a slope."""
+    keep_out = keep_out or (lambda x, y: False)
+    v, f, gv, gf, dv, df = [], [], [], [], [], []
+    for base, h in bases:
+        for j in range(5):
+            a = j * math.tau / 5 + rng.uniform(-0.4, 0.4)
+            direction = Vector((math.cos(a), math.sin(a)))
+            side = Vector((-direction.y, direction.x))
+            length = rng.uniform(0.65, 1.3) * h / 14
+            k = len(v)
+            for t, w, rise in ((0, h * 0.025, 0.45), (0.5, 0.12, 0.13), (1, 0.025, -0.05)):
+                p = base.xy + direction * length * t
+                for s, z in ((-1, -0.04), (0, rise), (1, -0.04)):
+                    q = p + side * w * s
+                    v.append((q.x, q.y, height(q.x, q.y) + z))
+            for n in range(2):
+                for s in range(2):
+                    i = k + n * 3 + s
+                    f.append((i, i + 1, i + 4, i + 3))
+
+        def foot(rr):
+            for _ in range(100):
+                a, r = rr.uniform(0, math.tau), rr.uniform(0.35, 1.35)
+                x, y = base.x + math.cos(a) * r, base.y + math.sin(a) * r
+                if not keep_out(x, y):
+                    return x, y
+            return base.x, base.y
+
+        reb.grass_tufts(rng, 30, foot, height, gv, gf)
+        for _ in range(24):
+            x, y = foot(rng)
+            reb.card(dv, df, Vector((x, y, height(x, y) + 0.012)), Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)).normalized(), Vector((0, 0, 1)), 0.04, 0.18, 0)
+    if f:
+        reb.mesh_object("Tree roots", v, f, mat("bark"))
+        reb.mesh_object("Grass round roots", gv, gf, mat("blades"), smooth=False)
+        reb.mesh_object("Needles round roots", dv, df, mat("dead needles"))
+
+
+def rocks(name, rng, spots, height, m=None, grass=True):
+    """Boulders sat into the ground, never on it: each of `spots`
+    [(x, y, r)] is sunk below the lowest ground under it, with grass round
+    its foot. Returns the rocks' object."""
+    v, f, gv, gf = [], [], [], []
+    for x, y, r in spots:
+        low = min(height(x + math.cos(a) * r * 1.2, y + math.sin(a) * r) for a in (i * math.tau / 8 for i in range(8)))
+        low = min(low, height(x, y))
+        reb.boulder(rng, (x, y, low + r * 0.15), r, v, f, squash=0.75)
+        if grass:
+            def ring(rr, x=x, y=y, r=r):
+                a = rr.uniform(0, math.tau)
+                d = r * rr.uniform(1.0, 1.5)
+                return x + math.cos(a) * d * 1.2, y + math.sin(a) * d
+            reb.grass_tufts(rng, int(10 + 30 * r), ring, height, gv, gf)
+    ob = reb.mesh_object(name, v, f, m or mat("rock"))
+    if gf:
+        reb.mesh_object(f"{name} grass", gv, gf, mat("blades"), smooth=False)
+    return ob
+
+
+def rough_log(name, a, b, r, m=None, seed=0, stubs=6):
+    """A fallen trunk from `a` to `b` (x, y, z): lumpy, tapering and a
+    little bent, its bark ridged, both ends snapped off ragged, with a few
+    broken branch stubs. Not a machined cylinder. Sink `a` and `b` a little
+    into the ground so it lies in it. Returns the object."""
+    rng = random.Random(seed)
+    a, b = Vector(a), Vector(b)
+    axis = b - a
+    length = axis.length
+    d = axis.normalized()
+    side = d.cross(Vector((0, 0, 1)))
+    side = side.normalized() if side.length > 1e-6 else Vector((1, 0, 0))
+    up = side.cross(d).normalized()
+    ring, n = 14, max(4, int(length / 0.12))
+    v, f = [], []
+    for i in range(n + 1):
+        t = i / n
+        bend = side * 0.12 * r * math.sin(t * math.pi * 1.3 + seed) + up * 0.08 * r * noise.noise(Vector((t * 4, seed, 1)))
+        c = a + axis * t + bend
+        taper = 1.0 - 0.3 * t
+        end = i in (0, n)
+        for k in range(ring):
+            ang = math.tau * k / ring
+            bark = 1 + 0.2 * noise.noise(Vector((t * length * 0.9, k * 0.8, seed))) + 0.07 * math.sin(k * 5 + t * 60)
+            rr = r * taper * bark * (rng.uniform(0.25, 0.95) if end else 1.0)
+            p = c + (side * math.cos(ang) + up * math.sin(ang)) * rr
+            if end:
+                p += d * rng.uniform(-0.35, 0.35) * r * (1 if i else -1)
+            v.append(tuple(p))
+    for i in range(n):
+        for k in range(ring):
+            p0, p1 = i * ring + k, i * ring + (k + 1) % ring
+            f.append((p0, p1, p1 + ring, p0 + ring))
+    # The broken ends: splintered wood a little inside each ragged rim.
+    for i, inward in ((0, d), (n, -d)):
+        k = len(v)
+        v.append(tuple(a + axis * (i / n) + inward * 0.2 * r))
+        f.extend((k, i * ring + j, i * ring + (j + 1) % ring) for j in range(ring))
+    for _ in range(stubs):
+        t = rng.uniform(0.15, 0.9)
+        ang = rng.uniform(0, math.tau)
+        out = side * math.cos(ang) + up * math.sin(ang)
+        if out.z < -0.2:
+            continue
+        root = a + axis * t
+        tip = root + (out + d * rng.uniform(-0.3, 0.3)).normalized() * r * rng.uniform(1.4, 2.4)
+        k = len(v)
+        w = r * 0.1
+        for q in (root - side * w - up * w, root + side * w - up * w, tip + side * w * 0.3, tip - side * w * 0.3, root + up * w * 1.4):
+            v.append(tuple(q))
+        f.extend(((k, k + 1, k + 2, k + 3), (k + 1, k + 4, k + 2), (k + 4, k, k + 3, k + 2)))
+    return reb.mesh_object(name, v, f, m or mat("bark"))
+
+
+def ruts(name, path, height, gauge=1.65, width=0.3, m=None, seed=0.0):
+    """Two tyre ruts along `path` [(x, y), ...]: they follow its curves and
+    each wanders on its own, widening into puddled churn here and there and
+    narrowing where a tyre barely bit. Returns the object."""
+    line = _smooth_line(path, 0.2)
+    v, f = [], []
+    for side in (-1, 1):
+        track = []
+        for i, p in enumerate(line):
+            a, b = line[max(0, i - 1)], line[min(len(line) - 1, i + 1)]
+            d = (b - a).normalized() if (b - a).length > 1e-6 else Vector((0, 1))
+            n = Vector((-d.y, d.x))
+            drift = 0.1 * noise.noise(Vector((p.x * 0.35, p.y * 0.35, seed + side))) + 0.04 * noise.noise(Vector((p.x * 1.7, p.y * 1.7, seed + side * 3)))
+            track.append(p + n * (side * gauge / 2 + drift))
+
+        def w(i, p, side=side):
+            churn = max(0.0, noise.noise(Vector((p.x * 0.5, p.y * 0.5, seed + side * 7))))
+            return width / 2 * (0.75 + 0.6 * churn + 0.2 * noise.noise(Vector((p.x * 2.1, p.y * 2.1, side))))
+        tv, tf = _ribbon(track, height, w, 0.008, across=2, edge=0.35, seed=seed + side)
+        k = len(v)
+        v.extend(tv)
+        f.extend(tuple(k + i for i in face) for face in tf)
+    return reb.mesh_object(name, v, f, m or mat("ruts"))
+
+
+def spencer_mansion(at, heading=0.0, scale=1.0, lit=0, far=False, seed=3, name="Spencer mansion"):
+    """The Spencer mansion as the Resident Evil Zero ending shows it: a long
+    two-storey house under a steep brown mansard roof with pointed dormers,
+    a tall chimney at each end, a taller hipped centre, and before it a
+    gabled entrance block with three arched windows between pale columns.
+    Beige walls framed in dark wood. Real size (about 96 m long, front
+    toward -y before `heading`, radians about z), its ground floor at `at`.
+    lit: how many windows glow. far: put the air between it and the
+    camera (air()), for a mansion miles off. Returns its objects."""
+    rng = random.Random(seed)
+    parts = {k: ([], []) for k in ("walls", "wood", "roof", "pale", "glass", "lit", "chimney")}
+
+    def box(part, centre, size):
+        reb.box(*parts[part], centre, size)
+
+    def quad(part, *pts):
+        vv, ff = parts[part]
+        k = len(vv)
+        vv.extend(pts)
+        ff.append(tuple(range(k, k + len(pts))))
+
+    def hip(part, x0, x1, y0, y1, z0, z1, inset, inset_ends=None):
+        """A sloped roof band from the rectangle at z0 up to one inset by
+        `inset` at z1: a mansard's steep lower slope, or a hipped top."""
+        e = inset if inset_ends is None else inset_ends
+        a = [(x0, y0, z0), (x1, y0, z0), (x1, y1, z0), (x0, y1, z0)]
+        xi0, xi1 = min(x0 + e, (x0 + x1) / 2), max(x1 - e, (x0 + x1) / 2)
+        yi0, yi1 = min(y0 + inset, (y0 + y1) / 2), max(y1 - inset, (y0 + y1) / 2)
+        b = [(xi0, yi0, z1), (xi1, yi0, z1), (xi1, yi1, z1), (xi0, yi1, z1)]
+        for i in range(4):
+            quad(part, a[i], a[(i + 1) % 4], b[(i + 1) % 4], b[i])
+        quad(part, *b)
+
+    def mansard(x0, x1, y0, y1, eave, brk, top):
+        hip("roof", x0 - 0.4, x1 + 0.4, y0 - 0.4, y1 + 0.4, eave, brk, 1.6)
+        hip("roof", x0 + 1.2, x1 - 1.2, y0 + 1.2, y1 - 1.2, brk, top, (y1 - y0) / 2 - 1.2)
+        box("wood", ((x0 + x1) / 2, y0 - 0.25, eave - 0.2), (x1 - x0 + 0.9, 0.5, 0.4))
+        box("wood", ((x0 + x1) / 2, y1 + 0.25, eave - 0.2), (x1 - x0 + 0.9, 0.5, 0.4))
+
+    def windows(x0, x1, y, floors, every=3.2, w=1.3, h=2.1, face=-1):
+        n = max(1, int((x1 - x0) / every))
+        for i in range(n):
+            x = x0 + (i + 0.5) * (x1 - x0) / n
+            for z in floors:
+                box("glass", (x, y + face * 0.06, z), (w, 0.12, h))
+                box("wood", (x, y + face * 0.1, z - h / 2 - 0.12), (w + 0.4, 0.2, 0.18))
+            # Dark timber between the bays, from sill to eave.
+            box("wood", (x0 + i * (x1 - x0) / n, y + face * 0.08, 4.2), (0.3, 0.16, 8.4))
+
+    # The long house: two storeys, a wing either side of the centre.
+    for side in (-1, 1):
+        x0, x1 = sorted((side * 9.0, side * 48.0))
+        box("walls", ((x0 + x1) / 2, 0, 4.25 - 1), (x1 - x0, 14, 8.5 + 2))
+        mansard(x0, x1, -7, 7, 8.5, 13.0, 15.0)
+        box("wood", ((x0 + x1) / 2, -7.1, 4.3), (x1 - x0, 0.2, 0.35))  # the band between the storeys
+        windows(x0, x1, -7.0, (2.2, 6.3))
+        windows(x0, x1, 7.0, (2.2, 6.3), every=4.0, face=1)
+        # Pointed dormers on the steep front slope.
+        for i in range(5):
+            x = x0 + (i + 0.5) * (x1 - x0) / 5
+            y, z = -6.2, 10.3
+            box("walls", (x, y, z), (1.9, 1.6, 2.2))
+            box("glass", (x, y - 0.82, z - 0.1), (1.0, 0.08, 1.4))
+            quad("pale", (x - 1.1, y - 0.85, z + 1.1), (x + 1.1, y - 0.85, z + 1.1), (x, y - 0.85, z + 2.6))
+            quad("roof", (x - 1.25, y - 0.95, z + 1.0), (x, y - 0.95, z + 2.75), (x, y + 1.4, z + 2.75), (x - 1.25, y + 1.4, z + 1.0))
+            quad("roof", (x, y - 0.95, z + 2.75), (x + 1.25, y - 0.95, z + 1.0), (x + 1.25, y + 1.4, z + 1.0), (x, y + 1.4, z + 2.75))
+        # A tall chimney at each end, its cap stepped.
+        cx = side * 44.5
+        box("chimney", (cx, 1.0, 13.0), (2.4, 3.0, 16.0))
+        box("chimney", (cx, 1.0, 21.2), (2.9, 3.5, 0.5))
+        for dx in (-0.8, 0.8):
+            box("chimney", (cx + dx, 1.0, 21.9), (0.5, 0.6, 0.9))
+        # The ends: plain walls with a window each storey.
+        for z in (2.2, 6.3):
+            box("glass", (side * 48.06, 0, z), (0.12, 1.3, 2.1))
+    # The centre, taller, under its own steep hipped roof.
+    box("walls", (0, 0, 4.75 - 1), (18, 18, 9.5 + 2))
+    hip("roof", -9.5, 9.5, -9.5, 9.5, 9.5, 15.5, 3.5)
+    hip("roof", -6.0, 6.0, -6.0, 6.0, 15.5, 19.5, 5.2, 3.0)
+    windows(-9, 9, -9.0, (2.2, 6.5), every=3.6)
+    # The entrance block, gabled to the front: three tall arched windows
+    # between pale columns, under a pale pediment.
+    box("walls", (0, -12.5, 4.5 - 1), (14, 7, 9 + 2))
+    y = -16.0
+    pts = [(-7.6, y, 9.0), (7.6, y, 9.0), (0, y, 14.6)]
+    quad("pale", *pts)
+    quad("roof", (-7.9, y - 0.3, 8.9), (0, y - 0.3, 14.9), (0, -8.5, 14.9), (-7.9, -8.5, 8.9))
+    quad("roof", (0, y - 0.3, 14.9), (7.9, y - 0.3, 8.9), (7.9, -8.5, 8.9), (0, -8.5, 14.9))
+    box("pale", (0, y - 0.6, 8.6), (15.4, 1.4, 0.8))  # the entablature, on the columns
+    for x in (-5.4, -1.75, 1.75, 5.4):
+        box("pale", (x, y - 0.9, 4.1), (0.75, 0.75, 8.2))
+    for x in (-3.5, 0.0, 3.5):
+        tall = 6.2 if x == 0 else 5.4
+        box("glass", (x, y - 0.06, 0.6 + tall / 2), (2.2, 0.12, tall))
+        vv, ff = parts["glass"]
+        k = len(vv)
+        top = 0.6 + tall
+        vv.append((x, y - 0.12, top))
+        for s in range(9):
+            a = math.pi * s / 8
+            vv.append((x + math.cos(a) * 1.1, y - 0.12, top + math.sin(a) * 1.1))
+        ff.extend((k, k + s + 1, k + s + 2) for s in range(8))
+    box("pale", (0, y - 1.2, 0.15), (14.5, 2.4, 0.3))  # the steps under the portico
+    if lit:
+        spots = [((i + 0.5) * 3.9 * side + side * 9, -7.1, z) for side in (-1, 1) for i in range(10) for z in (2.2, 6.3)]
+        for x, y, z in rng.sample(spots, min(lit, len(spots))):
+            box("lit", (x, y - 0.04, z), (1.2, 0.1, 1.9))
+
+    colours = {
+        "walls": lambda: reb.mat_surface(f"{name} walls", [(0.2, (0.26, 0.22, 0.16)), (0.6, (0.36, 0.31, 0.24)), (1.0, (0.3, 0.26, 0.19))], scale=0.8, bump=0.1),
+        "wood": lambda: reb.mat_plain(f"{name} timber", (0.07, 0.04, 0.022), 0.8),
+        "roof": lambda: reb.mat_surface(f"{name} roof", [(0.2, (0.05, 0.022, 0.012)), (0.55, (0.1, 0.045, 0.024)), (1.0, (0.08, 0.04, 0.025))], scale=0.6, bump=0.1),
+        "pale": lambda: reb.mat_plain(f"{name} stone trim", (0.5, 0.45, 0.36), 0.7),
+        "glass": lambda: reb.mat_plain(f"{name} windows", (0.012, 0.012, 0.014), 0.4),
+        "lit": lambda: reb.mat_emit(f"{name} lit windows", (1.0, 0.6, 0.28), 2.0),
+        "chimney": lambda: reb.mat_surface(f"{name} chimneys", [(0.3, (0.26, 0.2, 0.14)), (1.0, (0.36, 0.3, 0.22))], scale=1.5, bump=0.1),
+    }
+    turn = Matrix.Rotation(heading, 4, "Z")
+    origin = Vector(at)
+    obs = []
+    for key, (vv, ff) in parts.items():
+        if not ff:
+            continue
+        m = colours[key]()
+        if far:
+            air(m, most=0.6)
+        world = [tuple(origin + turn @ (Vector(p) * scale)) for p in vv]
+        obs.append(reb.mesh_object(f"{name} {key}", world, ff, m, smooth=False))
+    return obs

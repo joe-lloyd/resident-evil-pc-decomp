@@ -29,6 +29,51 @@ Before building an existing scene, restore its rendered inputs with
 - **It reads at 320 x 240.** Small detail turns to noise. Big shapes,
   strong silhouettes, a few legible props in each shot.
 
+## The look
+
+Every scene follows the owner's review of the first twenty and the
+Resident Evil Zero ending he gave as the reference. `blender/kit.py`
+builds it; its section "The RE0 look outdoors" has the usage. An exterior
+that sees the horizon needs three calls:
+
+```python
+kit.time_light("morning")                                  # the light on the room
+kit.overcast_sky()                                         # the sky the cameras see
+land = kit.backdrop(eye=(6, -2, 3), toward=(0, 1), spread=160)
+```
+
+`backdrop` raises every camera's far plane on its own. `ridge/scene.py`
+shows a designed view: its ranges are drawn on camera 0's picture. The
+rules:
+
+- **Sky and distance.** Never a flat white, grey or blue backdrop, a plain
+  gradient or the edge of the world. Use heavy overcast, grey-blue and
+  lilac, with a warm glow at one edge (`kit.overcast_sky`). Below it put
+  long, low, rolling ranges fading into haze, with pine forest down every
+  slope into the valley mist (`kit.backdrop`). A camera that looks into
+  woods sees trunks layered back into the dark and the mist, never sky
+  through sparse trees: put `kit.forest` close and dense.
+- **Ground.** Paths are bare, trodden dirt (`kit.dirt_path`). A path runs
+  on past the edge of every camera; it never stops at the top of the
+  screen or at a drop. Ground off the path is grassed with no bald
+  patches (`kit.grass_ground` over `kit.mat("grassed earth")`). Tyre
+  tracks wander like real ruts (`kit.ruts`).
+- **Trees and rocks sit in the ground.** No floating, no discs, nothing
+  clipping a slope. `kit.forest` gives trunks roots (`kit.tree_roots`),
+  `kit.rocks` sinks boulders, and `kit.rough_log` makes a fallen trunk
+  that is not a machined cylinder.
+- **Blood soaks in.** `kit.mat("blood")` is dark, matte and patchy. Use it
+  sparingly and only where the story needs it. Bodies are few and
+  detailed. No dead animals unless a note asks for one.
+- **Motion is subtle.** Lights do not swing, flicker is rare, smoke is a
+  thin wisp and grass barely moves. No scratch-built crows: use the game's
+  crow, or none.
+- **Buildings.** Doors are shown closed, and roofs sit on their walls.
+  Signs carry no text that does not earn its place. The Spencer mansion is
+  `kit.spencer_mansion`: a long two-storey house with a brown mansard roof,
+  pointed dormers, a chimney at each end and a gabled, columned centre.
+  Pass `far=True` when it stands miles off.
+
 ## Steps
 
 1. Write `day/<slug>/scene.py`: the docstring (what it tells, the layout in
@@ -49,7 +94,8 @@ Before building an existing scene, restore its rendered inputs with
 4. Render it fully: `node tools/rebecca/day/render.ts <slug>` (a few minutes).
    This writes `day/<slug>/renders/`.
 5. After copying renders back from jellybingus, save them to Forgejo with
-   `node tools/rebecca/assets.ts push`.
+   `node tools/rebecca/assets.ts push <slug>`. Name your scenes: a bare
+   `push` saves every render in the worktree, other people's scenes too.
 
 ## Space and the game's rules
 
@@ -97,11 +143,12 @@ Before building an existing scene, restore its rendered inputs with
   verts and faces and call `reb.mesh_object`. `kit.splat`, `drag_trail`,
   `cracks`, `meadow` and `forest` already do. Keep a scene under about
   1500 objects; the log prints the count.
-- **Sky.** Use `kit.time_light(hour)`, not `reb.gradient_sky`, which paints
-  its below-the-horizon colour across the low sky.
+- **Sky.** Use `kit.time_light(hour)` and then `kit.overcast_sky()`, not
+  `reb.gradient_sky`, which paints its below-the-horizon colour across the
+  low sky.
 - **The edge of the world.** Past an edge or through a window there must be
-  something: `kit.vista` for a valley and mountains, `kit.forest` for trees,
-  or a backdrop wall.
+  something: `kit.backdrop` for the land out to the far ranges, `kit.forest`
+  for trees, or a backdrop wall. `kit.vista` is the older, closer valley.
 - **Ground fighting a floor.** Keep the terrain a little below a slab or a
   floor that sits on it (the platform drops the ground to -0.4 under its
   slab).
