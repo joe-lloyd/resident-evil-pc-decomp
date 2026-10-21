@@ -1,0 +1,12 @@
+{
+  "scene": "shed",
+  "steps": [
+    { "action": "hold", "frames": 120, "picture": "shed-entry-door" },
+    { "action": "walk", "x": 3500, "z": 3100 },
+    { "action": "hold", "frames": 240, "camera": 0, "picture": "shed-camera0-tools" },
+    { "action": "look", "zone": { "x": 2805, "z": 3145, "w": 1105, "d": 1360 }, "picture": "shed-took-crank" },
+    { "action": "walk", "x": 4500, "z": 4000 },
+    { "action": "hold", "frames": 240, "camera": 1, "picture": "shed-camera1-door" },
+    { "action": "exit", "x": 5500, "z": 3500, "to": "yard", "zone": { "x": 5100, "z": 2890, "w": 1020, "d": 1360 } }
+  ]
+}

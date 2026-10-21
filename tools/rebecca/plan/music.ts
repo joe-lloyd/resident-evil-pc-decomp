@@ -92,7 +92,7 @@ export const CUES: readonly Cue[] = [
     channels: [{ what: 'the chord, the harp and the wind', sketch: 'dawn' }],
   },
   {
-    id: 'station', title: 'The station', kind: 'new', places: ['yard', 'woods', 'bridge', 'platform', 'shed'], cutscenes: ['cut-dog'],
+    id: 'station', title: 'The station', kind: 'new', places: ['yard', 'woods', 'bridge', 'platform'], cutscenes: ['cut-dog'],
     mood: 'The hub she keeps coming back to: uneasy, never resolving, quiet enough to bear on the tenth visit. It cuts out when the first dog comes.',
     sound: 'Low piano notes far apart, bowed vibraphone chords, wind, a far glass note.',
     channels: [
@@ -100,6 +100,16 @@ export const CUES: readonly Cue[] = [
       { what: 'the generator hum, once the power is on', sketch: 'station-hum', switched: { on: 'generator-on' }, level: -34 },
       // The theme has the wind, so the woods' loop is only the leaves and the birds.
       { what: 'the forest', loop: 'forest', in: ['woods'] },
+    ],
+  },
+  {
+    id: 'shed', title: 'The tool shed', kind: 'new', places: ['shed'], cutscenes: [],
+    mood: 'The station theme carries indoors under a faint electrical buzz.',
+    sound: 'The station piano and bowed chords, with a loose bulb fitting.',
+    channels: [
+      { what: 'piano, bowed chords and wind', sketch: 'yard' },
+      { what: 'the generator hum, once the power is on', sketch: 'station-hum', switched: { on: 'generator-on' }, level: -34 },
+      { what: 'the bulb fitting', loop: 'bulb' },
     ],
   },
   {

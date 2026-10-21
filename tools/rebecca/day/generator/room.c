@@ -37,7 +37,7 @@ if (ck(FG_COMMON, 131, 1)) {
         tbl37_set(2, 26, 56);   // woods
         tbl37_set(2, 23, 24);   // bridge
         tbl37_set(2, 24, 24);   // platform
-        tbl37_set(2, 22, 24);   // shed
+        tbl37_set(2, 22, 56);   // shed
         message(138, 255, 0);
     }
 }
