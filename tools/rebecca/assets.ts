@@ -1,7 +1,7 @@
 // Restore or save Rebecca's rendered build inputs in the private Forgejo repo.
 //
 //   node tools/rebecca/assets.ts pull
-//   node tools/rebecca/assets.ts push
+//   node tools/rebecca/assets.ts push [scene ...]
 //
 // Node 24 and git, with access to https://git.home.arpa/joe/re1-rebecca-assets.
 // RE1_REBECCA_ASSETS_DIR overrides ~/.cache/re1-rebecca-assets.
@@ -18,8 +18,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const cache = path.resolve(process.env.RE1_REBECCA_ASSETS_DIR ?? path.join(homedir(), '.cache/re1-rebecca-assets'));
 const url = process.env.RE1_REBECCA_ASSETS_URL ?? 'https://git.home.arpa/joe/re1-rebecca-assets.git';
 const command = process.argv[2];
-if ((command !== 'pull' && command !== 'push') || process.argv.length !== 3) {
-  throw new Error('usage: node tools/rebecca/assets.ts <pull|push>');
+const scenes = process.argv.slice(3);
+if ((command !== 'pull' && command !== 'push') || (command === 'pull' && scenes.length) || scenes.some((s) => !/^[a-z0-9-]+$/.test(s))) {
+  throw new Error('usage: node tools/rebecca/assets.ts pull | push [scene ...]');
 }
 
 function git(dir: string, ...args: string[]): string {
@@ -67,14 +68,17 @@ if (command === 'pull') {
 } else {
   const list: string[] = [];
   for (const file of files(git(root, 'ls-files', '--others', '--ignored', '--exclude-standard', '-z', '--', 'tools/rebecca'))) {
-    if (isAsset(file)) list.push(file);
+    if (isAsset(file)) {
+      // Concurrent scene work must not overwrite another worktree's renders.
+      if (!scenes.length || scenes.some((s) => file.startsWith(`tools/rebecca/day/${s}/renders/`))) list.push(file);
+    }
     else if (!/(^|\/)__pycache__\/|^tools\/rebecca\/music\/renders\/|\.log$/.test(file)) {
       throw new Error(`Unrecognized ignored file: ${file}. Add its asset path to assets.ts before pushing.`);
     }
   }
   // This lettering is already tracked in the game repo. Mirror it as well.
   const lettering = 'tools/rebecca/card/rebecca-id-lettering.png';
-  if (existsSync(path.join(root, lettering)) && !list.includes(lettering)) list.push(lettering);
+  if (!scenes.length && existsSync(path.join(root, lettering)) && !list.includes(lettering)) list.push(lettering);
   if (!list.length) throw new Error('No Rebecca assets to save');
   // Finish a previously interrupted push before copying the next batch.
   git(cache, 'push');
