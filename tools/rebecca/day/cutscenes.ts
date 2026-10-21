@@ -288,9 +288,11 @@ export const CUTSCENES: readonly Cutscene[] = [
       wait(15),
       say('Something is coming round the cabin.'),
       say('"Stay back!"'),
-      // No dog AI runs during the lines. The next visit uses the same
-      // spawn in yard/room.c, with the same persistent kill flag.
-      scd('scd {', '    enemy(2, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);', '    return;', '}'),
+      // yard/room.c's init sets the dog in slot 0 with behaviour 0x80, so
+      // the script holds it at the corner through the lines. Only init can
+      // set it: the room loads no model for an enemy set later. Here it is
+      // let go: behaviour 12, the stalk (cmd_enemy_prop_set sub-command 0).
+      scd('scd {', '    eml_state(0, 0, 0, 12, 0);', '    return;', '}'),
     ],
   },
   {

@@ -50,8 +50,18 @@ if (ck(FG_ITEM, 246, 0)) {
 }
 // The dog comes out of the trees once she has the key: from behind the
 // cabin's far corner, so she sees it come round before it reaches her.
-if (ck(FG_ITEM, 242, 1) && ck(FG_COMMON, 126, 0)) {
-    enemy(2 /* Cerberus */, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);
+// It is set here, in init, on every visit: the room loads the models of the
+// enemies its init sets and of no others (room_set, RoomInit.cpp), so a dog
+// set later has no model and the game crashes drawing it. Until cut-dog
+// (FG_COMMON 126) has run, behaviour 0x80 gives the dog to the script: it
+// stands at the corner while she sees it, and the scene's end sets its
+// behaviour to 12, the stalk it has on later visits.
+if (ck(FG_ITEM, 242, 1)) {
+    if (ck(FG_COMMON, 126, 1)) {
+        enemy(2 /* Cerberus */, 128, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);
+    } else {
+        enemy(2 /* Cerberus */, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);
+    }
 }
 // CUTSCENES INIT (day/scripts.ts writes these)
 // cut-dog (day/cutscenes.ts): its people, and what starts it. FG_COMMON 126 once it has run.
@@ -118,7 +128,7 @@ wait_voice();
 message(139, 0, 0);  // her
 wait_voice();
 scd {
-    enemy(2, 12, 200, 1, 2, 0, 0, 2048, 0, 0, 29750, 0, 5100, 0, 0, 0, 0);
+    eml_state(0, 0, 0, 12, 0);
     return;
 }
 set_entity(ENT_PLAYER, 0);

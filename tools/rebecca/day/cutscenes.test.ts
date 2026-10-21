@@ -82,7 +82,7 @@ test('entry scenes wait for their story flags and for the previous scene to fini
     for (const r of c.requires!) assert.ok(main.includes(`ck(${r.bank}, ${r.flag}, ${r.set ? 0 : 1})`));
     if (id === 'cut-dog') {
       const event = result.event.join('\n');
-      assert.ok(event.lastIndexOf('wait_voice();') < event.indexOf('enemy(2,'));
+      assert.ok(event.lastIndexOf('wait_voice();') < event.indexOf('eml_state(0, 0, 0, 12, 0);'));
     }
   }
 });

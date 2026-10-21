@@ -192,8 +192,9 @@ export function buildStoryboard() {
     const cuts = CUTSCENES.filter((c) => c.room === slug);
     const entry = cuts.some((c) => c.trigger.on === 'enter') ? '' : /message\(128,\s*255,\s*0\)/.test(script) ? msgs.find((m) => m.n === 0)?.text ?? evidence.entry : '';
     const enemies = FOES[slug]?.map(([kind, count]) => ({ kind, count })) ?? Object.entries(FOE_KINDS).flatMap(([kind, k]) => {
-      // A cutscene can repeat a room's spawn call for the same enemy and kill flag.
-      const count = new Set(calls(script, 'enemy').filter((a) => Number(a[0]) === k.id).map((a) => a.join(','))).size;
+      // One enemy per slot and kill flag: a room can set the same one in
+      // either branch of an if, as the yard's dog is held for cut-dog or not.
+      const count = new Set(calls(script, 'enemy').filter((a) => Number(a[0]) === k.id).map((a) => `${a[2]},${a[13]}`)).size;
       return count ? [{ kind, count }] : [];
     });
     return { place, slug, script, msgs, evidence, images, entry, enemies, cuts, clips: footage.clips.filter((c) => c.room === place.id), steps: day.steps.filter((s) => s.at === place.id),
