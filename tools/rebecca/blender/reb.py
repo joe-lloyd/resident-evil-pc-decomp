@@ -23,6 +23,7 @@ import json
 import math
 import os
 import random
+import shutil
 
 import bpy
 from mathutils import Vector, noise
@@ -794,7 +795,9 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
     game (src/game/BgAnim.cpp). f(k) poses the scene for frame k of a loop of
     N; frame 0 is the background itself, frames 1 .. N - 1 are rendered as
     cam<N>.a<k>.png. The game shows each frame for T game frames (30 a second),
-    so the loop should come back round to frame 0.
+    so the loop should come back round to frame 0. An optional "key": g makes
+    g(k) name frame k's pose: a frame posed as an earlier one is copied from
+    it, not rendered again (a long loop that mostly holds still).
 
     states: [{"name", "bank", "bit", "set": f}] are changes the room's script
     makes, shown while FG_SCENARIO (bank 0) or FG_COMMON (bank 1) flag `bit`
@@ -861,7 +864,15 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
     if not states_only and not zall_only:
         render_all("")
         if anim and not preview:
+            posed = {anim["key"](0): ""} if "key" in anim else {}
             for k in range(1, anim["frames"]):
+                same = posed.get(anim["key"](k)) if "key" in anim else None
+                if same is not None:
+                    for i in range(len(cams)):
+                        shutil.copyfile(os.path.join(out_dir, f"cam{i}{same}.png"), os.path.join(out_dir, f"cam{i}.a{k}.png"))
+                    continue
+                if "key" in anim:
+                    posed[anim["key"](k)] = f".a{k}"
                 anim["set"](k)
                 render_all(f".a{k}")
             anim["set"](0)
