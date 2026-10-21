@@ -16,6 +16,23 @@ import { pages } from './scripts.ts';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const script = (room: string) => (room === 'save' ? path.join(here, '..', 'rooms', 'ROOM1000.c') : path.join(here, room, 'room.c'));
 
+// The room loads the models of the enemies its init procedure sets and of no
+// others (room_set, src/game/RoomInit.cpp). An enemy() in a main or event
+// procedure gets no model, and the game crashes drawing it: the yard's dog did,
+// when cut-dog set it.
+test('every enemy a room script sets is set by its init procedure', () => {
+  const rooms = [...readdirSync(here).filter((d) => existsSync(script(d))), 'save'];
+  const late: string[] = [];
+  for (const room of rooms) {
+    let part = 'init';
+    for (const [i, line] of readFileSync(script(room), 'utf8').split('\n').entries()) {
+      part = /^\/\/ (init|main|event) procedure \d+/.exec(line)?.[1] ?? part;
+      if (part !== 'init' && /^\s*enemy\(/.test(line)) late.push(`${room}/room.c:${i + 1} (${part}): ${line.trim()}`);
+    }
+  }
+  assert.deepEqual(late, []);
+});
+
 test("each scene's flag is set in its own room and set in no other", () => {
   const users = new Map<number, Set<string>>();
   const rooms = [...readdirSync(here).filter((d) => existsSync(script(d))), 'save'];
