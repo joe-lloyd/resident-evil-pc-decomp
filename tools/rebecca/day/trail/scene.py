@@ -2,13 +2,13 @@
 
 A footpath down through the spruces. The sun is low in the east and comes
 through the trunks in shafts; the night's mist is still lying in the trees.
-A marker post points the way to the station. Crows go over.
+A marker post points the way to the station. Dense forest closes the view.
 
 Metres, real sizes, but the walkable strip keeps the game units the trail has
 always had (X 2000-5000, Z 0-16000), so the ridge and the yard still meet it
 where they did: x 1.18-2.94, y 0-9.41.
 
-Moving: crows crossing the sky, grass and ferns in the wind.
+Moving: grass and ferns stir slightly in the wind.
 """
 import math
 import os
@@ -29,8 +29,8 @@ Y0, Y1 = 0.0, 16000 / reb.UNITS
 # The cameras the trail has always had (game units): high behind the top
 # looking down it, and beyond the foot looking back up.
 CAMERAS = [
-    {"from": (3300, -4400, -5400), "to": (3600, 0, 9000), "fov": 250},
-    {"from": (3500, -3300, 19000), "to": (3500, -500, 11500), "fov": 250},
+    {"from": (3300, -4400, -5400), "to": (3600, 0, 9000), "fov": 250, "clip_end": 2000},
+    {"from": (3500, -3300, 19000), "to": (3500, -500, 11500), "fov": 250, "clip_end": 2000},
 ]
 
 
@@ -61,14 +61,13 @@ def build():
     logs = reb.mat_wood("Fallen log", (0.16, 0.11, 0.07))
     post_m = reb.mat_wood("Post", (0.2, 0.13, 0.07))
     letter = reb.mat_plain("Marker paint", (0.85, 0.75, 0.3), 0.6)
-    crow_m = reb.mat_plain("Crow", (0.01, 0.01, 0.012), 0.6)
 
     reb.terrain("Ground", ground_m, (-14, 20), (-14, 30), height, step=0.3)
     # The path: dirt down the strip, a little wider than she can walk.
     v, f = [], []
     n = 60
     for i in range(n):
-        y0, y1 = -6 + (Y1 + 10) * i / n, -6 + (Y1 + 10) * (i + 1) / n
+        y0, y1 = -18 + (Y1 + 60) * i / n, -18 + (Y1 + 60) * (i + 1) / n
         w0 = 0.15 + 0.1 * noise.noise(Vector((0, y0, 3)))
         w1 = 0.15 + 0.1 * noise.noise(Vector((0, y1, 3)))
         k = len(v)
@@ -124,10 +123,10 @@ def build():
     def banks(rr):
         while True:
             x, y = rr.uniform(X0 - 4, X1 + 4), rr.uniform(-4, Y1 + 5)
-            if X0 + 0.1 < x < X1 - 0.1:
+            if X0 - 0.4 < x < X1 + 0.4:
                 continue
             return x, y
-    reb.grass_tufts(rng, 2400, banks, height, gv, gf)
+    reb.grass_tufts(rng, 7500, banks, height, gv, gf)
     grass = reb.mesh_object("Grass", gv, gf, blades, smooth=False)
     grass_rest = [Vector(p) for p in gv]
     fv, ff = [], []
@@ -143,40 +142,28 @@ def build():
         reb.card(dv, df, Vector((x, y, height(x, y) + 0.01)), Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)).normalized(), Vector((0, 0, 1)), 0.08, 0.3, 0.0)
     reb.mesh_object("Fallen needles", dv, df, dead)
 
-    # Crows: five dark birds, wings up or down, crossing the sky over the trail.
-    crows = []
-    for i in range(5):
-        cv = [(-0.25, 0, 0), (0, 0.05, 0), (0.25, 0, 0), (0, -0.12, 0)]
-        ob = reb.mesh_object(f"Crow {i}", cv, [(0, 1, 3), (1, 2, 3)], crow_m, smooth=False)
-        crows.append((ob, rng.uniform(0, 1), rng.uniform(-2, 2), rng.uniform(-1.5, 1.5)))
+    kit.tree_roots(rng, bases, height, lambda x, y: X0 - 0.4 < x < X1 + 0.4)
+    kit.mountain_forest(rng, (3, 5), near=24, below=-50)
+    # Forest continues beyond both ends of the path, with a narrow dark exit.
+    kit.forest(rng, height, lambda x, y: X0 - 0.8 < x < X1 + 0.8,
+               (-24, -28, 28, 48), count=160, spacing=2, ferns=40)
+    kit.time_light("morning", sun_heading=105, sun_energy=4.0)
 
-    # Light: a low morning sun from the east through the trunks, mist in the trees.
-    reb.light_for("morning", mist_box=((3, 8, 3), (50, 60, 12)), mist_density=0.004)
-    sun = bpy.data.objects["Sun"]
-    sun.rotation_euler = (math.radians(90 - 24), 0, math.radians(105))
-    sun.data.energy = 7.0
-    sun.data.color = (1.0, 0.88, 0.7)
-    reb.gradient_sky((0.85, 0.78, 0.65), (0.4, 0.55, 0.8), below=(0.08, 0.09, 0.07), strength=2.0)
+    reb.spot("Soft trail light", (3, 4, 10), (3, 5, 0), 6000, (0.9,0.85,0.7), 120, 1, 5)
+
+    reb.spot("Upper trail fill", (3, 12, 7), (3, 8, 0), 3000, (0.8,0.88,1.0), 120, 1, 5)
 
     def pose(k):
         phase = 2 * math.pi * k / FRAMES
         for idx in range(2, len(grass_rest), 3):
             p = grass_rest[idx]
             wv = math.sin(phase + p.x * 0.6 + p.y * 0.3)
-            grass.data.vertices[idx].co = (p.x + 0.05 * wv, p.y + 0.02 * wv, p.z)
+            grass.data.vertices[idx].co = (p.x + 0.018 * wv, p.y + 0.007 * wv, p.z)
         grass.data.update()
         for idx, (p, above) in enumerate(fern_rest):
-            sway = 0.036 * math.sin(phase + p.y * 0.5) * above
+            sway = 0.012 * math.sin(phase + p.y * 0.5) * above
             fern_ob.data.vertices[idx].co = (p.x + sway, p.y, p.z)
         fern_ob.data.update()
-        # Crows fly from west to east high over the path, one pass per loop,
-        # their wings beating every other frame.
-        for ob, start, dy, dz in crows:
-            t = (start + k / FRAMES) % 1.0
-            ob.location = (-25 + 55 * t, 14 + dy * 3 + 6 * t, 14 + dz + 1.5 * math.sin(t * 6))
-            ob.scale = (2.2, 2.2, 2.2)
-            ob.rotation_euler = (0.4 if k % 2 else -0.4, 0, -math.pi / 2)
-
     # The kit's worn, bitty surfaces, as every kit room has.
 
     kit.wear(float(os.environ.get("RE1_WEAR", "1.3")))
