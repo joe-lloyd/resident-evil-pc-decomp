@@ -143,6 +143,9 @@ def cut(args):
     (args.publish / 'clips').mkdir(parents=True, exist_ok=True)
     total = 0
     for clip in manifest['clips']:
+        if clip.get('review'):
+            print(f"Keeping scene review {clip['file']}; use replace-scene.py to cut it", flush=True)
+            continue
         target = args.publish / clip['file']
         # Manifest milliseconds may round a 30 fps keyframe down. Seek just
         # after that instant, or the demuxer can choose the previous GOP.

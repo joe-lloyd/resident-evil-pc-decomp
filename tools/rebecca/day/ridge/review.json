@@ -1,0 +1,11 @@
+{
+  "scene": "ridge",
+  "steps": [
+    { "action": "hold", "frames": 120, "camera": 0, "picture": "ridge-camera0" },
+    { "action": "look", "zone": { "x": 5800, "z": 9200, "w": 1800, "d": 1000 }, "picture": "ridge-mansion-check" },
+    { "action": "walk", "x": 3900, "z": 9400, "picture": "ridge-west-boulder" },
+    { "action": "walk", "x": 6400, "z": 4800 },
+    { "action": "hold", "frames": 120, "camera": 1, "picture": "ridge-camera1" },
+    { "action": "exit", "x": 12800, "z": 5300, "to": "trail" }
+  ]
+}

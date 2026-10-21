@@ -69,6 +69,17 @@ export function startRecording(remoteFile: string, port: number): void {
   `);
 }
 
+/** Wait for the scheduled recorder to open the output before moving the game. */
+export function waitForRecording(remoteFile: string): void {
+  const out = powershell(`
+    for ($i = 0; $i -lt 60; $i++) {
+      if ((Test-Path '${remoteFile}') -and (Get-Item '${remoteFile}').Length -gt 0) { 'RECORDING'; break }
+      Start-Sleep -Seconds 1
+    }
+  `);
+  if (!out.includes('RECORDING')) throw new Error('Recorder did not open its output within 60 seconds');
+}
+
 /**
  * Stop the recording and rewrite it as a plain MP4 with its index at the
  * front, so a browser can play it while it downloads. Returns that file.
