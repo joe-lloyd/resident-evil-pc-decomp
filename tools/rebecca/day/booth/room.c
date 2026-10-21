@@ -3,16 +3,16 @@
 // To platform.
 door_aot_set(0, 4420, 5440, 1530, 680, 1, 0, 33, 1, 0, ROOM_318, 22355, 0, 10710, 3072, UNLOCKED, 193);
 // The typewriter and the item box, its lid on the body the scene paints.
-aot_set(1, 3315, 1700, 1020, 1360, SCE_TYPEWRITER, 129, 0, 0, 0, 0, 0, 0);
-aot_set(2, 5440, 3349, 1700, 782, SCE_ITEMBOX, 129, 0, 0, 0, 0, 0, 0);
-obj(0, 17, 255, 7129, -1440, 3485, 2048, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+aot_set(1, 3264, 1700, 816, 1360, SCE_TYPEWRITER, 129, 0, 0, 0, 0, 0, 0);
+aot_set(2, 5440, 4454, 1700, 646, SCE_ITEMBOX, 129, 0, 0, 0, 0, 0, 0);
+obj(0, 17, 255, 7132, -936, 4845, 2048, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 aot_set(3, 5100, 1700, 1870, 1190, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(4, 1700, 4080, 1530, 850, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(5, 3230, 4080, 1360, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
-aot_set(7, 5950, 5015, 1190, 850, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
+aot_set(7, 5950, 5134, 1190, 731, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 aot_set(8, 3570, 5100, 850, 1020, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
 if (ck(FG_ITEM, 180, 0)) {  // greenHerb
-    item_aot_set(9, 2820, 2820, 1200, 1200, 68, 1, 0, 255, 92, 13, 0, 0, 92, 13, 0, 0, 180, 129, 1, 0);
+    item_aot_set(9, 3500, 1800, 1200, 1200, 68, 1, 0, 255, 4, 16, 0, 0, 96, 9, 0, 0, 180, 129, 1, 0);
 }
 // fit-fuse (day/events.ts), FG_COMMON 140 once it has happened.
 if (ck(FG_COMMON, 140, 1)) {
@@ -32,9 +32,9 @@ if (ck(FG_COMMON, 141, 1)) {
 }
 // cut-phone (day/cutscenes.ts): its people, and what starts it. FG_COMMON 115 once it has run.
 if (ck(FG_COMMON, 115, 1)) {
-    aot_set(6, 5440, 4165, 1700, 850, SCE_EVENT, 129, 9, 0, 0, 0, 0, 0);
+    aot_set(6, 5440, 3349, 1700, 1071, SCE_EVENT, 129, 9, 0, 0, 0, 0, 0);
 } else {
-    aot_set(6, 5440, 4165, 1700, 850, SCE_MESSAGE, 129, 141, 0, 255, 0, 0, 0);
+    aot_set(6, 5440, 3349, 1700, 1071, SCE_MESSAGE, 129, 141, 0, 255, 0, 0, 0);
 }
 return;
 
@@ -79,7 +79,7 @@ return;
 // cut-phone (day/cutscenes.ts)
 scd {
     set(FG_COMMON, 115, 0);
-    aot_set(6, 5440, 4165, 1700, 850, SCE_MESSAGE, 129, 141, 0, 255, 0, 0, 0);
+    aot_set(6, 5440, 3349, 1700, 1071, SCE_MESSAGE, 129, 141, 0, 255, 0, 0, 0);
     set(FG_STATUS, 15, 0);
     set(FG_6, 23, 1);
     return;

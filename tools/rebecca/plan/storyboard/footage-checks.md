@@ -120,3 +120,24 @@ Sheets: [cabin](https://home.arpa/research/rebecca-storyboard/review/cabin-befor
 [cabin recording frames](https://home.arpa/research/rebecca-storyboard/review/cabin-recording-frames.png)
 and [shed and booth debug-boot frames](https://home.arpa/research/rebecca-storyboard/review/shed-booth-debug-boot-frames.png).
 Coverage: cabin 3.7%, shed 0.0%, booth 4.5% of the floor lost.
+
+## Shed and booth recorded in play, 22 October 2026
+
+With the yard dog fix from [#21](https://github.com/joe-lloyd/resident-evil-pc-decomp/pull/21) on main, both rooms are reached by playing, in normal
+damage mode. From the played cabin checkpoint, the harness ran the cabin
+and dog stretches of `day.ts`: she took the key, the dog came out and
+died after 11 shots, and the spray healed her. She then walked into the
+shed, and `record-scene.ts shed` recorded the room and the way back out
+to the yard. From that yard checkpoint, the winch stretch and the doors
+through the gorge and the platform took her into the booth, and
+`record-scene.ts booth` recorded it. Neither run crashed.
+
+The checked shed frames show the packed tool walls, the crank taken into
+her bag, the bulb up under the roof and the door's open animation out to
+the yard. The checked booth frames show the footlocker under the phone
+with RE1's lid sitting on it, camera 0 with no grey block, the typewriter
+behind her at the desk's end, and the door out to the platform. The booth
+route's camera checks were wrong for its two cameras and now walk her to
+the north-west for camera 0 and the south-east for camera 1.
+
+The new clips replace the shed's and the booth's three quarter clips each.

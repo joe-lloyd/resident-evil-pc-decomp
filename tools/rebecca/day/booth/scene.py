@@ -289,10 +289,10 @@ def build():
     # The phone and the poster hang over the item box: their zones reach out
     # past its front, either side of the box's own, where her action probe lands.
     room.spot("fit-fuse", (X1 - 1.0, 1.3, X1, 1.95))  # day/events.ts says what she sees and does here
-    room.check((X1 - 1.0, 1.97, X1, 2.5), "The handset is hanging off the hook. The line's dead.")
+    room.check((X1 - 1.0, 1.97, X1, 2.6), "The handset is hanging off the hook. The line's dead.")
     room.check((X1 - 0.7, 3.02, X1, 3.45), "ARKLAY SKYWAY. See the valley the way the eagles do.\nSomeone has scratched out the family's eyes.")
     room.check((DOOR[0] - 0.5, Y1 - 0.6, DOOR[0], Y1), "A handprint in blood on the door frame. It's still tacky.")
-    room.save_room(typewriter=(1.92, Y0, 2.4, 1.8), box=(X1 - 1.0, 2.52, X1, 3.0), lid=box_lid)
+    room.save_room(typewriter=(1.92, Y0, 2.4, 1.8), box=(X1 - 1.0, 2.62, X1, 3.0), lid=box_lid)
     room.export(anim)
 
 

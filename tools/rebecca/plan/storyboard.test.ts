@@ -86,8 +86,9 @@ test('the ending keeps its written lines alongside inherited control messages', 
 test('each recorded visit has its own player and each room card shows coverage', () => {
   const html = renderStoryboard(board);
   assert.equal(board.scenes.filter((s) => s.clips.length).length, 53);
-  // The ridge and the cabin each show one reviewed recording in place of their quarter visits.
-  assert.equal(html.split('<video controls preload="none"').length - 1, 140);
+  // The ridge, the trail, the cabin, the shed and the booth each show one
+  // reviewed recording in place of their quarter visits.
+  assert.equal(html.split('<video controls preload="none"').length - 1, 136);
   for (const scene of board.scenes) {
     for (const clip of scene.clips) {
       assert.ok(html.includes(`src="${clip.file}" type="video/mp4"`), clip.file);
@@ -121,9 +122,12 @@ test('the recording manifest rejects bad spans and unsafe asset paths', async ()
   assert.throws(() => parseFootage({ clips: [visit, visit], noFootage: [] }), /Duplicate clip file/);
 });
 
-test('quarter four booth footage starts after the unlogged ridge intro', () => {
-  const booth = board.scenes.find((s) => s.place.id === 'booth');
-  assert.deepEqual(booth?.clips.filter((c) => c.quarter === 4).map((c) => c.start), [29.967]);
+test('the shed and the booth show their played review recordings in place of the quarter visits', () => {
+  for (const id of ['shed', 'booth']) {
+    const scene = board.scenes.find((s) => s.place.id === id);
+    assert.deepEqual(scene?.clips.map((c) => c.file.split('-review-')[0]), [`clips/${id}`]);
+    assert.equal(scene?.clips[0]?.review?.god, false);
+  }
 });
 
 test('a reviewed scene shows its own date and damage mode beside the new clip', async () => {
