@@ -103,3 +103,80 @@ python3 tools/rebecca/plan/storyboard/verify-clips.py
 ```
 
 The check requests every clip and poster, verifies MIME types, and tests full and ranged GET responses from each quarter. It also checks the page's player count, navigation tag and research index card. In a browser, play clips from all four quarters and confirm that leaving a scene pauses its videos.
+
+## Re-record one reviewed scene
+
+`tools/harness/record-scene.ts` records one route and saves its source MP4,
+timestamped events, screenshots and entry checkpoints together. It uses
+normal damage. The ridge starts through NEW GAME and Rebecca's card, keeps
+the opening text visible, checks her 15 loaded rounds and knife, walks both
+cameras and the west boulder, and exits to the mountain trail.
+
+Build and deploy the branch and overlay first. Use these lab settings for
+all of the harness commands:
+
+```sh
+export RE1_LAB_GAME_DIR='D:\Games\RE1-files'
+export RE1_LAB_REPO_DIR='C:\Users\joell\Tools\re1-files'
+export PORT=7811
+export OVERLAY=/tmp/reb-ridge-build
+node tools/harness/deploy.ts reb-ridge-feedback
+RAE_CLI=/path/to/retro-archive-explorer/scripts/cli.mjs \
+  node tools/rebecca/build.ts /path/to/USA "$OVERLAY"
+node --input-type=module -e "import {deployOverlay} from './tools/harness/lab.ts'; deployOverlay(process.env.OVERLAY + '/REB')"
+node tools/harness/record-scene.ts ridge --out /tmp/ridge-review
+```
+
+The recorder waits for ffmpeg to open its output before moving the game.
+A passed run is evidence of the route checks; inspect the captured frames
+before claiming that the scene looks or behaves correctly. The recording
+has no sound because the lab has no loopback device. Music renders must be
+restored separately if the lab needs to play the themes.
+
+For the next scene, use the destination checkpoint saved by the previous
+run. The trail has a review route ready:
+
+```sh
+node tools/harness/record-scene.ts trail \
+  --from /tmp/ridge-review/trail-entry.json --out /tmp/trail-review
+```
+
+For other scenes, add `day/<slug>/review.json`, or pass `--route <file>`.
+The route has `scene` and `steps`. Steps can `walk` to `x,z`, `hold` for
+`frames`, or `look` at a `zone` with `x,z,w,d`. A step can name a `picture`;
+a walk or hold can require a `camera`. Finish with one `exit` with `x,z`
+and `to`. Give an indoor exit its door `zone` too, so the harness presses
+action. Later scenes require `--from` with a played checkpoint inside the
+scene. The recorder rejects checkpoints marked as made up from the plan.
+It saves the entered neighbour's checkpoint for the next review.
+
+Copy `recording.json` and its MP4 to a temporary directory on `pi-server`.
+Inspect video frames and choose the start, end and poster times in that
+source. Keep the opening and exit; leave at least a second before the
+recorder's damaged final packet. Copy the manifest and cutter there too:
+
+```sh
+ssh pi-server 'mkdir -p /tmp/rebecca-scene-review'
+scp /tmp/ridge-review/recording.json /tmp/ridge-review/ridge-*.mp4 \
+  tools/rebecca/plan/storyboard/clips.json \
+  tools/rebecca/plan/storyboard/replace-scene.py pi-server:/tmp/rebecca-scene-review/
+# Replace START, END and POSTER with frame-checked source times.
+ssh pi-server 'python3 /tmp/rebecca-scene-review/replace-scene.py \
+  /tmp/rebecca-scene-review/recording.json /tmp/rebecca-scene-review/clips.json \
+  /tmp/rebecca-scene-review/publish --start START --end END --poster POSTER \
+  --note "Inspected frames and observed behaviour"'
+scp pi-server:/tmp/rebecca-scene-review/clips.json tools/rebecca/plan/storyboard/clips.json
+ssh pi-server 'sudo -n rsync -az /tmp/rebecca-scene-review/publish/ /opt/homelab/cert-setup/dashboard/research/rebecca-storyboard/'
+node tools/rebecca/plan/storyboard.ts /tmp/rebecca-storyboard
+rsync -az --rsync-path='sudo -n rsync' /tmp/rebecca-storyboard/ pi-server:/opt/homelab/cert-setup/dashboard/research/rebecca-storyboard/
+```
+
+The cutter checks the source hash, cuts just this scene, keeps its source
+and event log under `recordings/`, and replaces only that room's manifest
+rows. Other rooms retain their old clips. Each review clip displays its own
+date, damage mode and start method. The old quarter cutter skips review
+rows. Do not rebuild the entire index over a reviewed manifest, since that
+would restore the old scene visits. Keep `clips.json` in git; videos,
+posters and source recordings stay on the server. Publish without
+`--delete`, and verify in a separate browser profile so the owner's saved
+edits are untouched.

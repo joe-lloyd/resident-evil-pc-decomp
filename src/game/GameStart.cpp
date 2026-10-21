@@ -103,9 +103,8 @@ void SetInitialItems(void)
         ITEM_NONE,              0,
         // rebecca items (port addition: a new game as Rebecca, --boot rebecca).
         // Her day starts with what she has left after the training facility:
-        // her Beretta, one spare clip and her knife; she finds the rest on the way.
+        // her Beretta with 15 loaded rounds and her knife; she finds the rest on the way.
         ITEM_BERETTA,          15,
-        ITEM_CLIP,             15,
         ITEM_KNIFE,             0,
         ITEM_NONE,              0       // ends the list: the copy stops at an empty id
     };

@@ -1,7 +1,7 @@
 # Supply budget for Rebecca's day
 
-This counts room pickups, not her starting 15 loaded rounds and 15 spare
-rounds, and not carry-over from the previous act. Enemy counts are the
+This counts room pickups, not her starting 15 loaded rounds, and not
+carry-over from the previous act. She starts with no spare handgun rounds. Enemy counts are the
 spawn totals in day/foes.ts. No new enemies are added.
 
 | Act | Enemies | Handgun rounds before | Handgun rounds after | Green herbs before and after | Red herbs before and after | Sprays before and after |
@@ -36,3 +36,22 @@ Spare rounds, other weapons and all carried healing go there once.
 None of this balance has been played. Route choice, aim, damage taken,
 the number of enemies she can safely avoid, and rounds left at the final
 loss still need an in-game pass.
+
+## Act 1 after the ridge review
+
+Rebecca starts with the Beretta loaded with 15 rounds and the knife. There
+are no handgun pickups in act 1. The total falls from 30 to 15 rounds;
+no other room supplies change.
+
+Act 1 has eight spawns: two crows on the trail, one Cerberus in the yard,
+three adders at the bridge, and two crows at the platform. That is 1.875
+rounds per spawn. If she avoids all four crows and three adders, she has
+15 rounds for the yard dog. The woods and den dogs belong to act 2.
+The cabin has one first aid spray; the booth has one green herb. Neither
+adds ammunition.
+
+This is a tight avoidance budget. The source tables do not give enemy HP
+or hit counts, so they cannot establish that 15 rounds are enough for every
+encounter. The ridge recording checks the starting kit and the exit;
+it does not test act 1 combat. A route test with normal damage is still
+needed to judge ammunition sufficiency. No supplies have been rebalanced.

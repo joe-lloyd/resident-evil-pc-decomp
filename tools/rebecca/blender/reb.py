@@ -629,7 +629,7 @@ def add_camera(i, cam):
     data.sensor_width = 32.0
     data.lens = cam["fov"] / 10.0
     data.clip_start = 0.1
-    data.clip_end = 400
+    data.clip_end = cam.get("clip_end", 400)
     ob = bpy.data.objects.new(f"Room camera {i}", data)
     bpy.context.scene.collection.objects.link(ob)
     eye = game_to_blender(cam["from"])

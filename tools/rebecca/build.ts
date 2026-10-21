@@ -44,7 +44,7 @@ export const start = dayStart;
 /**
  * Enemies that are already dead when her game starts: enemy() skips a spawn
  * whose kill flag (its third argument) is set. Chris's route is thinned for a
- * medic with a Beretta and one spare clip. In Chapter 1 the Cerberus in 11A
+ * medic with a Beretta with 15 loaded rounds and her knife. In Chapter 1 the Cerberus in 11A
  * and one zombie in 10A stay as her fights.
  */
 export const killedAtStart = [

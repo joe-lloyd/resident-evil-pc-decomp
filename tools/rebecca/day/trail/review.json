@@ -1,0 +1,9 @@
+{
+  "scene": "trail",
+  "steps": [
+    { "action": "hold", "frames": 90, "camera": 0, "picture": "trail-camera0" },
+    { "action": "walk", "x": 3500, "z": 11200 },
+    { "action": "hold", "frames": 90, "camera": 1, "picture": "trail-camera1" },
+    { "action": "exit", "x": 3500, "z": 16400, "to": "yard" }
+  ]
+}

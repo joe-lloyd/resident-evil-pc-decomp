@@ -7,7 +7,7 @@ import { snapshot } from '../snapshot.ts';
 
 const CHAR_REBECCA = 3;
 const ITEM_BERETTA = 0x02;
-const ITEM_CLIP = 0x0b;
+const ITEM_KNIFE = 0x01;
 
 const session = await open(Number(process.env.PORT ?? 7801), '--boot rebecca:0:2');
 const failures: string[] = [];
@@ -26,7 +26,7 @@ try {
     JSON.stringify(held) ===
       JSON.stringify([
         { id: ITEM_BERETTA, qty: 15 },
-        { id: ITEM_CLIP, qty: 15 },
+        { id: ITEM_KNIFE, qty: 0 },
       ]),
     `items ${JSON.stringify(held)}`,
   );

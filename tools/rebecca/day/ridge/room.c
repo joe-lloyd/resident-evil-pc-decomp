@@ -1,7 +1,7 @@
 // The ridge (ROOM3130): where Rebecca's day begins, at dawn on 24 July 1998.
 // She has just watched Billy go into the trees. The cliff edge looks down on
-// the training facility, still burning in the valley; the trail down leaves
-// through the pines on the east side, by a touch door to the mountain trail.
+// the wooded valley toward the distant mansion; the trail down leaves
+// on the east side, by a touch door to the mountain trail.
 //
 // The opening is a cutscene (day/cutscenes.ts, cut-opening), which
 // day/scripts.ts writes between the CUTSCENES markers.

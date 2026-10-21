@@ -58,7 +58,7 @@ export const day: Plan = {
   ],
   places: [
     // Act 1: built, but for the gondola station.
-    place(1, 'ridge', 'The ridge', 2, [10, 0], ['Where the game opens', 'Smoke from the facility, grass', '', 'Billy has gone; the training facility burns below'], built('ridge')),
+    place(1, 'ridge', 'The ridge', 2, [10, 0], ['Where the game opens', 'Grass in the dawn wind', '', 'Billy has gone; Rebecca looks across the wooded hills toward the mansion'], built('ridge')),
     place(1, 'trail', 'The mountain trail', 2, [10, 1.4], ['Down through the spruces', 'Ferns in the wind', 'Crows', 'Alone for the first time'], built('trail')),
     place(1, 'yard', 'The station yard', 4, [10, 2.8], ['The hub: the pine, the truck and its winch, his rifle', 'Chimney smoke, hazard lights', 'A Cerberus, once she has the shed key', 'Someone was here this morning'], built('yard')),
     place(1, 'cabin', 'The cabin', 2, [12.2, 2.2], ['The logbook, the radio, the shed key', 'The lamp flame, a fly', '', 'He left in a hurry, mid-breakfast'], built('lookout')),

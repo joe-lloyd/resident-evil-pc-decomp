@@ -270,7 +270,7 @@ export const CUTSCENES: readonly Cutscene[] = [
       walk('her', { x: 7000, z: 8400 }),
       wait(20),
       say("Billy's gone. It's just me now."),
-      say('The valley first. Then the others.'),
+      say('A mansion in the trees. The others might be there.'),
     ],
   },
   {

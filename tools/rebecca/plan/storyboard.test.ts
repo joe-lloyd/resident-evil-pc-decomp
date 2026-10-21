@@ -62,8 +62,9 @@ test('the tracker drops written scenes and keeps an unmapped reward and missing 
 });
 
 test('starting kit, loaded gun and hand-written enemy spawns enter the balance', () => {
-  assert.deepEqual(board.balance.map((b) => [b.act, b.rounds, b.enemies]), [[1, 30, 8], [2, 75, 36], [3, 30, 11], [4, 5, 1]]);
+  assert.deepEqual(board.balance.map((b) => [b.act, b.rounds, b.enemies]), [[1, 15, 8], [2, 75, 36], [3, 30, 11], [4, 5, 1]]);
   assert.deepEqual(board.items.filter((i) => i.kind === 'weapon').map((i) => `${i.name} ${i.source}`), ['Beretta start', 'Knife start']);
+  assert.deepEqual(board.items.filter((i) => i.source === 'start').map((i) => [i.name, i.rounds]), [['Beretta', 15], ['Knife', 0]]);
   assert.equal(board.items.find((i) => i.room === 'cabin' && i.kind === 'ribbons')?.name, 'Ink ribbons');
 });
 
@@ -120,4 +121,19 @@ test('the recording manifest rejects bad spans and unsafe asset paths', async ()
 test('quarter four booth footage starts after the unlogged ridge intro', () => {
   const booth = board.scenes.find((s) => s.place.id === 'booth');
   assert.deepEqual(booth?.clips.filter((c) => c.quarter === 4).map((c) => c.start), [29.967]);
+});
+
+test('a reviewed scene shows its own date and damage mode beside the new clip', async () => {
+  const { parseFootage, renderClips } = await import('./storyboard/footage.ts');
+  const clip = { room: 'ridge', quarter: 1, visit: 1, start: 4, end: 60,
+    file: 'clips/ridge-review-test.mp4', poster: 'clips/ridge-review-test.jpg', note: 'Both cameras checked.',
+    events: [{ t: 5, what: 'new Rebecca game' }],
+    review: { recorded: '2026-10-21', source: 'recordings/ridge-test.mp4', god: false, audio: false, checkpoint: null } };
+  const parsed = parseFootage({ clips: [clip], noFootage: [] });
+  const html = renderClips(parsed.clips, 'The ridge');
+  assert.ok(html.includes('2026-10-21 · Scene review'));
+  assert.ok(html.includes('Normal damage · No sound · New Rebecca game'));
+  assert.ok(!html.includes('17 October recording'));
+  assert.ok(html.includes('recordings/ridge-test.mp4'));
+  assert.throws(() => parseFootage({ clips: [{ ...clip, review: { ...clip.review, source: '../bad.mp4' } }], noFootage: [] }), /Invalid scene recording/);
 });

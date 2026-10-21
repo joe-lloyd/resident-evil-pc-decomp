@@ -1,10 +1,11 @@
-"""The ridge, where Rebecca's day begins: a clearing on the mountain top at
-dawn. A rock face behind, pines either side, the cliff edge in front, and far
-below in the valley the training facility still burning. The trail down
-leaves through the trees on the east side.
+"""Rebecca alone at dawn after Billy has left. From the cliff edge she looks
+across wooded hills to the Spencer mansion, a dark roof among the trees.
+The rock face closes the back and west of the clearing. The only way down
+is the worn path east, between the rock shoulder and the pines.
 
-Run in Blender with reb.py beside it: RE1_OUT names the output folder.
-Game units: the clearing floor is X 3000-11000, Z 3000-10000, Y = 0.
+Moving: grass bends in the wind. Distant hills fade into the dawn haze.
+Game units: the clearing floor is X 3900-11000, Z 3000-10000, Y = 0;
+the east exit is X 11000-13000, Z 3800-6800. RE1_OUT names the output.
 """
 import math
 import os
@@ -29,9 +30,9 @@ OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__f
 
 CAMERAS = [
     # 0: from the back of the clearing, out over the edge to the valley.
-    {"from": (5600, -4300, 2400), "to": (8600, 2600, 20000), "fov": 240},
+    {"from": (5600, -4300, 2400), "to": (8600, 2600, 20000), "fov": 240, "clip_end": 2000},
     # 1: from the cliff edge, back at the rock face and the trail out (east).
-    {"from": (5200, -2600, 11200), "to": (8300, -400, 3500), "fov": 250},
+    {"from": (5200, -3200, 11200), "to": (8300, -400, 3500), "fov": 250},
 ]
 
 
@@ -90,17 +91,6 @@ def build():
         y = rng.uniform(2.2, 3.0)
         reb.boulder(rng, (x, y, ground_height(x, y) + 0.2), rng.uniform(0.35, 0.9) * GROW, verts, faces)
     reb.mesh_object("Fallen rocks", verts, faces, rock)
-    # Pines along the top of the rock face, against the sky.
-    tv, tf, tb = [], [], []
-    for i in range(12):
-        x = rng.uniform(-4, 18)
-        base = Vector((x, rng.uniform(-3.5, -1.5), 14.5))
-        h = rng.uniform(7, 11) * GROW
-        reb.conifer(rng, base, h, tv, tf)
-        tb.append((base, h))
-    reb.mesh_object("Cliff-top pines", tv, tf, needles, smooth=False)
-    reb.trunks("Cliff-top trunks", bark, tb)
-
     # Boulders in the clearing, two near camera 1 that she can walk behind.
     for name, (x, y, r, in_front) in {
         "Boulder west": (4.0, 8.2, 0.7, True),
@@ -113,16 +103,35 @@ def build():
         if in_front:
             reb.mask(ob)
 
+    # Close the false west path with rock, rooted below the clearing.
+    # Each piece exports its own footprint, rather than one box over the path.
+    for i, y in enumerate((3.0, 5.0, 7.0)):
+        v, f = [], []
+        reb.boulder(rng, (1.6, y, 1.0), 2.0, v, f)
+        reb.wall(reb.mesh_object(f"West rock shoulder {i}", v, f, rock))
+
+    v, f = [], []
+    reb.boulder(rng, (4.0, 2.5, 1.2), 1.7, v, f)
+    reb.wall(reb.mesh_object("West path rockfall", v, f, rock))
+
+    # A worn strip leads to the single east exit, at floor height throughout.
+    path_m = reb.mat_surface("Worn trail", [(0.0, (0.08, 0.065, 0.045)), (1.0, (0.2, 0.16, 0.1))], scale=5)
+    v, f = [], []
+    for i in range(16):
+        x = 8.8 + i * 0.65
+        lo, hi = 4.5 + 0.12 * math.sin(i), 6.2 + 0.12 * math.sin(i)
+        k = len(v)
+        v += [(x, lo, 0.035), (x + 0.65, lo, 0.035), (x + 0.65, hi, 0.035), (x, hi, 0.035)]
+        f.append((k, k + 1, k + 2, k + 3))
+    reb.mesh_object("Trail east", v, f, path_m)
+
     # Pines around the clearing: the west edge, the east edge either side of
     # the trail out, and the forest down the valley.
     needle_v, needle_f, bases = [], [], []
     ring = []
     for _ in range(30):
-        x, y = rng.uniform(-8, 1.2), rng.uniform(1, 13)
-        ring.append((x, y))
-    for _ in range(30):
-        x, y = rng.uniform(12.8, 23), rng.uniform(0.5, 13)
-        if 2.5 < y < 8.0 and x < 19:
+        x, y = rng.uniform(18, 27), rng.uniform(8.5, 19)
+        if y < 10 and x < 21:
             continue  # the trail out
         ring.append((x, y))
     for x, y in ring:
@@ -134,77 +143,64 @@ def build():
     # The pines' footprint is the clearing's edge (room.json "bounds"), not their own.
     reb.trunks("Pine trunks", bark, bases)
 
-    # The valley below: forest as dark cones, cheaper than cards at this range.
-    verts, faces = [], []
-    for _ in range(900):
-        x, y = rng.uniform(-60, 80), rng.uniform(25, 160)
-        z = ground_height(x, y)
-        h = rng.uniform(8, 16)
-        k = len(verts)
-        r = h * 0.25
-        verts.append((x, y, z + h))
-        for s in range(6):
-            a = 2 * math.pi * s / 6
-            verts.append((x + math.cos(a) * r, y + math.sin(a) * r, z))
-        for s in range(6):
-            faces.append((k, k + 1 + s, k + 1 + (s + 1) % 6))
-    reb.mesh_object("Valley forest", verts, faces, reb.mat_cards("Far needles", (0.01, 0.025, 0.02), (0.035, 0.06, 0.045)), smooth=False)
+    # Continuous wooded hills under the canopy. Camera 0 has a longer
+    # render far plane so the panorama closes below and beside the view.
+    def valley_height(x, y):
+        return (-80 + min(35, max(0, y - 160) * 0.12) + 11 * math.sin(x * 0.022 + y * 0.014)
+                + 9 * math.sin(y * 0.045) + 5 * noise.noise(Vector((x * 0.03, y * 0.03, 2))))
+    far_ground = reb.mat_surface("Wooded hills", [(0.0, (0.018, 0.035, 0.025)), (1.0, (0.07, 0.1, 0.055))], scale=0.1, bump=0.0)
+    reb.terrain("Valley hills", far_ground, (-650, 650), (45, 900), valley_height, step=4)
+    forests = [([], []) for _ in range(3)]
+    for _ in range(60000):
+        x, y = rng.uniform(-450, 480), rng.uniform(19, 760)
+        z = ground_height(x, y) if y < 45 else valley_height(x, y)
+        # A small break in the canopy leaves the mansion's roof readable.
+        if abs(x - 30) < 28 and 123 < y < 165:
+            continue
+        v, f = forests[0 if y < 160 else 1 if y < 350 else 2]
+        h = rng.uniform(7, 14)
+        # Three tiers keep the canopy from looking like a field of cones.
+        for tier in range(3):
+            base = z + tier * h * 0.23
+            tip = z + h * (0.65 + tier * 0.175)
+            radius = h * (0.26 - tier * 0.055)
+            k = len(v)
+            v.append((x, y, tip))
+            for side in range(6):
+                a = 2 * math.pi * side / 6
+                v.append((x + math.cos(a) * radius, y + math.sin(a) * radius, base))
+            for side in range(6):
+                f.append((k, k + 1 + side, k + 1 + (side + 1) % 6))
+    for i, (v, f) in enumerate(forests):
+        lo, hi = (((0.012, 0.03, 0.021), (0.055, 0.095, 0.05)),
+                  ((0.035, 0.06, 0.05), (0.08, 0.115, 0.08)),
+                  ((0.075, 0.1, 0.09), (0.12, 0.15, 0.12)))[i]
+        reb.mesh_object(f"Valley forest {i}", v, f, reb.mat_cards(f"Far needles {i}", lo, hi), smooth=False)
 
-    # The training facility, burning far down the valley, and its smoke.
-    verts, faces = [], []
-    base = Vector((14.0, 120.0, ground_height(14.0, 120.0)))
-    for off, size in (((0, 0, 4), (24, 12, 8)), ((16, 4, 3), (10, 10, 6)), ((-6, 8, 9), (4, 4, 18))):
-        reb.box(verts, faces, tuple(base + Vector(off)), size)
-    reb.mesh_object("Training facility", verts, faces, reb.mat_surface("Concrete", [(0.0, (0.03, 0.03, 0.03)), (1.0, (0.08, 0.08, 0.08))]))
-    verts, faces = [], []
-    for wx in (-9, -4, 3, 8):
-        reb.box(verts, faces, (base.x + wx, base.y - 6.1, base.z + 5), (2.0, 0.2, 1.2))
-    fire_m = reb.mat_emit("Fire glow", (1.0, 0.35, 0.08), 60)
-    reb.mesh_object("Fire", verts, faces, fire_m, smooth=False)
-    fire = reb.point("Fire light", (base.x, base.y - 9, base.z + 6), 400000, (1.0, 0.42, 0.12), 4.0)
-    import bpy  # noqa: E402
-
-    bpy.ops.mesh.primitive_cone_add(vertices=24, radius1=4, radius2=22, depth=120, location=(base.x - 4, base.y + 4, base.z + 62))
-    smoke = bpy.context.active_object
-    smoke.name = "Smoke"
-    m = bpy.data.materials.new("Smoke")
-    m.use_nodes = True
-    nodes = m.node_tree.nodes
-    nodes.remove(nodes["Principled BSDF"])
-    vol = nodes.new("ShaderNodeVolumePrincipled")
-    vol.inputs["Color"].default_value = (0.08, 0.075, 0.07, 1)
-    # Billowing: noise drives the density. Two layers rise through the plume,
-    # half a loop apart, each fading out as it wraps, so the loop is seamless.
-    links = m.node_tree.links
-    tc = nodes.new("ShaderNodeTexCoord")
-    layers = []
-    for _ in range(2):
-        mapping = nodes.new("ShaderNodeMapping")
-        links.new(tc.outputs["Generated"], mapping.inputs["Vector"])
-        tex = nodes.new("ShaderNodeTexNoise")
-        tex.inputs["Scale"].default_value = 3.0
-        tex.inputs["Detail"].default_value = 6
-        links.new(mapping.outputs["Vector"], tex.inputs["Vector"])
-        layers.append((mapping, tex))
-    mix = nodes.new("ShaderNodeMix")
-    mix.data_type = "FLOAT"
-    links.new(layers[0][1].outputs["Fac"], mix.inputs["A"])
-    links.new(layers[1][1].outputs["Fac"], mix.inputs["B"])
-    ramp = nodes.new("ShaderNodeValToRGB")
-    ramp.color_ramp.elements[0].position = 0.45
-    ramp.color_ramp.elements[0].color = (0, 0, 0, 1)
-    ramp.color_ramp.elements[1].color = (0.6, 0.6, 0.6, 1)
-    links.new(mix.outputs["Result"], ramp.inputs["Fac"])
-    links.new(ramp.outputs["Color"], vol.inputs["Density"])
-    m.node_tree.links.new(vol.outputs["Volume"], nodes["Material Output"].inputs["Volume"])
-    smoke.data.materials.append(m)
+    # Spencer mansion: broad wings, steep roofs, a central pediment and
+    # chimneys. Big roof shapes survive the distance at 320 x 240.
+    base = Vector((30, 145, valley_height(30, 145) + 3))
+    v, f = [], []
+    for off, size in (((0, 0, 5), (40, 17, 10)), ((-17, 1, 5.5), (10, 20, 11)), ((17, 1, 5.5), (10, 20, 11)), ((0, -9, 6), (12, 3, 12))):
+        reb.box(v, f, tuple(base + Vector(off)), size)
+    def roof(cx, cy, w, d, eave, peak):
+        k = len(v)
+        v.extend(tuple(base + Vector(p)) for p in ((cx-w/2, cy-d/2, eave), (cx+w/2, cy-d/2, eave), (cx+w/2, cy+d/2, eave), (cx-w/2, cy+d/2, eave), (cx, cy-d/2, peak), (cx, cy+d/2, peak)))
+        f.extend(tuple(k+i for i in face) for face in ((0,1,4), (3,5,2), (0,4,5,3), (1,2,5,4)))
+    roof(0, 0, 42, 19, 10, 16)
+    roof(-17, 0, 12, 22, 11, 18)
+    roof(17, 0, 12, 22, 11, 18)
+    roof(0, -10, 14, 4, 12, 17)
+    for x in (-16, -10, 10, 16):
+        reb.box(v, f, tuple(base + Vector((x, 2, 17))), (1.8, 2, 7))
+    reb.mesh_object("Spencer mansion", v, f, reb.mat_plain("Mansion silhouette", (0.018, 0.021, 0.024), 1.0), smooth=False)
 
     # Grass about the clearing.
     gv, gf = [], []
     def patchy(r):
         while True:
             x, y = r.uniform(2.5, 11.5), r.uniform(2.6, 10.3)
-            if noise.noise(Vector((x * 0.35, y * 0.35, 9))) > -0.1:
+            if not (x > 9 and 4.3 < y < 6.4) and noise.noise(Vector((x * 0.35, y * 0.35, 9))) > -0.1:
                 return x, y
     reb.grass_tufts(rng, 1800, patchy, ground_height, gv, gf)
     # Tufts made for a 1000-unit metre: stretch them up to her scale.
@@ -220,34 +216,25 @@ def build():
     reb.mesh_object("Stones", sv, sf, rock)
     grass_ob = reb.mesh_object("Grass", gv, gf, grass, smooth=False)
     grass_rest = [Vector(p) for p in gv]
-    # Birds wheeling over the valley.
-    bird_m = reb.mat_plain("Bird", (0.01, 0.01, 0.012), 0.6)
-    birds = []
-    for i in range(4):
-        bv = [(-0.5, 0, 0), (0, 0.1, 0), (0.5, 0, 0), (0, -0.25, 0)]
-        birds.append((reb.mesh_object(f"Bird {i}", bv, [(0, 1, 3), (1, 2, 3)], bird_m, smooth=False), rng.uniform(0, 1), rng.uniform(8, 16), rng.uniform(-2, 2)))
+    # Broad ridges extend past both sides of the view and close beneath
+    # the valley. Keep the far plane beyond their lowest visible surfaces.
+    for i, (dist, top) in enumerate(((680, 50), (800, 70), (950, 90))):
+        v, f = [], []
+        for j in range(81):
+            x = -1200 + 2400 * j / 80
+            peak = -65 + top * (0.7 + 0.25 * math.sin(x * 0.018 + i * 3) + 0.12 * noise.noise(Vector((x * 0.03, i, 0))))
+            v.extend(((x, dist, -350), (x, dist, peak)))
+        for j in range(80):
+            k = j * 2
+            f.append((k, k + 2, k + 3, k + 1))
+        col = (0.045 + i * 0.012, 0.065 + i * 0.012, 0.065 + i * 0.014)
+        ridge = reb.mesh_object(f"Distant wooded ridge {i}", v, f, reb.mat_emit(f"Haze ridge {i}", col, 0.7))
+        ridge.visible_shadow = False
 
-    # Ridges beyond the valley, one behind another, fading into the mist.
-    for i, (dist, top, col) in enumerate(((180, 60, (0.03, 0.04, 0.05)), (320, 110, (0.06, 0.065, 0.09)), (520, 170, (0.1, 0.1, 0.14)))):
-        verts, faces = [], []
-        n = 80
-        for j in range(n + 1):
-            x = -500 + 1100 * j / n
-            peak = top * (0.55 + 0.45 * noise.noise(Vector((x * 0.004 + i * 7, 0, 0))) + 0.2 * noise.noise(Vector((x * 0.02, i, 0))))
-            verts.append((x, dist, -80))
-            verts.append((x, dist + 30, -80 + peak))
-        for j in range(n):
-            a = 2 * j
-            faces.append((a, a + 2, a + 3, a + 1))
-        reb.mesh_object(f"Ridge {i}", verts, faces, reb.mat_surface(f"Far ridge {i}", [(0.3, tuple(c * 0.5 for c in col)), (0.6, col), (0.8, tuple(c * 1.4 for c in col))], scale=0.08, detail=10, bump=0.0))
-
-    reb.light_for("dawn", mist_box=((10, 140, -70), (500, 300, 40)), mist_density=0.0018)
-    sun_dir = Vector((0.85, 0.35, 0.08)).normalized()
-    reb.gradient_sky((1.0, 0.55, 0.32), (0.12, 0.16, 0.32), below=(0.05, 0.05, 0.07), strength=1.0, sun_dir=sun_dir)
+    kit.time_light("dawn")
     # A soft key on the clearing, from the cameras' side, for the RE look.
     reb.spot("Key", (7.0, 3.5, 9.0), (7.0, 8.0, 0.0), 2500, (1.0, 0.8, 0.65), 110, 1.0, 2.0)
     reb.spot("Back key", (6.0, 11.0, 8.0), (8.0, 4.0, 0.0), 1800, (0.8, 0.85, 1.0), 110, 1.0, 2.0)
-    fflick = [1.0] + [1.0 + random.Random(i).uniform(-0.25, 0.2) for i in range(1, FRAMES)]
 
     def pose(k):
         t = k / FRAMES
@@ -257,19 +244,6 @@ def build():
             w = math.sin(phase + p.x * 0.7 + p.y * 0.4)
             grass_ob.data.vertices[idx].co = (p.x + 0.08 * w, p.y + 0.03 * w, p.z)
         grass_ob.data.update()
-        # The smoke rises: layer A drifts up through the loop, layer B half a loop behind.
-        rise = 0.35
-        layers[0][0].inputs["Location"].default_value = (0, 0, -rise * t)
-        layers[1][0].inputs["Location"].default_value = (0, 0, -rise * ((t + 0.5) % 1.0))
-        mix.inputs["Factor"].default_value = math.cos(math.pi * t) ** 2
-        reb.emit_strength(fire_m, 60 * fflick[k])
-        fire.data.energy = 400000 * fflick[k]
-        # Birds circle slowly far out over the valley.
-        for ob, start, radius, dz in birds:
-            a = 2 * math.pi * ((start + t) % 1.0)
-            ob.location = (8 + radius * math.cos(a), 45 + radius * 0.6 * math.sin(a), 6 + dz)
-            ob.rotation_euler = (0.5 if k % 2 else -0.5, 0, a + math.pi)
-            ob.scale = (1.8, 1.8, 1.8)
 
     # The kit's worn, bitty surfaces, as every kit room has.
 
@@ -280,9 +254,8 @@ def build():
         OUT,
         anim={"frames": FRAMES, "ticks": 3, "set": pose},
         extra={
-            # The walls the game needs, in game units: the rock face, the pines
-            # either side, and the cliff edge, which has no object of its own.
-            # The west edge stops short of the pines: both cameras lose her there.
+            # Clearing bounds close the cliff and west shoulder. Only the
+            # east trail opens them; tagged rock supplies its own collision.
             "bounds": {"x0": 3900, "z0": 3000, "x1": 11000, "z1": 10000},
             # Underfoot (sound/ground.ts): the clearing's earth.
             "ground": "earth",
