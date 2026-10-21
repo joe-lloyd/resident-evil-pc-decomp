@@ -87,7 +87,7 @@ export const CHANNELS = 3;
 export const CUES: readonly Cue[] = [
   {
     id: 'dawn', title: 'Morning after', kind: 'new', places: ['ridge', 'trail'], cutscenes: ['cut-opening'],
-    mood: 'Cold and still. She has just left Billy, and the day has not started yet.',
+    mood: 'Cold and still. Billy has gone. She looks across the wooded hills toward the mansion at dawn.',
     sound: 'A held minor chord on a soft string pad, a few harp notes, wind.',
     channels: [{ what: 'the chord, the harp and the wind', sketch: 'dawn' }],
   },

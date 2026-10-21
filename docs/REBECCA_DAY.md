@@ -13,8 +13,8 @@ it produced stay.
 ## The day
 
 Resident Evil 0 ends at dawn on 24 July 1998. Rebecca and Billy part on a
-ridge above the burning training facility. Alpha Team reaches the mansion
-that night, and Chris finds Rebecca in the 1F save room. In between, she has
+ridge looking across wooded hills toward the distant Spencer mansion.
+Alpha Team reaches the mansion that night, and Chris finds Rebecca in the 1F save room. In between, she has
 a whole day alone on the mountain, and nothing in canon says what she did.
 
 Her way down is the gondola from the ranger station to the valley. It is
