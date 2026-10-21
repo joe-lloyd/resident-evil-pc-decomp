@@ -62,7 +62,7 @@
   }
  ],
  "anim": {
-  "frames": 16,
+  "frames": 64,
   "ticks": 3
  },
  "states": [
