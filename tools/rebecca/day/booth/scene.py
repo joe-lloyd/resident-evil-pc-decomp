@@ -13,8 +13,10 @@ eyes out of the smiling family on it.
 Metres: the floor is x 1.0-4.2, y 1.0-3.6, 2.4 high. The door is in the
 south wall at x 2.6-3.5, out onto the platform. The control desk runs under
 the big west window, which looks out over the platform to the car. Where
-she saves: his typewriter on a stand against the north wall, and the item
-box along the east wall, under the fuse box and the phone.
+she saves: his typewriter on a stand against the north wall, at the
+desk's end under camera 1, so only camera 0 shows it; and a footlocker
+item box along the east wall under the phone, in the corner under camera
+0, so only camera 1 shows it.
 
 Moving: the phone's handset turning on its cord; the strip light dipping
 now and then, as tired tubes do; the heater's glow.
@@ -213,13 +215,15 @@ def build():
         kit.splat(f"Bootprint {i}", mat("mud"), (x + (0.12 if i % 2 else -0.12), y, 0.0), 0.06, seed=20 + i, stretch=(0.6, 1.4), lumps=0.2)
     kit.web("Web", (X1 - 0.02, Y0 + 0.02, H - 0.02), 0.3, (-1, 1))
 
-    # ---- Where she saves: his typewriter on a stand against the north wall,
-    # the day's log half typed; the item box along the east wall, under the
-    # fuse box, the first aid box and the phone.
-    stand = kit.table("Typing stand", frame_m, (2.25, 1.26, 0.0), size=(0.6, 0.42, 0.7))
+    # ---- Where she saves. Each camera sees one of them whole and the other
+    # not at all, so neither is cut off at a frame's edge: his typewriter on
+    # a low stand against the north wall at the desk's end, under camera 1,
+    # the day's log half typed; a footlocker item box along the east wall
+    # under the phone, in the corner under camera 0.
+    stand = kit.table("Typing stand", frame_m, (1.82, Y0 + 0.15, 0.0), size=(0.44, 0.3, 0.62))
     reb.mask(reb.wall(stand))
-    reb.mask(kit.typewriter("His typewriter", (2.25, 1.26, 0.7)))
-    box_lid = kit.item_box("Item box", (X1 - 0.43, 2.05), (-1, 0))
+    reb.mask(kit.typewriter("His typewriter", (1.82, Y0 + 0.17, 0.62)))
+    box_lid = kit.item_box("Item box", (X1 - 0.28, 2.85), (-1, 0), scale=0.65)
 
     # ---- Light: low morning sun through the window and the door, the strip light failing.
     kit.time_light("morning", sun_heading=290, sun_energy=2.5)
@@ -282,13 +286,13 @@ def build():
     room.spot("gondola-runs", (X0, 1.1, X0 + 0.9, 1.6))  # day/events.ts says what she sees and does here
     room.check((X0, 2.4, X0 + 0.9, 2.9), "His coffee went over. A photo of a girl with a fish, propped against the glass.")
     room.check((1.9, 2.4, 2.7, 3.0), "Gauze, soaked through. He dressed something in a hurry.\nA bite, by the look of the first aid box. Everything in it is gone.")
-    # The fuse box and the phone hang over the item box: their zones reach out
-    # past its front, where her action probe lands.
+    # The phone and the poster hang over the item box: their zones reach out
+    # past its front, either side of the box's own, where her action probe lands.
     room.spot("fit-fuse", (X1 - 1.0, 1.3, X1, 1.95))  # day/events.ts says what she sees and does here
-    room.check((X1 - 1.0, 2.45, X1, 2.95), "The handset is hanging off the hook. The line's dead.")
-    room.check((X1 - 0.7, 2.95, X1, 3.45), "ARKLAY SKYWAY. See the valley the way the eagles do.\nSomeone has scratched out the family's eyes.")
+    room.check((X1 - 1.0, 1.97, X1, 2.5), "The handset is hanging off the hook. The line's dead.")
+    room.check((X1 - 0.7, 3.02, X1, 3.45), "ARKLAY SKYWAY. See the valley the way the eagles do.\nSomeone has scratched out the family's eyes.")
     room.check((DOOR[0] - 0.5, Y1 - 0.6, DOOR[0], Y1), "A handprint in blood on the door frame. It's still tacky.")
-    room.save_room(typewriter=(1.95, Y0, 2.55, 1.8), box=(X1 - 1.0, 1.97, X1, 2.43), lid=box_lid)
+    room.save_room(typewriter=(1.92, Y0, 2.4, 1.8), box=(X1 - 1.0, 2.52, X1, 3.0), lid=box_lid)
     room.export(anim)
 
 
