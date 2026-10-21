@@ -46,3 +46,49 @@ The source checks pass: 27 plan, supply, enemy and storyboard tests, including 1
 The evidence review caught ridge intro frames in the first quarter 4 booth clip. The matcher had compared only rooms in the logged route, which omitted the boot intro. It now keeps the ridge render as a competing match. The regenerated booth clip starts at 29.967 seconds and its first room match is at 33 seconds. I viewed the first six seconds of the rebuilt clip. They show the door and then the booth, with no ridge footage. A source test protects that checked start. The same comparison refined several outdoor fades. Every other clip still starts before its earlier matched entry frame, so those changes retain the room entrances.
 
 The final duration check exposed millisecond rounding in packet-copy seeks. A rounded-down keyframe time could select the preceding GOP and add a second of lead-in. Seeking one millisecond past the stored time fixes that, and 46 affected clips were regenerated. All 142 published clips then loaded metadata in the browser at 640 by 480. Every duration differs from its manifest span by less than one second. The timestamped check includes the corrected booth clip.
+
+## Ridge review, 21 October 2026
+
+The ridge now uses [its scene review clip](https://home.arpa/research/rebecca-storyboard/clips/ridge-review-20261021-bb38ef47.mp4).
+The other 141 visits and all four quarter source records are unchanged.
+The new source is `recordings/ridge-20261021194342.mp4`, SHA-256
+`bb38ef47e1e7fcadca2181c929ae7d3a4c9b639949a143e8fd9dad1e3baf720f`.
+Its event log is beside it as `ridge-review-20261021-bb38ef47.json`.
+The Windows build was commit `281d076`, deployed with the rebuilt REB overlay
+on port 7811. The run used NEW GAME, Rebecca's card and normal damage.
+
+I extracted and viewed source frames at 12, 23, 37, 43, 48, 52, 58, 63, 66,
+68, 71, 74, 76, 78 and 80 seconds. They show Rebecca's card, the dawn
+narration, all four opening lines, the mansion across the forest, the new
+edge check, the west boulder pass, camera 2's rock face and trail, the walk
+transition, and Rebecca on the mountain trail. The grass animation remains;
+there are no birds or fire in the ridge. The clip uses source seconds
+11.6 to 80.0, with its poster at 58.0. Its duration is 68.4 seconds.
+The source's damaged final packet stays outside that span.
+
+The recording checks the opening flag, both cameras, the trail arrival,
+normal damage mode and the exact starting kit: Beretta 15, knife 0, four
+empty slots. The existing `tests/ridge.ts` check also passed at 88/88 HP.
+The full render's coverage check reports 2.6% lost floor. The floor bounds,
+rock collision, camera floors, depth occluders and masks were rebuilt from
+the new scene. Fifteen mask, occluder and animation source tests pass.
+
+Contact sheets for both cameras are published as
+[before](https://home.arpa/research/rebecca-storyboard/review/ridge-before.png)
+and [after](https://home.arpa/research/rebecca-storyboard/review/ridge-after.png).
+The checked [video frame sheet](https://home.arpa/research/rebecca-storyboard/review/ridge-recording-frames.jpg)
+is beside them. The full render inputs are saved in the private assets
+repository at commit `6ce866f`.
+
+The published page and clip were checked in a separate incognito browser
+tab. Both camera images loaded. Playback and seeking decoded 640 by 480
+frames with advancing time and no media error. All 284 clip and poster
+URLs passed the HTTP check, along with ranged GET checks for the existing
+quarters. The new ridge clip also passed a ranged GET and full decode.
+The owner's browser and localStorage were not used.
+
+This run covers the ridge and its exit. Act 1 combat with the reduced
+ammunition has not been played. Its budget is 15 loaded rounds, no spare
+rounds or ammo pickups, four crows, three adders and one dog. No supplies
+in other rooms were changed. The lab recordings have no audio; the lab
+build also lacks the optional rendered music themes.

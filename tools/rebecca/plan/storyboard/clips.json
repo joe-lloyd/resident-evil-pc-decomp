@@ -76,18 +76,150 @@
       "room": "ridge",
       "quarter": 1,
       "visit": 1,
-      "start": 0.0,
-      "end": 26.5,
-      "roomStart": 0,
-      "posterTime": 25.0,
-      "file": "clips/ridge-q1-v01.mp4",
-      "poster": "clips/ridge-q1-v01.jpg",
-      "note": "",
+      "start": 11.6,
+      "end": 80.0,
+      "roomStart": 11.6,
+      "posterTime": 58.0,
+      "file": "clips/ridge-review-20261021-bb38ef47.mp4",
+      "poster": "clips/ridge-review-20261021-bb38ef47.jpg",
+      "review": {
+        "recorded": "2026-10-21",
+        "sha256": "bb38ef47e1e7fcadca2181c929ae7d3a4c9b639949a143e8fd9dad1e3baf720f",
+        "gameCommit": "281d0769df92b9bd76d76746d77fe93504a8e54d",
+        "checkpoint": null,
+        "god": false,
+        "audio": false,
+        "source": "recordings/ridge-20261021194342.mp4",
+        "log": "recordings/ridge-review-20261021-bb38ef47.json",
+        "logSha256": "7afcdc319956aeb0f62bfd503da39506c89b8ab6142ad3cf177bc565e9169f27"
+      },
+      "note": "Checked source frames at 12, 23, 37, 43, 48, 52, 58, 63, 66, 68, 71, 74, 76, 78 and 80 seconds. Rebecca card, opening text, mansion view, both cameras, west boulder pass and arrival on the mountain trail are visible. Normal damage; no combat in the ridge.",
       "events": [
         {
-          "t": 23,
+          "t": 0,
+          "frame": 11,
+          "room": "0:0",
+          "camera": 0,
+          "what": "recording ready"
+        },
+        {
+          "t": 11.3,
+          "frame": 555,
+          "room": "0:27",
+          "camera": 0,
+          "what": "new Rebecca game"
+        },
+        {
+          "t": 19.7,
+          "frame": 1086,
           "room": "ridge",
-          "what": "on the ridge"
+          "camera": 0,
+          "what": "opening message 127"
+        },
+        {
+          "t": 23.7,
+          "frame": 1209,
+          "room": "ridge",
+          "camera": 0,
+          "what": "opening message 127"
+        },
+        {
+          "t": 27.8,
+          "frame": 1332,
+          "room": "ridge",
+          "camera": 0,
+          "what": "opening message 127"
+        },
+        {
+          "t": 31.8,
+          "frame": 1454,
+          "room": "ridge",
+          "camera": 0,
+          "what": "opening message 127"
+        },
+        {
+          "t": 35.9,
+          "frame": 1576,
+          "room": "ridge",
+          "camera": 0,
+          "what": "opening message 131"
+        },
+        {
+          "t": 40,
+          "frame": 1699,
+          "room": "ridge",
+          "camera": 0,
+          "what": "opening message 132"
+        },
+        {
+          "t": 45.2,
+          "frame": 1858,
+          "room": "ridge",
+          "camera": 0,
+          "what": "opening message 133"
+        },
+        {
+          "t": 49.2,
+          "frame": 1980,
+          "room": "ridge",
+          "camera": 0,
+          "what": "opening message 134"
+        },
+        {
+          "t": 56.1,
+          "frame": 2188,
+          "room": "ridge",
+          "camera": 0,
+          "what": "scene ready; items [{\"id\":2,\"qty\":15},{\"id\":1,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
+        },
+        {
+          "t": 60.1,
+          "frame": 2310,
+          "room": "ridge",
+          "camera": 0,
+          "what": "hold ridge-camera0"
+        },
+        {
+          "t": 65.5,
+          "frame": 2473,
+          "room": "ridge",
+          "camera": 0,
+          "what": "look ridge-mansion-check"
+        },
+        {
+          "t": 66.8,
+          "frame": 2512,
+          "room": "ridge",
+          "camera": 0,
+          "what": "walk ridge-west-boulder"
+        },
+        {
+          "t": 68.8,
+          "frame": 2573,
+          "room": "ridge",
+          "camera": 1,
+          "what": "walk"
+        },
+        {
+          "t": 72.9,
+          "frame": 2696,
+          "room": "ridge",
+          "camera": 1,
+          "what": "hold ridge-camera1"
+        },
+        {
+          "t": 73.3,
+          "frame": 2698,
+          "room": "ridge",
+          "camera": 1,
+          "what": "leaving for trail"
+        },
+        {
+          "t": 79,
+          "frame": 2953,
+          "room": "trail",
+          "camera": 0,
+          "what": "arrived in trail"
         }
       ]
     },
