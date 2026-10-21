@@ -843,6 +843,11 @@ def box(name, m, at, size, rot=0.0, bevel=0.0):
     return reb.prim("cube", name, m, (x, y, z + size[2] / 2), size, rot=(0, 0, rot), bevel=bevel)
 
 
+def box_center(name, m, at, size, rot=0.0, bevel=0.0):
+    """A box positioned by its centre, turned about z. box() uses its foot."""
+    return reb.prim("cube", name, m, at, size, rot=(0, 0, rot), bevel=bevel)
+
+
 def text(name, words, m, at, size=0.2, rot=(math.pi / 2, 0, 0), depth=0.004, align="CENTER"):
     """Lettering as a mesh: a sign, a stencil, a word written on a wall.
     Default rot stands it up facing -y (toward a camera south of it)."""
@@ -1952,7 +1957,7 @@ def tree_roots(rng, bases, height, keep_out=lambda x, y: False):
     reb.mesh_object("Root litter", dv, df, mat("dead needles"))
 
 
-def mountain_forest(rng, centre, near=40.0, below=-65.0, count=28000):
+def mountain_forest(rng, centre, near=40.0, below=-65.0, count=60000):
     """A continuous wooded mountainside and distant mountain folds all round
     the room. Real tiered tree silhouettes cover the slope below the path;
     broad, irregular mountain spurs overlap beyond them. Cameras need a
@@ -1964,7 +1969,7 @@ def mountain_forest(rng, centre, near=40.0, below=-65.0, count=28000):
         r = math.hypot(dx, dy)
         a = math.atan2(dy, dx)
         fall = below * (1 - math.exp(-max(0, r - near + 45) / 65))
-        return fall + 13 * math.sin(a * 3 + r * 0.012) + 7 * noise.noise(Vector((x * 0.025, y * 0.025, 7)))
+        return fall + 13 * math.sin(a * 3 + r * 0.012) + 32 * math.sin(a*4+r*0.012) * min(1,max(0,r-near)/90) + 7 * noise.noise(Vector((x * 0.025, y * 0.025, 7)))
     v, f = [], []
     rings, sides = 65, 240
     for j in range(rings + 1):
@@ -1983,7 +1988,7 @@ def mountain_forest(rng, centre, near=40.0, below=-65.0, count=28000):
         r = near + (780 - near) * rng.random() ** 1.8
         a = rng.uniform(0, math.tau)
         x, y = cx + math.cos(a) * r, cy + math.sin(a) * r
-        z, h = hill(x, y) - 0.2, rng.uniform(8, 17)
+        z, h = hill(x, y) - 0.2, rng.uniform(7, 12)
         tv, tf = layers[0 if r < 140 else 1 if r < 330 else 2]
         for tier in range(3):
             k = len(tv)
@@ -1995,7 +2000,7 @@ def mountain_forest(rng, centre, near=40.0, below=-65.0, count=28000):
             tf.extend((k, k + 1 + s, k + 1 + (s + 1) % 7) for s in range(7))
     for i, (tv, tf) in enumerate(layers):
         c = i * 0.018
-        reb.mesh_object(f"Mountain canopy {i}", tv, tf, reb.mat_cards(f"Mountain pine {i}", (0.016 + c, 0.035 + c, 0.024 + c), (0.055 + c, 0.095 + c, 0.06 + c)), smooth=False)
+        reb.mesh_object(f"Mountain canopy {i}", tv, tf, reb.mat_surface(f"Mountain pine {i}", [(0,(0.012+c,0.028+c,0.018+c)),(1,(0.045+c,0.075+c,0.04+c))],scale=0.8,rough=1,bump=0), smooth=False)
     for layer in range(3):
         v, f = [], []
         for j in range(13):
@@ -2003,15 +2008,15 @@ def mountain_forest(rng, centre, near=40.0, below=-65.0, count=28000):
             r = 680 + layer * 170 + t * 220
             for i in range(sides + 1):
                 a = math.tau * i / sides
-                crest = 90 + 48 * math.sin(a * 5 + layer * 2) + 31 * math.sin(a * 11 + layer) + 14 * noise.noise(Vector((a * 6, layer, 4)))
-                z = below - 30 + crest * math.sin(t * math.pi / 2) + 10 * math.sin(a * 19 + t * 3) * math.sin(t * math.pi)
+                crest = 185 + 58 * math.sin(a * 5 + layer * 2) + 35 * math.sin(a * 17 + layer) + 45 * noise.noise(Vector((a * 6, layer, 4)))
+                z = below - 30 + crest * math.sin(t * math.pi / 2) + 25 * math.sin(a * 19 + t * 3) * math.sin(t * math.pi)
                 v.append((cx + math.cos(a) * r, cy + math.sin(a) * r, z))
         for j in range(12):
             for i in range(sides):
                 k = j * (sides + 1) + i
                 f.append((k, k + 1, k + sides + 2, k + sides + 1))
         c = layer * 0.025
-        m = reb.mat_surface(f"Distant forested mountain {layer}", [(0, (0.04+c, 0.065+c, 0.055+c)), (1, (0.10+c, 0.135+c, 0.12+c))], scale=0.025, bump=0)
+        m = reb.mat_surface(f"Distant forested mountain {layer}", [(0, (0.04+c, 0.065+c, 0.055+c)), (1, (0.10+c, 0.135+c, 0.12+c))], scale=0.06, detail=6, bump=0.3)
         reb.mesh_object(f"Folded mountain {layer}", v, f, m)
 
 
