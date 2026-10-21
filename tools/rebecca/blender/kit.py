@@ -675,7 +675,7 @@ def crag(rng, verts, faces, centre, size, floor=-0.35):
     bpy.data.objects.remove(tmp)
 
 
-def wheel(name, at, r=0.38, width=0.27, rim=None, flat=0.0):
+def wheel(name, at, r=0.38, width=0.27, rim=None, flat=0.0, detail=False):
     """A tyre on a steel rim, its axle along y, centred on `at`: the tyre's
     shoulders rounded, the rim dished with a hub cap. `flat` squashes it
     onto the ground (a slashed tyre). Returns the parts."""
@@ -689,6 +689,15 @@ def wheel(name, at, r=0.38, width=0.27, rim=None, flat=0.0):
         y = at[1] + side * (width / 2 - 0.01)
         parts.append(reb.prim("cyl", f"{name} rim", rim, (at[0], y, at[2]), (1.15 * r, 1.15 * r, 0.03), rot=(math.pi / 2, 0, 0), segments=24))
         parts.append(reb.prim("sphere", f"{name} hub", rim, (at[0], y + side * 0.02, at[2]), (0.4 * r, 0.12, 0.4 * r), segments=12))
+    if detail:
+        for side in (-1,1):
+            for i in range(6):
+                a=math.tau*i/6
+                parts.append(reb.prim("cyl",f"{name} lug",mat("iron"),(at[0]+math.cos(a)*r*0.34,at[1]+side*(width/2+0.025),at[2]+math.sin(a)*r*0.34),(0.04,0.04,0.025),rot=(math.pi/2,0,0),segments=6))
+        for i in range(28):
+            a=math.tau*i/28
+            parts.append(box(f"{name} tread",mat("rubber"),(at[0]+math.cos(a)*r,at[1],at[2]+math.sin(a)*r),(0.075,width*0.9,0.025),bevel=0.004))
+            parts[-1].rotation_euler[1]=math.pi/2-a
     if flat:
         for p in parts:
             p.scale.z = 1 - flat
@@ -1892,3 +1901,120 @@ def _sky(horizon, zenith, strength, sun):
     mix.inputs["B"].default_value = (*[min(1.0, c * 1.2) for c in sun.data.color], 1)
     links.new(mix.outputs["Result"], bg.inputs["Color"])
     bg.inputs["Strength"].default_value = strength
+
+def path_distance(x, y, paths):
+    """Distance to the nearest segment of any footpath, in metres."""
+    p = Vector((x, y))
+    nearest = float('inf')
+    for path in paths:
+        for a, b in zip(path, path[1:]):
+            a, b = Vector(a), Vector(b)
+            d = b - a
+            t = max(0.0, min(1.0, (p - a).dot(d) / max(d.length_squared, 1e-9)))
+            nearest = min(nearest, (p - a - d * t).length)
+    return nearest
+
+
+def tree_roots(rng, bases, height, keep_out=lambda x, y: False):
+    """Buried, tapering root flares, needles and tufts at each trunk foot.
+    Each root follows the actual ground rather than a horizontal base disc.
+    """
+    v, f, gv, gf, dv, df = [], [], [], [], [], []
+    for base, h in bases:
+        for j in range(5):
+            a = j * math.tau / 5 + rng.uniform(-0.4, 0.4)
+            direction = Vector((math.cos(a), math.sin(a)))
+            side = Vector((-direction.y, direction.x))
+            length = rng.uniform(0.65, 1.3) * h / 14
+            k = len(v)
+            for t, w, rise in ((0, h * 0.025, 0.45), (0.5, 0.12, 0.13), (1, 0.025, -0.025)):
+                p = base.xy + direction * length * t
+                for s, z in ((-1, 0), (0, rise), (1, 0)):
+                    q = p + side * w * s
+                    v.append((q.x, q.y, height(q.x, q.y) + z))
+            for n in range(2):
+                for s in range(2):
+                    i = k + n * 3 + s
+                    f.append((i, i + 1, i + 4, i + 3))
+        def foot(rr):
+            for _ in range(100):
+                a, r = rr.uniform(0, math.tau), rr.uniform(0.35, 1.35)
+                x, y = base.x + math.cos(a) * r, base.y + math.sin(a) * r
+                if not keep_out(x, y):
+                    return x, y
+            return base.x, base.y
+        reb.grass_tufts(rng, 30, foot, height, gv, gf)
+        for _ in range(24):
+            x, y = foot(rng)
+            reb.card(dv, df, Vector((x, y, height(x, y) + 0.012)), Vector((1, 0, 0)), Vector((0, 0, 1)), 0.04, 0.18, 0)
+    reb.mesh_object("Exposed tapering roots", v, f, mat("bark"))
+    reb.mesh_object("Grass round roots", gv, gf, mat("blades"), smooth=False)
+    reb.mesh_object("Root litter", dv, df, mat("dead needles"))
+
+
+def mountain_forest(rng, centre, near=40.0, below=-65.0, count=28000):
+    """A continuous wooded mountainside and distant mountain folds all round
+    the room. Real tiered tree silhouettes cover the slope below the path;
+    broad, irregular mountain spurs overlap beyond them. Cameras need a
+    2000 m far plane. This backdrop does not enter collision or masks.
+    """
+    cx, cy = centre
+    def hill(x, y):
+        dx, dy = x - cx, y - cy
+        r = math.hypot(dx, dy)
+        a = math.atan2(dy, dx)
+        fall = below * (1 - math.exp(-max(0, r - near + 45) / 65))
+        return fall + 13 * math.sin(a * 3 + r * 0.012) + 7 * noise.noise(Vector((x * 0.025, y * 0.025, 7)))
+    v, f = [], []
+    rings, sides = 65, 240
+    for j in range(rings + 1):
+        r = near + (860 - near) * j / rings
+        for i in range(sides):
+            a = math.tau * i / sides
+            x, y = cx + math.cos(a) * r, cy + math.sin(a) * r
+            v.append((x, y, hill(x, y)))
+    for j in range(rings):
+        for i in range(sides):
+            a, b = j * sides + i, j * sides + (i + 1) % sides
+            f.append((a, b, b + sides, a + sides))
+    reb.mesh_object("Continuous wooded slopes", v, f, reb.mat_surface("Forest under canopy", [(0, (0.018, 0.032, 0.02)), (1, (0.055, 0.08, 0.04))], scale=0.08, bump=0))
+    layers = [([], []) for _ in range(3)]
+    for _ in range(count):
+        r = near + (780 - near) * rng.random() ** 1.8
+        a = rng.uniform(0, math.tau)
+        x, y = cx + math.cos(a) * r, cy + math.sin(a) * r
+        z, h = hill(x, y) - 0.2, rng.uniform(8, 17)
+        tv, tf = layers[0 if r < 140 else 1 if r < 330 else 2]
+        for tier in range(3):
+            k = len(tv)
+            tv.append((x, y, z + h * (0.65 + tier * 0.175)))
+            for s in range(7):
+                b = math.tau * s / 7
+                radius = h * (0.24 - tier * 0.055)
+                tv.append((x + math.cos(b) * radius, y + math.sin(b) * radius, z + tier * h * 0.23))
+            tf.extend((k, k + 1 + s, k + 1 + (s + 1) % 7) for s in range(7))
+    for i, (tv, tf) in enumerate(layers):
+        c = i * 0.018
+        reb.mesh_object(f"Mountain canopy {i}", tv, tf, reb.mat_cards(f"Mountain pine {i}", (0.016 + c, 0.035 + c, 0.024 + c), (0.055 + c, 0.095 + c, 0.06 + c)), smooth=False)
+    for layer in range(3):
+        v, f = [], []
+        for j in range(13):
+            t = j / 12
+            r = 680 + layer * 170 + t * 220
+            for i in range(sides + 1):
+                a = math.tau * i / sides
+                crest = 90 + 48 * math.sin(a * 5 + layer * 2) + 31 * math.sin(a * 11 + layer) + 14 * noise.noise(Vector((a * 6, layer, 4)))
+                z = below - 30 + crest * math.sin(t * math.pi / 2) + 10 * math.sin(a * 19 + t * 3) * math.sin(t * math.pi)
+                v.append((cx + math.cos(a) * r, cy + math.sin(a) * r, z))
+        for j in range(12):
+            for i in range(sides):
+                k = j * (sides + 1) + i
+                f.append((k, k + 1, k + sides + 2, k + sides + 1))
+        c = layer * 0.025
+        m = reb.mat_surface(f"Distant forested mountain {layer}", [(0, (0.04+c, 0.065+c, 0.055+c)), (1, (0.10+c, 0.135+c, 0.12+c))], scale=0.025, bump=0)
+        reb.mesh_object(f"Folded mountain {layer}", v, f, m)
+
+
+def soaked_blood(name="Soaked blood"):
+    """Dried, rough blood broken by dusty pores rather than glossy red paint."""
+    return reb.mat_surface(name, [(0.2, (0.045, 0.018, 0.012)), (0.43, (0.085, 0.025, 0.016)), (0.6, (0.13, 0.05, 0.032)), (0.76, (0.19, 0.16, 0.12))], scale=85, detail=4, rough=0.96, bump=0.15)
