@@ -146,7 +146,7 @@ def build():
     # Continuous wooded hills under the canopy. Camera 0 has a longer
     # render far plane so the panorama closes below and beside the view.
     def valley_height(x, y):
-        return (-80 + min(35, max(0, y - 160) * 0.12) + 11 * math.sin(x * 0.022 + y * 0.014)
+        return (78 * math.exp(-((x-108)/100)**2-((y-635)/95)**2) -80 + min(35, max(0, y - 160) * 0.12) + 11 * math.sin(x * 0.022 + y * 0.014)
                 + 9 * math.sin(y * 0.045) + 5 * noise.noise(Vector((x * 0.03, y * 0.03, 2))))
     far_ground = reb.mat_surface("Wooded hills", [(0.0, (0.018, 0.035, 0.025)), (1.0, (0.07, 0.1, 0.055))], scale=0.1, bump=0.0)
     reb.terrain("Valley hills", far_ground, (-650, 650), (45, 900), valley_height, step=4)
@@ -155,7 +155,7 @@ def build():
         x, y = rng.uniform(-450, 480), rng.uniform(19, 760)
         z = ground_height(x, y) if y < 45 else valley_height(x, y)
         # A small break in the canopy leaves the mansion's roof readable.
-        if abs(x - 30) < 28 and 123 < y < 165:
+        if abs(x - 108) < 28 and 595 < y < 668:
             continue
         v, f = forests[0 if y < 160 else 1 if y < 350 else 2]
         h = rng.uniform(7, 14)
@@ -179,7 +179,7 @@ def build():
 
     # Spencer mansion: broad wings, steep roofs, a central pediment and
     # chimneys. Big roof shapes survive the distance at 320 x 240.
-    base = Vector((30, 145, valley_height(30, 145) + 3))
+    base = Vector((108, 635, valley_height(108, 635) + 1))
     v, f = [], []
     for off, size in (((0, 0, 5), (40, 17, 10)), ((-17, 1, 5.5), (10, 20, 11)), ((17, 1, 5.5), (10, 20, 11)), ((0, -9, 6), (12, 3, 12))):
         reb.box(v, f, tuple(base + Vector(off)), size)
@@ -194,6 +194,11 @@ def build():
     for x in (-16, -10, 10, 16):
         reb.box(v, f, tuple(base + Vector((x, 2, 17))), (1.8, 2, 7))
     reb.mesh_object("Spencer mansion", v, f, reb.mat_plain("Mansion silhouette", (0.018, 0.021, 0.024), 1.0), smooth=False)
+
+    v, f = [], []
+    for x in (-13, -5, 6, 14):
+        reb.box(v, f, tuple(base + Vector((x, -8.6, 6))), (1.4, 0.12, 2.0))
+    reb.mesh_object("Distant mansion windows", v, f, reb.mat_emit("Few lit windows", (0.8, 0.47, 0.18), 2.5), smooth=False)
 
     # Grass about the clearing.
     gv, gf = [], []
@@ -242,7 +247,7 @@ def build():
         for idx in range(2, len(grass_rest), 3):
             p = grass_rest[idx]
             w = math.sin(phase + p.x * 0.7 + p.y * 0.4)
-            grass_ob.data.vertices[idx].co = (p.x + 0.08 * w, p.y + 0.03 * w, p.z)
+            grass_ob.data.vertices[idx].co = (p.x + 0.025 * w, p.y + 0.01 * w, p.z)
         grass_ob.data.update()
 
     # The kit's worn, bitty surfaces, as every kit room has.
