@@ -62,8 +62,9 @@ test('the tracker drops written scenes and keeps an unmapped reward and missing 
 });
 
 test('starting kit, loaded gun and hand-written enemy spawns enter the balance', () => {
-  assert.deepEqual(board.balance.map((b) => [b.act, b.rounds, b.enemies]), [[1, 30, 8], [2, 75, 36], [3, 30, 11], [4, 5, 1]]);
+  assert.deepEqual(board.balance.map((b) => [b.act, b.rounds, b.enemies]), [[1, 15, 8], [2, 75, 36], [3, 30, 11], [4, 5, 1]]);
   assert.deepEqual(board.items.filter((i) => i.kind === 'weapon').map((i) => `${i.name} ${i.source}`), ['Beretta start', 'Knife start']);
+  assert.deepEqual(board.items.filter((i) => i.source === 'start').map((i) => [i.name, i.rounds]), [['Beretta', 15], ['Knife', 0]]);
   assert.equal(board.items.find((i) => i.room === 'cabin' && i.kind === 'ribbons')?.name, 'Ink ribbons');
 });
 
