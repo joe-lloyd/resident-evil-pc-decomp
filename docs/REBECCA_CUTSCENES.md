@@ -119,6 +119,13 @@ two people at most.
   next visit. A `check` or `step` scene keeps the room's enemies. They keep
   moving during its lines, because a scene's line doesn't pause the game. Keep
   such a scene short, or put it in a room with no enemies near.
+- Only a room's init procedure can set an enemy. The room loads the models
+  of the enemies its init sets and of no others (`room_set` in
+  `src/game/RoomInit.cpp`), so an `enemy()` in a scene or a main procedure
+  has no model and the game crashes drawing it. To keep an enemy still
+  through a scene, set it in init with a behaviour the script owns, such as
+  the Cerberus's 0x80, and let it go at the scene's end with `eml_state`.
+  `cutscenes.test.ts` fails on an `enemy()` outside init.
 - The end of every scene puts her back to standing,
   clears the bars, frees the camera and gives her controls back. A person who
   leaves is stood far out of sight rather than removed, since clearing the
@@ -170,8 +177,10 @@ RE1's own "Chris met Rebecca", which `cut-sleep` sets as the old meeting did.
 ## The added scenes
 
 - `cut-dog`, flag 126, starts in the yard once she takes the shed key.
-  Camera 1 looks down the cabin front. The dog spawns after her lines, so
-  its AI cannot attack her while she reads. Its old kill flag stays 200.
+  Camera 1 looks down the cabin front. The yard's init sets the dog at the
+  cabin's far corner with behaviour 0x80, so it stands there while she
+  reads. After her lines the scene sets its behaviour to 12 and it attacks.
+  Its old kill flag stays 200.
 - `cut-mine-chase`, flag 127, finishes the escape at the mine lift after
   the collapse and Hal's scene. She runs into the cage and turns towards
   the junction. The junction's existing spinners supply the playable
