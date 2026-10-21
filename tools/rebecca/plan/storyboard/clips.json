@@ -80,45 +80,45 @@
       "end": 80.0,
       "roomStart": 11.5,
       "posterTime": 58.0,
-      "file": "clips/ridge-review-20261021-e10b5b10.mp4",
-      "poster": "clips/ridge-review-20261021-e10b5b10.jpg",
+      "file": "clips/ridge-review-20261021-e1fcc3fb.mp4",
+      "poster": "clips/ridge-review-20261021-e1fcc3fb.jpg",
       "review": {
         "recorded": "2026-10-21",
-        "sha256": "e10b5b10127f8825c3748a9cb1542163c05bd555e9441ad7b0a83f35a1bd954e",
-        "gameCommit": "f26014f9c3db507bfe8ff0190c21f18c2ff8fbd1",
+        "sha256": "e1fcc3fb78922afdbf8ad6756d3032632fbee07cd718ad7af591627e8f194124",
+        "gameCommit": "fdf44aacf934b4a91aed405f90664aedea00af9b",
         "checkpoint": null,
         "god": false,
         "audio": false,
-        "source": "recordings/ridge-20261021213409.mp4",
-        "log": "recordings/ridge-review-20261021-e10b5b10.json",
-        "logSha256": "0375c49eaa50f610c4106398fa5b75f0bd1105b04f42b5172d885324ce3f08d5"
+        "source": "recordings/ridge-20261021225105.mp4",
+        "log": "recordings/ridge-review-20261021-e1fcc3fb.json",
+        "logSha256": "b80d07604cadc86fb15eff509e6205dcc94788725e4c83d464d5b9b42287563a"
       },
-      "note": "Checked source frames at 11, 12, 14, 20, 37, 48, 56, 58, 61, 66, 68, 71, 75, 78, 80 and 81 seconds. Rebecca card, opening text, the new valley view with the far mansion and layered ranges, both cameras, west boulder pass and arrival on the mountain trail are visible. Normal damage; no combat in the ridge.",
+      "note": "RE0 look: overcast sky, rolling ranges and the kit Spencer mansion; frames checked by eye: opening, both cameras, mansion check, west boulder, exit to the trail",
       "events": [
         {
           "t": 0,
-          "frame": 185,
+          "frame": 24,
           "room": "0:0",
           "camera": 0,
           "what": "recording ready"
         },
         {
           "t": 11.2,
-          "frame": 584,
+          "frame": 583,
           "room": "0:27",
           "camera": 0,
           "what": "new Rebecca game"
         },
         {
           "t": 19.4,
-          "frame": 1115,
+          "frame": 1113,
           "room": "ridge",
           "camera": 0,
           "what": "opening message 127"
         },
         {
           "t": 23.5,
-          "frame": 1240,
+          "frame": 1239,
           "room": "ridge",
           "camera": 0,
           "what": "opening message 127"
@@ -132,7 +132,7 @@
         },
         {
           "t": 31.7,
-          "frame": 1488,
+          "frame": 1487,
           "room": "ridge",
           "camera": 0,
           "what": "opening message 127"
@@ -145,78 +145,78 @@
           "what": "opening message 131"
         },
         {
-          "t": 39.9,
-          "frame": 1735,
+          "t": 40,
+          "frame": 1736,
           "room": "ridge",
           "camera": 0,
           "what": "opening message 132"
         },
         {
-          "t": 45.2,
-          "frame": 1896,
+          "t": 45.1,
+          "frame": 1894,
           "room": "ridge",
           "camera": 0,
           "what": "opening message 133"
         },
         {
           "t": 49.3,
-          "frame": 2022,
+          "frame": 2021,
           "room": "ridge",
           "camera": 0,
           "what": "opening message 134"
         },
         {
-          "t": 56.4,
-          "frame": 2235,
+          "t": 56.3,
+          "frame": 2232,
           "room": "ridge",
           "camera": 0,
           "what": "scene ready; items [{\"id\":2,\"qty\":15},{\"id\":1,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
-          "t": 60.4,
-          "frame": 2358,
+          "t": 60.3,
+          "frame": 2354,
           "room": "ridge",
           "camera": 0,
           "what": "hold ridge-camera0"
         },
         {
-          "t": 66.4,
-          "frame": 2537,
+          "t": 65.7,
+          "frame": 2518,
           "room": "ridge",
           "camera": 0,
           "what": "look ridge-mansion-check"
         },
         {
-          "t": 67.7,
-          "frame": 2578,
+          "t": 67.1,
+          "frame": 2558,
           "room": "ridge",
           "camera": 0,
           "what": "walk ridge-west-boulder"
         },
         {
-          "t": 70.1,
-          "frame": 2651,
+          "t": 69.1,
+          "frame": 2621,
           "room": "ridge",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 74.2,
-          "frame": 2774,
+          "t": 73.2,
+          "frame": 2744,
           "room": "ridge",
           "camera": 1,
           "what": "hold ridge-camera1"
         },
         {
-          "t": 74.7,
-          "frame": 2776,
+          "t": 73.7,
+          "frame": 2746,
           "room": "ridge",
           "camera": 1,
           "what": "leaving for trail"
         },
         {
-          "t": 80.5,
-          "frame": 3035,
+          "t": 79.4,
+          "frame": 3003,
           "room": "trail",
           "camera": 0,
           "what": "arrived in trail"
@@ -227,18 +227,76 @@
       "room": "trail",
       "quarter": 1,
       "visit": 1,
-      "start": 23.5,
-      "end": 43.0,
-      "roomStart": 26.5,
-      "posterTime": 36.5,
-      "file": "clips/trail-q1-v01.mp4",
-      "poster": "clips/trail-q1-v01.jpg",
-      "note": "",
+      "start": 0.5,
+      "end": 16.5,
+      "roomStart": 0.5,
+      "posterTime": 9.0,
+      "file": "clips/trail-review-20261021-9aae0636.mp4",
+      "poster": "clips/trail-review-20261021-9aae0636.jpg",
+      "review": {
+        "recorded": "2026-10-21",
+        "sha256": "9aae0636f49232f75f78244f08f68c72ce7284e661b84bab038b0f3827cc14eb",
+        "gameCommit": "fdf44aacf934b4a91aed405f90664aedea00af9b",
+        "checkpoint": {
+          "file": "trail-entry.json",
+          "sha256": "f1b393a415bb6f0de08ceda96cde66ccb61b4c882bab0e9a231e2922355a0ef1"
+        },
+        "god": false,
+        "audio": false,
+        "source": "recordings/trail-20261021225238.mp4",
+        "log": "recordings/trail-review-20261021-9aae0636.json",
+        "logSha256": "a8d6ccc1dd27d977ffcff630d9d48372ecf242a23f11890717c3c350b44f0482"
+      },
+      "note": "Dense forest at both path ends, no entry message, crows start at the path edges; frames checked by eye through to the yard",
       "events": [
         {
-          "t": 34,
+          "t": 0,
+          "frame": 1255,
           "room": "trail",
-          "what": "down the path to the trail"
+          "camera": 0,
+          "what": "recording ready"
+        },
+        {
+          "t": 1.7,
+          "frame": 1305,
+          "room": "trail",
+          "camera": 0,
+          "what": "scene ready; items [{\"id\":2,\"qty\":15},{\"id\":1,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
+        },
+        {
+          "t": 4.8,
+          "frame": 1399,
+          "room": "trail",
+          "camera": 0,
+          "what": "hold trail-camera0"
+        },
+        {
+          "t": 7.2,
+          "frame": 1473,
+          "room": "trail",
+          "camera": 1,
+          "what": "walk"
+        },
+        {
+          "t": 10.3,
+          "frame": 1566,
+          "room": "trail",
+          "camera": 1,
+          "what": "hold trail-camera1"
+        },
+        {
+          "t": 10.8,
+          "frame": 1567,
+          "room": "trail",
+          "camera": 1,
+          "what": "leaving for yard"
+        },
+        {
+          "t": 15.4,
+          "frame": 1791,
+          "room": "yard",
+          "camera": 0,
+          "what": "arrived in yard"
         }
       ]
     },
