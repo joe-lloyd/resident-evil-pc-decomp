@@ -4,6 +4,7 @@ import { dayRooms } from '../rebecca/day/rooms.ts';
 export type ReviewStep =
   | { action: 'walk'; x: number; z: number; camera?: number; picture?: string }
   | { action: 'look'; zone: { x: number; z: number; w: number; d: number }; picture?: string }
+  | { action: 'use'; item: number; x: number; z: number; picture?: string }
   | { action: 'hold'; frames: number; camera?: number; picture?: string }
   | { action: 'exit'; x: number; z: number; to: string; zone?: { x: number; z: number; w: number; d: number } };
 export interface ReviewRoute { scene: string; steps: ReviewStep[] }
@@ -19,9 +20,10 @@ export function parseReviewRoute(value: unknown): ReviewRoute {
     if ('picture' in s && (typeof s.picture !== 'string' || !/^[a-z0-9-]+$/.test(s.picture))) throw new Error('Invalid picture name');
     if ('camera' in s && !coordinate(s.camera)) throw new Error('Invalid review camera');
     if ('zone' in s && s.zone && (!Object.values(s.zone).every(coordinate) || !s.zone.w || !s.zone.d || Object.keys(s.zone).sort().join() !== 'd,w,x,z')) throw new Error('Invalid review zone');
-    if (s.action === 'walk' || s.action === 'exit') {
+    if (s.action === 'walk' || s.action === 'exit' || s.action === 'use') {
       if (!coordinate(s.x) || !coordinate(s.z)) throw new Error('Invalid review position');
       if (s.action === 'exit' && !room(s.to)) throw new Error('Invalid exit scene');
+      if (s.action === 'use' && (!Number.isInteger(s.item) || s.item < 1 || s.item > 255)) throw new Error('Invalid review item');
     } else if (s.action === 'hold') {
       if (!coordinate(s.frames) || s.frames < 1 || s.frames > 900) throw new Error('Invalid hold frames');
     } else if (s.action === 'look') {
@@ -31,4 +33,3 @@ export function parseReviewRoute(value: unknown): ReviewRoute {
   if (steps.at(-1)?.action !== 'exit' || steps.slice(0, -1).some((s) => s.action === 'exit')) throw new Error('Finish the review with one exit');
   return { scene, steps };
 }
-

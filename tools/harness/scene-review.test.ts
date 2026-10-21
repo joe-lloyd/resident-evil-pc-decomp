@@ -25,3 +25,13 @@ assert result[1] is clips[1]
 assert len(clips) == 3
 `, script]);
 });
+
+test('review item use requires a valid item and position', () => {
+  const exit = { action: 'exit', x: 26500, z: 20000, to: 'bridge' };
+  const use = { action: 'use', item: 30, x: 20060, z: 18360 };
+  assert.equal(parseReviewRoute({ scene: 'yard', steps: [use, exit] }).steps[0]?.action, 'use');
+  for (const item of [0, 256, 1.5, undefined]) {
+    assert.throws(() => parseReviewRoute({ scene: 'yard', steps: [{ ...use, item }, exit] }), /item/);
+  }
+  assert.throws(() => parseReviewRoute({ scene: 'yard', steps: [{ ...use, x: -1 }, exit] }), /position/);
+});

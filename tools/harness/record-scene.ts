@@ -7,7 +7,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fetch, open, startRecording, stopRecording, waitForRecording } from './lab.ts';
 import { load, restore, save, take } from './checkpoint.ts';
-import { check, goTo, inControl, settle, useDoor } from './flows.ts';
+import { check, goTo, inControl, settle, useDoor, useItem } from './flows.ts';
 import { Key } from './link.ts';
 import { Run, commonFlag, inRoom } from './scenario.ts';
 import { messageOnScreen } from './state.ts';
@@ -97,6 +97,14 @@ try {
   for (const step of route.steps) {
     if (step.action === 'walk') s = await goTo(link, run.dataDirs, step.x, step.z, { radius: 250 });
     if (step.action === 'look') s = await check(link, step.zone);
+    if (step.action === 'use') {
+      if (!s.items.some((item) => item.id === step.item)) throw new Error(`Missing review item ${step.item}`);
+      await goTo(link, run.dataDirs, step.x, step.z, { radius: 250 });
+      await useItem(link, step.item);
+      // Item-use responses start after the status screen has closed.
+      await link.frames(90);
+      s = await settle(link, (st) => inRoom(st, room));
+    }
     if (step.action === 'hold') s = await link.frames(step.frames);
     if (step.action === 'exit') {
       log(`leaving for ${step.to}`);
