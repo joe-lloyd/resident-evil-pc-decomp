@@ -1,0 +1,41 @@
+{
+  "scene": "bridge",
+  "steps": [
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 0,
+      "picture": "bridge-camera0"
+    },
+    {
+      "action": "walk",
+      "x": 10200,
+      "z": 16500,
+      "picture": "bridge-crossing"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 1,
+      "picture": "bridge-camera1"
+    },
+    {
+      "action": "walk",
+      "x": 10200,
+      "z": 27500,
+      "picture": "bridge-far-bank"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 2,
+      "picture": "bridge-camera2"
+    },
+    {
+      "action": "exit",
+      "x": 10200,
+      "z": 30300,
+      "to": "platform"
+    }
+  ]
+}

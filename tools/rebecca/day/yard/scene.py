@@ -51,13 +51,13 @@ def G(x, y, z=0.0):
 
 CAMERAS = [
     # 0: from up the trail, north-west, over the yard: the sign, the shed, the flag, the cabin.
-    {"from": G(2.6, -1.4, 4.0), "to": G(9.0, 8.5, 0.0), "fov": 200},
+    {"from": G(2.6, -1.4, 4.0), "to": G(9.0, 8.5, 0.0), "fov": 200, "clip_end": 2000},
     # 1: from the south-east edge, at the cabin front, its porch and his rifle in the grass.
-    {"from": G(18.5, 11.5, 2.6), "to": G(12.5, 4.5, 1.0), "fov": 200},
+    {"from": G(18.5, 11.5, 3.6), "to": G(12.5, 4.5, 1.0), "fov": 200, "clip_end": 2000},
     # 2: from by the flagpole, south-west at the shed door and the truck's tailgate.
-    {"from": G(9.4, 5.6, 3.0), "to": G(3.8, 9.6, 0.3), "fov": 200},
+    {"from": G(9.4, 5.6, 3.0), "to": G(3.8, 9.6, 0.3), "fov": 200, "clip_end": 2000},
     # 3: from by the porch, south-west at the truck's winch and the pine across the trail.
-    {"from": G(16.0, 7.5, 3.2), "to": G(12.5, 12.0, 0.3), "fov": 200},
+    {"from": G(16.0, 7.5, 3.8), "to": G(12.5, 12.0, 0.3), "fov": 200, "clip_end": 2000},
 ]
 
 
@@ -77,6 +77,107 @@ def ground_height(x, y):
 
 def inside(x, y, box, pad=0.0):
     return box[0] - pad < x < box[1] + pad and box[2] - pad < y < box[3] + pad
+
+
+def shed(rng, planks, iron):
+    """A framed timber shed with a seated gable roof and a fitted east door."""
+    sx0, sx1, sy0, sy1 = SHED
+    centre_y = (sy0 + sy1) / 2
+    reb.wall(kit.box_center("Shed footprint", None, ((sx0+sx1)/2,centre_y,1), (sx1-sx0,sy1-sy0,2))).hide_render=True
+    for ob in kit.walls(sx0, sy0, sx1, sy1, 2.15, planks,
+                        openings=[("e", SHED_DOOR[0], SHED_DOOR[1], 0, 1.95)], thick=0.1, name="Shed siding"):
+        reb.mask(reb.wall(ob))
+    roof_m = reb.mat_surface("Weathered shed tin", [(0, (0.075, 0.08, 0.075)), (0.6, (0.22, 0.22, 0.18)), (1, (0.25, 0.12, 0.05))], scale=8, rough=0.85)
+    for x in (sx0, sx1):
+        reb.mesh_object("Shed gable", [(x, sy0, 2.15), (x, sy1, 2.15), (x, centre_y, 2.65)], [(0, 1, 2)], planks, smooth=False)
+    for side in (-1, 1):
+        ye = centre_y + side * ((sy1 - sy0) / 2 + 0.18)
+        reb.mesh_object("Seated shed roof", [(sx0-0.2, ye, 2.07), (sx1+0.2, ye, 2.07), (sx1+0.2, centre_y, 2.68), (sx0-0.2, centre_y, 2.68)], [(0,1,2,3)], roof_m, smooth=False)
+        for x in (sx0 - 0.14, sx1 + 0.14):
+            kit.rod("Shed barge board", planks, (x, ye, 2.06), (x, centre_y, 2.67), 0.055)
+        for i in range(12):
+            x = sx0 - 0.15 + (sx1 - sx0 + 0.3) * i / 11
+            kit.rod("Tin standing seam", roof_m, (x, ye, 2.085), (x, centre_y, 2.69), 0.012, 4)
+    y0, y1 = SHED_DOOR
+    for yy in (y0 - 0.045, y1 + 0.045):
+        kit.box_center("Door jamb", planks, (sx1+0.06, yy, 1.01), (0.13, 0.09, 2.02))
+    kit.box_center("Door lintel", planks, (sx1+0.06, (y0+y1)/2, 2.0), (0.13, y1-y0+0.18, 0.12))
+    for i in range(5):
+        kit.box_center("Fitted door plank", planks, (sx1+0.11, y0+(i+0.5)*(y1-y0)/5, 0.98), (0.06, (y1-y0)/5-0.008, 1.90))
+    for z in (0.35, 1.55):
+        kit.box_center("Door brace", planks, (sx1+0.15, (y0+y1)/2, z), (0.05, y1-y0-0.05, 0.10))
+        kit.box_center("Strap hinge", iron, (sx1+0.105, y1-0.12, z), (0.025, 0.25, 0.05))
+    kit.rod("Diagonal door brace", planks, (sx1+0.07,y0+0.08,0.4), (sx1+0.07,y1-0.08,1.5), 0.055)
+    kit.box_center("Hasp", iron, (sx1+0.11,y0+0.06,1.02), (0.025,0.16,0.06))
+    kit.box_center("Padlock", reb.mat_metal("Lock brass", (0.42,0.31,0.12),0.5), (sx1+0.14,y0+0.06,0.96), (0.05,0.065,0.09), bevel=0.008)
+
+
+def ranger_truck(paint, white):
+    """Square-bodied ranger pickup: visible axle, suspension, cut wheel arches,
+    open load bed, separate flat windscreen and framed cab."""
+    origin = Vector((8.25, 10.8, 0))
+    parts = []
+    def box(name, m, p, size, **kw):
+        ob = kit.box_center(name, m, tuple(origin + Vector(p)), size, **kw)
+        parts.append(ob)
+        return ob
+    metal, rubber = kit.mat("iron"), kit.mat("rubber")
+    glass = reb.mat_plain("Dusty flat windscreen", (0.08,0.12,0.125), 0.27)
+    for y in (-0.56,0.56):
+        box("Chassis rail", metal, (0,y,0.48), (5.0,0.12,0.18))
+    for x in (-1.65,1.65):
+        parts.append(kit.rod("Axle",metal, origin+Vector((x,-0.95,0.39)), origin+Vector((x,0.95,0.39)),0.065))
+        box("Differential",metal,(x,0,0.39),(0.28,0.26,0.24),bevel=0.06)
+        for y in (-0.78,0.78):
+            parts.extend(kit.wheel("Truck wheel",tuple(origin+Vector((x,y,0.4))),r=0.4,width=0.30,detail=True))
+            for j in range(4):
+                box("Leaf spring",metal,(x,y*0.75,0.53+j*0.022),(0.95-j*0.14,0.07,0.025))
+            # A shaped side skin around an actual circular wheel opening.
+            v, f = [], []
+            for j in range(17):
+                a=math.pi*j/16
+                xx=x+math.cos(a)*0.50; z=0.4+math.sin(a)*0.50
+                v.extend([tuple(origin+Vector((xx,y/abs(y)*0.94,z))),tuple(origin+Vector((xx,y/abs(y)*0.94,1.17)))])
+            for j in range(16):
+                k=j*2; f.append((k,k+1,k+3,k+2))
+            parts.append(reb.mesh_object("Wheel arch panel",v,f,paint,smooth=False))
+    box("Open bed floor",kit.mat("planks"),(-1.42,0,0.83),(2.22,1.70,0.08))
+    for y in (-0.92,0.92):
+        for x, length in ((-2.34,0.53),(-0.65,0.95)):
+            box("Bed quarter",paint,(x,y,0.95),(length,0.08,0.47))
+        box("Bed top rail",paint,(-1.42,y,1.21),(2.35,0.11,0.09),bevel=0.018)
+    box("Tailgate",paint,(-2.62,0,0.98),(0.1,1.87,0.48),bevel=0.015)
+    box("Tailgate inset",paint,(-2.68,0,0.98),(0.025,1.45,0.28),bevel=0.015)
+    box("Tailgate handle",kit.mat("steel"),(-2.7,0,1.13),(0.03,0.24,0.04))
+    box("Cab floor",paint,(0.45,0,0.7),(1.5,1.85,0.15))
+    box("Cab back",paint,(-0.28,0,1.17),(0.10,1.86,1.0))
+    box("Rear glass",glass,(-0.34,0,1.5),(0.015,1.25,0.4))
+    box("Bonnet",paint,(1.92,0,1.05),(1.46,1.85,0.24),bevel=0.04)
+    box("Cab roof",paint,(0.4,0,1.97),(1.60,1.91,0.12),bevel=0.035)
+    # The windscreen is one plane between two straight posts.
+    for y in (-0.88,0.88):
+        parts.append(kit.rod("Windscreen pillar",paint,origin+Vector((1.23,y,1.15)),origin+Vector((1.10,y,1.92)),0.055))
+        parts.append(kit.rod("Rear cab pillar",paint,origin+Vector((-0.28,y,1.15)),origin+Vector((-0.28,y,1.92)),0.05))
+        box("Window sill",paint,(0.47,y,1.2),(1.50,0.08,0.10))
+    v=[tuple(origin+Vector(p)) for p in ((1.235,-0.83,1.22),(1.235,0.83,1.22),(1.112,0.83,1.89),(1.112,-0.83,1.89))]
+    parts.append(reb.mesh_object("Flat windscreen",v,[(0,1,2,3)],glass,smooth=False))
+    box("Cab seat",kit.mat("rubber"),(0.10,0,1.00),(0.45,1.55,0.18),bevel=0.04)
+    box("Cab seat back",kit.mat("rubber"),(-0.10,0,1.29),(0.15,1.55,0.6),bevel=0.04)
+    box("Closed passenger door",paint,(0.48,0.94,0.94),(1.45,0.06,0.53))
+    box("Passenger window",glass,(0.44,0.935,1.55),(1.28,0.02,0.58))
+    door=box("Open driver door",paint,(0.6,-1.5,0.94),(1.35,0.06,0.53),rot=0.8,bevel=0.02)
+    box("Driver door window",glass,(0.6,-1.5,1.54),(1.35,0.025,0.60),rot=0.8)
+    for z in (1.25,1.86):
+        box("Driver window frame",paint,(0.6,-1.5,z),(1.4,0.05,0.05),rot=0.8)
+    for x in (-2.75,2.72):
+        box("Bumper",kit.mat("steel"),(x,0,0.57),(0.14,1.97,0.18),bevel=0.025)
+    box("Grille",metal,(2.675,0,0.91),(0.05,1.85,0.42))
+    for z in (0.79,0.9,1.01):
+        box("Grille bar",kit.mat("steel"),(2.71,0,z),(0.025,1.20,0.025))
+    for y in (-0.72,0.72):
+        box("Headlamp",white,(2.72,y,0.94),(0.035,0.27,0.22),bevel=0.025)
+        box("Tail lamp",kit.mat("red paint"),(-2.69,y,1.0),(0.035,0.13,0.28))
+    return kit.join("Truck",parts,origin=tuple(origin))
 
 
 def build():
@@ -158,22 +259,19 @@ def build():
     logs_along("y", cx0 - r, cy0, cy1, [])
     logs_along("y", cx1 + r, cy0, cy1, [(2.6, 3.5, 1.0, 1.7)])
     reb.wall(reb.prim("cube", "Cabin body", reb.mat_plain("Cabin dark", (0.02, 0.015, 0.01)), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 1.3), (cx1 - cx0, cy1 - cy0, 2.6)))
-    # Gable ends and the roof: two slopes of shingle rows from the eaves to the ridge.
-    ridge_z, eave_z, over = 4.0, 2.5, 0.5
+    # A continuous roof seated on the log walls, with boards along the eaves.
+    ridge_z, eave_z, over = 4.0, 2.5, 0.4
     cym = (cy0 + cy1) / 2
     for side in (-1, 1):
-        y_eave = cym + side * ((cy1 - cy0) / 2 + over)
-        rows = 12
-        for i in range(rows):
-            t0, t1 = i / rows, (i + 1) / rows
-            ya, yb = y_eave + (cym - y_eave) * t0, y_eave + (cym - y_eave) * t1
-            za, zb = eave_z + (ridge_z - eave_z) * t0, eave_z + (ridge_z - eave_z) * t1
-            mid = Vector(((cx0 + cx1) / 2, (ya + yb) / 2, (za + zb) / 2 + 0.03))
-            slope = math.atan2(zb - za, abs(yb - ya))
-            reb.prim("cube", "Shingle row", shingle, mid, (cx1 - cx0 + 2 * over, abs(yb - ya) * 1.25, 0.04), rot=(side * slope, 0, 0))
-    for x in (cx0 - 0.25, cx1 + 0.25):
-        v = [(x, cy0 - 0.2, eave_z), (x, cy1 + 0.2, eave_z), (x, cym, ridge_z)]
-        reb.mesh_object("Gable", v, [(0, 1, 2)], planks, smooth=False)
+        ye = cym + side * ((cy1 - cy0) / 2 + over)
+        reb.mesh_object("Cabin shingle roof", [(cx0-over,ye,eave_z-0.2),(cx1+over,ye,eave_z-0.2),(cx1+over,cym,ridge_z),(cx0-over,cym,ridge_z)], [(0,1,2,3)], shingle, smooth=False)
+        kit.box_center("Cabin fascia", dark, ((cx0+cx1)/2,ye,eave_z-0.22), (cx1-cx0+2*over,0.12,0.20))
+        for i in range(1,13):
+            t=i/13
+            yy=ye+(cym-ye)*t; zz=eave_z-0.2+(ridge_z-eave_z+0.2)*t
+            kit.rod("Shingle course",shingle,(cx0-over,yy,zz+0.012),(cx1+over,yy,zz+0.012),0.018,4)
+    for x in (cx0-0.16,cx1+0.16):
+        reb.mesh_object("Cabin gable",[(x,cy0-0.15,2.5),(x,cy1+0.15,2.5),(x,cym,ridge_z)],[(0,1,2)],planks,smooth=False)
     reb.prim("cyl", "Stovepipe", iron, (STOVEPIPE[0], STOVEPIPE[1], 3.6), (0.16, 0.16, 1.6))
     reb.prim("cone", "Stovepipe cap", iron, (STOVEPIPE[0], STOVEPIPE[1], 4.48), (0.36, 0.36, 0.16), top=0.1)
     # Windows: dark glass; the east one smashed, blood down the logs below it.
@@ -210,32 +308,13 @@ def build():
     a, b = Vector((cx0 - 0.3, cy0 + 0.6, 7.9)), Vector((cx0 + 0.5, cym, ridge_z + 0.05))
     reb.prim("cyl", "Mast wire", iron, (a + b) / 2, (0.008, 0.008, (b - a).length), rot=(b - a).to_track_quat("Z", "Y").to_euler())
 
-    # ---- The tool shed: plank walls, a lean-to roof, the door padlocked.
-    sx0, sx1, sy0, sy1 = SHED
-    for i in range(int((sy1 - sy0) / 0.2)):
-        y = sy0 + 0.1 + i * 0.2
-        if not (SHED_DOOR[0] < y < SHED_DOOR[1]):
-            reb.prim("cube", "Shed board", planks, (sx1, y, 1.05), (0.03, 0.19, 2.1 + rng.uniform(-0.02, 0.02)))
-        reb.prim("cube", "Shed board", planks, (sx0, y, 1.1), (0.03, 0.19, 2.2))
-    for i in range(int((sx1 - sx0) / 0.2)):
-        x = sx0 + 0.1 + i * 0.2
-        for y in (sy0, sy1):
-            reb.prim("cube", "Shed board", planks, (x, y, 1.1), (0.19, 0.03, 2.2 - (x - sx0) * 0.04))
-    reb.mask(reb.wall(reb.prim("cube", "Shed body", reb.mat_plain("Shed dark", (0.015, 0.012, 0.01)), ((sx0 + sx1) / 2, (sy0 + sy1) / 2, 1.0), (sx1 - sx0 - 0.04, sy1 - sy0 - 0.04, 2.0))))
-    reb.prim("cube", "Shed roof", reb.mat_surface("Tin roof", [(0.0, (0.2, 0.2, 0.2)), (0.6, (0.32, 0.3, 0.28)), (1.0, (0.3, 0.14, 0.05))], scale=5, rough=0.5), ((sx0 + sx1) / 2, (sy0 + sy1) / 2, 2.2), (sx1 - sx0 + 0.5, sy1 - sy0 + 0.5, 0.03), rot=(0, -0.08, 0))
-    for i in range(4):
-        reb.prim("cube", "Shed door board", planks, (sx1 + 0.03, SHED_DOOR[0] + 0.1 + i * 0.2, 1.0), (0.04, 0.19, 2.0))
-    reb.prim("cube", "Shed door brace", planks, (sx1 + 0.06, SHED_DOOR[0] + 0.4, 1.0), (0.03, 0.12, 1.6), rot=(0.4, 0, 0))
-    reb.prim("cube", "Hasp", iron, (sx1 + 0.07, SHED_DOOR[0] + 0.1, 1.1), (0.02, 0.18, 0.05))
-    reb.prim("cube", "Padlock", reb.mat_metal("Padlock", (0.55, 0.45, 0.2), 0.3), (sx1 + 0.09, SHED_DOOR[0] + 0.08, 1.05), (0.03, 0.06, 0.07), bevel=0.008)
-    reb.prim("cube", "Shed sign", white, (sx1 + 0.05, SHED_DOOR[0] + 0.4, 1.75), (0.02, 0.5, 0.18))
+    # ---- The shed is framed and roofed as one building.
+    shed(rng, planks, iron)
 
     # ---- The truck: a green ranger pickup, driver's door open, the winch on its bumper.
     tx0, tx1, ty0, ty1 = TRUCK
     tym = (ty0 + ty1) / 2
-    truck, hinge = kit.pickup("Truck", paint, door_open=0.75, door_side=-1)
-    truck.location = (tx1 - 2.75, tym, 0.0)
-    reb.prim("cube", "Door stripe", white, (-0.68, -0.035, 0.0), (1.2, 0.01, 0.12)).parent = hinge
+    truck = ranger_truck(paint, white)
     body = [truck]
     # Gear in the bed: a jerrycan, a coil of rope, a tarp.
     reb.prim("cube", "Jerrycan", reb.mat_plain("Red can", (0.35, 0.04, 0.03), 0.5), (tx0 + 0.6, ty0 + 0.45, 1.07), (0.35, 0.18, 0.45), bevel=0.02)
@@ -277,8 +356,12 @@ def build():
                 k = i * segs + s
                 faces.append((k, k + (s + 1) % segs - s, k + segs + (s + 1) % segs - s, k + segs))
         trunk = reb.mesh_object("Pine trunk", verts, faces, bark)
-        # Root plate: a disc of roots and earth standing up.
-        rp = reb.prim("cyl", "Root plate", dirt, (-0.15, 0, 0.5), (1.5, 1.5, 0.3), rot=(0, math.pi / 2, 0), segments=14)
+        # Splintered break with projecting wood fibres, never a circular base.
+        parts = []
+        for j in range(9):
+            a = math.tau*j/9
+            y, z = math.cos(a)*0.23, 0.3+math.sin(a)*0.23
+            parts.append(kit.rod("Broken trunk splinter", logs, (0.12,y,z), (-prng.uniform(0.08,0.5),y*0.8,z+prng.uniform(-0.05,0.05)), 0.04, 5))
         # Branches: drooping needle cards along the upper two thirds, pressed flat where they hit the ground.
         nv, nf = [], []
         up = Vector((0, 0, 1))
@@ -296,7 +379,7 @@ def build():
         bpy.ops.object.empty_add(location=(0, 0, 0))
         pivot = bpy.context.active_object
         pivot.name = "Pine"
-        for ob in (trunk, rp, cards):
+        for ob in [trunk, cards] + parts:
             ob.parent = pivot
         return pivot
 
@@ -401,11 +484,13 @@ def build():
     gv, gf = [], []
     def meadow(rr):
         while True:
-            x, y = rr.uniform(X0 - 1.5, X1 + 1.5), rr.uniform(Y0 - 1.0, Y1 + 1.0)
+            x, y = rr.uniform(-7, 27), rr.uniform(-7, 28)
             if inside(x, y, CABIN, 0.5) or inside(x, y, PORCH, 0.3) or inside(x, y, SHED, 0.3) or inside(x, y, TRUCK, 0.1):
                 continue
+            if kit.path_distance(x, y, paths) < 0.95:
+                continue
             return x, y
-    reb.grass_tufts(rng, 2600, meadow, ground_height, gv, gf)
+    reb.grass_tufts(rng, 16000, meadow, ground_height, gv, gf)
     grass = reb.mesh_object("Grass", gv, gf, blades, smooth=False)
     grass_rest = [Vector(p) for p in gv]
     fv2, ff2 = [], []
@@ -442,20 +527,18 @@ def build():
     vol.inputs["Density"].default_value = 1.0
     smoke_m.node_tree.links.new(vol.outputs["Volume"], nodes["Material Output"].inputs["Volume"])
     puffs = []
-    PUFFS = 8
+    PUFFS = 6
     for i in range(PUFFS):
         ob = reb.prim("sphere", f"Smoke puff {i}", None, (0, 0, 0), (1, 1, 1), segments=12)
         m = smoke_m.copy()
         ob.data.materials.append(m)
         puffs.append((ob, m))
 
-    # ---- Light: the morning sun low in the east, sky, a little mist in the trees.
-    reb.light_for("morning", mist_box=((10, 12, 6), (70, 70, 16)), mist_density=0.0025)
-    sun = bpy.data.objects["Sun"]
-    sun.rotation_euler = (math.radians(90 - 34), 0, math.radians(125))
-    sun.data.energy = 6.0
-    sun.data.color = (1.0, 0.9, 0.75)
-    reb.gradient_sky((0.85, 0.8, 0.68), (0.35, 0.52, 0.8), below=(0.08, 0.09, 0.07), strength=1.7)
+    kit.tree_roots(rng, bases, ground_height, lambda x, y: kit.path_distance(x,y,paths)<0.95)
+    kit.forest(rng, ground_height, lambda x,y: not free_for_tree(x,y), (-30,-28,48,50), count=200, spacing=2.0, ferns=60)
+    kit.mountain_forest(rng, (10,7), near=43, below=-80)
+    kit.time_light("morning", sun_heading=125, sun_energy=5.0)
+    reb.spot("Yard sky fill",(10,7,13),(10,7,0),12000,(0.9,0.88,0.75),130,1,8)
 
     def pose(k):
         phase = 2 * math.pi * k / FRAMES
@@ -468,21 +551,21 @@ def build():
         for idx, vtx in enumerate(flag.data.vertices):
             p = flag_rest[idx]
             u = (p.x - FLAGPOLE[0]) / 1.35
-            vtx.co = (p.x - 0.06 * u * (1 - math.cos(phase * 2 + u * 4)), p.y + 0.18 * u * math.sin(phase * 2 + u * 5), p.z - 0.05 * u)
+            vtx.co = (p.x - 0.015 * u * (1 - math.cos(phase * 2 + u * 4)), p.y + 0.045 * u * math.sin(phase * 2 + u * 5), p.z - 0.05 * u)
         flag.data.update()
         # Grass: the tip of each blade sways with a gust that rolls across the yard.
         for idx in range(2, len(grass_rest), 3):
             p = grass_rest[idx]
             w = math.sin(phase + p.x * 0.6 + p.y * 0.25)
-            grass.data.vertices[idx].co = (p.x + 0.07 * w, p.y + 0.03 * w, p.z)
+            grass.data.vertices[idx].co = (p.x + 0.018 * w, p.y + 0.007 * w, p.z)
         grass.data.update()
         # Smoke: puff i sits a fraction (i + k / FRAMES) of the way up the plume.
         for i, (ob, m) in enumerate(puffs):
             t = (i + k / FRAMES) / PUFFS
-            ob.location = (STOVEPIPE[0] - 1.2 * t * t, STOVEPIPE[1] + 0.6 * t, 4.6 + 3.2 * t)
-            s = 0.35 + 1.4 * t
+            ob.location = (STOVEPIPE[0] - 0.25 * t * t, STOVEPIPE[1] + 0.15 * t, 4.6 + 1.4 * t)
+            s = 0.12 + 0.35 * t
             ob.scale = (s, s * 0.9, s * 0.8)
-            m.node_tree.nodes["Principled Volume"].inputs["Density"].default_value = 0.9 * (1 - t) ** 1.5
+            m.node_tree.nodes["Principled Volume"].inputs["Density"].default_value = 0.25 * (1 - t) ** 1.5
 
     place_pine(0)
     # The kit's worn, bitty surfaces, as every kit room has.

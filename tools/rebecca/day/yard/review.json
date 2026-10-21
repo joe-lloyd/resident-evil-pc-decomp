@@ -1,0 +1,66 @@
+{
+  "scene": "yard",
+  "steps": [
+    {
+      "action": "walk",
+      "x": 8500,
+      "z": 6800,
+      "picture": "yard-trail"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 0,
+      "picture": "yard-camera0"
+    },
+    {
+      "action": "walk",
+      "x": 27000,
+      "z": 12000,
+      "picture": "yard-cabin"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 1,
+      "picture": "yard-camera1"
+    },
+    {
+      "action": "walk",
+      "x": 11200,
+      "z": 13500,
+      "picture": "yard-shed"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 2,
+      "picture": "yard-camera2"
+    },
+    {
+      "action": "walk",
+      "x": 20500,
+      "z": 18200,
+      "picture": "yard-winch"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 3,
+      "picture": "yard-camera3"
+    },
+    {
+      "action": "use",
+      "item": 30,
+      "x": 20060,
+      "z": 18360,
+      "picture": "yard-pine-moved"
+    },
+    {
+      "action": "exit",
+      "x": 26800,
+      "z": 20500,
+      "to": "bridge"
+    }
+  ]
+}

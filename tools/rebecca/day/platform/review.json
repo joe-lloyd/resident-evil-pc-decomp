@@ -1,0 +1,83 @@
+{
+  "scene": "platform",
+  "steps": [
+    {
+      "action": "walk",
+      "x": 7000,
+      "z": 6500,
+      "picture": "platform-arrival"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 0,
+      "picture": "platform-camera0"
+    },
+    {
+      "action": "walk",
+      "x": 20500,
+      "z": 14000,
+      "picture": "platform-booth"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 1,
+      "picture": "platform-camera1"
+    },
+    {
+      "action": "walk",
+      "x": 13000,
+      "z": 17000,
+      "picture": "platform-car"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 2,
+      "picture": "platform-camera2"
+    },
+    {
+      "action": "walk",
+      "x": 17000,
+      "z": 15000,
+      "picture": "platform-rail"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 3,
+      "picture": "platform-camera3"
+    },
+    {
+      "action": "walk",
+      "x": 31000,
+      "z": 17500,
+      "picture": "platform-ledge"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 4,
+      "picture": "platform-camera4"
+    },
+    {
+      "action": "walk",
+      "x": 27700,
+      "z": 16100,
+      "picture": "platform-return"
+    },
+    {
+      "action": "hold",
+      "frames": 90,
+      "camera": 5,
+      "picture": "platform-camera5"
+    },
+    {
+      "action": "exit",
+      "x": 31800,
+      "z": 16500,
+      "to": "east-path"
+    }
+  ]
+}
