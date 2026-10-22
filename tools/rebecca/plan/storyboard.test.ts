@@ -86,9 +86,10 @@ test('the ending keeps its written lines alongside inherited control messages', 
 test('each recorded visit has its own player and each room card shows coverage', () => {
   const html = renderStoryboard(board);
   assert.equal(board.scenes.filter((s) => s.clips.length).length, 53);
-  // The ridge, the trail, the cabin, the shed and the booth each show one
-  // reviewed recording in place of their quarter visits.
-  assert.equal(html.split('<video controls preload="none"').length - 1, 136);
+  // The ridge, the trail, the cabin, the yard, the shed, the booth, the
+  // bridge and the platform each show one reviewed recording in place of
+  // their quarter visits.
+  assert.equal(html.split('<video controls preload="none"').length - 1, 113);
   for (const scene of board.scenes) {
     for (const clip of scene.clips) {
       assert.ok(html.includes(`src="${clip.file}" type="video/mp4"`), clip.file);
@@ -97,7 +98,7 @@ test('each recorded visit has its own player and each room card shows coverage',
   }
   assert.deepEqual(board.scenes.filter((s) => !s.clips.length).map((s) => s.place.id), ['flume', 'line-track', 'weather', 'mast', 'wine']);
   assert.equal(html.split('No footage of this room in the four-quarter recording.').length - 1, 5);
-  assert.ok(html.includes('15 recorded clips'), 'repeated room visits remain visible on cards');
+  assert.ok(html.includes('9 recorded clips'), 'repeated room visits remain visible on cards');
 });
 
 test('visit labels keep logged actions and distinguish the cabin plan id from its recording slug', () => {
