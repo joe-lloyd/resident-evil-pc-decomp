@@ -43,6 +43,30 @@ function text(value: unknown): string {
   if (typeof value !== 'string') throw new Error('Expected room text');
   return value;
 }
+// Each rebuild after a review adds a version, so earlier notes stay with the art they were about.
+export function noteVersions(value: unknown) {
+  return Object.fromEntries(Object.entries(object(value)).map(([room, list]) => [room, rows(list).map((v) => {
+    const date = text(v.date);
+    const sheet = text(v.sheet);
+    if (!Array.isArray(v.prs) || !v.prs.every((n) => Number.isInteger(n) && n > 0) || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !/^review\/[a-z0-9-]+\.png$/.test(sheet)) throw new Error(`Invalid note version for ${room}`);
+    return { date, prs: v.prs.map(Number), sheet };
+  })]));
+}
+const VERSIONS = noteVersions(JSON.parse(read(join(HERE, 'storyboard/versions.json'))));
+const PR_URL = 'https://github.com/joe-lloyd/resident-evil-pc-decomp/pull/';
+const noteField = (n: number) => n === 1 ? 'scene notes' : `scene notes v${n}`;
+function versionLabel(room: string, n: number): string {
+  const v = VERSIONS[room]?.[n - 2];
+  if (!v) return `Version ${n} · first renders`;
+  return `Version ${n} · rebuilt ${esc(v.date)} in ${v.prs.map((pr) => `<a href="${PR_URL}${pr}">#${pr}</a>`).join(', ')} · <a href="${esc(v.sheet)}">before and after</a>`;
+}
+function sceneNotes(room: string): string {
+  const current = (VERSIONS[room]?.length ?? 0) + 1;
+  const earlier = Array.from({ length: current - 1 }, (_, i) => i + 1).reverse();
+  const history = earlier.length ? `<details class="note-history" open hidden><summary>Your notes on earlier versions</summary>${earlier.map((n) => `<div class="old-note" data-room="${esc(room)}" data-field="${noteField(n)}" data-version="${n}" hidden><small>${versionLabel(room, n)}</small><p class="words"></p></div>`).join('')}</details>` : '';
+  return `${edit(room, noteField(current), '', 'note', `Scene notes on version ${current}`)}<small class="version">${versionLabel(room, current)}</small>${history}`;
+}
+
 export function roomEvidence(slug: string) {
   const file = join(DAY, slug, 'renders/room.json');
   const json: Record<string, unknown> = existsSync(file) ? object(JSON.parse(read(file))) : {};
@@ -303,7 +327,7 @@ export function renderStoryboard(board: Storyboard): string {
     const save = SAVES.find((v) => v.place === s.place.id);
     return `<article class="scene" id="scene-${s.place.id}" hidden><div class="scene-heading"><div><small>Scene ${index + 1} of ${board.scenes.length} · Act ${s.place.act} · ${esc(s.hour)}</small><h2>${esc(s.place.name)}</h2><p>${esc(s.place.id)} · ${esc(s.file)} · ${s.built ? 'Built' : 'Planned'} · plan label: ${s.place.built}</p></div><div class="scene-nav">${index > 0 ? `<a href="#scene-${board.scenes[index - 1]?.place.id}">← Previous</a>` : ''}<a href="#flow">All rooms</a>${index < board.scenes.length - 1 ? `<a href="#scene-${board.scenes[index + 1]?.place.id}">Next →</a>` : ''}</div></div>
     <div class="scene-top"><div><div class="gallery">${s.images.length ? s.images.map((image, n) => `<figure><img src="img/${s.slug}-${image.replace('.png', '.jpg')}" alt="${esc(s.place.name)} · camera ${n + 1}" loading="lazy" width="640" height="480"><figcaption>Camera ${n + 1}</figcaption></figure>`).join('') : `<div class="placeholder"><h3>${s.place.existing ? 'Original mansion save room' : 'Planned scene'}</h3><p>${esc(s.place.there)}</p><p>${esc(s.place.story)}</p></div>`}</div><p class="hint">Swipe or scroll to see each camera.</p></div>
-    <div class="goals">${edit(s.place.id, 'main goal', main, 'edit', 'Main goal')}${edit(s.place.id, 'secondary goal', secondary, 'edit', 'Secondary goal')}${edit(s.place.id, 'scene notes', '', 'note', 'Scene notes')}<p class="hint">Edits save in this browser. Copy them when you are ready to send them back.</p></div></div>
+    <div class="goals">${edit(s.place.id, 'main goal', main, 'edit', 'Main goal')}${edit(s.place.id, 'secondary goal', secondary, 'edit', 'Secondary goal')}${sceneNotes(s.place.id)}<p class="hint">Edits save in this browser. Copy them when you are ready to send them back.</p></div></div>
     ${renderClips(s.clips, s.place.name)}
     <div class="facts-grid"><section><h3>Rebecca here</h3><p>${esc(s.place.story || 'No new story beat planned.')}</p><p>${s.place.id === 'ridge' ? `Starts with ${board.items.filter((i) => i.source === 'start').map((i) => `${i.name}${i.rounds ? ` · ${i.rounds} rounds` : ''}`).join(', ')}.` : s.place.id === 'crawl' ? `She leaves her pack at the narrow turn and keeps only the pistol. Her keys stay. Removed item ids: ${GEAR.join(', ')}.` : s.place.id === 'save' ? 'She arrives with the pistol and her keys, which is all she has when the main game starts.' : 'She carries everything she has picked up until the crawl space under the mansion. The mountain branches can be visited in different orders.'}</p><p>Keys needed by local steps: ${esc(needs.map(stepLabel).join('; ') || 'None listed')}.</p><p>Knows from required clues: ${esc(known.map(stepLabel).join('; ') || 'No explicit learned prerequisite')}.</p><p class="hint">This is a plan state. Inventory and current HP depend on the route, pickups and combat. Her bag has six slots.</p></section>
     <section><h3>Risk and rewards</h3><p>${s.enemies.length ? s.enemies.map((e) => `${e.count} ${e.kind}`).join(', ') : 'No enemy spawns listed'}. Enemy HP is not given in foes.ts.</p><p>Health risk: ${s.enemies.length ? `${s.enemies.reduce((n, e) => n + e.count, 0)} attackers can spend her health and ammunition` : 'no placed attackers'}. Current HP depends on earlier combat.</p><p>Planned threat: ${esc(s.place.enemies || 'None')}.</p><p>Moves: ${esc(s.place.moves || 'None listed')}.</p><p>${save ? esc(save.props) : s.place.id === 'save' ? 'Original typewriter and shared item box.' : 'No save point here.'}</p><p>Music: ${esc(cues.map((c) => `${c.title}: ${c.sound}`).join('\n') || 'No cue listed')}.</p></section></div>

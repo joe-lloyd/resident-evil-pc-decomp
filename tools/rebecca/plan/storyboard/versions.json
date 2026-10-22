@@ -1,0 +1,17 @@
+{
+  "ridge": [{ "date": "2026-10-21", "prs": [18, 20, 22], "sheet": "review/ridge-before-after.png" }],
+  "trail": [{ "date": "2026-10-21", "prs": [22], "sheet": "review/trail-before-after.png" }],
+  "cabin": [{ "date": "2026-10-22", "prs": [19], "sheet": "review/cabin-before-after.png" }],
+  "shed": [{ "date": "2026-10-22", "prs": [19], "sheet": "review/shed-before-after.png" }],
+  "booth": [{ "date": "2026-10-22", "prs": [19], "sheet": "review/booth-before-after.png" }],
+  "yard": [{ "date": "2026-10-22", "prs": [23], "sheet": "review/yard-before-after.png" }],
+  "bridge": [{ "date": "2026-10-22", "prs": [23], "sheet": "review/bridge-before-after.png" }],
+  "platform": [{ "date": "2026-10-22", "prs": [23], "sheet": "review/platform-before-after.png" }],
+  "bunkhouse": [{ "date": "2026-10-22", "prs": [24], "sheet": "review/bunkhouse-before-after.png" }],
+  "office": [{ "date": "2026-10-22", "prs": [24], "sheet": "review/office-before-after.png" }],
+  "mess": [{ "date": "2026-10-22", "prs": [24], "sheet": "review/mess-before-after.png" }],
+  "workshop": [{ "date": "2026-10-22", "prs": [24], "sheet": "review/workshop-before-after.png" }],
+  "woods": [{ "date": "2026-10-22", "prs": [25], "sheet": "review/woods-before-after.png" }],
+  "den": [{ "date": "2026-10-22", "prs": [25], "sheet": "review/den-before-after.png" }],
+  "logging-road": [{ "date": "2026-10-22", "prs": [25], "sheet": "review/logging-road-before-after.png" }]
+}
