@@ -14,7 +14,7 @@ Metres, real sizes. She walks the near bank (x 2-10, y 2-7), the bridge
 (x 5.3-6.7, y 7-15, the deck flat at z 0) and the far bank (x 2-10, y 15-18).
 Ways out: north up the trail to the yard, south on down the trail.
 
-Moving: the river, the grass, the rope rails, all of it slight.
+Moving: the river and the rope rails, both slight. The grass stands still.
 """
 import math
 import os
@@ -227,7 +227,7 @@ def build():
     # nothing bald, nothing on the trail.
     def no_grass(x, y):
         return on_trail(x, y) or in_gorge(x, y, -0.05) or (BX0 - 0.3 < x < BX1 + 0.3 and NEAR - 0.8 < y < FAR + 0.8)
-    grass = kit.grass_ground(rng, (-8, -8, 20, 26), ground_height, keep_out=no_grass, per_m2=32)
+    kit.grass_ground(rng, (-8, -8, 20, 26), ground_height, keep_out=no_grass, per_m2=32)
     kit.grass_ground(rng, (-30, -30, 42, 46), ground_height, keep_out=lambda x, y: no_grass(x, y) or (-8 < x < 20 and -8 < y < 26), per_m2=6)
     lv, lf = [], []
     for _ in range(420):
@@ -244,8 +244,7 @@ def build():
             base = Vector((x, y, ground_height(x, y)))
             lv.extend([base - w, base + w, base + lean + Vector((0, 0, h))])
             lf.append((k, k + 1, k + 2))
-    long_grass = reb.mesh_object("Long grass", lv, lf, kit.mat("blades"), smooth=False)
-    sways = [(ob, [Vector(p.co) for p in ob.data.vertices]) for ob in (grass, long_grass)]
+    reb.mesh_object("Long grass", lv, lf, kit.mat("blades"), smooth=False)
 
     # ---- The forest: close and dense on both banks and up the mountain,
     # every trunk back from the lip, none on the trail or before a lens.
@@ -285,13 +284,6 @@ def build():
         phase = 2 * math.pi * k / FRAMES
         # The river: the noise slides downstream, one loop of the texture per loop of frames.
         mapping.inputs["Location"].default_value = (2.0 * k / FRAMES * 2.5, 0, 0)
-        # Grass: the tips barely stir.
-        for ob, rest in sways:
-            for idx in range(2, len(rest), 3):
-                p = rest[idx]
-                wv = math.sin(phase + p.x * 0.7 + p.y * 0.3)
-                ob.data.vertices[idx].co = (p.x + 0.018 * wv, p.y + 0.007 * wv, p.z)
-            ob.data.update()
         # The rails stir a little, most in the middle.
         for cu, poly, pts in rail_objs:
             for p, (px, py, pz) in zip(poly.points, pts):

@@ -18,8 +18,8 @@ y 2-12.2; the ground falls away beyond it. Ways out: north-west up the
 trail (x 2-4.5), west along the tyre tracks (y 9.6-12), east after the drag
 marks (y 4.5-7.5), south-east down the trail past the pine (x 14.3-17.2).
 
-Moving: a thin wisp of smoke from the stovepipe, the flag, the hazard
-lights, the grass, all of it slight.
+Moving: a thin wisp of smoke from the stovepipe, the flag and the hazard
+lights, all of it slight. The grass stands still: no wind down here.
 State "pine" (FG_COMMON 205): the pine dragged off the trail by the winch,
 played as it drags when she works the winch.
 """
@@ -515,9 +515,8 @@ def build():
     def no_grass(x, y):
         return (on_path(x, y) or on_road(x, y, -0.6) or inside(x, y, CABIN, 0.3) or inside(x, y, PORCH, 0.1)
                 or inside(x, y, SHED, 0.05) or inside(x, y, (TRUCK[0] - 0.3, tx1 + 0.1, ty0 + 0.1, ty1 - 0.1)))
-    grass = kit.grass_ground(rng, (-2, -5, 22, 16), ground_height, keep_out=no_grass, per_m2=30)
+    kit.grass_ground(rng, (-2, -5, 22, 16), ground_height, keep_out=no_grass, per_m2=30)
     grass_far = kit.grass_ground(rng, (-16, -16, 36, 30), ground_height, keep_out=lambda x, y: no_grass(x, y) or (-2 < x < 22 and -5 < y < 16), per_m2=7)
-    grass_rest = [Vector(p.co) for p in grass.data.vertices]
     kit.rocks("Rocks", rng, [(1.0, 6.2, 0.55), (19.4, 4.0, 0.6), (13.6, 14.6, 0.5), (19.2, 14.0, 0.55), (7.0, 13.6, 0.75), (0.6, 13.6, 0.5)], ground_height, rock)
     # Rocks and brush fill the corners no camera sees well, so she cannot stand there.
     for name, (x, y, rr) in (("Rocks south-west", (3.2, 11.3, 1.0)), ("Rocks south-east", (17.6, 11.4, 0.9))):
@@ -568,12 +567,6 @@ def build():
             u = (p.x - FLAGPOLE[0]) / 1.35
             vtx.co = (p.x - 0.02 * u * (1 - math.cos(phase * 2 + u * 4)), p.y + 0.06 * u * math.sin(phase * 2 + u * 5), p.z - 0.05 * u)
         flag.data.update()
-        # Grass: the tips barely stir.
-        for idx in range(2, len(grass_rest), 3):
-            p = grass_rest[idx]
-            w = math.sin(phase + p.x * 0.6 + p.y * 0.25)
-            grass.data.vertices[idx].co = (p.x + 0.018 * w, p.y + 0.007 * w, p.z)
-        grass.data.update()
         # Smoke: puff i sits a fraction (i + k / FRAMES) of the way up a thin wisp.
         for i, (ob, m) in enumerate(puffs):
             t = (i + k / FRAMES) / PUFFS

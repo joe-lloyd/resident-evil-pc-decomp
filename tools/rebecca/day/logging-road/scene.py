@@ -22,8 +22,8 @@ She gets round it on either verge. The road goes on west to the woods
 y 6.2-11). The notice is on the west face of a spruce at x 6.0, y 3.6, just off the north verge.
 
 Moving: the blinker, the wipers twitching, flies on the seat and on the
-blood by the wheel, the grass. Past the verges the forest stands dense
-under the overcast (kit.overcast_sky, kit.backdrop).
+blood by the wheel. The grass stands still. Past the verges the forest
+stands dense under the overcast (kit.overcast_sky, kit.backdrop).
 """
 import math
 import os
@@ -155,7 +155,7 @@ def build():
             if abs(y - TY) < 0.35 or 2.2 < abs(y - TY) < 6:
                 if not (TAIL - 0.3 < x < FX + 0.3 and abs(y - TY) < 1.4):
                     return x, y
-    grass = kit.meadow(rng, 1400, verge, height)
+    kit.meadow(rng, 1400, verge, height)
 
     # ---- The truck: a 1970s conventional, mustard yellow, the hood long, a load of logs.
     # Frame and wheels.
@@ -388,7 +388,7 @@ def build():
     for _ in range(40):
         x, y = rng.uniform(X0, X1), rng.choice((rng.uniform(Y0, TY - 2.2), rng.uniform(TY + 2.4, Y1)))
         reb.fern(rng, (x, y, height(x, y)), rng.uniform(0.35, 0.6), xv, xf)
-    ferns = reb.mesh_object("Ferns on the verges", xv, xf, mat("ferns"))
+    reb.mesh_object("Ferns on the verges", xv, xf, mat("ferns"))
 
     # ---- Light: noon under cloud, the road a pale strip under it, mist down the road.
     sun = kit.time_light("noon", sun_heading=200, sun_energy=3.0, mist=((10.0, 8.0, 5.0), (80.0, 80.0, 16.0), 0.012),
@@ -416,8 +416,6 @@ def build():
     anim.custom(wipe)
     anim.flies((13.2, TY + 0.6, 1.7), count=7, radius=0.3)
     anim.flies((15.1, TY + 1.8, 0.05), count=8, radius=0.4)
-    anim.sway(grass, amount=0.06)
-    anim.sway(ferns, amount=0.02)
 
     # ---- What the game needs.
     room.door("woods", (X0, 6.4, X0 + 0.6, 10.0), arrive=(2.6, TY), face=(1, 0))

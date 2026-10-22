@@ -37,10 +37,6 @@
    "name": "Marker post"
   }
  ],
- "anim": {
-  "frames": 16,
-  "ticks": 3
- },
  "bounds": {
   "x0": 2000,
   "z0": 0,
