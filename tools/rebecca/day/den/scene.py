@@ -24,7 +24,8 @@ y 2-3.7. The pit is at x 8.6, y 2.8, under the slab; the ranger's feet are
 at x 10.4, y 5.7, his head toward the mouth.
 
 Moving: flies on the ranger and the pit, water dripping from the slab, the
-roots under it, the grass and ferns.
+hiker's torn jacket. No wind gets into the clearing: the roots, grass and
+ferns stand still.
 """
 import math
 import os
@@ -180,7 +181,7 @@ def build():
     for _ in range(12):
         x = rng.uniform(6.6, 11.4)
         hanging_root(rng, tv, tf, (x, 3.4 + rng.uniform(-0.3, 0.2), 2.6), rng.uniform(0.4, 1.1), rng.uniform(0.012, 0.03))
-    roots = reb.mesh_object("Roots under the slab", tv, tf, root_m)
+    reb.mesh_object("Roots under the slab", tv, tf, root_m)
     top_base = Vector((9.0, -5.8, height(9.0, -5.8) - 0.2))
     cv, cf = [], []
     reb.conifer(rng, top_base, 17, cv, cf)
@@ -287,17 +288,17 @@ def build():
     kit.lay_on_ground(kit.splat("Puddle under the drip", reb.mat_plain("Red puddle", (0.025, 0.01, 0.007), 0.3), (drip_at[0], drip_at[1], 0), 0.28, seed=14, stretch=(1.3, 1.0)), height, 0.007)
 
     # ---- The clearing's edges: grass, ferns, needles; the forest close round it.
-    floor_grass = kit.grass_ground(rng, (X0 - 1, Y0 - 1, X1 + 1, Y1 + 1), height, per_m2=14,
-                                   keep_out=lambda x, y: trodden(x, y) or in_rock(x, y) or on_way(x, y, 0.2))
-    slope_grass = kit.grass_ground(rng, (-12, -10, 30, 30), height, per_m2=5,
-                                   keep_out=lambda x, y: (X0 - 1 < x < X1 + 1 and Y0 - 1 < y < Y1 + 1) or in_rock(x, y) or on_way(x, y, 0.2))
+    kit.grass_ground(rng, (X0 - 1, Y0 - 1, X1 + 1, Y1 + 1), height, per_m2=14,
+                         keep_out=lambda x, y: trodden(x, y) or in_rock(x, y) or on_way(x, y, 0.2))
+    kit.grass_ground(rng, (-12, -10, 30, 30), height, per_m2=5,
+                         keep_out=lambda x, y: (X0 - 1 < x < X1 + 1 and Y0 - 1 < y < Y1 + 1) or in_rock(x, y) or on_way(x, y, 0.2))
     fv, ff = [], []
     for _ in range(140):
         x, y = rng.uniform(X0 - 6, X1 + 6), rng.uniform(Y0 - 3, Y1 + 6)
         if trodden(x, y) or in_rock(x, y) or on_way(x, y, 0.4):
             continue
         reb.fern(rng, (x, y, height(x, y)), rng.uniform(0.35, 0.7), fv, ff)
-    ferns = reb.mesh_object("Ferns round the clearing", fv, ff, mat("ferns"))
+    reb.mesh_object("Ferns round the clearing", fv, ff, mat("ferns"))
     nv, nf = [], []
     for _ in range(4000):
         x, y = rng.uniform(X0, X1), rng.uniform(Y0, Y1)
@@ -334,10 +335,6 @@ def build():
     anim.flies(tuple(head), count=16, radius=0.55)
     anim.flies((PIT[0], PIT[1], height(*PIT) + 0.05), count=6, radius=0.5)
     anim.drip(drip_at, fall=drip_at[2] - height(drip_at[0], drip_at[1]) - 0.02)
-    anim.sway(roots, amount=0.015, along=(1.0, 0.3), every=5, tip=3)
-    anim.sway(ferns, amount=0.02)
-    anim.sway(floor_grass, amount=0.02)
-    anim.sway(slope_grass, amount=0.02)
     anim.sway(torn, amount=0.02, along=(0.6, 1.0), every=2, tip=1)
 
     # ---- What the game needs.

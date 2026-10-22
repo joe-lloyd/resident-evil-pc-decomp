@@ -26,7 +26,7 @@ and an older one in the north-west, x 3-6.8, y 3.6-4.4, snapped off its
 stump.
 
 Moving: the flashlight failing, flies on the blood, the torn cloth and
-the ferns in the wind.
+the ribbon. No wind gets in under the trees: the grass and ferns stand still.
 """
 import math
 import os
@@ -304,7 +304,7 @@ def build():
         reb.fern(rng, (x, y, height(x, y)), rng.uniform(0.35, 0.7), fv, ff)
     for p in DRAG[2:7]:
         reb.fern(rng, (p[0] + 0.7, p[1] + 0.3, height(*p) - 0.12), 0.35, fv, ff)
-    ferns = reb.mesh_object("Ferns in the floor", fv, ff, kit.mat("ferns"))
+    reb.mesh_object("Ferns in the floor", fv, ff, kit.mat("ferns"))
     for k in range(5):
         x, y = rng.uniform(X0, X1), rng.uniform(Y0, Y1)
         if near_lens(x, y, 3.0) or min((Vector((x, y)) - Vector(p)).length for p in DRAG) < 0.8:
@@ -327,8 +327,8 @@ def build():
         if on_trail(x, y, 0.3) or on_way(x, y, 0.3) or kit.path_distance(x, y, [ROAD]) < 1.5:
             return True
         return 7.3 < x < 9.7 and 4.3 < y < 5.9
-    floor_grass = kit.grass_ground(rng, (X0 - 3, Y0 - 3, X1 + 3, Y1 + 3), height, per_m2=9,
-                                   keep_out=lambda x, y: bare(x, y) or noise.noise(Vector((x * 0.35, y * 0.35, 8.0))) < -0.1)
+    kit.grass_ground(rng, (X0 - 3, Y0 - 3, X1 + 3, Y1 + 3), height, per_m2=9,
+                     keep_out=lambda x, y: bare(x, y) or noise.noise(Vector((x * 0.35, y * 0.35, 8.0))) < -0.1)
     kit.grass_ground(rng, (X0 - 3, Y0 - 3, X1 + 3, Y1 + 3), height, per_m2=3, m=kit.mat("dead grass"),
                      keep_out=lambda x, y: bare(x, y))
     rock = reb.mat_surface("Mossy rock", [(0.0, (0.03, 0.04, 0.025)), (0.5, (0.08, 0.08, 0.07)), (1.0, (0.14, 0.13, 0.11))], scale=3, bump=0.9)
@@ -370,7 +370,7 @@ def build():
             x, y = r.uniform(14.0, 26.0), r.uniform(7.5, 13.0)
             if kit.path_distance(x, y, [ROAD]) > 0.25:
                 return x, y
-    grass = kit.meadow(rng, 500, verge, height)
+    kit.meadow(rng, 500, verge, height)
 
     # ---- Light: noon under thick cloud, mist hanging in the trees; the flashlight still on.
     sun = kit.time_light("noon", sun_heading=200, sun_energy=3.6, mist=((10.0, 8.0, 5.0), (90.0, 90.0, 18.0), 0.011),
@@ -389,9 +389,6 @@ def build():
     anim.flies((3.3, 8.3, height(3.3, 8.3) + 0.05), count=6, radius=0.35)
     anim.flies((8.5, 5.1, 0.1), count=5, radius=0.3)
     anim.sway(torn, amount=0.03, along=(0.6, 1.0), every=2, tip=1)
-    anim.sway(ferns, amount=0.02)
-    anim.sway(grass, amount=0.03)
-    anim.sway(floor_grass, amount=0.02)
     anim.swing(ribbon_knot, axis=0, degrees=12)
 
     # ---- What the game needs.

@@ -31,8 +31,8 @@ in a loop over the drop with the stake swinging on the end of it. At the
 far end, x 19.8-20.4, the path goes on east. The room is shifted 1.4 m
 west at export to fit the floor in the game's 0.6-19 m.
 
-Moving: the board on its chain, the car rocking on the cable, the grass,
-the rope and its stake over the drop, all of it slight.
+Moving: the board on its chain, the car rocking on the cable, the rope
+and its stake over the drop, all of it slight. The grass stands still.
 
 State "gondola-runs" (Hal's key in the booth, day/events.ts): the new cog
 in, the bullwheel turning, the drive's lamp lit on the wheel house, and the
@@ -555,7 +555,7 @@ def build():
     def no_grass(x, y):
         return ((X0 - 0.3 < x < X1 + 0.3 and Y0 - 0.3 < y < Y1 + 0.5) or on_path(x, y)
                 or (x > X1 + 0.3 and abs(y - ledge_y(x)) > LEDGE_HALF + 0.05))
-    grass = kit.grass_ground(rng, (-8, -8, 30, 16), height, keep_out=no_grass, per_m2=28)
+    kit.grass_ground(rng, (-8, -8, 30, 16), height, keep_out=no_grass, per_m2=28)
     kit.grass_ground(rng, (-24, -24, 50, 40), height, keep_out=lambda x, y: no_grass(x, y) or (-8 < x < 30 and -8 < y < 16) or height(x, y) < -30, per_m2=5)
     kit.meadow(rng, 140, lambda r: (r.uniform(X0 + 1, X1 - 1), r.uniform(Y0 + 1, Y1 - 1)), height, mat("dead grass"))
     kit.rocks("Rocks", rng, [(0.5, 6.0, 0.9), (1.2, 12.2, 0.7), (18.4, 12.9, 0.6), (-1.5, 2.5, 0.8)], height, mat("granite"))
@@ -585,7 +585,6 @@ def build():
     anim = kit.Anim(16)
     anim.swing(hook, axis=0, degrees=2)
     anim.custom(lambda k: setattr(pivot, "rotation_euler", (math.radians(0.6) * math.sin(anim.phase(k)), 0, 0)))
-    anim.sway(grass, amount=0.02)
     anim.flicker(glow, None, depth=0.35, dropouts=2)
     anim.swing(rope_pivot, axis=0, degrees=3)
 

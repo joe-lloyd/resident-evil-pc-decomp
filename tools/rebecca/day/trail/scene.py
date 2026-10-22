@@ -12,7 +12,7 @@ Metres, real sizes, but the walkable strip keeps the game units the trail has
 always had (X 2000-5000, Z 0-16000), so the ridge and the yard still meet it
 where they did: x 1.18-2.94, y 0-9.41.
 
-Moving: grass and ferns stir slightly in the wind.
+Nothing moves: no wind reaches down here, so the grass and ferns stand still.
 """
 import math
 import os
@@ -20,13 +20,11 @@ import random
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import bpy  # noqa: E402
 import reb  # noqa: E402
 import kit  # noqa: E402
 from mathutils import Vector, noise  # noqa: E402
 
 OUT = os.environ.get("RE1_OUT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "renders"))
-FRAMES = 16
 X0, X1 = 2000 / reb.UNITS, 5000 / reb.UNITS
 Y0, Y1 = 0.0, 16000 / reb.UNITS
 MID = (X0 + X1) / 2
@@ -119,10 +117,7 @@ def build():
     kit.forest(rng, height, no_tree, (-9, -12, 13, 24), count=150, spacing=1.3, tall=(12, 20), ferns=40, needles=800)
 
     # Grass over the banks, to the path's ragged edge and under the trees.
-    grass = kit.grass_ground(rng, (X0 - 7, -9, X1 + 7, Y1 + 12), height, keep_out=lambda x, y: on_path(x, y) or near_lens(x, y, 2.5), per_m2=22)
-    grass_rest = [Vector(p.co) for p in grass.data.vertices]
-    fern_ob = bpy.data.objects["Ferns"]
-    fern_rest = [(Vector(p.co), max(0.0, p.co.z - height(p.co.x, p.co.y))) for p in fern_ob.data.vertices]
+    kit.grass_ground(rng, (X0 - 7, -9, X1 + 7, Y1 + 12), height, keep_out=lambda x, y: on_path(x, y) or near_lens(x, y, 2.5), per_m2=22)
 
     # Light: a low morning sun from the east through the trunks, mist lying
     # in the trees. The sky the cameras see is the kit's overcast, and past
@@ -133,18 +128,6 @@ def build():
                  keep_out=lambda x, y: math.hypot(x - MID, y - Y1 / 2) < 34, shape=far_land, mist=30.0, rng=random.Random(9))
     reb.spot("Soft trail light", (3, 4, 10), (3, 5, 0), 6000, (0.9, 0.85, 0.7), 120, 1, 5)
     reb.spot("Upper trail fill", (3, 12, 7), (3, 8, 0), 3000, (0.8, 0.88, 1.0), 120, 1, 5)
-
-    def pose(k):
-        phase = 2 * math.pi * k / FRAMES
-        for idx in range(2, len(grass_rest), 3):
-            p = grass_rest[idx]
-            wv = math.sin(phase + p.x * 0.6 + p.y * 0.3)
-            grass.data.vertices[idx].co = (p.x + 0.018 * wv, p.y + 0.007 * wv, p.z)
-        grass.data.update()
-        for idx, (p, above) in enumerate(fern_rest):
-            sway = 0.012 * math.sin(phase + p.y * 0.5) * above
-            fern_ob.data.vertices[idx].co = (p.x + sway, p.y, p.z)
-        fern_ob.data.update()
 
     # The kit's worn, bitty surfaces, as every kit room has.
     kit.wear(float(os.environ.get("RE1_WEAR", "1.3")))
@@ -159,7 +142,6 @@ def build():
             "ground": "earth",
             "floors": [],
         },
-        anim={"frames": FRAMES, "ticks": 3, "set": pose},
     )
 
 
