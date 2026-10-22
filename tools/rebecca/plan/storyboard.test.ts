@@ -90,8 +90,8 @@ test('each recorded visit has its own player and each room card shows coverage',
   // bridge, the platform, the bunkhouse, the office, the mess, the
   // workshop, the woods, the den, the logging road, the camp gate, the camp
   // yard and the depot each show one reviewed recording in place of their
-  // quarter visits.
-  assert.equal(html.split('<video controls preload="none"').length - 1, 89);
+  // quarter visits. The camp yard adds a second, in god mode.
+  assert.equal(html.split('<video controls preload="none"').length - 1, 90);
   for (const scene of board.scenes) {
     for (const clip of scene.clips) {
       assert.ok(html.includes(`src="${clip.file}" type="video/mp4"`), clip.file);
@@ -100,7 +100,7 @@ test('each recorded visit has its own player and each room card shows coverage',
   }
   assert.deepEqual(board.scenes.filter((s) => !s.clips.length).map((s) => s.place.id), ['flume', 'line-track', 'weather', 'mast', 'wine']);
   assert.equal(html.split('No footage of this room in the four-quarter recording.').length - 1, 5);
-  assert.ok(html.includes('9 recorded clips'), 'repeated room visits remain visible on cards');
+  assert.ok(html.includes('4 recorded clips'), 'repeated room visits remain visible on cards');
 });
 
 test('visit labels keep logged actions and distinguish the cabin plan id from its recording slug', () => {

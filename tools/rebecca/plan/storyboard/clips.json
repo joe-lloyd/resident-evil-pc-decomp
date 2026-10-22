@@ -1292,107 +1292,107 @@
       "quarter": 1,
       "visit": 1,
       "start": 0.5,
-      "end": 35.5,
+      "end": 34.5,
       "roomStart": 0.5,
-      "posterTime": 11.0,
-      "file": "clips/camp-gate-review-20261022-b5769bac.mp4",
-      "poster": "clips/camp-gate-review-20261022-b5769bac.jpg",
+      "posterTime": 9.0,
+      "file": "clips/camp-gate-review-20261022-f4c6361c.mp4",
+      "poster": "clips/camp-gate-review-20261022-f4c6361c.jpg",
       "review": {
         "recorded": "2026-10-22",
-        "sha256": "b5769bac7ef6c65a12595dc158d134821e3b19477bad82233b964294ade3696a",
-        "gameCommit": "134923b5f21d2bea631b6feebf79903facb6f9a4",
+        "sha256": "f4c6361c1016a22388578a0206af99e924445eeaed646e3e870407db0b35f5e4",
+        "gameCommit": "e9b7bd16469f60b0c9b203ac1a862ea7b4bd5b09",
         "checkpoint": {
           "file": "camp-gate-entry.json",
           "sha256": "df4bdd0a17e12fc8464cffd6fc13b390776e71a5c8e73ab6f46c8ba2227b8c89"
         },
         "god": false,
         "audio": false,
-        "source": "recordings/camp-gate-20261022103331.mp4",
-        "log": "recordings/camp-gate-review-20261022-b5769bac.json",
-        "logSha256": "bdeb2a51fa0563fd4884993306c0cb9d0e1770a74299a1da74232bc4382405e5"
+        "source": "recordings/camp-gate-20261022105501.mp4",
+        "log": "recordings/camp-gate-review-20261022-f4c6361c.json",
+        "logSha256": "717d7d4bc464d5eec9791caab669cb47ac7b6d68646382e32899fa2a9326d1ae"
       },
-      "note": "Frames checked at 1 fps: the road in, the logger and his message, the pickup and its bloody door, the gate, the walk out to the yard",
+      "note": "Frames checked at 1 fps: the road in with no bald ground, the logger and his message, the pickup and its bloody door, the walk out to the yard",
       "events": [
         {
-          "t": 0,
-          "frame": 1239,
+          "t": 0.1,
+          "frame": 1316,
           "room": "camp-gate",
           "camera": 1,
           "what": "recording ready"
         },
         {
           "t": 1.7,
-          "frame": 1290,
+          "frame": 1368,
           "room": "camp-gate",
           "camera": 1,
           "what": "scene ready; items [{\"id\":2,\"qty\":14},{\"id\":1,\"qty\":0},{\"id\":65,\"qty\":1},{\"id\":30,\"qty\":1},{\"id\":57,\"qty\":1},{\"id\":28,\"qty\":2}]"
         },
         {
           "t": 3.8,
-          "frame": 1353,
+          "frame": 1430,
           "room": "camp-gate",
           "camera": 1,
           "what": "hold camp-gate-entry"
         },
         {
-          "t": 5.8,
-          "frame": 1415,
+          "t": 5.9,
+          "frame": 1495,
           "room": "camp-gate",
           "camera": 0,
           "what": "walk camp-gate-road"
         },
         {
-          "t": 7.9,
-          "frame": 1478,
+          "t": 8.1,
+          "frame": 1561,
           "room": "camp-gate",
           "camera": 0,
           "what": "walk"
         },
         {
-          "t": 12.7,
-          "frame": 1622,
+          "t": 12.4,
+          "frame": 1692,
           "room": "camp-gate",
-          "camera": 0,
+          "camera": 1,
           "what": "look camp-gate-logger"
         },
         {
-          "t": 14.7,
-          "frame": 1683,
+          "t": 14.6,
+          "frame": 1756,
           "room": "camp-gate",
-          "camera": 0,
+          "camera": 1,
           "what": "hold"
         },
         {
-          "t": 24.4,
-          "frame": 1977,
+          "t": 24.2,
+          "frame": 2049,
           "room": "camp-gate",
           "camera": 2,
           "what": "look camp-gate-pickup"
         },
         {
-          "t": 29.5,
-          "frame": 2132,
+          "t": 29.2,
+          "frame": 2200,
           "room": "camp-gate",
           "camera": 2,
           "what": "walk camp-gate-gate"
         },
         {
-          "t": 34.2,
-          "frame": 2273,
+          "t": 31.2,
+          "frame": 2261,
           "room": "camp-gate",
           "camera": 2,
           "what": "hold"
         },
         {
-          "t": 34.2,
-          "frame": 2273,
+          "t": 31.2,
+          "frame": 2261,
           "room": "camp-gate",
           "camera": 2,
           "what": "leaving for camp-yard"
         },
         {
-          "t": 39.2,
-          "frame": 2498,
+          "t": 36.4,
+          "frame": 2488,
           "room": "camp-yard",
           "camera": 0,
           "what": "arrived in camp-yard"
@@ -1456,6 +1456,111 @@
         {
           "t": 16.4,
           "frame": 1788,
+          "room": "depot",
+          "camera": 1,
+          "what": "arrived in depot"
+        }
+      ]
+    },
+    {
+      "room": "camp-yard",
+      "quarter": 1,
+      "visit": 2,
+      "start": 0.5,
+      "end": 52.5,
+      "roomStart": 0.5,
+      "posterTime": 12.0,
+      "file": "clips/camp-yard-review-20261022-37a7e681.mp4",
+      "poster": "clips/camp-yard-review-20261022-37a7e681.jpg",
+      "review": {
+        "recorded": "2026-10-22",
+        "sha256": "37a7e68154f0a9a8dfa4b33019875c39d688fd5880644352ebfdcdbfefb1deaa",
+        "gameCommit": "e9b7bd16469f60b0c9b203ac1a862ea7b4bd5b09",
+        "checkpoint": {
+          "file": "camp-yard-entry.json",
+          "sha256": "8ec72c6504de25a7aeb229c33d2777d5ec30cb6beeb26614cf228883ece28a91"
+        },
+        "god": true,
+        "audio": false,
+        "source": "recordings/camp-yard-20261022105827.mp4",
+        "log": "recordings/camp-yard-review-20261022-37a7e681.json",
+        "logSha256": "5ec148323d55e1595b5a3064e3b6a68ac803ff325b4d2203d18a1d34c65e1fb2"
+      },
+      "note": "God mode: the yard zombies kill this walk at normal damage. Frames checked at 1 fps: the burned body in the pit, the dead man by the log deck, the axe in the bunkhouse door, the cutters on the depot gate",
+      "events": [
+        {
+          "t": 0,
+          "frame": 1274,
+          "room": "camp-yard",
+          "camera": 0,
+          "what": "recording ready"
+        },
+        {
+          "t": 1.7,
+          "frame": 1327,
+          "room": "camp-yard",
+          "camera": 0,
+          "what": "scene ready; items [{\"id\":2,\"qty\":14},{\"id\":1,\"qty\":0},{\"id\":65,\"qty\":1},{\"id\":30,\"qty\":1},{\"id\":57,\"qty\":1},{\"id\":28,\"qty\":2}]"
+        },
+        {
+          "t": 3.8,
+          "frame": 1389,
+          "room": "camp-yard",
+          "camera": 0,
+          "what": "hold camp-yard-god-entry"
+        },
+        {
+          "t": 14.2,
+          "frame": 1705,
+          "room": "camp-yard",
+          "camera": 1,
+          "what": "look camp-yard-pit"
+        },
+        {
+          "t": 16.2,
+          "frame": 1764,
+          "room": "camp-yard",
+          "camera": 1,
+          "what": "hold"
+        },
+        {
+          "t": 24,
+          "frame": 2002,
+          "room": "camp-yard",
+          "camera": 2,
+          "what": "look camp-yard-logger"
+        },
+        {
+          "t": 25.5,
+          "frame": 2045,
+          "room": "camp-yard",
+          "camera": 2,
+          "what": "hold"
+        },
+        {
+          "t": 33.3,
+          "frame": 2281,
+          "room": "camp-yard",
+          "camera": 3,
+          "what": "look camp-yard-axe"
+        },
+        {
+          "t": 34.8,
+          "frame": 2326,
+          "room": "camp-yard",
+          "camera": 3,
+          "what": "hold"
+        },
+        {
+          "t": 34.8,
+          "frame": 2326,
+          "room": "camp-yard",
+          "camera": 3,
+          "what": "leaving for depot"
+        },
+        {
+          "t": 56.3,
+          "frame": 3051,
           "room": "depot",
           "camera": 1,
           "what": "arrived in depot"
