@@ -35,7 +35,7 @@ export const SAVES: readonly SaveRoom[] = [
   },
   {
     place: 'office', ribbons: 1,
-    props: "The foreman's typewriter on a stand by the door, the payroll half typed. The item box along the east wall, under the empty gun rack.",
+    props: "The foreman's typewriter on a stand by the door, the payroll half typed. A footlocker item box under the south window, by the door.",
     why: 'Off the camp yard, behind the key on the dead cook: the reward for getting into the camp. The mill, the pond and the flume are within four doors.',
   },
   {
