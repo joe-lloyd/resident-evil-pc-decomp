@@ -3140,3 +3140,259 @@ def spencer_mansion(at, heading=0.0, scale=1.0, lit=0, far=False, seed=3, name="
         world = [tuple(origin + turn @ (Vector(p) * scale)) for p in vv]
         obs.append(reb.mesh_object(f"{name} {key}", world, ff, m, smooth=False))
     return obs
+
+
+# ---------------------------------------------------------------------------
+# Camp buildings: board huts with their roofs the right way up, shut doors,
+# windows, and the drums that stand round them
+# ---------------------------------------------------------------------------
+
+
+def _slab(v, f, top, thick):
+    """A slab under the four corners `top` (in order round it), `thick` deep straight down."""
+    k = len(v)
+    v.extend(tuple(p) for p in top)
+    v.extend((p[0], p[1], p[2] - thick) for p in top)
+    f.extend(((k, k + 1, k + 2, k + 3), (k + 7, k + 6, k + 5, k + 4)))
+    f.extend((k + i, k + 4 + i, k + 4 + (i + 1) % 4, k + (i + 1) % 4) for i in range(4))
+
+
+def gable_roof(name, rect, h, roof_m, gable_m, ridge="x", pitch=0.3, thick=0.12, eaves=0.35, ends=0.25):
+    """A pitched roof on the walls round `rect` (x0, x1, y0, y1; walls
+    `thick` outside it, `h` high): two slopes rising from the eaves to a
+    ridge along x or y, so the ridge is the highest line and the roof sits on
+    its walls with no gap; gable ends filling the walls up to it, and a cap
+    over the ridge. Returns the ridge's height."""
+    x0, x1, y0, y1 = rect
+    t = math.tan(pitch)
+    v, f, gv, gf = [], [], [], []
+    if ridge == "x":
+        half, mid = (y1 - y0) / 2 + thick, (y0 + y1) / 2
+        lo, hi = x0 - thick - ends, x1 + thick + ends
+    else:
+        half, mid = (x1 - x0) / 2 + thick, (x0 + x1) / 2
+        lo, hi = y0 - thick - ends, y1 + thick + ends
+    top = h + half * t
+    low = h - eaves * t
+
+    def at(a, b, z):
+        """A point by its distance `a` along the ridge and `b` across it."""
+        return (a, b, z) if ridge == "x" else (b, a, z)
+    for s in (-1, 1):
+        edge = mid + s * (half + eaves)
+        _slab(v, f, [at(lo, edge, low + 0.06), at(hi, edge, low + 0.06), at(hi, mid, top + 0.06), at(lo, mid, top + 0.06)], 0.06)
+    # The cap: a bent strip over the ridge.
+    for s in (-1, 1):
+        _slab(v, f, [at(lo, mid, top + 0.09), at(hi, mid, top + 0.09), at(hi, mid + s * 0.18, top + 0.09 - 0.18 * t), at(lo, mid + s * 0.18, top + 0.09 - 0.18 * t)], 0.03)
+    # Gables: a triangle filling each end wall from its top up to the ridge, both faces.
+    ends_at = (x0 - thick, x0, x1, x1 + thick) if ridge == "x" else (y0 - thick, y0, y1, y1 + thick)
+    for a in ends_at:
+        k = len(gv)
+        gv.extend((at(a, mid - half, h), at(a, mid + half, h), at(a, mid, top)))
+        gf.append((k, k + 1, k + 2))
+    roof = reb.mesh_object(f"{name} roof", v, f, roof_m, smooth=False)
+    reb.mesh_object(f"{name} gables", gv, gf, gable_m, smooth=False)
+    # Fascia boards along the eaves' edges.
+    fv, ff = [], []
+    for s in (-1, 1):
+        edge = mid + s * (half + eaves)
+        _slab(fv, ff, [at(lo, edge, low + 0.07), at(hi, edge, low + 0.07), at(hi, edge - s * 0.04, low + 0.07), at(lo, edge - s * 0.04, low + 0.07)], 0.2)
+    reb.mesh_object(f"{name} fascia", fv, ff, mat("dark wood"), smooth=False)
+    return roof, top
+
+
+def shut_door(name, rect, side, a0, a1, top, m, thick=0.12, frame_m=None, handle_m=None):
+    """A door shut in a doorway that kit.walls cut in `rect`'s `side` wall
+    (a0..a1 along it, `top` high): a slab set a little into the wall, its
+    frame proud of the wall outside and a handle. Returns the slab, to hang
+    things on."""
+    x0, x1, y0, y1 = rect
+    frame_m = frame_m or mat("dark wood")
+    handle_m = handle_m or mat("iron")
+    w, mid = a1 - a0, (a0 + a1) / 2
+    out = {"n": -1, "s": 1, "w": -1, "e": 1}[side]
+    if side in "ns":
+        face = (y0 - thick) if side == "n" else (y1 + thick)
+
+        def p(a, d, z):
+            return (a, face - out * d, z)
+        size = lambda along, across, z: (along, across, z)
+    else:
+        face = (x0 - thick) if side == "w" else (x1 + thick)
+
+        def p(a, d, z):
+            return (face - out * d, a, z)
+        size = lambda along, across, z: (across, along, z)
+    door = reb.prim("cube", name, m, p(mid, 0.05, top / 2), size(w - 0.02, 0.05, top - 0.01))
+    for a in (a0 - 0.04, a1 + 0.04):
+        reb.prim("cube", f"{name} frame", frame_m, p(a, -0.01, (top + 0.04) / 2), size(0.08, 0.06, top + 0.04))
+    reb.prim("cube", f"{name} head", frame_m, p(mid, -0.01, top + 0.04), size(w + 0.16, 0.06, 0.08))
+    hx = a1 - 0.12 if side in "sw" else a0 + 0.12
+    reb.prim("cube", f"{name} handle", handle_m, p(hx, -0.02, top * 0.48), size(0.04, 0.05, 0.14), bevel=0.01)
+    return door
+
+
+def hut_window(rect, side, a0, a1, z0, z1, frame_m, glass_m, thick=0.12, boarded=False, broken=False, board_m=None):
+    """A window in a hut's wall (as kit.walls cut it): glass, a frame, a sill,
+    and boards nailed over it if `boarded`."""
+    x0, x1, y0, y1 = rect
+    mid, wdt, hgt, zc = (a0 + a1) / 2, a1 - a0, z1 - z0, (z0 + z1) / 2
+    if side in "ns":
+        y = y0 - thick / 2 if side == "n" else y1 + thick / 2
+        out = -1 if side == "n" else 1
+        put = lambda a, d, z: (a, y + out * d, z)
+        size = lambda along, across, z: (along, across, z)
+        tilt = lambda r: (0, r, 0)
+    else:
+        x = x0 - thick / 2 if side == "w" else x1 + thick / 2
+        out = -1 if side == "w" else 1
+        put = lambda a, d, z: (x + out * d, a, z)
+        size = lambda along, across, z: (across, along, z)
+        tilt = lambda r: (r, 0, 0)
+    if broken:
+        reb.prim("cube", "Window glass", glass_m, put(mid - wdt * 0.25, 0, z0 + hgt * 0.3), size(wdt * 0.5, 0.01, hgt * 0.6), rot=tilt(0.3))
+    else:
+        reb.prim("cube", "Window glass", glass_m, put(mid, 0, zc), size(wdt, 0.01, hgt))
+    for zz in (z0, z1):
+        reb.prim("cube", "Window frame", frame_m, put(mid, 0.05, zz), size(wdt + 0.12, 0.05, 0.06))
+    for aa in (a0, a1, mid):
+        reb.prim("cube", "Window frame", frame_m, put(aa, 0.05, zc), size(0.05 if aa == mid else 0.06, 0.05, hgt))
+    reb.prim("cube", "Window sill", frame_m, put(mid, 0.09, z0 - 0.04), size(wdt + 0.2, 0.12, 0.04))
+    if boarded:
+        a, b = put(a0 - 0.1, 0.09, 0), put(a1 + 0.1, 0.09, 0)
+        barricade("Boards over the window", board_m or mat("planks"), a[:2], b[:2], z0 + 0.1, z1 - 0.1, count=3, seed=int(mid * 10))
+
+
+def hut(name, rect, h, wall_m, roof_m, openings=(), ridge="x", pitch=0.3, thick=0.12, eaves=0.35, inside=None, trim_m=None, blocks=True):
+    """A camp building on `rect` (x0, x1, y0, y1): board walls with their
+    openings (kit.walls' [(side, a0, a1, z0, z1)]), a sill board round the
+    foot and corner posts, a pitched roof the right way up (gable_roof), a dim
+    floor and ceiling inside where a window shows it, and a hidden footprint
+    that blocks her (`blocks`). Shut the doors with shut_door and glaze the
+    windows with hut_window. Returns the roof's ridge height."""
+    x0, x1, y0, y1 = rect
+    trim_m = trim_m or mat("dark wood")
+    walls(x0, y0, x1, y1, h, wall_m, openings, thick=thick, name=f"{name} wall",
+          floor=inside or reb.mat_plain(f"{name} floor", (0.05, 0.04, 0.03), 0.9),
+          ceiling=reb.mat_plain(f"{name} ceiling", (0.04, 0.03, 0.025), 0.9))
+    for side in "nswe":
+        if side in "ns":
+            y = y0 - thick - 0.02 if side == "n" else y1 + thick + 0.02
+            reb.prim("cube", f"{name} sill", trim_m, ((x0 + x1) / 2, y, 0.1), (x1 - x0 + 2 * thick + 0.08, 0.06, 0.24))
+        else:
+            x = x0 - thick - 0.02 if side == "w" else x1 + thick + 0.02
+            reb.prim("cube", f"{name} sill", trim_m, (x, (y0 + y1) / 2, 0.1), (0.06, y1 - y0 + 2 * thick + 0.08, 0.24))
+    for cx in (x0 - thick, x1 + thick):
+        for cy in (y0 - thick, y1 + thick):
+            reb.prim("cube", f"{name} corner", trim_m, (cx, cy, h / 2), (0.12, 0.12, h))
+    _, top = gable_roof(name, rect, h, roof_m, wall_m, ridge=ridge, pitch=pitch, thick=thick, eaves=eaves)
+    if blocks:
+        foot = reb.prim("cube", f"{name} footprint", None, ((x0 + x1) / 2, (y0 + y1) / 2, 0.5), (x1 - x0 + 2 * thick, y1 - y0 + 2 * thick, 1.0))
+        foot.hide_render = True
+        reb.wall(foot)
+    return top
+
+
+def drum_paint(name, rgb):
+    """A drum's paint as it is after years in a fuel yard: chipped to rust at
+    the rims, streaked with run oil and grime from the top down."""
+    m, nodes, links, bsdf = reb.nodes_material(name)
+    bsdf.inputs["Roughness"].default_value = 0.6
+    bsdf.inputs["Metallic"].default_value = 0.25
+    tc = nodes.new("ShaderNodeTexCoord")
+    n = reb.noise_tex(nodes, links, 6, 10, 0.65)
+    paint = reb.ramp(nodes, links, n.outputs["Fac"], [(0.3, (0.16, 0.07, 0.03)), (0.42, tuple(c * 0.7 for c in rgb)), (0.6, rgb), (1.0, tuple(c * 0.8 for c in rgb))]).outputs["Color"]
+    # Streaks: noise stretched along z, darker toward the top where oil ran down.
+    mp = nodes.new("ShaderNodeMapping")
+    mp.inputs["Scale"].default_value = (14, 14, 1.2)
+    links.new(tc.outputs["Object"], mp.inputs["Vector"])
+    streak = nodes.new("ShaderNodeTexNoise")
+    streak.inputs["Detail"].default_value = 4
+    links.new(mp.outputs["Vector"], streak.inputs["Vector"])
+    run = reb.ramp(nodes, links, streak.outputs["Fac"], [(0.45, (1, 1, 1)), (0.62, (0.25, 0.2, 0.15))]).outputs["Color"]
+    mix = nodes.new("ShaderNodeMix")
+    mix.data_type = "RGBA"
+    mix.blend_type = "MULTIPLY"
+    mix.inputs["Factor"].default_value = 0.85
+    links.new(paint, mix.inputs["A"])
+    links.new(run, mix.inputs["B"])
+    links.new(mix.outputs["Result"], bsdf.inputs["Base Color"])
+    reb.bumped(nodes, links, bsdf, n.outputs["Fac"], 0.3, 0.01)
+    return m
+
+
+def stencil(ob, lines, m, radius=0.29, z=0.08, size=0.075, turn=0.0):
+    """Stencilled words round a drum's side (`ob` as drum() made it, standing):
+    `lines` top to bottom, wrapped onto the curve so no letter stands off it,
+    facing `turn` radians round from the drum's -y."""
+    parts = []
+    for i, words in enumerate(lines):
+        s = size if i == 0 else size * 0.7
+        t = text(f"{ob.name} stencil {i}", words, m, (0, 0, 0), size=s, depth=0.001)
+        t.data.transform(t.matrix_basis)
+        t.matrix_basis.identity()
+        zz = z - i * size * 1.15
+        for v in t.data.vertices:
+            a = v.co.x / radius + turn
+            r = radius + 0.004 - v.co.y
+            v.co = (r * math.sin(a), -r * math.cos(a), v.co.z + zz)
+        t.parent = ob
+        parts.append(t)
+    return parts
+
+
+def skidder(name, at, heading=0.0, paint=None, chokers=None):
+    """A wheeled log skidder, blade toward +x before `heading` turns it,
+    centred on `at` (x, y, ground z), 4.1 m long: the frame and engine
+    hood with louvres, an open cab under a roll cage, an arch and winch at
+    the back, the dozer blade down in front, and four big treaded tyres on
+    yellow rims, each sitting on the ground. Returns the joined object;
+    `chokers` (a list) gets the winch's world position to hang chains from."""
+    paint = paint or reb.mat_surface("Skidder yellow", [(0.0, (0.3, 0.2, 0.02)), (0.6, (0.5, 0.34, 0.03)), (0.8, (0.25, 0.12, 0.04)), (1.0, (0.08, 0.05, 0.03))], scale=3, rough=0.55, bump=0.2)
+    x0, x1, R = -2.05, 2.05, 0.72
+    sk = [reb.prim("cube", "Skidder frame", paint, (0, 0, 0.9), (x1 - x0 - 0.6, 1.2, 0.6), bevel=0.04)]
+    engine = loft("Skidder engine", [(x1 - 1.75, 0.58, 1.15, 1.85, 4), (x1 - 0.5, 0.56, 1.15, 1.82, 4), (x1 - 0.25, 0.5, 1.15, 1.7, 3)], [paint], ring=24)
+    sk.append(engine)
+    for s in (-1, 1):
+        for k in range(5):
+            sk.append(reb.prim("cube", "Engine louvre", mat("black"), (x1 - 1.5 + k * 0.2, s * 0.575, 1.5), (0.08, 0.02, 0.3)))
+        # Fenders over the tyres, so they sit in arches and not out in the air.
+        for wx in (x0 + 0.8, x1 - 1.0):
+            sk.append(reb.prim("cube", "Fender", paint, (wx, s * 0.95, 1.52), (1.7, 0.62, 0.05), rot=(0, 0, 0), bevel=0.02))
+    sk.append(reb.prim("cube", "Skidder cab floor", paint, (x0 + 1.6, 0, 1.3), (1.4, 1.5, 0.15)))
+    for dx in (0.95, 2.25):
+        for dy in (-0.7, 0.7):
+            sk.append(rod("Cab post", mat("black"), (x0 + dx, dy, 1.35), (x0 + dx, dy, 2.75), 0.04))
+    sk.append(reb.prim("cube", "Cab roof", paint, (x0 + 1.6, 0, 2.8), (1.6, 1.6, 0.08)))
+    sk.append(reb.prim("cube", "Seat", mat("black"), (x0 + 1.5, 0, 1.55), (0.45, 0.5, 0.3)))
+    sk.append(rod("Exhaust", mat("rust"), (x1 - 0.7, -0.35, 1.8), (x1 - 0.7, -0.35, 2.6), 0.05))
+    for wx in (x0 + 0.8, x1 - 1.0):
+        for s in (-1, 1):
+            sk += wheel("Skidder", (wx, s * 0.95, R), r=R, width=0.55, rim=paint)
+            # Deep chevron lugs on the crown, the look of a forestry tyre.
+            v, f = [], []
+            for k in range(22):
+                a = 2 * math.pi * k / 22
+                for half in (-1, 1):
+                    out, along = Vector((math.cos(a), 0, math.sin(a))), Vector((-math.sin(a), 0, math.cos(a)))
+                    c = Vector((wx, s * 0.95 + half * 0.13, R)) + out * (R + 0.01) + along * half * 0.04
+                    k0 = len(v)
+                    for dr in (-0.03, 0.03):
+                        for dt, dy in ((-0.035, -0.12), (0.035, -0.12), (0.035, 0.12), (-0.035, 0.12)):
+                            v.append(tuple(c + out * dr + along * (dt + dy * half * 0.35) + Vector((0, dy, 0))))
+                    f.extend(tuple(k0 + i for i in q) for q in ((0, 3, 2, 1), (4, 5, 6, 7), (0, 1, 5, 4), (1, 2, 6, 5), (2, 3, 7, 6), (3, 0, 4, 7)))
+            lugs = reb.mesh_object("Tyre lugs", v, f, mat("rubber"), smooth=False)
+            sk.append(lugs)
+    sk.append(reb.prim("cube", "Blade", paint, (x1 + 0.35, 0, 0.38), (0.12, 2.6, 0.75), rot=(0, 0.2, 0), bevel=0.02))
+    for s in (-1, 1):
+        sk.append(reb.prim("cube", "Blade arm", mat("iron"), (x1 + 0.05, s * 0.6, 0.7), (0.7, 0.12, 0.12), rot=(0, 0.4, 0)))
+        sk.append(reb.prim("cube", "Arch leg", paint, (x0 + 0.3, s * 0.7, 1.3), (0.2, 0.2, 1.3), rot=(0, -0.2, 0)))
+    sk.append(reb.prim("cube", "Arch", paint, (x0 + 0.15, 0, 1.9), (0.25, 1.6, 0.25)))
+    sk.append(reb.prim("cyl", "Winch drum", mat("iron"), (x0 + 0.5, 0, 1.1), (0.5, 0.5, 0.9), rot=(math.pi / 2, 0, 0)))
+    ob = join(name, sk, origin=(0, 0, 0))
+    ob.location = at
+    ob.rotation_euler = (0, 0, heading)
+    if chokers is not None:
+        c, s_ = math.cos(heading), math.sin(heading)
+        chokers.append(Vector((at[0] + (x0 + 0.1) * c, at[1] + (x0 + 0.1) * s_, at[2] + 1.75)))
+    return ob
