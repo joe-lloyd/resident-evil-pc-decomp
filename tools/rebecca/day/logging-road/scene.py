@@ -19,7 +19,8 @@ the trailer's tail and the log ends at x 4.0, the front bumper at x 16.6,
 y 7.0-9.4; the driver's door is on the south side at x 13.0-14.3, open.
 She gets round it on either verge. The road goes on west to the woods
 (the west edge, y 6.4-10) and east to the camp gate (the east edge,
-y 6.2-11). The notice is on the west face of a spruce at x 6.0, y 3.6, just off the north verge.
+y 6.2-11). The notice is nailed to a spruce at x 6.0, y 3.6, just off the north verge,
+facing down the road to the west.
 
 Moving: the blinker, the wipers twitching, flies on the seat and on the
 blood by the wheel. The grass stands still. Past the verges the forest
@@ -263,7 +264,9 @@ def build():
             kit.rod("Bunk stake", rack, (bx, TY + s * 1.2, 1.2), (bx, TY + s * 1.3, 2.7), 0.045)
     reb.prim("cube", "Reach pole", mat("iron"), (7.6, TY, 0.9), (5.0, 0.18, 0.18))
     reb.prim("cube", "Trailer frame", mat("iron"), (5.1, TY, 0.85), (1.8, 0.9, 0.25))
-    logs_m = reb.mat_surface("Log bark", [(0.0, (0.05, 0.035, 0.025)), (0.6, (0.12, 0.085, 0.06)), (1.0, (0.18, 0.14, 0.1))], scale=6, bump=0.9)
+    # Straight felled spruce, sawn square, the bark in long scales along
+    # each log (the owner: no wavy, bumpy trunks).
+    logs_m = kit.spruce_bark("Log bark")
     end_m = reb.mat_surface("Log ends", [(0.0, (0.28, 0.18, 0.09)), (0.7, (0.42, 0.3, 0.16)), (1.0, (0.2, 0.12, 0.06))], scale=12, bump=0.2)
     rows = [(4, 0.0), (3, 0.5), (2, 0.95)]
     for count, lift in rows:
@@ -272,7 +275,9 @@ def build():
             z = 1.53 + lift
             r = rng.uniform(0.26, 0.31)
             x0, x1 = TAIL + rng.uniform(0, 0.4), 12.25 - rng.uniform(0, 0.3)
-            kit.rough_log("Log", (x0, y, z), (x1, y + rng.uniform(-0.04, 0.04), z + rng.uniform(-0.03, 0.03)), r * 1.1, m=logs_m, seed=100 + count * 10 + k, stubs=rng.randint(0, 2), sawn=end_m)
+            rng.uniform(-0.04, 0.04), rng.uniform(-0.03, 0.03), rng.randint(0, 2)   # the old wobble's draws, so the forest stands where it did
+            ends = ((x0, y, z), (x1, y, z)) if (count + k) % 2 else ((x1, y, z), (x0, y, z))
+            kit.felled_log("Log", *ends, r * 1.05, logs_m, end_m, seed=100 + count * 10 + k)
     for cx in (6.8, 9.9):
         pts = [(cx, TY - 1.25, 1.2), (cx, TY - 1.15, 2.1), (cx, TY - 0.6, 2.75), (cx, TY + 0.6, 2.75), (cx, TY + 1.15, 2.1), (cx, TY + 1.25, 1.2)]
         for a, b in zip(pts, pts[1:]):
@@ -335,27 +340,45 @@ def build():
     verge_trunks = reb.mask(reb.trunks("Verge spruce trunks", mat("bark"), standing))
     kit.tree_roots(rng, standing, height)
     nx, ny = NOTICE_TREE
-    # On the west face of the trunk, read by anyone coming from the woods:
-    # find the bark there, since the trunk is not round.
-    bark = [v.co.x for v in verge_trunks.data.vertices if abs(v.co.z - 1.65) < 1.2 and abs(v.co.y - ny) < 0.3 and abs(v.co.x - nx) < 1.5]
-    face_x = min(bark) - 0.03
-    west = (math.pi / 2, 0, -math.pi / 2)
+    # Nailed to the trunk square to anyone coming up the road from the woods,
+    # in the middle of the trunk as camera 4 sees it. The trunk leans and is
+    # not round, so find its middle and its bark at the notice's height.
+    nz = 1.65
+    toward = Vector((2.6 - nx, 5.0 - ny, 0)).normalized()   # camera 4's eye
+    # The trunk's rings are the levels with a vertex all the way round;
+    # the branch stubs' few vertices are not.
+    levels = {}
+    for v in verge_trunks.data.vertices:
+        if math.hypot(v.co.x - nx, v.co.y - ny) < 1.5:
+            levels.setdefault(round(v.co.z, 4), []).append(v.co.copy())
+    rings = {z: ps for z, ps in levels.items() if len(ps) >= 12}
+    z0, z1 = max(z for z in rings if z <= nz), min(z for z in rings if z > nz)
+    lo, hi = rings[z0], rings[z1]
+    t = (nz - z0) / (z1 - z0)
+    mid = sum(lo, Vector()) / len(lo) * (1 - t) + sum(hi, Vector()) / len(hi) * t
+    reach = max((p - sum(lo, Vector()) / len(lo)).dot(toward) for p in lo) * (1 - t) + max((p - sum(hi, Vector()) / len(hi)).dot(toward) for p in hi) * t
+    at = Vector((mid.x, mid.y, nz)) + toward * (reach + 0.02)
+    yaw = math.atan2(toward.y, toward.x)
+    face = (math.pi / 2, 0, math.atan2(toward.x, -toward.y))
     # A board off a crate, painted and nailed up: no paper to flap about.
     board = kit.boards("Notice board", (0.2, 0.17, 0.13), width=0.2, seam=0.03, grime=0.7)
-    reb.prim("cube", "Notice", board, (face_x, ny, 1.65), (0.035, 0.52, 0.4), bevel=0.006)
-    kit.fit_text(kit.text("Notice head", "NO ENTRY", mat("red paint"), (face_x - 0.02, ny, 1.74), size=0.12, rot=west), 0.44, 0.12)
-    kit.fit_text(kit.text("Notice words", "TURN BACK", mat("white paint"), (face_x - 0.02, ny, 1.56), size=0.08, rot=west), 0.4, 0.08)
+    reb.prim("cube", "Notice", board, tuple(at), (0.035, 0.52, 0.4), rot=(0, 0, yaw), bevel=0.006)
+    front = at + toward * 0.02
+    kit.fit_text(kit.text("Notice head", "NO ENTRY", mat("red paint"), tuple(front + Vector((0, 0, 0.09))), size=0.12, rot=face), 0.44, 0.12)
+    kit.fit_text(kit.text("Notice words", "TURN BACK", mat("white paint"), tuple(front + Vector((0, 0, -0.09))), size=0.08, rot=face), 0.4, 0.08)
+    across = Vector((-toward.y, toward.x, 0))
     for dy in (-0.22, 0.22):
-        for z in (1.81, 1.49):
-            reb.prim("cyl", "Nail", mat("iron"), (face_x - 0.02, ny + dy, z), (0.014, 0.014, 0.03), rot=(0, math.pi / 2, 0), segments=6)
+        for dz in (0.16, -0.16):
+            reb.prim("cyl", "Nail", mat("iron"), tuple(front + across * dy + Vector((0, 0, dz))), (0.014, 0.014, 0.03), rot=(0, math.pi / 2, yaw), segments=6)
 
     # ---- On the south verge, seen past the log ends: the crew's cold deck,
     # a few logs left for the next load, the stumps they came off, the slash.
-    deck_m = reb.mat_surface("Deck bark", [(0.0, (0.045, 0.032, 0.022)), (0.6, (0.1, 0.075, 0.05)), (1.0, (0.15, 0.12, 0.085))], scale=6, bump=0.9)
+    deck_m = kit.spruce_bark("Deck bark", (0.028, 0.02, 0.014), (0.09, 0.068, 0.048), (0.16, 0.13, 0.1))
     deck_ends = reb.mat_surface("Deck log ends", [(0.0, (0.2, 0.13, 0.07)), (0.7, (0.32, 0.23, 0.12)), (1.0, (0.16, 0.1, 0.05))], scale=12, bump=0.2)
     for k, (y, z, r) in enumerate(((13.1, 0.28, 0.3), (13.7, 0.3, 0.32), (14.3, 0.32, 0.28), (13.4, 0.8, 0.29), (14.0, 0.82, 0.3))):
         x0 = 3.2 + rng.uniform(-0.2, 0.2)
-        reb.mask(kit.rough_log("Cold deck log", (x0, y, height(x0, y) + z - 0.05), (x0 + 6.2 + rng.uniform(-0.3, 0.3), y + rng.uniform(-0.1, 0.1), height(x0 + 6, y) + z - 0.05), r, m=deck_m, seed=200 + k, stubs=1, sawn=deck_ends))
+        x1 = x0 + 6.2 + rng.uniform(-0.3, 0.3)
+        reb.mask(kit.felled_log("Cold deck log", (x0, y, height(x0, y) + z - 0.05), (x1, y + rng.uniform(-0.1, 0.1), height(x1, y) + z - 0.05), r, deck_m, deck_ends, seed=200 + k))
     for k, (x, y, r) in enumerate(((11.2, 13.4, 0.38), (1.0, 13.8, 0.34), (13.6, 14.6, 0.42))):
         st = kit.rough_log(f"Stump {k}", (x, y, height(x, y) - 0.3), (x + 0.03, y - 0.02, height(x, y) + 0.45), r, seed=220 + k, stubs=0, sawn=deck_ends)
         reb.wall(st, "circle")
