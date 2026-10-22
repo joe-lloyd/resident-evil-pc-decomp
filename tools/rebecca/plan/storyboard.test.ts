@@ -152,11 +152,14 @@ test('a rebuilt scene takes notes on its new version and keeps a place for the n
   const html = renderStoryboard(board);
   const scene = (id: string) => html.split(`id="scene-${id}"`)[1]?.split('</article>')[0] ?? '';
   const woods = scene('woods');
-  assert.ok(woods.includes('data-field="scene notes v2"'));
-  assert.ok(woods.includes('Scene notes on version 2'));
+  assert.ok(woods.includes('data-field="scene notes v3"'));
+  assert.ok(woods.includes('Scene notes on version 3'));
+  assert.ok(woods.includes('class="old-note" data-room="woods" data-field="scene notes v2" data-version="2"'));
   assert.ok(woods.includes('class="old-note" data-room="woods" data-field="scene notes" data-version="1"'));
   assert.ok(woods.includes('href="review/woods-before-after.png"'));
+  assert.ok(woods.includes('href="review/woods-still-grass-before-after.png"'));
   assert.ok(woods.includes('href="https://github.com/joe-lloyd/resident-evil-pc-decomp/pull/25"'));
+  assert.ok(woods.includes('href="https://github.com/joe-lloyd/resident-evil-pc-decomp/pull/28"'));
   const sawmill = scene('sawmill');
   assert.ok(sawmill.includes('data-field="scene notes"'));
   assert.ok(sawmill.includes('Scene notes on version 1'));
