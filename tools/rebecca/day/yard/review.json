@@ -1,0 +1,13 @@
+{
+  "scene": "yard",
+  "steps": [
+    { "action": "hold", "frames": 90, "picture": "yard-entry" },
+    { "action": "walk", "x": 15300, "z": 15300, "picture": "yard-truck" },
+    { "action": "walk", "x": 22100, "z": 14960, "picture": "yard-winch-pine" },
+    { "action": "hold", "frames": 90 },
+    { "action": "walk", "x": 26350, "z": 13600, "picture": "yard-rifle" },
+    { "action": "walk", "x": 20400, "z": 12920, "picture": "yard-porch" },
+    { "action": "walk", "x": 10200, "z": 7650, "picture": "yard-sign" },
+    { "action": "exit", "x": 5440, "z": 3740, "to": "trail" }
+  ]
+}
