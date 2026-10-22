@@ -279,23 +279,33 @@ def trunks(name, mat, bases):
     """Trunks with a kink, the crown's lean and dead branch stubs on the bare
     lower part: bases is [(Vector base, height)]."""
     verts, faces = [], []
+    sides = 12
     for base, h in bases:
         rng = random.Random(round(base.x * 977) + round(base.y * 131))
         lean = _lean(base)
         r = h * 0.03
+        seed = rng.uniform(0, 100)
         # The first ring is a metre underground, so on a slope the flare
         # goes into the earth on every side instead of ending in a disc.
-        rings = [(-1.0 / h, r * 1.3), (0.0, r * 1.25), (0.08, r), (0.45, r * 0.7), (0.85, r * 0.25)]
+        # Above it the trunk swells into buttresses at the foot, then runs
+        # up out of round: fluted, a little bent, the bark in ridges.
+        rings = [(-1.0 / h, r * 1.45), (0.0, r * 1.4), (0.025, r * 1.15), (0.06, r), (0.15, r * 0.92), (0.3, r * 0.8), (0.45, r * 0.7), (0.65, r * 0.48), (0.85, r * 0.25)]
         k0 = len(verts)
         for i, (t, rr) in enumerate(rings):
-            c = Vector(base) + Vector((0, 0, h * t)) + lean * h * max(t, 0.0) + Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)) * 0.04 * max(i - 1, 0)
-            for s in range(7):
-                a = 2 * math.pi * s / 7
-                verts.append((c.x + math.cos(a) * rr * rng.uniform(0.85, 1.1), c.y + math.sin(a) * rr * rng.uniform(0.85, 1.1), c.z))
+            bend = Vector((noise.noise(Vector((t * 3, seed, 0))), noise.noise(Vector((t * 3, 0, seed))), 0)) * r * 0.5
+            c = Vector(base) + Vector((0, 0, h * t)) + lean * h * max(t, 0.0) + bend * min(1.0, t * 6)
+            foot = max(0.0, 1 - max(t, 0.0) / 0.06)
+            for s in range(sides):
+                a = 2 * math.pi * s / sides
+                flute = 1 + 0.07 * noise.noise(Vector((math.cos(a) * 2, math.sin(a) * 2, seed + t * 2)))
+                ridge = 1 + 0.035 * math.sin(a * 5 + seed) * (1 - foot)
+                buttress = 1 + 0.35 * foot * max(0.0, math.cos(a * 4 + seed)) ** 2
+                k = rr * flute * ridge * buttress
+                verts.append((c.x + math.cos(a) * k, c.y + math.sin(a) * k, c.z))
         for i in range(len(rings) - 1):
-            a0, a1 = k0 + i * 7, k0 + (i + 1) * 7
-            for s in range(7):
-                faces.append((a0 + s, a0 + (s + 1) % 7, a1 + (s + 1) % 7, a1 + s))
+            a0, a1 = k0 + i * sides, k0 + (i + 1) * sides
+            for s in range(sides):
+                faces.append((a0 + s, a0 + (s + 1) % sides, a1 + (s + 1) % sides, a1 + s))
         for _ in range(rng.randint(4, 10)):
             z = h * rng.uniform(0.1, 0.35)
             a = rng.uniform(0, 2 * math.pi)

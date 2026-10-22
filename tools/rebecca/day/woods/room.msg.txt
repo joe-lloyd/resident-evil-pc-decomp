@@ -3,10 +3,10 @@
 2: \nThe needles are soaked\nhere. This is where they\ngot him down.
 3: \nHis flashlight. It's still\non, just. The battery's\nnearly gone.
 4: \nOne of his boots, the\nlaces still done up.\p{0}\nHe caught his heel on the\nroot, and they pulled him\nout of it.
-5: \nA strip of khaki on a dead\nbranch, the same as his\nshirt.
+5: \nA strip of green cloth\ncaught on the log. Forest\nService green.
 6: \nPaw prints either side of\nthe smear. Big ones.\p{0}\nThey dragged him north,\ninto the hollow.
-7: \nA deer. They ate her soft\nparts first.\p{0}\nShe's been here longer\nthan he has.
-8: \nOrange paint on the bark,\nand a 4. A tree marked for\nfelling.\p{0}\nThe logging camp must be\nthat way.
+7: \nOld boards over the wet\nground. They dragged him\nstraight across them.
+8: \nOrange paint on the bark.\nA tree marked for felling.\p{0}\nThe loggers must be that\nway.
 9: \nThe drag marks go into the\ntrees. So does the blood.
 10: \nSomeone's up ahead,\ncrouched over the marks.
 11: \n\oHello?"

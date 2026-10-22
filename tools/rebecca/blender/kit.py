@@ -986,6 +986,16 @@ def text(name, words, m, at, size=0.2, rot=(math.pi / 2, 0, 0), depth=0.004, ali
     return ob
 
 
+def fit_text(ob, width, height=None):
+    """Shrink lettering made by text() until it fits `width` (and `height`)
+    metres of its board, so no word runs past a sign's edge. Returns it."""
+    bpy.context.view_layer.update()
+    w, h = ob.dimensions.x, ob.dimensions.y
+    k = min(1.0, width / max(w, 1e-6), (height or h) / max(h, 1e-6))
+    ob.scale = tuple(c * k for c in ob.scale)
+    return ob
+
+
 def _stain(verts, faces, rng, centre, r, yaw, lumps, stretch, seed, points=20, drops=True):
     """One irregular stain added to verts/faces, flat in its own XY plane."""
     c, s_ = math.cos(yaw), math.sin(yaw)
@@ -1047,6 +1057,21 @@ def drag_trail(name, m, path, width=0.3, seed=0, z=0.0, height=None):
             _stain(verts, faces, rng, (p.x, p.y, zz), r, yaw, 0.3, (1.8, 0.7), seed + i, points=12, drops=rng.random() < 0.3)
         walked += d.length
     return reb.mesh_object(name, verts, faces, m, smooth=False)
+
+
+def lay_on_ground(ob, height, lift=0.008):
+    """Lay a flat stain from splat() or drag_trail() onto uneven ground:
+    every vertex goes to height(x, y) + lift, so the ground's bumps never
+    cut through it and it never floats over a dip. Returns it."""
+    bpy.context.view_layer.update()
+    mw = ob.matrix_world.copy()
+    inv = mw.inverted()
+    for v in ob.data.vertices:
+        w = mw @ v.co
+        w.z = height(w.x, w.y) + lift
+        v.co = inv @ w
+    ob.data.update()
+    return ob
 
 
 def cracks(name, m, area, count=12, seed=0, z=0.001, length=1.5):
@@ -1566,6 +1591,129 @@ def drape(name, m, over, centre, size, yaw=0.0, base=0.0, support=None, gap=0.02
     return reb.mesh_object(name, verts, faces, m, smooth=True)
 
 
+# Dana's Forest Service uniform (npc/skins.ts) in linear colour. Every
+# ranger of the day wears it, living or dead (STYLE: the owner's review).
+UNIFORM = {
+    "jacket": (0.042, 0.069, 0.032),     # forest green
+    "shirt": (0.3, 0.25, 0.13),          # khaki, in the open front
+    "trousers": (0.025, 0.037, 0.019),   # darker green, cargo pockets
+    "felt": (0.3, 0.19, 0.08),           # the campaign hat
+    "gold": (0.61, 0.38, 0.06),          # the shield, the patch's edge
+    "patch": (0.16, 0.07, 0.02),         # the shoulder patch's brown
+    "tree": (0.05, 0.15, 0.04),          # the patch's green tree
+    "leather": (0.06, 0.03, 0.012),      # belt and boots
+}
+# Which way a body's chest faces, and which way is up it, in its own frame.
+_FACING = {"back": ((0, 0, 1), (1, 0, 0)), "slumped": ((1, 0, 0.2), (0, 0, 1)), "front": (None, (1, 0, 0))}
+
+
+def _decal(name, m, ob, centre, out, up, size, inside=None, res=8, lift=0.005):
+    """A patch on a body's surface: a grid `size` (up, across) metres round
+    `centre`, in the body's own frame, each point dropped onto the body by a
+    ray from `out`side. inside(a, b), a and b from -1 to 1, cuts a shape."""
+    out = Vector(out).normalized()
+    up = (Vector(up) - out * Vector(up).dot(out)).normalized()
+    side = up.cross(out)
+    pts = []
+    for i in range(res + 1):
+        for j in range(res + 1):
+            a, b = 2 * i / res - 1, 2 * j / res - 1
+            p = Vector(centre) + up * a * size[0] / 2 + side * b * size[1] / 2
+            hit, loc, normal, _ = ob.ray_cast(p + out * 0.3, -out, distance=0.6)
+            pts.append((loc + normal * lift) if hit else None)
+    v, f, index = [], [], {}
+    for i in range(res):
+        for j in range(res):
+            corners = [i * (res + 1) + j, i * (res + 1) + j + 1, (i + 1) * (res + 1) + j + 1, (i + 1) * (res + 1) + j]
+            a, b = 2 * (i + 0.5) / res - 1, 2 * (j + 0.5) / res - 1
+            if any(pts[c] is None for c in corners) or (inside and not inside(a, b)):
+                continue
+            for c in corners:
+                if c not in index:
+                    index[c] = len(v)
+                    v.append(tuple(pts[c]))
+            f.append(tuple(index[c] for c in corners))
+    d = reb.mesh_object(name, v, f, m, smooth=False)
+    d.matrix_world = ob.matrix_world.copy()
+    return d
+
+
+def _shield(a, b):
+    """A badge's outline: square shoulders, the sides closing to a point below."""
+    return abs(b) < (1.0 if a > -0.2 else 1.0 - ((-0.2 - a) / 0.8) ** 1.4 * 0.95)
+
+
+def ranger(name, at, heading=0.0, pose="back", seed=0, missing=(), bloody=0.0):
+    """A dead Forest Service ranger in Dana's uniform (npc/skins.ts): the
+    forest-green jacket open over a khaki shirt, the gold shield on his left
+    chest and a black name plate on his right, the brown shield patch with
+    its green tree on each shoulder, dark green trousers and a brown belt
+    with a brass buckle. Arguments as body(). Returns the body."""
+    s = reb.mat_surface
+    u = UNIFORM
+    jacket = s("Ranger jacket", [(0.0, tuple(c * 0.55 for c in u["jacket"])), (0.6, u["jacket"]), (1.0, tuple(c * 1.3 for c in u["jacket"]))], scale=30, bump=0.25)
+    trousers = s("Ranger trousers", [(0.0, tuple(c * 0.6 for c in u["trousers"])), (1.0, tuple(c * 1.3 for c in u["trousers"]))], scale=40, bump=0.25)
+    ob = body(name, at, heading, pose, top=jacket, legs=trousers, bloody=bloody, seed=seed, missing=missing)
+    bpy.context.view_layer.update()
+    flip = -1 if seed % 2 == 1 else 1
+    j = {k: Vector((x, y * flip, z)) for k, (x, y, z) in _POSES[pose].items()}
+    front, up = _FACING[pose]
+    shirt = s("Ranger shirt", [(0.0, tuple(c * 0.7 for c in u["shirt"])), (1.0, u["shirt"])], scale=40, bump=0.2)
+    gold = reb.mat_metal("Ranger gold", u["gold"], 0.35)
+    leather = s("Ranger leather", [(0.0, u["leather"]), (1.0, tuple(c * 2.2 for c in u["leather"]))], scale=20, rough=0.5, bump=0.2)
+    parts = []
+    if front is not None:
+        front, up = Vector(front).normalized(), Vector(up)
+        side = up.cross(front).normalized()
+        chest, neck, pelvis = j["chest"], j["neck"], j["pelvis"]
+        # The open front: khaki from the collar down to the chest, narrowing.
+        parts.append(_decal(f"{name} shirt", shirt, ob, (neck + chest) / 2 + up * 0.03, front, up, (0.34, 0.2), lambda a, b: abs(b) < 0.25 + 0.75 * (a + 1) / 2))
+        # The shield and the name plate.
+        badge_at = chest + up * 0.07 + side * (-0.1 * flip)
+        parts.append(_decal(f"{name} shield", gold, ob, badge_at, front, up, (0.075, 0.065), _shield, res=8, lift=0.007))
+        parts.append(_decal(f"{name} name plate", mat("black"), ob, chest + up * 0.09 + side * (0.1 * flip), front, up, (0.022, 0.085), lift=0.007))
+        # The belt across his middle and its buckle.
+        belt_at = pelvis + (chest - pelvis) * 0.22
+        parts.append(_decal(f"{name} belt", leather, ob, belt_at, front, up, (0.05, 0.44), res=10, lift=0.006))
+        parts.append(_decal(f"{name} buckle", gold, ob, belt_at, front, up, (0.055, 0.07), res=4, lift=0.009))
+    # The Forest Service patch on the outside of each shoulder.
+    tree_m = reb.mat_plain("Patch tree", u["tree"], 0.8)
+    patch_m = reb.mat_plain("Patch brown", u["patch"], 0.8)
+    for sh, el in (("l_shoulder", "l_elbow"), ("r_shoulder", "r_elbow")):
+        if any(k.endswith(("elbow", "shoulder")) and k[0] == sh[0] for k in missing):
+            continue
+        p = j[sh].lerp(j[el], 0.3)
+        arm = (j[sh] - j[el]).normalized()
+        out = Vector((0, 1 if j[sh].y > 0 else -1, 0))
+        out = (out - arm * out.dot(arm)).normalized()
+        parts.append(_decal(f"{name} patch edge", gold, ob, p, out, arm, (0.11, 0.09), _shield, lift=0.006))
+        parts.append(_decal(f"{name} patch", patch_m, ob, p, out, arm, (0.09, 0.07), _shield, lift=0.008))
+        parts.append(_decal(f"{name} patch tree", tree_m, ob, p + arm * 0.005, out, arm, (0.06, 0.04), lambda a, b: abs(b) < (1 - a) / 2 and a > -0.8, res=6, lift=0.01))
+    for p in parts:
+        p.parent = ob
+        p.matrix_parent_inverse = ob.matrix_world.inverted()
+    return ob
+
+
+def campaign_hat(name, at, heading=0.0, tilt=(0.0, 0.0)):
+    """The ranger's felt campaign hat, as Dana wears: a flat round brim, a
+    dark band, and the crown pinched into four dents to a peak. Returns it."""
+    felt = reb.mat_surface("Hat felt", [(0.0, tuple(c * 0.6 for c in UNIFORM["felt"])), (1.0, UNIFORM["felt"])], scale=25, bump=0.15)
+    parts = [
+        reb.prim("cyl", "brim", felt, (0, 0, 0.006), (0.42, 0.4, 0.012), segments=24),
+        reb.prim("cyl", "band", mat("black"), (0, 0, 0.025), (0.2, 0.19, 0.03), segments=16),
+        reb.prim("cone", "crown", felt, (0, 0, 0.085), (0.24, 0.24, 0.12), rot=(0, 0, math.pi / 4), segments=4, top=0.25),
+    ]
+    for p in parts[2:]:
+        bev = p.modifiers.new("Soft", "BEVEL")
+        bev.width = 0.02
+        bev.segments = 3
+    ob = join(name, parts, origin=(0, 0, 0))
+    ob.location = at
+    ob.rotation_euler = (tilt[0], tilt[1], heading)
+    return ob
+
+
 def bones(name, at, spread=0.5, seed=0, skull=True):
     """What the dogs left: long bones, a ribcage half sunk in the dirt, a skull."""
     rng = random.Random(seed)
@@ -1727,6 +1875,37 @@ def forest(rng, height, keep_out, area, count=70, spacing=1.6, tall=(11, 19), fe
     if dv:
         reb.mesh_object("Fallen needles", dv, df, mat("dead needles"))
     return bases
+
+
+def far_spruces(rng, height, keep_out, count=320, area=(-55, -55, 75, 75)):
+    """Spruces beyond the near forest, cheap: a dark trunk and a ragged cone
+    of needle-coloured skirts each, all one mesh, standing on height(x, y)
+    where keep_out(x, y) is False inside `area`. Seen through the mist they only
+    have to make a wall of trees, so no sky shows between the near trunks."""
+    m = reb.mat_surface("Far spruce", [(0.0, (0.015, 0.03, 0.018)), (1.0, (0.04, 0.07, 0.035))], scale=0.6, bump=0.3)
+    verts, faces = [], []
+    placed, tries = 0, 0
+    while placed < count and tries < count * 50:
+        tries += 1
+        x, y = rng.uniform(area[0], area[2]), rng.uniform(area[1], area[3])
+        if keep_out(x, y):
+            continue
+        placed += 1
+        z = height(x, y) - 0.3
+        h = rng.uniform(14, 24)
+        for tier in range(4):
+            z0 = z + h * (0.25 + 0.19 * tier)
+            r = h * 0.2 * (1 - 0.22 * tier) * rng.uniform(0.8, 1.1)
+            k = len(verts)
+            sides = 9
+            for j in range(sides):
+                a = 2 * math.pi * j / sides + rng.uniform(-0.2, 0.2)
+                rr = r * rng.uniform(0.75, 1.05)
+                verts.append((x + math.cos(a) * rr, y + math.sin(a) * rr, z0 - rng.uniform(0, 0.8)))
+            verts.append((x, y, z0 + h * 0.3))
+            faces.extend((k + j, k + (j + 1) % sides, k + sides) for j in range(sides))
+        reb.box(verts, faces, (x, y, z + h * 0.15), (0.4, 0.4, h * 0.3))
+    reb.mesh_object("Far spruces", verts, faces, m, smooth=False)
 
 
 def meadow(rng, count, where, height, m=None):
@@ -2742,11 +2921,13 @@ def ledge_plants(rng, ledges, tufts=3000, ferns=200, name="Ledge"):
     reb.mesh_object(f"{name} ferns", fv, ff, mat("ferns"))
 
 
-def rough_log(name, a, b, r, m=None, seed=0, stubs=6):
+def rough_log(name, a, b, r, m=None, seed=0, stubs=6, sawn=None):
     """A fallen trunk from `a` to `b` (x, y, z): lumpy, tapering and a
     little bent, its bark ridged, both ends snapped off ragged, with a few
     broken branch stubs. Not a machined cylinder. Sink `a` and `b` a little
-    into the ground so it lies in it. Returns the object."""
+    into the ground so it lies in it. `sawn`, a material for the cut wood,
+    saws both ends off square instead (a felled log on a load). Returns the
+    object."""
     rng = random.Random(seed)
     a, b = Vector(a), Vector(b)
     axis = b - a
@@ -2762,7 +2943,7 @@ def rough_log(name, a, b, r, m=None, seed=0, stubs=6):
         bend = side * 0.12 * r * math.sin(t * math.pi * 1.3 + seed) + up * 0.08 * r * noise.noise(Vector((t * 4, seed, 1)))
         c = a + axis * t + bend
         taper = 1.0 - 0.3 * t
-        end = i in (0, n)
+        end = i in (0, n) and sawn is None
         for k in range(ring):
             ang = math.tau * k / ring
             bark = 1 + 0.2 * noise.noise(Vector((t * length * 0.9, k * 0.8, seed))) + 0.07 * math.sin(k * 5 + t * 60)
@@ -2776,9 +2957,11 @@ def rough_log(name, a, b, r, m=None, seed=0, stubs=6):
             p0, p1 = i * ring + k, i * ring + (k + 1) % ring
             f.append((p0, p1, p1 + ring, p0 + ring))
     # The broken ends: splintered wood a little inside each ragged rim.
+    ends = []
     for i, inward in ((0, d), (n, -d)):
         k = len(v)
-        v.append(tuple(a + axis * (i / n) + inward * 0.2 * r))
+        v.append(tuple(Vector(v[i * ring:(i + 1) * ring][0]).lerp(Vector(v[i * ring + ring // 2]), 0.5)) if sawn else tuple(a + axis * (i / n) + inward * 0.2 * r))
+        ends.append(len(f))
         f.extend((k, i * ring + j, i * ring + (j + 1) % ring) for j in range(ring))
     for _ in range(stubs):
         t = rng.uniform(0.15, 0.9)
@@ -2793,7 +2976,14 @@ def rough_log(name, a, b, r, m=None, seed=0, stubs=6):
         for q in (root - side * w - up * w, root + side * w - up * w, tip + side * w * 0.3, tip - side * w * 0.3, root + up * w * 1.4):
             v.append(tuple(q))
         f.extend(((k, k + 1, k + 2, k + 3), (k + 1, k + 4, k + 2), (k + 4, k, k + 3, k + 2)))
-    return reb.mesh_object(name, v, f, m or mat("bark"))
+    ob = reb.mesh_object(name, v, f, m or mat("bark"))
+    if sawn:
+        ob.data.materials.append(sawn)
+        for start in ends:
+            for q in range(start, start + ring):
+                ob.data.polygons[q].material_index = 1
+                ob.data.polygons[q].use_smooth = False
+    return ob
 
 
 def ruts(name, path, height, gauge=1.65, width=0.3, m=None, seed=0.0):

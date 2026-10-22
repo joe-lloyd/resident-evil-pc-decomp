@@ -87,10 +87,10 @@ test('each recorded visit has its own player and each room card shows coverage',
   const html = renderStoryboard(board);
   assert.equal(board.scenes.filter((s) => s.clips.length).length, 53);
   // The ridge, the trail, the cabin, the yard, the shed, the booth, the
-  // bridge, the platform, the bunkhouse, the office, the mess and the
-  // workshop each show one reviewed recording in place of their quarter
-  // visits.
-  assert.equal(html.split('<video controls preload="none"').length - 1, 112);
+  // bridge, the platform, the bunkhouse, the office, the mess, the
+  // workshop, the woods, the den and the logging road each show one
+  // reviewed recording in place of their quarter visits.
+  assert.equal(html.split('<video controls preload="none"').length - 1, 101);
   for (const scene of board.scenes) {
     for (const clip of scene.clips) {
       assert.ok(html.includes(`src="${clip.file}" type="video/mp4"`), clip.file);

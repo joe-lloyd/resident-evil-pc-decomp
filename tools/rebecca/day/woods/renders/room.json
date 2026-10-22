@@ -69,43 +69,51 @@
  "walls": [
   {
    "shape": "circle",
-   "x0": 10423,
-   "z0": 21850,
-   "x1": 12017,
-   "z1": 23419,
-   "name": "Old spruce"
+   "x0": 10136,
+   "z0": 21526,
+   "x1": 12304,
+   "z1": 23694,
+   "name": "Old spruce footprint"
   },
   {
    "shape": "circle",
-   "x0": 18536,
-   "z0": 4975,
-   "x1": 20224,
-   "z1": 6637,
-   "name": "Old spruce.001"
+   "x0": 18232,
+   "z0": 4633,
+   "x1": 20527,
+   "z1": 6928,
+   "name": "Old spruce footprint.001"
   },
   {
    "shape": "circle",
-   "x0": 24070,
-   "z0": 3194,
-   "x1": 25570,
-   "z1": 4672,
-   "name": "Old spruce.002"
+   "x0": 23800,
+   "z0": 2890,
+   "x1": 25840,
+   "z1": 4930,
+   "name": "Old spruce footprint.002"
   },
   {
    "shape": "circle",
-   "x0": 19263,
-   "z0": 20660,
-   "x1": 20857,
-   "z1": 22229,
-   "name": "Old spruce.003"
+   "x0": 18976,
+   "z0": 20336,
+   "x1": 21144,
+   "z1": 22504,
+   "name": "Old spruce footprint.003"
   },
   {
    "shape": "circle",
-   "x0": 7844,
-   "z0": 1924,
-   "x1": 9156,
-   "z1": 3216,
-   "name": "Old spruce.004"
+   "x0": 7607,
+   "z0": 1658,
+   "x1": 9393,
+   "z1": 3443,
+   "name": "Old spruce footprint.004"
+  },
+  {
+   "shape": "circle",
+   "x0": 28454,
+   "z0": 20124,
+   "x1": 30366,
+   "z1": 22036,
+   "name": "Old spruce footprint.005"
   },
   {
    "shape": "box",
@@ -148,12 +156,12 @@
    "name": "Blowdown 0 footprint.004"
   },
   {
-   "shape": "box",
-   "x0": 14554,
-   "z0": 16047,
-   "x1": 16881,
-   "z1": 20228,
-   "name": "Root plate 0"
+   "shape": "circle",
+   "x0": 14500,
+   "z0": 17308,
+   "x1": 16112,
+   "z1": 18974,
+   "name": "Snapped stump 0"
   },
   {
    "shape": "box",
@@ -180,20 +188,12 @@
    "name": "Blowdown 1 footprint.002"
   },
   {
-   "shape": "box",
-   "x0": 3863,
-   "z0": 6095,
-   "x1": 5390,
-   "z1": 9246,
-   "name": "Root plate 1"
-  },
-  {
-   "shape": "box",
-   "x0": 20409,
-   "z0": 7775,
-   "x1": 23791,
-   "z1": 10925,
-   "name": "Doe footprint"
+   "shape": "circle",
+   "x0": 3656,
+   "z0": 6993,
+   "x1": 4943,
+   "z1": 8264,
+   "name": "Snapped stump 1"
   },
   {
    "shape": "box",
@@ -229,35 +229,27 @@
   },
   {
    "shape": "circle",
-   "x0": 25501,
-   "z0": 21046,
-   "x1": 26859,
+   "x0": 25473,
+   "z0": 21075,
+   "x1": 26887,
    "z1": 22474,
    "name": "Stump 0"
   },
   {
    "shape": "circle",
-   "x0": 22538,
-   "z0": 12988,
-   "x1": 23702,
+   "x0": 22514,
+   "z0": 13013,
+   "x1": 23726,
    "z1": 14212,
    "name": "Stump 1"
   },
   {
    "shape": "circle",
-   "x0": 28593,
-   "z0": 11220,
-   "x1": 29887,
+   "x0": 28567,
+   "z0": 11248,
+   "x1": 29913,
    "z1": 12580,
    "name": "Stump 2"
-  },
-  {
-   "shape": "circle",
-   "x0": 28740,
-   "z0": 20441,
-   "x1": 30080,
-   "z1": 21760,
-   "name": "Blazed spruce"
   }
  ],
  "anim": {
@@ -353,39 +345,39 @@
   },
   {
    "zone": {
-    "x0": 12750,
-    "z0": 9180,
-    "x1": 14620,
-    "z1": 10880
+    "x0": 12580,
+    "z0": 9690,
+    "x1": 14450,
+    "z1": 11390
    },
    "text": "One of his boots, the laces still done up.\nHe caught his heel on the root, and they pulled him out of it."
   },
   {
    "zone": {
-    "x0": 11560,
-    "z0": 6800,
-    "x1": 13430,
-    "z1": 8330
+    "x0": 10540,
+    "z0": 5950,
+    "x1": 12580,
+    "z1": 7650
    },
-   "text": "A strip of khaki on a dead branch, the same as his shirt."
+   "text": "A strip of green cloth caught on the log. Forest Service green."
   },
   {
    "zone": {
     "x0": 13260,
     "z0": 5100,
     "x1": 16320,
-    "z1": 7820
+    "z1": 7650
    },
    "text": "Paw prints either side of the smear. Big ones.\nThey dragged him north, into the hollow."
   },
   {
    "zone": {
-    "x0": 20400,
+    "x0": 12920,
     "z0": 7820,
-    "x1": 23970,
-    "z1": 11050
+    "x1": 15980,
+    "z1": 9520
    },
-   "text": "A deer. They ate her soft parts first.\nShe's been here longer than he has."
+   "text": "Old boards over the wet ground. They dragged him straight across them."
   },
   {
    "zone": {
@@ -394,7 +386,7 @@
     "x1": 30600,
     "z1": 22440
    },
-   "text": "Orange paint on the bark, and a 4. A tree marked for felling.\nThe logging camp must be that way."
+   "text": "Orange paint on the bark. A tree marked for felling.\nThe loggers must be that way."
   }
  ],
  "saves": null,
@@ -403,9 +395,9 @@
  "entry": null,
  "notes": [
   "from the south-west: the drag in from the yard, the flashlight, the way north",
-  "from the north edge looking back: the boot, the smear swinging round the blowdown",
-  "from the north-east: the doe and her flies, the blowdown, the drag beyond",
-  "from by the doe, south-east: over the blowdown to the ruts and the way out east",
-  "from the north-west over the old blowdown: the casings, the drag in, the doe far off"
+  "from the north edge looking back: the puncheon, the boot, the smear swinging round the blowdown",
+  "from the north-east: the blowdown, the stumps, the drag beyond",
+  "from the middle, south-east: over the blowdown to the ruts and the way out east",
+  "from the north-west over the old blowdown: the casings, the drag in"
  ]
 }

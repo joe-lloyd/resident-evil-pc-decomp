@@ -1,4 +1,4 @@
-"""The logging road to Camp 4, through the spruces, at noon under cloud.
+"""The logging road to the camp, through the spruces, at noon under cloud.
 
 What it tells: a log truck was bringing a load down from the cut to the
 camp's sawmill when its driver got sick at the wheel. He stopped where he
@@ -8,8 +8,8 @@ when he fell out after it, the pail open, the thermos rolled away. He
 coughed up blood by the front wheel. Then he walked on toward the camp,
 dragging one foot: his prints go east in the mud. The battery is dying:
 the left blinker still flashes and the wipers twitch now and then on the
-dry glass. Back up the road someone from the camp nailed a QUARANTINE
-notice to a spruce to turn people away. Someone has torn half of it down.
+dry glass. Back up the road someone from the camp nailed a NO ENTRY
+notice to a spruce to turn people away.
 A player should work out that whatever was in the camp got out of it, and
 that the camp is east.
 
@@ -21,8 +21,9 @@ She gets round it on either verge. The road goes on west to the woods
 (the west edge, y 6.4-10) and east to the camp gate (the east edge,
 y 6.2-11). The notice is on the west face of a spruce at x 6.0, y 3.6, just off the north verge.
 
-Moving: the blinker, the wipers twitching, the torn half of the notice in
-the wind, flies on the seat and on the blood by the wheel, the grass.
+Moving: the blinker, the wipers twitching, flies on the seat and on the
+blood by the wheel, the grass. Past the verges the forest stands dense
+under the overcast (kit.overcast_sky, kit.backdrop).
 """
 import math
 import os
@@ -88,11 +89,32 @@ def spruce_crown(rng, base, h, verts, faces, lift):
 
 
 def wheel(name, x, y, r=0.52, width=0.3):
-    """A truck wheel: the tyre, its rim, the hub, axis along y."""
-    tyre = reb.prim("cyl", name, mat("rubber"), (x, y, r), (2 * r, 2 * r, width), rot=(math.pi / 2, 0, 0), segments=20)
-    reb.prim("cyl", f"{name} rim", mat("rust"), (x, y + (width / 2 + 0.005) * (1 if y > TY else -1), r), (r * 1.1, r * 1.1, 0.02), rot=(math.pi / 2, 0, 0), segments=16)
-    reb.prim("cyl", f"{name} hub", mat("iron"), (x, y + (width / 2 + 0.03) * (1 if y > TY else -1), r), (0.22, 0.22, 0.06), rot=(math.pi / 2, 0, 0), segments=10)
-    return tyre
+    """A truck wheel: the treaded tyre, its rim, the hub and nuts, axis along y."""
+    return kit.wheel(name, (x, y, r), r=r, width=width, rim=mat("rust"))[0]
+
+
+def fender(name, wx, side, m, r=0.52):
+    """A front fender over the wheel at x `wx` on `side` (+1 south, -1
+    north): one pressed sheet sweeping down to the bumper at the front,
+    arching over the tyre with a hand's gap all round and running back
+    level into the cab's step, its outer edge rolled down into a skirt."""
+    arch = r + 0.14
+    profile = [(wx + 1.08, 0.84), (wx + 0.9, 0.76)]
+    for k in range(13):
+        a = math.radians(14 + 152 * k / 12)
+        profile.append((wx + math.cos(a) * arch, r + math.sin(a) * arch))
+    profile += [(wx - 0.8, 0.74), (wx - 0.93, 0.75)]
+    v, f = [], []
+    for x, z in profile:
+        v += [(x, TY + side * 0.58, z), (x, TY + side * 1.27, z + 0.015), (x, TY + side * 1.31, z - 0.1)]
+    for i in range(len(profile) - 1):
+        for j in range(2):
+            a = i * 3 + j
+            f.append((a, a + 1, a + 4, a + 3))
+    ob = reb.mesh_object(name, v, f, m, smooth=True)
+    sol = ob.modifiers.new("Sheet", "SOLIDIFY")
+    sol.thickness = 0.025
+    return ob
 
 
 def build():
@@ -115,6 +137,8 @@ def build():
     rut_m = reb.mat_surface("Wet ruts", [(0.0, (0.015, 0.012, 0.008)), (0.6, (0.04, 0.03, 0.02)), (1.0, (0.08, 0.06, 0.04))], scale=4, rough=0.25, bump=0.5)
     floor_m = reb.mat_surface("Forest floor", [(0.0, (0.05, 0.035, 0.02)), (0.4, (0.11, 0.075, 0.045)), (0.65, (0.15, 0.1, 0.06)), (0.85, (0.07, 0.08, 0.035)), (1.0, (0.05, 0.075, 0.025))], scale=1.2, bump=0.5)
     puddle = reb.mat_plain("Puddle", (0.01, 0.012, 0.012), 0.04)
+    # Blood gone into the mud and the vinyl: dark, brown-red, matte.
+    soaked = reb.mat_surface("Soaked blood", [(0.0, (0.02, 0.006, 0.004)), (0.5, (0.045, 0.012, 0.007)), (0.8, (0.07, 0.025, 0.014)), (1.0, (0.05, 0.03, 0.02))], scale=25, detail=8, rough=0.92, bump=0.1)
 
     # ---- Ground: the forest floor, the road bed, the ruts with water in them.
     reb.terrain("Forest floor", floor_m, (-16, 36), (-14, 30), height, step=0.4)
@@ -148,24 +172,20 @@ def build():
     hood = kit.loft("Hood", [(CAB[1], 0.68, 1.05, 2.15, 6), (CAB[1] + 0.3, 0.68, 1.05, 2.14, 6), (FX - 0.6, 0.62, 1.05, 2.05, 5), (FX - 0.25, 0.6, 1.08, 2.0, 4)], [paint], ring=32)
     hood.location.y = TY
     reb.mask(hood)
+    # Under the hood: the engine's dark bulk, so no daylight shows between the fenders.
+    reb.prim("cube", "Engine", mat("black"), (15.5, TY, 0.85), (1.9, 1.1, 0.5))
     for s in (-1, 1):
-        arc = []
-        for k in range(9):
-            t = -1 + 2 * k / 8
-            zb = 0.75 + 0.62 * math.sqrt(max(0.0, 1 - t * t * 0.92))
-            arc.append((15.45 + 0.95 * t, 0.24, zb, zb + 0.07, 3))
-        fender = kit.loft("Front fender", arc, [paint], ring=16)
-        fender.location.y = TY + s * 1.0
-        reb.mask(fender)
-        reb.prim("cube", "Step", mat("iron"), (14.2, TY + s * 1.15, 0.95), (0.6, 0.3, 0.05), bevel=0.01)
+        reb.mask(fender("Front fender", 15.4, s, paint))
     reb.prim("cube", "Grille", chrome, (FX - 0.22, TY, 1.55), (0.06, 1.15, 1.0))
     for k in range(9):
         reb.prim("cube", "Grille bar", dark, (FX - 0.19, TY - 0.5 + k * 0.125, 1.55), (0.02, 0.03, 0.9))
     for s in (-1, 1):
-        reb.prim("cyl", "Headlight", reb.mat_glass("Headlamp", (0.7, 0.7, 0.62)), (FX - 0.2, TY + s * 0.82, 1.25), (0.22, 0.22, 0.06), rot=(0, math.pi / 2, 0), segments=14)
+        hy = TY + s * 0.86
+        reb.prim("sphere", "Headlamp bucket", chrome, (FX - 0.3, hy, 1.22), (0.2, 0.24, 0.24), segments=16)
+        reb.prim("cyl", "Headlight", reb.mat_plain("Headlamp", (0.7, 0.7, 0.62), 0.1), (FX - 0.2, hy, 1.22), (0.2, 0.2, 0.02), rot=(0, math.pi / 2, 0), segments=16)
+        kit.rod("Headlamp bar", chrome, (FX - 0.3, TY + s * 0.55, 1.22), (FX - 0.3, hy, 1.22), 0.02, 6)
+        kit.rod("Headlamp stalk", chrome, (FX - 0.3, hy, 1.1), (FX - 0.32, hy, 0.95), 0.025, 6)
     reb.prim("cube", "Bumper", chrome, (FX, TY, 0.85), (0.18, 2.6, 0.26), bevel=0.03)
-    kit.text("Hood name", "ARKLAY LUMBER", mat("white paint"), ((CAB[1] + FX) / 2, TY + 0.68, 1.75), size=0.18, rot=(math.pi / 2, 0, math.pi))
-    kit.text("Hood name, other side", "ARKLAY LUMBER", mat("white paint"), ((CAB[1] + FX) / 2, TY - 0.68, 1.75), size=0.18)
     # The cab: a box with its windows, its roof lights, the exhaust stack, the mirrors.
     # Walls round the inside x CAB, y TY +- HW, 1.1 to 2.9 up: the door's hole on the south, windows cut.
     cab_walls = kit.walls(CAB[0] + 0.06, TY - HW + 0.06, CAB[1] - 0.06, TY + HW - 0.06, 1.74, paint, openings=[
@@ -197,7 +217,7 @@ def build():
     # Inside: the bench seat, bloody; the wheel; the dash.
     reb.prim("cube", "Bench seat", seat_m, (13.2, TY, 1.55), (0.55, 2.1, 0.18))
     reb.prim("cube", "Seat back", seat_m, (12.92, TY, 1.95), (0.14, 2.1, 0.7), rot=(0, -0.15, 0))
-    kit.splat("Blood on the seat", mat("blood"), (13.2, TY + 0.6, 1.645), 0.2, seed=61, stretch=(1.3, 1.0))
+    kit.splat("Blood on the seat", soaked, (13.2, TY + 0.6, 1.645), 0.2, seed=61, stretch=(1.3, 1.0))
     kit.splat("Blood on the seat back", mat("old blood"), (12.995, TY + 0.55, 1.95), 0.16, rot=(0, math.pi / 2 - 0.15, 0), seed=62, stretch=(1.0, 1.6))
     reb.prim("cyl", "Steering wheel", mat("black"), (14.05, TY + 0.6, 2.0), (0.48, 0.48, 0.04), rot=(0, math.pi / 2 + 0.6, 0), segments=16)
     kit.rod("Steering column", mat("black"), (14.05, TY + 0.6, 2.0), (14.4, TY + 0.6, 1.6), 0.03)
@@ -209,14 +229,14 @@ def build():
     door = reb.prim("cube", "Driver's door", paint, (-(DOOR[1] - DOOR[0]) / 2, 0.035, 0.0), (DOOR[1] - DOOR[0], 0.07, 1.6), bevel=0.03)
     win = reb.prim("cube", "Door window", glass, (-(DOOR[1] - DOOR[0]) / 2 - 0.05, 0.075, 0.45), (DOOR[1] - DOOR[0] - 0.25, 0.02, 0.55))
     scr = kit.scratches("Scratched inside of the door", mat("black"), (-(DOOR[1] - DOOR[0]) / 2, -0.005, 0.25), (0, -1), count=6, length=0.4, seed=63)
-    hand = kit.splat("Hand on the door", mat("blood"), (-0.95, -0.006, -0.05), 0.07, rot=(math.pi / 2, 0, 0), seed=64)
-    kit.text("Door name", "CAMP 4", mat("white paint"), (-(DOOR[1] - DOOR[0]) / 2, 0.075, -0.25), size=0.16, rot=(math.pi / 2, 0, math.pi))
-    for p in (door, win, scr, hand, bpy.data.objects["Door name"]):
+    hand = kit.splat("Hand on the door", soaked, (-0.95, -0.006, -0.05), 0.07, rot=(math.pi / 2, 0, 0), seed=64)
+    kit.fit_text(kit.text("Door number", "No 7", mat("white paint"), (-(DOOR[1] - DOOR[0]) / 2, 0.075, -0.25), size=0.16, rot=(math.pi / 2, 0, math.pi)), 0.6)
+    for p in (door, win, scr, hand, bpy.data.objects["Door number"]):
         p.parent = hinge
     hinge.rotation_euler = (0, 0, -1.25)
     kit.splat("Smear on the cab", mat("old blood"), (13.0, TY + HW + 0.01, 1.6), 0.12, rot=(math.pi / 2, 0, math.pi), seed=65, stretch=(0.8, 1.8))
     for k in range(4):
-        kit.splat(f"Drops down the step {k}", mat("blood"), (13.6 + rng.uniform(-0.2, 0.2), TY + HW + 0.05, 0.745 + 0.0), 0.04, seed=66 + k)
+        kit.splat(f"Drops down the step {k}", soaked, (13.6 + rng.uniform(-0.2, 0.2), TY + HW + 0.05, 0.745 + 0.0), 0.04, seed=66 + k)
     # The wipers, on pivots at the foot of each pane.
     wipers = []
     for s in (-1, 1):
@@ -252,9 +272,7 @@ def build():
             z = 1.53 + lift
             r = rng.uniform(0.26, 0.31)
             x0, x1 = TAIL + rng.uniform(0, 0.4), 12.25 - rng.uniform(0, 0.3)
-            kit.rod("Log", logs_m, (x0, y, z), (x1, y, z), r, 12)
-            for x in (x0 - 0.005, x1 + 0.005):
-                reb.prim("cyl", "Log end", end_m, (x, y, z), (2 * r - 0.03, 2 * r - 0.03, 0.01), rot=(0, math.pi / 2, 0), segments=12)
+            kit.rough_log("Log", (x0, y, z), (x1, y + rng.uniform(-0.04, 0.04), z + rng.uniform(-0.03, 0.03)), r * 1.1, m=logs_m, seed=100 + count * 10 + k, stubs=rng.randint(0, 2), sawn=end_m)
     for cx in (6.8, 9.9):
         pts = [(cx, TY - 1.25, 1.2), (cx, TY - 1.15, 2.1), (cx, TY - 0.6, 2.75), (cx, TY + 0.6, 2.75), (cx, TY + 1.15, 2.1), (cx, TY + 1.25, 1.2)]
         for a, b in zip(pts, pts[1:]):
@@ -277,9 +295,9 @@ def build():
         reb.prim("cube", "Sandwich", bread, (lx - 0.35 + k * 0.08, ly - 0.15 + k * 0.03, 0.02 + k * 0.02), (0.12, 0.12, 0.025), rot=(0.1 * k, 0, 0.3 + k))
     reb.prim("sphere", "Apple", reb.mat_plain("Apple red", (0.3, 0.03, 0.02), 0.5), (lx + 0.2, ly + 0.55, 0.04), (0.08, 0.08, 0.08), segments=10)
     kit.papers("Wax paper", (lx - 0.2, ly + 0.15, 0.0), spread=0.3, count=2, seed=3, m=reb.mat_plain("Wax paper", (0.55, 0.52, 0.45), 0.4))
-    kit.splat("Coughed up by the wheel", mat("blood"), (15.0, TY + 1.7, height(15.0, TY + 1.7) + 0.01), 0.3, seed=71, stretch=(1.4, 0.9))
-    kit.splat("Coughed up, older", mat("old blood"), (15.2, TY + 1.9, height(15.0, TY + 1.9) + 0.008), 0.45, seed=72, stretch=(1.3, 1.0))
-    kit.splat("His hand in the mud", mat("old blood"), (14.2, TY + 1.5, height(14.2, TY + 1.5) + 0.012), 0.07, seed=73)
+    kit.lay_on_ground(kit.splat("Coughed up by the wheel", soaked, (15.0, TY + 1.7, 0), 0.2, seed=71, stretch=(1.4, 0.9), lumps=0.7), height, 0.007)
+    kit.lay_on_ground(kit.splat("Coughed up, older", soaked, (15.25, TY + 1.95, 0), 0.26, seed=72, stretch=(1.3, 1.0), lumps=0.7), height, 0.006)
+    kit.lay_on_ground(kit.splat("His hand in the mud", soaked, (14.2, TY + 1.5, 0), 0.07, seed=73), height, 0.008)
     cap = reb.mat_plain("Cap", (0.08, 0.15, 0.08), 0.8)
     reb.prim("sphere", "His cap", cap, (14.6, TY + 2.4, 0.04), (0.2, 0.17, 0.08), segments=12)
     reb.prim("cube", "Cap peak", cap, (14.7, TY + 2.52, 0.01), (0.12, 0.1, 0.01), rot=(0, 0, 0.4))
@@ -301,70 +319,71 @@ def build():
     reb.mesh_object("His prints east", pv, pf, reb.mat_plain("Bootprints", (0.02, 0.014, 0.009), 0.4), smooth=False)
     for k in range(5):
         x = 15.6 + k * 0.7
-        kit.splat(f"Drip on the way {k}", mat("old blood"), (x, TY + 1.4 - k * 0.05, height(x, TY + 1.4) + 0.014), 0.05, seed=80 + k)
+        kit.lay_on_ground(kit.splat(f"Drip on the way {k}", soaked, (x, TY + 1.4 - k * 0.05, 0), 0.05, seed=80 + k), height, 0.009)
 
     # ---- The spruces on the verges, the notice on one of them.
     cv, cf = [], []
+    standing = []
     for x, y in STANDING:
         h = rng.uniform(15, 19)
         base = Vector((x, y, height(x, y) - 0.15))
         spruce_crown(rng, base, h, cv, cf, rng.uniform(4.0, 5.2))
-        r = h * 0.027
-        t = reb.prim("cone", "Spruce", mat("bark"), (x, y, base.z + h * 0.45), (2 * r, 2 * r, h * 0.9), segments=9, top=0.25)
-        reb.mask(reb.wall(t, "circle"))
+        standing.append((base, h))
+        r = h * 0.03 * 1.25
+        reb.wall(reb.prim("cyl", "Spruce footprint", None, (x, y, 1.0), (2 * r, 2 * r, 2.0), segments=8), "circle").hide_render = True
     reb.mesh_object("Spruce crowns", cv, cf, mat("needles"))
+    verge_trunks = reb.mask(reb.trunks("Verge spruce trunks", mat("bark"), standing))
+    kit.tree_roots(rng, standing, height)
     nx, ny = NOTICE_TREE
-    face_x = nx - 0.47     # on the west face of the trunk, read by anyone coming from the woods
-    notice_m = reb.mat_surface("Notice paper", [(0.0, (0.45, 0.43, 0.36)), (1.0, (0.6, 0.58, 0.5))], scale=12, bump=0.05)
+    # On the west face of the trunk, read by anyone coming from the woods:
+    # find the bark there, since the trunk is not round.
+    bark = [v.co.x for v in verge_trunks.data.vertices if abs(v.co.z - 1.65) < 1.2 and abs(v.co.y - ny) < 0.3 and abs(v.co.x - nx) < 1.5]
+    face_x = min(bark) - 0.03
     west = (math.pi / 2, 0, -math.pi / 2)
-    reb.prim("cube", "Notice", notice_m, (face_x, ny, 1.65), (0.01, 0.62, 0.48))
-    kit.text("Notice head", "QUARANTINE", mat("red paint"), (face_x - 0.008, ny, 1.8), size=0.11, rot=west)
-    kit.text("Notice words", "SICKNESS IN CAMP 4", mat("black"), (face_x - 0.008, ny, 1.65), size=0.055, rot=west)
-    kit.text("Notice words 2", "NO ENTRY  TURN BACK", mat("black"), (face_x - 0.008, ny, 1.56), size=0.05, rot=west)
-    for dy in (-0.28, 0.28):
-        reb.prim("cyl", "Nail", mat("iron"), (face_x - 0.01, ny + dy, 1.87), (0.012, 0.012, 0.03), rot=(0, math.pi / 2, 0), segments=6)
-    # The torn half hangs from one nail and moves; the rest is in the grass.
-    flap_pin = reb.prim("sphere", "Flap pin", mat("iron"), (face_x - 0.015, ny + 0.28, 1.42), (0.015, 0.015, 0.015), segments=6)
-    flap = reb.prim("cube", "Torn flap", notice_m, (-0.15, 0.0, -0.18), (0.32, 0.008, 0.38), rot=(0, 0.35, 0))
-    flap.parent = flap_pin
-    flap_pin.rotation_euler = (0, 0, math.pi / 2)
-    kit.papers("Torn notice in the grass", (nx - 0.9, ny + 1.3, height(nx - 0.9, ny + 1.3)), spread=0.4, count=2, seed=9, m=notice_m)
+    # A board off a crate, painted and nailed up: no paper to flap about.
+    board = kit.boards("Notice board", (0.2, 0.17, 0.13), width=0.2, seam=0.03, grime=0.7)
+    reb.prim("cube", "Notice", board, (face_x, ny, 1.65), (0.035, 0.52, 0.4), bevel=0.006)
+    kit.fit_text(kit.text("Notice head", "NO ENTRY", mat("red paint"), (face_x - 0.02, ny, 1.74), size=0.12, rot=west), 0.44, 0.12)
+    kit.fit_text(kit.text("Notice words", "TURN BACK", mat("white paint"), (face_x - 0.02, ny, 1.56), size=0.08, rot=west), 0.4, 0.08)
+    for dy in (-0.22, 0.22):
+        for z in (1.81, 1.49):
+            reb.prim("cyl", "Nail", mat("iron"), (face_x - 0.02, ny + dy, z), (0.014, 0.014, 0.03), rot=(0, math.pi / 2, 0), segments=6)
+
+    # ---- On the south verge, seen past the log ends: the crew's cold deck,
+    # a few logs left for the next load, the stumps they came off, the slash.
+    deck_m = reb.mat_surface("Deck bark", [(0.0, (0.045, 0.032, 0.022)), (0.6, (0.1, 0.075, 0.05)), (1.0, (0.15, 0.12, 0.085))], scale=6, bump=0.9)
+    deck_ends = reb.mat_surface("Deck log ends", [(0.0, (0.2, 0.13, 0.07)), (0.7, (0.32, 0.23, 0.12)), (1.0, (0.16, 0.1, 0.05))], scale=12, bump=0.2)
+    for k, (y, z, r) in enumerate(((13.1, 0.28, 0.3), (13.7, 0.3, 0.32), (14.3, 0.32, 0.28), (13.4, 0.8, 0.29), (14.0, 0.82, 0.3))):
+        x0 = 3.2 + rng.uniform(-0.2, 0.2)
+        reb.mask(kit.rough_log("Cold deck log", (x0, y, height(x0, y) + z - 0.05), (x0 + 6.2 + rng.uniform(-0.3, 0.3), y + rng.uniform(-0.1, 0.1), height(x0 + 6, y) + z - 0.05), r, m=deck_m, seed=200 + k, stubs=1, sawn=deck_ends))
+    for k, (x, y, r) in enumerate(((11.2, 13.4, 0.38), (1.0, 13.8, 0.34), (13.6, 14.6, 0.42))):
+        st = kit.rough_log(f"Stump {k}", (x, y, height(x, y) - 0.3), (x + 0.03, y - 0.02, height(x, y) + 0.45), r, seed=220 + k, stubs=0, sawn=deck_ends)
+        reb.wall(st, "circle")
+    kit.tree_roots(rng, [(Vector((x, y, height(x, y) - 0.1)), 12) for x, y in ((11.2, 13.4), (1.0, 13.8), (13.6, 14.6))], height)
+    for k in range(9):
+        x, y = 10.0 + rng.uniform(-1.0, 1.5), 14.6 + rng.uniform(-0.5, 0.6)
+        a = rng.uniform(0, math.tau)
+        L = rng.uniform(1.0, 2.2)
+        kit.rough_log(f"Slash {k}", (x, y, height(x, y) + 0.05 + 0.06 * k), (x + math.cos(a) * L, y + math.sin(a) * L * 0.5, height(x, y) + 0.12 + 0.04 * k), rng.uniform(0.03, 0.06), seed=240 + k, stubs=3)
 
     # ---- A sign for the camp at the east, the forest round it all.
     kit.rod("Camp sign post", mat("dark wood"), (16.6, 5.6, -0.1), (16.6, 5.6, 2.0), 0.06)
     reb.prim("cube", "Camp sign", mat("planks"), (16.6, 5.64, 1.75), (1.3, 0.05, 0.32))
-    kit.text("Camp sign words", "CAMP 4  >", mat("white paint"), (16.6, 5.67, 1.75), size=0.17, rot=(math.pi / 2, 0, math.pi))
+    kit.fit_text(kit.text("Camp sign words", "CAMP  >", mat("white paint"), (16.6, 5.67, 1.75), size=0.17, rot=(math.pi / 2, 0, math.pi)), 1.15)
     cams = ((1.4, 4.6), (1.6, 11.4), (18.4, 11.4), (13.4, 4.6), (2.6, 5.0))
 
     def keep_out(x, y):
         if X0 - 1.0 < x < X1 + 1.0 and Y0 - 0.8 < y < Y1 + 0.8:
             return True
-        if abs(y - TY) < 1.8:
+        if abs(y - TY) < 1.8 or (2.0 < x < 15.0 and 12.4 < y < 15.6):
+            return True
+        if any((x - sx) ** 2 + (y - sy) ** 2 < 4 for sx, sy in STANDING):
             return True
         return any((x - cx) ** 2 + (y - cy) ** 2 < 9 for cx, cy in cams)
     kit.forest(rng, height, keep_out, (-16, -14, 36, 30), count=130, spacing=1.7, tall=(13, 22), ferns=180, needles=1200, dead=0.1)
-    far_m = reb.mat_surface("Far spruce", [(0.0, (0.015, 0.03, 0.018)), (1.0, (0.04, 0.07, 0.035))], scale=0.6, bump=0.3)
-    fv, ff = [], []
-    placed = 0
-    while placed < 300:
-        x, y = rng.uniform(-55, 75), rng.uniform(-55, 75)
-        if (-16 < x < 36 and -14 < y < 30) or abs(y - TY) < 2.0:
-            continue
-        placed += 1
-        z = height(x, y) - 0.4
-        h = rng.uniform(14, 24)
-        for tier in range(4):
-            z0 = z + h * (0.25 + 0.19 * tier)
-            r = h * 0.2 * (1 - 0.22 * tier) * rng.uniform(0.8, 1.1)
-            k0 = len(fv)
-            for j in range(9):
-                a = 2 * math.pi * j / 9 + rng.uniform(-0.2, 0.2)
-                rr = r * rng.uniform(0.75, 1.05)
-                fv.append((x + math.cos(a) * rr, y + math.sin(a) * rr, z0 - rng.uniform(0, 0.8)))
-            fv.append((x, y, z0 + h * 0.3))
-            ff.extend((k0 + j, k0 + (j + 1) % 9, k0 + 9) for j in range(9))
-        reb.box(fv, ff, (x, y, z + h * 0.15), (0.4, 0.4, h * 0.3))
-    reb.mesh_object("Far spruces", fv, ff, far_m, smooth=False)
+    # A second, closer ring so the trunks wall the road in, back into the mist.
+    kit.forest(rng, height, lambda x, y: keep_out(x, y) or any((x - cx) ** 2 + (y - cy) ** 2 < 49 for cx, cy in cams), (-8, -6, 28, 22), count=110, spacing=1.4, tall=(12, 20), ferns=60, needles=600)
+    kit.far_spruces(rng, height, keep_out=lambda x, y: -16 < x < 36 and -14 < y < 30 or abs(y - TY) < 2.5, count=1000, area=(-70, -70, 90, 90))
     xv, xf = [], []
     for _ in range(40):
         x, y = rng.uniform(X0, X1), rng.choice((rng.uniform(Y0, TY - 2.2), rng.uniform(TY + 2.4, Y1)))
@@ -376,6 +395,15 @@ def build():
                          sky=((0.6, 0.62, 0.63), (0.4, 0.42, 0.45), 1.1))
     sun.data.angle = math.radians(18)
     sun.rotation_euler[0] = math.radians(28)
+    kit.overcast_sky()
+    reb.spot("Soft light on the road", (10.0, TY, 14.0), (10.0, TY, 0.0), 14000, (0.85, 0.86, 0.85), 120, 1, 8)
+
+    def far_land(x, y, z):
+        r = math.hypot(x - 10.0, y - TY)
+        w = max(0.0, min(1.0, (200.0 - r) / 150.0))
+        return z + (height(x, y) - z) * w * w * (3 - 2 * w)
+    kit.backdrop((10.0, TY, 3.0), spread=360, below=-30.0, near=36.0, forest_to=1600.0, trees=110000,
+                 keep_out=lambda x, y: math.hypot(x - 10.0, y - TY) < 36, shape=far_land, mist=25.0, rng=random.Random(5))
 
     anim = kit.Anim(16)
     anim.blink(blink, blink_m, on=(0, 4))
@@ -386,7 +414,6 @@ def build():
         for i, w in enumerate(wipers):
             w.rotation_euler = (-1.2 + twitch[(k + i) % 16], 0, 0)
     anim.custom(wipe)
-    anim.swing(flap_pin, axis=1, degrees=14)
     anim.flies((13.2, TY + 0.6, 1.7), count=7, radius=0.3)
     anim.flies((15.1, TY + 1.8, 0.05), count=8, radius=0.4)
     anim.sway(grass, amount=0.06)
@@ -395,7 +422,7 @@ def build():
     # ---- What the game needs.
     room.door("woods", (X0, 6.4, X0 + 0.6, 10.0), arrive=(2.6, TY), face=(1, 0))
     room.door("camp-gate", (X1 - 0.6, 6.2, X1, 11.0), arrive=(17.3, 10.6), face=(-1, 0))
-    room.check((nx - 1.3, Y0, nx + 0.3, Y0 + 0.8), "QUARANTINE. SICKNESS IN CAMP 4. NO ENTRY. TURN BACK.\nThe bottom half's torn off.")
+    room.check((nx - 1.3, Y0, nx + 0.3, Y0 + 0.8), "NO ENTRY. TURN BACK.\nPainted on a board and nailed up in a hurry.")
     room.check((DOOR[0] - 0.3, TY + HW, DOOR[1] + 0.4, TY + HW + 1.0), "The driver's door is wide open. Blood on the seat, and down the step.\nScratches on the inside of the door.")
     room.check((lx - 0.6, ly - 0.5, lx + 1.0, ly + 0.8), "His lunch, in the mud. He never got to eat it.")
     room.check((14.7, TY + 1.4, 15.8, TY + 2.3), "Blood in the mud by the wheel. He was coughing it up.")

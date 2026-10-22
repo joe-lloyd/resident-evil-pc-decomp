@@ -1,0 +1,15 @@
+{
+  "scene": "den",
+  "steps": [
+    { "action": "hold", "frames": 60, "picture": "den-clearing" },
+    { "action": "walk", "x": 19550, "z": 11050, "picture": "den-ranger" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 14960, "z": 6630, "picture": "den-mouth" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 9860, "z": 14280, "picture": "den-jacket" },
+    { "action": "hold", "frames": 40 },
+    { "action": "walk", "x": 14620, "z": 14620 },
+    { "action": "walk", "x": 14960, "z": 17000, "picture": "den-way-out" },
+    { "action": "exit", "x": 14960, "z": 20060, "to": "woods" }
+  ]
+}
