@@ -1192,173 +1192,111 @@
       "room": "mess",
       "quarter": 1,
       "visit": 1,
-      "start": 778.3,
-      "end": 923.5,
-      "roomStart": 782.0,
-      "posterTime": 782.0,
-      "file": "clips/mess-q1-v01.mp4",
-      "poster": "clips/mess-q1-v01.jpg",
-      "note": "",
+      "start": 0.5,
+      "end": 32.5,
+      "roomStart": 0.5,
+      "posterTime": 10.0,
+      "file": "clips/mess-review-20261022-51ecd082.mp4",
+      "poster": "clips/mess-review-20261022-51ecd082.jpg",
+      "review": {
+        "recorded": "2026-10-22",
+        "sha256": "51ecd0826e39db105d4af8139064e07cdb325766208c7c1d1c743ee292826823",
+        "gameCommit": "ee9d7c9a61b7559c3c1f0772c5672a768283c279",
+        "checkpoint": {
+          "file": "after-office-key.json",
+          "sha256": "41aabae65719ed3b4d721c1e842e5b20e5eca1bec233d47b8835a1ccf1f31c8e"
+        },
+        "god": false,
+        "audio": false,
+        "source": "recordings/mess-20261022074410.mp4",
+        "log": "recordings/mess-review-20261022-51ecd082.json",
+        "logSha256": "5c4d3eba84a4b43d328ee3046437a93de15f59ef78ac06368468c82ed0fa7dae"
+      },
+      "note": "Played from inside after the office key: the tables, the stocked kitchen, out through the shut door. Inspected frames.",
       "events": [
         {
-          "t": 785,
+          "t": 0,
+          "frame": 1262,
           "room": "mess",
-          "what": "into mess"
+          "camera": 0,
+          "what": "recording ready"
         },
         {
-          "t": 813,
+          "t": 1.7,
+          "frame": 1313,
           "room": "mess",
-          "what": "done: office-key"
+          "camera": 0,
+          "what": "scene ready; items [{\"id\":2,\"qty\":12},{\"id\":65,\"qty\":1},{\"id\":30,\"qty\":1},{\"id\":57,\"qty\":1},{\"id\":28,\"qty\":2},{\"id\":58,\"qty\":1}]"
         },
         {
-          "t": 817,
+          "t": 3.8,
+          "frame": 1375,
           "room": "mess",
-          "what": "goal: calendar (take in bunkhouse)"
+          "camera": 0,
+          "what": "hold mess-cook"
         },
         {
-          "t": 841,
+          "t": 7,
+          "frame": 1474,
           "room": "mess",
-          "what": "the way to camp-yard did not open"
+          "camera": 2,
+          "what": "walk mess-tables"
         },
         {
-          "t": 842,
+          "t": 9.5,
+          "frame": 1550,
           "room": "mess",
-          "what": "stuck on calendar: no way to bunkhouse"
+          "camera": 2,
+          "what": "hold"
         },
         {
-          "t": 845,
+          "t": 11.8,
+          "frame": 1618,
           "room": "mess",
-          "what": "goal: letters (take in office)"
+          "camera": 1,
+          "what": "walk"
         },
         {
-          "t": 847,
+          "t": 13.3,
+          "frame": 1664,
           "room": "mess",
-          "what": "stuck on letters: no way to office"
+          "camera": 3,
+          "what": "walk mess-kitchen"
         },
         {
-          "t": 849,
+          "t": 16.7,
+          "frame": 1768,
           "room": "mess",
-          "what": "goal: letters (take in office)"
+          "camera": 3,
+          "what": "hold"
         },
         {
-          "t": 851,
+          "t": 22.5,
+          "frame": 1943,
           "room": "mess",
-          "what": "stuck on letters: no way to office"
+          "camera": 1,
+          "what": "walk"
         },
         {
-          "t": 854,
+          "t": 23.6,
+          "frame": 1974,
           "room": "mess",
-          "what": "goal: calendar (take in bunkhouse)"
+          "camera": 1,
+          "what": "walk"
         },
         {
-          "t": 856,
+          "t": 23.6,
+          "frame": 1974,
           "room": "mess",
-          "what": "stuck on calendar: no way to bunkhouse"
+          "camera": 1,
+          "what": "leaving for camp-yard"
         },
         {
-          "t": 858,
-          "room": "mess",
-          "what": "goal: mill-race (event in pond)"
-        },
-        {
-          "t": 860,
-          "room": "mess",
-          "what": "stuck on mill-race: no way to pond"
-        },
-        {
-          "t": 863,
-          "room": "mess",
-          "what": "goal: mill-race (event in pond)"
-        },
-        {
-          "t": 864,
-          "room": "mess",
-          "what": "stuck on mill-race: no way to pond"
-        },
-        {
-          "t": 867,
-          "room": "mess",
-          "what": "trying again: calendar, letters, mill-race"
-        },
-        {
-          "t": 869,
-          "room": "mess",
-          "what": "goal: letters (take in office)"
-        },
-        {
-          "t": 871,
-          "room": "mess",
-          "what": "stuck on letters: no way to office"
-        },
-        {
-          "t": 873,
-          "room": "mess",
-          "what": "goal: letters (take in office)"
-        },
-        {
-          "t": 875,
-          "room": "mess",
-          "what": "stuck on letters: no way to office"
-        },
-        {
-          "t": 877,
-          "room": "mess",
-          "what": "goal: calendar (take in bunkhouse)"
-        },
-        {
-          "t": 879,
-          "room": "mess",
-          "what": "stuck on calendar: no way to bunkhouse"
-        },
-        {
-          "t": 882,
-          "room": "mess",
-          "what": "goal: calendar (take in bunkhouse)"
-        },
-        {
-          "t": 884,
-          "room": "mess",
-          "what": "stuck on calendar: no way to bunkhouse"
-        },
-        {
-          "t": 886,
-          "room": "mess",
-          "what": "goal: mill-race (event in pond)"
-        },
-        {
-          "t": 888,
-          "room": "mess",
-          "what": "stuck on mill-race: no way to pond"
-        },
-        {
-          "t": 891,
-          "room": "mess",
-          "what": "goal: mill-race (event in pond)"
-        },
-        {
-          "t": 893,
-          "room": "mess",
-          "what": "stuck on mill-race: no way to pond"
-        },
-        {
-          "t": 895,
-          "room": "mess",
-          "what": "trying again: letters, calendar, mill-race"
-        },
-        {
-          "t": 897,
-          "room": "mess",
-          "what": "goal: letters (take in office)"
-        },
-        {
-          "t": 899,
-          "room": "mess",
-          "what": "stuck on letters: no way to office"
-        },
-        {
-          "t": 902,
-          "room": "mess",
-          "what": "goal: calendar (take in bunkhouse)"
+          "t": 34.2,
+          "frame": 2451,
+          "room": "camp-yard",
+          "camera": 5,
+          "what": "arrived in camp-yard"
         }
       ]
     },
@@ -1385,33 +1323,111 @@
       "room": "bunkhouse",
       "quarter": 1,
       "visit": 1,
-      "start": 956.433,
-      "end": 999.0,
-      "roomStart": 959.5,
-      "posterTime": 969.5,
-      "file": "clips/bunkhouse-q1-v01.mp4",
-      "poster": "clips/bunkhouse-q1-v01.jpg",
-      "note": "",
+      "start": 0.5,
+      "end": 32.0,
+      "roomStart": 0.5,
+      "posterTime": 10.0,
+      "file": "clips/bunkhouse-review-20261022-a785eaee.mp4",
+      "poster": "clips/bunkhouse-review-20261022-a785eaee.jpg",
+      "review": {
+        "recorded": "2026-10-22",
+        "sha256": "a785eaee6bf3d1977721f01cdb2d4a7efb4dec1611621bb61638b277f9d047dc",
+        "gameCommit": "ee9d7c9a61b7559c3c1f0772c5672a768283c279",
+        "checkpoint": {
+          "file": "after-calendar.json",
+          "sha256": "c4404e6108dd81d50bc7ba1d68ba8afe7ed71e3c2189fe5fd0438c22d90f72df"
+        },
+        "god": false,
+        "audio": false,
+        "source": "recordings/bunkhouse-20261022074140.mp4",
+        "log": "recordings/bunkhouse-review-20261022-a785eaee.json",
+        "logSha256": "cdf46876f198202fee0c5b538b395553e2e787b9fad245b59be4d119fa47ecf2"
+      },
+      "note": "Played from inside after the calendar: the dead man under his blanket, the empty bunk with torn belts, out through the shut door. Inspected frames.",
       "events": [
         {
-          "t": 963,
+          "t": 0,
+          "frame": 1268,
           "room": "bunkhouse",
-          "what": "into bunkhouse"
+          "camera": 1,
+          "what": "recording ready"
         },
         {
-          "t": 972,
+          "t": 1.7,
+          "frame": 1320,
           "room": "bunkhouse",
-          "what": "done: calendar"
+          "camera": 1,
+          "what": "scene ready; items [{\"id\":2,\"qty\":14},{\"id\":1,\"qty\":0},{\"id\":65,\"qty\":1},{\"id\":30,\"qty\":1},{\"id\":57,\"qty\":1},{\"id\":28,\"qty\":2}]"
         },
         {
-          "t": 976,
+          "t": 3.8,
+          "frame": 1383,
           "room": "bunkhouse",
-          "what": "goal: safe (take in office)"
+          "camera": 1,
+          "what": "hold bunkhouse-calendar"
         },
         {
-          "t": 976,
+          "t": 10.9,
+          "frame": 1599,
           "room": "bunkhouse",
-          "what": "bag full: to the item box to put away item 30"
+          "camera": 2,
+          "what": "walk bunkhouse-dead-in-his-bunk"
+        },
+        {
+          "t": 13.5,
+          "frame": 1677,
+          "room": "bunkhouse",
+          "camera": 2,
+          "what": "hold"
+        },
+        {
+          "t": 15.9,
+          "frame": 1748,
+          "room": "bunkhouse",
+          "camera": 1,
+          "what": "walk"
+        },
+        {
+          "t": 17.1,
+          "frame": 1787,
+          "room": "bunkhouse",
+          "camera": 0,
+          "what": "walk bunkhouse-west-end"
+        },
+        {
+          "t": 19.6,
+          "frame": 1863,
+          "room": "bunkhouse",
+          "camera": 0,
+          "what": "hold"
+        },
+        {
+          "t": 22,
+          "frame": 1933,
+          "room": "bunkhouse",
+          "camera": 0,
+          "what": "walk bunkhouse-empty-bunk"
+        },
+        {
+          "t": 23.3,
+          "frame": 1974,
+          "room": "bunkhouse",
+          "camera": 0,
+          "what": "walk"
+        },
+        {
+          "t": 23.3,
+          "frame": 1974,
+          "room": "bunkhouse",
+          "camera": 0,
+          "what": "leaving for camp-yard"
+        },
+        {
+          "t": 34.1,
+          "frame": 2451,
+          "room": "camp-yard",
+          "camera": 3,
+          "what": "arrived in camp-yard"
         }
       ]
     },
@@ -1438,53 +1454,90 @@
       "room": "office",
       "quarter": 1,
       "visit": 1,
-      "start": 1018.733,
-      "end": 1086.5,
-      "roomStart": 1022.5,
-      "posterTime": 1022.5,
-      "file": "clips/office-q1-v01.mp4",
-      "poster": "clips/office-q1-v01.jpg",
-      "note": "",
+      "start": 0.5,
+      "end": 19.6,
+      "roomStart": 0.5,
+      "posterTime": 6.0,
+      "file": "clips/office-review-20261022-741df41e.mp4",
+      "poster": "clips/office-review-20261022-741df41e.jpg",
+      "review": {
+        "recorded": "2026-10-22",
+        "sha256": "741df41ebfb2863f38f23b98c9e709558b84984a997f125b194b4850d3704a6e",
+        "gameCommit": "ee9d7c9a61b7559c3c1f0772c5672a768283c279",
+        "checkpoint": {
+          "file": "after-letters.json",
+          "sha256": "f997bc4b88c396843ea2182c4cf3e6ec69d2bb1e9790709671fe95b39144fd98"
+        },
+        "god": false,
+        "audio": false,
+        "source": "recordings/office-20261022074300.mp4",
+        "log": "recordings/office-review-20261022-741df41e.json",
+        "logSha256": "131ff421b0163dd5844d0848005e10b5919ae8665b53e79fb90074e74566b662"
+      },
+      "note": "Played from inside after the letters: the desk, the foreman, the new stove, out through the shut door. Inspected frames.",
       "events": [
         {
-          "t": 1026,
+          "t": 0,
+          "frame": 1278,
           "room": "office",
-          "what": "into office"
+          "camera": 2,
+          "what": "recording ready"
         },
         {
-          "t": 1036,
+          "t": 1.7,
+          "frame": 1329,
           "room": "office",
-          "what": "put item 30 in the box"
+          "camera": 2,
+          "what": "scene ready; items [{\"id\":2,\"qty\":12},{\"id\":30,\"qty\":1},{\"id\":57,\"qty\":1},{\"id\":28,\"qty\":2},{\"id\":59,\"qty\":1},{\"id\":0,\"qty\":0}]"
         },
         {
-          "t": 1048,
+          "t": 3.8,
+          "frame": 1391,
           "room": "office",
-          "what": "done: safe"
+          "camera": 2,
+          "what": "hold office-desk"
         },
         {
-          "t": 1052,
+          "t": 4.9,
+          "frame": 1427,
           "room": "office",
-          "what": "goal: letters (take in office)"
+          "camera": 2,
+          "what": "walk office-foreman"
         },
         {
-          "t": 1062,
+          "t": 7.5,
+          "frame": 1503,
           "room": "office",
-          "what": "done: letters"
+          "camera": 2,
+          "what": "hold"
         },
         {
-          "t": 1066,
+          "t": 9.2,
+          "frame": 1556,
           "room": "office",
-          "what": "goal: mill-race (event in pond)"
+          "camera": 1,
+          "what": "walk office-stove"
         },
         {
-          "t": 1066,
+          "t": 11.8,
+          "frame": 1633,
           "room": "office",
-          "what": "to the item box for item 30"
+          "camera": 1,
+          "what": "hold"
         },
         {
-          "t": 1077,
+          "t": 11.8,
+          "frame": 1633,
           "room": "office",
-          "what": "took item 30 from the box"
+          "camera": 1,
+          "what": "leaving for camp-yard"
+        },
+        {
+          "t": 22.9,
+          "frame": 2122,
+          "room": "camp-yard",
+          "camera": 4,
+          "what": "arrived in camp-yard"
         }
       ]
     },
@@ -1637,57 +1690,104 @@
       "room": "workshop",
       "quarter": 1,
       "visit": 1,
-      "start": 1581.333,
-      "end": 1633.5,
-      "roomStart": 1585.0,
-      "posterTime": 1596.0,
-      "file": "clips/workshop-q1-v01.mp4",
-      "poster": "clips/workshop-q1-v01.jpg",
-      "note": "",
+      "start": 0.5,
+      "end": 21.5,
+      "roomStart": 0.5,
+      "posterTime": 8.0,
+      "file": "clips/workshop-review-20261022-a512e2ae.mp4",
+      "poster": "clips/workshop-review-20261022-a512e2ae.jpg",
+      "review": {
+        "recorded": "2026-10-22",
+        "sha256": "a512e2ae93bd2803d47b81b81d55693521bf6569c96bd3f1289facd0ead04b18",
+        "gameCommit": "ee9d7c9a61b7559c3c1f0772c5672a768283c279",
+        "checkpoint": {
+          "file": "after-cog.json",
+          "sha256": "c249c2efb87752ca3476a56eb61ba88d701b3cf044bfe29b1b95ebdfcba26ac5"
+        },
+        "god": false,
+        "audio": false,
+        "source": "recordings/workshop-20261022074530.mp4",
+        "log": "recordings/workshop-review-20261022-a512e2ae.json",
+        "logSha256": "fa97597770e022eaee3f9527ece5f5f4ac8838b9540bd640c0f7f147a0fb3968"
+      },
+      "note": "Played from inside after the cog: the bench, the crate under its logs, out through the shut door. Inspected frames.",
       "events": [
         {
-          "t": 1589,
+          "t": 0,
+          "frame": 1294,
           "room": "workshop",
-          "what": "into workshop"
+          "camera": 2,
+          "what": "recording ready"
         },
         {
-          "t": 1617,
+          "t": 1.7,
+          "frame": 1345,
           "room": "workshop",
-          "what": "could not take the clip here"
+          "camera": 2,
+          "what": "scene ready; items [{\"id\":2,\"qty\":9},{\"id\":57,\"qty\":1},{\"id\":28,\"qty\":2},{\"id\":11,\"qty\":30},{\"id\":41,\"qty\":1},{\"id\":0,\"qty\":0}]"
         },
         {
-          "t": 1631,
+          "t": 3.8,
+          "frame": 1408,
           "room": "workshop",
-          "what": "done: cog"
+          "camera": 2,
+          "what": "hold workshop-bench"
         },
         {
-          "t": 1637,
+          "t": 5.3,
+          "frame": 1455,
           "room": "workshop",
-          "what": "quarter 1 done: its end saved for the next quarter"
-        }
-      ]
-    },
-    {
-      "room": "workshop",
-      "quarter": 2,
-      "visit": 2,
-      "start": 28.833,
-      "end": 49.0,
-      "roomStart": 32.0,
-      "posterTime": 38.5,
-      "file": "clips/workshop-q2-v02.mp4",
-      "poster": "clips/workshop-q2-v02.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 36,
-          "room": "workshop",
-          "what": "quarter 2: starting from /tmp/rebplan/quarters/snaps/q1-end.json"
+          "camera": 2,
+          "what": "walk"
         },
         {
-          "t": 38,
+          "t": 6.5,
+          "frame": 1490,
           "room": "workshop",
-          "what": "goal: cut-depot (unlock in camp-yard)"
+          "camera": 2,
+          "what": "walk workshop-mattress"
+        },
+        {
+          "t": 8.9,
+          "frame": 1565,
+          "room": "workshop",
+          "camera": 2,
+          "what": "hold"
+        },
+        {
+          "t": 10.4,
+          "frame": 1609,
+          "room": "workshop",
+          "camera": 0,
+          "what": "walk workshop-crate"
+        },
+        {
+          "t": 12.9,
+          "frame": 1685,
+          "room": "workshop",
+          "camera": 0,
+          "what": "hold"
+        },
+        {
+          "t": 14.2,
+          "frame": 1725,
+          "room": "workshop",
+          "camera": 0,
+          "what": "walk workshop-door"
+        },
+        {
+          "t": 14.7,
+          "frame": 1727,
+          "room": "workshop",
+          "camera": 0,
+          "what": "leaving for camp-yard"
+        },
+        {
+          "t": 24.7,
+          "frame": 2196,
+          "room": "camp-yard",
+          "camera": 7,
+          "what": "arrived in camp-yard"
         }
       ]
     },
