@@ -8,9 +8,8 @@ if (ck(FG_ITEM, 160, 0)) {  // ranger keys (truck-keys)
 aot_set(2, 15714, 6483, 3400, 3400, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(3, 13600, 3400, 2380, 2380, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(4, 12070, 5440, 2040, 1360, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
-aot_set(5, 15300, 3400, 1870, 1700, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
-aot_set(6, 8500, 15300, 3230, 2720, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
-aot_set(7, 15470, 5185, 1700, 1700, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
+aot_set(5, 8500, 15300, 3230, 2720, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
+aot_set(6, 15470, 5185, 1700, 1700, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 if (ck(FG_COMMON, 117, 0)) {
     enemy(2, 1, 190, 1, 2, 0, 0, 2637, 0, 0, 24500, 0, 6140, 0, 0, 0, 0);  // a cerberus
 }
@@ -37,7 +36,7 @@ scd {
 }
 dir_set(0, 0, 1024, 0, 15130, 0, 18020);  // her, in from woods
 cutnext(0);
-message(135, 0, 0);  // her
+message(134, 0, 0);  // her
 wait_voice();
 // She walks to (15200, 13600).
 set_entity(ENT_PLAYER, 0);
@@ -52,7 +51,7 @@ anim_begin();
     anim_play(34, 63, 0);
     anim_flags(0, 16);
 anim_end();
-message(136, 0, 0);  // Dana
+message(135, 0, 0);  // Dana
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
@@ -77,7 +76,7 @@ anim_begin();
     anim_play(33, 63, 0);
     anim_flags(0, 16);
 anim_end();
-message(137, 0, 0);  // Dana
+message(136, 0, 0);  // Dana
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
@@ -97,21 +96,21 @@ anim_begin();
     anim_play(37, 63, 0);
     anim_flags(0, 16);
 anim_end();
-message(138, 0, 0);  // Dana
+message(137, 0, 0);  // Dana
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
     anim_play(0, 63, 0);
     anim_flags(0, 16);
 anim_end();
-message(139, 0, 0);  // her
+message(138, 0, 0);  // her
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
     anim_play(35, 63, 0);
     anim_flags(0, 16);
 anim_end();
-message(140, 0, 0);  // Dana
+message(139, 0, 0);  // Dana
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();

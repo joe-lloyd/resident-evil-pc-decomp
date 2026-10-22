@@ -2,12 +2,11 @@
 1: \nThe ranger. What the dogs\nleft of him.\p{0}\nHis keys are still on his\nbelt.
 2: \nA pit scraped in the soil\nunder the rock, matted\nwith black hair.\p{0}\nThis is where they sleep.
 3: \nA heavy collar on a broken\nchain. The tag's too\nscratched to read.\p{0}\nThese dogs belonged to\nsomeone.
-4: \nA human skull. It's been\nhere a lot longer than he\nhas.
-5: \nA hiker's jacket, torn up\non the fallen tree.\p{0}\nI don't want to know where\nthe hiker is.
-6: \nWater dripping off the\nrock into a puddle. The\npuddle's red.
-7: \nThe smell hits first. Then\nthe flies.
-8: \n\oIt's him."
-9: \n\oHis truck keys. It's\nparked by the station."
-10: \n\oTake it. Get help, if\nthere's any left."
-11: \n\oCome with me."
-12: \n\oNot yet. I'm not leaving\nhim like this."
+4: \nA hiker's jacket, torn up\non the fallen tree.\p{0}\nI don't want to know where\nthe hiker is.
+5: \nWater dripping off the\nrock into a puddle. The\npuddle's red.
+6: \nThe smell hits first. Then\nthe flies.
+7: \n\oIt's him."
+8: \n\oHis truck keys. It's\nparked by the station."
+9: \n\oTake it. Get help, if\nthere's any left."
+10: \n\oCome with me."
+11: \n\oNot yet. I'm not leaving\nhim like this."

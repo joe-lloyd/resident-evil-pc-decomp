@@ -6,9 +6,9 @@ with the dark going back under it. The ranger is here. They pulled him to
 the mouth head first and ate what they wanted: he lies on his back in his
 Forest Service uniform, the same as Dana's, the green jacket open, a hand
 and a foot gone, and the flies are thick on him. His ring of keys still
-hangs at his belt and catches what light there is. He is not the first: a
-few old gnawed bones lie by the pit, a human skull among them, and a
-hiker's orange jacket is torn up on the windfall at the south-west. In the
+hangs at his belt and catches what light there is. A hiker's orange
+jacket is torn up on the windfall at the south-west, a boot by it. There
+are no bones anywhere: he is the only dead thing here. In the
 mouth, under the slab, the dogs have dug a pit in the soil where they lie,
 matted with their hair. A heavy collar with a broken chain lies by it:
 these were somebody's dogs once. Water drips off the slab into a puddle
@@ -137,7 +137,7 @@ def build():
     room.ground("earth")
     notes = ["from the way down: the clearing, the tor, the ranger at the cave mouth",
              "from beside the west block: the drag in from the woods, the windfall and the jacket, the way back up",
-             "from the east: the mouth under the slab, the pit, the bones, the skull"]
+             "from the east: the mouth under the slab, the pit, the ranger"]
     for (eye, look), note in zip(CAMS, notes):
         room.camera(eye, look, 200, note)
 
@@ -240,12 +240,6 @@ def build():
     reb.prim("cube", "His radio", reb.mat_plain("Radio black", (0.02, 0.02, 0.02), 0.5), (radio_at.x, radio_at.y, rz + 0.04), (0.08, 0.2, 0.06), rot=(0, 0, 0.9))
     kit.rod("Radio aerial", mat("black"), (radio_at.x, radio_at.y, rz + 0.05), (radio_at.x + 0.18, radio_at.y + 0.12, rz + 0.05), 0.004, 4)
 
-    # ---- By the pit: one heap of old gnawed bones and a human skull, half buried.
-    kit.bones("Gnawed bones", (PIT[0] + 1.3, PIT[1] + 0.4, height(PIT[0] + 1.3, PIT[1] + 0.4)), spread=0.35, seed=40, skull=False)
-    sx, sy = PIT[0] + 0.9, PIT[1] - 0.3
-    reb.prim("sphere", "Human skull", mat("bone"), (sx, sy, height(sx, sy) + 0.04), (0.17, 0.2, 0.17), segments=14)
-    for s in (-1, 1):
-        reb.prim("sphere", "Eye socket", mat("black"), (sx + 0.03 * s, sy + 0.08, height(sx, sy) + 0.07), (0.04, 0.04, 0.05), segments=8)
     # Windfall at the south-west, the hiker's jacket torn up on its stubs.
     wa, wb = (4.2, 11.2), (7.4, 9.3)
     windfall = kit.rough_log("Windfall", (wa[0], wa[1], height(*wa) + 0.16), (wb[0], wb[1], height(*wb) + 0.14), 0.26, seed=50, stubs=6)
@@ -343,7 +337,6 @@ def build():
     room.check((hx - 1.0, hy - 1.0, hx + 1.0, hy + 1.0), "The ranger. What the dogs left of him.\nHis keys are still on his belt.")
     room.check((PIT[0] - 0.6, Y0, PIT[0] + 0.8, PIT[1] + 0.6), "A pit scraped in the soil under the rock, matted with black hair.\nThis is where they sleep.")
     room.check((cx - 0.5, cy - 0.4, cx + 0.7, cy + 0.4), "A heavy collar on a broken chain. The tag's too scratched to read.\nThese dogs belonged to someone.")
-    room.check((sx - 0.5, Y0, sx + 0.6, sy + 0.5), "A human skull. It's been here a lot longer than he has.")
     room.check((5.0, 9.0, 6.9, 10.6), "A hiker's jacket, torn up on the fallen tree.\nI don't want to know where the hiker is.")
     room.check((drip_at[0] - 0.5, drip_at[1] - 0.5, drip_at[0] + 0.5, drip_at[1] + 0.5), "Water dripping off the rock into a puddle. The puddle's red.")
     room.export(anim)
