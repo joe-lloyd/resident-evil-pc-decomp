@@ -2921,6 +2921,99 @@ def ledge_plants(rng, ledges, tufts=3000, ferns=200, name="Ledge"):
     reb.mesh_object(f"{name} ferns", fv, ff, mat("ferns"))
 
 
+def spruce_bark(name, dark=(0.03, 0.022, 0.016), mid=(0.1, 0.075, 0.055), light=(0.19, 0.16, 0.13)):
+    """Spruce bark for felled_log(): grey-brown, in long rough streaks and
+    broken scales running with the grain, along the object's own z axis."""
+    m, nodes, links, bsdf = reb.nodes_material(name)
+    bsdf.inputs["Roughness"].default_value = 0.92
+    tc = nodes.new("ShaderNodeTexCoord")
+    grain = nodes.new("ShaderNodeMapping")
+    grain.inputs["Scale"].default_value = (1.0, 1.0, 0.12)   # stretched along the trunk
+    links.new(tc.outputs["Object"], grain.inputs["Vector"])
+    # Wander the grain a little, so no two streaks run alike.
+    wander = nodes.new("ShaderNodeTexNoise")
+    wander.inputs["Scale"].default_value = 3.0
+    links.new(grain.outputs["Vector"], wander.inputs["Vector"])
+    nudge = nodes.new("ShaderNodeVectorMath")
+    nudge.operation = "MULTIPLY_ADD"
+    nudge.inputs[1].default_value = (0.08, 0.08, 0.08)
+    links.new(wander.outputs["Color"], nudge.inputs[0])
+    links.new(grain.outputs["Vector"], nudge.inputs[2])
+    streaks = nodes.new("ShaderNodeTexNoise")
+    streaks.inputs["Scale"].default_value = 14.0
+    streaks.inputs["Detail"].default_value = 10.0
+    streaks.inputs["Roughness"].default_value = 0.7
+    links.new(nudge.outputs["Vector"], streaks.inputs["Vector"])
+    scales = nodes.new("ShaderNodeTexVoronoi")
+    scales.feature = "DISTANCE_TO_EDGE"
+    scales.inputs["Scale"].default_value = 26.0
+    links.new(nudge.outputs["Vector"], scales.inputs["Vector"])
+    edge = nodes.new("ShaderNodeMapRange")
+    edge.inputs["From Min"].default_value, edge.inputs["From Max"].default_value = 0.0, 0.08
+    edge.inputs["To Min"].default_value = 0.55
+    links.new(scales.outputs["Distance"], edge.inputs["Value"])
+    both = nodes.new("ShaderNodeMath")
+    both.operation = "MULTIPLY"
+    links.new(streaks.outputs["Fac"], both.inputs[0])
+    links.new(edge.outputs["Result"], both.inputs[1])
+    col = reb.ramp(nodes, links, both.outputs["Value"], [(0.12, dark), (0.3, mid), (0.5, light), (0.62, mid)])
+    links.new(col.outputs["Color"], bsdf.inputs["Base Color"])
+    reb.bumped(nodes, links, bsdf, both.outputs["Value"], 0.8, 0.03)
+    return m
+
+
+def felled_log(name, a, b, r, bark, ends, seed=0, taper=0.12, sides=20):
+    """A felled spruce from `a` to `b` (x, y, z), sawn square at both ends:
+    a straight trunk, round but a little out of it, tapering by `taper`
+    from the butt at `a`, with bark in shallow ridges along its length
+    (`bark` from spruce_bark()) and pale end grain (`ends`) inside a rim
+    of bark. Built along its own z, so the bark's grain runs with it.
+    Returns the object."""
+    rng = random.Random(seed)
+    a, b = Vector(a), Vector(b)
+    length = (b - a).length
+    oval = rng.uniform(0.93, 1.0)
+    turn = rng.uniform(0, math.tau)
+    ridges = [1 + 0.035 * rng.uniform(-1, 1) for _ in range(sides)]
+
+    def ring(z, rr):
+        out = []
+        for k in range(sides):
+            ang = math.tau * k / sides
+            q = rr * ridges[k] * (1 + (oval - 1) * math.cos(2 * (ang - turn)))
+            out.append((math.cos(ang) * q, math.sin(ang) * q, z))
+        return out
+    v, f = [], []
+    rings = 6
+    for i in range(rings + 1):
+        t = i / rings
+        v += ring(length * t, r * (1 - taper * t))
+    for i in range(rings):
+        for k in range(sides):
+            p0, p1 = i * sides + k, i * sides + (k + 1) % sides
+            f.append((p0, p1, p1 + sides, p0 + sides))
+    # Each sawn end: a thin rim of bark, then the cut wood inside it.
+    cut_faces = []
+    for i, z in ((0, -0.004), (rings, length + 0.004)):
+        rr = r * (1 - taper * i / rings)
+        k0 = len(v)
+        v += ring(z, rr * 0.9)
+        v.append((0.0, 0.0, z))
+        for k in range(sides):
+            o0, o1 = i * sides + k, i * sides + (k + 1) % sides
+            n0, n1 = k0 + k, k0 + (k + 1) % sides
+            f.append((o0, o1, n1, n0))
+            cut_faces.append(len(f))
+            f.append((n0, n1, k0 + sides))
+    ob = reb.mesh_object(name, v, f, bark)
+    ob.data.materials.append(ends)
+    for q in cut_faces:
+        ob.data.polygons[q].material_index = 1
+        ob.data.polygons[q].use_smooth = False
+    ob.matrix_world = Matrix.Translation(a) @ (b - a).to_track_quat("Z", "Y").to_matrix().to_4x4()
+    return ob
+
+
 def rough_log(name, a, b, r, m=None, seed=0, stubs=6, sawn=None):
     """A fallen trunk from `a` to `b` (x, y, z): lumpy, tapering and a
     little bent, its bark ridged, both ends snapped off ragged, with a few
