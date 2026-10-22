@@ -39,6 +39,8 @@ interface KitDoor {
   arrive: Arrive;
   /** False when the scene asks for a door that opens, such as stairs between two outdoor rooms. */
   walk?: boolean;
+  /** False when a walk between outdoor rooms goes through a gate she opens with the action button. */
+  touch?: boolean;
 }
 interface KitJson {
   doors?: KitDoor[];
@@ -394,8 +396,9 @@ function main(): void {
       // building a door opens, with the action button.
       const walk = d.walk !== false && !isInside(spec) && !game && !isInside(target as DayRoom);
       lines.push(`// To ${d.to}.`);
-      // A locked way opens with the action button even between outdoor rooms.
-      const touch = walk && !lockFor(slug, d.to);
+      // A locked way, or a gate the scene shuts (touch=False), opens with the
+      // action button even between outdoor rooms.
+      const touch = walk && d.touch !== false && !lockFor(slug, d.to);
       const door = `door_aot_set(${id}, ${size(d.zone)}, ${doorAnim(slug, d.to, walk)}, ${roomName(target)}, ${back.x}, 0, ${back.z}, ${back.angle}, ${doorKey(slug, d.to)}, ${touch ? TOUCH : OPEN});`;
       // A way an event opens, here or from another room: what blocks it until the event's flag is set.
       const gate = EVENTS.find((e) => e.opens?.to === d.to && (e.opens.from ?? e.room) === slug && kits.get(e.room)?.spots?.some((sp) => sp.step === e.step));

@@ -177,8 +177,14 @@ The cutter checks the source hash, cuts just this scene, keeps its source
 and event log under `recordings/`, and replaces only that room's manifest
 rows. Other rooms retain their old clips. Pass `--room` when the storyboard
 names the room differently from its scene: the `lookout` scene is the
-storyboard's `cabin`. Each review clip displays its own
-date, damage mode and start method. The old quarter cutter skips review
+storyboard's `cabin`. Pass `--add` to keep the room's earlier review clips
+and add this one as the next visit. Each review clip displays its own
+date, damage mode and start method.
+
+When a room's enemies kill a scripted walk at normal damage, record a second
+route with `record-scene.ts <slug> --route <file> --from <checkpoint> --god`.
+The recording says it ran in god mode, and the storyboard shows that on the
+clip. Cut it with `--add` so the normal-damage clip stays. The old quarter cutter skips review
 rows. Do not rebuild the entire index over a reviewed manifest, since that
 would restore the old scene visits. Keep `clips.json` in git; videos,
 posters and source recordings stay on the server. Publish without

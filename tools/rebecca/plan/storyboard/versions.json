@@ -13,5 +13,8 @@
   "workshop": [{ "date": "2026-10-22", "prs": [24], "sheet": "review/workshop-before-after.png" }],
   "woods": [{ "date": "2026-10-22", "prs": [25], "sheet": "review/woods-before-after.png" }],
   "den": [{ "date": "2026-10-22", "prs": [25], "sheet": "review/den-before-after.png" }],
-  "logging-road": [{ "date": "2026-10-22", "prs": [25], "sheet": "review/logging-road-before-after.png" }]
+  "logging-road": [{ "date": "2026-10-22", "prs": [25], "sheet": "review/logging-road-before-after.png" }],
+  "camp-gate": [{ "date": "2026-10-22", "prs": [27], "sheet": "review/camp-gate-before-after.png" }],
+  "camp-yard": [{ "date": "2026-10-22", "prs": [27], "sheet": "review/camp-yard-before-after.png" }],
+  "depot": [{ "date": "2026-10-22", "prs": [27], "sheet": "review/depot-before-after.png" }]
 }

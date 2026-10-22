@@ -43,18 +43,18 @@
  "walls": [
   {
    "shape": "circle",
-   "x0": 9435,
-   "z0": 1615,
-   "x1": 9605,
-   "z1": 1785,
+   "x0": 9407,
+   "z0": 1581,
+   "x1": 9633,
+   "z1": 1819,
    "name": "Gate post"
   },
   {
    "shape": "circle",
-   "x0": 12495,
-   "z0": 1615,
-   "x1": 12665,
-   "z1": 1785,
+   "x0": 12467,
+   "z0": 1581,
+   "x1": 12693,
+   "z1": 1819,
    "name": "Gate post.001"
   },
   {
@@ -76,49 +76,49 @@
   {
    "shape": "circle",
    "x0": 12707,
-   "z0": 6970,
+   "z0": 6885,
    "x1": 14152,
-   "z1": 7820,
+   "z1": 7905,
    "name": "Reel footprint"
   },
   {
    "shape": "circle",
-   "x0": 4753,
-   "z0": 3053,
-   "x1": 6127,
-   "z1": 4427,
+   "x0": 4826,
+   "z0": 3126,
+   "x1": 6054,
+   "z1": 4354,
    "name": "Drum 0"
   },
   {
    "shape": "circle",
-   "x0": 5852,
-   "z0": 3217,
-   "x1": 7238,
-   "z1": 4603,
+   "x0": 5937,
+   "z0": 3302,
+   "x1": 7153,
+   "z1": 4518,
    "name": "Drum 1"
   },
   {
    "shape": "circle",
-   "x0": 5256,
-   "z0": 4236,
-   "x1": 6644,
-   "z1": 5624,
+   "x0": 5371,
+   "z0": 4351,
+   "x1": 6529,
+   "z1": 5509,
    "name": "Drum 2"
   },
   {
    "shape": "circle",
-   "x0": 2054,
-   "z0": 4519,
-   "x1": 3216,
-   "z1": 5681,
+   "x0": 1972,
+   "z0": 4437,
+   "x1": 3298,
+   "z1": 5763,
    "name": "Drum 3"
   },
   {
    "shape": "circle",
-   "x0": 1957,
-   "z0": 5527,
-   "x1": 3313,
-   "z1": 6883,
+   "x0": 1938,
+   "z0": 5508,
+   "x1": 3332,
+   "z1": 6902,
    "name": "Drum 4"
   },
   {
@@ -131,34 +131,34 @@
   },
   {
    "shape": "circle",
-   "x0": 14037,
-   "z0": 8597,
-   "x1": 15203,
-   "z1": 9763,
+   "x0": 14023,
+   "z0": 8583,
+   "x1": 15217,
+   "z1": 9777,
    "name": "Drum 6"
   },
   {
    "shape": "circle",
-   "x0": 12734,
-   "z0": 10184,
-   "x1": 13956,
-   "z1": 11406,
+   "x0": 12679,
+   "z0": 10129,
+   "x1": 14011,
+   "z1": 11461,
    "name": "Drum 7"
   },
   {
    "shape": "circle",
-   "x0": 14690,
-   "z0": 9845,
-   "x1": 16080,
-   "z1": 11235,
+   "x0": 14858,
+   "z0": 10013,
+   "x1": 15912,
+   "z1": 11067,
    "name": "Drum 8"
   },
   {
    "shape": "circle",
-   "x0": 13659,
-   "z0": 10004,
-   "x1": 14901,
-   "z1": 11246,
+   "x0": 13702,
+   "z0": 10047,
+   "x1": 14858,
+   "z1": 11203,
    "name": "Drum 9"
   },
   {
@@ -200,14 +200,6 @@
    "x1": 4275,
    "z1": 11518,
    "name": "Oil shelves"
-  },
-  {
-   "shape": "box",
-   "x0": 14535,
-   "z0": 4590,
-   "x1": 15725,
-   "z1": 6630,
-   "name": "Dog footprint"
   }
  ],
  "anim": {
@@ -238,7 +230,7 @@
     "angle": 3072
    },
    "walk": true,
-   "touch": true
+   "touch": false
   }
  ],
  "checks": [
@@ -253,12 +245,12 @@
   },
   {
    "zone": {
-    "x0": 13770,
+    "x0": 14620,
     "z0": 4420,
-    "x1": 14450,
-    "z1": 6800
+    "x1": 16320,
+    "z1": 7140
    },
-   "text": "A dog. Not a camp dog: a big one, its hide torn open in strips.\nIt dug in under the wire. Somebody shot it."
+   "text": "The dirt's dug out under the wire, the wire bent up.\nThere's blood on it. Something got in here."
   },
   {
    "zone": {
@@ -295,7 +287,7 @@
  "entry": null,
  "notes": [
   "from the north-east corner by the gate: the tank, the nozzle dripping, the lean-to",
-  "from the south-east drums: the dog against the wire, the gate out to the yard",
+  "from the south-east drums: the shut gate out to the yard, the mess hall beyond",
   "from the north-west drums: the pump and the padlocked reel, the drums in the corner"
  ]
 }

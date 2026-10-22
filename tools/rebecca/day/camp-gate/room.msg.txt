@@ -1,8 +1,9 @@
 0: \n...
-1: \nSICK - KEEP OUT. Painted\nin a hurry, the paint\nstill running.
-2: \nLOGGING CAMP 4. Someone's\nclawed the sign.\p{0}\nThe gate's hanging open.
+1: \nKEEP OUT. Painted in a\nhurry, the paint still\nrunning.
+2: \nARKLAY TIMBER CO.\nSomeone's clawed the sign.\p{0}\nThe gate's hanging open.
 3: \nThe outside of the gate is\nclawed to splinters.\p{0}\nSomething wanted in.
-4: \nA logger, dead over the\nlogs they piled up. The\ncrows have had his eyes.
+4: \nA logger, face down in the\nmud. He was running for\nthe road.
 5: \nThe camp truck, shoved out\nof the gate.\p{0}\nBloody hands all over the\ninside of the door.\nSomeone wanted out.
-6: \nThe barricade. Logs,\nsandbags, spikes. Pulled\ndown, or pushed.
-7: \nA site plan of Camp 4, off\nthe notice board.
+6: \nThe barricade. Logs off\nthe deck, sandbags,\p{0}\nspikes. Pulled down, or\npushed.
+7: \nLogs off the cold deck.\nThey rolled them across\nthe gate.
+8: \nA site plan of the logging\ncamp, off the notice\nboard.

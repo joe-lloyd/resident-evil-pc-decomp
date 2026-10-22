@@ -2,27 +2,27 @@
  "cameras": [
   {
    "from": [
-    3740,
-    -5950,
-    21420
+    2720,
+    -5780,
+    20400
    ],
    "to": [
-    21250,
-    -1360,
-    8500
+    19720,
+    -1190,
+    7140
    ],
    "fov": 200
   },
   {
    "from": [
-    29920,
-    -6460,
-    23120
+    22100,
+    -6120,
+    4420
    ],
    "to": [
-    5100,
+    7140,
     -510,
-    12920
+    18020
    ],
    "fov": 200
   },
@@ -53,7 +53,7 @@
    "shape": "box",
    "x0": 20060,
    "z0": 2550,
-   "x1": 32300,
+   "x1": 31280,
    "z1": 3230,
    "name": "Fence east footprint"
   },
@@ -91,6 +91,14 @@
   },
   {
    "shape": "box",
+   "x0": 1870,
+   "z0": 3230,
+   "x1": 9690,
+   "z1": 7310,
+   "name": "Cold deck footprint"
+  },
+  {
+   "shape": "box",
    "x0": 11050,
    "z0": 3570,
    "x1": 15470,
@@ -99,123 +107,131 @@
   },
   {
    "shape": "box",
-   "x0": 16677,
-   "z0": 7884,
-   "x1": 17867,
-   "z1": 9074,
+   "x0": 16541,
+   "z0": 7667,
+   "x1": 17731,
+   "z1": 8857,
    "name": "Strewn log footprint"
   },
   {
    "shape": "box",
-   "x0": 17935,
-   "z0": 8755,
-   "x1": 19125,
-   "z1": 9945,
+   "x0": 17765,
+   "z0": 8585,
+   "x1": 18955,
+   "z1": 9775,
    "name": "Strewn log footprint.001"
   },
   {
    "shape": "box",
-   "x0": 19193,
-   "z0": 9626,
-   "x1": 20383,
-   "z1": 10816,
+   "x0": 18989,
+   "z0": 9503,
+   "x1": 20179,
+   "z1": 10693,
    "name": "Strewn log footprint.002"
   },
   {
    "shape": "box",
-   "x0": 10055,
-   "z0": 8687,
-   "x1": 11245,
-   "z1": 9877,
+   "x0": 6514,
+   "z0": 10243,
+   "x1": 7704,
+   "z1": 11433,
    "name": "Strewn log footprint.003"
   },
   {
    "shape": "box",
-   "x0": 11390,
-   "z0": 9435,
-   "x1": 12580,
-   "z1": 10625,
+   "x0": 7905,
+   "z0": 10880,
+   "x1": 9095,
+   "z1": 12070,
    "name": "Strewn log footprint.004"
   },
   {
    "shape": "box",
-   "x0": 12725,
-   "z0": 10183,
-   "x1": 13915,
-   "z1": 11373,
+   "x0": 9296,
+   "z0": 11517,
+   "x1": 10486,
+   "z1": 12707,
    "name": "Strewn log footprint.005"
   },
   {
    "shape": "box",
-   "x0": 15403,
-   "z0": 12218,
-   "x1": 16593,
-   "z1": 13408,
+   "x0": 14393,
+   "z0": 13549,
+   "x1": 15583,
+   "z1": 14739,
    "name": "Strewn log footprint.006"
   },
   {
    "shape": "box",
-   "x0": 16915,
-   "z0": 11985,
-   "x1": 18105,
-   "z1": 13175,
+   "x0": 15895,
+   "z0": 13260,
+   "x1": 17085,
+   "z1": 14450,
    "name": "Strewn log footprint.007"
   },
   {
    "shape": "box",
-   "x0": 18427,
-   "z0": 11752,
-   "x1": 19617,
-   "z1": 12942,
+   "x0": 17397,
+   "z0": 12971,
+   "x1": 18587,
+   "z1": 14161,
    "name": "Strewn log footprint.008"
   },
   {
    "shape": "box",
-   "x0": 6104,
-   "z0": 10654,
-   "x1": 7294,
-   "z1": 11844,
+   "x0": 26876,
+   "z0": 14102,
+   "x1": 28066,
+   "z1": 15292,
    "name": "Strewn log footprint.009"
   },
   {
    "shape": "box",
-   "x0": 7395,
-   "z0": 11475,
-   "x1": 8585,
-   "z1": 12665,
+   "x0": 27710,
+   "z0": 15385,
+   "x1": 28900,
+   "z1": 16575,
    "name": "Strewn log footprint.010"
   },
   {
    "shape": "box",
-   "x0": 8686,
-   "z0": 12296,
-   "x1": 9876,
-   "z1": 13486,
+   "x0": 28544,
+   "z0": 16668,
+   "x1": 29734,
+   "z1": 17858,
    "name": "Strewn log footprint.011"
   },
   {
    "shape": "box",
-   "x0": 27258,
-   "z0": 12772,
-   "x1": 28448,
-   "z1": 13962,
+   "x0": 3720,
+   "z0": 7835,
+   "x1": 4910,
+   "z1": 9025,
    "name": "Strewn log footprint.012"
   },
   {
    "shape": "box",
-   "x0": 28135,
-   "z0": 14025,
-   "x1": 29325,
-   "z1": 15215,
+   "x0": 5185,
+   "z0": 7395,
+   "x1": 6375,
+   "z1": 8585,
    "name": "Strewn log footprint.013"
   },
   {
    "shape": "box",
-   "x0": 29012,
-   "z0": 15278,
-   "x1": 30202,
-   "z1": 16468,
+   "x0": 6650,
+   "z0": 6955,
+   "x1": 7840,
+   "z1": 8145,
    "name": "Strewn log footprint.014"
+  },
+  {
+   "shape": "box",
+   "x0": 20400,
+   "z0": 3230,
+   "x1": 30940,
+   "z1": 6970,
+   "name": "Shoved logs footprint"
   },
   {
    "shape": "box",
@@ -227,35 +243,67 @@
   },
   {
    "shape": "circle",
-   "x0": 2753,
-   "z0": 6120,
-   "x1": 4047,
-   "z1": 7480,
-   "name": "Stump 0"
+   "x0": 2754,
+   "z0": 11934,
+   "x1": 4046,
+   "z1": 13226,
+   "name": "Stump 0 footprint"
   },
   {
    "shape": "circle",
-   "x0": 29136,
+   "x0": 29104,
    "z0": 4454,
-   "x1": 30364,
+   "x1": 30396,
    "z1": 5746,
-   "name": "Stump 1"
+   "name": "Stump 1 footprint"
   },
   {
    "shape": "circle",
-   "x0": 2154,
+   "x0": 22406,
+   "z0": 19006,
+   "x1": 23834,
+   "z1": 20434,
+   "name": "Stump 2 footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 28645,
    "z0": 11305,
-   "x1": 3286,
+   "x1": 29835,
    "z1": 12495,
-   "name": "Stump 2"
+   "name": "Stump 3 footprint"
   },
   {
    "shape": "circle",
-   "x0": 28901,
-   "z0": 13906,
-   "x1": 30259,
-   "z1": 15334,
-   "name": "Stump 3"
+   "x0": 8840,
+   "z0": 19720,
+   "x1": 10200,
+   "z1": 21080,
+   "name": "Stump 4 footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 24310,
+   "z0": 15810,
+   "x1": 30090,
+   "z1": 20230,
+   "name": "Slash footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 21794,
+   "z0": 15674,
+   "x1": 23086,
+   "z1": 16966,
+   "name": "Drum by the slash"
+  },
+  {
+   "shape": "box",
+   "x0": 20145,
+   "z0": 16915,
+   "x1": 21675,
+   "z1": 18445,
+   "name": "Tipped drum footprint"
   }
  ],
  "anim": {
@@ -265,8 +313,8 @@
  "bounds": {
   "x0": 1700,
   "z0": 3400,
-  "x1": 30600,
-  "z1": 21080
+  "x1": 29580,
+  "z1": 20400
  },
  "ground": "earth",
  "floors": [],
@@ -313,7 +361,7 @@
     "x1": 10030,
     "z1": 4760
    },
-   "text": "SICK - KEEP OUT. Painted in a hurry, the paint still running."
+   "text": "KEEP OUT. Painted in a hurry, the paint still running."
   },
   {
    "zone": {
@@ -322,7 +370,7 @@
     "x1": 19040,
     "z1": 5780
    },
-   "text": "LOGGING CAMP 4. Someone's clawed the sign.\nThe gate's hanging open."
+   "text": "ARKLAY TIMBER CO. Someone's clawed the sign.\nThe gate's hanging open."
   },
   {
    "zone": {
@@ -335,12 +383,12 @@
   },
   {
    "zone": {
-    "x0": 11560,
-    "z0": 6800,
-    "x1": 15300,
-    "z1": 8500
+    "x0": 8500,
+    "z0": 7820,
+    "x1": 12920,
+    "z1": 10880
    },
-   "text": "A logger, dead over the logs they piled up. The crows have had his eyes."
+   "text": "A logger, face down in the mud. He was running for the road."
   },
   {
    "zone": {
@@ -353,12 +401,21 @@
   },
   {
    "zone": {
-    "x0": 8840,
-    "z0": 7820,
-    "x1": 14620,
-    "z1": 11900
+    "x0": 14280,
+    "z0": 6630,
+    "x1": 15980,
+    "z1": 7820
    },
-   "text": "The barricade. Logs, sandbags, spikes. Pulled down, or pushed."
+   "text": "The barricade. Logs off the deck, sandbags, spikes. Pulled down, or pushed."
+  },
+  {
+   "zone": {
+    "x0": 1700,
+    "z0": 7480,
+    "x1": 7820,
+    "z1": 8840
+   },
+   "text": "Logs off the cold deck. They rolled them across the gate."
   }
  ],
  "saves": null,
@@ -366,8 +423,8 @@
  "spots": [],
  "entry": null,
  "notes": [
-  "from the road coming in: the gate, the strewn logs, the pickup shoved aside",
-  "from the south-east corner: the strewn logs, the logger on the barricade, the road leaving west into the trees",
+  "from the road coming in: the ruts bending to the gate, the strewn logs, the pickup shoved aside",
+  "from beside the gate, looking back down the road: the barricade, the logger, the road into the trees",
   "from the south, square on: the gate and its sign, the gap, the camp beyond"
  ]
 }

@@ -80,7 +80,7 @@ test('the ending keeps its written lines alongside inherited control messages', 
   const save = board.scenes.find((s) => s.place.id === 'save');
   assert.ok(save?.msgs.some((m) => m.text === '"Freeze!"'));
   assert.ok(save?.cuts.some((c) => c.beats.some((b) => b.kind === 'say' && b.text === '"Freeze!"')));
-  assert.equal(board.scenes.reduce((n, s) => n + s.msgs.length, 0), 585);
+  assert.equal(board.scenes.reduce((n, s) => n + s.msgs.length, 0), 586);
 });
 
 test('each recorded visit has its own player and each room card shows coverage', () => {
@@ -88,9 +88,10 @@ test('each recorded visit has its own player and each room card shows coverage',
   assert.equal(board.scenes.filter((s) => s.clips.length).length, 53);
   // The ridge, the trail, the cabin, the yard, the shed, the booth, the
   // bridge, the platform, the bunkhouse, the office, the mess, the
-  // workshop, the woods, the den and the logging road each show one
-  // reviewed recording in place of their quarter visits.
-  assert.equal(html.split('<video controls preload="none"').length - 1, 101);
+  // workshop, the woods, the den, the logging road, the camp gate, the camp
+  // yard and the depot each show one reviewed recording in place of their
+  // quarter visits. The camp yard adds a second, in god mode.
+  assert.equal(html.split('<video controls preload="none"').length - 1, 90);
   for (const scene of board.scenes) {
     for (const clip of scene.clips) {
       assert.ok(html.includes(`src="${clip.file}" type="video/mp4"`), clip.file);
@@ -99,7 +100,7 @@ test('each recorded visit has its own player and each room card shows coverage',
   }
   assert.deepEqual(board.scenes.filter((s) => !s.clips.length).map((s) => s.place.id), ['flume', 'line-track', 'weather', 'mast', 'wine']);
   assert.equal(html.split('No footage of this room in the four-quarter recording.').length - 1, 5);
-  assert.ok(html.includes('9 recorded clips'), 'repeated room visits remain visible on cards');
+  assert.ok(html.includes('4 recorded clips'), 'repeated room visits remain visible on cards');
 });
 
 test('visit labels keep logged actions and distinguish the cabin plan id from its recording slug', () => {

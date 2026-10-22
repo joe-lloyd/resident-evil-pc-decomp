@@ -1,0 +1,13 @@
+{
+  "scene": "camp-yard",
+  "steps": [
+    { "action": "hold", "frames": 60, "picture": "camp-yard-god-entry" },
+    { "action": "look", "zone": { "x": 12920, "z": 11900, "w": 4760, "d": 4420 }, "picture": "camp-yard-pit" },
+    { "action": "hold", "frames": 45 },
+    { "action": "look", "zone": { "x": 23120, "z": 9520, "w": 3740, "d": 2720 }, "picture": "camp-yard-logger" },
+    { "action": "hold", "frames": 30 },
+    { "action": "look", "zone": { "x": 17680, "z": 2890, "w": 1020, "d": 1530 }, "picture": "camp-yard-axe" },
+    { "action": "hold", "frames": 30 },
+    { "action": "exit", "x": 5950, "z": 25330, "to": "depot", "zone": { "x": 4420, "z": 24820, "w": 3060, "d": 1020 } }
+  ]
+}

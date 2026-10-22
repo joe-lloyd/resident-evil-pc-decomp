@@ -1,0 +1,13 @@
+{
+  "scene": "depot",
+  "steps": [
+    { "action": "hold", "frames": 60, "picture": "depot-entry" },
+    { "action": "look", "zone": { "x": 10710, "z": 6630, "w": 1700, "d": 935 }, "picture": "depot-ledger" },
+    { "action": "look", "zone": { "x": 14620, "z": 4420, "w": 1700, "d": 2720 }, "picture": "depot-wire" },
+    { "action": "hold", "frames": 45 },
+    { "action": "look", "zone": { "x": 6630, "z": 3400, "w": 1530, "d": 1360 }, "picture": "depot-skins" },
+    { "action": "walk", "x": 5100, "z": 6800, "picture": "depot-lean-to" },
+    { "action": "hold", "frames": 45 },
+    { "action": "exit", "x": 11050, "z": 2210, "to": "camp-yard", "zone": { "x": 9520, "z": 1700, "w": 3060, "d": 1020 } }
+  ]
+}
