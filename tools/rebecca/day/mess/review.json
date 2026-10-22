@@ -1,0 +1,14 @@
+{
+  "scene": "mess",
+  "steps": [
+    { "action": "hold", "frames": 60, "picture": "mess-cook" },
+    { "action": "walk", "x": 9520, "z": 13600, "picture": "mess-tables" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 9775, "z": 7480 },
+    { "action": "walk", "x": 9265, "z": 4165, "picture": "mess-kitchen" },
+    { "action": "hold", "frames": 90 },
+    { "action": "walk", "x": 9775, "z": 7480 },
+    { "action": "walk", "x": 9520, "z": 9265 },
+    { "action": "exit", "x": 10540, "z": 9265, "to": "camp-yard", "zone": { "x": 10030, "z": 8500, "w": 850, "d": 1530 } }
+  ]
+}

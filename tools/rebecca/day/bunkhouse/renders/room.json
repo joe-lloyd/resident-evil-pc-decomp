@@ -200,7 +200,7 @@
   }
  ],
  "anim": {
-  "frames": 16,
+  "frames": 48,
   "ticks": 3
  },
  "bounds": {
@@ -256,7 +256,7 @@
     "x1": 18700,
     "z1": 7905
    },
-   "text": "They tied him to the bunk with their belts.\nWrists and ankles. Then something with a hammer."
+   "text": "Belts, buckled round all four posts. Torn through.\nWhoever they tied here got loose."
   },
   {
    "zone": {

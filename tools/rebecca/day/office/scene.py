@@ -1,11 +1,10 @@
-"""The foreman's office at Camp 4, noon.
+"""The foreman's office at the logging camp, noon.
 
 What it tells: the foreman ran the camp from here, and he knew more than
 his men. The letters on his desk are on Umbrella letterhead: Umbrella paid
 for the gondola, and asked him to keep "the samples" cold and say nothing.
 His payroll ledger lists his crew, and he has struck the names through one
-by one as they died. He painted the quarantine board himself. When it was
-his turn he took the last shotgun from the rack, sat at his desk and used
+by one as they died. When it was his turn he took the last shotgun from the rack, sat at his desk and used
 it: the chair went over backwards, he slid down the wall, and the wall and
 the ceiling behind him are sprayed dark. His lamp is still on and his fan
 still turns, blowing at the papers. The safe stands shut in the corner; the
@@ -14,16 +13,19 @@ map of the camp.
 
 Metres: the floor is x 1.0-4.6, y 1.0-4.0, 2.5 high (the yard's office hut
 moved 0.4 south). The door is in the south wall at x 2.5-3.4, out to the
-yard; windows in the south wall at x 3.75-4.35 and the east wall at y
+yard, shut; windows in the south wall at x 3.75-4.35 and the east wall at y
 1.6-2.7, from 1.0 to 1.8 high. The stove in the north-west corner, its
-pipe at (1.6, 1.8). The desk at (3.2, 2.35), the foreman against the north
+pipe at (1.6, 1.8): a cast-iron box stove on legs on a
+sheet-iron hearth, its woodbox beside it. The desk at (3.2, 2.35), the foreman against the north
 wall behind it, the safe in the south-west corner, the filing cabinet and
 fan in the north-east, the gun rack on the east wall at y 3.0-3.8, the map
 on the west wall. Where she saves: his typewriter on a stand between the
-safe and the door, and the item box along the east wall, under the gun rack.
+safe and the door, and a footlocker item box under the south window, east
+of the door, in the corner under camera 0, so that camera never sees it
+and the other two see it whole.
 
-Moving: the desk fan turning, a letter lifting in its draught, the lamp's
-light wavering as the power sags.
+Moving: the desk fan turning, a letter on the blotter lifting in its
+draught, the lamp sagging once in a while as the power dips.
 """
 import math
 import os
@@ -91,11 +93,17 @@ def build():
     reb.prim("cube", "East window bar", frame_m, (X1 + 0.03, sum(EWIN) / 2, sum(WZ) / 2), (0.04, 0.04, WZ[1] - WZ[0]))
     reb.prim("cube", "South sill", frame_m, (sum(SWIN) / 2, Y1 - 0.04, WZ[0] - 0.02), (SWIN[1] - SWIN[0] + 0.1, 0.1, 0.04))
     reb.prim("cube", "East sill", frame_m, (X1 - 0.04, sum(EWIN) / 2, WZ[0] - 0.02), (0.1, EWIN[1] - EWIN[0] + 0.1, 0.04))
-    kit.text("KEEP OUT on the glass", "KEEP OUT", mat("red paint"), (sum(SWIN) / 2, Y1 + 0.05, 1.4), size=0.09, rot=(math.pi / 2, 0, math.pi))
     for x in (DOOR[0] - 0.04, DOOR[1] + 0.04):
         reb.prim("cube", "Door frame", frame_m, (x, Y1 + 0.04, 1.05), (0.08, 0.16, 2.1))
     reb.prim("cube", "Door head", frame_m, (sum(DOOR) / 2, Y1 + 0.04, 2.09), (DOOR[1] - DOOR[0] + 0.16, 0.16, 0.08))
-    reb.prim("cube", "Door, open", mat("green paint"), (DOOR[0] - 0.05, Y1 + 0.52, 1.02), (0.05, 0.85, 2.04), rot=(0, 0, 0.15))
+    # The door, shut: green-painted ledged boards, a knob and a bolt.
+    door_m = reb.mat_surface("Door green", [(0.0, (0.06, 0.1, 0.07)), (0.7, (0.1, 0.16, 0.11)), (1.0, (0.2, 0.14, 0.08))], scale=7, rough=0.7, bump=0.2)
+    reb.prim("cube", "Door, shut", door_m, (sum(DOOR) / 2, Y1 + 0.03, 1.02), (DOOR[1] - DOOR[0], 0.05, 2.04))
+    for z in (0.35, 1.0, 1.7):
+        reb.prim("cube", "Door ledge", door_m, (sum(DOOR) / 2, Y1 - 0.0, z), (DOOR[1] - DOOR[0] - 0.08, 0.03, 0.11))
+    reb.prim("sphere", "Door knob", brass, (DOOR[1] - 0.1, Y1 - 0.04, 1.0), (0.05, 0.05, 0.05))
+    reb.prim("cube", "Door bolt", mat("iron"), (DOOR[1] - 0.12, Y1 - 0.02, 1.45), (0.16, 0.03, 0.03))
+    reb.prim("cube", "Light under the door", reb.mat_emit("Daylight under the door", (0.75, 0.8, 0.88), 2.0), (sum(DOOR) / 2, Y1 + 0.03, 0.006), (DOOR[1] - DOOR[0] - 0.04, 0.05, 0.01))
 
     # ---- Outside the door and the windows: the yard (moved 0.4 south from its own plan).
     reb.prim("cube", "Outside, mud", kit.dirtied(mat("mud"), 0.6), (3.0, 12.0, -0.1), (30, 16, 0.2))
@@ -109,15 +117,46 @@ def build():
     kit.rod("Outside, line pole", mat("dark wood"), (5.6, 3.0, 0), (5.6, 3.0, 2.15), 0.04)
     kit.rod("Outside, washing line", mat("canvas"), (5.6, 3.0, 2.05), (9.8, 3.8, 2.05), 0.006, 4)
     reb.cloth("Outside, washing", mat("flannel"), (6.3, 3.13, 1.7), (0.6, 0.7), rot=(math.pi / 2, 0, 0.19), cuts=6, lumps=0.03, seed=1)
-    reb.prim("cube", "Outside, far trees", reb.mat_plain("Far trees", (0.05, 0.07, 0.05), 0.9), (3.0, 26, 8), (80, 1, 16))
-    reb.prim("cube", "Outside, far trees east", reb.mat_plain("Far trees", (0.05, 0.07, 0.05), 0.9), (24, 6, 8), (1, 60, 16))
+    # Past the yard, through the grimy windows: dense spruce under the overcast.
+    kit.forest(random.Random(5), lambda x, y: 0.0, lambda x, y: x < 24 and y < 20, (-12, -14, 40, 34), count=110, spacing=1.8, ferns=0, needles=0)
 
-    # ---- The stove in the corner, cold now, and its pipe.
-    stove = reb.prim("cube", "Box stove", mat("iron"), (1.45, 1.8, 0.35), (0.5, 0.45, 0.6), bevel=0.02)
+    # ---- The stove in the corner, cold now: a cast-iron box stove on four
+    # legs, its door to the room, on a sheet-iron hearth; the pipe up to a
+    # tin collar in the ceiling; the woodbox and the kettle.
+    cast = reb.mat_surface("Cast iron", [(0.0, (0.025, 0.024, 0.023)), (0.7, (0.05, 0.047, 0.044)), (1.0, (0.12, 0.06, 0.03))], scale=16, rough=0.65, bump=0.5)
+    sx, sy = 1.48, 1.8
+    reb.prim("cube", "Hearth plate", reb.mat_metal("Hearth iron", (0.12, 0.11, 0.1), 0.6), (sx, sy + 0.08, 0.006), (0.8, 0.85, 0.012), bevel=0.01)
+    body_parts = [reb.prim("cube", "body", cast, (0, 0, 0.42), (0.56, 0.44, 0.42), bevel=0.02),
+                  reb.prim("cube", "top", cast, (0, 0, 0.645), (0.62, 0.5, 0.035), bevel=0.01),
+                  reb.prim("cube", "base rim", cast, (0, 0, 0.2), (0.6, 0.48, 0.03), bevel=0.008),
+                  reb.prim("cube", "door", cast, (0, 0.225, 0.43), (0.3, 0.03, 0.24), bevel=0.01),
+                  reb.prim("cube", "ash lip", cast, (0, 0.24, 0.215), (0.34, 0.07, 0.02))]
+    for i in range(4):
+        body_parts.append(reb.prim("cube", "grille slot", mat("black"), (-0.08 + i * 0.055, 0.242, 0.47), (0.025, 0.01, 0.09)))
+    for dx in (-0.24, 0.24):
+        for dy in (-0.17, 0.17):
+            body_parts.append(reb.prim("cyl", "leg", cast, (dx, dy, 0.1), (0.05, 0.05, 0.2), segments=8))
+    for dx in (-0.13, 0.13):
+        body_parts.append(reb.prim("cyl", "lid", cast, (dx, 0.03, 0.668), (0.17, 0.17, 0.012), segments=16))
+    body_parts.append(reb.prim("cube", "door handle", mat("steel"), (0.12, 0.25, 0.47), (0.06, 0.025, 0.015)))
+    stove = kit.join("Box stove", body_parts, origin=(0, 0, 0))
+    stove.location = (sx, sy, 0.0)
     reb.mask(reb.wall(stove))
-    kit.rod("Stovepipe", mat("rust"), (1.6, 1.8, 0.65), (1.6, 1.8, H), 0.06)
-    reb.prim("cube", "Kettle", mat("steel"), (1.4, 1.8, 0.72), (0.18, 0.18, 0.14), bevel=0.03)
-    kit.splat("Ash on the floor", reb.mat_plain("Ash", (0.15, 0.14, 0.13), 0.9), (1.75, 1.85, 0.0), 0.2, seed=2)
+    pipe_m = reb.mat_surface("Stovepipe", [(0.0, (0.03, 0.028, 0.026)), (0.75, (0.06, 0.055, 0.05)), (1.0, (0.16, 0.08, 0.035))], scale=10, rough=0.7, bump=0.3)
+    kit.rod("Stovepipe", pipe_m, (sx + 0.13, sy - 0.12, 0.66), (sx + 0.13, sy - 0.12, H), 0.065, 12)
+    for z in (1.05, 1.5, 1.95):
+        reb.prim("cyl", "Pipe joint", pipe_m, (sx + 0.13, sy - 0.12, z), (0.145, 0.145, 0.03), segments=12)
+    reb.prim("cyl", "Damper disc", pipe_m, (sx + 0.13, sy - 0.12, 0.95), (0.14, 0.14, 0.012), rot=(0, 0.6, 0), segments=12)
+    reb.prim("cube", "Damper handle", mat("steel"), (sx + 0.22, sy - 0.12, 0.95), (0.08, 0.02, 0.02))
+    reb.prim("cyl", "Ceiling collar", mat("tin"), (sx + 0.13, sy - 0.12, H - 0.01), (0.3, 0.3, 0.02), segments=16)
+    reb.prim("cyl", "Kettle", mat("steel"), (sx - 0.13, sy + 0.03, 0.73), (0.18, 0.18, 0.12), segments=14)
+    reb.prim("sphere", "Kettle lid", mat("steel"), (sx - 0.13, sy + 0.03, 0.79), (0.12, 0.12, 0.04), segments=12)
+    kit.rod("Kettle spout", mat("steel"), (sx - 0.05, sy + 0.03, 0.73), (sx + 0.03, sy + 0.03, 0.8), 0.012, 6)
+    # The woodbox against the west wall, split logs in it.
+    reb.prim("cube", "Woodbox", frame_m, (X0 + 0.22, sy + 0.55, 0.2), (0.38, 0.5, 0.4), bevel=0.01)
+    for i in range(5):
+        kit.rough_log(f"Split log {i}", (X0 + 0.1 + (i % 3) * 0.1, sy + 0.34, 0.36 + (i // 3) * 0.08), (X0 + 0.12 + (i % 3) * 0.1, sy + 0.76, 0.37 + (i // 3) * 0.08), 0.045, seed=60 + i, stubs=0)
+    kit.splat("Ash on the hearth", reb.mat_plain("Ash", (0.15, 0.14, 0.13), 0.9), (sx + 0.05, sy + 0.4, 0.013), 0.16, seed=2)
 
     # ---- The desk: ledger, letters, the lamp still on, a bottle and a glass.
     desk = kit.table("Foreman's desk", desk_m, (DESK[0], DESK[1], 0.0), size=(1.35, 0.72, 0.76))
@@ -135,8 +174,10 @@ def build():
     umbrella("Letterhead", (DESK[0] + 0.33, DESK[1] - 0.14, 0.768), 0.035)
     for i in range(5):
         reb.prim("cube", f"Typed line {i}", mat("black"), (DESK[0] + 0.36 - i * 0.005, DESK[1] - 0.06 + i * 0.03, 0.767), (0.15, 0.004, 0.001), rot=(0, 0, 0.3))
+    # A letter held by a paperweight at the back of the blotter, its free
+    # end lifting in the fan's draught, clear of the ledger under it.
     flutter = reb.prim("cube", "Letter in the draught", mat("paper"), (0, 0.13, 0.0), (0.21, 0.26, 0.002))
-    flutter_pivot = reb.prim("sphere", "Paperweight", brass, (DESK[0] - 0.42, DESK[1] + 0.05, 0.775), (0.05, 0.05, 0.03))
+    flutter_pivot = reb.prim("sphere", "Paperweight", brass, (DESK[0] + 0.05, DESK[1] - 0.3, 0.788), (0.05, 0.05, 0.03))
     flutter.parent = flutter_pivot
     flutter_pivot.rotation_euler = (0.1, 0, 0.2)
     lamp_m = reb.mat_emit("Lamp shade glow", (1.0, 0.7, 0.35), 4)
@@ -145,7 +186,6 @@ def build():
     reb.prim("cyl", "Lamp shade", reb.mat_plain("Banker green", (0.03, 0.18, 0.08), 0.3), (DESK[0] - 0.4, DESK[1] - 0.22, 1.1), (0.3, 0.13, 0.08), rot=(0, math.pi / 2, 0), segments=12)
     reb.prim("cyl", "Lamp tube", lamp_m, (DESK[0] - 0.4, DESK[1] - 0.22, 1.07), (0.02, 0.02, 0.24), rot=(0, math.pi / 2, 0), segments=8)
     lamp = reb.point("Desk lamp", (DESK[0] - 0.4, DESK[1] - 0.22, 1.0), 25, (1.0, 0.68, 0.36), 0.08)
-    reb.prim("cyl", "Whisky bottle", mat("bottle"), (DESK[0] + 0.55, DESK[1] + 0.2, 0.89), (0.08, 0.08, 0.26), segments=10)
     reb.prim("cyl", "Glass", mat("glass"), (DESK[0] + 0.4, DESK[1] + 0.25, 0.8), (0.06, 0.06, 0.08), segments=10)
     reb.prim("cyl", "Ashtray", mat("steel"), (DESK[0] + 0.15, DESK[1] + 0.25, 0.77), (0.13, 0.13, 0.025), segments=12)
     reb.prim("cube", "Desk phone", mat("black"), (DESK[0] - 0.55, DESK[1] + 0.18, 0.81), (0.2, 0.22, 0.09), bevel=0.02)
@@ -153,7 +193,7 @@ def build():
     # ---- The foreman: he went over backwards with the chair and slid down the wall.
     fx = DESK[0] - 0.1
     kit.body("The foreman", (fx, Y0 + 0.02, 0.0), heading=math.pi / 2, pose="slumped", top=reb.mat_plain("Foreman's shirt", (0.32, 0.3, 0.26), 0.9), legs=reb.mat_plain("Work trousers", (0.12, 0.11, 0.08), 0.9), seed=9)
-    kit.splat("Blood down his shirt", mat("blood"), (fx - 0.06, Y0 + 0.17, 0.62), 0.12, rot=(math.pi / 2 - 0.2, 0, 0), seed=10, stretch=(1.0, 1.8))
+    kit.splat("Blood down his shirt", spray, (fx - 0.06, Y0 + 0.17, 0.62), 0.1, rot=(math.pi / 2 - 0.2, 0, 0), seed=10, stretch=(1.0, 1.8))
     kit.chair("His chair, over", desk_m, (fx + 0.6, Y0 + 0.62, 0.0), rot=-math.pi / 2 + 0.3, tipped=True)
     reb.wall(reb.prim("cube", "Where he lies", None, (3.37, 1.45, 0.4), (1.25, 0.9, 0.8))).hide_render = True
     kit.splat("Spray on the wall", spray, (fx + 0.05, Y0 + 0.006, 1.35), 0.42, rot=(math.pi / 2, 0, 0), seed=5, stretch=(1.3, 1.0), lumps=0.7, points=36)
@@ -165,7 +205,7 @@ def build():
         x = fx + rng.uniform(-0.3, 0.3)
         reb.prim("cube", f"Run {i}", spray, (x, Y0 + 0.005, 0.95 + rng.uniform(-0.05, 0.05)), (0.025, 0.004, rng.uniform(0.3, 0.55)))
     kit.splat("Spray on the ceiling", spray, (fx + 0.1, Y0 + 0.35, H - 0.004), 0.35, rot=(math.pi, 0, 0), seed=6, stretch=(1.4, 0.8), lumps=0.7)
-    kit.splat("Pool under him", mat("blood"), (fx, Y0 + 0.3, 0.0), 0.4, seed=7, stretch=(1.4, 0.8))
+    kit.splat("Pool under him", spray, (fx, Y0 + 0.3, 0.0), 0.3, seed=7, stretch=(1.4, 0.8), lumps=0.6)
     reb.prim("cube", "The shotgun", mat("iron"), (fx + 0.35, Y0 + 0.75, 0.04), (1.0, 0.05, 0.05), rot=(0, 0, 0.6))
     reb.prim("cube", "The shotgun stock", desk_m, (fx - 0.05, Y0 + 0.47, 0.05), (0.32, 0.06, 0.09), rot=(0, 0, 0.6))
     shells = [reb.prim("cyl", "Shell", mat("red paint"), (fx + 0.6 + rng.gauss(0, 0.15), Y0 + 0.9 + rng.gauss(0, 0.1), 0.012), (0.024, 0.024, 0.07), rot=(math.pi / 2, 0, rng.uniform(0, 3)), segments=6) for _ in range(3)]
@@ -223,18 +263,15 @@ def build():
         reb.prim("cube", f"Rack notch {i}", mat("black"), (X1 - 0.055, 3.1 + i * 0.2, 1.6), (0.01, 0.05, 0.05))
         kit.rod(f"Rack peg {i}", frame_m, (X1 - 0.03, 3.1 + i * 0.2, 0.98), (X1 - 0.16, 3.1 + i * 0.2, 0.98), 0.012, 6)
     kit.splat("Clean shape on the wall", reb.mat_plain("Unfaded pine", (0.45, 0.33, 0.19), 0.8), (X1 - 0.006, 3.3, 1.28), 0.05, rot=(0, math.pi / 2, 0), stretch=(1.0, 6.0), seed=3, lumps=0.05)
-    reb.prim("sphere", "Hard hat on the floor", reb.mat_plain("Hard hat white", (0.55, 0.53, 0.48), 0.4), (3.15, 2.95, 0.07), (0.3, 0.26, 0.16), rot=(0.4, 0.2, 0))
     reb.cloth("Jacket over the safe", mat("canvas"), (1.4, 3.6, 0.99), (0.55, 0.7), cuts=8, lumps=0.05, seed=4)
 
     # ---- Where she saves: his typewriter on a stand by the door, the
-    # payroll half typed in it; the item box along the east wall, under the
-    # empty gun rack.
+    # payroll half typed in it; the item box under the south window. Along
+    # the east wall camera 1 cut it off at its right edge.
     stand = kit.table("Typing stand", desk_m, (2.1, 3.73, 0.0), size=(0.6, 0.42, 0.7))
     reb.mask(reb.wall(stand))
     reb.mask(kit.typewriter("His typewriter", (2.1, 3.73, 0.7), rot=math.pi))
-    # Shrunk to 0.8: at RE1's size its south end reached the door, and where
-    # she stood to open it was in the door's zone, which comes first.
-    box_lid = kit.item_box("Item box", (X1 - 0.35, 3.365), (-1, 0), scale=0.8)
+    box_lid = kit.item_box("Item box", (3.88, Y1 - 0.255), (0, -1), scale=0.6)
 
     # ---- The west wall: the map of the camp, drawn by hand; a calendar; notices.
     mapc = Vector((X0 + 0.012, 2.85, 1.5))
@@ -247,7 +284,6 @@ def build():
         cz = mapc.z + 0.3 - ((by0 + by1) / 2 + 3.0) * s
         reb.prim("cube", f"Map {name}", ink, (X0 + 0.017, cy, cz), (0.003, (bx1 - bx0) * s, (by1 - by0) * s * 0.9))
     reb.prim("cube", "Map red X", reb.mat_plain("Map red", (0.5, 0.02, 0.02), 0.5), (X0 + 0.018, mapc.y + (16.3 - 8.0) * 0.028, mapc.z + 0.3 - (16.6 + 3.0) * 0.028), (0.003, 0.06, 0.06), rot=(0.785, 0, 0))
-    kit.text("Map title", "CAMP 4", ink, (X0 + 0.02, mapc.y, mapc.z + 0.3), size=0.06, rot=(math.pi / 2, 0, math.pi / 2))
     for i, (y, z) in enumerate(((2.05, 1.6), (2.25, 1.45), (3.55, 1.7))):
         reb.prim("cube", f"Notice {i}", mat("paper") if i % 2 else mat("old paper"), (X0 + 0.01, y, z), (0.006, 0.2, 0.28))
 
@@ -255,13 +291,15 @@ def build():
     kit.time_light("noon", sun_heading=200, sun_energy=1.5, sky=((0.5, 0.52, 0.54), (0.36, 0.39, 0.43), 0.8))
     reb.spot("Window light south", (sum(SWIN) / 2, Y1 - 0.15, 1.7), (3.6, 2.6, 0.0), 90, (0.72, 0.78, 0.88), 110, 0.9, 0.5)
     reb.spot("Window light east", (X1 - 0.15, sum(EWIN) / 2, 1.7), (3.0, 2.0, 0.0), 90, (0.72, 0.78, 0.88), 110, 0.9, 0.5)
-    reb.spot("Door light", (sum(DOOR) / 2, Y1 + 3.0, 2.3), (sum(DOOR) / 2, Y1 - 2.0, 0.0), 300, (0.75, 0.8, 0.88), 45, 0.8, 0.6)
+    kit.overcast_sky()
     reb.point("Fill", (2.8, 2.6, 2.2), 15, (0.6, 0.65, 0.75), 1.0)
 
-    anim = kit.Anim(16)
-    anim.spin(hub, axis=0, turns=3, symmetry=4)
-    anim.flicker(lamp, lamp_m, depth=0.15, dropouts=1)
-    anim.custom(lambda k: setattr(flutter_pivot, "rotation_euler", (0.1 + 0.25 * max(0.0, math.sin(anim.phase(k, 2))), 0, 0.2)))
+    # A 4.8 second loop: the fan turns, the letter lifts with each pass of
+    # its draught, and the lamp sags once as the power dips.
+    anim = kit.Anim(48)
+    anim.spin(hub, axis=0, turns=9, symmetry=4)
+    anim.dips(lamp, lamp_m)
+    anim.custom(lambda k: setattr(flutter_pivot, "rotation_euler", (0.1 + 0.25 * max(0.0, math.sin(anim.phase(k, 6))), 0, 0.2)))
 
     # ---- What the game needs.
     room.door("camp-yard", (DOOR[0], Y1 - 0.5, DOOR[1], Y1), arrive=(2.0, 2.75), face=(0, -1))
@@ -271,8 +309,8 @@ def build():
     room.check((1.1, 2.9, 2.0, 3.25), "A safe. It's locked.\nA combination dial: three numbers.")
     room.check((X0, 2.4, X0 + 0.6, 3.3), "A map of the camp, drawn by hand. Somebody marked a red X by the workshop.")
     # The typewriter's zone leaves the safe's to it, and the box's leaves the
-    # strip in front of the desk to the letters on it.
-    room.save_room(typewriter=(2.0, 3.15, 2.45, Y1), box=(3.6, 3.2, X1, Y1), lid=box_lid)
+    # strip in front of the desk to the letters on it and the door to its own.
+    room.save_room(typewriter=(2.0, 3.15, 2.45, Y1), box=(3.5, 3.17, 4.26, Y1), lid=box_lid)
     room.check((3.6, 1.55, X1, 2.2), "A desk fan, still running. The power's still on somewhere.")
     # Many scenes share the render machine's GPU: keep each frame cheap.
     scene = bpy.context.scene

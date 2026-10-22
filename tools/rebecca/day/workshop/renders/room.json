@@ -99,11 +99,11 @@
   },
   {
    "shape": "circle",
-   "x0": 5950,
-   "z0": 1802,
-   "x1": 7378,
-   "z1": 3230,
-   "name": "Tyres"
+   "x0": 5899,
+   "z0": 1751,
+   "x1": 7429,
+   "z1": 3281,
+   "name": "Wheels footprint"
   },
   {
    "shape": "circle",
@@ -195,7 +195,7 @@
     "x1": 8160,
     "z1": 4590
    },
-   "text": "A power cable, cut. It's still live. I'm not touching that."
+   "text": "A power cable, cut off short. It's still live. I'm not touching that."
   },
   {
    "zone": {

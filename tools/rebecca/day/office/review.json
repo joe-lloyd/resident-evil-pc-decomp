@@ -1,0 +1,11 @@
+{
+  "scene": "office",
+  "steps": [
+    { "action": "hold", "frames": 60, "picture": "office-desk" },
+    { "action": "walk", "x": 6970, "z": 5440, "picture": "office-foreman" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 3400, "z": 4930, "picture": "office-stove" },
+    { "action": "hold", "frames": 60 },
+    { "action": "exit", "x": 5015, "z": 6375, "to": "camp-yard", "zone": { "x": 4250, "z": 5950, "w": 1530, "d": 850 } }
+  ]
+}
