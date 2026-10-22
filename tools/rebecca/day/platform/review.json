@@ -1,0 +1,16 @@
+{
+  "scene": "platform",
+  "steps": [
+    { "action": "hold", "frames": 90, "picture": "platform-from-the-booth" },
+    { "action": "walk", "x": 16320, "z": 14450 },
+    { "action": "walk", "x": 11730, "z": 16660, "picture": "platform-car" },
+    { "action": "hold", "frames": 90 },
+    { "action": "walk", "x": 5270, "z": 12750, "picture": "platform-wheel-house" },
+    { "action": "walk", "x": 23970, "z": 15640, "picture": "platform-smear" },
+    { "action": "walk", "x": 30770, "z": 16490, "picture": "platform-ledge" },
+    { "action": "hold", "frames": 90 },
+    { "action": "walk", "x": 22780, "z": 15300 },
+    { "action": "walk", "x": 5270, "z": 6800, "picture": "platform-trail-in" },
+    { "action": "exit", "x": 5270, "z": 3740, "to": "bridge" }
+  ]
+}

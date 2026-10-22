@@ -2,14 +2,15 @@
 
 What it tells: the last car came up before dawn with something in it. Its
 door was forced from inside and the glass is smeared red. Whatever was in
-it was dragged out across the platform: the smear runs from the car door to
-the rail on the east side and stops, and the crows are working at what is
-caught on the rail. A hiker's pack lies split open where it was dropped,
-one boot beside it. The drive is dead: the gearbox under the wheel house
-stands open with its cog sheared and a spanner dropped in the oil, an OUT
-OF SERVICE board hangs from one chain, and the operator's booth door stands
-open. The station looks out over the valley, where the cable runs down into
-the mist.
+it was dragged out across the platform: a broken smear, soaked into the
+concrete, runs from the car door to the rail on the east side and stops at
+what is caught on the rail. A hiker's pack lies split open where it was dropped,
+one boot beside it. The drive is dead: under the wheel house the motor and
+gearbox stand open with the cog sheared and a spanner dropped in the oil,
+an OUT OF SERVICE board hangs by one chain from the queue's rope, and the
+operator's booth door stands open. The station looks out over the valley,
+where the cable runs down into the mist, over the RE0 overcast and the
+ranges (kit.backdrop, kit.overcast_sky).
 
 Metres: the platform is x 2-17, y 2-13 at z 0. North (y 2) the trail comes
 in from the gorge at x 3-6. The booth is x 12.5-15.7, y 2.5-5.1, its door
@@ -30,8 +31,8 @@ in a loop over the drop with the stake swinging on the end of it. At the
 far end, x 19.8-20.4, the path goes on east. The room is shifted 1.4 m
 west at export to fit the floor in the game's 0.6-19 m.
 
-Moving: the board on its one chain, the car rocking on the cable, a crow
-pecking, grass in the wind, the rope and its stake swinging over the drop.
+Moving: the board on its chain, the car rocking on the cable, the grass,
+the rope and its stake over the drop, all of it slight.
 
 State "gondola-runs" (Hal's key in the booth, day/events.ts): the new cog
 in, the bullwheel turning, the drive's lamp lit on the wheel house, and the
@@ -70,6 +71,16 @@ def ledge_y(x):
     return LEDGE[-1][1]
 
 
+UP_SEED, UP_LEDGES = 2.0, (1.1, 2.4, 3.9, 5.2, 6.2)
+
+
+def cliff_up(x):
+    """How tall the cliff over the ledge stands at x: rising out of the
+    platform's corner to its full height."""
+    t = min(1.0, max(0.0, (x - X1 - 0.2) / 3.0))
+    return 0.6 + 6.3 * t * t * (3 - 2 * t)
+
+
 def height(x, y):
     """The platform flat; the mountain rising north and west, falling away south;
     east, the ledge along the gorge: rock rising north of it, the drop south."""
@@ -82,13 +93,18 @@ def height(x, y):
             return 0.02 * n
         if d > 0:
             e = d - LEDGE_HALF
-            return -min(88.0, e * 3.2 + e * e * 0.5) + 0.4 * n * min(1.0, e)
+            return -min(88.0, e * 2.4 + e * e * 0.4) + 0.4 * n * min(1.0, e)
+        # North: hidden behind the cliff (cliff_up) until its top, then the
+        # mountain going on up from there.
         e = -d - LEDGE_HALF
-        grow = min(1.0, (x - X1 - 0.3) / 3.0)
-        return grow * min(6.5, e * 2.6) + 0.5 * n * min(1.0, e / 2.0)
+        top = cliff_up(x)
+        if e < kit.cliff_relief(x, top, UP_SEED, UP_LEDGES) - 0.15:
+            return -0.4
+        return top - 0.2 + 0.35 * (e - 3.0) + 0.5 * n
     h = 0.3 * n
     if y > Y1 + 0.4:
-        h -= (y - Y1 - 0.4) * 1.6
+        e = y - Y1 - 0.4
+        h -= min(120.0, e * 2.4 + e * e * 0.4)       # the fall under the platform's rock face
     if y < Y0 - 0.3:
         h += (Y0 - 0.3 - y) * 0.5
     if x < X0 - 0.3:
@@ -187,7 +203,6 @@ def cliff_path(rng):
     cx, cy = pulled - 0.6, ledge_y(pulled) + 0.4
     reb.prim("sphere", "Operator's cap", cap, (cx, cy, height(cx, cy) + 0.04), (0.22, 0.2, 0.12), rot=(0, 0, 0.7), segments=12)
     reb.prim("cube", "Cap peak", cap, (cx + 0.12, cy + 0.1, height(cx, cy) + 0.012), (0.14, 0.16, 0.012), rot=(0, 0, 0.7))
-    kit.splat("Blood on the lip", mat("blood"), (pulled + 0.3, lip(pulled) + 0.05, height(pulled + 0.3, lip(pulled)) + 0.004), 0.1, seed=6, stretch=(1.6, 0.6))
     # Rock fallen on the ledge from the cliff; the cliff's foot.
     rv, rf = [], []
     for _ in range(26):
@@ -200,6 +215,119 @@ def cliff_path(rng):
         reb.boulder(rng, (x, y, height(x, y)), r, rv, rf)
     reb.mesh_object("Rock at the cliff's foot", rv, rf, mat("rock"))
     return rope, pivot
+
+
+def gondola(car_red, glass, dark):
+    """Car 4: a cabin for six in pressed steel, red below a band of windows
+    all round, corner pillars and a domed roof; a rubbing rail round its
+    waist; the hanger, an arm that rises off the roof and bends over to the
+    grip on the cable. Its door, north, slides and has been forced half
+    open from inside. Returns its parts, round the grip."""
+    import bpy
+    cx0, cx1, cy0, cy1 = CAR
+    mx, my = (cx0 + cx1) / 2, (cy0 + cy1) / 2
+    w, d = cx1 - cx0, cy1 - cy0
+    parts = []
+    # The body: a lower shell tapered in to its floor, the window band, the roof.
+    lower = reb.prim("cube", "Car body", car_red, (mx, my, 0.82), (w, d, 1.0), bevel=0.18)
+    lower.scale = (1.0, 1.0, 1.0)
+    taper = lower.modifiers.new("Taper", "SIMPLE_DEFORM")
+    taper.deform_method = "TAPER"
+    taper.deform_axis = "Z"
+    taper.factor = 0.18
+    parts.append(lower)
+    parts.append(reb.prim("cube", "Car skirt", dark, (mx, my, 0.3), (w - 0.35, d - 0.35, 0.06), bevel=0.03))
+    parts.append(reb.prim("cube", "Car rubbing rail", kit.mat("steel"), (mx, my, 1.0), (w + 0.06, d + 0.06, 0.07), bevel=0.03))
+    # Windows: dark glass all round, with the pillars and mullions over it.
+    parts.append(reb.prim("cube", "Car windows", glass, (mx, my, 1.72), (w - 0.06, d - 0.06, 0.82), bevel=0.12))
+    parts.append(reb.prim("cube", "Car inside", reb.mat_plain("Car dark", (0.02, 0.012, 0.01), 0.9), (mx, my, 1.5), (w - 0.2, d - 0.2, 1.4)))
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            parts.append(reb.prim("cube", "Car pillar", car_red, (mx + sx * (w / 2 - 0.1), my + sy * (d / 2 - 0.1), 1.72), (0.16, 0.16, 0.86), bevel=0.05))
+    for x in (mx - w / 6, mx + w / 6):
+        for sy in (-1, 1):
+            parts.append(reb.prim("cube", "Car mullion", car_red, (x, my + sy * (d / 2 - 0.02), 1.72), (0.06, 0.05, 0.84)))
+    parts.append(reb.prim("cube", "Car mullion", car_red, (mx + w / 2 - 0.02, my, 1.72), (0.05, 0.06, 0.84)))
+    parts.append(reb.prim("cube", "Car mullion", car_red, (mx - w / 2 + 0.02, my, 1.72), (0.05, 0.06, 0.84)))
+    parts.append(reb.prim("cube", "Car window sill", car_red, (mx, my, 1.3), (w + 0.02, d + 0.02, 0.06), bevel=0.02))
+    parts.append(reb.prim("cube", "Car eave", car_red, (mx, my, 2.15), (w + 0.04, d + 0.04, 0.08), bevel=0.03))
+    roof = reb.prim("sphere", "Car roof", car_red, (mx, my, 2.17), (w / 2 + 0.02, d / 2 + 0.02, 0.32), segments=24)
+    cut = roof.modifiers.new("Flat", "BOOLEAN")
+    plane = reb.prim("cube", "Roof cutter", None, (mx, my, 1.67), (w + 1, d + 1, 1.0))
+    cut.operation = "DIFFERENCE"
+    cut.object = plane
+    parts.append(roof)
+    parts.append(reb.prim("cyl", "Roof vent", kit.mat("steel"), (mx - 0.5, my, 2.45), (0.3, 0.3, 0.1), segments=16))
+    # The door, north: its track over the opening, the door slid half open and bent out at its foot.
+    parts.append(reb.prim("cube", "Car doorway", reb.mat_plain("Car dark", (0.02, 0.012, 0.01), 0.9), (mx - 0.35, cy0 - 0.005, 1.15), (0.85, 0.02, 1.75)))
+    parts.append(reb.prim("cube", "Door track", kit.mat("steel"), (mx, cy0 - 0.08, 2.08), (w - 0.2, 0.05, 0.05)))
+    parts.append(reb.prim("cube", "Car door, forced", car_red, (mx + 0.35, cy0 - 0.09, 1.15), (0.85, 0.05, 1.8), rot=(0.06, 0, -0.05), bevel=0.02))
+    parts.append(reb.prim("cube", "Car door glass", glass, (mx + 0.35, cy0 - 0.12, 1.7), (0.65, 0.01, 0.6), rot=(0.06, 0, -0.05)))
+    parts.append(reb.prim("cube", "Door handle", kit.mat("steel"), (mx + 0.0, cy0 - 0.13, 1.15), (0.04, 0.03, 0.2)))
+    # The hanger: up off the roof, out over the side, and over to the grip.
+    gx, gz = mx, 3.45
+    arm = [(mx, my, 2.4), (mx, my, 2.65), (mx + 0.55, my, 2.85), (mx + 0.75, my, 3.15), (mx + 0.5, my, 3.4), (gx + 0.12, my, gz - 0.02)]
+    parts.append(kit.tube("Car hanger", kit.mat("iron"), arm, 0.06, 10))
+    parts.append(reb.prim("cube", "Hanger plate", kit.mat("iron"), (mx, my, 2.43), (0.5, 0.5, 0.05)))
+    parts.append(reb.prim("cube", "Car grip", kit.mat("iron"), (gx, my, gz), (0.32, 0.55, 0.26), bevel=0.04))
+    for dy in (-0.2, 0.2):
+        parts.append(reb.prim("cyl", "Grip wheel", kit.mat("steel"), (gx, my + dy, gz + 0.1), (0.2, 0.2, 0.06), rot=(0, math.pi / 2, 0), segments=14))
+    for i in range(4):
+        kit.splat(f"Smear on the glass {i}", kit.mat("blood"), (cx0 + 0.45 + i * 0.5, cy0 - 0.035, 1.7 + (i % 2) * 0.2 - 0.1), 0.15, rot=(math.pi / 2, 0, 0), seed=60 + i, stretch=(0.6, 1.5))
+        parts.append(bpy.data.objects[f"Smear on the glass {i}"])
+    parts.append(kit.text("Car number", "4", kit.mat("white paint"), (cx1 - 0.4, cy0 - 0.03, 0.75), size=0.3, rot=(math.pi / 2, 0, math.pi)))
+    plane.hide_render = True
+    return parts
+
+
+def wheel_house_detail(wx0, wx1, wy0, wy1, rng):
+    """What drives the line: the motor on its bed beside the gearbox, its
+    fins and coupling, the control cabinet with its dead lamps, the frame
+    braced across under the roof, the guide sheaves where the cable leaves,
+    grease cans, a cable drum, the guard rail round it."""
+    cx = (wx0 + wx1) / 2
+    cy = (wy0 + wy1) / 2 + 0.6
+    green = kit.mat("green paint")
+    reb.prim("cube", "Machine bed", kit.mat("concrete"), (cx, cy, 0.08), (2.6, 2.0, 0.16), bevel=0.02)
+    motor = reb.prim("cyl", "Drive motor", green, (cx - 1.25, cy + 0.2, 0.55), (0.7, 0.7, 1.1), rot=(0, math.pi / 2, 0), segments=24)
+    reb.mask(reb.wall(motor))
+    for i in range(9):
+        x = cx - 1.7 + i * 0.11
+        reb.prim("cyl", "Motor fin", green, (x, cy + 0.2, 0.55), (0.8, 0.8, 0.03), rot=(0, math.pi / 2, 0), segments=24)
+    reb.prim("cube", "Motor foot", green, (cx - 1.25, cy + 0.2, 0.2), (0.9, 0.7, 0.12))
+    reb.prim("cube", "Motor terminal box", green, (cx - 1.25, cy - 0.2, 0.92), (0.3, 0.2, 0.22), bevel=0.02)
+    kit.rod("Motor cable", kit.mat("black"), (cx - 1.25, cy - 0.3, 0.95), (cx - 1.25, wy0 - 0.1, 2.0), 0.03, 6)
+    kit.rod("Coupling", kit.mat("steel"), (cx - 0.7, cy + 0.2, 0.55), (cx - 0.78, cy + 0.2, 0.55), 0.16, 16)
+    kit.rod("Drive shaft", kit.mat("steel"), (cx - 0.7, cy + 0.2, 0.55), (cx - 0.8, cy + 0.2, 0.55), 0.06, 10)
+    for dx in (-0.6, 0.6):
+        for dy in (-0.45, 0.45):
+            reb.prim("cyl", "Gearbox bolt", kit.mat("iron"), (cx + dx, cy + dy, 1.11), (0.05, 0.05, 0.03), segments=6)
+    reb.prim("cube", "Gearbox inspection rim", kit.mat("iron"), (cx, cy, 1.11), (0.9, 0.7, 0.03))
+    # The control cabinet on the back post, its lamps dead, a cable down.
+    cab = reb.prim("cube", "Control cabinet", kit.mat("green paint"), (wx0 + 0.25, wy1 - 0.6, 1.3), (0.35, 0.8, 1.1), bevel=0.02)
+    reb.mask(cab)
+    for i, rgb in enumerate(((0.25, 0.04, 0.02), (0.25, 0.2, 0.02), (0.04, 0.2, 0.06))):
+        reb.prim("cyl", "Cabinet lamp", reb.mat_plain(f"Dead lamp {i}", rgb, 0.3), (wx0 + 0.43, wy1 - 0.85 + i * 0.25, 1.6), (0.08, 0.08, 0.04), rot=(0, math.pi / 2, 0), segments=10)
+    reb.prim("cyl", "Stop button", kit.mat("red paint"), (wx0 + 0.43, wy1 - 0.6, 1.25), (0.12, 0.12, 0.05), rot=(0, math.pi / 2, 0), segments=12)
+    reb.prim("cube", "Cabinet handle", kit.mat("steel"), (wx0 + 0.44, wy1 - 0.25, 1.3), (0.03, 0.03, 0.18))
+    # The frame: beams across the posts under the roof, braces at the corners.
+    for y in (wy0, wy1):
+        kit.rod("Frame beam", kit.mat("rust"), (wx0, y, 4.15), (wx1, y, 4.15), 0.07, 6)
+    for x in (wx0, wx1):
+        kit.rod("Frame beam", kit.mat("rust"), (x, wy0, 4.15), (x, wy1, 4.15), 0.07, 6)
+        for y, sgn in ((wy0, 1), (wy1, -1)):
+            kit.rod("Corner brace", kit.mat("rust"), (x, y, 3.3), (x, y + sgn * 0.9, 4.15), 0.04, 6)
+    kit.rod("Wheel frame leg", kit.mat("rust"), (cx - 0.9, cy, 1.1), (cx, cy, 3.1), 0.07, 8)
+    kit.rod("Wheel frame leg", kit.mat("rust"), (cx + 0.9, cy, 1.1), (cx, cy, 3.1), 0.07, 8)
+    # Guide sheaves where the cable leaves for the car.
+    for dx in (1.55, -1.55):
+        reb.prim("cyl", "Guide sheave", kit.mat("steel"), (cx + dx, wy1 + 0.1, 3.2), (0.35, 0.35, 0.08), rot=(math.pi / 2, 0, 0), segments=18)
+        kit.rod("Sheave bracket", kit.mat("rust"), (cx + dx, wy1 + 0.1, 3.0), (cx + dx, wy1, 4.15), 0.04, 6)
+    # A cable drum on its side and grease cans by the bed.
+    reb.prim("cyl", "Cable drum", kit.mat("planks"), (wx1 - 0.4, wy1 - 0.5, 0.45), (0.9, 0.9, 0.5), rot=(math.pi / 2, 0, 0), segments=18)
+    reb.prim("cyl", "Cable on the drum", kit.mat("iron"), (wx1 - 0.4, wy1 - 0.5, 0.45), (0.65, 0.65, 0.45), rot=(math.pi / 2, 0, 0), segments=18)
+    for i in range(3):
+        reb.prim("cyl", "Grease can", reb.mat_plain("Grease can", (0.3, 0.2, 0.04), 0.5), (wx0 + 1.0 + i * 0.3, wy0 + 0.35, 0.18), (0.22, 0.22, 0.34), segments=12)
 
 
 def build():
@@ -218,37 +346,35 @@ def build():
     concrete = kit.dirtied(mat("concrete"), 0.7, scale=1.2)
     paint = mat("green paint")
     car_red = reb.mat_surface("Car paint", [(0.0, (0.22, 0.03, 0.02)), (0.8, (0.35, 0.05, 0.03)), (1.0, (0.18, 0.1, 0.06))], scale=4, rough=0.45, bump=0.1)
-    oil = reb.mat_plain("Oil", (0.02, 0.018, 0.015), 0.15)
+    oil = reb.mat_plain("Oil", (0.025, 0.022, 0.018), 0.55)
     panel = kit.boards("Booth boards", (0.2, 0.22, 0.17), width=0.16, grime=0.7)
 
-    # ---- Ground: the slab, the mountain round it, cracks with grass in them.
-    side = steep(mat("grass"), "Grass, steep")
+    # ---- Ground: the slab, the mountain round it in grassed earth, rock
+    # where it is steep; the cliff over the ledge and the drop under it in
+    # granite with moss on the ledges.
+    side = steep(mat("grassed earth"), "Grassed earth, steep")
     nx0, ny0, nx1, ny1 = NEAR
     reb.terrain("Mountainside near", side, (nx0, nx1), (ny0, ny1), height, step=0.25)
-    reb.terrain("Mountainside", side, (-14, 50), (-12, 40), lambda x, y: height(x, y) - (3.0 if nx0 + 1 < x < nx1 - 1 and ny0 + 1 < y < ny1 - 1 else 0.0), step=0.6)
-    # The gorge's far side: its floor 90 m down, its wall rising beyond, wooded,
-    # so a camera looking down the drop finds rock and trees, not sky.
-    def far_side(x, y):
-        n = noise.noise(Vector((x * 0.05, y * 0.05, 7.0)))
-        return -90.0 + max(0.0, y - 46.0) * 2.4 + 6.0 * n
-    reb.terrain("Gorge far side", side, (-30, 80), (36, 110), far_side, step=2.0)
-    tv, tf = [], []
-    for _ in range(260):
-        x, y = rng.uniform(-30, 80), rng.uniform(40, 105)
-        reb.conifer(rng, Vector((x, y, far_side(x, y))), rng.uniform(14, 24), tv, tf)
-    reb.mesh_object("Gorge spruce", tv, tf, mat("needles"))
-    # Granite standing out of the cliff over the ledge and under its lip.
+    reb.terrain("Mountainside", side, (-30, 70), (-30, 60), lambda x, y: height(x, y) - (3.0 if nx0 + 1 < x < nx1 - 1 and ny0 + 1 < y < ny1 - 1 else 0.0), step=0.5)
+    xs = [17.2 + 0.2 * i for i in range(141)]
+    _, up_ledges = kit.cliff("Cliff over the ledge", xs, lambda x: (ledge_y(x) - LEDGE_HALF - 0.05, -0.2), cliff_up, 1, rise=True, m=mat("granite"), ledge_m=mat("moss"), seed=UP_SEED, ledges=UP_LEDGES)
+    _, down_ledges = kit.cliff("Drop under the ledge", xs, lambda x: (ledge_y(x) + LEDGE_HALF + 0.05, 0.02), 18.0, 1, m=mat("granite"), ledge_m=mat("moss"), seed=5.0)
+    _, under_ledges = kit.cliff("Drop under the platform", [-14.0 + 0.25 * i for i in range(126)], lambda x: (Y1 + 0.58, -1.2), 16.0, 1, m=mat("granite"), ledge_m=mat("moss"), seed=8.0)
+    kit.ledge_plants(rng, up_ledges + down_ledges + under_ledges, tufts=2400, ferns=160)
+    # Granite standing out of the drop under the ledge.
     cv, cf = [], []
-    for x in (19.5, 22.5, 25.5, 28.5, 32.0, 36.0):
+    for x in (22.5, 28.5, 36.0):
         y = ledge_y(x)
-        kit.crag(rng, cv, cf, (x, y - LEDGE_HALF - 2.2, 2.0), (1.4, 1.2, 2.8), floor=-0.8)
-        kit.crag(rng, cv, cf, (x + 1.2, y + LEDGE_HALF + 2.0, -5.8), (1.6, 1.3, 3.2), floor=-0.9)
-    reb.mesh_object("Gorge crags", cv, cf, steep(mat("rock"), "Granite, steep"), smooth=False)
+        kit.crag(rng, cv, cf, (x + 1.2, y + LEDGE_HALF + 2.4, -7.5), (1.6, 1.3, 3.2), floor=-0.9)
+    reb.mesh_object("Gorge crags", cv, cf, mat("granite"), smooth=False)
     reb.prim("cube", "Slab edge east", mat("concrete"), (X1 + 0.32, (10.4 + Y1 + 0.5) / 2, -1.2), (0.3, Y1 + 0.5 - 10.4, 2.4))
     reb.prim("cube", "Platform slab", concrete, ((X0 + X1) / 2, (Y0 + Y1) / 2, -0.15), (X1 - X0 + 0.6, Y1 - Y0 + 0.8, 0.3))
     reb.prim("cube", "Slab edge", mat("concrete"), ((X0 + X1) / 2, Y1 + 0.42, -1.2), (X1 - X0 + 0.6, 0.3, 2.4))
     kit.cracks("Cracks", mat("black"), (X0, Y0, X1, Y1), count=16, seed=1)
-    kit.path_strip("Trail in", mat("dirt"), [(4.5, -6.0), (4.5, -2.0), (4.6, 1.5), (4.7, 2.4)], height, width=0.9)
+    # The trail in from the bridge, down the mountain to the slab's edge,
+    # its dirt trodden out over the concrete where it meets it.
+    on_trail_in = kit.dirt_path("Trail in", [(7.0, -40.0), (6.2, -24.0), (5.0, -12.0), (4.5, -5.0), (4.5, -1.0), (4.6, 1.6), (4.65, 2.5)], height, width=1.4)
+    kit.splat("Dirt trodden onto the slab", mat("trodden dirt"), (4.6, 2.5, 0.003), 0.45, lumps=0.6, seed=31, stretch=(1.0, 0.6))
 
     # ---- The edge: a rail along the drop, the queue rails, the sign.
     for x in [X0 + 0.2 + i * 1.5 for i in range(11)]:
@@ -337,6 +463,7 @@ def build():
     reb.prim("cube", "Dropped spanner", mat("steel"), ((wx0 + wx1) / 2 + 0.8, (wy0 + wy1) / 2 + 0.1, 0.01), (0.35, 0.04, 0.015), rot=(0, 0, 0.6))
     kit.drum("Grease drum", mat("rust"), (wx0 + 0.5, wy0 + 0.5, 0.0))
     kit.drum("Drum on its side", mat("rust"), (wx0 + 0.7, wy0 + 1.5, 0.0), tipped=True, rot=0.4)
+    wheel_house_detail(wx0, wx1, wy0, wy1, rng)
     # The haul cables: from the wheel out over the car and down the mountain.
     hub = Vector(((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 3.1))
     grip_at = Vector(((CAR[0] + CAR[1]) / 2, (CAR[2] + CAR[3]) / 2, 3.45))
@@ -351,34 +478,21 @@ def build():
 
     # ---- The car: red, its door forced, glass smeared from inside.
     cx0, cx1, cy0, cy1 = CAR
-    car = reb.prim("cube", "Gondola car", car_red, ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 1.25), (cx1 - cx0, cy1 - cy0, 2.1), bevel=0.25)
-    reb.prim("cube", "Car windows", reb.mat_glass("Car glass", (0.4, 0.45, 0.45)), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 1.65), (cx1 - cx0 + 0.02, cy1 - cy0 + 0.02, 0.75))
-    reb.prim("cube", "Car inside", reb.mat_plain("Car dark", (0.02, 0.012, 0.01), 0.9), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 1.25), (cx1 - cx0 - 0.15, cy1 - cy0 - 0.15, 1.9))
-    reb.prim("cube", "Car door, forced", car_red, ((cx0 + cx1) / 2 + 0.75, cy0 - 0.12, 1.05), (1.0, 0.06, 1.8), rot=(0, 0, -0.12))
-    reb.prim("cube", "Car doorway", reb.mat_plain("Car dark", (0.02, 0.012, 0.01), 0.9), ((cx0 + cx1) / 2 - 0.2, cy0 - 0.01, 1.0), (1.0, 0.02, 1.8))
-    for i in range(4):
-        kit.splat(f"Smear on the glass {i}", mat("blood"), (cx0 + 0.4 + i * 0.55, cy0 - 0.012, 1.6 + rng.uniform(-0.2, 0.2)), 0.16, rot=(math.pi / 2, 0, 0), seed=60 + i, stretch=(0.6, 1.4))
-    kit.text("Car number", "4", mat("white paint"), (cx1 - 0.35, cy0 - 0.012, 0.75), size=0.3, rot=(math.pi / 2, 0, math.pi))
-    hanger = kit.rod("Car hanger", mat("iron"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 2.3), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 3.4), 0.06)
-    grip = reb.prim("cube", "Car grip", mat("iron"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 3.45), (0.5, 0.3, 0.25))
-    car_parts = [car] + [o for o in __import__("bpy").data.objects if o.name.startswith(("Car windows", "Car inside", "Car door", "Car doorway", "Smear on the glass", "Car number", "Car hanger", "Car grip"))]
+    car_parts = gondola(car_red, reb.mat_plain("Car glass", (0.03, 0.04, 0.045), 0.12), mat("black"))
     pivot = reb.prim("sphere", "Car pivot", mat("iron"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 3.45), (0.05, 0.05, 0.05))
     for p in car_parts:
         p.parent = pivot
         p.matrix_parent_inverse = pivot.matrix_world.inverted()
     reb.wall(reb.prim("cube", "Car footprint", None, ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 0.5), (cx1 - cx0, cy1 - cy0, 1.0))).hide_render = True
 
-    # ---- What was dragged from it: the smear to the east rail, the crows at the end.
-    kit.drag_trail("Drag smear", mat("old blood"), [(8.0, 10.9), (9.5, 10.0), (11.5, 9.6), (13.5, 9.9), (15.5, 10.6), (16.8, 11.2)], width=0.45, seed=7, z=0.0)
-    kit.drag_trail("Fresh smear", mat("blood"), [(8.1, 10.8), (9.4, 10.1), (11.0, 9.7)], width=0.25, seed=8, z=0.002)
-    kit.splat("Pool at the rail", mat("blood"), (16.7, 11.3, 0.0), 0.5, seed=9, stretch=(1.2, 1.6))
+    # ---- What was dragged from it: a smear broken where it was lifted and
+    # dropped, soaked into the concrete, to the east rail.
+    for i, leg in enumerate(([(8.1, 10.8), (8.9, 10.3), (9.8, 10.0)], [(10.6, 9.75), (11.7, 9.6), (12.4, 9.75)], [(13.6, 10.0), (14.6, 10.3), (15.3, 10.65)], [(15.9, 10.9), (16.6, 11.2)])):
+        kit.drag_trail(f"Drag smear {i}", mat("blood"), leg, width=0.42 - 0.04 * i, seed=7 + i, z=0.0)
+    for i, (x, y) in enumerate(((10.2, 9.95), (13.0, 9.7), (13.2, 10.05), (15.6, 10.8))):
+        kit.splat(f"Drip {i}", mat("blood"), (x, y, 0.002), 0.06, seed=40 + i, points=10)
+    kit.splat("Pool at the rail", mat("blood"), (16.7, 11.3, 0.0), 0.32, seed=9, stretch=(1.1, 1.4))
     reb.cloth("Rag of shirt on the rail", mat("flannel"), (17.12, 11.2, 0.75), (0.05, 0.45), rot=(0, math.pi / 2, 0), cuts=8, lumps=0.05, seed=2)
-    crows = []
-    for i, (x, y, z, hd) in enumerate(((16.75, 11.4, 0.0, 2.6), (17.1, 10.8, 1.12, 3.4), (16.3, 11.0, 0.0, 0.8))):
-        b, w = kit.crow(f"Crow {i}", (x, y, z), heading=hd)
-        crows.append(b)
-    kit.crow("Crow on the sign", (9.2, 2.4, 2.56), heading=1.6)
-    kit.crow("Crow on the roof", (13.6, 3.6, 2.66), heading=4.0)
     # The hiker's pack, split, and a boot.
     reb.prim("cube", "Backpack", reb.mat_plain("Pack orange", (0.45, 0.12, 0.03), 0.7), (11.2, 7.3, 0.18), (0.55, 0.32, 0.36), rot=(0, 0.3, 0.7), bevel=0.06)
     reb.cloth("Spilled clothes", mat("denim"), (11.7, 7.0, 0.02), (0.6, 0.4), rot=(0, 0, 0.4), lumps=0.04, seed=3)
@@ -386,16 +500,17 @@ def build():
     reb.prim("cube", "Lone boot", mat("rubber"), (10.4, 8.6, 0.07), (0.3, 0.12, 0.14), rot=(0, 0, 2.1), bevel=0.03)
     kit.papers("Trail map", (11.0, 6.6, 0.0), spread=0.3, count=2, seed=1)
 
-    # ---- OUT OF SERVICE, hanging from one chain at the queue's head.
-    board = reb.prim("cube", "Service board", reb.mat_plain("Board white", (0.5, 0.48, 0.42), 0.8), (0, -0.25, -0.3), (0.9, 0.03, 0.45))
-    kit.text("Board words", "OUT OF", mat("red paint"), (0, -0.27, -0.2), size=0.14, rot=(math.pi / 2, 0, math.pi))
-    kit.text("Board words 2", "SERVICE", mat("red paint"), (0, -0.27, -0.38), size=0.14, rot=(math.pi / 2, 0, math.pi))
-    hook = reb.prim("sphere", "Board hook", mat("iron"), (8.3, 6.5, 2.1), (0.04, 0.04, 0.04))
-    kit.rod("Board beam", mat("rust"), (6.6, 6.5, 2.1), (10.0, 6.5, 2.1), 0.04)
+    # ---- OUT OF SERVICE, hung across the queue's head on a chain between
+    # its two front posts, slipped down at one end.
+    kit.rod("Queue head chain", mat("iron"), (7.0, 6.5, 0.92), (8.3, 6.5, 0.72), 0.01, 4)
+    kit.rod("Queue head chain", mat("iron"), (8.3, 6.5, 0.72), (9.6, 6.5, 0.92), 0.01, 4)
+    board = reb.prim("cube", "Service board", reb.mat_plain("Board white", (0.5, 0.48, 0.42), 0.8), (0, -0.03, -0.26), (0.9, 0.03, 0.42))
+    kit.text("Board words", "OUT OF", mat("red paint"), (0, -0.05, -0.17), size=0.14, rot=(math.pi / 2, 0, math.pi))
+    kit.text("Board words 2", "SERVICE", mat("red paint"), (0, -0.05, -0.35), size=0.14, rot=(math.pi / 2, 0, math.pi))
+    hook = reb.prim("sphere", "Board hook", mat("iron"), (8.3, 6.5, 0.72), (0.03, 0.03, 0.03))
     for p in [o for o in __import__("bpy").data.objects if o.name.startswith(("Service board", "Board words"))]:
         p.parent = hook
-    kit.rod("Board chain", mat("iron"), (7.9, 6.5, 2.1), (7.9, 6.25, 1.6), 0.008, 4)
-    hook.rotation_euler = (0, 0.5, 0)
+    hook.rotation_euler = (0, 0.18, 0)
 
     # ---- The ways out: the line track's gate west, the quarry trail east.
     for y in (6.0, 8.0):
@@ -404,17 +519,16 @@ def build():
     reb.prim("cube", "Gate sign", mat("white paint"), (X0 - 0.12, 8.3, 1.4), (0.03, 0.5, 0.35))
     kit.text("Gate sign words", "LINE TRACK", mat("red paint"), (X0 - 0.09, 8.3, 1.46), size=0.07, rot=(math.pi / 2, 0, -math.pi / 2))
     kit.text("Gate sign words 2", "STAFF ONLY", mat("red paint"), (X0 - 0.09, 8.3, 1.36), size=0.07, rot=(math.pi / 2, 0, -math.pi / 2))
-    kit.path_strip("Line track", mat("dirt"), [(X0 + 0.5, 7.0), (-2.0, 7.2), (-8.0, 8.0)], height, width=0.7)
+    on_line = kit.dirt_path("Line track", [(X0 - 0.1, 7.0), (-2.0, 7.2), (-8.0, 8.0), (-16.0, 9.5), (-28.0, 10.0)], height, width=1.1, taper=0.4)
     kit.rod("Trail sign post", mat("dark wood"), (X1 + 0.3, 10.4, 0), (X1 + 0.3, 10.4, 1.7), 0.05)
     reb.prim("cube", "Trail sign", mat("dark wood"), (X1 + 0.3, 10.1, 1.5), (0.04, 0.8, 0.2))
     kit.text("Trail sign words", "QUARRY TRAIL >", mat("white paint"), (X1 + 0.27, 10.1, 1.5), size=0.09, rot=(math.pi / 2, 0, -math.pi / 2))
-    kit.path_strip("East trail", mat("dirt"), [(X1 - 0.5, 9.0)] + [(x, ledge_y(x)) for x in (18.4, 19.0, 20.4, 24.0, 30.0, 40.0)], height, width=0.6)
-    # A bench by the booth, the bin kicked over, rubbish blown about, rain in the hollows.
+    on_east = kit.dirt_path("East trail", [(X1 + 0.15, 9.0)] + [(x, ledge_y(x)) for x in (18.4, 19.0, 20.4, 24.0, 30.0, 38.0, 46.0, 56.0)], height, width=1.5, taper=0.5)
+    kit.splat("Dirt trodden onto the slab east", mat("trodden dirt"), (X1 - 0.05, 9.0, 0.003), 0.38, lumps=0.6, seed=32, stretch=(0.6, 1.2))
+    # A bench by the booth, the bin kicked over, rubbish blown about.
     reb.wall(kit.table("Bench", reb.mat_wood("Bench slats", (0.2, 0.14, 0.08)), (11.6, 3.2, 0.0), size=(1.8, 0.45, 0.45)))
     reb.prim("cyl", "Bin", mat("green paint"), (10.3, 4.2, 0.25), (0.45, 0.45, 0.7), rot=(math.pi / 2, 0, 2.4), segments=16)
     kit.papers("Rubbish", (10.8, 4.8, 0.0), spread=1.2, count=10, seed=9)
-    for i in range(5):
-        kit.splat(f"Damp patch {i}", reb.mat_plain("Damp concrete", (0.09, 0.09, 0.085), 0.25), (rng.uniform(4, 15), rng.uniform(4, 11), 0.0), rng.uniform(0.3, 0.7), seed=70 + i, stretch=(1.4, 0.8))
     leaves_m = mat("dead needles")
     lv, lf = [], []
     for _ in range(600):
@@ -423,35 +537,57 @@ def build():
             reb.card(lv, lf, Vector((x, y, 0.004)), Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)).normalized(), Vector((0, 0, 1)), 0.06, 0.12, 0.0)
     reb.mesh_object("Needles on the slab", lv, lf, leaves_m)
 
-    # ---- The mountain round it: spruces up the slope, grass in the cracks and the verge.
-    def keep_out(x, y):
-        return (X0 - 1.5 < x < X1 + 1.5 and Y0 - 1.5 < y < Y1 + 1.0) or y > Y1 + 1.0 or (x > X1 - 0.5 and y > ledge_y(x) - LEDGE_HALF - 1.2) or (3.0 < x < 6.5 and y < Y0) or (x < X0 and 6.0 < y < 8.6) or (x > X1 and 8.0 < y < 11.0) or any((x - cx) ** 2 + (y - cy) ** 2 < 9 for cx, cy in ((3.2, 0.8), (16.6, 12.6), (13.2, 6.2), (2.5, 4.0)))
-    kit.forest(rng, height, keep_out, (-14, -12, 44, 16), count=75, ferns=20, needles=600)
+    # ---- The mountain round it: spruces close and dense up the slope and
+    # down the fall below the platform, grass over all but the paths.
+    def on_path(x, y, margin=0.0):
+        return on_trail_in(x, y, margin) or on_east(x, y, margin) or on_line(x, y, margin)
 
-    def verge(r):
-        while True:
-            x, y = r.uniform(X0 - 3, X1 + 3), r.uniform(Y0 - 3, Y1 + 0.5)
-            if not (X0 + 0.2 < x < X1 - 0.2 and Y0 + 0.2 < y < Y1 - 0.2) and not (x > X1 + 0.3 and y > ledge_y(x) + LEDGE_HALF):
-                return x, y
-    grass = kit.meadow(rng, 1600, verge, height)
-    cracks = kit.meadow(rng, 140, lambda r: (r.uniform(X0 + 1, X1 - 1), r.uniform(Y0 + 1, Y1 - 1)), height, mat("dead grass"))
-    rv, rf = [], []
-    for (x, y, r) in ((0.5, 6.0, 0.9), (18.6, 4.5, 0.8), (1.2, 12.2, 0.7), (18.4, 12.6, 0.6)):
-        reb.boulder(rng, (x, y, height(x, y)), r, rv, rf)
-    reb.mesh_object("Rocks", rv, rf, mat("rock"))
+    eyes = [(3.2, 0.8), (16.6, 12.6), (13.2, 6.2), (2.5, 4.0), (15.4, 12.6), (23.2, 9.4)]
+
+    def keep_out(x, y):
+        return ((X0 - 1.5 < x < X1 + 1.5 and Y0 - 1.5 < y < Y1 + 1.6)
+                or (x > X1 - 0.5 and ledge_y(x) - LEDGE_HALF - 1.4 < y < ledge_y(x) + LEDGE_HALF + 3.0)
+                or (y > Y1 + 1.6 and height(x, y) > -6.0)        # the fall below the rail: trees only well down it
+                or on_path(x, y, 1.4) or any((x - cx) ** 2 + (y - cy) ** 2 < 16 for cx, cy in eyes))
+    kit.forest(rng, height, keep_out, (-30, -30, 60, 16), count=330, spacing=1.6, tall=(14, 22), ferns=80, needles=1500)
+    kit.forest(rng, height, keep_out, (-20, 13, 60, 55), count=260, spacing=2.0, tall=(15, 24), ferns=0, needles=0)
+
+    def no_grass(x, y):
+        return ((X0 - 0.3 < x < X1 + 0.3 and Y0 - 0.3 < y < Y1 + 0.5) or on_path(x, y)
+                or (x > X1 + 0.3 and abs(y - ledge_y(x)) > LEDGE_HALF + 0.05))
+    grass = kit.grass_ground(rng, (-8, -8, 30, 16), height, keep_out=no_grass, per_m2=28)
+    kit.grass_ground(rng, (-24, -24, 50, 40), height, keep_out=lambda x, y: no_grass(x, y) or (-8 < x < 30 and -8 < y < 16) or height(x, y) < -30, per_m2=5)
+    kit.meadow(rng, 140, lambda r: (r.uniform(X0 + 1, X1 - 1), r.uniform(Y0 + 1, Y1 - 1)), height, mat("dead grass"))
+    kit.rocks("Rocks", rng, [(0.5, 6.0, 0.9), (1.2, 12.2, 0.7), (18.4, 12.9, 0.6), (-1.5, 2.5, 0.8)], height, mat("granite"))
 
     # ---- Light: the morning sun low in the east, the valley in mist below.
     kit.time_light("morning", sun_heading=110, sun_energy=5.0)
-    kit.vista(rng, (9.0, Y1), (0.0, 1.0), below=-90.0)
+    kit.overcast_sky(glow=(0.9, 0.4))
+
+    def far_land(x, y, z):
+        r = math.hypot(x - 10.0, y - 8.0)
+        w = max(0.0, min(1.0, (240.0 - r) / 170.0))
+        return z + (height(x, y) - z) * w * w * (3 - 2 * w)
+    # The far side of the valley the line runs down into: long rolling
+    # ranges, wooded to their crests, nearer and higher than the kit's own,
+    # for a station on a summit.
+    ranges = [
+        {"at": 650, "depth": 380, "rise": 4.5, "roll": 1.6},
+        {"at": 1500, "depth": 800, "rise": 4.0, "roll": 1.4},
+        {"at": 3200, "depth": 1500, "rise": 4.2, "roll": 1.2},
+        {"at": 6500, "depth": 2600, "rise": 4.6, "roll": 1.0},
+        {"at": 12000, "depth": 3200, "rise": 5.0, "roll": 0.8},
+    ]
+    kit.backdrop((10.0, 8.0, 3.0), spread=360, ranges=ranges, below=-190.0, near=50.0, forest_to=2200.0, trees=130000,
+                 keep_out=lambda x, y: math.hypot(x - 10.0, y - 8.0) < 50, shape=far_land, mist=22.0, rng=random.Random(5))
     rope, rope_pivot = cliff_path(rng)
 
     anim = kit.Anim(16)
-    anim.swing(hook, axis=0, degrees=7)
-    anim.custom(lambda k: setattr(pivot, "rotation_euler", (math.radians(1.2) * math.sin(anim.phase(k)), 0, 0)))
-    anim.bob(crows[0], height=0.05, speed=2)
-    anim.sway(grass, amount=0.06)
+    anim.swing(hook, axis=0, degrees=2)
+    anim.custom(lambda k: setattr(pivot, "rotation_euler", (math.radians(0.6) * math.sin(anim.phase(k)), 0, 0)))
+    anim.sway(grass, amount=0.02)
     anim.flicker(glow, None, depth=0.35, dropouts=2)
-    anim.swing(rope_pivot, axis=0, degrees=9)
+    anim.swing(rope_pivot, axis=0, degrees=3)
 
     lit_inside = [ob.active_material for ob in car_parts if ob.name.startswith(("Car inside", "Car doorway"))]
 
@@ -483,7 +619,7 @@ def build():
         room.void((ax0, ay1, ax1, Y1))      # the drop into the gorge
     room.door("line-track", (X0, 6.0, X0 + 0.6, 8.0), arrive=(3.4, 7.0), face=(1, 0))
     room.door("car", (cx0 + 0.6, cy0 - 0.6, cx0 + 1.6, cy0), arrive=(8.3, 9.9), face=(0, -1), walk=False, touch=False)
-    room.check((15.8, 10.6, X1, 12.0), "The smear ends at the rail. The crows are at something caught on it.\nA strip of plaid shirt.")
+    room.check((15.8, 10.6, X1, 12.0), "The smear ends at the rail. Something is caught on it.\nA strip of plaid shirt.")
     room.check((cx0, cy0 - 0.7, cx1, cy0), "Car 4. The door has been forced from inside. The glass is smeared red.")
     room.spot("fit-cog", (wx0 + 0.6, wy0 + 0.4, wx1 - 0.4, wy1 - 1.2))  # day/events.ts says what she sees and does here
     room.check((10.6, 6.7, 12.4, 7.9), "A hiker's pack, split open. Clothes, a water bottle, a trail map.")

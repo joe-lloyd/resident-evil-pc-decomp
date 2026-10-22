@@ -1,6 +1,6 @@
 0: \n...
 1: \nThe gondola's dead.
-2: \nThe smear ends at the\nrail. The crows are at\nsomething caught on it.\p{0}\nA strip of plaid shirt.
+2: \nThe smear ends at the\nrail. Something is caught\non it.\p{0}\nA strip of plaid shirt.
 3: \nCar 4. The door has been\nforced from inside. The\nglass is smeared red.
 4: \nA hiker's pack, split\nopen. Clothes, a water\nbottle, a trail map.
 5: \nARKLAY SKYWAY. UPPER\nSTATION. ELEV 1840.

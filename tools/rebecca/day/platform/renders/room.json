@@ -194,6 +194,14 @@
   },
   {
    "shape": "box",
+   "x0": 1785,
+   "z0": 19125,
+   "x1": 3655,
+   "z1": 20315,
+   "name": "Drive motor"
+  },
+  {
+   "shape": "box",
    "x0": 9520,
    "z0": 18700,
    "x1": 13940,
@@ -374,7 +382,7 @@
     "x1": 26520,
     "z1": 20400
    },
-   "text": "The smear ends at the rail. The crows are at something caught on it.\nA strip of plaid shirt."
+   "text": "The smear ends at the rail. Something is caught on it.\nA strip of plaid shirt."
   },
   {
    "zone": {
