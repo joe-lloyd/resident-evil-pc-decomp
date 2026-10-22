@@ -1,0 +1,14 @@
+{
+  "scene": "camp-gate",
+  "steps": [
+    { "action": "hold", "frames": 60, "picture": "camp-gate-entry" },
+    { "action": "walk", "x": 8500, "z": 14280, "picture": "camp-gate-road" },
+    { "action": "walk", "x": 11560, "z": 11220 },
+    { "action": "look", "zone": { "x": 8500, "z": 7820, "w": 4420, "d": 3060 }, "picture": "camp-gate-logger" },
+    { "action": "hold", "frames": 45 },
+    { "action": "look", "zone": { "x": 22440, "z": 11220, "w": 3060, "d": 2040 }, "picture": "camp-gate-pickup" },
+    { "action": "walk", "x": 17170, "z": 7820, "picture": "camp-gate-gate" },
+    { "action": "hold", "frames": 45 },
+    { "action": "exit", "x": 17170, "z": 3740, "to": "camp-yard" }
+  ]
+}

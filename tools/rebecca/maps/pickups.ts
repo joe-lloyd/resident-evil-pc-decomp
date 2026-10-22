@@ -23,7 +23,7 @@ export const MAP_FLAGS = Array.from({ length: MAP_ITEMS.length }, (_, i) => 248 
 /** What she says on taking each map, by its id in MAP_ITEMS. */
 const FOUND: Record<string, string> = {
   'map-trail': "The ranger's trail map. The station, the gorge and the summit.",
-  'map-camp': 'A site plan of Camp 4, off the notice board.',
+  'map-camp': 'A site plan of the logging camp, off the notice board.',
   'map-forestry': 'A Forest Service road map. The road, the tower, the line, the quarry.',
   'map-mine': 'A survey of the mine. The levels, the pump and the lift.',
   'map-valley': "The Skyway's route map. The line, the valley, the creek.",
