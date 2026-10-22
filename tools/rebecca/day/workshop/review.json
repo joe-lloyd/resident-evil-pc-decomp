@@ -1,0 +1,13 @@
+{
+  "scene": "workshop",
+  "steps": [
+    { "action": "hold", "frames": 60, "picture": "workshop-bench" },
+    { "action": "walk", "x": 3400, "z": 7820 },
+    { "action": "walk", "x": 5950, "z": 8840, "picture": "workshop-mattress" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 7820, "z": 5100, "picture": "workshop-crate" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 4760, "z": 3400, "picture": "workshop-door" },
+    { "action": "exit", "x": 4760, "z": 2040, "to": "camp-yard", "zone": { "x": 3740, "z": 1700, "w": 2040, "d": 850 } }
+  ]
+}
