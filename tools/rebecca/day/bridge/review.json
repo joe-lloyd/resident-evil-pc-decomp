@@ -1,0 +1,14 @@
+{
+  "scene": "bridge",
+  "steps": [
+    { "action": "hold", "frames": 90, "picture": "bridge-far-bank" },
+    { "action": "walk", "x": 10200, "z": 26520 },
+    { "action": "walk", "x": 10200, "z": 18700, "picture": "bridge-over-the-drop" },
+    { "action": "hold", "frames": 90 },
+    { "action": "walk", "x": 10200, "z": 10200, "picture": "bridge-near-bank" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 10200, "z": 18700 },
+    { "action": "walk", "x": 9520, "z": 28050, "picture": "bridge-back-on-the-far-bank" },
+    { "action": "exit", "x": 9520, "z": 30260, "to": "platform" }
+  ]
+}
