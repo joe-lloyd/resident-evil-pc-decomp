@@ -92,3 +92,52 @@ ammunition has not been played. Its budget is 15 loaded rounds, no spare
 rounds or ammo pickups, four crows, three adders and one dog. No supplies
 in other rooms were changed. The lab recordings have no audio; the lab
 build also lacks the optional rendered music themes.
+
+## Cabin, shed and booth review, 21 October 2026
+
+The cabin clip comes from `record-scene.ts lookout`, started from a played
+yard-to-cabin checkpoint, in normal damage mode. It passed. The checked
+frames show the typewriter on the desk under the north window, the desk
+chair beside the desk, the pot-belly stove with its fire, the folded rug
+corner, the logbook taken from the corner table, and the item sparkle on
+the shed key's board past the hat pegs. The route leaves the key on its
+hook. Taking it and then entering the yard crashes main in
+`render_entity` as the dog spawns from the `cut-dog` event script; the
+same crash happens with the overlay built for the ridge review, so it is
+not caused by these scenes. A quarter-one playthrough took the logbook,
+the spray and the key at their new zones before reaching that crash.
+
+The shed and the booth can only be reached past that crash, so they have
+no new storyboard clip. Their scenes were checked by booting the game
+straight into each room on the lab and capturing frames. Those frames are
+debug boots, not a played route. The shed bulb stutters twice in its
+6.4 second loop and the booth's strip light dips once in its 6.4 second
+loop, measured from the captured video's brightness.
+
+Sheets: [cabin](https://home.arpa/research/rebecca-storyboard/review/cabin-before-after.png),
+[shed](https://home.arpa/research/rebecca-storyboard/review/shed-before-after.png),
+[booth](https://home.arpa/research/rebecca-storyboard/review/booth-before-after.png),
+[cabin recording frames](https://home.arpa/research/rebecca-storyboard/review/cabin-recording-frames.png)
+and [shed and booth debug-boot frames](https://home.arpa/research/rebecca-storyboard/review/shed-booth-debug-boot-frames.png).
+Coverage: cabin 3.7%, shed 0.0%, booth 4.5% of the floor lost.
+
+## Shed and booth recorded in play, 22 October 2026
+
+With the yard dog fix from [#21](https://github.com/joe-lloyd/resident-evil-pc-decomp/pull/21) on main, both rooms are reached by playing, in normal
+damage mode. From the played cabin checkpoint, the harness ran the cabin
+and dog stretches of `day.ts`: she took the key, the dog came out and
+died after 11 shots, and the spray healed her. She then walked into the
+shed, and `record-scene.ts shed` recorded the room and the way back out
+to the yard. From that yard checkpoint, the winch stretch and the doors
+through the gorge and the platform took her into the booth, and
+`record-scene.ts booth` recorded it. Neither run crashed.
+
+The checked shed frames show the packed tool walls, the crank taken into
+her bag, the bulb up under the roof and the door's open animation out to
+the yard. The checked booth frames show the footlocker under the phone
+with RE1's lid sitting on it, camera 0 with no grey block, the typewriter
+behind her at the desk's end, and the door out to the platform. The booth
+route's camera checks were wrong for its two cameras and now walk her to
+the north-west for camera 0 and the south-east for camera 1.
+
+The new clips replace the shed's and the booth's three quarter clips each.

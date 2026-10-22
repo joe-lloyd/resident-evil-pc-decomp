@@ -50,30 +50,43 @@ const moved = (a: number, b: number) =>
   Math.abs(((a >> 5) & 31) - ((b >> 5) & 31)) >= PIXEL_STEP ||
   Math.abs(((a >> 10) & 31) - ((b >> 10) & 31)) >= PIXEL_STEP;
 
-/** The tiles where any frame differs from the base, merged into rectangles along rows. */
-export function changedRects(base: Uint16Array, frames: readonly Uint16Array[]): Rect[] {
-  const cols = W / TILE;
-  const rows = H / TILE;
-  const dirty = new Array<boolean>(cols * rows).fill(false);
+const COLS = W / TILE;
+const ROWS = H / TILE;
+
+/** The tiles where any frame differs from the base by more than render noise. */
+function dirtyTiles(base: Uint16Array, frames: readonly Uint16Array[]): boolean[] {
+  const dirty = new Array<boolean>(COLS * ROWS).fill(false);
   for (const f of frames) {
-    for (let ty = 0; ty < rows; ty++) {
-      for (let tx = 0; tx < cols; tx++) {
-        if (dirty[ty * cols + tx]) continue;
+    for (let ty = 0; ty < ROWS; ty++) {
+      for (let tx = 0; tx < COLS; tx++) {
+        if (dirty[ty * COLS + tx]) continue;
         let n = 0;
         for (let y = ty * TILE; y < (ty + 1) * TILE && n < TILE_PIXELS; y++) {
           for (let x = tx * TILE; x < (tx + 1) * TILE; x++) if (moved(base[y * W + x]!, f[y * W + x]!)) n++;
         }
-        dirty[ty * cols + tx] = n >= TILE_PIXELS;
+        dirty[ty * COLS + tx] = n >= TILE_PIXELS;
       }
     }
   }
-  // Runs of dirty tiles per row, then runs stacked when they line up exactly.
+  return dirty;
+}
+
+/** Whether tile t of the frame has any pixel unlike the base's. */
+function differs(base: Uint16Array, f: Uint16Array, t: number): boolean {
+  const tx = (t % COLS) * TILE;
+  const ty = Math.floor(t / COLS) * TILE;
+  for (let y = ty; y < ty + TILE; y++) for (let x = tx; x < tx + TILE; x++) if (base[y * W + x] !== f[y * W + x]) return true;
+  return false;
+}
+
+/** Tiles merged into rectangles: runs along each row, stacked when they line up exactly. */
+function tileRects(dirty: readonly boolean[]): Rect[] {
   const open: { x0: number; x1: number; y0: number; y1: number }[] = [];
   const done: Rect[] = [];
-  for (let ty = 0; ty < rows; ty++) {
+  for (let ty = 0; ty < ROWS; ty++) {
     const runs: { x0: number; x1: number }[] = [];
-    for (let tx = 0; tx < cols; tx++) {
-      if (!dirty[ty * cols + tx]) continue;
+    for (let tx = 0; tx < COLS; tx++) {
+      if (!dirty[ty * COLS + tx]) continue;
       const last = runs[runs.length - 1];
       if (last && last.x1 === tx) last.x1 = tx + 1;
       else runs.push({ x0: tx, x1: tx + 1 });
@@ -95,10 +108,18 @@ export function changedRects(base: Uint16Array, frames: readonly Uint16Array[]):
   return done;
 }
 
+/** The tiles where any frame differs from the base, merged into rectangles along rows. */
+export const changedRects = (base: Uint16Array, frames: readonly Uint16Array[]): Rect[] => tileRects(dirtyTiles(base, frames));
+
 /** The camera's RBA1 file, or undefined when nothing in it moves or changes. */
 export function buildAnim(base: Image, layers: readonly AnimLayer[]): Uint8Array | undefined {
   const base15 = to15(base);
-  const built: { layer: AnimLayer; frames: Uint16Array[]; rects: Rect[] }[] = [];
+  // Each frame stores only the layer's tiles that differ from the base in
+  // that frame. A tile equal to the base is left out unless an earlier layer
+  // can draw there, so what the engine shows is unchanged: a long loop that
+  // is mostly still costs only its moving frames.
+  const built: { layer: AnimLayer; frames: Rect[][]; pixels: Uint16Array[] }[] = [];
+  const below = new Array<boolean>(COLS * ROWS).fill(false);
   for (const layer of layers) {
     if (layer.frames.length === 0) throw new Error('an animation layer needs at least one frame');
     if ((layer.frames.length > 1 || layer.once) && (layer.ticks < 1 || layer.ticks > 255)) throw new Error(`ticks ${layer.ticks} out of range`);
@@ -106,9 +127,12 @@ export function buildAnim(base: Image, layers: readonly AnimLayer[]): Uint8Array
       throw new Error(`flag ${layer.when.bank}:${layer.when.bit} out of range`);
     }
     if (layer.once && !layer.when) throw new Error('a layer played once needs a flag to start it');
-    const frames = layer.frames.map(to15);
-    const rects = changedRects(base15, frames);
-    if (rects.length) built.push({ layer, frames, rects });
+    const pixels = layer.frames.map(to15);
+    const dirty = dirtyTiles(base15, pixels);
+    if (!dirty.some(Boolean)) continue;
+    const frames = pixels.map((f) => tileRects(dirty.map((d, t) => d && (below[t] || differs(base15, f, t)))));
+    dirty.forEach((d, t) => { if (d) below[t] = true; });
+    built.push({ layer, frames, pixels });
   }
   if (!built.length) return undefined;
 
@@ -116,11 +140,12 @@ export function buildAnim(base: Image, layers: readonly AnimLayer[]): Uint8Array
   const u16 = (v: number) => bytes.push(v & 0xff, (v >> 8) & 0xff);
   bytes.push(...'RBA1'.split('').map((c) => c.charCodeAt(0)));
   u16(built.length);
-  for (const { layer, frames, rects } of built) {
+  for (const { layer, frames, pixels } of built) {
     const value = (layer.when?.value === false ? 0 : 1) | (layer.once ? 2 : 0);
     bytes.push(layer.when ? layer.when.bank : 0xff, layer.when?.bit ?? 0, value, frames.length > 1 || layer.once ? layer.ticks : 0);
     u16(frames.length);
-    for (const f of frames) {
+    frames.forEach((rects, k) => {
+      const f = pixels[k]!;
       u16(rects.length);
       for (const r of rects) {
         u16(r.x);
@@ -129,7 +154,7 @@ export function buildAnim(base: Image, layers: readonly AnimLayer[]): Uint8Array
         u16(r.h);
         for (let y = r.y; y < r.y + r.h; y++) for (let x = r.x; x < r.x + r.w; x++) u16(f[y * W + x]!);
       }
-    }
+    });
   }
   return Uint8Array.from(bytes);
 }

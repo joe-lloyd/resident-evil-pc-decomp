@@ -292,13 +292,19 @@ function scatter(out: Float32Array, rnd: () => number, every: number, make: () =
 // (docs/REBECCA_SOUND.md): the station's music has the wind, so the forest is
 // leaves and birds; the mine's music has the drips and the water, so the mine
 // is its air and timber.
-export const AMBIENCES = ['gale', 'forest', 'mine', 'dusk', 'night', 'cellar'] as const;
+export const AMBIENCES = ['gale', 'forest', 'mine', 'dusk', 'night', 'cellar', 'bulb'] as const;
 export type Ambience = (typeof AMBIENCES)[number];
 
 /** Each loop's seed, fixed, so the loops whose recipe stays the same sound the same. */
-const SEED: Record<Ambience, number> = { gale: 1, forest: 2, mine: 4, dusk: 5, night: 6, cellar: 7 };
+const SEED: Record<Ambience, number> = { gale: 1, forest: 2, mine: 4, dusk: 5, night: 6, cellar: 7, bulb: 8 };
 
 const MAKE: Record<Ambience, (rnd: () => number) => Float32Array> = {
+  // The shed's loose bulb fitting. Harmonics of the mains, under the music.
+  bulb: () => Float32Array.from({ length: N }, (_, i) => {
+    const t = i / RATE;
+    const tremble = 0.85 + 0.08 * Math.sin(2 * Math.PI * 7 * t) + 0.07 * Math.sin(2 * Math.PI * 19 * t);
+    return tremble * (Math.sin(2 * Math.PI * 120 * t) + 0.22 * Math.sin(2 * Math.PI * 240 * t) + 0.06 * Math.sin(2 * Math.PI * 840 * t));
+  }),
   // High and exposed, round the gondola car and the pylon: hard wind, with a whistle.
   gale: (rnd) => wind(rnd, 1),
   // Under the trees: the leaves stirring, small birds far off.
@@ -351,7 +357,7 @@ export function ambience(kind: Ambience): Float32Array {
     peak = Math.max(peak, Math.abs(v));
   }
   const rms = Math.sqrt(sum / x.length) || 1;
-  const gain = Math.min(10 ** (TARGET_RMS / 20) / rms, 10 ** (PEAK_MAX / 20) / (peak || 1));
+  const gain = Math.min(10 ** ((kind === 'bulb' ? -44 : TARGET_RMS) / 20) / rms, 10 ** (PEAK_MAX / 20) / (peak || 1));
   for (let i = 0; i < x.length; i++) x[i] = x[i]! * gain;
   return x;
 }

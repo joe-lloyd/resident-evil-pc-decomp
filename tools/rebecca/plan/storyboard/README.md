@@ -173,7 +173,9 @@ rsync -az --rsync-path='sudo -n rsync' /tmp/rebecca-storyboard/ pi-server:/opt/h
 
 The cutter checks the source hash, cuts just this scene, keeps its source
 and event log under `recordings/`, and replaces only that room's manifest
-rows. Other rooms retain their old clips. Each review clip displays its own
+rows. Other rooms retain their old clips. Pass `--room` when the storyboard
+names the room differently from its scene: the `lookout` scene is the
+storyboard's `cabin`. Each review clip displays its own
 date, damage mode and start method. The old quarter cutter skips review
 rows. Do not rebuild the entire index over a reviewed manifest, since that
 would restore the old scene visits. Keep `clips.json` in git; videos,

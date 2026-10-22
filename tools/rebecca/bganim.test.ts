@@ -52,7 +52,7 @@ function parse(file: Uint8Array) {
   return { magic: String.fromCharCode(...file.subarray(0, 4)), layers };
 }
 
-test('a looping animation stores only the tiles that move, in every frame', () => {
+test('a looping animation stores only the tiles that move, and nothing for a frame like the base', () => {
   const file = buildAnim(flame(0), [{ frames: [flame(0), flame(1), flame(2)], ticks: 4 }])!;
   const { magic, layers } = parse(file);
   assert.equal(magic, 'RBA1');
@@ -60,7 +60,30 @@ test('a looping animation stores only the tiles that move, in every frame', () =
   const [l] = layers;
   assert.deepEqual([l!.bank, l!.ticks, l!.frames.length], [0xff, 4, 3]);
   // x 100..110 is inside tile 6 (96..112); y 40..60 spans tiles 2 and 3 (32..64).
-  for (const rects of l!.frames) assert.deepEqual(rects.map(({ x, y, w, h }) => ({ x, y, w, h })), [{ x: 96, y: 32, w: 16, h: 32 }]);
+  assert.deepEqual(l!.frames.map((rects) => rects.map(({ x, y, w, h }) => ({ x, y, w, h }))), [
+    [],
+    [{ x: 96, y: 32, w: 16, h: 32 }],
+    [{ x: 96, y: 32, w: 16, h: 32 }],
+  ]);
+});
+
+test('a rare flicker over the whole picture costs only its own frames', () => {
+  const dim = frame(() => [48, 48, 48]);
+  const { layers } = parse(buildAnim(frame(), [{ frames: [frame(), frame(), dim, frame()], ticks: 3 }])!);
+  assert.deepEqual(layers[0]!.frames.map((rects) => rects.length), [0, 0, 1, 0]);
+  assert.deepEqual(layers[0]!.frames[2]!.map(({ x, y, w, h }) => ({ x, y, w, h })), [{ x: 0, y: 0, w: 320, h: 240 }]);
+});
+
+test('a later layer still covers an earlier one where its frame matches the base', () => {
+  // The flame's tile, then a change of state over the same tile that puts it back as it was.
+  const { layers } = parse(buildAnim(flame(0), [
+    { frames: [flame(0), flame(1)], ticks: 4 },
+    { frames: [flame(0), flame(2)], ticks: 4, when: { bank: 1, bit: 3, value: true } },
+  ])!);
+  assert.deepEqual(layers[1]!.frames.map((rects) => rects.map(({ x, y, w, h }) => ({ x, y, w, h }))), [
+    [{ x: 96, y: 32, w: 16, h: 32 }],
+    [{ x: 96, y: 32, w: 16, h: 32 }],
+  ]);
 });
 
 test('a change of state is one frame shown while its flag is set', () => {

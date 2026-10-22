@@ -23,8 +23,8 @@ test('a new cue plays its render once it exists, and only its loops before', () 
     const t = musicTable(CUES, day.places, dayRooms, rendered);
     return t.rooms.filter((r) => r.cue === 'station').map((r) => roomChannels(t, r).map(([, f]) => f).join(' '));
   };
-  assert.deepEqual(station(withYard), ['Reb_station', 'Reb_station Reb_amb_forest', 'Reb_station', 'Reb_station', 'Reb_station']);
-  assert.deepEqual(station(() => false), ['', 'Reb_amb_forest', '', '', '']);
+  assert.deepEqual(station(withYard), ['Reb_station', 'Reb_station Reb_amb_forest', 'Reb_station', 'Reb_station']);
+  assert.deepEqual(station(() => false), ['', 'Reb_amb_forest', '', '']);
 });
 
 test('every one of her rooms has a row, so none keeps the row of the RE1 room whose slot it took', () => {
@@ -43,14 +43,14 @@ test('music.dat: the header, a group per cue with a file, and a row per room', (
   const t = musicTable(CUES, day.places, dayRooms, withYard);
   const bytes = musicFile(t);
   assert.equal(new TextDecoder().decode(bytes.subarray(0, 4)), 'RBM1');
-  // The station, the mine, the line down, the valley, the two quiet cues, the grounds and the save rooms.
-  assert.deepEqual([bytes[4], bytes[5]], [8, dayRooms.length]);
-  assert.equal(bytes.length, 8 + 8 * 52 + dayRooms.length * 6);
+  // The station, the mine, the line down, the valley, the two quiet cues, the grounds the shed and the save rooms.
+  assert.deepEqual([bytes[4], bytes[5]], [9, dayRooms.length]);
+  assert.equal(bytes.length, 8 + 9 * 52 + dayRooms.length * 6);
   const name = (g: number, ch: number) => new TextDecoder().decode(bytes.subarray(8 + g * 52 + ch * 16, 8 + g * 52 + ch * 16 + 16)).replace(/\0+$/, '');
   const station = t.groups.findIndex((g) => g.cue === 'station');
   assert.deepEqual([name(station, 0), name(station, 1), name(station, 2)], ['Reb_station', '', 'Reb_amb_forest']);
   assert.deepEqual([...bytes.subarray(8 + station * 52 + 48, 8 + station * 52 + 51)], [1, 0, 1]);
-  const rows = bytes.subarray(8 + 8 * 52);
+  const rows = bytes.subarray(8 + 9 * 52);
   const yard = t.rooms.findIndex((r) => r.slug === 'yard');
   assert.deepEqual([...rows.subarray(yard * 6, yard * 6 + 6)], [2, 0x15, t.rooms[yard]!.group, 0xff, 0xff, 0xff]);
 });
@@ -74,10 +74,10 @@ test('a layer joins when its step happens: the generator hum in every room of th
   const t = musicTable(CUES, day.places, dayRooms, all);
   const station = t.groups.find((g) => g.cue === 'station')!;
   assert.deepEqual(station.channels.map((c) => c?.file), ['Reb_station', 'Reb_station_1', 'Reb_amb_forest']);
-  assert.deepEqual(t.rooms.filter((r) => r.cue === 'station').map((r) => r.state), [0x08, 0x28, 0x08, 0x08, 0x08]);
+  assert.deepEqual(t.rooms.filter((r) => r.cue === 'station').map((r) => r.state), [0x08, 0x28, 0x08, 0x08]);
   const gen = musicSwitches(CUES, t).steps.find((s) => s.step === 'generator-on')!;
   assert.deepEqual(gen.writes.map((w) => [w.slug, w.stage, w.room, w.state]), [
-    ['yard', 2, 0x15, 0x18], ['woods', 2, 0x1a, 0x38], ['bridge', 2, 0x17, 0x18], ['platform', 2, 0x18, 0x18], ['shed', 2, 0x16, 0x18],
+    ['yard', 2, 0x15, 0x18], ['woods', 2, 0x1a, 0x38], ['bridge', 2, 0x17, 0x18], ['platform', 2, 0x18, 0x18], ['shed', 2, 0x16, 0x38],
   ]);
   // The generator is on the road, not in the station: nothing starts where she stands.
   assert.equal(gen.now.some((n) => n.slug === 'generator'), false);
@@ -135,7 +135,7 @@ test('one owner for each sound: a room plays its music and the layers and loops 
       ridge: '0:Reb_dawn',
       yard: '0:Reb_station',
       woods: '0:Reb_station 2:Reb_amb_forest',
-      shed: '0:Reb_station',
+      shed: '0:Reb_shed 2:Reb_amb_bulb',
       // The camp's three channels are its music's: the mill comes with the sluice, so it isn't a loop.
       'camp-yard': '0:Reb_camp',
       pond: '0:Reb_camp 2:Reb_camp_2',

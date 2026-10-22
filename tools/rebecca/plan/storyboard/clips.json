@@ -338,38 +338,125 @@
       "room": "cabin",
       "quarter": 1,
       "visit": 1,
-      "start": 76.367,
-      "end": 132.0,
-      "roomStart": 80.0,
-      "posterTime": 80.0,
-      "file": "clips/cabin-q1-v01.mp4",
-      "poster": "clips/cabin-q1-v01.jpg",
-      "note": "",
+      "start": 0.5,
+      "end": 41.5,
+      "roomStart": 0.5,
+      "posterTime": 12.0,
+      "file": "clips/cabin-review-20261021-638a9ba3.mp4",
+      "poster": "clips/cabin-review-20261021-638a9ba3.jpg",
+      "review": {
+        "recorded": "2026-10-21",
+        "sha256": "638a9ba3c5f6ac076b422d1510a0d19d6659f26d1e0bba798b395ba2f215c192",
+        "gameCommit": "742e789c379b9d44852bbccb83a08b7529513daa",
+        "checkpoint": {
+          "file": "lookout-entry.json",
+          "sha256": "10333f36bbb9f81d7d43ca366973c66d59bacf955ea159d0e23909f3399135be"
+        },
+        "god": false,
+        "audio": false,
+        "source": "recordings/lookout-20261021212114.mp4",
+        "log": "recordings/cabin-review-20261021-638a9ba3.json",
+        "logSha256": "856a1f6eb5b85ab75480c7cd6ddf2652df73125596f778a4436a5b6cae4feec1"
+      },
+      "note": "Inspected frames: the typewriter on the desk, the pot-belly stove, the logbook taken from the corner table, the key sparkling on its board past the hat pegs. The key stays on its hook: taking it and then entering the yard crashes main when the dog spawns (render_entity).",
       "events": [
         {
-          "t": 86,
-          "room": "cabin",
-          "what": "into the ranger's cabin"
+          "t": 0,
+          "frame": 1244,
+          "room": "lookout",
+          "camera": 1,
+          "what": "recording ready"
         },
         {
-          "t": 101,
-          "room": "cabin",
-          "what": "listened to the radio"
+          "t": 1.7,
+          "frame": 1295,
+          "room": "lookout",
+          "camera": 1,
+          "what": "scene ready; items [{\"id\":2,\"qty\":15},{\"id\":1,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
-          "t": 108,
-          "room": "cabin",
-          "what": "took the logbook: the crank is in the shed"
+          "t": 4.8,
+          "frame": 1387,
+          "room": "lookout",
+          "camera": 1,
+          "what": "hold cabin-entry"
         },
         {
-          "t": 118,
-          "room": "cabin",
-          "what": "took the First Aid Spray"
+          "t": 6.9,
+          "frame": 1441,
+          "room": "lookout",
+          "camera": 1,
+          "what": "walk cabin-stove"
         },
         {
-          "t": 125,
-          "room": "cabin",
-          "what": "took the shed key"
+          "t": 8.2,
+          "frame": 1481,
+          "room": "lookout",
+          "camera": 1,
+          "what": "walk"
+        },
+        {
+          "t": 9.7,
+          "frame": 1517,
+          "room": "lookout",
+          "camera": 0,
+          "what": "walk cabin-desk-typewriter"
+        },
+        {
+          "t": 14.3,
+          "frame": 1640,
+          "room": "lookout",
+          "camera": 0,
+          "what": "hold cabin-north"
+        },
+        {
+          "t": 19.7,
+          "frame": 1859,
+          "room": "lookout",
+          "camera": 0,
+          "what": "look cabin-took-logbook"
+        },
+        {
+          "t": 21.8,
+          "frame": 1924,
+          "room": "lookout",
+          "camera": 1,
+          "what": "walk"
+        },
+        {
+          "t": 22.9,
+          "frame": 1957,
+          "room": "lookout",
+          "camera": 1,
+          "what": "walk cabin-rug"
+        },
+        {
+          "t": 24.9,
+          "frame": 2016,
+          "room": "lookout",
+          "camera": 1,
+          "what": "walk cabin-key-board"
+        },
+        {
+          "t": 29.3,
+          "frame": 2151,
+          "room": "lookout",
+          "camera": 1,
+          "what": "hold cabin-key-sparkle"
+        },
+        {
+          "t": 29.8,
+          "frame": 2153,
+          "room": "lookout",
+          "camera": 1,
+          "what": "leaving for yard"
+        },
+        {
+          "t": 40.2,
+          "frame": 2621,
+          "room": "yard",
+          "camera": 1,
+          "what": "arrived in yard"
         }
       ]
     },
@@ -401,23 +488,97 @@
       "room": "shed",
       "quarter": 1,
       "visit": 1,
-      "start": 167.933,
-      "end": 194.5,
-      "roomStart": 171.5,
-      "posterTime": 179.5,
-      "file": "clips/shed-q1-v01.mp4",
-      "poster": "clips/shed-q1-v01.jpg",
-      "note": "",
+      "start": 0.3,
+      "end": 48.5,
+      "roomStart": 0.3,
+      "posterTime": 15.0,
+      "file": "clips/shed-review-20261021-9262876c.mp4",
+      "poster": "clips/shed-review-20261021-9262876c.jpg",
+      "review": {
+        "recorded": "2026-10-21",
+        "sha256": "9262876c57386e3b4ce7ebe416a56b8d455875c98e77818c3452bf85b11d5975",
+        "gameCommit": "9ab7f59aba33dd846105fb9722a3af418309b848",
+        "checkpoint": {
+          "file": "shed-entry.json",
+          "sha256": "6c8de41454d21895bf97f2007eb282a44d9d0d79a86946751fb35633cd379aaf"
+        },
+        "god": false,
+        "audio": false,
+        "source": "recordings/shed-20261021223626.mp4",
+        "log": "recordings/shed-review-20261021-9262876c.json",
+        "logSha256": "6e53b3590585a743c26c83bbb932f3a247f684ace30ccc0b576a3cf0be3d5909"
+      },
+      "note": "Played in from the cabin with normal damage: key, dog, shed. Frames checked: entry, the tool wall on camera 0, the crank taken, camera 1 on the door, out to the yard. No crash.",
       "events": [
         {
-          "t": 176,
+          "t": 0,
+          "frame": 1241,
           "room": "shed",
-          "what": "unlocked the shed and went in"
+          "camera": 1,
+          "what": "recording ready"
         },
         {
-          "t": 186,
+          "t": 1.7,
+          "frame": 1292,
           "room": "shed",
-          "what": "took the winch crank"
+          "camera": 1,
+          "what": "scene ready; items [{\"id\":2,\"qty\":9},{\"id\":1,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
+        },
+        {
+          "t": 5.8,
+          "frame": 1395,
+          "room": "shed",
+          "camera": 1,
+          "what": "hold shed-entry-door"
+        },
+        {
+          "t": 7.1,
+          "frame": 1435,
+          "room": "shed",
+          "camera": 0,
+          "what": "walk"
+        },
+        {
+          "t": 15.2,
+          "frame": 1636,
+          "room": "shed",
+          "camera": 0,
+          "what": "hold shed-camera0-tools"
+        },
+        {
+          "t": 24.1,
+          "frame": 1959,
+          "room": "shed",
+          "camera": 0,
+          "what": "look shed-took-crank"
+        },
+        {
+          "t": 26.2,
+          "frame": 1999,
+          "room": "shed",
+          "camera": 1,
+          "what": "walk"
+        },
+        {
+          "t": 35.2,
+          "frame": 2212,
+          "room": "shed",
+          "camera": 1,
+          "what": "hold shed-camera1-door"
+        },
+        {
+          "t": 36.3,
+          "frame": 2214,
+          "room": "shed",
+          "camera": 1,
+          "what": "leaving for yard"
+        },
+        {
+          "t": 49.2,
+          "frame": 2704,
+          "room": "yard",
+          "camera": 2,
+          "what": "arrived in yard"
         }
       ]
     },
@@ -512,38 +673,90 @@
       "room": "booth",
       "quarter": 1,
       "visit": 1,
-      "start": 275.733,
-      "end": 350.0,
-      "roomStart": 279.5,
-      "posterTime": 288.5,
-      "file": "clips/booth-q1-v01.mp4",
-      "poster": "clips/booth-q1-v01.jpg",
-      "note": "",
+      "start": 0.3,
+      "end": 57.5,
+      "roomStart": 0.3,
+      "posterTime": 31.0,
+      "file": "clips/booth-review-20261021-f4354a8b.mp4",
+      "poster": "clips/booth-review-20261021-f4354a8b.jpg",
+      "review": {
+        "recorded": "2026-10-21",
+        "sha256": "f4354a8bee72deef557a7414a046c64df0f1a80556b626bc20d40e377ff7f418",
+        "gameCommit": "9ab7f59aba33dd846105fb9722a3af418309b848",
+        "checkpoint": {
+          "file": "booth-entry.json",
+          "sha256": "d24ff105abd7765d9e62f8f913d6cf43b3cdec4d96661c67084b719b38cf1893"
+        },
+        "god": false,
+        "audio": false,
+        "source": "recordings/booth-20261021225454.mp4",
+        "log": "recordings/booth-review-20261021-f4354a8b.json",
+        "logSha256": "9723f66dad0f815f736fba0dd9db632a404fe1a433ee571fd2c9053f8cc24edf"
+      },
+      "note": "Played in from the yard with normal damage: winch, gorge, platform, booth. Frames checked: entry with the footlocker under the phone and its lid on it, camera 0 with no grey block, camera 1, out to the platform. No crash.",
       "events": [
         {
-          "t": 284,
+          "t": 0,
+          "frame": 1260,
           "room": "booth",
-          "what": "into booth"
+          "camera": 1,
+          "what": "recording ready"
         },
         {
-          "t": 296,
+          "t": 1.8,
+          "frame": 1313,
           "room": "booth",
-          "what": "done: duty-board"
+          "camera": 1,
+          "what": "scene ready; items [{\"id\":2,\"qty\":9},{\"id\":1,\"qty\":0},{\"id\":30,\"qty\":1},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
-          "t": 300,
+          "t": 15.7,
+          "frame": 1736,
           "room": "booth",
-          "what": "goal: hal-phone (look in booth)"
+          "camera": 1,
+          "what": "hold booth-entry"
         },
         {
-          "t": 335,
+          "t": 17.2,
+          "frame": 1780,
           "room": "booth",
-          "what": "done: hal-phone"
+          "camera": 0,
+          "what": "walk"
         },
         {
-          "t": 339,
+          "t": 31.1,
+          "frame": 2202,
           "room": "booth",
-          "what": "goal: meet-partner (scene in woods)"
+          "camera": 0,
+          "what": "hold booth-camera0"
+        },
+        {
+          "t": 33,
+          "frame": 2260,
+          "room": "booth",
+          "camera": 1,
+          "what": "walk"
+        },
+        {
+          "t": 47,
+          "frame": 2682,
+          "room": "booth",
+          "camera": 1,
+          "what": "hold booth-camera1"
+        },
+        {
+          "t": 47.5,
+          "frame": 2684,
+          "room": "booth",
+          "camera": 1,
+          "what": "leaving for platform"
+        },
+        {
+          "t": 58,
+          "frame": 3170,
+          "room": "platform",
+          "camera": 1,
+          "what": "arrived in platform"
         }
       ]
     },
@@ -706,30 +919,6 @@
       ]
     },
     {
-      "room": "cabin",
-      "quarter": 1,
-      "visit": 2,
-      "start": 485.167,
-      "end": 519.0,
-      "roomStart": 489.0,
-      "posterTime": 494.0,
-      "file": "clips/cabin-q1-v02.mp4",
-      "poster": "clips/cabin-q1-v02.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 491,
-          "room": "cabin",
-          "what": "into lookout"
-        },
-        {
-          "t": 503,
-          "room": "cabin",
-          "what": "put item 1 in the box"
-        }
-      ]
-    },
-    {
       "room": "yard",
       "quarter": 1,
       "visit": 6,
@@ -846,30 +1035,6 @@
           "t": 654,
           "room": "yard",
           "what": "into yard"
-        }
-      ]
-    },
-    {
-      "room": "cabin",
-      "quarter": 1,
-      "visit": 3,
-      "start": 661.333,
-      "end": 695.5,
-      "roomStart": 665.0,
-      "posterTime": 671.0,
-      "file": "clips/cabin-q1-v03.mp4",
-      "poster": "clips/cabin-q1-v03.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 667,
-          "room": "cabin",
-          "what": "into lookout"
-        },
-        {
-          "t": 680,
-          "room": "cabin",
-          "what": "put item 65 in the box"
         }
       ]
     },
@@ -1856,35 +2021,6 @@
           "t": 401,
           "room": "yard",
           "what": "into yard"
-        }
-      ]
-    },
-    {
-      "room": "shed",
-      "quarter": 2,
-      "visit": 2,
-      "start": 407.6,
-      "end": 434.0,
-      "roomStart": 411.5,
-      "posterTime": 420.5,
-      "file": "clips/shed-q2-v02.mp4",
-      "poster": "clips/shed-q2-v02.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 413,
-          "room": "shed",
-          "what": "into shed"
-        },
-        {
-          "t": 422,
-          "room": "shed",
-          "what": "done: jerrycan"
-        },
-        {
-          "t": 426,
-          "room": "shed",
-          "what": "goal: fuel (event in depot)"
         }
       ]
     },
@@ -2938,35 +3074,6 @@
       ]
     },
     {
-      "room": "shed",
-      "quarter": 3,
-      "visit": 3,
-      "start": 775.233,
-      "end": 803.5,
-      "roomStart": 779.0,
-      "posterTime": 788.0,
-      "file": "clips/shed-q3-v03.mp4",
-      "poster": "clips/shed-q3-v03.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 781,
-          "room": "shed",
-          "what": "into shed"
-        },
-        {
-          "t": 790,
-          "room": "shed",
-          "what": "done: fuses"
-        },
-        {
-          "t": 793,
-          "room": "shed",
-          "what": "goal: fit-fuse (event in booth)"
-        }
-      ]
-    },
-    {
       "room": "yard",
       "quarter": 3,
       "visit": 15,
@@ -3020,69 +3127,6 @@
           "t": 832,
           "room": "platform",
           "what": "into platform"
-        }
-      ]
-    },
-    {
-      "room": "booth",
-      "quarter": 3,
-      "visit": 2,
-      "start": 841.533,
-      "end": 887.467,
-      "roomStart": 845.5,
-      "posterTime": 854.5,
-      "file": "clips/booth-q3-v02.mp4",
-      "poster": "clips/booth-q3-v02.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 848,
-          "room": "booth",
-          "what": "into booth"
-        },
-        {
-          "t": 863,
-          "room": "booth",
-          "what": "done: fit-fuse"
-        },
-        {
-          "t": 866,
-          "room": "booth",
-          "what": "goal: gondola-runs (event in booth)"
-        },
-        {
-          "t": 886,
-          "room": "booth",
-          "what": "done: gondola-runs"
-        },
-        {
-          "t": 891,
-          "room": "booth",
-          "what": "quarter 3 done: its end saved for the next quarter"
-        }
-      ]
-    },
-    {
-      "room": "booth",
-      "quarter": 4,
-      "visit": 3,
-      "start": 29.967,
-      "end": 48.5,
-      "roomStart": 33.0,
-      "posterTime": 33.5,
-      "file": "clips/booth-q4-v03.mp4",
-      "poster": "clips/booth-q4-v03.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 37,
-          "room": "booth",
-          "what": "quarter 4: starting from /tmp/rebplan/quarters/snaps/q3-end.json"
-        },
-        {
-          "t": 38,
-          "room": "booth",
-          "what": "goal: ride (scene in car)"
         }
       ]
     },

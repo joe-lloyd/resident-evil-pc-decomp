@@ -86,7 +86,9 @@ test('the ending keeps its written lines alongside inherited control messages', 
 test('each recorded visit has its own player and each room card shows coverage', () => {
   const html = renderStoryboard(board);
   assert.equal(board.scenes.filter((s) => s.clips.length).length, 53);
-  assert.equal(html.split('<video controls preload="none"').length - 1, 142);
+  // The ridge, the trail, the cabin, the shed and the booth each show one
+  // reviewed recording in place of their quarter visits.
+  assert.equal(html.split('<video controls preload="none"').length - 1, 136);
   for (const scene of board.scenes) {
     for (const clip of scene.clips) {
       assert.ok(html.includes(`src="${clip.file}" type="video/mp4"`), clip.file);
@@ -99,11 +101,13 @@ test('each recorded visit has its own player and each room card shows coverage',
 });
 
 test('visit labels keep logged actions and distinguish the cabin plan id from its recording slug', () => {
+  // The cabin's review recording is logged under its scene slug, lookout, and shown on the cabin.
   const cabin = board.scenes.find((s) => s.place.id === 'cabin');
-  assert.ok(cabin && cabin.clips.length > 1);
-  assert.ok(cabin.clips.some((c) => c.events.some((e) => e.what === 'took the shed key')));
+  assert.equal(cabin?.clips.length, 1);
+  assert.ok(cabin.clips[0]!.file.startsWith('clips/cabin-review-'));
+  assert.ok(cabin.clips[0]!.events.some((e) => e.what === 'look cabin-took-logbook'));
   const html = renderStoryboard(board);
-  assert.ok(html.includes('took the shed key'));
+  assert.ok(html.includes('look cabin-took-logbook'));
   assert.ok(html.includes('Quarter 4 · Visit 1'));
   assert.ok(html.includes('https://home.arpa/research/rebecca-whole-day/'));
   assert.ok(!html.includes('older room layout'));
@@ -118,9 +122,12 @@ test('the recording manifest rejects bad spans and unsafe asset paths', async ()
   assert.throws(() => parseFootage({ clips: [visit, visit], noFootage: [] }), /Duplicate clip file/);
 });
 
-test('quarter four booth footage starts after the unlogged ridge intro', () => {
-  const booth = board.scenes.find((s) => s.place.id === 'booth');
-  assert.deepEqual(booth?.clips.filter((c) => c.quarter === 4).map((c) => c.start), [29.967]);
+test('the shed and the booth show their played review recordings in place of the quarter visits', () => {
+  for (const id of ['shed', 'booth']) {
+    const scene = board.scenes.find((s) => s.place.id === id);
+    assert.deepEqual(scene?.clips.map((c) => c.file.split('-review-')[0]), [`clips/${id}`]);
+    assert.equal(scene?.clips[0]?.review?.god, false);
+  }
 });
 
 test('a reviewed scene shows its own date and damage mode beside the new clip', async () => {

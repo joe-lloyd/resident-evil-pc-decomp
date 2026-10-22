@@ -39,9 +39,10 @@ def main():
     p.add_argument('--end', type=float, required=True)
     p.add_argument('--poster', type=float, required=True)
     p.add_argument('--note', required=True)
+    p.add_argument('--room', help="the storyboard's id for the scene when it differs from the slug (cabin for lookout)")
     args = p.parse_args()
     recording = json.loads(args.recording.read_text())
-    scene = recording['scene']
+    scene = args.room or recording['scene']
     if not re.fullmatch(r'[a-z0-9-]+', scene) or recording['result'] != 'PASS':
         raise ValueError('Use a passed recording of one scene')
     if Path(recording['video']).name != recording['video']:

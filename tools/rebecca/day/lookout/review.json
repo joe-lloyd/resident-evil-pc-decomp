@@ -1,0 +1,16 @@
+{
+  "scene": "lookout",
+  "steps": [
+    {"action": "hold", "frames": 90, "picture": "cabin-entry"},
+    {"action": "walk", "x": 5525, "z": 6800, "picture": "cabin-stove"},
+    {"action": "walk", "x": 5525, "z": 5610},
+    {"action": "walk", "x": 8500, "z": 5300, "picture": "cabin-desk-typewriter"},
+    {"action": "hold", "frames": 120, "picture": "cabin-north"},
+    {"action": "look", "zone": {"x": 10115, "z": 4165, "w": 765, "d": 935}, "picture": "cabin-took-logbook"},
+    {"action": "walk", "x": 5525, "z": 5610},
+    {"action": "walk", "x": 5525, "z": 7650, "picture": "cabin-rug"},
+    {"action": "walk", "x": 8900, "z": 8600, "picture": "cabin-key-board"},
+    {"action": "hold", "frames": 120, "picture": "cabin-key-sparkle"},
+    {"action": "exit", "x": 6715, "z": 9600, "to": "yard", "zone": {"x": 5950, "z": 9100, "w": 1530, "d": 1100}}
+  ]
+}

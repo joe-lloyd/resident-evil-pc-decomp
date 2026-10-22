@@ -204,7 +204,13 @@ export function musicSwitches(cues: readonly Cue[], t: MusicTable): { steps: Ste
         if ((after & bit) !== (r.state & bit)) now.push({ slug: r.slug, channel: n, on: (after & bit) !== 0 });
       }
     }
-    if (writes.length) steps.push({ step, writes, now });
+    if (writes.length) {
+      const at = steps.findIndex((s) => s.step === step);
+      const previous = steps[at];
+      if (previous) {
+        steps[at] = { step, writes: [...previous.writes, ...writes], now: [...previous.now, ...now] };
+      } else steps.push({ step, writes, now });
+    }
   }
   const takeovers: TakeoverSwitch[] = [];
   for (const c of cues) {

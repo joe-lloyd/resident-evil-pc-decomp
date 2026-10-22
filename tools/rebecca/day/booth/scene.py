@@ -13,11 +13,13 @@ eyes out of the smiling family on it.
 Metres: the floor is x 1.0-4.2, y 1.0-3.6, 2.4 high. The door is in the
 south wall at x 2.6-3.5, out onto the platform. The control desk runs under
 the big west window, which looks out over the platform to the car. Where
-she saves: his typewriter on a stand against the north wall, and the item
-box along the east wall, under the fuse box and the phone.
+she saves: his typewriter on a stand against the north wall, at the
+desk's end under camera 1, so only camera 0 shows it; and a footlocker
+item box along the east wall under the phone, in the corner under camera
+0, so only camera 1 shows it.
 
-Moving: the phone's handset turning on its cord; the strip light failing;
-the heater's glow.
+Moving: the phone's handset turning on its cord; the strip light dipping
+now and then, as tired tubes do; the heater's glow.
 
 State "gondola-runs" (Hal's key, day/events.ts): the key in the switch, the
 drive's lamps along the desk lit, the warning beacon in the corner, and
@@ -82,7 +84,7 @@ def build():
         reb.prim("cube", "Door frame", frame_m, (x, Y1 - 0.02, 1.03), (0.07, 0.09, 2.06))
     reb.prim("cube", "Door head", frame_m, ((DOOR[0] + DOOR[1]) / 2, Y1 - 0.02, 2.08), (DOOR[1] - DOOR[0] + 0.14, 0.09, 0.07))
     # His hand on the frame, and where it slid down.
-    kit.splat("Handprint", mat("blood"), (DOOR[0] - 0.08, Y1 - 0.07, 1.22), 0.06, rot=(math.pi / 2, 0, 0), seed=3, lumps=0.5)
+    kit.splat("Handprint", mat("old blood"), (DOOR[0] - 0.08, Y1 - 0.07, 1.22), 0.06, rot=(math.pi / 2, 0, 0), seed=3, lumps=0.5)
     reb.prim("cube", "Smear", mat("old blood"), (DOOR[0] - 0.08, Y1 - 0.068, 0.97), (0.045, 0.004, 0.45), rot=(0, 0.06, 0))
     # Window glass, holed from outside: a star of cracks, glass in on the desk.
     for i, (y0, y1) in enumerate(((WINDOW[0], 2.28), (2.32, WINDOW[1]))):
@@ -144,12 +146,25 @@ def build():
         reb.cloth(f"Gauze {i}", gauze, (2.25 + rng.uniform(-0.3, 0.3), 2.65 + rng.uniform(-0.2, 0.2), 0.012), (0.14, 0.09), rot=(0, 0, rng.uniform(0, 3)), cuts=8, lumps=0.015, seed=i)
     for i in range(4):
         reb.prim("cube", f"Wrapper {i}", mat("white paint"), (2.5 + rng.uniform(-0.4, 0.4), 2.3 + rng.uniform(-0.3, 0.3), 0.002), (0.08, 0.06, 0.002), rot=(0, 0, rng.uniform(0, 3)))
+    # Hours old and soaked into the lino: dark and matte, patchy where it
+    # dried, the floor showing through at the edges.
+    soaked = reb.mat_surface("Soaked blood", [(0.0, (0.028, 0.006, 0.004)), (0.55, (0.058, 0.012, 0.007)), (1.0, (0.09, 0.02, 0.011))], scale=18, rough=0.95, bump=0.05)
+    nodes, links = soaked.node_tree.nodes, soaked.node_tree.links
+    coords = nodes.new("ShaderNodeTexCoord")
+    patches = nodes.new("ShaderNodeTexNoise")
+    patches.inputs["Scale"].default_value = 9
+    links.new(coords.outputs["Object"], patches.inputs["Vector"])
+    alpha = nodes.new("ShaderNodeMapRange")
+    alpha.inputs["From Min"].default_value, alpha.inputs["From Max"].default_value = 0.35, 0.65
+    alpha.inputs["To Min"].default_value, alpha.inputs["To Max"].default_value = 0.4, 0.88
+    links.new(patches.outputs["Fac"], alpha.inputs["Value"])
+    links.new(alpha.outputs["Result"], nodes["Principled BSDF"].inputs["Alpha"])
     for i in range(12):
         t = i / 11
         x = 1.75 + (DOOR[0] + 0.2 - 1.75) * t + rng.uniform(-0.08, 0.08)
         y = 2.3 + (Y1 - 0.15 - 2.3) * t + rng.uniform(-0.08, 0.08)
-        kit.splat(f"Drip {i}", mat("blood"), (x, y, 0.0), rng.uniform(0.025, 0.05), seed=40 + i, lumps=0.4)
-    kit.splat("Pool by the desk", mat("blood"), (1.8, 2.35, 0.0), 0.22, seed=13, stretch=(1.3, 1.0))
+        kit.splat(f"Drip {i}", soaked, (x, y, 0.0), rng.uniform(0.025, 0.05), seed=40 + i, lumps=0.4)
+    kit.splat("Pool by the desk", soaked, (1.8, 2.35, 0.0), 0.22, seed=13, stretch=(1.3, 1.0))
 
     # ---- North wall: the duty board, chalked through the night.
     reb.prim("cube", "Board frame", frame_m, (3.55, Y0 + 0.012, 1.5), (1.16, 0.02, 0.86))
@@ -200,13 +215,15 @@ def build():
         kit.splat(f"Bootprint {i}", mat("mud"), (x + (0.12 if i % 2 else -0.12), y, 0.0), 0.06, seed=20 + i, stretch=(0.6, 1.4), lumps=0.2)
     kit.web("Web", (X1 - 0.02, Y0 + 0.02, H - 0.02), 0.3, (-1, 1))
 
-    # ---- Where she saves: his typewriter on a stand against the north wall,
-    # the day's log half typed; the item box along the east wall, under the
-    # fuse box, the first aid box and the phone.
-    stand = kit.table("Typing stand", frame_m, (2.25, 1.26, 0.0), size=(0.6, 0.42, 0.7))
+    # ---- Where she saves. Each camera sees one of them whole and the other
+    # not at all, so neither is cut off at a frame's edge: his typewriter on
+    # a low stand against the north wall at the desk's end, under camera 1,
+    # the day's log half typed; a footlocker item box along the east wall
+    # under the phone, in the corner under camera 0.
+    stand = kit.table("Typing stand", frame_m, (1.82, Y0 + 0.15, 0.0), size=(0.44, 0.3, 0.62))
     reb.mask(reb.wall(stand))
-    reb.mask(kit.typewriter("His typewriter", (2.25, 1.26, 0.7)))
-    box_lid = kit.item_box("Item box", (X1 - 0.43, 2.05), (-1, 0))
+    reb.mask(kit.typewriter("His typewriter", (1.82, Y0 + 0.17, 0.62)))
+    box_lid = kit.item_box("Item box", (X1 - 0.28, 2.85), (-1, 0), scale=0.65)
 
     # ---- Light: low morning sun through the window and the door, the strip light failing.
     kit.time_light("morning", sun_heading=290, sun_energy=2.5)
@@ -217,12 +234,20 @@ def build():
     strip = reb.point("Strip light glow", (3.0, 2.3, H - 0.24), 14, (0.75, 0.95, 0.85), 0.4)
     heat = reb.point("Heater glow", (1.55, 3.1, 0.3), 3.0, (1.0, 0.3, 0.06), 0.1)
 
-    anim = kit.Anim(16)
-    anim.flicker(strip, tube_m, depth=0.4, dropouts=3)
+    # A 6.4 second loop: the tube holds steady, then sags once for a fifth
+    # of a second and comes back. The handset and the beacon keep their 1.6
+    # second beat.
+    anim = kit.Anim(64)
+
+    def tube(k):
+        level = {40: 0.45, 41: 0.8}.get(k, 1.0)
+        strip.data.energy = 14 * level
+        reb.emit_strength(tube_m, 10 * level)
+    anim.custom(tube)
     anim.flicker(heat, coil_m, depth=0.15, dropouts=0)
 
     def turn(k):
-        a = anim.phase(k)
+        a = anim.phase(k, 4)
         pivot.rotation_euler = (0.12 * math.sin(a), 0.05 * math.cos(a), 0.6 * math.sin(a))
     anim.custom(turn)
 
@@ -249,7 +274,7 @@ def build():
 
     def flashing(k):
         """The beacon's turning lamp, twice round a loop."""
-        f = 0.5 + 0.5 * math.cos(anim.phase(k, 2))
+        f = 0.5 + 0.5 * math.cos(anim.phase(k, 8))
         beacon_glow.data.energy = 25 * (0.15 + 0.85 * f)
         beacon_m.node_tree.nodes["Emission"].inputs["Strength"].default_value = 30 * (0.2 + 0.8 * f)
     key_turned(0)
@@ -261,13 +286,13 @@ def build():
     room.spot("gondola-runs", (X0, 1.1, X0 + 0.9, 1.6))  # day/events.ts says what she sees and does here
     room.check((X0, 2.4, X0 + 0.9, 2.9), "His coffee went over. A photo of a girl with a fish, propped against the glass.")
     room.check((1.9, 2.4, 2.7, 3.0), "Gauze, soaked through. He dressed something in a hurry.\nA bite, by the look of the first aid box. Everything in it is gone.")
-    # The fuse box and the phone hang over the item box: their zones reach out
-    # past its front, where her action probe lands.
+    # The phone and the poster hang over the item box: their zones reach out
+    # past its front, either side of the box's own, where her action probe lands.
     room.spot("fit-fuse", (X1 - 1.0, 1.3, X1, 1.95))  # day/events.ts says what she sees and does here
-    room.check((X1 - 1.0, 2.45, X1, 2.95), "The handset is hanging off the hook. The line's dead.")
-    room.check((X1 - 0.7, 2.95, X1, 3.45), "ARKLAY SKYWAY. See the valley the way the eagles do.\nSomeone has scratched out the family's eyes.")
+    room.check((X1 - 1.0, 1.97, X1, 2.6), "The handset is hanging off the hook. The line's dead.")
+    room.check((X1 - 0.7, 3.02, X1, 3.45), "ARKLAY SKYWAY. See the valley the way the eagles do.\nSomeone has scratched out the family's eyes.")
     room.check((DOOR[0] - 0.5, Y1 - 0.6, DOOR[0], Y1), "A handprint in blood on the door frame. It's still tacky.")
-    room.save_room(typewriter=(1.95, Y0, 2.55, 1.8), box=(X1 - 1.0, 1.97, X1, 2.43), lid=box_lid)
+    room.save_room(typewriter=(1.92, Y0, 2.4, 1.8), box=(X1 - 1.0, 2.62, X1, 3.0), lid=box_lid)
     room.export(anim)
 
 
