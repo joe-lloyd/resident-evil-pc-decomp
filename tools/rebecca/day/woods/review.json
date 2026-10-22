@@ -1,0 +1,13 @@
+{
+  "scene": "woods",
+  "steps": [
+    { "action": "hold", "frames": 60, "picture": "woods-after-the-meeting" },
+    { "action": "walk", "x": 14280, "z": 7650, "picture": "woods-drag-north" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 17000, "z": 15300, "picture": "woods-blowdown" },
+    { "action": "walk", "x": 23800, "z": 17000, "picture": "woods-stumps" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 27880, "z": 17340 },
+    { "action": "exit", "x": 30260, "z": 17340, "to": "logging-road" }
+  ]
+}
