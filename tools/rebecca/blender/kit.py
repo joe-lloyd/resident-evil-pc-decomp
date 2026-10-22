@@ -351,7 +351,7 @@ def mat(name):
         "paper": lambda: reb.mat_plain("Paper", (0.62, 0.6, 0.52), 0.85),
         "old paper": lambda: s("Old paper", [(0.0, (0.4, 0.35, 0.24)), (1.0, (0.58, 0.53, 0.4))], scale=8, bump=0.05),
         "glass": lambda: reb.mat_glass("Glass", (0.6, 0.7, 0.7)),
-        "bottle": lambda: reb.mat_glass("Bottle glass", (0.2, 0.35, 0.12)),
+        "bottle": lambda: _beer_glass(),
         "black": lambda: reb.mat_plain("Black", (0.012, 0.012, 0.012), 0.6),
         "feathers": lambda: _glossy("Crow feathers", (0.01, 0.01, 0.014), 0.35),
         "web": lambda: reb.mat_plain("Web", (0.6, 0.6, 0.6), 0.9),
@@ -478,6 +478,16 @@ def wear(strength=1.0, texel=0.012):
         m["worn"] = True
         worn += 1
     print(f"[kit] wear {strength}: {worn} materials", flush=True)
+
+
+def _beer_glass():
+    """Brown beer-bottle glass, dusty: dark amber with a dull sheen, not a
+    glowing tube."""
+    m, nodes, links, bsdf = reb.nodes_material("Beer bottle glass")
+    bsdf.inputs["Base Color"].default_value = (0.1, 0.045, 0.012, 1)
+    bsdf.inputs["Roughness"].default_value = 0.3
+    bsdf.inputs["Transmission Weight"].default_value = 0.25
+    return m
 
 
 def _glossy(name, rgb, rough):
@@ -1162,7 +1172,7 @@ def shelves(name, m, at, size=(1.0, 0.3, 1.8), rows=4, rot=0.0, clutter=0.7, see
                 elif kind == "jar":
                     it = reb.prim("cyl", "jar", mat("glass"), (xx, rng.uniform(-0.05, 0.05), h + 0.08), (0.09, 0.09, 0.16), segments=10)
                 elif kind == "bottle":
-                    it = reb.prim("cyl", "bottle", mat("bottle"), (xx, rng.uniform(-0.05, 0.05), h + 0.12), (0.07, 0.07, 0.24), segments=10)
+                    it = beer_bottle("bottle", (xx, rng.uniform(-0.05, 0.05), h))
                 else:
                     it = reb.prim("cube", "box", mat("old paper"), (xx, 0, h + 0.07), (0.14, 0.16, 0.14), rot=(0, 0, rng.uniform(-0.2, 0.2)))
                 it.parent = ob
@@ -1286,15 +1296,35 @@ def papers(name, at, spread=0.5, count=8, seed=0, m=None, z=0.0):
     return join(name, parts)
 
 
+def beer_bottle(name, at, tipped=False, yaw=0.0):
+    """An empty brown beer bottle standing on `at` (or on its side, rolled
+    toward `yaw`): a body, a shoulder, a neck and a faded paper label. One
+    mesh, about 0.24 m tall."""
+    label = reb.mat_plain("Beer label", (0.42, 0.36, 0.25), 0.9)
+    parts = [
+        reb.prim("cyl", "body", mat("bottle"), (0, 0, 0.075), (0.064, 0.064, 0.15), segments=12),
+        reb.prim("sphere", "shoulder", mat("bottle"), (0, 0, 0.15), (0.064, 0.064, 0.06), segments=12),
+        reb.prim("cyl", "neck", mat("bottle"), (0, 0, 0.2), (0.026, 0.026, 0.08), segments=10),
+        reb.prim("cyl", "lip", mat("bottle"), (0, 0, 0.238), (0.03, 0.03, 0.008), segments=10),
+        reb.prim("cyl", "label", label, (0, 0, 0.07), (0.066, 0.066, 0.07), segments=12),
+    ]
+    ob = join(name, parts, origin=(0, 0, 0))
+    if tipped:
+        ob.rotation_euler = (math.pi / 2, 0, yaw)
+        ob.location = (at[0], at[1], at[2] + 0.032)
+    else:
+        ob.rotation_euler = (0, 0, yaw)
+        ob.location = at
+    return ob
+
+
 def bottles(name, at, count=4, spread=0.4, seed=0, tipped=0.5):
+    """Empty beer bottles stood and knocked over round `at`."""
     rng = random.Random(seed)
     parts = []
     for i in range(count):
         p = (at[0] + rng.gauss(0, spread / 2), at[1] + rng.gauss(0, spread / 2), at[2])
-        if rng.random() < tipped:
-            parts.append(reb.prim("cyl", "bottle", mat("bottle"), (p[0], p[1], p[2] + 0.035), (0.07, 0.07, 0.25), rot=(math.pi / 2, 0, rng.uniform(0, math.pi)), segments=10))
-        else:
-            parts.append(reb.prim("cyl", "bottle", mat("bottle"), (p[0], p[1], p[2] + 0.125), (0.07, 0.07, 0.25), segments=10))
+        parts.append(beer_bottle("bottle", p, tipped=rng.random() < tipped, yaw=rng.uniform(0, 2 * math.pi)))
     return join(name, parts)
 
 
@@ -1475,6 +1505,65 @@ def body(name, at, heading=0.0, pose="back", top=None, legs=None, bloody=0.0, se
         ob.hide_render = True
         return sh
     return ob
+
+
+def drape(name, m, over, centre, size, yaw=0.0, base=0.0, support=None, gap=0.025, cuts=40, lumps=0.015, slope=0.7, seed=0):
+    """A blanket or a sheet laid over `over` (objects such as a body), so it
+    rests on them instead of cutting through: `size` (x, y) metres round
+    `centre` (x, y), turned by `yaw`, on a surface at height `base`. Each
+    point sits `gap` above whatever is under it, and the cloth spans the
+    hollows between high points at `slope`, as fabric does. Beyond
+    `support` (x0, y0, x1, y1 in the cloth's own frame, default all of it)
+    it hangs down over the edge."""
+    from mathutils.bvhtree import BVHTree
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get()
+    trees = []
+    for ob in over:
+        ev = ob.evaluated_get(dg)
+        me = ev.to_mesh()
+        me.transform(ob.matrix_world)
+        trees.append(BVHTree.FromPolygons([v.co.copy() for v in me.vertices], [tuple(p.vertices) for p in me.polygons]))
+        ev.to_mesh_clear()
+    sx, sy = size
+    sup = support or (-sx / 2, -sy / 2, sx / 2, sy / 2)
+    c, s_ = math.cos(yaw), math.sin(yaw)
+    n = cuts
+    local = [(-sx / 2 + sx * i / n, -sy / 2 + sy * j / n) for j in range(n + 1) for i in range(n + 1)]
+    lift, touch = [], []
+    for lx, ly in local:
+        wx, wy = centre[0] + lx * c - ly * s_, centre[1] + lx * s_ + ly * c
+        top, hit_z = base, None
+        for t in trees:
+            hit = t.ray_cast(Vector((wx, wy, base + 3.0)), Vector((0, 0, -1)))
+            if hit[0] is not None:
+                hit_z = hit[0].z if hit_z is None else max(hit_z, hit[0].z)
+        lift.append(max(top, hit_z if hit_z is not None else top) + gap)
+        touch.append(hit_z)
+    # Span the hollows: a point is no lower than any neighbour less the slope.
+    step = max(sx, sy) / n
+    reach = 4
+    tented = list(lift)
+    for j in range(n + 1):
+        for i in range(n + 1):
+            best = lift[j * (n + 1) + i]
+            for dj in range(-reach, reach + 1):
+                for di in range(-reach, reach + 1):
+                    a, b = i + di, j + dj
+                    if 0 <= a <= n and 0 <= b <= n:
+                        best = max(best, lift[b * (n + 1) + a] - slope * step * math.hypot(di, dj))
+            tented[j * (n + 1) + i] = best
+    off = Vector((seed * 7.1, seed * 3.3, seed * 1.7))
+    verts = []
+    for (lx, ly), z, hit_z in zip(local, tented, touch):
+        out = max(sup[0] - lx, lx - sup[2], sup[1] - ly, ly - sup[3], 0.0)
+        if out > 0:
+            # Over the edge it hangs, but still lies on a limb that is there.
+            z = max(z - min(out * 2.5, z - 0.02), hit_z + gap if hit_z is not None else 0.0)
+        z += lumps * noise.noise(Vector((lx, ly, 0)) * 6 + off)
+        verts.append((centre[0] + lx * c - ly * s_, centre[1] + lx * s_ + ly * c, z))
+    faces = [(j * (n + 1) + i, j * (n + 1) + i + 1, (j + 1) * (n + 1) + i + 1, (j + 1) * (n + 1) + i) for j in range(n) for i in range(n)]
+    return reb.mesh_object(name, verts, faces, m, smooth=True)
 
 
 def bones(name, at, spread=0.5, seed=0, skull=True):
@@ -1747,6 +1836,25 @@ class Anim:
             light.data.energy = base * seq[k]
             if gbase is not None:
                 reb.emit_strength(glow, gbase * seq[k])
+        self.moves.append(f)
+
+    def dips(self, light, glow=None, levels=None):
+        """A tired lamp: steady, then a short sag now and then. `levels` maps
+        a frame to its brightness (default: one sag two thirds round the
+        loop). Mundane, never a disco."""
+        levels = levels or {self.frames * 5 // 8: 0.45, self.frames * 5 // 8 + 1: 0.8}
+        base = light.data.energy
+        gbase = None
+        if glow is not None:
+            for n in glow.node_tree.nodes:
+                if n.type == "EMISSION":
+                    gbase = n.inputs["Strength"].default_value
+
+        def f(k):
+            level = levels.get(k, 1.0)
+            light.data.energy = base * level
+            if gbase is not None:
+                reb.emit_strength(glow, gbase * level)
         self.moves.append(f)
 
     def blink(self, light, glow=None, on=(0, 8)):
