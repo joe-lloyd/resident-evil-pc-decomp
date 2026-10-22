@@ -39,6 +39,7 @@ def main():
     p.add_argument('--end', type=float, required=True)
     p.add_argument('--poster', type=float, required=True)
     p.add_argument('--note', required=True)
+    p.add_argument('--add', action='store_true', help="keep the room's earlier review clips and add this one after them")
     p.add_argument('--room', help="the storyboard's id for the scene when it differs from the slug (cabin for lookout)")
     args = p.parse_args()
     recording = json.loads(args.recording.read_text())
@@ -79,14 +80,15 @@ def main():
     review['source'] = f'recordings/{source.name}'
     review['log'] = f'recordings/{stem}.json'
     review['logSha256'] = sha(args.recording)
+    kept = [c for c in previous if 'review' in c] if args.add else []
     clip = {'room': scene, 'quarter': previous[0]['quarter'] if previous else 1,
-            'visit': 1, 'start': args.start, 'end': args.end, 'roomStart': args.start,
+            'visit': len(kept) + 1, 'start': args.start, 'end': args.end, 'roomStart': args.start,
             'posterTime': args.poster, 'file': video, 'poster': poster,
             'review': review, 'note': args.note, 'events': recording['events']}
-    manifest['clips'] = replace(manifest['clips'], scene, [clip])
+    manifest['clips'] = replace(manifest['clips'], scene, kept + [clip])
     manifest['noFootage'] = [r for r in manifest['noFootage'] if r != scene]
     args.manifest.write_text(json.dumps(manifest, indent=2) + '\n')
-    print(f'Replaced {len(previous)} {scene} visits with {video}; other rooms preserved')
+    print(f'Replaced {len(previous) - len(kept)} {scene} visits with {video}, kept {len(kept)}; other rooms preserved')
 
 
 if __name__ == '__main__':

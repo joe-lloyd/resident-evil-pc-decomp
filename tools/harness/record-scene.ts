@@ -1,6 +1,8 @@
 // Record one reviewed Rebecca scene. See plan/storyboard/README.md.
 // OVERLAY=<build parent> PORT=7811 node tools/harness/record-scene.ts ridge --out /tmp/ridge-review
 // Later scenes: <slug> --route <review.json> --from <played-checkpoint.json>.
+// --god plays the route in god mode, for a room whose enemies kill a scripted walk;
+// the recording says so, and the storyboard shows it.
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -18,7 +20,8 @@ import { CUT_FLAGS } from '../rebecca/day/cutscenes.ts';
 const args = process.argv.slice(2);
 const option = (name: string) => { const at = args.indexOf(name); return at < 0 ? undefined : args[at + 1]; };
 const slug = args[0];
-if (!slug || slug.startsWith('-')) throw new Error('usage: record-scene.ts <slug> [--route file] [--from checkpoint] [--out dir]');
+if (!slug || slug.startsWith('-')) throw new Error('usage: record-scene.ts <slug> [--route file] [--from checkpoint] [--out dir] [--god]');
+const god = args.includes('--god');
 const routeFile = option('--route') ?? new URL(`../rebecca/day/${slug}/review.json`, import.meta.url).pathname;
 const route = parseReviewRoute(JSON.parse(readFileSync(routeFile, 'utf8')));
 if (route.scene !== slug) throw new Error('Route belongs to another scene');
@@ -51,6 +54,7 @@ const hash = (file: string) => createHash('sha256').update(readFileSync(file)).d
 let result = 'FAIL';
 try {
   if (checkpoint) await restore(link, checkpoint);
+  if (god) await link.god(true);
   startRecording(remote, session.port);
   recording = true;
   waitForRecording(remote);
@@ -90,7 +94,7 @@ try {
     }
   }
   let s = await settle(link, (s) => inRoom(s, room));
-  if (s.god) throw new Error('Review must run with normal damage');
+  if (s.god !== god) throw new Error(god ? 'God mode did not take' : 'Review must run with normal damage');
   if (!checkpoint && (!commonFlag(s, CUT_FLAGS.get('cut-opening')!) || JSON.stringify(s.items.filter((i) => i.id)) !== JSON.stringify([{ id: 2, qty: 15 }, { id: 1, qty: 0 }]))) throw new Error('Opening or starting kit did not match');
   log(`scene ready; items ${JSON.stringify(s.items)}`);
   save(path.join(out, `${slug}-entry.json`), take(s, checkpoint?.reached ?? []));
@@ -124,7 +128,7 @@ try {
   if (recording) {
     try {
       fetch(stopRecording(remote), video);
-      writeFileSync(path.join(out, 'recording.json'), JSON.stringify({ scene: slug, recorded: new Date().toISOString().slice(0, 10), result, video: path.basename(video), sha256: hash(video), gameCommit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(), route: JSON.parse(readFileSync(routeFile, 'utf8')), routeSha256: hash(routeFile), checkpoint: from ? { file: path.basename(from), sha256: hash(from) } : null, god: false, audio: false, timing: 'Seconds after recorder readiness; check video frames before selecting clip bounds.', events }, null, 2) + '\n');
+      writeFileSync(path.join(out, 'recording.json'), JSON.stringify({ scene: slug, recorded: new Date().toISOString().slice(0, 10), result, video: path.basename(video), sha256: hash(video), gameCommit: execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim(), route: JSON.parse(readFileSync(routeFile, 'utf8')), routeSha256: hash(routeFile), checkpoint: from ? { file: path.basename(from), sha256: hash(from) } : null, god, audio: false, timing: 'Seconds after recorder readiness; check video frames before selecting clip bounds.', events }, null, 2) + '\n');
       console.log(`video: ${video}`);
     } finally { session.end(); }
   } else session.end();
