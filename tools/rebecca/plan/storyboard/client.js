@@ -3,6 +3,8 @@
   const storageKey = 'rebecca-storyboard-edits-v1';
   const status = document.querySelector('#save-status');
   const fields = [...document.querySelectorAll('textarea[data-field]')];
+  // Notes on an earlier version of a scene stay saved and show read-only.
+  const history = [...document.querySelectorAll('.old-note')];
   const keyOf = (el) => JSON.stringify([el.dataset.room, el.dataset.field]);
   let edits = new Map();
   let stored = [];
@@ -36,9 +38,18 @@
       }
     }
   }
+  function fillHistory() {
+    for (const el of history) {
+      const edit = edits.get(keyOf(el));
+      el.querySelector('.words').textContent = edit ? edit.value : '';
+      el.hidden = !edit;
+    }
+    for (const box of document.querySelectorAll('.note-history')) box.hidden = !box.querySelector('.old-note:not([hidden])');
+  }
   function savedStatus() {
     const stale = [...edits].filter(([key, e]) => {
       const current = fields.find((el) => keyOf(el) === key);
+      if (history.some((el) => keyOf(el) === key)) return false;
       return !current || current.dataset.old !== e.old;
     }).length;
     return edits.size ? `${edits.size} edits saved here${stale ? ` · ${stale} need source review` : ''}` : 'Edits stay in this browser';
@@ -66,6 +77,7 @@
     save();
   });
   fillFields();
+  fillHistory();
   if (edits.size) status.textContent = savedStatus();
 
   function showView() {
@@ -105,8 +117,10 @@
     if (!edits.size) return '# Rebecca\'s day edits\n\nNo edits yet.\n';
     return '# Rebecca\'s day edits\n\n' + [...rooms].map(([room, rows]) => `## ${room}\n\n` + rows.map((e) => {
       const current = fields.find((el) => el.dataset.room === e.room && el.dataset.field === e.field);
+      const earlier = history.find((el) => el.dataset.room === e.room && el.dataset.field === e.field);
+      if (earlier) return `### scene notes on version ${earlier.dataset.version}, before the latest rebuild\n\n${quote(e.value)}\n`;
       const change = !current ? '\nSource warning: this field is no longer on the page.\n' : current.dataset.old !== e.old ? `\nCurrent source value:\n${quote(current.dataset.old || 'Empty')}\n` : '';
-      return `### ${e.field}\n\nOld value:\n${quote(e.old || 'Empty')}\n${change}\n${e.mode === 'edit' ? 'New value' : 'Note'}:\n${quote(e.value)}\n`;
+      return `### ${e.field.replace(/^scene notes v(\d+)$/, 'scene notes on version $1')}\n\nOld value:\n${quote(e.old || 'Empty')}\n${change}\n${e.mode === 'edit' ? 'New value' : 'Note'}:\n${quote(e.value)}\n`;
     }).join('\n')).join('\n');
   }
   const exportDialog = document.querySelector('#export-dialog');
@@ -129,6 +143,7 @@
   document.querySelector('#confirm-clear').addEventListener('click', () => {
     edits.clear();
     fillFields();
+    fillHistory();
     save();
     clearDialog.close();
   });

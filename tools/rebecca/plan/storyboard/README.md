@@ -43,6 +43,8 @@ Balance findings are prompts for a route test. Enemy HP is absent from `foes.ts`
 
 Goal edits, dialogue notes and item notes save automatically to this browser's localStorage. Copy my edits exports markdown grouped by room, including the field, old source value and new text or note. Clear edits asks before removing saved changes. If the source changes after an edit, the page flags the saved edit and includes both source versions in the export. No edits are sent to a server.
 
+Scene notes are versioned. Version 1 is the first set of renders, and its notes use the field `scene notes`. Each time a scene is rebuilt after a review, add an entry for it in `versions.json` with the merge date, the pull requests and the before and after sheet under `review/`. The page then labels the notes box with the new version and saves to `scene notes v<n>`. Notes on earlier versions stay in the browser and show read-only under the box, so the owner never has to clear them. The export labels each note with its version.
+
 ## Regenerate the room clips
 
 The storyboard uses the 17 October whole-day recording, split into four quarters. The published sources are at [the whole-day page](https://home.arpa/research/rebecca-whole-day/). Their server directory is `/opt/homelab/cert-setup/dashboard/research/rebecca-whole-day` on `pi-server`.

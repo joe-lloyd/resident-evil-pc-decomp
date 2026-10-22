@@ -8,7 +8,7 @@ import { CUTSCENES } from '../day/cutscenes.ts';
 import { SUPPLIES, SUPPLY_KINDS } from '../day/supplies.ts';
 import { DOCUMENTS } from '../files/documents.ts';
 import { MAP_ITEMS } from './maps.ts';
-import { buildStoryboard, messages, renderStoryboard } from './storyboard.ts';
+import { buildStoryboard, messages, noteVersions, renderStoryboard } from './storyboard.ts';
 
 const board = buildStoryboard();
 
@@ -145,4 +145,20 @@ test('a reviewed scene shows its own date and damage mode beside the new clip', 
   assert.ok(!html.includes('17 October recording'));
   assert.ok(html.includes('recordings/ridge-test.mp4'));
   assert.throws(() => parseFootage({ clips: [{ ...clip, review: { ...clip.review, source: '../bad.mp4' } }], noFootage: [] }), /Invalid scene recording/);
+});
+
+test('a rebuilt scene takes notes on its new version and keeps a place for the notes on the old one', () => {
+  const html = renderStoryboard(board);
+  const scene = (id: string) => html.split(`id="scene-${id}"`)[1]?.split('</article>')[0] ?? '';
+  const woods = scene('woods');
+  assert.ok(woods.includes('data-field="scene notes v2"'));
+  assert.ok(woods.includes('Scene notes on version 2'));
+  assert.ok(woods.includes('class="old-note" data-room="woods" data-field="scene notes" data-version="1"'));
+  assert.ok(woods.includes('href="review/woods-before-after.png"'));
+  assert.ok(woods.includes('href="https://github.com/joe-lloyd/resident-evil-pc-decomp/pull/25"'));
+  const sawmill = scene('sawmill');
+  assert.ok(sawmill.includes('data-field="scene notes"'));
+  assert.ok(sawmill.includes('Scene notes on version 1'));
+  assert.ok(!sawmill.includes('old-note'));
+  assert.throws(() => noteVersions({ woods: [{ date: '2026-10-22', prs: [25], sheet: '../woods.png' }] }), /Invalid note version for woods/);
 });
