@@ -324,6 +324,9 @@ def mat(name):
         # Stones a few centimetres across: finer than this averages away at 320 x 240.
         "gravel": lambda: s("Gravel", [(0.0, (0.08, 0.075, 0.065)), (0.4, (0.2, 0.19, 0.17)), (0.6, (0.26, 0.25, 0.22)), (1.0, (0.36, 0.34, 0.3))], scale=9, bump=1.0),
         "rock": lambda: s("Granite", [(0.0, (0.12, 0.12, 0.11)), (1.0, (0.3, 0.29, 0.27))], scale=3, bump=0.9),
+        # Cliff granite: grey-brown, banded light and dark; moss for its ledges.
+        "granite": lambda: s("Cliff granite", [(0.0, (0.05, 0.045, 0.04)), (0.3, (0.12, 0.108, 0.09)), (0.55, (0.2, 0.18, 0.15)), (0.8, (0.3, 0.27, 0.23)), (1.0, (0.38, 0.35, 0.3))], scale=2.2, detail=15, bump=1.0),
+        "moss": lambda: s("Ledge moss", [(0.0, (0.03, 0.045, 0.015)), (0.5, (0.07, 0.09, 0.03)), (1.0, (0.12, 0.13, 0.05))], scale=5, detail=10, bump=0.5),
         "wet rock": lambda: s("Wet rock", [(0.0, (0.04, 0.04, 0.038)), (1.0, (0.14, 0.13, 0.12))], scale=3, rough=0.35, bump=1.0),
         "bark": lambda: s("Bark", [(0.0, (0.05, 0.035, 0.025)), (1.0, (0.13, 0.09, 0.06))], scale=10, bump=0.9),
         "planks": lambda: reb.mat_wood("Weathered planks", (0.24, 0.2, 0.15)),
@@ -685,7 +688,8 @@ def crag(rng, verts, faces, centre, size, floor=-0.35):
 
 def wheel(name, at, r=0.38, width=0.27, rim=None, flat=0.0):
     """A tyre on a steel rim, its axle along y, centred on `at`: the tyre's
-    shoulders rounded, the rim dished with a hub cap. `flat` squashes it
+    shoulders rounded and its tread in blocks round the crown, the rim
+    dished with a hub and its wheel nuts on both faces. `flat` squashes it
     onto the ground (a slashed tyre). Returns the parts."""
     rim = rim or mat("steel")
     tyre = reb.prim("cyl", f"{name} tyre", mat("rubber"), at, (2 * r, 2 * r, width), rot=(math.pi / 2, 0, 0), segments=32)
@@ -693,10 +697,34 @@ def wheel(name, at, r=0.38, width=0.27, rim=None, flat=0.0):
     bev.width = width * 0.3
     bev.segments = 3
     parts = [tyre]
+    # Tread: blocks standing proud of the crown, staggered either side of
+    # the centre line, so the tyre reads as a tyre and not a black disc.
+    cx, cy, cz = at
+    v, f = [], []
+    blocks = max(18, int(2 * math.pi * r / 0.075))
+    for i in range(blocks):
+        a = 2 * math.pi * (i + 0.5 * (i % 2)) / blocks
+        for half in (-1, 1):
+            k = len(v)
+            y0 = cy + half * (0.04 if i % 2 else 0.02)
+            y1 = cy + half * width * 0.42
+            for rr in (r - 0.01, r + 0.018):
+                for da in (-0.32, 0.32):
+                    aa = a + da * 2 * math.pi / blocks
+                    for yy in (y0, y1):
+                        v.append((cx + math.cos(aa) * rr, yy, cz + math.sin(aa) * rr))
+            # 8 corners: (rr, da, yy) bits 4, 2, 1
+            for q in ((0, 1, 3, 2), (4, 6, 7, 5), (0, 4, 5, 1), (2, 3, 7, 6), (0, 2, 6, 4), (1, 5, 7, 3)):
+                f.append(tuple(k + j for j in q))
+    parts.append(reb.mesh_object(f"{name} tread", v, f, mat("rubber"), smooth=False))
     for side in (-1, 1):
-        y = at[1] + side * (width / 2 - 0.01)
-        parts.append(reb.prim("cyl", f"{name} rim", rim, (at[0], y, at[2]), (1.15 * r, 1.15 * r, 0.03), rot=(math.pi / 2, 0, 0), segments=24))
-        parts.append(reb.prim("sphere", f"{name} hub", rim, (at[0], y + side * 0.02, at[2]), (0.4 * r, 0.12, 0.4 * r), segments=12))
+        y = cy + side * (width / 2 - 0.01)
+        parts.append(reb.prim("cyl", f"{name} rim", rim, (cx, y, cz), (1.15 * r, 1.15 * r, 0.03), rot=(math.pi / 2, 0, 0), segments=24))
+        parts.append(reb.prim("cyl", f"{name} rim lip", mat("iron"), (cx, y + side * 0.012, cz), (1.2 * r, 1.2 * r, 0.012), rot=(math.pi / 2, 0, 0), segments=24))
+        parts.append(reb.prim("sphere", f"{name} hub", rim, (cx, y + side * 0.02, cz), (0.4 * r, 0.12, 0.4 * r), segments=12))
+        for i in range(6):
+            a = 2 * math.pi * i / 6
+            parts.append(reb.prim("cyl", f"{name} nut", mat("iron"), (cx + math.cos(a) * r * 0.3, y + side * 0.035, cz + math.sin(a) * r * 0.3), (0.035, 0.035, 0.03), rot=(math.pi / 2, 0, 0), segments=6))
     if flat:
         for p in parts:
             p.scale.z = 1 - flat
@@ -706,90 +734,174 @@ def wheel(name, at, r=0.38, width=0.27, rim=None, flat=0.0):
 
 def pickup(name, paint, door_open=None, door_side=1, glass_gone=False, flat=0.0):
     """A 1970s pickup, nose toward +x, wheels on z = 0, centred on the
-    origin, 5.4 m long: cab and bonnet one rounded body with its windscreen,
-    side and back windows; the bed open on top; wheel arches cut round the
-    tyres; chrome grille, bumpers and mirrors. `door_open` swings the
-    driver's door (on the +y side, or -y with door_side -1) that far out,
-    radians, leaving its doorway open. `glass_gone` leaves the windows empty.
-    Returns (body, the door's hinge or None): put what hangs on the door on
-    the hinge."""
+    origin, 5.6 m long: a square-bodied truck in pressed panels, the bonnet
+    and front wings, the cab with a flat, raked windscreen between its
+    pillars, the bed with its tailgate and wheel tubs. Round arches are cut
+    out of the panels over each wheel, lined dark inside, with the axles,
+    springs and chassis under the body. Chrome grille, lamps, bumpers and
+    mirrors. `door_open` swings the driver's door (on the +y side, or -y with
+    door_side -1) that far out, radians, leaving its doorway open.
+    `glass_gone` leaves the windows empty. Returns (body, the door's hinge or
+    None): put what hangs on the door on the hinge."""
     chrome = reb.mat_metal("Chrome", (0.6, 0.6, 0.58), 0.25)
-    glass = reb.mat_glass("Pickup glass", (0.35, 0.4, 0.4))
+    # Flat glass: dark and glossy, so it mirrors the sky without the
+    # warping a refracting glass shows on a 320 x 240 picture.
+    glass = reb.mat_plain("Pickup glass", (0.035, 0.045, 0.05), 0.12)
     dark = mat("black")
     inside = reb.mat_plain("Cab inside", (0.04, 0.035, 0.03), 0.8)
+    vinyl = reb.mat_plain("Seat vinyl", (0.08, 0.06, 0.05), 0.5)
     wheels_x = (1.72, -1.68)
+    WR, ARCH, HW, SILL = 0.38, 0.5, 0.93, 0.5
+    parts, cutters = [], []
 
-    def arch(c):
-        x, y, z = c
-        return abs(y) > 0.55 and any(math.hypot(x - wx, z - 0.38) < 0.5 for wx in wheels_x)
+    def arch_cut(ob):
+        """Cut the round arch over each wheel out of a body panel."""
+        for wx in wheels_x:
+            c = reb.prim("cyl", f"{name} arch cutter", None, (wx, 0, WR), (2 * ARCH, 2 * ARCH, 3.0), rot=(math.pi / 2, 0, 0), segments=40)
+            cutters.append(c)
+            b = ob.modifiers.new("Arch", "BOOLEAN")
+            b.operation = "DIFFERENCE"
+            b.object = c
+        return ob
 
-    def window(c):
-        x, y, z = c
-        if 0.98 < x < 1.4 and z > 1.22 and abs(y) < 0.82:
-            return True                                    # windscreen
-        if abs(y) > 0.7 and 1.3 < z < 1.78 and -0.06 < x < 1.0:
-            return True                                    # side windows
-        return False
+    def panel(label, m, at, size, bevel=0.03, cut=True):
+        ob = reb.prim("cube", f"{name} {label}", m, at, size, bevel=bevel)
+        parts.append(arch_cut(ob) if cut else ob)
+        return ob
 
-    def doorway(c):
-        x, y, z = c
-        return door_open is not None and y * door_side > 0.55 and -0.08 < x < 1.32 and 0.58 < z < 1.84
+    # The bonnet and front wings, one pressing; the cab's lower half; the bed.
+    panel("bonnet", paint, (2.02, 0, (SILL + 1.15) / 2), (1.42, 2 * HW, 1.15 - SILL), bevel=0.06)
+    door_y = door_side * HW
+    if door_open is None:
+        panel("cab", paint, (0.57, 0, (SILL + 1.22) / 2), (1.5, 2 * HW, 1.22 - SILL), bevel=0.04)
+    else:
+        # The doorway's side is open: the cab's floor, its far side and its
+        # front and back pillars below the windows.
+        panel("cab floor", inside, (0.57, 0, SILL + 0.05), (1.5, 2 * HW - 0.04, 0.1), bevel=0.0)
+        panel("cab far side", paint, (0.57, -door_y + door_side * 0.03, (SILL + 1.22) / 2), (1.5, 0.06, 1.22 - SILL), bevel=0.02)
+        panel("cab front", paint, (1.3, 0, (SILL + 1.22) / 2), (0.06, 2 * HW, 1.22 - SILL), bevel=0.02)
+        panel("cab back", paint, (-0.16, 0, (SILL + 1.22) / 2), (0.06, 2 * HW, 1.22 - SILL), bevel=0.02)
+        panel("door sill", paint, (0.57, door_y - door_side * 0.04, SILL + 0.05), (1.5, 0.08, 0.1), bevel=0.01)
+    # The bed: floor, sides, the front wall and the tailgate, a rail along
+    # each side's top, and the wheel tubs inside.
+    panel("bed floor", mat("planks"), (-1.47, 0, 0.84), (2.34, 2 * HW - 0.1, 0.05), bevel=0.0, cut=False)
+    for s in (-1, 1):
+        panel("bed side", paint, (-1.47, s * (HW - 0.03), (SILL + 1.2) / 2), (2.38, 0.06, 1.2 - SILL), bevel=0.015)
+        panel("bed rail", paint, (-1.47, s * (HW - 0.04), 1.215), (2.4, 0.12, 0.04), bevel=0.01, cut=False)
+        panel("wheel tub", paint, (wheels_x[1], s * (HW - 0.22), 0.92), (0.98, 0.32, 0.18), bevel=0.06, cut=False)
+    panel("bed front", paint, (-0.3, 0, (0.84 + 1.2) / 2), (0.05, 2 * HW - 0.06, 1.2 - 0.84), bevel=0.01, cut=False)
+    panel("tailgate", paint, (-2.64, 0, (0.72 + 1.2) / 2), (0.06, 2 * HW - 0.04, 1.2 - 0.72), bevel=0.015, cut=False)
+    panel("tailgate inset", paint, (-2.68, 0, 0.98), (0.02, 1.4, 0.26), bevel=0.01, cut=False)
+    panel("tailgate latch", chrome, (-2.69, 0, 1.12), (0.02, 0.22, 0.04), bevel=0.0, cut=False)
+    panel("rear sill", paint, (-2.62, 0, 0.62), (0.08, 2 * HW - 0.1, 0.2), bevel=0.02, cut=False)
 
-    def cab_faces(c):
-        x, y, z = c
-        if window(c):
-            return 1
-        if x > 2.7:
-            return 2                                       # the nose: dark behind the grille's bars
-        return 0
+    # The cab's top half: pillars round a flat, raked windscreen, the roof,
+    # the back window, side windows. The windscreen leans back from the
+    # cowl (x 1.3, z 1.22) to the roof (x 0.98, z 1.86).
+    gw0, gw1 = HW - 0.04, HW - 0.09        # the glasshouse's half width at its foot and top
+    cowl, top = (1.3, 1.22), (0.98, 1.86)
+    back = -0.16
+    for s in (-1, 1):
+        parts.append(rod(f"{name} windscreen pillar", paint, (cowl[0], s * gw0, cowl[1]), (top[0], s * gw1, top[1]), 0.045, 8))
+        parts.append(rod(f"{name} back pillar", paint, (back, s * gw0, cowl[1]), (back + 0.04, s * gw1, top[1]), 0.07, 8))
+    parts.append(reb.prim("cube", f"{name} roof", paint, ((top[0] + back) / 2 + 0.01, 0, top[1] + 0.035), (top[0] - back + 0.12, 2 * gw1 + 0.1, 0.09), bevel=0.04))
+    parts.append(reb.prim("cube", f"{name} cowl", paint, (cowl[0] + 0.03, 0, cowl[1] + 0.01), (0.12, 2 * gw0, 0.04), bevel=0.01))
+    parts.append(reb.prim("cube", f"{name} back wall", paint, (back + 0.01, 0, 1.31), (0.06, 2 * gw0, 0.18)))
+    parts.append(reb.prim("cube", f"{name} back header", paint, (back + 0.03, 0, 1.79), (0.06, 2 * gw1, 0.12)))
+    for s in (-1, 1):
+        parts.append(reb.prim("cube", f"{name} back window post", paint, (back + 0.02, s * (gw0 - 0.18), 1.58), (0.06, 0.3, 0.46)))
 
-    cab = loft(f"{name} cab", [
-        (2.74, 0.84, 0.56, 1.0, 8), (2.66, 0.92, 0.5, 1.08, 10), (1.5, 0.93, 0.5, 1.14, 10), (1.38, 0.93, 0.5, 1.19, 10),
-        (0.98, 0.88, 0.5, 1.86, 8), (-0.06, 0.9, 0.5, 1.88, 8), (-0.18, 0.9, 0.5, 1.84, 8)],
-        [paint, glass, dark, inside], ring=40, material_of=cab_faces,
-        holes=lambda c: arch(c) or doorway(c) or (glass_gone and window(c)), shell=0.03)
-    bed = loft(f"{name} bed", [(-0.28, 0.92, 0.5, 1.2, 10), (-2.6, 0.92, 0.5, 1.2, 10), (-2.66, 0.9, 0.52, 1.18, 8)],
-               [paint, inside], ring=40, holes=lambda c: arch(c) or (c[2] > 1.1 and abs(c[1]) < 0.86 and -2.58 < c[0] < -0.32), shell=0.04)
-    parts = [cab, bed,
-             reb.prim("cube", f"{name} bed floor", mat("planks"), (-1.45, 0, 0.82), (2.25, 1.74, 0.04)),
-             reb.prim("cube", f"{name} chassis", dark, (0.05, 0, 0.42), (5.0, 1.3, 0.2)),
-             reb.prim("cube", f"{name} seat", reb.mat_plain("Seat vinyl", (0.08, 0.06, 0.05), 0.5), (0.25, 0, 0.98), (0.55, 1.6, 0.16), bevel=0.04),
-             reb.prim("cube", f"{name} seat back", reb.mat_plain("Seat vinyl", (0.08, 0.06, 0.05), 0.5), (0.0, 0, 1.3), (0.14, 1.6, 0.6), rot=(0, -0.15, 0), bevel=0.04),
-             reb.prim("cube", f"{name} dash", inside, (1.2, 0, 1.12), (0.35, 1.7, 0.22)),
-             reb.prim("cube", f"{name} back window", glass if not glass_gone else inside, (-0.2, 0, 1.55), (0.02, 1.2, 0.36)),
-             reb.prim("cyl", f"{name} wheel", dark, (0.95, 0.42 * door_side, 1.32), (0.4, 0.4, 0.03), rot=(0, 1.1, 0), segments=16)]
-    # Grille bars and its frame, the lamps in it, the bumpers wrapping the corners.
-    for z in (0.7, 0.81, 0.92):
-        parts.append(reb.prim("cube", f"{name} grille bar", chrome, (2.75, 0, z), (0.03, 1.2, 0.025)))
-    parts.append(reb.prim("cube", f"{name} grille frame", chrome, (2.745, 0, 0.81), (0.03, 1.66, 0.4)))
-    for y in (-0.66, 0.66):
-        parts.append(reb.prim("cube", f"{name} lamp bezel", chrome, (2.74, y, 0.85), (0.05, 0.3, 0.3), bevel=0.02))
-        parts.append(reb.prim("cyl", f"{name} headlamp", reb.mat_plain("Headlamp glass", (0.7, 0.7, 0.62), 0.1), (2.77, y, 0.85), (0.22, 0.22, 0.03), rot=(0, math.pi / 2, 0), segments=16))
-        parts.append(reb.prim("cube", f"{name} tail lamp", reb.mat_plain("Tail lamp", (0.4, 0.03, 0.02), 0.3), (-2.68, y * 1.3, 1.0), (0.04, 0.12, 0.26)))
-    for x, d in ((2.86, 1), (-2.74, -1)):
-        parts.append(reb.prim("cube", f"{name} bumper", chrome, (x, 0, 0.55), (0.12, 1.86, 0.2), bevel=0.03))
-        for y in (-0.9, 0.9):
-            parts.append(reb.prim("cube", f"{name} bumper end", chrome, (x - d * 0.12, y, 0.55), (0.24, 0.1, 0.2), rot=(0, 0, d * math.copysign(0.4, y)), bevel=0.03))
-    for y in (-1, 1):
-        parts.append(rod(f"{name} mirror arm", chrome, (1.0, y * 0.9, 1.3), (1.05, y * 1.12, 1.5), 0.012, 6))
-        parts.append(reb.prim("cube", f"{name} mirror", dark, (1.05, y * 1.14, 1.55), (0.05, 0.12, 0.2), bevel=0.01))
-        parts.append(reb.prim("cube", f"{name} handle", chrome, (0.05, y * 0.935, 1.28), (0.16, 0.02, 0.03)))
-        # Rails along the top of the bed's sides.
-        parts.append(reb.prim("cube", f"{name} bed rail", paint, (-1.45, y * 0.9, 1.21), (2.32, 0.1, 0.03), bevel=0.01))
+    def pane(label, quad, m=glass):
+        if not glass_gone or m is not glass:
+            parts.append(reb.mesh_object(f"{name} {label}", quad, [(0, 1, 2, 3)], m, smooth=False))
+
+    seal = 0.035
+    pane("windscreen", [(cowl[0] - seal, -gw0 + seal, cowl[1] + seal), (cowl[0] - seal, gw0 - seal, cowl[1] + seal), (top[0] + seal * 0.5, gw1 - seal, top[1] - seal), (top[0] + seal * 0.5, -gw1 + seal, top[1] - seal)])
+    for s in (-1, 1):
+        a = [(cowl[0], s * gw0, cowl[1]), (top[0], s * gw1, top[1])]
+        parts.append(rod(f"{name} windscreen seal", dark, (cowl[0] - 0.02, -gw0 + 0.04, cowl[1] + 0.03), (cowl[0] - 0.02, gw0 - 0.04, cowl[1] + 0.03), 0.018, 6))
+        parts.append(rod(f"{name} wiper", dark, (cowl[0] - 0.04, s * 0.3, cowl[1] + 0.05), (cowl[0] - 0.14, s * 0.3 - 0.35, cowl[1] + 0.28), 0.008, 4))
+        # The side windows (the doorway's opens with its door).
+        if s != door_side or door_open is None:
+            y = s * (gw0 - 0.01)
+            pane("side window", [(back + 0.06, y, 1.24), (cowl[0] - 0.08, y, 1.24), (top[0] - 0.02, s * (gw1 - 0.01), top[1] - 0.06), (back + 0.08, s * (gw1 - 0.01), top[1] - 0.06)])
+            parts.append(rod(f"{name} vent post", paint, (0.95, y, 1.22), (0.82, s * gw1, 1.82), 0.018, 6))
+    pane("back window", [(back - 0.025, -gw0 + 0.33, 1.4), (back - 0.025, gw0 - 0.33, 1.4), (back - 0.025, gw0 - 0.33, 1.73), (back - 0.025, -gw0 + 0.33, 1.73)])
+
+    # Arch liners: dark wells over the tyres, and a lip round each arch.
     for wx in wheels_x:
-        for y in (-0.8, 0.8):
-            parts += wheel(f"{name} wheel", (wx, y, 0.38), flat=flat if (wx > 0 and y < 0) or (wx < 0 and y > 0) else 0.0)
+        for s in (-1, 1):
+            v, f = [], []
+            for k in range(17):
+                a = math.pi * k / 16
+                for yy in (s * 0.55, s * (HW - 0.02)):
+                    v.append((wx + math.cos(a) * (ARCH - 0.02), yy, WR + math.sin(a) * (ARCH - 0.02)))
+            for k in range(16):
+                f.append((2 * k, 2 * k + 1, 2 * k + 3, 2 * k + 2))
+            parts.append(reb.mesh_object(f"{name} arch liner", v, f, dark, smooth=True))
+            lip = [(wx + math.cos(math.pi * k / 16) * (ARCH + 0.015), s * (HW + 0.005), WR + math.sin(math.pi * k / 16) * (ARCH + 0.015)) for k in range(17)]
+            parts.append(tube(f"{name} arch lip", paint, lip, 0.025, 8))
+
+    # Underneath: the chassis rails, the axles, the leaf springs, the diff.
+    for s in (-1, 1):
+        parts.append(reb.prim("cube", f"{name} chassis rail", dark, (0.0, s * 0.48, 0.44), (5.1, 0.1, 0.16)))
+        for wx in wheels_x:
+            for j in range(3):
+                parts.append(reb.prim("cube", f"{name} spring leaf", dark, (wx, s * 0.48, 0.56 - j * 0.035), (1.1 - j * 0.25, 0.08, 0.025)))
+    for wx in wheels_x:
+        parts.append(rod(f"{name} axle", dark, (wx, -0.78, WR), (wx, 0.78, WR), 0.045, 8))
+        parts.append(reb.prim("sphere", f"{name} diff", dark, (wx, 0.0, WR), (0.3, 0.26, 0.28), segments=12))
+    parts.append(reb.prim("cube", f"{name} running gear shadow", dark, (0.0, 0, 0.47), (4.6, 1.2, 0.06)))
+
+    # Inside the cab: the bench seat, the dash and the wheel.
+    parts.append(reb.prim("cube", f"{name} seat", vinyl, (0.25, 0, 0.98), (0.55, 1.6, 0.16), bevel=0.04))
+    parts.append(reb.prim("cube", f"{name} seat back", vinyl, (0.0, 0, 1.3), (0.14, 1.6, 0.6), rot=(0, -0.15, 0), bevel=0.04))
+    parts.append(reb.prim("cube", f"{name} dash", inside, (1.18, 0, 1.12), (0.3, 1.7, 0.2)))
+    parts.append(reb.prim("cyl", f"{name} steering wheel", dark, (0.95, 0.42 * door_side, 1.32), (0.4, 0.4, 0.03), rot=(0, 1.1, 0), segments=16))
+    parts.append(reb.prim("cube", f"{name} cab dark", inside, (0.57, 0, 1.5), (1.3, 2 * gw1 - 0.1, 0.6)))
+
+    # The nose: a grille of bars in a chrome frame, round lamps in bezels,
+    # the bumpers wrapping the corners; the tail lamps on the bed's corners.
+    nose = 2.74
+    parts.append(reb.prim("cube", f"{name} grille", dark, (nose - 0.02, 0, 0.84), (0.04, 1.62, 0.42)))
+    for z in (0.7, 0.79, 0.88, 0.97):
+        parts.append(reb.prim("cube", f"{name} grille bar", chrome, (nose + 0.01, 0, z), (0.025, 1.2, 0.025)))
+    for y in (-0.3, 0.0, 0.3):
+        parts.append(reb.prim("cube", f"{name} grille bar", chrome, (nose + 0.012, y, 0.835), (0.02, 0.02, 0.32)))
+    parts.append(reb.prim("cube", f"{name} grille frame", chrome, (nose, 0, 0.84), (0.03, 1.7, 0.46), bevel=0.01))
+    for y in (-0.7, 0.7):
+        parts.append(reb.prim("cyl", f"{name} lamp bezel", chrome, (nose + 0.01, y, 0.86), (0.28, 0.28, 0.05), rot=(0, math.pi / 2, 0), segments=20))
+        parts.append(reb.prim("cyl", f"{name} headlamp", reb.mat_plain("Headlamp glass", (0.7, 0.7, 0.62), 0.1), (nose + 0.035, y, 0.86), (0.22, 0.22, 0.02), rot=(0, math.pi / 2, 0), segments=20))
+        parts.append(reb.prim("cube", f"{name} tail lamp", reb.mat_plain("Tail lamp", (0.4, 0.03, 0.02), 0.3), (-2.68, y * 1.22, 1.0), (0.03, 0.12, 0.26), bevel=0.01))
+    for x, d in ((2.86, 1), (-2.76, -1)):
+        parts.append(reb.prim("cube", f"{name} bumper", chrome, (x, 0, 0.52), (0.12, 1.9, 0.2), bevel=0.03))
+        for y in (-0.92, 0.92):
+            parts.append(reb.prim("cube", f"{name} bumper end", chrome, (x - d * 0.1, y, 0.52), (0.22, 0.1, 0.2), rot=(0, 0, d * math.copysign(0.4, y)), bevel=0.03))
+    parts.append(reb.prim("cube", f"{name} plate", reb.mat_plain("Plate", (0.5, 0.48, 0.4), 0.6), (-2.83, 0, 0.53), (0.01, 0.32, 0.16)))
+    for s in (-1, 1):
+        parts.append(rod(f"{name} mirror arm", chrome, (1.15, s * HW, 1.3), (1.18, s * (HW + 0.2), 1.48), 0.012, 6))
+        parts.append(reb.prim("cube", f"{name} mirror", dark, (1.18, s * (HW + 0.22), 1.52), (0.05, 0.14, 0.22), bevel=0.01))
+        if s != door_side or door_open is None:
+            parts.append(reb.prim("cube", f"{name} handle", chrome, (0.05, s * (HW + 0.005), 1.12), (0.16, 0.02, 0.03)))
+            parts.append(reb.prim("cube", f"{name} door seam", dark, (1.28, s * (HW + 0.002), 0.86), (0.012, 0.01, 0.68)))
+            parts.append(reb.prim("cube", f"{name} door seam", dark, (-0.12, s * (HW + 0.002), 0.86), (0.012, 0.01, 0.68)))
+    for wx in wheels_x:
+        for y in (-0.78, 0.78):
+            parts += wheel(f"{name} wheel", (wx, y, WR), r=WR, flat=flat if (wx > 0 and y < 0) or (wx < 0 and y > 0) else 0.0)
     body = join(name, parts, origin=(0, 0, 0))
+    for c in cutters:
+        bpy.data.objects.remove(c)
     hinge = None
     if door_open is not None:
-        hinge = reb.prim("sphere", f"{name} door hinge", dark, (1.3, door_side * 0.93, 1.15), (0.03, 0.03, 0.03))
-        door = reb.prim("cube", f"{name} door", paint, (-0.68, 0.0, -0.2), (1.36, 0.06, 0.62), bevel=0.02)
-        frame = [reb.prim("cube", f"{name} door frame", paint, (-0.68, 0.0, 0.62), (1.36, 0.05, 0.04)),
-                 reb.prim("cube", f"{name} door frame", paint, (-1.33, 0.0, 0.36), (0.05, 0.05, 0.5)),
-                 reb.prim("cube", f"{name} door frame", paint, (-0.03, 0.0, 0.36), (0.05, 0.05, 0.5), rot=(0, -0.3, 0))]
-        pane = [] if glass_gone else [reb.prim("cube", f"{name} door glass", glass, (-0.68, 0.0, 0.36), (1.25, 0.015, 0.5))]
-        trim = reb.prim("cube", f"{name} door inside", inside, (-0.68, -door_side * 0.035, -0.2), (1.3, 0.01, 0.58))
-        for p in [door, trim] + frame + pane:
+        hinge = reb.prim("sphere", f"{name} door hinge", dark, (1.28, door_side * HW, 1.15), (0.03, 0.03, 0.03))
+        door = reb.prim("cube", f"{name} door", paint, (-0.7, 0.0, -0.29), (1.4, 0.06, 0.72), bevel=0.02)
+        frame = [reb.prim("cube", f"{name} door frame", paint, (-0.72, 0.0, 0.67), (1.36, 0.05, 0.05)),
+                 reb.prim("cube", f"{name} door frame", paint, (-1.37, 0.0, 0.36), (0.05, 0.05, 0.58)),
+                 rod(f"{name} door frame", paint, (-0.02, 0.0, 0.07), (-0.3, 0.0, 0.67), 0.025, 6)]
+        pane = [] if glass_gone else [reb.mesh_object(f"{name} door glass", [(-1.34, 0, 0.1), (-0.06, 0, 0.1), (-0.32, 0, 0.64), (-1.34, 0, 0.64)], [(0, 1, 2, 3)], glass, smooth=False)]
+        trim = reb.prim("cube", f"{name} door inside", inside, (-0.7, -door_side * 0.035, -0.29), (1.34, 0.01, 0.66))
+        handle = reb.prim("cube", f"{name} door handle", chrome, (-1.2, door_side * 0.035, -0.0), (0.16, 0.02, 0.03))
+        for p in [door, trim, handle] + frame + pane:
             p.parent = hinge
         # Out from the cab: the door runs back (-x) from its hinge.
         hinge.rotation_euler = (0, 0, -door_side * door_open)
@@ -2439,6 +2551,87 @@ def rocks(name, rng, spots, height, m=None, grass=True):
     if gf:
         reb.mesh_object(f"{name} grass", gv, gf, mat("blades"), smooth=False)
     return ob
+
+
+def cliff_relief(x, u, seed, ledges):
+    """How far a rock face stands out at depth u along it: leaning, stepping
+    at each ledge, standing out in buttresses, broken by the grain. 0 at the
+    edge it hangs from, so it meets the ground there."""
+    steps = 0.0
+    for i, depth in enumerate(ledges):
+        at = depth + 0.9 * noise.noise(Vector((x * 0.07, i * 1.7, seed)))
+        steps += 0.38 * min(1.0, max(0.0, (u - at) / 0.25))
+    buttress = 1.2 * max(0.0, noise.noise(Vector((x * 0.16, u * 0.03, seed + 1.0))))
+    grain = (0.45 * (noise.noise(Vector((x * 0.35, u * 0.2, seed + 2.0))) + 1) / 2
+             + 0.22 * noise.noise(Vector((x * 1.25, u * 0.9, seed + 3.0)))
+             + 0.1 * noise.noise(Vector((x * 2.6, u * 1.4, seed + 6.0)))
+             + 0.06 * noise.noise(Vector((x * 6.0, u * 6.0, seed + 4.0)))
+             - 0.12 * abs(noise.noise(Vector((x * 0.9, u * 2.2, seed + 5.0)))))   # cracks, cut in
+    fade = min(1.0, u / 0.8)
+    return 0.05 * u + steps + (buttress + grain) * fade * fade
+
+
+def cliff(name, xs, edge, height, air, rise=False, m=None, ledge_m=None, seed=0.0, ledges=None, step=0.2):
+    """A rock face running along x, for a gorge's wall, a drop or a cliff
+    over a path. It hangs `height` metres (or height(x)) down from
+    edge(x) -> (y, z), or
+    rises that high from it with rise=True; the open air is toward `air`
+    (+1 or -1 in y). Going away from the edge it steps out into the air
+    (hanging) or back into the rock (rising) in ledges, stands out in
+    buttresses and is broken all over by the rock's grain, so it reads as
+    rock at 320 x 240, not a smooth sheet nor courses of blocks. At the edge
+    it lies exactly on edge(x), to meet the ground there. The ledges'
+    upward faces take ledge_m (moss). Returns (object, [(x, y, z)] of the
+    ledges), for grass and ferns on them."""
+    m = m or mat("rock")
+    tall = height if callable(height) else (lambda x: height)
+    most = max(tall(x) for x in xs)
+    ledges = ledges or [most * f for f in (0.16, 0.35, 0.56, 0.75, 0.9)]
+    n = int(most / step) + 1
+    out = 1 if not rise else -1
+    v, f = [], []
+    for x in xs:
+        y0, z0 = edge(x)
+        h = tall(x)
+        for j in range(n):
+            u = h * j / (n - 1)
+            v.append((x, y0 + air * out * cliff_relief(x, u, seed, ledges), z0 + (u if rise else -u)))
+    for i in range(len(xs) - 1):
+        for j in range(n - 1):
+            k = i * n + j
+            f.append((k, k + n, k + n + 1, k + 1))
+    # Face the air: flip the winding if the first face looks into the rock.
+    a, b, c = (Vector(v[q]) for q in f[0][:3])
+    if (b - a).cross(c - a).y * air < 0:
+        f = [q[::-1] for q in f]
+    ob = reb.mesh_object(name, v, f, m, smooth=False)
+    found = []
+    if ledge_m is not None:
+        ob.data.materials.append(ledge_m)
+        for poly in ob.data.polygons:
+            if poly.normal.z > 0.42:
+                poly.material_index = 1
+                found.append(tuple(poly.center))
+    return ob, found
+
+
+def ledge_plants(rng, ledges, tufts=3000, ferns=200, name="Ledge"):
+    """Grass and ferns on a cliff's ledges (cliff's second return)."""
+    if not ledges:
+        return
+    lv, lf, fv, ff = [], [], [], []
+    last = [0.0]
+
+    def on(rr):
+        x, y, z = rr.choice(ledges)
+        last[0] = z - 0.03
+        return x, y
+    reb.grass_tufts(rng, tufts, on, lambda x, y: last[0], lv, lf)
+    for _ in range(ferns):
+        x, y = on(rng)
+        reb.fern(rng, (x, y, last[0]), rng.uniform(0.3, 0.6), fv, ff)
+    reb.mesh_object(f"{name} grass", lv, lf, mat("blades"), smooth=False)
+    reb.mesh_object(f"{name} ferns", fv, ff, mat("ferns"))
 
 
 def rough_log(name, a, b, r, m=None, seed=0, stubs=6):

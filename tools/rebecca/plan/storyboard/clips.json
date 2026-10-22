@@ -304,33 +304,104 @@
       "room": "yard",
       "quarter": 1,
       "visit": 1,
-      "start": 39.767,
-      "end": 80.0,
-      "roomStart": 43.0,
-      "posterTime": 43.0,
-      "file": "clips/yard-q1-v01.mp4",
-      "poster": "clips/yard-q1-v01.jpg",
-      "note": "",
+      "start": 0.5,
+      "end": 24.0,
+      "roomStart": 0.5,
+      "posterTime": 12.0,
+      "file": "clips/yard-review-20261022-95851827.mp4",
+      "poster": "clips/yard-review-20261022-95851827.jpg",
+      "review": {
+        "recorded": "2026-10-22",
+        "sha256": "95851827c704ccbad1dc77c87838dbab13b440d602a768f40bb935dcf229b6e3",
+        "gameCommit": "8d12bccdb2d21091116417a73cf00c64aa51cdc6",
+        "checkpoint": {
+          "file": "yard-entry.json",
+          "sha256": "735a416a93be95efbf07795cd3d1ed13029eba4c837498898e4ced6bfa85d4a1"
+        },
+        "god": false,
+        "audio": false,
+        "source": "recordings/yard-20261022071510.mp4",
+        "log": "recordings/yard-review-20261022-95851827.json",
+        "logSha256": "a1d3afc7e92ef7f30a6b115a183f547ba273e438bfda827dd946a1e32bf71747"
+      },
+      "note": "Played out of the shed: the truck, the winch, the porch, the sign and up the trail. Inspected frames.",
       "events": [
         {
-          "t": 48,
+          "t": 0,
+          "frame": 1262,
           "room": "yard",
-          "what": "down to the ranger station"
+          "camera": 2,
+          "what": "recording ready"
         },
         {
-          "t": 48,
+          "t": 1.8,
+          "frame": 1314,
           "room": "yard",
-          "what": "at the ranger station"
+          "camera": 2,
+          "what": "scene ready; items [{\"id\":2,\"qty\":9},{\"id\":1,\"qty\":0},{\"id\":30,\"qty\":2},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
-          "t": 61,
+          "t": 4.9,
+          "frame": 1407,
           "room": "yard",
-          "what": "the pine blocks the trail down"
+          "camera": 2,
+          "what": "hold yard-entry"
         },
         {
-          "t": 70,
+          "t": 6.6,
+          "frame": 1460,
           "room": "yard",
-          "what": "the winch has no crank"
+          "camera": 0,
+          "what": "walk yard-truck"
+        },
+        {
+          "t": 9.1,
+          "frame": 1531,
+          "room": "yard",
+          "camera": 1,
+          "what": "walk yard-winch-pine"
+        },
+        {
+          "t": 12.6,
+          "frame": 1637,
+          "room": "yard",
+          "camera": 1,
+          "what": "hold"
+        },
+        {
+          "t": 13.8,
+          "frame": 1672,
+          "room": "yard",
+          "camera": 1,
+          "what": "walk yard-rifle"
+        },
+        {
+          "t": 16.2,
+          "frame": 1744,
+          "room": "yard",
+          "camera": 1,
+          "what": "walk yard-porch"
+        },
+        {
+          "t": 19.6,
+          "frame": 1845,
+          "room": "yard",
+          "camera": 1,
+          "what": "walk yard-sign"
+        },
+        {
+          "t": 20,
+          "frame": 1846,
+          "room": "yard",
+          "camera": 1,
+          "what": "leaving for trail"
+        },
+        {
+          "t": 25.3,
+          "frame": 2090,
+          "room": "trail",
+          "camera": 1,
+          "what": "arrived in trail"
         }
       ]
     },
@@ -461,30 +532,6 @@
       ]
     },
     {
-      "room": "yard",
-      "quarter": 1,
-      "visit": 2,
-      "start": 128.1,
-      "end": 171.5,
-      "roomStart": 132.0,
-      "posterTime": 132.0,
-      "file": "clips/yard-q1-v02.mp4",
-      "poster": "clips/yard-q1-v02.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 134,
-          "room": "yard",
-          "what": "out to the yard"
-        },
-        {
-          "t": 156,
-          "room": "yard",
-          "what": "killed the dog (2 shots)"
-        }
-      ]
-    },
-    {
       "room": "shed",
       "quarter": 1,
       "visit": 1,
@@ -583,60 +630,114 @@
       ]
     },
     {
-      "room": "yard",
-      "quarter": 1,
-      "visit": 3,
-      "start": 191.4,
-      "end": 216.5,
-      "roomStart": 194.5,
-      "posterTime": 200.0,
-      "file": "clips/yard-q1-v03.mp4",
-      "poster": "clips/yard-q1-v03.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 196,
-          "room": "yard",
-          "what": "out of the shed"
-        },
-        {
-          "t": 211,
-          "room": "yard",
-          "what": "cranked the winch"
-        }
-      ]
-    },
-    {
       "room": "bridge",
       "quarter": 1,
       "visit": 1,
-      "start": 212.533,
-      "end": 253.0,
-      "roomStart": 216.5,
-      "posterTime": 218.5,
-      "file": "clips/bridge-q1-v01.mp4",
-      "poster": "clips/bridge-q1-v01.jpg",
-      "note": "",
+      "start": 0.5,
+      "end": 23.5,
+      "roomStart": 0.5,
+      "posterTime": 12.0,
+      "file": "clips/bridge-review-20261022-483df675.mp4",
+      "poster": "clips/bridge-review-20261022-483df675.jpg",
+      "review": {
+        "recorded": "2026-10-22",
+        "sha256": "483df675448081dc0b4cd89823b6b072457d6bb0d8cf49921a1aa2444adc3102",
+        "gameCommit": "8d12bccdb2d21091116417a73cf00c64aa51cdc6",
+        "checkpoint": {
+          "file": "bridge-entry.json",
+          "sha256": "0c42d95f939c4286ac63f50b5a776e4dc448035e4b2d368c9cd3144f519fb122"
+        },
+        "god": false,
+        "audio": false,
+        "source": "recordings/bridge-20261022071356.mp4",
+        "log": "recordings/bridge-review-20261022-483df675.json",
+        "logSha256": "0f3be15d29f365a52e0f8015a13bd49ae5e9741ed96d8d053557360bf259f7ac"
+      },
+      "note": "Played in from the platform: across the bridge under the new gorge camera to the near bank and back. Inspected frames.",
       "events": [
         {
-          "t": 223,
+          "t": 0,
+          "frame": 1250,
           "room": "bridge",
-          "what": "down the trail past the pine"
+          "camera": 2,
+          "what": "recording ready"
         },
         {
-          "t": 231,
+          "t": 1.7,
+          "frame": 1302,
           "room": "bridge",
-          "what": "on the bridge"
+          "camera": 2,
+          "what": "scene ready; items [{\"id\":2,\"qty\":9},{\"id\":1,\"qty\":0},{\"id\":30,\"qty\":1},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
-          "t": 245,
+          "t": 4.8,
+          "frame": 1394,
           "room": "bridge",
-          "what": "across the gorge: the valley trail sign"
+          "camera": 2,
+          "what": "hold bridge-far-bank"
         },
         {
-          "t": 248,
+          "t": 5.8,
+          "frame": 1426,
           "room": "bridge",
-          "what": "goal: gondola-dead (visit in platform)"
+          "camera": 2,
+          "what": "walk"
+        },
+        {
+          "t": 7.6,
+          "frame": 1479,
+          "room": "bridge",
+          "camera": 1,
+          "what": "walk bridge-over-the-drop"
+        },
+        {
+          "t": 11.1,
+          "frame": 1587,
+          "room": "bridge",
+          "camera": 1,
+          "what": "hold"
+        },
+        {
+          "t": 13,
+          "frame": 1643,
+          "room": "bridge",
+          "camera": 0,
+          "what": "walk bridge-near-bank"
+        },
+        {
+          "t": 15.5,
+          "frame": 1720,
+          "room": "bridge",
+          "camera": 0,
+          "what": "hold"
+        },
+        {
+          "t": 18,
+          "frame": 1793,
+          "room": "bridge",
+          "camera": 1,
+          "what": "walk"
+        },
+        {
+          "t": 19.9,
+          "frame": 1854,
+          "room": "bridge",
+          "camera": 2,
+          "what": "walk bridge-back-on-the-far-bank"
+        },
+        {
+          "t": 20.4,
+          "frame": 1855,
+          "room": "bridge",
+          "camera": 2,
+          "what": "leaving for platform"
+        },
+        {
+          "t": 24.6,
+          "frame": 2068,
+          "room": "platform",
+          "camera": 1,
+          "what": "arrived in platform"
         }
       ]
     },
@@ -644,28 +745,125 @@
       "room": "platform",
       "quarter": 1,
       "visit": 1,
-      "start": 249.4,
-      "end": 279.5,
-      "roomStart": 253.0,
-      "posterTime": 253.5,
-      "file": "clips/platform-q1-v01.mp4",
-      "poster": "clips/platform-q1-v01.jpg",
-      "note": "",
+      "start": 0.5,
+      "end": 33.0,
+      "roomStart": 0.5,
+      "posterTime": 12.0,
+      "file": "clips/platform-review-20261022-8d80349a.mp4",
+      "poster": "clips/platform-review-20261022-8d80349a.jpg",
+      "review": {
+        "recorded": "2026-10-22",
+        "sha256": "8d80349ac95f0dc0cd2482ec2771370c52b9af5bcb9ce83393c6cb49d93dfd33",
+        "gameCommit": "8d12bccdb2d21091116417a73cf00c64aa51cdc6",
+        "checkpoint": {
+          "file": "platform-entry.json",
+          "sha256": "dc144f495937670d73884535d265913c29df12aecbce45c6f5fc50f058f98a7e"
+        },
+        "god": false,
+        "audio": false,
+        "source": "recordings/platform-20261022071231.mp4",
+        "log": "recordings/platform-review-20261022-8d80349a.json",
+        "logSha256": "7f3512eb76f3f5ba4cd601195c572add91f67f0425ec24d1085a27c0042f3a4b"
+      },
+      "note": "Played from the booth exit: the car, the wheel house, the broken smear, the ledge east and out to the bridge. Inspected frames: new car, rock cliff, ranges behind.",
       "events": [
         {
-          "t": 258,
+          "t": 0,
+          "frame": 1257,
           "room": "platform",
-          "what": "into platform"
+          "camera": 1,
+          "what": "recording ready"
         },
         {
-          "t": 260,
+          "t": 1.7,
+          "frame": 1308,
           "room": "platform",
-          "what": "done: gondola-dead"
+          "camera": 1,
+          "what": "scene ready; items [{\"id\":2,\"qty\":9},{\"id\":1,\"qty\":0},{\"id\":30,\"qty\":1},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
-          "t": 264,
+          "t": 4.8,
+          "frame": 1401,
           "room": "platform",
-          "what": "goal: duty-board (look in booth)"
+          "camera": 1,
+          "what": "hold platform-from-the-booth"
+        },
+        {
+          "t": 7,
+          "frame": 1468,
+          "room": "platform",
+          "camera": 1,
+          "what": "walk"
+        },
+        {
+          "t": 8.3,
+          "frame": 1508,
+          "room": "platform",
+          "camera": 2,
+          "what": "walk platform-car"
+        },
+        {
+          "t": 11.8,
+          "frame": 1613,
+          "room": "platform",
+          "camera": 2,
+          "what": "hold"
+        },
+        {
+          "t": 13.6,
+          "frame": 1670,
+          "room": "platform",
+          "camera": 3,
+          "what": "walk platform-wheel-house"
+        },
+        {
+          "t": 18.5,
+          "frame": 1818,
+          "room": "platform",
+          "camera": 5,
+          "what": "walk platform-smear"
+        },
+        {
+          "t": 20.6,
+          "frame": 1880,
+          "room": "platform",
+          "camera": 5,
+          "what": "walk platform-ledge"
+        },
+        {
+          "t": 24,
+          "frame": 1985,
+          "room": "platform",
+          "camera": 5,
+          "what": "hold"
+        },
+        {
+          "t": 26.4,
+          "frame": 2056,
+          "room": "platform",
+          "camera": 5,
+          "what": "walk"
+        },
+        {
+          "t": 30,
+          "frame": 2164,
+          "room": "platform",
+          "camera": 0,
+          "what": "walk platform-trail-in"
+        },
+        {
+          "t": 30.4,
+          "frame": 2166,
+          "room": "platform",
+          "camera": 0,
+          "what": "leaving for bridge"
+        },
+        {
+          "t": 35.4,
+          "frame": 2402,
+          "room": "bridge",
+          "camera": 2,
+          "what": "arrived in bridge"
         }
       ]
     },
@@ -761,63 +959,6 @@
       ]
     },
     {
-      "room": "platform",
-      "quarter": 1,
-      "visit": 2,
-      "start": 346.933,
-      "end": 363.5,
-      "roomStart": 350.0,
-      "posterTime": 350.0,
-      "file": "clips/platform-q1-v02.mp4",
-      "poster": "clips/platform-q1-v02.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 352,
-          "room": "platform",
-          "what": "into platform"
-        }
-      ]
-    },
-    {
-      "room": "bridge",
-      "quarter": 1,
-      "visit": 2,
-      "start": 359.967,
-      "end": 380.0,
-      "roomStart": 363.5,
-      "posterTime": 368.0,
-      "file": "clips/bridge-q1-v02.mp4",
-      "poster": "clips/bridge-q1-v02.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 366,
-          "room": "bridge",
-          "what": "into bridge"
-        }
-      ]
-    },
-    {
-      "room": "yard",
-      "quarter": 1,
-      "visit": 4,
-      "start": 376.667,
-      "end": 389.5,
-      "roomStart": 380.0,
-      "posterTime": 385.0,
-      "file": "clips/yard-q1-v04.mp4",
-      "poster": "clips/yard-q1-v04.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 382,
-          "room": "yard",
-          "what": "into yard"
-        }
-      ]
-    },
-    {
       "room": "woods",
       "quarter": 1,
       "visit": 1,
@@ -900,54 +1041,6 @@
       ]
     },
     {
-      "room": "yard",
-      "quarter": 1,
-      "visit": 5,
-      "start": 471.733,
-      "end": 489.0,
-      "roomStart": 475.0,
-      "posterTime": 475.5,
-      "file": "clips/yard-q1-v05.mp4",
-      "poster": "clips/yard-q1-v05.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 477,
-          "room": "yard",
-          "what": "into yard"
-        }
-      ]
-    },
-    {
-      "room": "yard",
-      "quarter": 1,
-      "visit": 6,
-      "start": 516.0,
-      "end": 542.0,
-      "roomStart": 519.0,
-      "posterTime": 526.5,
-      "file": "clips/yard-q1-v06.mp4",
-      "poster": "clips/yard-q1-v06.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 521,
-          "room": "yard",
-          "what": "into yard"
-        },
-        {
-          "t": 533,
-          "room": "yard",
-          "what": "done: cutters"
-        },
-        {
-          "t": 537,
-          "room": "yard",
-          "what": "goal: quarantine (take in logging-road)"
-        }
-      ]
-    },
-    {
       "room": "woods",
       "quarter": 1,
       "visit": 3,
@@ -1016,44 +1109,6 @@
           "t": 636,
           "room": "woods",
           "what": "into woods"
-        }
-      ]
-    },
-    {
-      "room": "yard",
-      "quarter": 1,
-      "visit": 7,
-      "start": 648.2,
-      "end": 665.0,
-      "roomStart": 652.0,
-      "posterTime": 654.5,
-      "file": "clips/yard-q1-v07.mp4",
-      "poster": "clips/yard-q1-v07.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 654,
-          "room": "yard",
-          "what": "into yard"
-        }
-      ]
-    },
-    {
-      "room": "yard",
-      "quarter": 1,
-      "visit": 8,
-      "start": 692.4,
-      "end": 701.0,
-      "roomStart": 695.5,
-      "posterTime": 695.5,
-      "file": "clips/yard-q1-v08.mp4",
-      "poster": "clips/yard-q1-v08.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 697,
-          "room": "yard",
-          "what": "into yard"
         }
       ]
     },
@@ -1761,25 +1816,6 @@
       ]
     },
     {
-      "room": "yard",
-      "quarter": 2,
-      "visit": 9,
-      "start": 134.367,
-      "end": 157.5,
-      "roomStart": 138.0,
-      "posterTime": 138.0,
-      "file": "clips/yard-q2-v09.mp4",
-      "poster": "clips/yard-q2-v09.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 140,
-          "room": "yard",
-          "what": "into yard"
-        }
-      ]
-    },
-    {
       "room": "road",
       "quarter": 2,
       "visit": 1,
@@ -2006,44 +2042,6 @@
       ]
     },
     {
-      "room": "yard",
-      "quarter": 2,
-      "visit": 10,
-      "start": 394.1,
-      "end": 411.5,
-      "roomStart": 398.0,
-      "posterTime": 398.5,
-      "file": "clips/yard-q2-v10.mp4",
-      "poster": "clips/yard-q2-v10.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 401,
-          "room": "yard",
-          "what": "into yard"
-        }
-      ]
-    },
-    {
-      "room": "yard",
-      "quarter": 2,
-      "visit": 11,
-      "start": 430.067,
-      "end": 441.5,
-      "roomStart": 434.0,
-      "posterTime": 434.0,
-      "file": "clips/yard-q2-v11.mp4",
-      "poster": "clips/yard-q2-v11.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 436,
-          "room": "yard",
-          "what": "into yard"
-        }
-      ]
-    },
-    {
       "room": "woods",
       "quarter": 2,
       "visit": 7,
@@ -2235,25 +2233,6 @@
       ]
     },
     {
-      "room": "yard",
-      "quarter": 2,
-      "visit": 12,
-      "start": 603.767,
-      "end": 626.5,
-      "roomStart": 607.0,
-      "posterTime": 611.0,
-      "file": "clips/yard-q2-v12.mp4",
-      "poster": "clips/yard-q2-v12.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 609,
-          "room": "yard",
-          "what": "into yard"
-        }
-      ]
-    },
-    {
       "room": "road",
       "quarter": 2,
       "visit": 3,
@@ -2432,73 +2411,6 @@
           "t": 109,
           "room": "road",
           "what": "into road"
-        }
-      ]
-    },
-    {
-      "room": "yard",
-      "quarter": 3,
-      "visit": 13,
-      "start": 115.733,
-      "end": 135.5,
-      "roomStart": 119.5,
-      "posterTime": 127.5,
-      "file": "clips/yard-q3-v13.mp4",
-      "poster": "clips/yard-q3-v13.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 122,
-          "room": "yard",
-          "what": "into yard"
-        }
-      ]
-    },
-    {
-      "room": "bridge",
-      "quarter": 3,
-      "visit": 3,
-      "start": 132.267,
-      "end": 152.0,
-      "roomStart": 135.5,
-      "posterTime": 146.0,
-      "file": "clips/bridge-q3-v03.mp4",
-      "poster": "clips/bridge-q3-v03.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 138,
-          "room": "bridge",
-          "what": "into bridge"
-        }
-      ]
-    },
-    {
-      "room": "platform",
-      "quarter": 3,
-      "visit": 3,
-      "start": 148.667,
-      "end": 191.5,
-      "roomStart": 152.0,
-      "posterTime": 152.0,
-      "file": "clips/platform-q3-v03.mp4",
-      "poster": "clips/platform-q3-v03.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 154,
-          "room": "platform",
-          "what": "into platform"
-        },
-        {
-          "t": 172,
-          "room": "platform",
-          "what": "done: fit-cog"
-        },
-        {
-          "t": 176,
-          "room": "platform",
-          "what": "goal: quarry-key (take in cottage)"
         }
       ]
     },
@@ -3013,139 +2925,6 @@
           "t": 715,
           "room": "east-path",
           "what": "into east-path"
-        }
-      ]
-    },
-    {
-      "room": "platform",
-      "quarter": 3,
-      "visit": 4,
-      "start": 726.933,
-      "end": 747.5,
-      "roomStart": 730.0,
-      "posterTime": 740.0,
-      "file": "clips/platform-q3-v04.mp4",
-      "poster": "clips/platform-q3-v04.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 732,
-          "room": "platform",
-          "what": "into platform"
-        }
-      ]
-    },
-    {
-      "room": "bridge",
-      "quarter": 3,
-      "visit": 4,
-      "start": 743.567,
-      "end": 763.5,
-      "roomStart": 747.5,
-      "posterTime": 752.0,
-      "file": "clips/bridge-q3-v04.mp4",
-      "poster": "clips/bridge-q3-v04.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 749,
-          "room": "bridge",
-          "what": "into bridge"
-        }
-      ]
-    },
-    {
-      "room": "yard",
-      "quarter": 3,
-      "visit": 14,
-      "start": 760.467,
-      "end": 779.0,
-      "roomStart": 763.5,
-      "posterTime": 771.0,
-      "file": "clips/yard-q3-v14.mp4",
-      "poster": "clips/yard-q3-v14.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 766,
-          "room": "yard",
-          "what": "into yard"
-        }
-      ]
-    },
-    {
-      "room": "yard",
-      "quarter": 3,
-      "visit": 15,
-      "start": 799.8,
-      "end": 813.5,
-      "roomStart": 803.5,
-      "posterTime": 803.5,
-      "file": "clips/yard-q3-v15.mp4",
-      "poster": "clips/yard-q3-v15.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 806,
-          "room": "yard",
-          "what": "into yard"
-        }
-      ]
-    },
-    {
-      "room": "bridge",
-      "quarter": 3,
-      "visit": 5,
-      "start": 810.4,
-      "end": 829.5,
-      "roomStart": 813.5,
-      "posterTime": 814.0,
-      "file": "clips/bridge-q3-v05.mp4",
-      "poster": "clips/bridge-q3-v05.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 815,
-          "room": "bridge",
-          "what": "into bridge"
-        }
-      ]
-    },
-    {
-      "room": "platform",
-      "quarter": 3,
-      "visit": 5,
-      "start": 826.367,
-      "end": 845.5,
-      "roomStart": 829.5,
-      "posterTime": 837.5,
-      "file": "clips/platform-q3-v05.mp4",
-      "poster": "clips/platform-q3-v05.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 832,
-          "room": "platform",
-          "what": "into platform"
-        }
-      ]
-    },
-    {
-      "room": "platform",
-      "quarter": 4,
-      "visit": 6,
-      "start": 44.8,
-      "end": 70.5,
-      "roomStart": 48.5,
-      "posterTime": 48.5,
-      "file": "clips/platform-q4-v06.mp4",
-      "poster": "clips/platform-q4-v06.jpg",
-      "note": "",
-      "events": [
-        {
-          "t": 60,
-          "room": "platform",
-          "what": "into platform"
         }
       ]
     },
