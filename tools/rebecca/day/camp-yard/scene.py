@@ -1,24 +1,22 @@
-"""Logging Camp 4's yard, noon under cloud: the hub of the camp.
+"""The logging camp's yard, noon under cloud: the hub of the camp.
 
-What it tells: about twenty men worked here. They got sick one by one. The
-foreman painted a board, CAMP 4 - QUARANTINE - BY ORDER, and they shut the
-gate. They burned the sick men's bedding in the fire pit, then the sick men
-themselves: the springs of a mattress and charred bones lie in the ash, and
-one log still smokes. Then the well turned on the sick, and the sick on the
-well. A fire axe is buried in the bunkhouse door, which someone held shut
-from inside. A logger lies face down in the mud by the skidder with a peavey
-in his back and his hard hat in a puddle; another sits dead against the log
-deck, shotgun shells round him. Two more were laid out under canvas by the
-mess wall, early on, when they still had time for that. The laundry is still
-on the line. The skidder sits where it stopped with its blade down, its
-choker chains still on three logs. Smoke from the mess chimney: the range
-inside is still warm. A player should work out that the camp sealed itself
-in, and that the sickness came from inside the fence.
+What it tells: about twenty men worked here for Arklay Timber. They got
+sick one by one, and they shut the gate. Then they burned the sick in the
+fire pit: one is still there, curled black in the ash, a thin smoke coming
+off him. Then the well turned on the sick, and the sick on the well. A fire
+axe is buried in the bunkhouse door, which someone held shut from inside.
+One man sat down against the log deck with a shotgun and fired until it was
+empty. Everything else stopped where it was: a log half cut on the
+sawhorses with the chainsaw left on it, the cookhouse woodpile and its
+garbage, the laundry still on the line, the skidder with its chokers on
+three logs, smoke from the mess chimney where the range is still warm. A
+player should work out that the camp sealed itself in, and that the
+sickness came from inside the fence.
 
 Metres: the yard floor is x 1.0-18.4, y 1.0-18.6.
-- North: the bunkhouse, x 6.0-17.0, y -3.4-1.6, brown boards, five windows
-  in its south wall; its door at x 11.0-11.9 (the bunkhouse inside is x
-  1-12, y 1-6, door at x 6.0-6.9 in its south wall).
+- North: the bunkhouse, x 6.0-17.0, y -3.4-1.6, brown boards, windows in
+  its south wall; its door at x 11.0-11.9 (the bunkhouse inside is x 1-12,
+  y 1-6, door at x 6.0-6.9 in its south wall).
 - North-west: the foreman's office, x 1.0-4.6, y 0.6-3.6, green boards; its
   door in the south wall at x 2.5-3.4, windows south at x 3.75-4.35 and east
   at y 1.2-2.3 (inside: x 1-4.6, y 1-4, the same shifted 0.4 south).
@@ -26,21 +24,23 @@ Metres: the yard floor is x 1.0-18.4, y 1.0-18.6.
   in the east wall at y 9.0-9.9, windows at y 6.0-7.4 and 11.2-12.6 (inside:
   x 1-6.4, y 1-10, shifted 4 south and 4.4 east), its chimney smoking.
 - South-west: the fuel depot's fenced compound, x -2.0-6.6, y 15.2-21; its
-  gate in the north fence at x 2.6-4.4 (the depot is that compound moved 3
-  east and 14.2 north).
+  gate in the north fence at x 2.6-4.4, shut and chained (the depot is that
+  compound moved 3 east and 14.2 north).
 - South: the camp gate between log posts at x 8.4 and 11.8 on y 18.9.
 - South-east: the workshop, tin, x 13.4-19.2, y 13.8-19.4; its door in the
   north wall at x 14.6-15.8, a window north at x 17.0-18.2 and west at y
   15.4-16.6 (inside: x 1-6.8, y 1-6.6, door at x 2.2-3.4).
-- East: the sawmill shed, west wall at x 18.5 from y 2.6 to 12.2, its big
-  doors open at y 6.0-9.0.
+- East: the sawmill, west wall at x 18.5 from y 2.6 to 12.2, its big doors
+  shut at y 6.0-9.0.
 - In the yard: the fire pit at (9.0, 8.3), the bell post at (3.2, 7.3), the
   log deck at x 12.6-17.4, y 2.4-4.6, the skidder at x 5.6-10.4, y 11.8-14.2,
-  the laundry line from (5.6, 2.6) to (9.8, 3.4), the board at (7.4, 16.9).
+  the laundry line from (5.6, 2.6) to (9.8, 3.4), the sawhorses at (11.8,
+  15.4), the cookhouse woodpile along the mess wall at y 10.4-13.2.
+Every door is shut: she opens each with the action button.
 
-Moving: smoke rising off the fire pit and the mess chimney, the embers'
-glow, the bell swinging, the laundry stirring, the bunkhouse bulb failing
-behind its door, a crow on the mess roof.
+Moving: a thin smoke off the body in the fire pit and the mess chimney, the
+embers' glow, the bell, the laundry stirring. The grass is still: no wind
+reaches the camp.
 """
 import math
 import os
@@ -73,6 +73,7 @@ DEPOT_GATE = (2.6, 4.4)
 GATE = (8.4, 11.8)
 GATE_Y = 18.9
 PIT = (9.0, 8.3)
+CENTRE = (9.7, 9.8)
 
 
 def height(x, y):
@@ -87,6 +88,14 @@ def height(x, y):
     if y > 23:
         h -= (y - 23) * 0.12
     return h
+
+
+def far_land(x, y, z):
+    """The kit's ranges, eased into the camp's own mountainside near it."""
+    r = math.hypot(x - CENTRE[0], y - CENTRE[1])
+    w = max(0.0, min(1.0, (240.0 - r) / 180.0))
+    own = height(x, y) - 0.5
+    return z + (own - z) * w * w * (3 - 2 * w)
 
 
 # ---------------------------------------------------------------------------
@@ -160,15 +169,15 @@ def smoke_column(name, base, puffs=5, rise=2.6, drift=(0.5, 0.2), size=(0.35, 1.
     parts = []
     for i in range(puffs):
         m, vol = smoke_mat(f"{name} {i}", density)
-        ob = reb.prim("sphere", f"{name} puff {i}", m, base, (1, 1, 1.2), segments=10)
+        ob = reb.prim("sphere", f"{name} puff {i}", m, base, (1, 1, 1.4), segments=10)
         parts.append((ob, vol, i / puffs))
 
     def f(k, frames=16):
         for ob, vol, off in parts:
             t = (k / frames + off) % 1.0
-            ob.location = (base[0] + drift[0] * t, base[1] + drift[1] * t, base[2] + rise * t)
+            ob.location = (base[0] + drift[0] * t * t, base[1] + drift[1] * t * t, base[2] + rise * t)
             s = size[0] + (size[1] - size[0]) * t
-            ob.scale = (s, s, s)
+            ob.scale = (s, s, s * 1.3)
             vol.default_value = density * math.sin(math.pi * t) ** 0.7
     f(0)
     return f
@@ -187,7 +196,7 @@ def logs_mesh(name, logs, bark=None, end=None):
         for end_pt in (a, b):
             for i in range(seg):
                 ang = 2 * math.pi * i / seg
-                rr = r * (1 + 0.06 * math.sin(ang * 3 + a.x))
+                rr = r * (1 + 0.08 * math.sin(ang * 3 + a.x) + 0.04 * math.sin(ang * 7 + a.y))
                 sv.append(tuple(end_pt + (u * math.cos(ang) + w * math.sin(ang)) * rr))
         for i in range(seg):
             sf.append((k + i, k + (i + 1) % seg, k + seg + (i + 1) % seg, k + seg + i))
@@ -245,93 +254,54 @@ def chain_link():
     return m
 
 
-def window(rect, side, a0, a1, z0, z1, frame_m, glass_m, boarded=False, broken=False, rng=None, board_m=None):
-    """A window in a hut's wall (as kit.walls cuts it): glass, a frame, a sill."""
-    x0, x1, y0, y1 = rect
-    mid = (a0 + a1) / 2
-    wdt, hgt = a1 - a0, z1 - z0
-    zc = (z0 + z1) / 2
-    if side in "ns":
-        y = y0 - T / 2 if side == "n" else y1 + T / 2
-        out = -1 if side == "n" else 1
-        if not broken:
-            reb.prim("cube", "Window glass", glass_m, (mid, y, zc), (wdt, 0.01, hgt))
-        else:
-            reb.prim("cube", "Window glass", glass_m, (mid - wdt * 0.25, y, z0 + hgt * 0.3), (wdt * 0.5, 0.01, hgt * 0.6), rot=(0, 0.3, 0))
-        for zz in (z0, z1):
-            reb.prim("cube", "Window frame", frame_m, (mid, y + out * 0.05, zz), (wdt + 0.12, 0.05, 0.06))
-        for aa in (a0, a1, mid):
-            reb.prim("cube", "Window frame", frame_m, (aa, y + out * 0.05, zc), (0.05 if aa == mid else 0.06, 0.05, hgt))
-        if boarded:
-            kit.barricade("Boards over the window", board_m or mat("planks"), (a0 - 0.1, y + out * 0.09), (a1 + 0.1, y + out * 0.09), z0 + 0.1, z1 - 0.1, count=3, seed=int(mid * 10))
-    else:
-        x = x0 - T / 2 if side == "w" else x1 + T / 2
-        out = -1 if side == "w" else 1
-        if not broken:
-            reb.prim("cube", "Window glass", glass_m, (x, mid, zc), (0.01, wdt, hgt))
-        else:
-            reb.prim("cube", "Window glass", glass_m, (x, mid - wdt * 0.25, z0 + hgt * 0.3), (0.01, wdt * 0.5, hgt * 0.6), rot=(0.3, 0, 0))
-        for zz in (z0, z1):
-            reb.prim("cube", "Window frame", frame_m, (x + out * 0.05, mid, zz), (0.05, wdt + 0.12, 0.06))
-        for aa in (a0, a1, mid):
-            reb.prim("cube", "Window frame", frame_m, (x + out * 0.05, aa, zc), (0.05, 0.05 if aa == mid else 0.06, hgt))
-        if boarded:
-            kit.barricade("Boards over the window", board_m or mat("planks"), (x + out * 0.09, a0 - 0.1), (x + out * 0.09, a1 + 0.1), z0 + 0.1, z1 - 0.1, count=3, seed=int(mid * 10))
+def garment(name, m, kind, w, h, seed=0):
+    """Washing as it hangs from a line: a shirt with its sleeves, long johns
+    with two legs, a towel or a sock, cut from a sheet hanging down from
+    z = 0 in the x-z plane, with folds running down it and the hem sagging.
+    Returns the object, origin at the line."""
+    rng = random.Random(seed)
+    nx, nz = 16, 18
+
+    def inside(u, v):
+        """u across from -0.5 to 0.5 of the width, v down from 0 to 1 of the height."""
+        if kind == "shirt":
+            body = abs(u) < 0.32 and v < 1.0
+            arm = abs(u) < 0.5 and v < 0.42 - 0.25 * (abs(u) - 0.32) / 0.18 and v > 0.0
+            return body or arm
+        if kind == "johns":
+            return (abs(u) < 0.42 and v < 0.38) or (0.04 < abs(u) < 0.42 - 0.06 * v)
+        return True
+    v, f, idx = [], [], {}
+    for j in range(nz + 1):
+        for i in range(nx + 1):
+            u, vv = i / nx - 0.5, j / nz
+            x = u * w
+            sag = 0.05 * h * math.sin(math.pi * (u + 0.5)) * vv
+            fold = 0.035 * math.sin(u * 19 + seed) * vv + 0.02 * noise.noise(Vector((x * 6, vv * 4, seed)))
+            idx[i, j] = len(v)
+            v.append((x, fold + rng.uniform(-0.004, 0.004), -vv * h - sag * 0.3))
+    for j in range(nz):
+        for i in range(nx):
+            u, vv = (i + 0.5) / nx - 0.5, (j + 0.5) / nz
+            if inside(u, vv):
+                f.append((idx[i, j], idx[i + 1, j], idx[i + 1, j + 1], idx[i, j + 1]))
+    ob = reb.mesh_object(name, v, f, m)
+    mod = ob.modifiers.new("Thickness", "SOLIDIFY")
+    mod.thickness = 0.008
+    return ob
 
 
-def hut(name, rect, h, wall_m, roof_m, openings, ridge="x", pitch=0.3, inside_m=None, eaves=0.35):
-    """A camp building: board walls with their openings, a pitched tin roof,
-    a dim floor and ceiling inside so doors and windows show a room, and a
-    hidden footprint that blocks her."""
-    x0, x1, y0, y1 = rect
-    kit.walls(x0, y0, x1, y1, h, wall_m, openings, thick=T, name=f"{name} wall",
-              floor=inside_m or reb.mat_plain(f"{name} floor", (0.05, 0.04, 0.03), 0.9),
-              ceiling=reb.mat_plain(f"{name} ceiling", (0.04, 0.03, 0.025), 0.9))
-    # A sill board round the foot, and corner posts.
-    for side in "nswe":
-        if side in "ns":
-            y = y0 - T - 0.02 if side == "n" else y1 + T + 0.02
-            reb.prim("cube", f"{name} sill", mat("dark wood"), ((x0 + x1) / 2, y, 0.1), (x1 - x0 + 2 * T + 0.08, 0.06, 0.2))
-        else:
-            x = x0 - T - 0.02 if side == "w" else x1 + T + 0.02
-            reb.prim("cube", f"{name} sill", mat("dark wood"), (x, (y0 + y1) / 2, 0.1), (0.06, y1 - y0 + 2 * T + 0.08, 0.2))
-    for cx in (x0 - T, x1 + T):
-        for cy in (y0 - T, y1 + T):
-            reb.prim("cube", f"{name} corner", mat("dark wood"), (cx, cy, h / 2), (0.1, 0.1, h))
-    # The roof: two tin slopes over the ridge and gable ends in the walls' boards.
-    if ridge == "x":
-        span = (y1 - y0) + 2 * T + 2 * eaves
-        run = span / 2
-        rise = run * math.tan(pitch)
-        slope = run / math.cos(pitch)
-        yc = (y0 + y1) / 2
-        for s in (-1, 1):
-            reb.prim("cube", f"{name} roof", roof_m, ((x0 + x1) / 2, yc + s * run / 2, h + rise / 2 + 0.04), (x1 - x0 + 2 * T + 2 * eaves, slope, 0.05), rot=(s * pitch, 0, 0))
-        gv, gf = [], []
-        for x in (x0 - T / 2, x1 + T / 2):
-            k = len(gv)
-            gv += [(x, y0 - T, h), (x, y1 + T, h), (x, yc, h + rise * ((y1 - y0 + 2 * T) / span))]
-            gf.append((k, k + 1, k + 2))
-        reb.mesh_object(f"{name} gables", gv, gf, wall_m, smooth=False)
-        reb.prim("cube", f"{name} ridge cap", roof_m, ((x0 + x1) / 2, yc, h + rise + 0.06), (x1 - x0 + 2 * T + 2 * eaves, 0.25, 0.04))
-    else:
-        span = (x1 - x0) + 2 * T + 2 * eaves
-        run = span / 2
-        rise = run * math.tan(pitch)
-        slope = run / math.cos(pitch)
-        xc = (x0 + x1) / 2
-        for s in (-1, 1):
-            reb.prim("cube", f"{name} roof", roof_m, (xc + s * run / 2, (y0 + y1) / 2, h + rise / 2 + 0.04), (slope, y1 - y0 + 2 * T + 2 * eaves, 0.05), rot=(0, -s * pitch, 0))
-        gv, gf = [], []
-        for y in (y0 - T / 2, y1 + T / 2):
-            k = len(gv)
-            gv += [(x0 - T, y, h), (x1 + T, y, h), (xc, y, h + rise * ((x1 - x0 + 2 * T) / span))]
-            gf.append((k, k + 1, k + 2))
-        reb.mesh_object(f"{name} gables", gv, gf, wall_m, smooth=False)
-        reb.prim("cube", f"{name} ridge cap", roof_m, (xc, (y0 + y1) / 2, h + rise + 0.06), (0.25, y1 - y0 + 2 * T + 2 * eaves, 0.04))
-    foot = reb.prim("cube", f"{name} footprint", None, ((x0 + x1) / 2, (y0 + y1) / 2, 0.5), (x1 - x0 + 2 * T, y1 - y0 + 2 * T, 1.0))
-    foot.hide_render = True
-    reb.wall(foot)
+def oil_spill(name, m, at, r, heading, seed=0):
+    """Oil that splashed and soaked in: a ragged main stain trailing off in
+    one direction into smaller blots and drops, not one round pool."""
+    rng = random.Random(seed)
+    x, y, z = at
+    d = Vector((math.cos(heading), math.sin(heading)))
+    kit.splat(name, m, (x, y, z), r, rot=(0, 0, heading), seed=seed, stretch=(1.5, 0.7), lumps=0.6)
+    for i in range(5):
+        t = r * (0.9 + i * 0.45)
+        p = Vector((x, y)) + d * t + Vector((-d.y, d.x)) * rng.uniform(-0.35, 0.35) * r
+        kit.splat(f"{name} blot {i}", m, (p.x, p.y, z + 0.0005), r * rng.uniform(0.12, 0.3) * (1 - i * 0.12), rot=(0, 0, rng.uniform(0, 6)), seed=seed * 13 + i, lumps=0.6)
 
 
 # ---------------------------------------------------------------------------
@@ -343,24 +313,24 @@ def build():
     rng = random.Random(404)
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
-    room.ground("earth")  # mud, worn paths, puddles too small to wade
+    room.ground("earth")  # mud, trodden earth, puddles too small to wade
     cams = [
-        ((10.4, 20.6, 3.9), (10.2, 11.5, 0.2), "from the gate: the body in the mud, the skidder, the fire pit, the bunkhouse beyond"),
-        ((5.2, 6.4, 3.3), (15.0, 14.6, 0.3), "from by the office: the fire pit, the skidder's blade, the workshop door"),
-        ((12.0, 12.6, 3.6), (16.6, 4.4, 0.4), "from the ruts: the sawmill's open doors, the log deck, the dead man against it"),
+        ((10.4, 20.6, 3.9), (10.2, 11.5, 0.2), "from the gate: the sawhorses, the skidder, the fire pit, the bunkhouse beyond"),
+        ((5.2, 6.4, 3.3), (15.0, 14.6, 0.3), "from by the office: the burned man in the fire pit, the skidder's blade, the workshop door"),
+        ((12.0, 12.6, 3.6), (16.6, 4.4, 0.4), "from the ruts: the sawmill's shut doors, the log deck, the dead man against it"),
         ((5.0, 8.4, 3.4), (12.5, 2.0, 0.6), "from the bell post: the laundry, the bunkhouse door with the axe in it"),
         ((9.4, 10.6, 3.4), (2.4, 3.6, 0.5), "from the fire pit: the office door in the corner, the bell post, the laundry"),
-        ((8.4, 10.0, 3.3), (2.0, 9.8, 0.6), "from the ruts: the mess door, the bell, the two under canvas"),
-        ((12.4, 17.8, 3.4), (3.5, 13.6, 0.3), "from inside the gate: the depot gate, the choked logs, the board"),
-        ((11.0, 9.6, 3.6), (17.0, 13.6, 0.4), "from the fire pit: the workshop door, the leaking drums, the mill doors"),
+        ((8.4, 10.0, 3.3), (2.0, 9.8, 0.6), "from the ruts: the mess door, the bell, the cookhouse woodpile"),
+        ((12.4, 17.8, 3.4), (3.5, 13.6, 0.3), "from inside the gate: the depot's chained gate, the choked logs"),
+        ((11.0, 9.6, 3.6), (17.0, 13.6, 0.4), "from the fire pit: the workshop door, the leaking drums, the mill"),
     ]
     for eye, look, note in cams:
         room.camera(eye, look, 200, note)
 
     # ---- Materials.
-    mud = kit.dirtied(mat("mud"), 0.6, scale=0.8)
-    wet_mud = reb.mat_plain("Wet mud", (0.03, 0.022, 0.014), 0.25)
-    puddle = reb.mat_plain("Puddle", (0.06, 0.055, 0.05), 0.18)
+    yard = kit.dirtied(reb.mat_surface("Yard earth", [(0.0, (0.03, 0.022, 0.014)), (0.3, (0.06, 0.045, 0.03)), (0.55, (0.1, 0.078, 0.052)),
+                                                      (0.75, (0.085, 0.07, 0.05)), (1.0, (0.13, 0.11, 0.08))], scale=1.6, detail=14, rough=0.75, bump=0.7), 0.7, scale=0.35)
+    wet = reb.mat_surface("Wet ground", [(0.0, (0.012, 0.01, 0.008)), (0.6, (0.03, 0.024, 0.017)), (1.0, (0.05, 0.04, 0.03))], scale=8, rough=0.3, bump=0.3)
     brown = kit.boards("Bunkhouse boards", (0.17, 0.11, 0.07), width=0.22, grime=0.8)
     green = kit.boards("Office boards", (0.08, 0.14, 0.09), width=0.16, grime=0.8)
     white = kit.boards("Mess boards", (0.42, 0.4, 0.36), width=0.18, grime=0.9)
@@ -371,128 +341,127 @@ def build():
     glass_m = reb.mat_glass("Grimy glass", (0.32, 0.34, 0.3))
     yellow = reb.mat_surface("Skidder yellow", [(0.0, (0.3, 0.2, 0.02)), (0.6, (0.5, 0.34, 0.03)), (0.8, (0.25, 0.12, 0.04)), (1.0, (0.08, 0.05, 0.03))], scale=3, rough=0.55, bump=0.2)
     ash = reb.mat_surface("Ash", [(0.0, (0.03, 0.03, 0.03)), (0.6, (0.12, 0.115, 0.11)), (1.0, (0.22, 0.21, 0.2))], scale=6, bump=0.4)
-    char = reb.mat_surface("Charred wood", [(0.0, (0.01, 0.01, 0.01)), (1.0, (0.05, 0.04, 0.035))], scale=12, rough=0.7, bump=0.8)
-    ply = reb.mat_surface("Plywood", [(0.0, (0.28, 0.22, 0.14)), (1.0, (0.4, 0.33, 0.22))], scale=5, bump=0.1)
+    char = reb.mat_surface("Charred", [(0.0, (0.006, 0.005, 0.005)), (0.5, (0.018, 0.014, 0.012)), (0.7, (0.045, 0.03, 0.022)), (0.85, (0.14, 0.135, 0.13)), (1.0, (0.2, 0.08, 0.03))], scale=14, rough=0.85, bump=1.0)
+    oil = reb.mat_surface("Oil soak", [(0.0, (0.008, 0.007, 0.006)), (0.6, (0.02, 0.017, 0.013)), (1.0, (0.04, 0.034, 0.026))], scale=10, rough=0.35, bump=0.15)
     hard_hat = reb.mat_plain("Hard hat", (0.5, 0.3, 0.02), 0.4)
+    stencil_m = kit.dirtied(reb.mat_plain("Stencil white", (0.5, 0.48, 0.42), 0.6), 0.6, scale=20)
 
-    # ---- Ground: mud, ruts, puddles, the mountain round the camp.
-    reb.terrain("Ground", mud, (-30, 50), (-30, 55), height, step=0.7)
-    for i, path in enumerate((
-        [(10.0, 22.0), (10.0, 17.0), (9.8, 15.0), (10.4, 13.4)],
-        [(10.9, 22.0), (10.9, 17.0), (11.0, 15.2), (11.4, 13.6)],
-        [(10.4, 11.8), (12.0, 10.0), (15.0, 8.2), (18.5, 7.6)],
-        [(10.8, 12.6), (12.5, 10.8), (15.2, 9.0), (18.5, 8.4)],
-    )):
-        kit.path_strip(f"Rut {i}", wet_mud, path, height, width=0.18, wobble=0.4, lift=0.006)
-    kit.path_strip("Worn path to the bunkhouse", kit.dirtied(mat("dirt"), 0.7), [(10.4, 16.0), (10.0, 11.0), (11.3, 6.0), (11.45, 1.9)], height, width=0.5, lift=0.004)
-    kit.path_strip("Worn path to the mess", kit.dirtied(mat("dirt"), 0.7), [(9.6, 10.6), (6.0, 10.0), (2.2, 9.45)], height, width=0.45, lift=0.004)
-    for i, (x, y, r, s) in enumerate(((12.2, 12.0, 0.7, (1.6, 0.8)), (6.0, 8.4, 0.5, (1.2, 0.9)), (14.2, 6.8, 0.6, (1.8, 0.7)), (4.6, 15.6, 0.45, (1.3, 0.8)), (11.6, 16.4, 0.55, (1.5, 0.8)), (16.4, 11.8, 0.4, (1.2, 1.0)), (7.2, 5.4, 0.4, (1.4, 0.7)))):
-        kit.splat(f"Puddle {i}", puddle, (x, y, 0.0), r, rot=(0, 0, rng.uniform(0, 3)), seed=80 + i, stretch=s, lumps=0.45)
-    for i in range(26):
-        t = i / 25
-        x = 10.3 + rng.uniform(-0.2, 0.2) + (0.3 if i % 2 else -0.3) * 0.5
-        y = 18.0 - t * 15.0
-        kit.splat(f"Bootprint {i}", wet_mud, (x + (0.4 if i > 18 else 0) * (t - 0.7), y, 0.0), 0.07, seed=200 + i, stretch=(0.6, 1.4), lumps=0.2)
+    # ---- Ground: one surface of trodden earth, wet where the rain stood, the ruts in it.
+    reb.terrain("Ground", yard, (-30, 50), (-30, 55), height, step=0.5)
+    kit.ruts("Ruts to the mill", [(10.3, 26.0), (10.4, 19.0), (10.2, 15.6), (11.2, 12.4), (13.6, 9.6), (16.4, 8.0), (19.5, 7.4)], height, gauge=1.7, width=0.32, seed=2.0)
+    # Stones, bark and woodchips trodden into the earth, thick round the log deck and the mill.
+    stones = [(rng.uniform(X0 - 1, X1 + 1), rng.uniform(Y0 - 0.5, Y1 + 1), rng.uniform(0.03, 0.09)) for _ in range(70)]
+    kit.rocks("Yard stones", rng, stones, height, kit.dirtied(mat("rock"), 0.7), grass=False)
+    cv, cf = [], []
+    for _ in range(900):
+        if rng.random() < 0.55:
+            x, y = rng.gauss(15.0, 2.0), rng.gauss(5.5, 2.2)
+        else:
+            x, y = rng.uniform(X0, X1), rng.uniform(Y0, Y1)
+        reb.card(cv, cf, Vector((x, y, height(x, y) + 0.006)), Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)).normalized(), Vector((0, 0, 1)), rng.uniform(0.03, 0.06), rng.uniform(0.05, 0.14), 0.0)
+    reb.mesh_object("Woodchips and bark", cv, cf, reb.mat_surface("Woodchips", [(0.0, (0.12, 0.08, 0.045)), (0.6, (0.3, 0.22, 0.13)), (1.0, (0.4, 0.31, 0.19))], scale=40, bump=0.3), smooth=False)
 
-    # ---- The buildings.
-    # The bunkhouse along the north: long, low, brown boards, five windows.
+    # ---- The buildings, every door shut.
+    # The bunkhouse along the north: long, low, brown boards, windows in a row.
     bwin = [(7.0, 8.0), (8.9, 9.9), (13.0, 14.0), (15.0, 16.0)]
-    hut("Bunkhouse", BUNK, 2.4, brown, tin, [("s", BUNK_DOOR[0], BUNK_DOOR[1], 0.0, 2.05)] + [("s", a, b, 1.0, 1.7) for a, b in bwin], ridge="x", pitch=0.26)
+    kit.hut("Bunkhouse", BUNK, 2.4, brown, tin, [("s", BUNK_DOOR[0], BUNK_DOOR[1], 0.0, 2.05)] + [("s", a, b, 1.0, 1.7) for a, b in bwin], ridge="x", pitch=0.48, thick=T)
     for i, (a, b) in enumerate(bwin):
-        window(BUNK, "s", a, b, 1.0, 1.7, frame_m, glass_m, boarded=i == 1, broken=i == 2, board_m=mat("planks"))
+        kit.hut_window(BUNK, "s", a, b, 1.0, 1.7, frame_m, glass_m, thick=T, boarded=i == 1, broken=i == 2)
     kit.shards("Glass under the bunkhouse window", (13.5, 2.1, 0.0), spread=0.6, count=14, seed=4)
-    # Its door: forced open out against the wall, a fire axe buried in it.
-    bdoor = reb.prim("cube", "Bunkhouse door", mat("planks"), (BUNK_DOOR[0] - 0.45, BUNK[3] + T + 0.07, 1.02), (0.9, 0.05, 2.04))
-    reb.prim("cube", "Door brace", frame_m, (BUNK_DOOR[0] - 0.45, BUNK[3] + T + 0.1, 1.02), (0.8, 0.03, 0.1), rot=(0, 0.9, 0))
-    for x in (BUNK_DOOR[0] - 0.04, BUNK_DOOR[1] + 0.04):
-        reb.prim("cube", "Door frame", frame_m, (x, BUNK[3] + T / 2, 1.05), (0.08, T + 0.04, 2.1))
-    reb.prim("cube", "Door head", frame_m, ((BUNK_DOOR[0] + BUNK_DOOR[1]) / 2, BUNK[3] + T / 2, 2.1), (BUNK_DOOR[1] - BUNK_DOOR[0] + 0.16, T + 0.04, 0.08))
+    bdoor = kit.shut_door("Bunkhouse door", BUNK, "s", BUNK_DOOR[0], BUNK_DOOR[1], 2.05, mat("planks"), thick=T)
     reb.prim("cube", "Step", mat("planks"), ((BUNK_DOOR[0] + BUNK_DOOR[1]) / 2, BUNK[3] + T + 0.25, 0.08), (1.4, 0.5, 0.16))
-    axe_at = Vector((BUNK_DOOR[0] - 0.5, BUNK[3] + T + 0.1, 1.3))
-    kit.rod("Axe handle", reb.mat_wood("Axe handle", (0.4, 0.28, 0.14)), axe_at + Vector((0, 0.02, 0)), axe_at + Vector((0.25, 0.75, -0.25)), 0.02)
-    reb.prim("cube", "Axe head", reb.mat_plain("Fire axe red", (0.4, 0.03, 0.02), 0.45), axe_at + Vector((-0.02, 0.02, 0.02)), (0.22, 0.06, 0.12), rot=(0, 0.35, 0.2))
+    # The fire axe buried in it, chips of fresh wood, the gouges.
+    face = BUNK[3] + T
+    axe_at = Vector((BUNK_DOOR[0] + 0.3, face + 0.02, 1.3))
+    kit.rod("Axe handle", reb.mat_wood("Axe handle", (0.4, 0.28, 0.14)), axe_at + Vector((0, 0.02, 0)), axe_at + Vector((0.3, 0.7, -0.3)), 0.02)
+    reb.prim("cube", "Axe head", reb.mat_plain("Fire axe red", (0.4, 0.03, 0.02), 0.45), axe_at + Vector((-0.02, 0.0, 0.02)), (0.2, 0.06, 0.12), rot=(0, 0.35, 0.2))
     for i in range(4):
-        reb.prim("cube", f"Axe cut {i}", reb.mat_wood("Fresh wood", (0.45, 0.34, 0.2)), axe_at + Vector((rng.uniform(-0.25, 0.2), -0.005, rng.uniform(-0.35, 0.3))), (0.18, 0.02, 0.025), rot=(0, rng.uniform(-0.6, 0.6), 0))
-    kit.scratches("Gouges in the door", mat("black"), (BUNK_DOOR[0] - 0.3, BUNK[3] + T + 0.1, 1.0), (0, 1), count=4, length=0.4, seed=3)
-    kit.splat("Handprint by the bunkhouse door", mat("old blood"), (BUNK_DOOR[1] + 0.12, BUNK[3] + T + 0.005, 1.15), 0.07, rot=(math.pi / 2, 0, 0), seed=5)
-    # Inside, through the door: bunk ends, and the bulb that fails.
-    for x in (8.0, 10.2, 13.0, 15.2):
+        reb.prim("cube", f"Axe cut {i}", reb.mat_wood("Fresh wood", (0.45, 0.34, 0.2)), (BUNK_DOOR[0] + rng.uniform(0.15, 0.75), face + 0.03, 1.3 + rng.uniform(-0.35, 0.3)), (0.16, 0.02, 0.025), rot=(0, rng.uniform(-0.6, 0.6), 0))
+    kit.scratches("Gouges in the door", mat("black"), (BUNK_DOOR[0] + 0.45, face + 0.03, 1.0), (0, 1), count=4, length=0.4, seed=3)
+    kit.splat("Handprint by the bunkhouse door", mat("old blood"), (BUNK_DOOR[1] + 0.14, face + 0.004, 1.15), 0.07, rot=(math.pi / 2, 0, 0), seed=5)
+    for x in (8.0, 13.0, 15.2):
         kit.bunk(f"Bunk inside {x}", mat("iron"), (x, -2.4, 0.0), seed=int(x))
-    kit.bunk("Bunk inside, south", mat("iron"), (12.6, 0.6, 0.0), seed=31)
-    bcord, bglass, blight, bglow = kit.bulb("Bunkhouse bulb", (11.45, -0.6, 2.4), energy=35, rgb=(1.0, 0.75, 0.45), flex=0.4)
+    kit.bottles("Bottles by the step", (12.6, 2.4, 0.0), count=5, spread=0.5, seed=4, tipped=0.8)
+    kit.crate("Boot crate by the step", mat("planks"), (9.9, 2.05, 0.0), size=(0.6, 0.4, 0.35), rot=0.1, open_=True)
+    for i, x in enumerate((10.0, 10.25)):
+        reb.prim("cube", f"Boot {i}", mat("black"), (x, 2.45, 0.08), (0.12, 0.3, 0.16), rot=(0, 0, 0.3 * i), bevel=0.03)
 
     # The foreman's office in the north-west corner: green boards, a stovepipe.
-    hut("Office", OFFICE, 2.5, green, tin, [("s", OFFICE_DOOR[0], OFFICE_DOOR[1], 0.0, 2.05), ("s", 3.75, 4.35, 1.0, 1.8), ("e", 1.2, 2.3, 1.0, 1.8)], ridge="y", pitch=0.32, eaves=0.3)
-    window(OFFICE, "s", 3.75, 4.35, 1.0, 1.8, frame_m, glass_m)
-    window(OFFICE, "e", 1.2, 2.3, 1.0, 1.8, frame_m, glass_m)
-    reb.prim("cube", "Office door", mat("green paint"), (OFFICE_DOOR[0] - 0.05, OFFICE[3] + T + 0.42, 1.02), (0.05, 0.85, 2.04), rot=(0, 0, 0.15))
-    for x in (OFFICE_DOOR[0] - 0.04, OFFICE_DOOR[1] + 0.04):
-        reb.prim("cube", "Door frame", frame_m, (x, OFFICE[3] + T / 2, 1.05), (0.08, T + 0.04, 2.1))
-    reb.prim("cube", "Door head", frame_m, ((OFFICE_DOOR[0] + OFFICE_DOOR[1]) / 2, OFFICE[3] + T / 2, 2.1), (1.06, T + 0.04, 0.08))
+    kit.hut("Office", OFFICE, 2.5, green, tin, [("s", OFFICE_DOOR[0], OFFICE_DOOR[1], 0.0, 2.05), ("s", 3.75, 4.35, 1.0, 1.8), ("e", 1.2, 2.3, 1.0, 1.8)], ridge="y", pitch=0.5, eaves=0.3, thick=T)
+    kit.hut_window(OFFICE, "s", 3.75, 4.35, 1.0, 1.8, frame_m, glass_m, thick=T)
+    kit.hut_window(OFFICE, "e", 1.2, 2.3, 1.0, 1.8, frame_m, glass_m, thick=T)
+    kit.shut_door("Office door", OFFICE, "s", OFFICE_DOOR[0], OFFICE_DOOR[1], 2.05, mat("green paint"), thick=T)
     reb.prim("cube", "Office sign", mat("white paint"), ((OFFICE_DOOR[0] + OFFICE_DOOR[1]) / 2, OFFICE[3] + T + 0.02, 2.3), (0.8, 0.03, 0.2))
     kit.text("Office sign words", "OFFICE", mat("black"), ((OFFICE_DOOR[0] + OFFICE_DOOR[1]) / 2, OFFICE[3] + T + 0.04, 2.3), size=0.13, rot=(math.pi / 2, 0, math.pi))
     reb.prim("cube", "Office step", mat("planks"), ((OFFICE_DOOR[0] + OFFICE_DOOR[1]) / 2, OFFICE[3] + T + 0.22, 0.08), (1.2, 0.44, 0.16))
     kit.rod("Office stovepipe", mat("rust"), (1.6, 1.4, 2.4), (1.6, 1.4, 3.9), 0.08)
-    kit.text("Office window words", "KEEP OUT", mat("red paint"), (4.05, OFFICE[3] + T + 0.1, 1.4), size=0.09, rot=(math.pi / 2, 0, math.pi))
+    reb.prim("cone", "Stovepipe hat", mat("rust"), (1.6, 1.4, 4.0), (0.3, 0.3, 0.14), top=0.1)
 
     # The mess hall along the west: whitewashed boards, its chimney smoking.
     mwin = [(6.0, 7.4), (11.2, 12.6)]
-    hut("Mess", MESS, 2.8, white, tin, [("e", MESS_DOOR[0], MESS_DOOR[1], 0.0, 2.1)] + [("e", a, b, 1.0, 1.9) for a, b in mwin], ridge="y", pitch=0.28)
+    kit.hut("Mess", MESS, 2.8, white, tin, [("e", MESS_DOOR[0], MESS_DOOR[1], 0.0, 2.1)] + [("e", a, b, 1.0, 1.9) for a, b in mwin], ridge="y", pitch=0.46, thick=T)
     for a, b in mwin:
-        window(MESS, "e", a, b, 1.0, 1.9, frame_m, reb.mat_glass("Steamy glass", (0.45, 0.42, 0.36)))
-    reb.prim("cube", "Mess door", mat("white paint"), (MESS[1] + T + 0.42, MESS_DOOR[1] + 0.05, 1.04), (0.85, 0.05, 2.08), rot=(0, 0, 0.12))
-    for y in (MESS_DOOR[0] - 0.04, MESS_DOOR[1] + 0.04):
-        reb.prim("cube", "Door frame", frame_m, (MESS[1] + T / 2, y, 1.08), (T + 0.04, 0.08, 2.16))
-    reb.prim("cube", "Door head", frame_m, (MESS[1] + T / 2, (MESS_DOOR[0] + MESS_DOOR[1]) / 2, 2.16), (T + 0.04, 1.06, 0.08))
+        kit.hut_window(MESS, "e", a, b, 1.0, 1.9, frame_m, reb.mat_glass("Steamy glass", (0.45, 0.42, 0.36)), thick=T)
+    kit.shut_door("Mess door", MESS, "e", MESS_DOOR[0], MESS_DOOR[1], 2.1, mat("white paint"), thick=T)
     reb.prim("cube", "Mess sign", frame_m, (MESS[1] + T + 0.03, (MESS_DOOR[0] + MESS_DOOR[1]) / 2, 2.45), (0.03, 1.4, 0.3))
     kit.text("Mess sign words", "COOKHOUSE", mat("white paint"), (MESS[1] + T + 0.05, (MESS_DOOR[0] + MESS_DOOR[1]) / 2, 2.45), size=0.17, rot=(math.pi / 2, 0, math.pi / 2))
     reb.prim("cube", "Mess step", mat("planks"), (MESS[1] + T + 0.25, (MESS_DOOR[0] + MESS_DOOR[1]) / 2, 0.08), (0.5, 1.3, 0.16))
-    reb.prim("cube", "Mess chimney", mat("brick"), (-0.4, 6.0, 3.4), (0.6, 0.6, 2.4))
+    reb.prim("cube", "Mess chimney", mat("brick"), (-0.4, 6.0, 3.6), (0.6, 0.6, 2.4))
     mess_glow = reb.point("Range glow in the mess", (0.4, 8.0, 1.6), 25, (1.0, 0.55, 0.25), 0.5)
     reb.point("Lamp in the mess", (0.0, 12.0, 2.2), 12, (1.0, 0.7, 0.4), 0.3)
     reb.prim("cube", "Mess counter inside", mat("dark wood"), (-1.0, 7.0, 0.45), (1.6, 0.6, 0.9))
     kit.table("Mess table inside", mat("pine"), (0.0, 11.4, 0.0), size=(0.9, 2.6, 0.76))
-    # Laid out under canvas along the mess wall, early on.
-    canvas = reb.mat_surface("Tarp", [(0.0, (0.1, 0.11, 0.07)), (1.0, (0.2, 0.2, 0.13))], scale=6, bump=0.3)
-    for i, x in enumerate((2.95, 3.95)):
-        kit.body(f"Laid out {i}", (x, 10.55, 0.0), heading=math.pi / 2, seed=60 + i)
-        reb.cloth(f"Canvas over {i}", canvas, (x, 11.65, 0.24), (0.95, 1.45), rot=(0, 0, rng.uniform(-0.08, 0.08)), cuts=14, lumps=0.07, seed=60 + i)
-    kit.splat("Stain through the canvas", mat("old blood"), (3.0, 11.3, 0.31), 0.14, seed=61)
+    # Along the mess wall: the cookhouse woodpile, its garbage cans, a washstand.
+    wood = []
+    for row in range(5):
+        for i in range(13):
+            y = 10.45 + i * 0.21 + rng.uniform(-0.02, 0.02)
+            z = 0.1 + row * 0.19
+            x = MESS[1] + T + 0.15 + rng.uniform(-0.04, 0.04)
+            wood.append(((x, y, z), (x + 0.5 + rng.uniform(-0.05, 0.05), y + rng.uniform(-0.03, 0.03), z), rng.uniform(0.08, 0.1)))
+    pile, _ = logs_mesh("Cookhouse woodpile", wood, bark=mat("bark"))
+    reb.wall(reb.prim("cube", "Woodpile footprint", None, (MESS[1] + T + 0.4, 11.8, 0.5), (0.7, 2.9, 1.0))).hide_render = True
+    reb.prim("cube", "Woodpile roof", mat("tin"), (MESS[1] + T + 0.45, 11.8, 1.35), (0.9, 3.0, 0.03), rot=(0, 0.25, 0))
+    for i, y in enumerate((13.5, 14.1)):
+        can = reb.prim("cyl", f"Garbage can {i}", kit.drum_paint(f"Galvanised can {i}", (0.3, 0.3, 0.28)), (MESS[1] + T + 0.4, y, 0.38), (0.5, 0.5, 0.75), segments=18)
+        reb.wall(can, "circle")
+    reb.prim("cyl", "Can lid", mat("steel"), (MESS[1] + T + 0.9, 14.0, 0.03), (0.52, 0.52, 0.03), rot=(0.1, 0, 0), segments=18)
+    kit.papers("Garbage spilled", (MESS[1] + T + 0.9, 13.6, 0.0), spread=0.5, count=5, seed=8)
+    kit.table("Washstand", mat("planks"), (MESS[1] + T + 0.35, 8.1, 0.0), size=(0.5, 1.1, 0.8))
+    reb.prim("cyl", "Wash basin", reb.mat_plain("Enamel", (0.5, 0.5, 0.46), 0.3), (MESS[1] + T + 0.35, 8.0, 0.86), (0.42, 0.42, 0.1), segments=18)
+    reb.prim("cube", "Soap bar", reb.mat_plain("Soap", (0.5, 0.45, 0.3), 0.6), (MESS[1] + T + 0.35, 8.45, 0.82), (0.08, 0.05, 0.03), segments=8)
+    reb.wall(reb.prim("cube", "Washstand footprint", None, (MESS[1] + T + 0.35, 8.1, 0.5), (0.55, 1.15, 1.0))).hide_render = True
 
     # The workshop in the south-east: corrugated tin on a timber frame.
-    hut("Workshop", WORK, 3.0, tin_wall, tin, [("n", WORK_DOOR[0], WORK_DOOR[1], 0.0, 2.3), ("n", 17.0, 18.2, 1.1, 1.9), ("w", 15.4, 16.6, 1.1, 1.9)], ridge="x", pitch=0.22)
-    window(WORK, "n", 17.0, 18.2, 1.1, 1.9, frame_m, glass_m, boarded=True, board_m=mat("planks"))
-    window(WORK, "w", 15.4, 16.6, 1.1, 1.9, frame_m, glass_m, boarded=True, board_m=mat("planks"))
-    reb.prim("cube", "Workshop door", tin_wall, (WORK_DOOR[1] + 0.62, WORK[2] - T - 0.06, 1.15), (1.2, 0.04, 2.3))
-    for x in (WORK_DOOR[0] - 0.05, WORK_DOOR[1] + 0.05):
-        reb.prim("cube", "Door frame", frame_m, (x, WORK[2] - T / 2, 1.2), (0.1, T + 0.04, 2.4))
-    reb.prim("cube", "Door head", frame_m, ((WORK_DOOR[0] + WORK_DOOR[1]) / 2, WORK[2] - T / 2, 2.35), (1.4, T + 0.04, 0.1))
+    kit.hut("Workshop", WORK, 3.0, tin_wall, tin, [("n", WORK_DOOR[0], WORK_DOOR[1], 0.0, 2.3), ("n", 17.0, 18.2, 1.1, 1.9), ("w", 15.4, 16.6, 1.1, 1.9)], ridge="x", pitch=0.42, thick=T)
+    kit.hut_window(WORK, "n", 17.0, 18.2, 1.1, 1.9, frame_m, glass_m, thick=T, boarded=True)
+    kit.hut_window(WORK, "w", 15.4, 16.6, 1.1, 1.9, frame_m, glass_m, thick=T, boarded=True)
+    kit.shut_door("Workshop door", WORK, "n", WORK_DOOR[0], WORK_DOOR[1], 2.3, tin_wall, thick=T, handle_m=mat("rust"))
     reb.prim("cube", "Workshop sign", mat("yellow paint"), (16.0, WORK[2] - T - 0.03, 2.65), (1.8, 0.03, 0.3))
-    kit.text("Workshop sign words", "SHOP  NO SMOKING", mat("black"), (16.0, WORK[2] - T - 0.05, 2.65), size=0.13)
-    # A barricade: a bench and boards he pulled away from the inside of the door.
+    kit.text("Workshop sign words", "NO SMOKING", mat("black"), (16.0, WORK[2] - T - 0.05, 2.65), size=0.13)
     kit.barricade("Boards torn off the shop door", mat("planks"), (WORK_DOOR[0] - 0.3, WORK[2] - 0.45), (WORK_DOOR[0] + 0.8, WORK[2] - 0.9), 0.02, 0.06, count=3, seed=8)
-    reb.point("Workshop inside", ((WORK[0] + WORK[1]) / 2, (WORK[2] + WORK[3]) / 2, 2.2), 15, (0.7, 0.8, 1.0), 0.3)
     kit.text("Scrawl on the shop", "DONT LET THEM IN", mat("red paint"), (WORK[0] - T - 0.01, 14.6, 1.6), size=0.14, rot=(math.pi / 2, 0, -math.pi / 2))
 
-    # The sawmill along the east: a tall grey shed, its big doors run open.
+    # The sawmill along the east: a tall grey shed, its big sliding doors run shut.
     mx0, mx1, my0, my1 = MILL
-    kit.walls(mx0 + T, my0, mx1, my1, 6.0, grey, [("w", MILL_DOOR[0], MILL_DOOR[1], 0.0, 3.4), ("w", 3.4, 5.0, 3.8, 4.8), ("w", 10.0, 11.6, 3.8, 4.8)], thick=T, name="Sawmill wall",
-              floor=reb.mat_surface("Sawdust", [(0.0, (0.22, 0.16, 0.09)), (1.0, (0.42, 0.33, 0.2))], scale=8, bump=0.3))
-    for i in range(2):
-        reb.prim("cube", "Sawmill roof", tin, ((mx0 + mx1) / 2, (my0 + my1) / 2 + (i * 2 - 1) * 2.5, 6.8), (mx1 - mx0 + 1.0, 5.4, 0.06), rot=((i * 2 - 1) * 0.3, 0, 0))
-    reb.prim("cube", "Sawmill dark", reb.mat_plain("Mill dark", (0.012, 0.01, 0.008), 0.95), (mx0 + 9.0, (my0 + my1) / 2, 3.0), (0.2, my1 - my0 - 0.3, 6.0))
-    for y in (MILL_DOOR[0] - 1.45, MILL_DOOR[1] + 1.45):
-        reb.prim("cube", "Mill door, run back", grey, (mx0 - 0.08, y, 1.7), (0.06, 2.9, 3.4))
-    reb.prim("cube", "Mill door rail", mat("rust"), (mx0 - 0.1, (MILL_DOOR[0] + MILL_DOOR[1]) / 2, 3.5), (0.08, 9.0, 0.08))
-    reb.prim("cube", "Head saw carriage", mat("rust"), (mx0 + 3.5, 7.5, 0.5), (5.0, 0.9, 0.8))
-    logs_mesh("Log on the carriage", [((mx0 + 1.6, 7.5, 1.2), (mx0 + 5.6, 7.5, 1.2), 0.38)])
-    reb.prim("cyl", "Head saw", mat("steel"), (mx0 + 4.0, 6.7, 1.2), (1.6, 1.6, 0.03), rot=(math.pi / 2, 0, 0), segments=32)
-    reb.point("Mill skylight", (mx0 + 4.0, 7.5, 5.0), 60, (0.7, 0.75, 0.85), 1.0)
-    reb.prim("cube", "Mill sign", mat("white paint"), (mx0 - 0.04, 7.5, 4.1), (0.03, 3.2, 0.5))
-    kit.text("Mill sign words", "CAMP 4 SAWMILL", mat("black"), (mx0 - 0.07, 7.5, 4.1), size=0.3, rot=(math.pi / 2, 0, -math.pi / 2))
-    mill_foot = reb.prim("cube", "Sawmill footprint", None, ((mx0 + mx1) / 2, (my0 + my1) / 2, 0.5), (mx1 - mx0, my1 - my0 + 0.3, 1.0))
-    mill_foot.hide_render = True
-    reb.wall(mill_foot)
+    kit.hut("Sawmill", MILL, 6.0, grey, tin, [("w", MILL_DOOR[0], MILL_DOOR[1], 0.0, 3.4), ("w", 3.4, 5.0, 3.8, 4.8), ("w", 10.0, 11.6, 3.8, 4.8)], ridge="x", pitch=0.42, thick=T,
+            inside=reb.mat_surface("Sawdust", [(0.0, (0.22, 0.16, 0.09)), (1.0, (0.42, 0.33, 0.2))], scale=8, bump=0.3))
+    for a, b in ((3.4, 5.0), (10.0, 11.6)):
+        kit.hut_window(MILL, "w", a, b, 3.8, 4.8, frame_m, glass_m, thick=T)
+    for i, (a, b) in enumerate(((MILL_DOOR[0], (MILL_DOOR[0] + MILL_DOOR[1]) / 2), ((MILL_DOOR[0] + MILL_DOOR[1]) / 2, MILL_DOOR[1]))):
+        kit.shut_door(f"Mill door {i}", MILL, "w", a, b, 3.4, grey, thick=T, handle_m=mat("rust"))
+        for z in (0.6, 1.7, 2.8):
+            reb.prim("cube", "Mill door brace", frame_m, (mx0 - T - 0.03, (a + b) / 2, z), (0.04, b - a - 0.1, 0.14))
+    reb.prim("cube", "Mill door rail", mat("rust"), (mx0 - T - 0.06, (MILL_DOOR[0] + MILL_DOOR[1]) / 2, 3.52), (0.08, 6.0, 0.08))
+    # Sawn boards stacked under a lean-to roof by the mill wall, the dust round them.
+    lum = []
+    for row in range(6):
+        for i in range(5):
+            y = 9.7 + i * 0.32
+            lum.append(reb.prim("cube", "Sawn board", mat("pine"), (mx0 - 0.9, y, 0.12 + row * 0.07), (1.4, 0.28, 0.05), rot=(0, 0, rng.uniform(-0.03, 0.03))))
+    for x in (mx0 - 1.4, mx0 - 0.4):
+        lum.append(reb.prim("cube", "Bearer", mat("dark wood"), (x, 10.3, 0.05), (0.1, 1.7, 0.1)))
+    reb.wall(kit.join("Sawn boards", lum))
 
     # ---- Fences: the slab fence round the camp where no building stands, the depot's wire.
     rng_f = random.Random(5)
@@ -511,19 +480,34 @@ def build():
             p = a.lerp(b, i / n)
             kit.rod("Depot post", mat("rust"), (p.x, p.y, 0), (p.x, p.y, 2.1), 0.035, 6)
         kit.rod("Depot top rail", mat("rust"), (a.x, a.y, 2.0), (b.x, b.y, 2.0), 0.02, 6)
-    gate_leaf = reb.prim("cube", "Depot gate", wire, (DEPOT_GATE[0] + 0.25, DEPOT[2] - 0.85, 0.95), (0.02, 1.7, 1.8), rot=(0, 0, 0.3))
+    # The depot gate: two leaves shut, chained and padlocked through the middle.
+    gmid = (DEPOT_GATE[0] + DEPOT_GATE[1]) / 2
+    for a, b in ((DEPOT_GATE[0] + 0.05, gmid - 0.02), (gmid + 0.02, DEPOT_GATE[1] - 0.05)):
+        reb.prim("cube", "Depot gate leaf", wire, ((a + b) / 2, DEPOT[2], 1.0), (b - a, 0.02, 1.8))
+        for z in (0.12, 1.88):
+            kit.rod("Gate frame", mat("rust"), (a, DEPOT[2], z), (b, DEPOT[2], z), 0.02, 6)
+        for x in (a, b):
+            kit.rod("Gate frame", mat("rust"), (x, DEPOT[2], 0.12), (x, DEPOT[2], 1.88), 0.02, 6)
     for x in DEPOT_GATE:
         reb.mask(reb.wall(kit.rod("Depot gate post", mat("rust"), (x, DEPOT[2], 0), (x, DEPOT[2], 2.2), 0.05, 8), "circle"))
+    links_ = []
+    for k in range(10):
+        a = 2 * math.pi * k / 10
+        links_.append(kit.rod("Gate chain", mat("iron"), (gmid + 0.12 * math.cos(a), DEPOT[2] - 0.03, 1.05 + 0.1 * math.sin(a)),
+                              (gmid + 0.12 * math.cos(a + 0.63), DEPOT[2] - 0.03, 1.05 + 0.1 * math.sin(a + 0.63)), 0.012, 4))
+    kit.join("Gate chain", links_)
+    reb.prim("cube", "Padlock", mat("steel"), (gmid, DEPOT[2] - 0.06, 0.92), (0.08, 0.03, 0.1), bevel=0.01)
     reb.prim("cube", "Depot sign", mat("white paint"), (5.5, DEPOT[2] - 0.03, 1.4), (0.9, 0.02, 0.45))
     kit.text("Depot sign words", "FUEL", mat("red paint"), (5.5, DEPOT[2] - 0.045, 1.5), size=0.16)
     kit.text("Depot sign words 2", "NO NAKED FLAME", mat("red paint"), (5.5, DEPOT[2] - 0.045, 1.3), size=0.07)
-    # Inside the depot: drums, the tank on its stand, the hose reel.
+    # Inside the depot: drums, the tank on its stand.
     for i, (x, y) in enumerate(((0.2, 16.4), (0.85, 16.5), (0.5, 17.1), (5.6, 19.6), (6.0, 18.9))):
-        kit.drum(f"Depot drum {i}", mat("red paint") if i % 2 else mat("rust"), (x, y, 0.0), rot=rng.uniform(0, 3))
+        d = kit.drum(f"Depot drum {i}", kit.drum_paint(f"Depot drum paint {i}", (0.3, 0.05, 0.03) if i % 2 else (0.06, 0.1, 0.05)), (x, y, 0.0), rot=rng.uniform(0, 3))
+        kit.stencil(d, ["DIESEL", f"No 55-{4100 + 37 * i}"], stencil_m, size=0.11, turn=rng.uniform(-0.5, 0.5))
     reb.prim("cyl", "Depot tank", reb.mat_plain("Tank green", (0.1, 0.14, 0.09), 0.5), (2.6, 19.4, 1.6), (1.4, 1.4, 3.4), rot=(0, math.pi / 2, 0), segments=20)
     for x in (1.4, 3.8):
         reb.prim("cube", "Tank stand", mat("rust"), (x, 19.4, 0.45), (0.15, 1.2, 0.9))
-    kit.splat("Oil in the depot", reb.mat_plain("Oil", (0.015, 0.013, 0.012), 0.12), (3.0, 17.4, 0.0), 0.9, seed=9, stretch=(1.4, 0.8))
+    oil_spill("Oil in the depot", oil, (3.0, 17.4, 0.001), 0.6, 0.4, seed=9)
     room.void((X0, DEPOT[2], DEPOT[1], Y1))
 
     # ---- The camp gate: two log posts and a beam, the leaves dragged open.
@@ -534,50 +518,58 @@ def build():
         reb.mask(reb.wall(reb.prim("cyl", "Gate post footprint", None, (x, GATE_Y, 1.0), (0.4, 0.4, 2.0)), "circle")).hide_render = True
     for i, (x, yaw) in enumerate(((GATE[0] - 0.9, 0.5), (GATE[1] + 0.9, -0.6))):
         reb.prim("cube", f"Gate leaf {i}", mat("logs"), (x, GATE_Y + 0.9, 0.9), (1.8, 0.1, 1.5), rot=(0, 0, yaw))
-    kit.path_strip("Road out", kit.dirtied(mat("dirt"), 0.6), [(10.3, 18.4), (10.4, 24.0), (11.5, 34.0)], height, width=1.4)
-    # Their barricade, pulled down: logs dragged aside, a broken board.
-    logs_mesh("Barricade logs", [((7.1, 18.2, 0.2), (8.2, 16.4, 0.22), 0.2), ((12.1, 18.4, 0.2), (13.0, 15.7, 0.2), 0.18)])
+    on_road = kit.dirt_path("Road out", [(10.3, 18.0), (10.4, 24.0), (11.5, 34.0), (14.0, 46.0)], height, width=3.2)
+    # Their barricade, pulled down: logs dragged aside.
+    kit.rough_log("Barricade log", (7.1, 18.2, 0.12), (8.2, 16.4, 0.14), 0.2, m=mat("bark"), seed=3, stubs=2)
+    kit.rough_log("Barricade log 2", (12.1, 18.4, 0.12), (13.0, 15.7, 0.12), 0.18, m=mat("bark"), seed=4, stubs=2)
 
-    # ---- The quarantine board, painted by hand on a sheet of ply, nailed to two posts.
-    for x in (7.1, 8.5):
-        reb.mask(reb.wall(kit.rod("Board post", mat("dark wood"), (x, 16.85, 0), (x, 16.85, 2.0), 0.05), "circle"))
-    reb.prim("cube", "Quarantine board", ply, (7.8, 16.9, 1.45), (1.9, 0.03, 1.0), rot=(0, 0.04, 0))
-    for i, (words, size, z, m) in enumerate((("CAMP 4", 0.2, 1.75, mat("black")), ("QUARANTINE", 0.24, 1.47, mat("red paint")), ("BY ORDER", 0.15, 1.2, mat("black")))):
-        kit.text(f"Board words {i}", words, m, (7.8, 16.92, z), size=size, rot=(math.pi / 2, -0.04, math.pi))
-    kit.splat("Paint run", mat("red paint"), (8.25, 16.92, 1.32), 0.025, rot=(math.pi / 2, 0, 0), stretch=(0.5, 3.0), seed=2)
-
-    # ---- The fire pit: a ring of stones, ash, a mattress's springs, charred bones, a log still smoking.
+    # ---- The fire pit: a ring of stones, the ash, a man burned black in it, still smoking.
     sv, sf = [], []
     for i in range(14):
         a = 2 * math.pi * i / 14
-        reb.boulder(rng, (PIT[0] + math.cos(a) * 1.05, PIT[1] + math.sin(a) * 1.05, 0.0), rng.uniform(0.14, 0.2), sv, sf)
-    reb.mesh_object("Fire ring", sv, sf, kit.dirtied(mat("rock"), 0.8))
+        reb.boulder(rng, (PIT[0] + math.cos(a) * 1.05, PIT[1] + math.sin(a) * 1.05, -0.03), rng.uniform(0.14, 0.2), sv, sf)
+    reb.mesh_object("Fire ring", sv, sf, kit.dirtied(mat("rock"), 0.9))
     reb.mask(reb.wall(reb.prim("cyl", "Fire pit footprint", None, (PIT[0], PIT[1], 0.3), (2.3, 2.3, 0.6)), "circle")).hide_render = True
-    reb.prim("cyl", "Ash heap", ash, (PIT[0], PIT[1], 0.02), (2.0, 2.0, 0.08), segments=24)
-    kit.splat("Ash blown out", ash, (PIT[0] + 0.8, PIT[1] + 0.4, 0.0), 1.2, seed=3, stretch=(1.4, 0.8), lumps=0.5)
-    logs_mesh("Charred logs", [((PIT[0] - 0.7, PIT[1] - 0.3, 0.12), (PIT[0] + 0.5, PIT[1] + 0.25, 0.25), 0.11),
-                               ((PIT[0] + 0.6, PIT[1] - 0.5, 0.1), (PIT[0] - 0.2, PIT[1] + 0.6, 0.2), 0.1),
-                               ((PIT[0] - 0.4, PIT[1] + 0.5, 0.1), (PIT[0] + 0.3, PIT[1] - 0.6, 0.12), 0.09)], bark=char, end=char)
+    kit.splat("Ash bed", ash, (PIT[0], PIT[1], height(*PIT) + 0.01), 1.0, seed=3, stretch=(1.0, 1.0), lumps=0.3)
+    kit.splat("Ash blown out", ash, (PIT[0] + 0.9, PIT[1] + 0.4, height(*PIT) + 0.004), 0.7, seed=4, stretch=(1.4, 0.7), lumps=0.6)
+    bh = 0.6
+    bdir = Vector((math.cos(bh), math.sin(bh), 0))
+    bat = Vector((PIT[0], PIT[1], 0.06)) - bdir * 0.8
+    burned = kit.body("Burned in the pit", tuple(bat), heading=bh, pose="back", seed=41)
+    burned.data.materials.clear()
+    burned.data.materials.append(char)
+    burned.scale = (1.0, 1.0, 0.85)
+    # The fire took him to the bone at the head and the chest: a skull and ribs show through the char.
+    bone_m = kit.dirtied(reb.mat_plain("Scorched bone", (0.42, 0.36, 0.27), 0.7), 0.8, scale=12)
+    head = bat + bdir * 1.6 + Vector((0, 0, 0.1))
+    reb.prim("sphere", "Scorched skull", bone_m, tuple(head), (0.2, 0.17, 0.19), rot=(0, 0, bh), segments=14)
+    reb.prim("sphere", "Jaw", bone_m, tuple(head - bdir * 0.07 + Vector((0, 0, -0.06))), (0.12, 0.1, 0.06), rot=(0, 0, bh), segments=10)
+    for side in (-1, 1):
+        reb.prim("sphere", "Eye socket", mat("black"), tuple(head + bdir * 0.02 + Vector((0, 0, 0.09)) + Vector((-bdir.y, bdir.x, 0)) * 0.045 * side), (0.05, 0.05, 0.03), segments=8)
+    ribs = []
+    chest = bat + bdir * 1.2 + Vector((0, 0, 0.2))
+    across = Vector((-bdir.y, bdir.x, 0))
+    for i in range(5):
+        c0 = chest - bdir * (i * 0.06)
+        for side in (-1, 1):
+            ribs.append(kit.rod("Rib", bone_m, c0 + across * 0.16 * side + Vector((0, 0, -0.06)), c0 + across * 0.03 * side + Vector((0, 0, 0.05)), 0.012, 5))
+    kit.join("Ribs through the char", ribs)
+    coal = reb.mat_surface("Charcoal", [(0.0, (0.004, 0.004, 0.004)), (0.7, (0.015, 0.013, 0.012)), (1.0, (0.05, 0.045, 0.04))], scale=20, rough=0.85, bump=1.0)
+    logs_mesh("Charred logs", [((PIT[0] - 0.75, PIT[1] + 0.55, 0.07), (PIT[0] - 0.2, PIT[1] + 0.8, 0.09), 0.07),
+                               ((PIT[0] + 0.6, PIT[1] - 0.6, 0.06), (PIT[0] + 0.85, PIT[1] - 0.1, 0.08), 0.07)], bark=coal, end=coal)
     spr = []
-    for i in range(7):
-        spr.append(kit.rod("Spring wire", mat("rust"), (PIT[0] - 0.9 + i * 0.3, PIT[1] - 0.45, 0.14 + 0.05 * math.sin(i)), (PIT[0] - 0.9 + i * 0.3 + 0.05, PIT[1] + 0.5, 0.16), 0.008, 4))
-    for y in (-0.45, 0.5):
-        spr.append(kit.rod("Spring frame", mat("rust"), (PIT[0] - 0.95, PIT[1] + y, 0.15), (PIT[0] + 0.95, PIT[1] + y, 0.16), 0.012, 4))
-    kit.join("Mattress springs", spr)
-    bones = kit.bones("Charred bones", (PIT[0] + 0.2, PIT[1] + 0.1, 0.06), spread=0.6, seed=12)
-    bones.data.materials.clear()
-    bones.data.materials.append(reb.mat_plain("Burnt bone", (0.12, 0.1, 0.08), 0.8))
-    ember_m = reb.mat_emit("Embers", (1.0, 0.28, 0.04), 4)
+    for i in range(5):
+        spr.append(kit.rod("Spring wire", mat("rust"), (PIT[0] - 0.7 + i * 0.25, PIT[1] + 0.55, 0.06 + 0.03 * math.sin(i)), (PIT[0] - 0.65 + i * 0.25, PIT[1] + 0.9, 0.07), 0.007, 4))
+    kit.join("Bed springs in the ash", spr)
+    ember_m = reb.mat_emit("Embers", (1.0, 0.28, 0.04), 3)
     ev, ef = [], []
-    for i in range(30):
-        c = (PIT[0] + rng.gauss(0, 0.3), PIT[1] + rng.gauss(0, 0.3), 0.1)
-        kit._stain(ev, ef, rng, c, rng.uniform(0.02, 0.05), 0, 0.4, (1, 1), i, points=6, drops=False)
+    for i in range(16):
+        c = (PIT[0] + rng.gauss(0, 0.35), PIT[1] + rng.gauss(0, 0.35), 0.06)
+        kit._stain(ev, ef, rng, c, rng.uniform(0.015, 0.035), 0, 0.4, (1, 1), i, points=6, drops=False)
     reb.mesh_object("Ember spots", ev, ef, ember_m, smooth=False)
-    embers = reb.point("Ember glow", (PIT[0], PIT[1], 0.35), 30, (1.0, 0.35, 0.08), 0.4)
-    smoke_pit = smoke_column("Pit smoke", (PIT[0] + 0.1, PIT[1], 0.4), puffs=6, rise=3.4, drift=(0.9, 0.4), size=(0.35, 1.3), density=7.0)
-    smoke_mess = smoke_column("Chimney smoke", (-0.4, 6.0, 4.7), puffs=4, rise=2.4, drift=(1.0, 0.3), size=(0.25, 0.9), density=5.0)
-    # The drag from the bunkhouse door to the fire.
-    kit.drag_trail("Dragged to the fire", mat("old blood"), [(11.4, 2.4), (11.0, 4.2), (10.2, 6.0), (9.6, 7.1)], width=0.4, seed=7)
+    embers = reb.point("Ember glow", (PIT[0], PIT[1], 0.3), 12, (1.0, 0.35, 0.08), 0.4)
+    smoke_pit = smoke_column("Pit smoke", (PIT[0] + 0.1, PIT[1] - 0.1, 0.35), puffs=5, rise=2.4, drift=(0.5, 0.2), size=(0.1, 0.42), density=2.2)
+    smoke_mess = smoke_column("Chimney smoke", (-0.4, 6.0, 4.9), puffs=4, rise=1.8, drift=(0.6, 0.2), size=(0.12, 0.45), density=1.6)
 
     # ---- The bell on its post by the cookhouse door.
     reb.mask(reb.wall(kit.rod("Bell post", mat("dark wood"), (3.2, 7.3, 0), (3.2, 7.3, 2.9), 0.07), "circle"))
@@ -589,23 +581,31 @@ def build():
     for p in (bell, clapper, rope):
         p.parent = pivot
 
-    # ---- The laundry on the line: shirts, long johns, a pair of socks.
+    # ---- The laundry on the line, the bunkhouse's: shirts, long johns, a towel, socks.
     la, lb = Vector((5.6, 2.6, 0)), Vector((9.8, 3.4, 0))
     for p in (la, lb):
         reb.mask(reb.wall(kit.rod("Line pole", mat("dark wood"), (p.x, p.y, 0), (p.x, p.y, 2.15), 0.04), "circle"))
-    kit.rod("Washing line", mat("canvas"), (la.x, la.y, 2.05), (lb.x, lb.y, 2.05), 0.006, 4)
+        kit.rod("Line pole brace", mat("dark wood"), (p.x, p.y, 1.9), (p.x, p.y - 0.25, 2.15), 0.02)
+    sag_line = []
+    for k in range(10):
+        t0, t1 = k / 10, (k + 1) / 10
+        p, q = la.lerp(lb, t0), la.lerp(lb, t1)
+        sag_line.append(kit.rod("Washing line", mat("canvas"), (p.x, p.y, 2.05 - 0.12 * math.sin(math.pi * t0)), (q.x, q.y, 2.05 - 0.12 * math.sin(math.pi * t1)), 0.006, 4))
+    kit.join("Washing line", sag_line)
     yaw = math.atan2(lb.y - la.y, lb.x - la.x)
     pegs = []
-    for i, (t, m, w, hgt) in enumerate(((0.15, mat("flannel"), 0.6, 0.7), (0.33, reb.mat_plain("Long johns", (0.5, 0.45, 0.36), 0.9), 0.45, 1.0), (0.5, mat("denim"), 0.5, 0.85),
-                                        (0.68, reb.mat_stripes("Blue flannel", [(0.05, 0.08, 0.2), (0.02, 0.03, 0.05)], across=20), 0.6, 0.7), (0.84, mat("canvas"), 0.3, 0.35))):
+    washing = ((0.14, mat("flannel"), "shirt", 0.95, 0.75), (0.33, reb.mat_surface("Long johns", [(0.0, (0.36, 0.32, 0.25)), (1.0, (0.5, 0.46, 0.37))], scale=20, bump=0.2), "johns", 0.55, 1.0),
+               (0.5, reb.mat_surface("Grey towel", [(0.0, (0.2, 0.2, 0.18)), (1.0, (0.3, 0.29, 0.26))], scale=30, bump=0.4), "towel", 0.5, 0.75),
+               (0.67, reb.mat_stripes("Blue flannel", [(0.05, 0.08, 0.2), (0.02, 0.03, 0.05)], across=20), "shirt", 0.9, 0.72),
+               (0.83, mat("canvas"), "towel", 0.14, 0.32), (0.88, mat("canvas"), "towel", 0.14, 0.3))
+    for i, (t, m, kind, w, hgt) in enumerate(washing):
         p = la.lerp(lb, t)
         sag = 0.12 * math.sin(math.pi * t)
-        peg = reb.prim("sphere", f"Peg {i}", mat("planks"), (p.x, p.y, 2.04 - sag), (0.03, 0.03, 0.05))
-        cl = reb.cloth(f"Washing {i}", m, (0, 0, -hgt / 2), (w, hgt), rot=(math.pi / 2, 0, 0), cuts=8, lumps=0.03, seed=i)
+        peg = reb.prim("cube", f"Peg {i}", mat("planks"), (p.x, p.y, 2.04 - sag), (0.02, 0.03, 0.07))
+        cl = garment(f"Washing {i}", m, kind, w, hgt, seed=i)
         cl.parent = peg
         peg.rotation_euler = (0, 0, yaw)
         pegs.append(peg)
-    kit.splat("Shirt in the mud", mat("flannel"), (8.6, 4.5, 0.0), 0.25, seed=14, stretch=(1.4, 0.8))
 
     # ---- The log deck on the north-east, and the man who died against it.
     logs = []
@@ -618,10 +618,25 @@ def build():
     reb.mask(reb.wall(deck))
     for x in (12.4, 17.6):
         kit.rod("Deck stake", mat("dark wood"), (x, 5.95, 0), (x, 5.95, 1.5), 0.06)
+    # He sat down against the logs, his gun across his legs, and fired till it was empty.
     kit.body("Dead against the logs", (14.6, 5.72, 0.0), heading=math.pi / 2, pose="slumped", top=mat("flannel"), legs=mat("denim"), seed=21)
-    kit.splat("His blood", mat("blood"), (14.55, 6.35, 0.0), 0.5, seed=21, stretch=(1.3, 1.0))
-    kit.splat("Spray on the logs", mat("old blood"), (14.6, 4.62, 1.0), 0.35, rot=(math.pi / 2, 0, 0), seed=22, stretch=(1.4, 0.8), lumps=0.6)
-    reb.prim("cube", "His shotgun", mat("iron"), (15.5, 6.6, 0.04), (0.95, 0.06, 0.06), rot=(0, 0, 0.5))
+    kit.splat("Soaked into his shirt", mat("blood"), (14.6, 5.62, 0.75), 0.16, rot=(math.pi / 2 - 0.3, 0, 0), seed=23, stretch=(1.0, 1.4))
+    soaked = reb.mat_surface("Soaked blood", [(0.0, (0.02, 0.006, 0.004)), (0.5, (0.045, 0.012, 0.007)), (0.8, (0.07, 0.025, 0.014)), (1.0, (0.05, 0.03, 0.02))], scale=25, detail=8, rough=0.92, bump=0.1)
+    kit.lay_on_ground(kit.splat("Where he bled", soaked, (14.55, 6.2, 0), 0.36, seed=21, stretch=(1.3, 1.0), lumps=0.7), height, 0.01)
+    kit.splat("Spray on the logs", mat("old blood"), (14.6, 4.62, 1.0), 0.3, rot=(math.pi / 2, 0, 0), seed=22, stretch=(1.4, 0.8), lumps=0.6)
+    gun = [kit.rod("Barrel", mat("iron"), (-0.45, 0, 0), (0.25, 0, 0), 0.016, 8),
+           kit.rod("Pump", mat("dark wood"), (-0.05, 0, -0.025), (0.12, 0, -0.025), 0.025, 8),
+           reb.prim("cube", "Receiver", mat("iron"), (0.33, 0, -0.01), (0.2, 0.04, 0.07)),
+           reb.prim("cube", "Stock", mat("dark wood"), (0.6, 0, -0.04), (0.38, 0.045, 0.1), rot=(0, 0.12, 0))]
+    shotgun = kit.join("His shotgun", gun, origin=(0, 0, 0))
+    shotgun.location = (14.7, 6.3, 0.32)
+    shotgun.rotation_euler = (0.1, 0.05, 0.3)
+    hat = reb.prim("sphere", "His hard hat", hard_hat, (15.5, 6.2, 0.1), (0.3, 0.26, 0.18), rot=(0.4, 0.2, 0), segments=14)
+    reb.prim("cyl", "Hard hat brim", hard_hat, (15.5, 6.22, 0.05), (0.36, 0.32, 0.015), rot=(0.4, 0.2, 0), segments=16)
+    for i, x in enumerate((13.9, 14.05)):
+        reb.prim("cube", f"Work glove {i}", reb.mat_plain("Leather glove", (0.3, 0.2, 0.1), 0.8), (x, 6.25 + 0.1 * i, 0.02), (0.1, 0.22, 0.04), rot=(0, 0, 0.5 + i), bevel=0.02)
+    reb.prim("cyl", "Thermos", reb.mat_plain("Thermos green", (0.08, 0.14, 0.08), 0.4), (13.7, 5.9, 0.16), (0.1, 0.1, 0.32), segments=12)
+    reb.prim("cube", "Lunch pail", mat("rust"), (13.6, 6.45, 0.09), (0.3, 0.18, 0.18), rot=(0, 0, 0.2), bevel=0.02)
     shells = []
     for i in range(9):
         shells.append(reb.prim("cyl", "Shell", mat("red paint"), (14.6 + rng.gauss(0, 0.6), 6.8 + rng.gauss(0, 0.4), 0.012), (0.024, 0.024, 0.07), rot=(math.pi / 2, 0, rng.uniform(0, 3)), segments=6))
@@ -629,69 +644,61 @@ def build():
     for i, (x, z) in enumerate(((13.4, 1.1), (14.1, 0.8), (15.8, 1.3))):
         kit.splat(f"Shot in the logs {i}", mat("black"), (x, 2.48, z), 0.03, rot=(math.pi / 2, 0, 0), seed=30 + i, lumps=0.6)
 
+    # Between the deck and the bunkhouse: what a logger drops when he runs. A peavey, a coil of
+    # choker cable, a tipped water bucket.
+    kit.rod("Peavey handle", reb.mat_wood("Peavey ash", (0.38, 0.28, 0.16)), (12.0, 6.4, 0.04), (13.4, 7.3, 0.05), 0.025)
+    reb.prim("cube", "Peavey spike", mat("iron"), (13.5, 7.36, 0.05), (0.18, 0.05, 0.05), rot=(0, 0, 0.57))
+    kit.rod("Peavey hook", mat("iron"), (13.25, 7.2, 0.06), (13.3, 6.95, 0.04), 0.012, 6)
+    coil = []
+    for turn in range(4):
+        r = 0.34 + 0.025 * turn
+        coil.append([(12.6 + r * math.cos(2 * math.pi * k / 18), 4.9 + r * 0.8 * math.sin(2 * math.pi * k / 18), 0.03 + 0.02 * turn) for k in range(19)])
+    for i, pts in enumerate(coil):
+        kit.tube(f"Choker cable {i}", mat("iron"), pts, 0.014, segments=6)
+    reb.prim("cyl", "Water bucket", kit.drum_paint("Galvanised bucket", (0.22, 0.22, 0.21)), (11.7, 7.6, 0.16), (0.32, 0.32, 0.36), rot=(math.pi / 2, 0, 0.9), segments=14)
+    kit.splat("Where the bucket ran out", mat("mud"), (11.4, 7.9, height(11.4, 7.9) + 0.003), 0.3, seed=36, stretch=(1.4, 0.7), lumps=0.7)
     # ---- The skidder: blade down, its choker chains on three logs.
-    sk = []
     sx0, sx1, sy = 5.9, 10.0, 13.0
-    sk.append(reb.prim("cube", "Skidder frame", yellow, ((sx0 + sx1) / 2, sy, 0.9), (sx1 - sx0 - 0.6, 1.2, 0.6), bevel=0.04))
-    engine = kit.loft("Skidder engine", [(sx1 - 1.75, 0.58, 1.15, 1.85, 4), (sx1 - 0.5, 0.56, 1.15, 1.82, 4), (sx1 - 0.25, 0.5, 1.15, 1.7, 3)], [yellow], ring=24)
-    engine.location.y = sy
-    sk.append(engine)
-    for s_ in (-1, 1):
-        for k in range(5):
-            sk.append(reb.prim("cube", "Engine louvre", mat("black"), (sx1 - 1.5 + k * 0.2, sy + s_ * 0.575, 1.5), (0.08, 0.02, 0.3)))
-    sk.append(reb.prim("cube", "Skidder cab floor", yellow, (sx0 + 1.6, sy, 1.3), (1.4, 1.5, 0.15)))
-    for dx in (0.95, 2.25):
-        for dy in (-0.7, 0.7):
-            sk.append(kit.rod("Cab post", mat("black"), (sx0 + dx, sy + dy, 1.35), (sx0 + dx, sy + dy, 2.75), 0.04))
-    sk.append(reb.prim("cube", "Cab roof", yellow, (sx0 + 1.6, sy, 2.8), (1.6, 1.6, 0.08)))
-    sk.append(reb.prim("cube", "Seat", mat("black"), (sx0 + 1.5, sy, 1.55), (0.45, 0.5, 0.3)))
-    sk.append(kit.rod("Exhaust", mat("rust"), (sx1 - 0.7, sy - 0.35, 1.8), (sx1 - 0.7, sy - 0.35, 2.6), 0.05))
-    # Big lugged forestry tyres on yellow rims.
-    for x in (sx0 + 0.8, sx1 - 1.0):
-        for s in (-1, 1):
-            sk += kit.wheel("Skidder", (x, sy + s * 0.95, 0.75), r=0.72, width=0.55, rim=yellow)
-            for k in range(22):
-                a_ = 2 * math.pi * k / 22
-                for half in (-1, 1):
-                    sk.append(reb.prim("cube", "Tyre lug", mat("rubber"), (x + 0.74 * math.cos(a_), sy + s * 0.95 + half * 0.13, 0.75 + 0.74 * math.sin(a_)),
-                                       (0.07, 0.26, 0.06), rot=(0, -a_, half * 0.45)))
-    sk.append(reb.prim("cube", "Blade", yellow, (sx1 + 0.35, sy, 0.38), (0.12, 2.6, 0.75), rot=(0, 0.2, 0), bevel=0.02))
-    sk.append(reb.prim("cube", "Blade arm", mat("iron"), (sx1 + 0.05, sy - 0.6, 0.7), (0.7, 0.12, 0.12), rot=(0, 0.4, 0)))
-    sk.append(reb.prim("cube", "Blade arm", mat("iron"), (sx1 + 0.05, sy + 0.6, 0.7), (0.7, 0.12, 0.12), rot=(0, 0.4, 0)))
-    sk.append(reb.prim("cube", "Arch", yellow, (sx0 + 0.15, sy, 1.9), (0.25, 1.6, 0.25)))
-    for s in (-1, 1):
-        sk.append(reb.prim("cube", "Arch leg", yellow, (sx0 + 0.3, sy + s * 0.7, 1.3), (0.2, 0.2, 1.3), rot=(0, -0.2, 0)))
-    sk.append(reb.prim("cyl", "Winch drum", mat("iron"), (sx0 + 0.5, sy, 1.1), (0.5, 0.5, 0.9), rot=(math.pi / 2, 0, 0)))
-    skidder = kit.join("Skidder", sk)
+    hooks = []
+    skidder = kit.skidder("Skidder", ((sx0 + sx1) / 2, sy, height((sx0 + sx1) / 2, sy)), paint=yellow, chokers=hooks)
     reb.mask(reb.wall(skidder))
-    kit.text("Skidder words", "CAMP 4", mat("black"), (sx1 - 1.0, sy + 0.56, 1.5), size=0.16, rot=(math.pi / 2, 0, math.pi))
-    kit.splat("Mud pushed by the blade", wet_mud, (sx1 + 0.6, sy, 0.0), 0.7, seed=17, stretch=(0.6, 1.8), lumps=0.5)
-    kit.splat("Oil under the skidder", reb.mat_plain("Oil", (0.015, 0.013, 0.012), 0.12), (sx1 - 1.2, sy + 0.2, 0.0), 0.5, seed=18)
-    choked = [((sx0 - 4.0, sy - 0.35 + i * 0.35, 0.22), (sx0 - 0.4, sy - 0.2 + i * 0.2, 0.3), 0.2 + 0.03 * i) for i in range(3)]
-    logs_mesh("Choked logs", choked)
+    oil_spill("Oil under the skidder", oil, (sx1 - 1.2, sy + 0.2, 0.002), 0.4, 2.6, seed=18)
+    choked = [((sx0 - 4.0, sy - 0.35 + i * 0.35, 0.18), (sx0 - 0.4, sy - 0.2 + i * 0.2, 0.26), 0.2 + 0.03 * i) for i in range(3)]
+    for i, (a, b, r) in enumerate(choked):
+        kit.rough_log(f"Choked log {i}", a, b, r, m=mat("bark"), seed=20 + i, stubs=3)
     chain = []
     for i in range(3):
         a = Vector(choked[i][1]) + Vector((-0.3, 0, 0.1))
-        b = Vector((sx0 + 0.1, sy, 1.75))
+        b = hooks[0]
         for k in range(6):
             p, q = a.lerp(b, k / 6), a.lerp(b, (k + 1) / 6)
-            sag = 0.25 * math.sin(math.pi * k / 6)
-            chain.append(kit.rod("Choker", mat("iron"), (p.x, p.y, p.z - sag), (q.x, q.y, q.z - 0.25 * math.sin(math.pi * (k + 1) / 6)), 0.015, 4))
+            chain.append(kit.rod("Choker", mat("iron"), (p.x, p.y, p.z - 0.25 * math.sin(math.pi * k / 6)), (q.x, q.y, q.z - 0.25 * math.sin(math.pi * (k + 1) / 6)), 0.015, 4))
     kit.join("Choker chains", chain)
     room_wall_logs = reb.prim("cube", "Choked logs footprint", None, (sx0 - 2.2, sy, 0.3), (3.8, 1.2, 0.6))
     room_wall_logs.hide_render = True
     reb.mask(reb.wall(room_wall_logs))
 
-    # ---- The logger in the mud by the skidder, a peavey in his back, his hat in the puddle.
-    kit.body("Logger in the mud", (11.0, 15.2, 0.0), heading=0.25, pose="front", top=reb.mat_stripes("Green check", [(0.05, 0.15, 0.06), (0.02, 0.03, 0.02)], across=20), legs=mat("denim"), seed=33)
-    kit.splat("His blood", mat("blood"), (11.9, 15.45, 0.0), 0.6, seed=33, stretch=(1.4, 0.9))
-    kit.rod("Peavey handle", reb.mat_wood("Peavey", (0.35, 0.24, 0.12)), (12.2, 15.5, 0.25), (12.6, 16.3, 1.45), 0.025)
-    reb.prim("cube", "Peavey hook", mat("iron"), (12.2, 15.5, 0.25), (0.06, 0.25, 0.06), rot=(0.4, 0, 0))
-    reb.prim("sphere", "Hard hat", hard_hat, (12.15, 12.15, 0.04), (0.3, 0.26, 0.16), rot=(0.6, 0.3, 0))
-    kit.drag_trail("He crawled", mat("old blood"), [(9.2, 16.8), (10.2, 16.1), (11.0, 15.5)], width=0.3, seed=34)
-    kit.splat("Blood in the puddle", mat("blood"), (11.8, 16.3, 0.0), 0.35, seed=35, stretch=(1.3, 0.8))
+    # ---- The sawhorses by the gate: a log half cut through, the chainsaw left on it.
+    hx, hy = 11.8, 15.4
+    horse = []
+    for dx in (-0.8, 0.8):
+        for s in (-1, 1):
+            horse.append(kit.rod("Sawhorse leg", mat("planks"), (hx + dx, hy, 0.75), (hx + dx + s * 0.05, hy + s * 0.35, 0.0), 0.035, 6))
+        horse.append(kit.rod("Sawhorse X", mat("planks"), (hx + dx, hy - 0.3, 0.1), (hx + dx, hy + 0.3, 0.9), 0.04, 6))
+        horse.append(kit.rod("Sawhorse X", mat("planks"), (hx + dx, hy + 0.3, 0.1), (hx + dx, hy - 0.3, 0.9), 0.04, 6))
+    kit.join("Sawhorses", horse)
+    cut, _ = logs_mesh("Log on the horses", [((hx - 1.4, hy + 0.02, 0.98), (hx + 0.05, hy - 0.02, 0.98), 0.2), ((hx + 0.1, hy, 0.98), (hx + 1.5, hy + 0.06, 0.97), 0.19)])
+    reb.wall(reb.prim("cube", "Sawhorses footprint", None, (hx, hy, 0.5), (3.0, 0.8, 1.0))).hide_render = True
+    saw = [reb.prim("cube", "Saw body", reb.mat_plain("Saw orange", (0.45, 0.12, 0.02), 0.5), (0, 0, 0), (0.42, 0.24, 0.26), bevel=0.04),
+           reb.prim("cube", "Saw bar", mat("steel"), (0.0, 0.45, -0.05), (0.06, 0.7, 0.03)),
+           kit.rod("Saw handle", mat("black"), (-0.1, -0.08, 0.14), (0.1, -0.08, 0.14), 0.02, 6)]
+    chainsaw = kit.join("Chainsaw", saw, origin=(0, 0, 0))
+    chainsaw.location = (hx + 0.05, hy - 0.45, 1.25)
+    chainsaw.rotation_euler = (0.1, 0, 0.0)
+    reb.prim("cube", "Gas can", reb.mat_plain("Can red", (0.3, 0.03, 0.02), 0.5), (hx + 1.4, hy - 0.6, 0.17), (0.24, 0.14, 0.34), rot=(0, 0, 0.6), bevel=0.02)
+    kit.splat("Sawdust under the cut", reb.mat_surface("Fresh sawdust", [(0.0, (0.1, 0.075, 0.045)), (0.6, (0.17, 0.13, 0.08)), (1.0, (0.24, 0.18, 0.11))], scale=12, bump=0.3), (hx, hy, height(hx, hy) + 0.004), 0.32, seed=33, stretch=(1.2, 0.9), lumps=0.8)
 
-    # ---- Odds and ends: a wheelbarrow over, a sawhorse, drums, a chopping block, crows.
+    # ---- Odds and ends: a wheelbarrow over, a chopping block, drums.
     wb = [reb.prim("cube", "Barrow tray", mat("rust"), (0, 0, 0.35), (0.9, 0.6, 0.3), bevel=0.02),
           reb.prim("cyl", "Barrow wheel", mat("rubber"), (0.55, 0, 0.18), (0.36, 0.36, 0.08), rot=(math.pi / 2, 0, 0)),
           kit.rod("Barrow handle", mat("planks"), (-0.2, -0.22, 0.4), (-0.9, -0.25, 0.5), 0.02),
@@ -701,69 +708,69 @@ def build():
     barrow.rotation_euler = (math.pi * 0.9, 0, 2.4)
     reb.wall(kit.box("Chopping block", mat("logs"), (4.6, 5.4, 0.0), (0.55, 0.55, 0.5)), "circle")
     kit.rod("Axe in the block, its handle", reb.mat_wood("Axe handle 2", (0.4, 0.28, 0.14)), (4.6, 5.4, 0.55), (4.95, 5.6, 1.15), 0.02)
-    reb.prim("cube", "Split wood", mat("logs"), (4.2, 5.9, 0.08), (0.5, 0.12, 0.12), rot=(0, 0, 0.6))
-    reb.prim("cube", "Split wood", mat("logs"), (4.9, 6.0, 0.08), (0.45, 0.11, 0.12), rot=(0, 0, 2.1))
+    for i, (x, y, a) in enumerate(((4.2, 5.9, 0.6), (4.9, 6.0, 2.1), (4.1, 5.1, 1.2), (5.1, 5.2, 2.9))):
+        reb.prim("cube", f"Split wood {i}", mat("logs"), (x, y, 0.06), (0.45, 0.11, 0.11), rot=(0, 0, a))
     for i, (x, y) in enumerate(((16.9, 13.1), (17.6, 12.6))):
-        kit.drum(f"Yard drum {i}", mat("rust"), (x, y, 0.0), tipped=i == 1, rot=1.2)
-    kit.splat("Diesel from the tipped drum", reb.mat_plain("Oil", (0.015, 0.013, 0.012), 0.12), (17.0, 12.0, 0.0), 0.45, seed=19)
-    kit.papers("Papers blown into the yard", (6.4, 9.2, 0.0), spread=2.0, count=7, seed=6)
-    kit.bottles("Bottles by the step", (12.6, 2.6, 0.0), count=5, spread=0.5, seed=4, tipped=0.8)
-    crow_a, wings_a = kit.crow("Crow on the mess roof", (2.3, 9.0, 3.05), heading=0.2)
-    kit.crow("Crow on the board", (8.3, 16.9, 1.97), heading=4.5)
-    kit.crow("Crow at the man", (11.9, 14.7, 0.0), heading=2.6)
+        d = kit.drum(f"Yard drum {i}", kit.drum_paint(f"Yard drum paint {i}", (0.06, 0.1, 0.05) if i else (0.3, 0.05, 0.03)), (x, y, 0.0), tipped=i == 1, rot=1.2)
+        if i == 0:
+            kit.stencil(d, ["DIESEL", "No 55-4318"], stencil_m, size=0.11, turn=2.4)
+    oil_spill("Diesel from the tipped drum", oil, (17.1, 12.0, 0.002), 0.35, 3.6, seed=19)
 
-    # ---- The mountain round the camp: spruces, grass at the fence feet.
+    # ---- The mountain round the camp: dense spruce, grass at the fence feet and the walls.
     def keep_out(x, y):
         if -4.5 < x < 33 and -4.2 < y < 22.0:
             return True
         if any((x - e[0]) ** 2 + (y - e[1]) ** 2 < 36 for e, _, _ in cams):
             return True
-        return 7.5 < x < 13.5 and y < 40
-    kit.forest(rng, height, keep_out, (-30, -30, 50, 50), count=85, spacing=2.0, ferns=30, needles=600)
-    grass = kit.meadow(rng, 900, lambda r: (r.uniform(-4, 22), r.choice((r.uniform(-4.5, 0.4), r.uniform(18.9, 22.0)))) if r.random() < 0.6 else (r.choice((r.uniform(-5, 0.5), r.uniform(18.6, 22))), r.uniform(-4, 22)), height, mat("dead grass"))
-    rv, rf = [], []
-    for (x, y, r) in ((-4.0, -1.0, 1.1), (20.0, 15.0, 0.9), (-5.0, 15.0, 0.8), (14.5, 21.0, 0.9)):
-        reb.boulder(rng, (x, y, height(x, y)), r, rv, rf)
-    reb.mesh_object("Rocks", rv, rf, mat("rock"))
+        return on_road(x, y, 1.5)
+    kit.forest(rng, height, keep_out, (-34, -34, 54, 58), count=320, spacing=1.7, tall=(14, 24), ferns=90, needles=1500)
+    kit.forest(rng, height, keep_out, (-12, -14, 42, 32), count=110, spacing=1.6, tall=(13, 21), ferns=40, needles=600)
+    kit.far_spruces(rng, height, keep_out=lambda x, y: -34 < x < 54 and -34 < y < 58, count=900, area=(-80, -80, 100, 100))
 
-    # ---- Light: noon under cloud, grey and soft, mist in the trees.
-    sun = kit.time_light("noon", sun_heading=200, sun_energy=1.8, mist=((9.0, 9.0, 6.0), (110, 110, 14), 0.009), sky=((0.5, 0.52, 0.54), (0.36, 0.39, 0.43), 0.75))
+    def in_yard(x, y):
+        """Where the yard is trodden bare: the floor and the ground round the buildings' doors."""
+        return X0 + 0.4 < x < X1 - 0.3 and Y0 + 1.2 < y < Y1 - 0.6 and not (x < 2.9 and 6 < y < 15) or on_road(x, y)
+    grass = kit.grass_ground(rng, (-6, -6, 26, 26), height, keep_out=lambda x, y: in_yard(x, y) or (DEPOT[0] < x < DEPOT[1] and DEPOT[2] < y < DEPOT[3]), per_m2=10, m=mat("dead grass"))
+    kit.rocks("Rocks", rng, [(-4.0, -1.0, 1.1), (20.0, 15.0, 0.9), (-5.0, 15.0, 0.8), (14.5, 21.5, 0.9), (22.0, 0.5, 0.7)], height)
+
+    # ---- Light: noon under cloud, grey and soft, mist in the trees; the RE0 sky and ranges.
+    sun = kit.time_light("noon", sun_heading=200, sun_energy=3.2, mist=((9.0, 9.0, 6.0), (110, 110, 14), 0.009), sky=((0.6, 0.62, 0.63), (0.4, 0.42, 0.45), 1.15))
     sun.data.angle = math.radians(25)
     sun.rotation_euler[0] = math.radians(35)
+    kit.overcast_sky(glow=(0.6, -1.0))
+    kit.backdrop((CENTRE[0], CENTRE[1], 3.5), spread=360, below=-40.0, near=60.0, forest_to=1800.0, trees=110000,
+                 keep_out=lambda x, y: math.hypot(x - CENTRE[0], y - CENTRE[1]) < 56, shape=far_land, mist=30.0, rng=random.Random(12))
 
     anim = kit.Anim(16)
     anim.custom(smoke_pit)
     anim.custom(smoke_mess)
-    anim.flicker(embers, ember_m, depth=0.4, dropouts=1)
-    anim.flicker(blight, bglow, depth=0.5, dropouts=3)
-    anim.flicker(mess_glow, None, depth=0.15, dropouts=0)
-    anim.swing(pivot, axis=1, degrees=9)
+    anim.flicker(embers, ember_m, depth=0.3, dropouts=0)
+    anim.flicker(mess_glow, None, depth=0.1, dropouts=0)
+    anim.swing(pivot, axis=1, degrees=2)
 
     def laundry(k):
         for i, peg in enumerate(pegs):
-            peg.rotation_euler = (math.radians(9) * math.sin(anim.phase(k) + i * 0.7), 0, yaw)
+            peg.rotation_euler = (math.radians(4) * math.sin(anim.phase(k) + i * 0.7), 0, yaw)
     anim.custom(laundry)
-    anim.flap(wings_a, degrees=25)
-    anim.sway(grass, amount=0.05)
 
     # ---- What the game needs.
     room.door("camp-gate", (GATE[0] + 0.2, Y1 - 0.6, GATE[1] - 0.2, Y1), arrive=(10.1, 16.9), face=(0, -1))
     room.door("bunkhouse", (BUNK_DOOR[0], BUNK[3] + T, BUNK_DOOR[1], BUNK[3] + T + 0.7), arrive=(11.45, 3.4), face=(0, 1), walk=False)
     room.door("office", (OFFICE_DOOR[0], OFFICE[3] + T, OFFICE_DOOR[1], OFFICE[3] + T + 0.7), arrive=(2.95, 4.7), face=(0, 1), walk=False)
     room.door("mess", (MESS[1] + T, MESS_DOOR[0], MESS[1] + T + 0.7, MESS_DOOR[1]), arrive=(3.7, 9.45), face=(1, 0), walk=False)
-    room.door("depot", (DEPOT_GATE[0], DEPOT[2] - 0.6, DEPOT_GATE[1], DEPOT[2]), arrive=(3.5, 13.7), face=(0, -1))
+    room.door("depot", (DEPOT_GATE[0], DEPOT[2] - 0.6, DEPOT_GATE[1], DEPOT[2]), arrive=(3.5, 13.7), face=(0, -1), touch=False)
     room.door("workshop", (WORK_DOOR[0], WORK[2] - T - 0.7, WORK_DOOR[1], WORK[2] - T), arrive=(15.2, 12.2), face=(0, -1), walk=False)
     room.door("sawmill", (MILL_X - 0.7, MILL_DOOR[0], X1, MILL_DOOR[1]), arrive=(16.9, 7.5), face=(-1, 0), walk=False)
-    room.check((6.8, 17.0, 8.8, 18.0), "CAMP 4. QUARANTINE. BY ORDER.\nPainted by hand. The paint ran before it dried.")
-    room.check((10.0, 14.4, 12.8, 16.2), "A logger, face down in the mud. A peavey is driven into his back.\nThat wasn't done by anything sick.")
-    room.check((7.6, 7.0, 10.4, 9.6), "They burned something here. Mattress springs. And bones.\nOne log is still smoking.")
+    room.check((10.6, 14.6, 13.4, 16.2), "A log on the sawhorses, cut halfway through.\nThe chainsaw's still sitting on it.")
+    room.check((7.6, 7.0, 10.4, 9.6), "Someone was burned here. What's left is curled up black in the ash.\nIt's still smoking.")
     room.check((10.4, 1.7, 11.0, 2.6), "A fire axe, buried in the door. Someone was holding it shut from inside.")
     room.check((13.6, 5.6, 15.8, 7.2), "He sat down against the logs with a shotgun and fired until it was empty.\nShells everywhere.")
-    room.check((2.6, 10.4, 4.8, 12.8), "Two men under canvas, laid out straight. Someone still cared, at first.")
+    room.check((2.2, 10.2, 3.2, 13.4), "The cookhouse woodpile. Split and stacked, enough for weeks.")
     room.check((2.6, 6.8, 3.8, 8.0), "The cookhouse bell. The rope's been cut short.")
     room.check((10.4, 11.8, 11.2, 14.2), "The skidder. Its blade is down in the mud, the chokers still on the logs.\nThe key's gone.")
     room.check((5.6, 2.6, 9.8, 4.0), "Laundry on the line. Nobody's coming for it.")
     room.check((15.8, 11.6, 18.0, 13.6), "Diesel, leaking from a drum into the mud.")
+    room.check((DEPOT_GATE[0] - 0.4, DEPOT[2] - 1.2, DEPOT_GATE[1] + 0.4, DEPOT[2] - 0.6), "The fuel depot. The gate's chained shut, a padlock on it.")
     # Many scenes share the render machine's GPU: keep each frame cheap.
     scene = bpy.context.scene
     scene.render.use_persistent_data = True

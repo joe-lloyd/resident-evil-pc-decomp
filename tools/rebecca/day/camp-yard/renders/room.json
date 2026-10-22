@@ -132,6 +132,38 @@
   },
   {
    "shape": "box",
+   "x0": 3689,
+   "z0": 17595,
+   "x1": 4879,
+   "z1": 22525,
+   "name": "Woodpile footprint"
+  },
+  {
+   "shape": "circle",
+   "x0": 3865,
+   "z0": 22525,
+   "x1": 4703,
+   "z1": 23375,
+   "name": "Garbage can 0"
+  },
+  {
+   "shape": "circle",
+   "x0": 3865,
+   "z0": 23545,
+   "x1": 4703,
+   "z1": 24395,
+   "name": "Garbage can 1"
+  },
+  {
+   "shape": "box",
+   "x0": 3731,
+   "z0": 12793,
+   "x1": 4667,
+   "z1": 14748,
+   "name": "Washstand footprint"
+  },
+  {
+   "shape": "box",
    "x0": 22576,
    "z0": 23256,
    "x1": 32844,
@@ -140,11 +172,19 @@
   },
   {
    "shape": "box",
-   "x0": 31450,
-   "z0": 4165,
-   "x1": 54400,
-   "z1": 20995,
+   "x0": 31246,
+   "z0": 4216,
+   "x1": 54604,
+   "z1": 20944,
    "name": "Sawmill footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 28724,
+   "z0": 16065,
+   "x1": 31116,
+   "z1": 18955,
+   "name": "Sawn boards"
   },
   {
    "shape": "circle",
@@ -180,22 +220,6 @@
   },
   {
    "shape": "circle",
-   "x0": 11985,
-   "z0": 28560,
-   "x1": 12155,
-   "z1": 28730,
-   "name": "Board post"
-  },
-  {
-   "shape": "circle",
-   "x0": 14365,
-   "z0": 28560,
-   "x1": 14535,
-   "z1": 28730,
-   "name": "Board post.001"
-  },
-  {
-   "shape": "circle",
    "x0": 13345,
    "z0": 12155,
    "x1": 17255,
@@ -228,15 +252,15 @@
   },
   {
    "shape": "box",
-   "x0": 20948,
-   "z0": 4189,
-   "x1": 30423,
-   "z1": 9484,
+   "x0": 20952,
+   "z0": 4266,
+   "x1": 30269,
+   "z1": 9574,
    "name": "Log deck"
   },
   {
    "shape": "box",
-   "x0": 9982,
+   "x0": 9945,
    "z0": 19890,
    "x1": 17815,
    "z1": 24310,
@@ -249,6 +273,14 @@
    "x1": 9520,
    "z1": 23120,
    "name": "Choked logs footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 17510,
+   "z0": 25500,
+   "x1": 22610,
+   "z1": 26860,
+   "name": "Sawhorses footprint"
   },
   {
    "shape": "circle",
@@ -358,7 +390,7 @@
     "angle": 1024
    },
    "walk": true,
-   "touch": true
+   "touch": false
   },
   {
    "to": "workshop",
@@ -396,21 +428,12 @@
  "checks": [
   {
    "zone": {
-    "x0": 11560,
-    "z0": 28900,
-    "x1": 14960,
-    "z1": 30600
-   },
-   "text": "CAMP 4. QUARANTINE. BY ORDER.\nPainted by hand. The paint ran before it dried."
-  },
-  {
-   "zone": {
-    "x0": 17000,
-    "z0": 24480,
-    "x1": 21760,
+    "x0": 18020,
+    "z0": 24820,
+    "x1": 22780,
     "z1": 27540
    },
-   "text": "A logger, face down in the mud. A peavey is driven into his back.\nThat wasn't done by anything sick."
+   "text": "A log on the sawhorses, cut halfway through.\nThe chainsaw's still sitting on it."
   },
   {
    "zone": {
@@ -419,7 +442,7 @@
     "x1": 17680,
     "z1": 16320
    },
-   "text": "They burned something here. Mattress springs. And bones.\nOne log is still smoking."
+   "text": "Someone was burned here. What's left is curled up black in the ash.\nIt's still smoking."
   },
   {
    "zone": {
@@ -441,12 +464,12 @@
   },
   {
    "zone": {
-    "x0": 4420,
-    "z0": 17680,
-    "x1": 8160,
-    "z1": 21760
+    "x0": 3740,
+    "z0": 17340,
+    "x1": 5440,
+    "z1": 22780
    },
-   "text": "Two men under canvas, laid out straight. Someone still cared, at first."
+   "text": "The cookhouse woodpile. Split and stacked, enough for weeks."
   },
   {
    "zone": {
@@ -483,6 +506,15 @@
     "z1": 23120
    },
    "text": "Diesel, leaking from a drum into the mud."
+  },
+  {
+   "zone": {
+    "x0": 3740,
+    "z0": 23800,
+    "x1": 8160,
+    "z1": 24820
+   },
+   "text": "The fuel depot. The gate's chained shut, a padlock on it."
   }
  ],
  "saves": null,
@@ -490,13 +522,13 @@
  "spots": [],
  "entry": null,
  "notes": [
-  "from the gate: the body in the mud, the skidder, the fire pit, the bunkhouse beyond",
-  "from by the office: the fire pit, the skidder's blade, the workshop door",
-  "from the ruts: the sawmill's open doors, the log deck, the dead man against it",
+  "from the gate: the sawhorses, the skidder, the fire pit, the bunkhouse beyond",
+  "from by the office: the burned man in the fire pit, the skidder's blade, the workshop door",
+  "from the ruts: the sawmill's shut doors, the log deck, the dead man against it",
   "from the bell post: the laundry, the bunkhouse door with the axe in it",
   "from the fire pit: the office door in the corner, the bell post, the laundry",
-  "from the ruts: the mess door, the bell, the two under canvas",
-  "from inside the gate: the depot gate, the choked logs, the board",
-  "from the fire pit: the workshop door, the leaking drums, the mill doors"
+  "from the ruts: the mess door, the bell, the cookhouse woodpile",
+  "from inside the gate: the depot's chained gate, the choked logs",
+  "from the fire pit: the workshop door, the leaking drums, the mill"
  ]
 }

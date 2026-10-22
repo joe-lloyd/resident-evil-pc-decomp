@@ -1,0 +1,7 @@
+{
+  "scene": "camp-yard",
+  "steps": [
+    { "action": "hold", "frames": 45, "picture": "camp-yard-entry" },
+    { "action": "exit", "x": 5950, "z": 25330, "to": "depot", "zone": { "x": 4420, "z": 24820, "w": 3060, "d": 1020 } }
+  ]
+}
