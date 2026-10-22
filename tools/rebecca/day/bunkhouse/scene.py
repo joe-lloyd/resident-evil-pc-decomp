@@ -1,14 +1,16 @@
-"""Camp 4's bunkhouse, noon: long and low, two rows of iron bunks.
+"""The logging camp's bunkhouse, noon: long and low, two rows of iron bunks.
 
 What it tells: the men slept here, and this is where the sickness went
 through them. The mattresses are soaked: sweat, sick, blood. Buckets stand
 by the bunks. One man died in his bunk under his blanket and nobody moved
 him; the flies have found him. Mike turned in the night: his friends tied
 him to his bunk frame with their belts, and one of them kept a diary on the
-next bunk: "Mike's fever broke at 3. He doesn't know us." Someone was
-dragged out of the far bunk to the door, and out to the fire. Then they
-held the door against the others: a footlocker and a bunk were shoved
-against it, and shoved back when the axe came through. The card game on
+next bunk: "Mike's fever broke at 3. He doesn't know us." The belts are
+still buckled round the posts, torn through: Mike is not in his bunk any
+more. Someone was dragged out of the far bunk to the door, and out to the
+fire. Then they held the door against the others: a footlocker and a chair
+were shoved against it, and shoved back when the axe came through; its
+blade is still through the planks of the shut door. The card game on
 the table never finished. Among the girlie calendars, a July 1998 calendar
 from the supply company has three dates circled in red: 17, 31 and 8. A
 player should notice the circled days.
@@ -22,8 +24,8 @@ x 2.05, 4.15, 8.55, 10.65 and the south wall at x 2.05, 4.15, 8.0, 10.1,
 heads east; the stove on the north wall at x 6.4; the card table at (6.0,
 3.6). The calendar on the north wall at x 7.3, by the stove.
 
-Moving: the bulb failing on its flex, flies over the man in his bunk, a rag
-in the broken window stirring.
+Moving: the bulb on its short flex dipping now and then, flies over the
+man in his bunk, a rag in the broken window stirring.
 """
 import math
 import os
@@ -44,12 +46,6 @@ WZ = (1.0, 1.7)
 NORTH_BUNKS = [2.05, 4.15, 8.55, 10.65]
 SOUTH_BUNKS = [2.05, 4.15, 8.0, 10.1]
 NY, SY = Y0 + 0.47, Y1 - 0.47   # bunk centre lines
-
-
-def local(at, heading, p):
-    """A point given in a body's own frame (kit's poses) in the world."""
-    c, s = math.cos(heading), math.sin(heading)
-    return Vector((at[0] + p[0] * c - p[1] * s, at[1] + p[0] * s + p[1] * c, at[2] + p[2]))
 
 
 def ring(name, m, centre, r, facing, width=0.012, seg=20):
@@ -117,12 +113,20 @@ def build():
     rag_peg = reb.prim("sphere", "Rag nail", mat("iron"), (8.7, Y1 + 0.02, 1.66), (0.02, 0.02, 0.02))
     rag.parent = rag_peg
     kit.shards("Glass on the floor", (8.5, Y1 - 0.5, 0.0), spread=0.6, count=16, seed=2)
-    # The door, open out to the yard, its frame; light from the yard.
+    # The door, shut in its frame: ledged planks, a latch, and the fire
+    # axe's blade through the boards where it was buried from the yard.
     for x in (DOOR[0] - 0.04, DOOR[1] + 0.04):
         reb.prim("cube", "Door frame", frame_m, (x, Y1 + 0.04, 1.05), (0.08, 0.16, 2.1))
     reb.prim("cube", "Door head", frame_m, ((DOOR[0] + DOOR[1]) / 2, Y1 + 0.04, 2.09), (DOOR[1] - DOOR[0] + 0.16, 0.16, 0.08))
-    reb.prim("cube", "Door, open out", mat("planks"), (DOOR[0] - 0.45, Y1 + 0.19, 1.02), (0.9, 0.05, 2.04))
-    kit.rod("Axe handle through", reb.mat_wood("Axe handle", (0.4, 0.28, 0.14)), (DOOR[0] - 0.5, Y1 + 0.24, 1.3), (DOOR[0] - 0.25, Y1 + 0.95, 1.05), 0.02)
+    door_m = kit.boards("Door planks", (0.27, 0.2, 0.13), width=0.15, grime=0.8)
+    reb.prim("cube", "Door, shut", door_m, ((DOOR[0] + DOOR[1]) / 2, Y1 + 0.03, 1.02), (DOOR[1] - DOOR[0], 0.05, 2.04))
+    for z in (0.3, 1.0, 1.75):
+        reb.prim("cube", "Door ledge", frame_m, ((DOOR[0] + DOOR[1]) / 2, Y1 - 0.0, z), (DOOR[1] - DOOR[0] - 0.06, 0.03, 0.12))
+    reb.prim("cube", "Door latch", mat("iron"), (DOOR[1] - 0.12, Y1 - 0.02, 1.05), (0.16, 0.03, 0.04))
+    reb.prim("cube", "Axe blade through", mat("steel"), (DOOR[0] + 0.32, Y1 - 0.03, 1.35), (0.16, 0.05, 0.11), rot=(0, 0.35, 0))
+    kit.splat("Split round the blade", mat("black"), (DOOR[0] + 0.32, Y1 - 0.004, 1.35), 0.09, rot=(math.pi / 2, 0, 0), seed=9, stretch=(0.5, 1.6), lumps=0.5)
+    # Daylight under the door and through the split.
+    reb.prim("cube", "Light under the door", reb.mat_emit("Daylight under the door", (0.75, 0.8, 0.88), 2.0), ((DOOR[0] + DOOR[1]) / 2, Y1 + 0.03, 0.006), (DOOR[1] - DOOR[0] - 0.04, 0.05, 0.01))
     kit.scratches("Gouges on the frame", mat("black"), (DOOR[1] + 0.09, Y1 - 0.01, 1.4), (0, -1), count=4, length=0.5, seed=4)
     kit.splat("Hand on the frame", mat("old blood"), (DOOR[0] - 0.09, Y1 - 0.005, 1.1), 0.07, rot=(math.pi / 2, 0, 0), seed=6)
     # The barricade, shoved back into the room: a footlocker, a chair, the scrape marks.
@@ -144,7 +148,8 @@ def build():
     for i, (a, b) in enumerate(deck):
         kit.rod(f"Outside, log {i}", mat("bark"), a, b, 0.25, 10)
     reb.prim("cyl", "Outside, fire ring", reb.mat_plain("Ash", (0.1, 0.1, 0.1), 0.9), (4.0, 12.7, 0.02), (2.2, 2.2, 0.06), segments=16)
-    reb.prim("cube", "Outside, far trees", reb.mat_plain("Far trees", (0.05, 0.07, 0.05), 0.9), (6.5, Y1 + 30, 8), (80, 1, 16))
+    # Past the yard, through the grimy windows: dense spruce under the overcast.
+    kit.forest(random.Random(5), lambda x, y: 0.0, lambda x, y: y < Y1 + 20, (-14, Y1 + 20, 28, Y1 + 34), count=90, spacing=1.7, ferns=0, needles=0)
     kit.rod("Outside, line pole", mat("dark wood"), (0.6, Y1 + 1.0, 0), (0.6, Y1 + 1.0, 2.15), 0.04)
     kit.rod("Outside, line pole", mat("dark wood"), (4.8, Y1 + 1.8, 0), (4.8, Y1 + 1.8, 2.15), 0.04)
     kit.rod("Outside, washing line", mat("canvas"), (0.6, Y1 + 1.0, 2.05), (4.8, Y1 + 1.8, 2.05), 0.006, 4)
@@ -163,9 +168,16 @@ def build():
     # Soaked mattresses: dark stains on the lower ones.
     for row, (y, xs) in enumerate(((NY, NORTH_BUNKS), (SY, SOUTH_BUNKS))):
         for i, x in enumerate(xs):
-            kit.splat(f"Soak {row}{i}", soak, (x + rng.uniform(-0.3, 0.3), y, 0.505), rng.uniform(0.2, 0.35), seed=row * 10 + i, stretch=(1.6, 0.8), lumps=0.5)
+            # The lower bunks' stains read as pasted-on patches from the
+            # aisle: they get bedding thrown about instead (below).
+            rng.uniform(-0.3, 0.3), rng.uniform(0.2, 0.35)
             if rng.random() < 0.5 and (row, i) not in ((0, 2), (1, 3)):
                 kit.splat(f"Soak top {row}{i}", soak, (x + rng.uniform(-0.3, 0.3), y, 1.755), rng.uniform(0.15, 0.3), seed=row * 10 + i + 50, stretch=(1.6, 0.8))
+    # A blanket thrown back in a heap on the second north bunk, a magazine on it.
+    reb.cloth("Blanket thrown back", wool, (NORTH_BUNKS[1] - 0.35, NY + 0.05, 0.56), (0.9, 0.8), rot=(0, 0, 0.2), cuts=16, lumps=0.07, seed=21)
+    for k, (x, y, yaw) in enumerate(((SOUTH_BUNKS[0] + 0.2, SY - 0.05, -0.3), (SOUTH_BUNKS[1] - 0.3, SY, 0.4), (SOUTH_BUNKS[2] - 0.45, SY + 0.05, 0.2), (NORTH_BUNKS[0] - 0.2, NY + 0.05, 0.6))):
+        reb.cloth(f"Bedding kicked off {k}", wool if k % 2 else mat("flannel"), (x, y, 0.56), (0.8, 0.7), rot=(0, 0, yaw), cuts=14, lumps=0.07, seed=30 + k)
+    reb.prim("cube", "Magazine", reb.mat_plain("Magazine cover", (0.35, 0.22, 0.12), 0.7), (NORTH_BUNKS[1] + 0.45, NY - 0.05, 0.52), (0.21, 0.28, 0.008), rot=(0, 0, 0.5))
     # Footlockers at the bunks' aisle side.
     for row, (y, xs) in enumerate(((NY + 0.68, NORTH_BUNKS), (SY - 0.68, SOUTH_BUNKS))):
         for i, x in enumerate(xs):
@@ -186,23 +198,19 @@ def build():
 
     # ---- The man who died in his bunk, under his blanket. The flies have him.
     dead_at = (8.55 - 0.85, NY, 0.5)
-    kit.body("Dead in his bunk", dead_at, heading=0.0, pose="back", top=wool, legs=mat("denim"), seed=4)
-    reb.cloth("His blanket", wool, (8.3, NY + 0.05, 0.74), (1.3, 0.95), lumps=0.06, seed=4)
+    dead = kit.body("Dead in his bunk", dead_at, heading=0.0, pose="back", top=mat("flannel"), legs=mat("denim"), seed=4)
+    # His blanket over him to the chest, lying on him and not through him,
+    # its edges hanging over the mattress's sides.
+    kit.drape("His blanket", wool, [dead], (dead_at[0] + 0.6, NY), (1.45, 0.98), base=0.5, support=(-0.695, -0.395, 0.725, 0.395), gap=0.05, cuts=60, seed=4)
     kit.splat("Dripped under his bunk", mat("old blood"), (8.6, NY + 0.4, 0.0), 0.25, seed=41)
 
-    # ---- Mike, tied to his bunk frame with his friends' belts.
+    # ---- Mike's bunk, empty: his friends' belts still buckled round the
+    # posts, torn through, the ends hanging; his gouges in the wall.
     mx = SOUTH_BUNKS[3]
-    mike_at = (mx + 0.85, SY, 0.5)
-    mh = math.pi
-    kit.body("Mike", mike_at, heading=mh, pose="back", top=reb.mat_plain("Vest", (0.45, 0.42, 0.36), 0.9), legs=mat("denim"), seed=8)
-    posts = [Vector((mx + dx, SY + dy, 0.55)) for dx in (-0.975, 0.975) for dy in (-0.425, 0.425)]
-    for name, joint in (("Belt, left wrist", "l_hand"), ("Belt, right wrist", "r_hand"), ("Belt, left ankle", "l_foot"), ("Belt, right ankle", "r_foot")):
-        at = local(mike_at, mh, kit._POSES["back"][joint])
-        belt(name, at, min(posts, key=lambda p: (p.xy - at.xy).length))
-    kit.splat("Mike's blood", mat("blood"), (mx - 0.6, SY, 0.506), 0.25, seed=81, stretch=(1.2, 0.8))
-    kit.splat("Mike's blood, the floor", mat("blood"), (mx - 0.7, SY - 0.6, 0.0), 0.3, seed=82)
+    for i, (dx, dy) in enumerate(((-0.975, -0.425), (-0.975, 0.425), (0.975, -0.425), (0.975, 0.425))):
+        post = Vector((mx + dx, SY + dy, 0.55))
+        belt(f"Torn belt {i}", post, post + Vector((0.04 * (1 if dx < 0 else -1), 0.03, -0.22 - 0.05 * (i % 2))), r=0.016)
     kit.scratches("Gouges in the wall by Mike", mat("black"), (mx + 0.2, Y1 - 0.005, 1.0), (0, -1), count=5, length=0.35, seed=8)
-    reb.prim("cube", "Claw hammer", mat("steel"), (mx + 0.3, SY - 0.75, 0.02), (0.3, 0.03, 0.03), rot=(0, 0, 0.7))
     # The diary on the next bunk, open; a pencil.
     dx = SOUTH_BUNKS[2]
     reb.prim("cube", "Diary", reb.mat_plain("Diary cover", (0.2, 0.08, 0.05), 0.7), (dx + 0.4, SY - 0.1, 0.52), (0.3, 0.22, 0.03), rot=(0, 0, 0.3))
@@ -210,7 +218,12 @@ def build():
     kit.rod("Pencil", mat("yellow paint"), (dx + 0.15, SY - 0.3, 0.51), (dx + 0.3, SY - 0.4, 0.51), 0.005, 6)
 
     # ---- The dragged one: from the far north bunk to the door.
-    kit.drag_trail("Drag to the door", mat("old blood"), [(10.6, NY + 0.4), (10.0, 2.6), (8.4, 3.4), (7.0, 4.4), (6.45, Y1 - 0.1)], width=0.4, seed=12)
+    # His heels left two smears that wander and break, wide where they
+    # stopped to get a grip, gone thin by the door.
+    kit.splat("Where he was pulled off", mat("old blood"), (10.55, NY + 0.62, 0.0), 0.28, seed=13, stretch=(1.3, 0.9), lumps=0.5)
+    drag = [(10.55, NY + 0.6), (10.25, 2.45), (9.6, 2.95), (8.9, 3.15), (8.1, 3.55), (7.45, 4.15), (6.95, 4.75), (6.55, Y1 - 0.1)]
+    kit.drag_trail("Drag to the door", mat("old blood"), drag, width=0.22, seed=12)
+    kit.drag_trail("Drag to the door, other heel", mat("old blood"), [(x + 0.1, y + 0.22) for x, y in drag[1:-1]], width=0.16, seed=17)
     reb.prim("cube", "Mattress pulled half off", mat("mattress"), (10.6, NY + 0.55, 0.3), (1.8, 0.75, 0.12), rot=(0.5, 0, 0.05))
 
     # ---- The stove on the north wall, cold; its pipe; wood and kindling.
@@ -276,26 +289,26 @@ def build():
 
     # ---- Light: the bulb over the aisle failing, grey noon through the windows and the door.
     kit.time_light("noon", sun_heading=200, sun_energy=1.5, sky=((0.5, 0.52, 0.54), (0.36, 0.39, 0.43), 0.8))
-    cord, glass, bulb_light, glow = kit.bulb("Bulb", (6.6, 3.5, H - 0.02), energy=110, rgb=(1.0, 0.72, 0.42), flex=0.45)
+    cord, glass, bulb_light, glow = kit.bulb("Bulb", (6.6, 3.5, H - 0.02), energy=110, rgb=(1.0, 0.72, 0.42), flex=0.12)
     for i, (a, b) in enumerate(WINDOWS):
         if i == 1:
             continue
         reb.spot(f"Window light {i}", ((a + b) / 2, Y1 - 0.15, 1.65), ((a + b) / 2 - 0.3, Y1 - 2.6, 0.0), 90, (0.72, 0.78, 0.88), 150, 0.9, 0.5)
-    reb.spot("Door light", ((DOOR[0] + DOOR[1]) / 2, Y1 + 3.0, 2.3), ((DOOR[0] + DOOR[1]) / 2, Y1 - 2.0, 0.0), 400, (0.75, 0.8, 0.88), 45, 0.8, 0.6)
+    kit.overcast_sky()
     reb.point("West end fill", (2.5, 3.5, 1.5), 30, (0.6, 0.65, 0.75), 1.0)
     reb.point("East end fill", (10.5, 3.5, 1.5), 30, (0.6, 0.65, 0.75), 1.0)
 
-    anim = kit.Anim(16)
-    anim.flicker(bulb_light, glow, depth=0.5, dropouts=3)
+    # A 4.8 second loop: the bulb holds steady and sags once.
+    anim = kit.Anim(48)
+    anim.dips(bulb_light, glow)
     anim.flies((8.55 + 0.6, NY, 0.75), count=10, radius=0.4)
-    anim.flies((mx + 0.4, SY, 0.6), count=6, radius=0.3)
-    anim.custom(lambda k: setattr(rag_peg, "rotation_euler", (math.radians(14) * math.sin(anim.phase(k)), 0, 0)))
+    anim.custom(lambda k: setattr(rag_peg, "rotation_euler", (math.radians(6) * math.sin(anim.phase(k, 3)), 0, 0)))
 
     # ---- What the game needs.
     room.door("camp-yard", (DOOR[0], Y1 - 0.5, DOOR[1], Y1), arrive=(6.45, 4.6), face=(0, -1))
     room.check((6.75, Y0, 7.55, 2.3), "A calendar from a supply company. July 1998.\nSomeone circled three days in red: the 17th, the 31st, the 8th.\nAnd wrote them again at the bottom. 17 31 8.")
     room.check((7.6, 2.3, 9.5, 2.8), "He died in his bed. Nobody even pulled the blanket over his face.")
-    room.check((mx - 0.9, 4.1, mx + 0.9, 4.65), "They tied him to the bunk with their belts.\nWrists and ankles. Then something with a hammer.")
+    room.check((mx - 0.9, 4.1, mx + 0.9, 4.65), "Belts, buckled round all four posts. Torn through.\nWhoever they tied here got loose.")
     room.check((dx - 0.4, 4.45, dx + 0.6, 5.1), "A diary, left open on the bunk.\n\"Mike's fever broke at 3. He doesn't know us.\"")
     room.check((4.4, 3.0, 5.8, 4.1), "A card game nobody finished. Bottles, all empty.")
     room.check((6.9, 3.7, 8.2, 4.8), "A footlocker and a chair, shoved back from the door.\nThey were holding it shut.")

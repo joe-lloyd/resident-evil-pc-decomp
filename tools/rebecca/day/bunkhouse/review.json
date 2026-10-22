@@ -1,0 +1,14 @@
+{
+  "scene": "bunkhouse",
+  "steps": [
+    { "action": "hold", "frames": 60, "picture": "bunkhouse-calendar" },
+    { "action": "walk", "x": 16150, "z": 5100, "picture": "bunkhouse-dead-in-his-bunk" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 7650, "z": 4590 },
+    { "action": "walk", "x": 5100, "z": 5950, "picture": "bunkhouse-west-end" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 8840, "z": 7820, "picture": "bunkhouse-empty-bunk" },
+    { "action": "walk", "x": 10965, "z": 8840 },
+    { "action": "exit", "x": 10965, "z": 9945, "to": "camp-yard", "zone": { "x": 10200, "z": 9350, "w": 1530, "d": 850 } }
+  ]
+}
