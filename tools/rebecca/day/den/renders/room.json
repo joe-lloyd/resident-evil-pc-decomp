@@ -167,15 +167,6 @@
   },
   {
    "zone": {
-    "x0": 15300,
-    "z0": 3400,
-    "x1": 17170,
-    "z1": 5100
-   },
-   "text": "A human skull. It's been here a lot longer than he has."
-  },
-  {
-   "zone": {
     "x0": 8500,
     "z0": 15300,
     "x1": 11730,
@@ -207,6 +198,6 @@
  "notes": [
   "from the way down: the clearing, the tor, the ranger at the cave mouth",
   "from beside the west block: the drag in from the woods, the windfall and the jacket, the way back up",
-  "from the east: the mouth under the slab, the pit, the bones, the skull"
+  "from the east: the mouth under the slab, the pit, the ranger"
  ]
 }

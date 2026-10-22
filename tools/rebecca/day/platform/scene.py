@@ -330,6 +330,46 @@ def wheel_house_detail(wx0, wx1, wy0, wy1, rng):
         reb.prim("cyl", "Grease can", reb.mat_plain("Grease can", (0.3, 0.2, 0.04), 0.5), (wx0 + 1.0 + i * 0.3, wy0 + 0.35, 0.18), (0.22, 0.22, 0.34), segments=12)
 
 
+def tracked_dirt(name, rng, mouth, into, goals, spread=1.6):
+    """The dirt carried onto the slab from a path's `mouth` (x, y): a
+    ragged spill of it trodden thick where the path meets the concrete,
+    `into` the slab (a unit direction), lapping back over the join and
+    thinning out across the slab, then the muddy prints of everyone who
+    came that way, walking off toward each of `goals` and fading as their
+    boots wiped clean. One mesh, on the slab (z 0) or the path's earth."""
+    v, f = [], []
+    mx, my = mouth
+    ix, iy = into
+    on_slab = lambda x, y: X0 - 0.25 < x < X1 + 0.28 and Y0 - 0.35 < y < Y1 + 0.35
+    ground = lambda x, y: 0.0 if on_slab(x, y) else height(x, y)
+    # The spill: thick over the join, scattered further in.
+    for k in range(150):
+        d = (spread + 0.6) * rng.random() ** 1.4 - 0.6
+        side = rng.gauss(0, 0.5 + 0.3 * max(d, 0.0))
+        x, y = mx + ix * d - iy * side, my + iy * d + ix * side
+        r = rng.uniform(0.07, 0.26) * (1.25 - 0.6 * max(d, 0.0) / spread)
+        kit._stain(v, f, rng, (x, y, ground(x, y) + 0.002 + 0.0004 * (k % 6)), r, rng.uniform(0, 6.3), 0.6, (rng.uniform(0.8, 1.7), 1.0), k, points=12, drops=d > 0.6)
+    # The prints: left, right, along each way, the mud wearing off them.
+    for g, (gx, gy) in enumerate(goals):
+        for walker in range(3):
+            x, y = mx + rng.uniform(-0.5, 0.5) * iy, my + rng.uniform(-0.5, 0.5) * ix
+            head = math.atan2(gy - y, gx - x)
+            step = 0
+            while True:
+                walked = math.hypot(x - mx, y - my)
+                if math.hypot(gx - x, gy - y) < 0.6 or walked > 9.0:
+                    break
+                head += (math.atan2(gy - y, gx - x) - head) * 0.3 + rng.uniform(-0.05, 0.05)
+                foot = 1 if step % 2 else -1
+                px, py = x - math.sin(head) * 0.13 * foot, y + math.cos(head) * 0.13 * foot
+                if on_slab(px, py) and rng.random() < math.exp(-walked / 4.5):
+                    kit._stain(v, f, rng, (px, py, 0.0035 + 0.0003 * (step % 4)), 0.075 * rng.uniform(0.85, 1.1), head, 0.25, (1.9, 0.8), g * 50 + walker * 20 + step, points=10, drops=False)
+                x += math.cos(head) * 0.36
+                y += math.sin(head) * 0.36
+                step += 1
+    return reb.mesh_object(name, v, f, mat("trodden dirt"), smooth=False)
+
+
 def build():
     rng = random.Random(77)
     reb.clear_scene()
@@ -374,7 +414,10 @@ def build():
     # The trail in from the bridge, down the mountain to the slab's edge,
     # its dirt trodden out over the concrete where it meets it.
     on_trail_in = kit.dirt_path("Trail in", [(7.0, -40.0), (6.2, -24.0), (5.0, -12.0), (4.5, -5.0), (4.5, -1.0), (4.6, 1.6), (4.65, 2.5)], height, width=1.4)
-    kit.splat("Dirt trodden onto the slab", mat("trodden dirt"), (4.6, 2.5, 0.003), 0.45, lumps=0.6, seed=31, stretch=(1.0, 0.6))
+    # Whoever walked up through the forest brought it with them: dirt
+    # trodden thick over the slab where the trail meets it, and their
+    # muddy prints going on across the concrete to the car and the booth.
+    tracked_dirt("Dirt tracked in from the trail", random.Random(61), (4.65, 2.1), (0.0, 1.0), [(8.3, 10.3), (14.55, 5.6), (11.0, 7.0)])
 
     # ---- The edge: a rail along the drop, the queue rails, the sign.
     for x in [X0 + 0.2 + i * 1.5 for i in range(11)]:
@@ -414,7 +457,16 @@ def build():
         ("w", by0 + 0.45, by1 - 0.35, 1.0, 1.95),
     ], name="Booth wall"):
         reb.wall(ob)
-    reb.prim("cube", "Booth roof", mat("tin"), ((bx0 + bx1) / 2, (by0 + by1) / 2, 2.55), (bx1 - bx0 + 0.6, by1 - by0 + 0.6, 0.08), rot=(0.08, 0, 0))
+    # A lean-to roof on the walls: the side walls rise in gables to the
+    # high south wall, so the tin lies on the wall tops with no gap.
+    rise, top = 0.35, 2.4
+    pitch = math.atan2(rise, by1 - by0)
+    for x0_, x1_ in ((bx0, bx0 + 0.12), (bx1 - 0.12, bx1)):
+        gv = [(x, y, z) for x in (x0_, x1_) for y, z in ((by0, top - 0.01), (by1, top - 0.01), (by1, top + rise))]
+        reb.mesh_object("Booth gable", gv, [(0, 1, 2), (5, 4, 3), (0, 3, 4, 1), (1, 4, 5, 2), (2, 5, 3, 0)], panel, smooth=False)
+    reb.prim("cube", "Booth wall, south, top", panel, ((bx0 + bx1) / 2, by1 - 0.06, top + rise / 2 - 0.005), (bx1 - bx0, 0.12, rise + 0.01))
+    mid_z = top + rise / 2 + 0.03 / math.cos(pitch)
+    reb.prim("cube", "Booth roof", mat("tin"), ((bx0 + bx1) / 2, (by0 + by1) / 2, mid_z), (bx1 - bx0 + 0.5, (by1 - by0) / math.cos(pitch) + 0.5, 0.06), rot=(pitch, 0, 0))
     reb.prim("cube", "Booth floor", mat("black"), ((bx0 + bx1) / 2, (by0 + by1) / 2, 0.005), (bx1 - bx0 - 0.3, by1 - by0 - 0.3, 0.01))
     reb.prim("cube", "Booth door", paint, (BOOTH_DOOR[1] + 0.45, by1 + 0.04, 1.02), (0.9, 0.05, 2.04))
     reb.prim("cube", "Booth window glass", reb.mat_glass("Grimy glass", (0.5, 0.55, 0.5)), (bx0 + 0.1, (by0 + by1) / 2 + 0.05, 1.48), (0.01, by1 - by0 - 0.8, 0.95))
@@ -424,10 +476,12 @@ def build():
 
     # ---- The wheel house: steel posts, a tin roof, the bullwheel, the gearbox open.
     wx0, wx1, wy0, wy1 = WHEEL
+    # The posts run up to the tin's underside, which slopes up to the south.
+    tilt = 0.05
     for x in (wx0, wx1):
         for y in (wy0, wy1):
-            reb.wall(kit.rod("Wheel house post", mat("rust"), (x, y, 0), (x, y, 4.2), 0.09))
-    reb.prim("cube", "Wheel house roof", mat("tin"), ((wx0 + wx1) / 2, (wy0 + wy1) / 2, 4.3), (wx1 - wx0 + 0.8, wy1 - wy0 + 0.8, 0.08), rot=(0.05, 0, 0))
+            reb.wall(kit.rod("Wheel house post", mat("rust"), (x, y, 0), (x, y, 4.3 - 0.04 / math.cos(tilt) + (y - (wy0 + wy1) / 2) * math.tan(tilt)), 0.09))
+    reb.prim("cube", "Wheel house roof", mat("tin"), ((wx0 + wx1) / 2, (wy0 + wy1) / 2, 4.3), (wx1 - wx0 + 0.8, wy1 - wy0 + 0.8, 0.08), rot=(tilt, 0, 0))
     wheel = reb.prim("cyl", "Bullwheel rim", mat("rust"), ((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 3.1), (3.2, 3.2, 0.18), segments=40)
     reb.prim("cyl", "Bullwheel hub", mat("iron"), ((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 3.1), (0.5, 0.5, 0.4), segments=20)
     c = Vector(((wx0 + wx1) / 2, (wy0 + wy1) / 2 + 0.6, 3.1))
@@ -524,7 +578,7 @@ def build():
     reb.prim("cube", "Trail sign", mat("dark wood"), (X1 + 0.3, 10.1, 1.5), (0.04, 0.8, 0.2))
     kit.text("Trail sign words", "QUARRY TRAIL >", mat("white paint"), (X1 + 0.27, 10.1, 1.5), size=0.09, rot=(math.pi / 2, 0, -math.pi / 2))
     on_east = kit.dirt_path("East trail", [(X1 + 0.15, 9.0)] + [(x, ledge_y(x)) for x in (18.4, 19.0, 20.4, 24.0, 30.0, 38.0, 46.0, 56.0)], height, width=1.5, taper=0.5)
-    kit.splat("Dirt trodden onto the slab east", mat("trodden dirt"), (X1 - 0.05, 9.0, 0.003), 0.38, lumps=0.6, seed=32, stretch=(0.6, 1.2))
+    tracked_dirt("Dirt tracked in from the ledge", random.Random(62), (X1 + 0.25, 9.0), (-1.0, 0.0), [(14.55, 5.6), (9.6, 10.3), (12.0, 8.0)])
     # A bench by the booth, the bin kicked over, rubbish blown about.
     reb.wall(kit.table("Bench", reb.mat_wood("Bench slats", (0.2, 0.14, 0.08)), (11.6, 3.2, 0.0), size=(1.8, 0.45, 0.45)))
     reb.prim("cyl", "Bin", mat("green paint"), (10.3, 4.2, 0.25), (0.45, 0.45, 0.7), rot=(math.pi / 2, 0, 2.4), segments=16)

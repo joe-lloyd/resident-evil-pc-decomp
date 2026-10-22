@@ -34,6 +34,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
+import bpy  # noqa: E402
 from kit import mat  # noqa: E402
 from mathutils import Vector  # noqa: E402
 
@@ -86,17 +87,72 @@ def build():
     # His hand on the frame, and where it slid down.
     kit.splat("Handprint", mat("old blood"), (DOOR[0] - 0.08, Y1 - 0.07, 1.22), 0.06, rot=(math.pi / 2, 0, 0), seed=3, lumps=0.5)
     reb.prim("cube", "Smear", mat("old blood"), (DOOR[0] - 0.08, Y1 - 0.068, 0.97), (0.045, 0.004, 0.45), rot=(0, 0.06, 0))
-    # Window glass, holed from outside: a star of cracks, glass in on the desk.
+    # Window glass, holed from outside: a real hole knocked through the
+    # pane, the daylight and the platform seen through it, a star of cracks
+    # round it and rings of them where the glass bent before it broke.
+    hub = Vector((X0 - 0.06, 1.85, 1.55))
+    crng = random.Random(9)   # its own, so the rest of the room lies as it did
+    for _ in range(11):       # the draws the old cracks took from rng
+        rng.uniform(-0.2, 0.2), rng.uniform(0.15, 0.42)
+    hole = []
+    for i in range(16):
+        a = 2 * math.pi * i / 16 + crng.uniform(-0.12, 0.12)
+        r = 0.075 * (crng.uniform(0.55, 1.0) if i % 2 else crng.uniform(1.0, 1.45))
+        hole.append((math.cos(a) * r, math.sin(a) * r))
+    hv = [(hub.x - 0.08, hub.y + dy, hub.z + dz) for dy, dz in hole] + [(hub.x + 0.08, hub.y + dy, hub.z + dz) for dy, dz in hole]
+    hf = [tuple(range(15, -1, -1)), tuple(range(16, 32))] + [(i, (i + 1) % 16, 16 + (i + 1) % 16, 16 + i) for i in range(16)]
+    cutter = reb.mesh_object("Hole cutter", hv, hf, None, smooth=False)
+    cutter.hide_render = True
+    # Window glass, not a refracting block: the view goes straight through
+    # it, a little dimmed, with a faint sheen of the room on top.
+    glass, nodes, links, shine = reb.nodes_material("Window glass")
+    shine.inputs["Base Color"].default_value = (0.0, 0.0, 0.0, 1)
+    shine.inputs["Roughness"].default_value = 0.12
+    clear = nodes.new("ShaderNodeBsdfTransparent")
+    clear.inputs["Color"].default_value = (0.72, 0.76, 0.72, 1)
+    both = nodes.new("ShaderNodeAddShader")
+    links.new(clear.outputs[0], both.inputs[0])
+    links.new(shine.outputs[0], both.inputs[1])
+    links.new(both.outputs[0], nodes["Material Output"].inputs["Surface"])
     for i, (y0, y1) in enumerate(((WINDOW[0], 2.28), (2.32, WINDOW[1]))):
-        reb.prim("cube", f"Window pane {i}", reb.mat_glass("Grimy glass", (0.5, 0.55, 0.5)), (X0 - 0.06, (y0 + y1) / 2, (WINDOW[2] + WINDOW[3]) / 2), (0.01, y1 - y0, WINDOW[3] - WINDOW[2]))
+        pane = reb.prim("cube", f"Window pane {i}", glass, (X0 - 0.06, (y0 + y1) / 2, (WINDOW[2] + WINDOW[3]) / 2), (0.01, y1 - y0, WINDOW[3] - WINDOW[2]))
+        if i == 0:
+            cut = pane.modifiers.new("Hole", "BOOLEAN")
+            cut.operation, cut.object, cut.solver = "DIFFERENCE", cutter, "EXACT"
+            bpy.context.view_layer.objects.active = pane
+            bpy.ops.object.modifier_apply(modifier="Hole")
+    bpy.data.objects.remove(cutter)
     reb.prim("cube", "Window mullion", frame_m, (X0 - 0.06, 2.3, (WINDOW[2] + WINDOW[3]) / 2), (0.05, 0.05, WINDOW[3] - WINDOW[2]))
     reb.prim("cube", "Window sill", frame_m, (X0 - 0.02, 2.3, WINDOW[2] - 0.02), (0.14, WINDOW[1] - WINDOW[0] + 0.1, 0.04))
-    hub = Vector((X0 - 0.05, 1.85, 1.55))
+    crack_m = reb.mat_plain("Crack", (0.16, 0.18, 0.17), 0.3)   # the split edges, dark against the light outside
+    face = hub + Vector((0.008, 0, 0))   # just on the room's side of the glass
+    # The crushed glass round the hole, gone white, its outer edge ragged.
+    cv, cf = [], []
+    for i in range(16):
+        dy, dz = hole[i]
+        out = 1 + 0.45 * crng.uniform(0.6, 1.4)
+        cv += [(face.x, face.y + dy, face.z + dz), (face.x, face.y + dy * out, face.z + dz * out)]
+    for i in range(16):
+        j = (i + 1) % 16
+        cf.append((2 * i, 2 * j, 2 * j + 1, 2 * i + 1))
+    reb.mesh_object("Crushed glass", cv, cf, reb.mat_plain("Crushed glass", (0.7, 0.73, 0.72), 0.4), smooth=False)
     for i in range(11):
-        a = 2 * math.pi * i / 11 + rng.uniform(-0.2, 0.2)
-        d = Vector((0, math.cos(a), math.sin(a))) * rng.uniform(0.15, 0.42)
-        kit.rod("Crack", reb.mat_plain("Crack", (0.75, 0.78, 0.8), 0.3), hub, hub + d, 0.002, 4)
-    kit.splat("Hole", mat("black"), (X0 - 0.045, 1.85, 1.55), 0.05, rot=(0, math.pi / 2, 0), seed=9, lumps=0.7)
+        a = 2 * math.pi * i / 11 + crng.uniform(-0.2, 0.2)
+        d = Vector((0, math.cos(a), math.sin(a)))
+        start = face + d * 0.12
+        end = face + d * crng.uniform(0.22, 0.42)
+        bend = Vector((0, -d.z, d.y)) * crng.uniform(-0.03, 0.03)
+        kit.rod("Crack", crack_m, start, (start + end) / 2 + bend, 0.0035, 4)
+        kit.rod("Crack", crack_m, (start + end) / 2 + bend, end, 0.003, 4)
+    for ring_r in (0.15, 0.24):
+        for i in range(11):
+            if crng.random() < 0.35:
+                continue
+            a0 = 2 * math.pi * i / 11 + crng.uniform(-0.1, 0.1)
+            a1 = a0 + 2 * math.pi / 11 * crng.uniform(0.6, 1.0)
+            p0 = face + Vector((0, math.cos(a0), math.sin(a0))) * ring_r * crng.uniform(0.9, 1.1)
+            p1 = face + Vector((0, math.cos(a1), math.sin(a1))) * ring_r * crng.uniform(0.9, 1.1)
+            kit.rod("Ring crack", crack_m, p0, p1, 0.003, 4)
     kit.shards("Glass on the desk", (X0 + 0.25, 1.9, 0.93), spread=0.4, count=18, seed=4)
     kit.shards("Glass on the floor", (X0 + 0.75, 1.9, 0.0), spread=0.5, count=12, seed=6)
     # Outside the window: the platform's edge and the morning beyond.
@@ -104,7 +160,6 @@ def build():
     reb.prim("cube", "Outside, rail", mat("rust"), (X0 - 3.5, 2.3, 1.0), (0.06, 8.0, 0.06))
     reb.prim("cube", "Outside, gondola", mat("red paint"), (X0 - 4.5, 3.4, 1.6), (2.2, 1.8, 1.8), bevel=0.2)
     car_lamp = reb.prim("cube", "Outside, gondola lit", reb.mat_emit("Car lamp", (1.0, 0.8, 0.5), 6), (X0 - 3.38, 3.4, 1.9), (0.02, 1.4, 0.55))
-    reb.prim("cube", "Outside, far mountain", mat("rock"), (X0 - 40, 2.3, 4.0), (1.0, 120, 30))
     # Out of the door: the platform's concrete, its rail, the bullwheel's housing.
     reb.prim("cube", "Outside, platform south", mat("concrete"), (2.0, Y1 + 4.0, -0.05), (12.0, 8.0, 0.1))
     reb.prim("cube", "Outside, rail south", mat("rust"), (2.0, Y1 + 5.5, 1.0), (12.0, 0.06, 0.06))
@@ -229,6 +284,10 @@ def build():
     kit.time_light("morning", sun_heading=290, sun_energy=2.5)
     reb.spot("Daylight through the window", (X0 - 2.5, 2.0, 2.2), (2.6, 2.5, 0.0), 650, (1.0, 0.86, 0.66), 50, 0.6, 0.2)
     reb.spot("Daylight through the door", (3.05, Y1 + 2.5, 2.0), (3.05, 2.4, 0.0), 160, (0.8, 0.86, 1.0), 40, 0.8, 0.4)
+    # Out of the window and the door: the valley under the overcast, its
+    # ranges and their forest, so the glass is looked through, not into.
+    kit.overcast_sky(glow=(-1.0, -0.3))
+    kit.backdrop((X0, 2.3, 1.6), toward=(-1.0, 0.2), spread=220, below=-60.0, near=20.0, forest_to=1500.0, trees=30000, mist=30.0, rng=random.Random(12))
     tube_m = reb.mat_emit("Strip light", (0.75, 0.95, 0.85), 10)
     reb.prim("cyl", "Strip light", tube_m, (3.0, 2.3, H - 0.16), (0.04, 0.04, 1.2), rot=(0, math.pi / 2, 0), segments=10)
     strip = reb.point("Strip light glow", (3.0, 2.3, H - 0.24), 14, (0.75, 0.95, 0.85), 0.4)

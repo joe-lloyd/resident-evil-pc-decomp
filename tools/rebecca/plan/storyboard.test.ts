@@ -80,7 +80,7 @@ test('the ending keeps its written lines alongside inherited control messages', 
   const save = board.scenes.find((s) => s.place.id === 'save');
   assert.ok(save?.msgs.some((m) => m.text === '"Freeze!"'));
   assert.ok(save?.cuts.some((c) => c.beats.some((b) => b.kind === 'say' && b.text === '"Freeze!"')));
-  assert.equal(board.scenes.reduce((n, s) => n + s.msgs.length, 0), 586);
+  assert.equal(board.scenes.reduce((n, s) => n + s.msgs.length, 0), 585);
 });
 
 test('each recorded visit has its own player and each room card shows coverage', () => {

@@ -745,122 +745,122 @@
       "room": "platform",
       "quarter": 1,
       "visit": 1,
-      "start": 0.5,
-      "end": 33.5,
-      "roomStart": 0.5,
+      "start": 1.8,
+      "end": 37.5,
+      "roomStart": 1.8,
       "posterTime": 22.0,
-      "file": "clips/platform-review-20261022-84d741e8.mp4",
-      "poster": "clips/platform-review-20261022-84d741e8.jpg",
+      "file": "clips/platform-review-20261022-85eb52b6.mp4",
+      "poster": "clips/platform-review-20261022-85eb52b6.jpg",
       "review": {
         "recorded": "2026-10-22",
-        "sha256": "84d741e8b301b86f971512994c1ef815690b80f3be2d1f994970c35a84212143",
-        "gameCommit": "2dc4d1b43f1e0ba79b149624652ef7b8f8765868",
+        "sha256": "85eb52b69fe7ed2dfb9a4c8d84de07dc4ac60e3875c1b6d8512db904ae9e0fbe",
+        "gameCommit": "86f114d87f40a8c1435eae7feca897f83e9378ad",
         "checkpoint": {
           "file": "platform-entry.json",
           "sha256": "dc144f495937670d73884535d265913c29df12aecbce45c6f5fc50f058f98a7e"
         },
         "god": false,
         "audio": false,
-        "source": "recordings/platform-20261022121613.mp4",
-        "log": "recordings/platform-review-20261022-84d741e8.json",
-        "logSha256": "79bb63813990c19db36c81456d954290f5e312dbacbf492270058ee53a70125a"
+        "source": "recordings/platform-20261022204044.mp4",
+        "log": "recordings/platform-review-20261022-85eb52b6.json",
+        "logSha256": "f000ec87bb6806c4e599de8527f1ff8455fed98a847db4a12850ac65bbbb991b"
       },
-      "note": "Still-grass pass: the grass by the paths and the ledge stands still. Frames checked at 2 fps and diffed in the holds",
+      "note": "Played from the platform's entry checkpoint with normal damage. Frames checked: the booth roof sits on its walls from every camera, the trail's dirt is trodden over the slab where it joins and muddy prints walk on toward the car and the booth, the ledge path's dirt laps over the concrete at the east corner. Out to the bridge, no crash.",
       "events": [
         {
           "t": 0,
-          "frame": 1250,
+          "frame": 1294,
           "room": "platform",
           "camera": 1,
           "what": "recording ready"
         },
         {
-          "t": 1.7,
-          "frame": 1302,
+          "t": 1.8,
+          "frame": 1346,
           "room": "platform",
           "camera": 1,
           "what": "scene ready; items [{\"id\":2,\"qty\":9},{\"id\":1,\"qty\":0},{\"id\":30,\"qty\":1},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
           "t": 4.8,
-          "frame": 1395,
+          "frame": 1439,
           "room": "platform",
           "camera": 1,
           "what": "hold platform-from-the-booth"
         },
         {
           "t": 7.2,
-          "frame": 1466,
+          "frame": 1511,
           "room": "platform",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 8.4,
-          "frame": 1506,
+          "t": 8.5,
+          "frame": 1550,
           "room": "platform",
           "camera": 2,
           "what": "walk platform-car"
         },
         {
-          "t": 12,
-          "frame": 1613,
+          "t": 12.2,
+          "frame": 1661,
           "room": "platform",
           "camera": 2,
           "what": "hold"
         },
         {
-          "t": 13.9,
-          "frame": 1669,
+          "t": 14.1,
+          "frame": 1718,
           "room": "platform",
           "camera": 3,
           "what": "walk platform-wheel-house"
         },
         {
-          "t": 18.7,
-          "frame": 1817,
+          "t": 19.5,
+          "frame": 1883,
           "room": "platform",
           "camera": 5,
           "what": "walk platform-smear"
         },
         {
-          "t": 20.7,
-          "frame": 1877,
+          "t": 21.7,
+          "frame": 1949,
           "room": "platform",
           "camera": 5,
           "what": "walk platform-ledge"
         },
         {
-          "t": 24.3,
-          "frame": 1984,
+          "t": 25.4,
+          "frame": 2060,
           "room": "platform",
           "camera": 5,
           "what": "hold"
         },
         {
-          "t": 26.6,
-          "frame": 2056,
+          "t": 27.7,
+          "frame": 2130,
           "room": "platform",
           "camera": 5,
           "what": "walk"
         },
         {
-          "t": 30.2,
-          "frame": 2164,
+          "t": 31.3,
+          "frame": 2238,
           "room": "platform",
           "camera": 0,
           "what": "walk platform-trail-in"
         },
         {
-          "t": 30.7,
-          "frame": 2166,
+          "t": 32,
+          "frame": 2240,
           "room": "platform",
           "camera": 0,
           "what": "leaving for bridge"
         },
         {
-          "t": 35.4,
-          "frame": 2394,
+          "t": 37,
+          "frame": 2479,
           "room": "bridge",
           "camera": 2,
           "what": "arrived in bridge"
@@ -871,87 +871,87 @@
       "room": "booth",
       "quarter": 1,
       "visit": 1,
-      "start": 0.3,
-      "end": 57.5,
-      "roomStart": 0.3,
-      "posterTime": 31.0,
-      "file": "clips/booth-review-20261021-f4354a8b.mp4",
-      "poster": "clips/booth-review-20261021-f4354a8b.jpg",
+      "start": 1.8,
+      "end": 56.0,
+      "roomStart": 1.8,
+      "posterTime": 22.0,
+      "file": "clips/booth-review-20261022-b2931298.mp4",
+      "poster": "clips/booth-review-20261022-b2931298.jpg",
       "review": {
-        "recorded": "2026-10-21",
-        "sha256": "f4354a8bee72deef557a7414a046c64df0f1a80556b626bc20d40e377ff7f418",
-        "gameCommit": "9ab7f59aba33dd846105fb9722a3af418309b848",
+        "recorded": "2026-10-22",
+        "sha256": "b29312988067fb65abd270629312106f81f0997c933aa5b0722e06755d8073db",
+        "gameCommit": "86f114d87f40a8c1435eae7feca897f83e9378ad",
         "checkpoint": {
           "file": "booth-entry.json",
           "sha256": "d24ff105abd7765d9e62f8f913d6cf43b3cdec4d96661c67084b719b38cf1893"
         },
         "god": false,
         "audio": false,
-        "source": "recordings/booth-20261021225454.mp4",
-        "log": "recordings/booth-review-20261021-f4354a8b.json",
-        "logSha256": "9723f66dad0f815f736fba0dd9db632a404fe1a433ee571fd2c9053f8cc24edf"
+        "source": "recordings/booth-20261022204319.mp4",
+        "log": "recordings/booth-review-20261022-b2931298.json",
+        "logSha256": "d379ea02dc97627a0834f7b63d98ee1a91817793d99b99d465dd421337317103"
       },
-      "note": "Played in from the yard with normal damage: winch, gorge, platform, booth. Frames checked: entry with the footlocker under the phone and its lid on it, camera 0 with no grey block, camera 1, out to the platform. No crash.",
+      "note": "Played in from the platform through the booth door with normal damage. Frames checked: camera 1's window shows the misty forest through clear glass, and the hole is see-through with the rail and trees behind it, ringed by crushed glass and cracks. Camera 2 unchanged. Out to the platform, no crash.",
       "events": [
         {
           "t": 0,
-          "frame": 1260,
+          "frame": 1299,
           "room": "booth",
           "camera": 1,
           "what": "recording ready"
         },
         {
-          "t": 1.8,
-          "frame": 1313,
+          "t": 1.7,
+          "frame": 1350,
           "room": "booth",
           "camera": 1,
           "what": "scene ready; items [{\"id\":2,\"qty\":9},{\"id\":1,\"qty\":0},{\"id\":30,\"qty\":1},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
           "t": 15.7,
-          "frame": 1736,
+          "frame": 1773,
           "room": "booth",
           "camera": 1,
           "what": "hold booth-entry"
         },
         {
-          "t": 17.2,
-          "frame": 1780,
+          "t": 17.3,
+          "frame": 1821,
           "room": "booth",
           "camera": 0,
           "what": "walk"
         },
         {
-          "t": 31.1,
-          "frame": 2202,
+          "t": 31.3,
+          "frame": 2243,
           "room": "booth",
           "camera": 0,
           "what": "hold booth-camera0"
         },
         {
-          "t": 33,
-          "frame": 2260,
+          "t": 33.3,
+          "frame": 2306,
           "room": "booth",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 47,
-          "frame": 2682,
+          "t": 47.3,
+          "frame": 2729,
           "room": "booth",
           "camera": 1,
           "what": "hold booth-camera1"
         },
         {
-          "t": 47.5,
-          "frame": 2684,
+          "t": 48,
+          "frame": 2731,
           "room": "booth",
           "camera": 1,
           "what": "leaving for platform"
         },
         {
-          "t": 58,
-          "frame": 3170,
+          "t": 58.3,
+          "frame": 3214,
           "room": "platform",
           "camera": 1,
           "what": "arrived in platform"
@@ -1067,115 +1067,115 @@
       "room": "den",
       "quarter": 1,
       "visit": 1,
-      "start": 0.0,
-      "end": 24.0,
-      "roomStart": 0.0,
-      "posterTime": 7.0,
-      "file": "clips/den-review-20261022-952038ac.mp4",
-      "poster": "clips/den-review-20261022-952038ac.jpg",
+      "start": 1.8,
+      "end": 28.0,
+      "roomStart": 1.8,
+      "posterTime": 10.0,
+      "file": "clips/den-review-20261022-ab0ff07f.mp4",
+      "poster": "clips/den-review-20261022-ab0ff07f.jpg",
       "review": {
         "recorded": "2026-10-22",
-        "sha256": "952038ac26d3f9de81e06ee9ec1845a925f383a6616ef74063ca4838f3858d5b",
-        "gameCommit": "2dc4d1b43f1e0ba79b149624652ef7b8f8765868",
+        "sha256": "ab0ff07f91a4fb90bcb83afe23287e120d1b344395a7bc671feacd54d6b42826",
+        "gameCommit": "86f114d87f40a8c1435eae7feca897f83e9378ad",
         "checkpoint": {
           "file": "after-truck-keys.json",
           "sha256": "68ec3516ba3827857f3da4e0110ef0aecd399e6d29220193862a31360f15b265"
         },
         "god": false,
         "audio": false,
-        "source": "recordings/den-20261022121846.mp4",
-        "log": "recordings/den-review-20261022-952038ac.json",
-        "logSha256": "cbfda7713c9d9ee194109a4e86f1eb46aa6ffa8abff8c27606cdd944863bc766"
+        "source": "recordings/den-20261022204508.mp4",
+        "log": "recordings/den-review-20261022-ab0ff07f.json",
+        "logSha256": "773824e680996267206108edf55e3e4f44e76c9f8fa3719a918e3bf00f98aa63"
       },
-      "note": "Still-grass pass: the clearing's grass, ferns and roots stand still. Frames checked at 2 fps and diffed in the holds",
+      "note": "Played from the den checkpoint with normal damage. Frames checked on all three cameras: no bones or skull at the cave mouth or by the pit, only the ranger. The dogs attack on the way. Out to the woods, no crash.",
       "events": [
         {
           "t": 0,
-          "frame": 1272,
+          "frame": 1292,
           "room": "den",
           "camera": 1,
           "what": "recording ready"
         },
         {
           "t": 1.7,
-          "frame": 1325,
+          "frame": 1343,
           "room": "den",
           "camera": 1,
           "what": "scene ready; items [{\"id\":2,\"qty\":14},{\"id\":1,\"qty\":0},{\"id\":65,\"qty\":1},{\"id\":30,\"qty\":1},{\"id\":57,\"qty\":1},{\"id\":0,\"qty\":0}]"
         },
         {
           "t": 3.8,
-          "frame": 1386,
+          "frame": 1406,
           "room": "den",
           "camera": 1,
           "what": "hold den-clearing"
         },
         {
-          "t": 5.6,
-          "frame": 1442,
+          "t": 5.7,
+          "frame": 1465,
           "room": "den",
           "camera": 0,
           "what": "walk den-ranger"
         },
         {
-          "t": 8.1,
-          "frame": 1518,
+          "t": 8.4,
+          "frame": 1546,
           "room": "den",
           "camera": 0,
           "what": "hold"
         },
         {
-          "t": 10,
-          "frame": 1575,
+          "t": 11.2,
+          "frame": 1631,
           "room": "den",
           "camera": 2,
           "what": "walk den-mouth"
         },
         {
-          "t": 12.5,
-          "frame": 1651,
+          "t": 13.8,
+          "frame": 1709,
           "room": "den",
           "camera": 2,
           "what": "hold"
         },
         {
-          "t": 14.8,
-          "frame": 1720,
+          "t": 16,
+          "frame": 1777,
           "room": "den",
           "camera": 1,
           "what": "walk den-jacket"
         },
         {
-          "t": 16.6,
-          "frame": 1775,
+          "t": 18,
+          "frame": 1837,
           "room": "den",
           "camera": 1,
           "what": "hold"
         },
         {
           "t": 19.5,
-          "frame": 1861,
+          "frame": 1882,
           "room": "den",
           "camera": 1,
           "what": "walk"
         },
         {
           "t": 20.6,
-          "frame": 1894,
+          "frame": 1914,
           "room": "den",
           "camera": 1,
           "what": "walk den-way-out"
         },
         {
-          "t": 21,
-          "frame": 1896,
+          "t": 21.2,
+          "frame": 1916,
           "room": "den",
           "camera": 1,
           "what": "leaving for woods"
         },
         {
-          "t": 25.4,
-          "frame": 2116,
+          "t": 26.3,
+          "frame": 2158,
           "room": "woods",
           "camera": 4,
           "what": "arrived in woods"
@@ -1186,101 +1186,101 @@
       "room": "logging-road",
       "quarter": 1,
       "visit": 1,
-      "start": 0.0,
-      "end": 27.0,
-      "roomStart": 0.0,
-      "posterTime": 16.0,
-      "file": "clips/logging-road-review-20261022-12edf932.mp4",
-      "poster": "clips/logging-road-review-20261022-12edf932.jpg",
+      "start": 1.8,
+      "end": 28.0,
+      "roomStart": 1.8,
+      "posterTime": 22.0,
+      "file": "clips/logging-road-review-20261022-5bc76b7c.mp4",
+      "poster": "clips/logging-road-review-20261022-5bc76b7c.jpg",
       "review": {
         "recorded": "2026-10-22",
-        "sha256": "12edf932239d0f4c322e60ed01854f8a2c15b45aa9b7b3568ba1ecafe9f6a508",
-        "gameCommit": "2dc4d1b43f1e0ba79b149624652ef7b8f8765868",
+        "sha256": "5bc76b7c37368bbe61a14c73d381ae9ebf584fa828dca462719c16e4530f192f",
+        "gameCommit": "86f114d87f40a8c1435eae7feca897f83e9378ad",
         "checkpoint": {
           "file": "after-quarantine.json",
           "sha256": "fb52827d2dde03635ee6cf08e51665c749f609622eefb0769ec993461060655a"
         },
         "god": false,
         "audio": false,
-        "source": "recordings/logging-road-20261022121958.mp4",
-        "log": "recordings/logging-road-review-20261022-12edf932.json",
-        "logSha256": "6869f88998100eb43f135be8bcad1f86aa7f17f782a9af11846ce9dc2737a11d"
+        "source": "recordings/logging-road-20261022204625.mp4",
+        "log": "recordings/logging-road-review-20261022-5bc76b7c.json",
+        "logSha256": "d598abc1fa707b9c0883ec978d3de7ca6697bbbdd445e8aa53aa5fde32cfb518"
       },
-      "note": "Still-grass pass: the verge grass and ferns stand still, with the zombie on the verge. Frames checked at 2 fps and diffed in the holds",
+      "note": "Played from the logging road checkpoint with normal damage. Frames checked: the logs on the truck and the cold deck are straight and barked, and on camera 5 the NO ENTRY board is nailed in the middle of its spruce, low on the trunk. Out to the camp gate, no crash.",
       "events": [
         {
           "t": 0,
-          "frame": 1269,
+          "frame": 1302,
           "room": "logging-road",
           "camera": 2,
           "what": "recording ready"
         },
         {
-          "t": 1.7,
-          "frame": 1321,
+          "t": 1.8,
+          "frame": 1354,
           "room": "logging-road",
           "camera": 2,
           "what": "scene ready; items [{\"id\":2,\"qty\":14},{\"id\":1,\"qty\":0},{\"id\":65,\"qty\":1},{\"id\":30,\"qty\":1},{\"id\":57,\"qty\":1},{\"id\":28,\"qty\":2}]"
         },
         {
           "t": 3.8,
-          "frame": 1384,
+          "frame": 1416,
           "room": "logging-road",
           "camera": 2,
           "what": "hold logging-road-notice"
         },
         {
-          "t": 11.6,
-          "frame": 1619,
+          "t": 12.1,
+          "frame": 1666,
           "room": "logging-road",
           "camera": 4,
           "what": "walk logging-road-load"
         },
         {
-          "t": 14.1,
-          "frame": 1694,
+          "t": 14.7,
+          "frame": 1746,
           "room": "logging-road",
           "camera": 4,
           "what": "walk logging-road-cab"
         },
         {
-          "t": 16.2,
-          "frame": 1759,
+          "t": 17.1,
+          "frame": 1818,
           "room": "logging-road",
           "camera": 3,
           "what": "walk logging-road-grille"
         },
         {
-          "t": 18.7,
-          "frame": 1833,
+          "t": 19.8,
+          "frame": 1900,
           "room": "logging-road",
           "camera": 3,
           "what": "hold"
         },
         {
-          "t": 20.5,
-          "frame": 1891,
+          "t": 21.8,
+          "frame": 1959,
           "room": "logging-road",
           "camera": 1,
           "what": "walk logging-road-open-door"
         },
         {
-          "t": 23.1,
-          "frame": 1966,
+          "t": 24.5,
+          "frame": 2040,
           "room": "logging-road",
           "camera": 1,
           "what": "hold"
         },
         {
-          "t": 23.1,
-          "frame": 1966,
+          "t": 24.5,
+          "frame": 2040,
           "room": "logging-road",
           "camera": 1,
           "what": "leaving for camp-gate"
         },
         {
-          "t": 29,
-          "frame": 2220,
+          "t": 30.6,
+          "frame": 2294,
           "room": "camp-gate",
           "camera": 1,
           "what": "arrived in camp-gate"
