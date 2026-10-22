@@ -1,27 +1,30 @@
-"""The dogs' den, a hollow north of the woods, at noon under cloud.
+"""The dogs' den, under a granite tor north of the woods, at noon under cloud.
 
-What it tells: this is where the drag marks end. The dogs have a den in a
-hollow under a granite overhang, where the spruce roots hang down through
-the bank. The ranger is here. They pulled him in under the lip of the rock
-and ate what they wanted: his khaki shirt is torn open, an arm and a leg
-are gone below the joint, and the flies are thick on him. His ring of keys
-still hangs at his belt and catches what light there is. He is not the
-first: the floor of the hollow is littered with gnawed bones, deer and
-older ones, a human skull among them, and a hiker's orange jacket is
-shredded across the roots. At the back, under the rock, the dogs have dug
-a pit in the soil where they lie, matted with their hair. A heavy collar
-with a broken chain lies by it: these were somebody's dogs once. Water
-drips from the overhang into a puddle stained red.
+What it tells: this is where the drag marks end. The dogs lie up in a cave
+mouth under a tor of weathered granite, a slab of rock across two blocks
+with the dark going back under it. The ranger is here. They pulled him to
+the mouth head first and ate what they wanted: he lies on his back in his
+Forest Service uniform, the same as Dana's, the green jacket open, a hand
+and a foot gone, and the flies are thick on him. His ring of keys still
+hangs at his belt and catches what light there is. He is not the first: a
+few old gnawed bones lie by the pit, a human skull among them, and a
+hiker's orange jacket is torn up on the windfall at the south-west. In the
+mouth, under the slab, the dogs have dug a pit in the soil where they lie,
+matted with their hair. A heavy collar with a broken chain lies by it:
+these were somebody's dogs once. Water drips off the slab into a puddle
+stained red. Round the clearing the ground rises gently into the spruce,
+grassed and thick with ferns, the trunks standing close into the mist.
 
-Metres: she walks the floor of the hollow, x 3-15, y 2-12. The trampled
-way comes down from the woods at the south edge, x 7.5-10. Earth banks
-rise steeply west, east and south; the granite overhang juts out over the
-north of the floor, its lip about 3.2 m up at y 4.5, and the rock face
-under it stands at y 1.5. The pit is at x 8.5, y 2.9; the ranger lies at
-x 10.6, y 5.0, his head toward the rock.
+Metres: she walks the floor of the clearing, x 3-15, y 2-12. The trampled
+way comes down from the woods at the south edge, x 7.5-10. The tor stands
+across the north: a west block (x 3.6-7.4), an east block (x 10-14), a back
+block behind the mouth, and the capstone across them, its front edge at
+about y 3.8 and its underside 2 m up. The mouth's floor is x 7.4-10,
+y 2-3.7. The pit is at x 8.6, y 2.8, under the slab; the ranger's feet are
+at x 10.4, y 5.7, his head toward the mouth.
 
-Moving: flies on the ranger and the pit, water dripping from the lip, the
-hanging roots in the draught.
+Moving: flies on the ranger and the pit, water dripping from the slab, the
+roots under it, the grass and ferns.
 """
 import math
 import os
@@ -37,30 +40,55 @@ from mathutils import Matrix, Vector, noise  # noqa: E402
 
 X0, X1, Y0, Y1 = 3.0, 15.0, 2.0, 12.0
 WAY = (7.5, 10.0)          # the trampled way down from the woods, x along the south edge
-LIP_Y = 4.5                # the overhang's front edge
-FACE_Y = 1.5               # the rock face under it
-PIT = (8.5, 2.9)
-RANGER = (10.6, 5.0)
+PIT = (8.6, 2.8)
+RANGER = (10.4, 5.7)       # his feet; his head is toward the mouth
+# The tor's granite: centre (x, y), how high the centre stands over the
+# lowest ground under the block (the capstone's is its height over the
+# floor), half-sizes, and whether she bumps it.
+BLOCKS = [
+    ((5.6, 1.4, 0.8), (2.0, 1.8, 1.9), True),      # west block
+    ((12.1, 1.3, 0.75), (2.1, 1.7, 1.8), True),    # east block
+    ((8.8, -1.4, 0.9), (2.0, 1.3, 1.9), True),     # the back of the mouth
+    ((9.0, 1.7, 2.5), (3.3, 2.0, 0.72), False),    # the capstone
+    ((6.4, -1.6, 1.2), (2.5, 1.8, 2.2), False),
+    ((11.6, -1.2, 1.1), (2.2, 1.7, 2.0), False),
+    ((9.4, -2.8, 1.2), (2.6, 1.9, 2.1), False),
+    ((2.0, 4.6, 0.3), (1.3, 1.2, 1.1), False),     # outliers on the slopes
+    ((16.2, 3.6, 0.3), (1.5, 1.2, 1.0), False),
+    ((3.2, -1.0, 0.8), (1.8, 1.5, 1.6), False),
+    ((14.8, -0.8, 0.7), (1.7, 1.4, 1.5), False),
+]
+CAMS = [((8.6, 11.7, 3.3), (9.1, 3.0, 0.9)), ((4.0, 5.4, 3.0), (11.0, 11.4, 0.3)), ((14.6, 7.4, 3.6), (6.0, 4.0, 0.7))]
 
 
 def height(x, y):
-    """The hollow's floor flat; banks rising steeply west and east, the slope
-    back up to the woods in the south, the rock behind."""
+    """The clearing's floor nearly flat; the ground rising gently into the
+    trees west, east and south, and up behind the tor in the north, never
+    steeply enough for a tree to stand out of a bank."""
     n = noise.noise(Vector((x * 0.3, y * 0.3, 5.0)))
     h = -0.03 + 0.025 * n
-    d_pit = math.hypot((x - PIT[0]) / 1.3, (y - PIT[1]) / 0.9)
+    d_pit = math.hypot((x - PIT[0]) / 1.1, (y - PIT[1]) / 0.7)
     if d_pit < 1.0:
-        h -= 0.16 * (1 - d_pit ** 2)
-    if x < X0 + 0.3:
-        h += (X0 + 0.3 - x) ** 1.3 * 0.9
-    if x > X1 - 0.3:
-        h += (x - X1 + 0.3) ** 1.3 * 0.9
-    if y > Y1 + 0.3:
-        dy = y - Y1 - 0.3
-        h += dy * (0.45 if WAY[0] - 0.5 < x < WAY[1] + 0.5 else 0.9)
-    if y < Y0:
-        h += (Y0 - y) * 1.5
-    return h + (0.4 * n if (x < X0 or x > X1 or y > Y1 + 0.3) else 0.0)
+        h -= 0.14 * (1 - d_pit ** 2)
+    rise = 0.0
+    if x < X0 + 0.5:
+        rise += (X0 + 0.5 - x) * 0.2
+    if x > X1 - 0.5:
+        rise += (x - X1 + 0.5) * 0.2
+    if y > Y1 + 0.5:
+        rise += (y - Y1 - 0.5) * (0.12 if WAY[0] - 0.5 < x < WAY[1] + 0.5 else 0.16)
+    if y < 0.6:
+        rise += (0.6 - y) * 0.5
+    far = 0.35 * noise.noise(Vector((x * 0.12, y * 0.12, 2.0)))
+    return h + rise + far * min(1.0, rise)
+
+
+def in_rock(x, y, margin=0.0):
+    """Inside a block's footprint (or within `margin` of it)."""
+    for (cx, cy, _), (sx, sy, _), _ in BLOCKS:
+        if ((x - cx) / (sx * 1.25 + margin)) ** 2 + ((y - cy) / (sy * 1.25 + margin)) ** 2 < 1:
+            return True
+    return False
 
 
 def tube(verts, faces, pts, r, sides=5, taper=0.4):
@@ -86,12 +114,12 @@ def tube(verts, faces, pts, r, sides=5, taper=0.4):
 
 
 def hanging_root(rng, verts, faces, top, length, r=0.03):
-    """A root hanging from the bank or the lip, kinking as it falls."""
+    """A root hanging from the slab's edge, kinking as it falls."""
     p = Vector(top)
     pts = [p.copy()]
     seg = length / 6
     for _ in range(6):
-        p = p + Vector((rng.uniform(-0.12, 0.12), rng.uniform(-0.12, 0.12), -seg))
+        p = p + Vector((rng.uniform(-0.1, 0.1), rng.uniform(-0.1, 0.1), -seg))
         pts.append(p.copy())
     tube(verts, faces, pts, r, 5, 0.7)
 
@@ -106,247 +134,221 @@ def build():
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1))
     room.ground("earth")
-    room.camera((8.6, 11.7, 3.3), (9.4, 3.2, 0.6), 200, "from the way down: the hollow, the overhang, the ranger under the lip")
-    room.camera((4.6, 5.8, 2.8), (11.2, 11.2, 0.2), 200, "from under the lip in the north-west: the ranger, the jacket on the east bank, the way back up")
-    room.camera((14.6, 7.0, 3.6), (5.0, 6.0, 0.3), 200, "from the east bank: the den under the rock, the pit, the bones, the skull")
+    notes = ["from the way down: the clearing, the tor, the ranger at the cave mouth",
+             "from beside the west block: the drag in from the woods, the windfall and the jacket, the way back up",
+             "from the east: the mouth under the slab, the pit, the bones, the skull"]
+    for (eye, look), note in zip(CAMS, notes):
+        room.camera(eye, look, 200, note)
 
-    soil = reb.mat_surface("Den soil", [(0.0, (0.03, 0.02, 0.012)), (0.5, (0.08, 0.055, 0.035)), (1.0, (0.13, 0.09, 0.055))], scale=2.5, bump=0.6)
-    bank = reb.mat_surface("Earth bank", [(0.0, (0.03, 0.02, 0.012)), (0.4, (0.09, 0.062, 0.038)), (0.55, (0.05, 0.07, 0.025)), (0.75, (0.035, 0.065, 0.02)), (1.0, (0.07, 0.1, 0.035))], scale=2.2, bump=0.9)
+    soil = reb.mat_surface("Den soil", [(0.0, (0.03, 0.02, 0.012)), (0.45, (0.07, 0.05, 0.03)), (0.7, (0.1, 0.075, 0.045)), (0.88, (0.06, 0.065, 0.03)), (1.0, (0.13, 0.1, 0.065))], scale=2.5, detail=12, bump=0.7)
     churned = reb.mat_surface("Churned soil", [(0.0, (0.015, 0.01, 0.006)), (1.0, (0.06, 0.04, 0.025))], scale=6, rough=0.8, bump=0.8)
     hair = reb.mat_cards("Dog hair", (0.02, 0.018, 0.016), (0.09, 0.08, 0.07))
     root_m = reb.mat_surface("Roots", [(0.0, (0.05, 0.035, 0.022)), (1.0, (0.13, 0.09, 0.06))], scale=20, bump=0.5)
-    jacket = reb.mat_surface("Hiker's jacket", [(0.0, (0.5, 0.12, 0.02)), (0.75, (0.6, 0.18, 0.03)), (1.0, (0.18, 0.03, 0.01))], scale=6, rough=0.5, bump=0.2)
-    trousers = reb.mat_surface("Ranger trousers", [(0.0, (0.06, 0.07, 0.04)), (1.0, (0.1, 0.11, 0.06))], scale=40, bump=0.2)
-    flesh = reb.mat_surface("Torn flesh", [(0.0, (0.1, 0.006, 0.004)), (0.6, (0.3, 0.03, 0.025)), (1.0, (0.42, 0.12, 0.1))], scale=10, rough=0.3, bump=0.5)
+    jacket = reb.mat_surface("Hiker's jacket", [(0.0, (0.3, 0.07, 0.015)), (0.75, (0.42, 0.12, 0.02)), (1.0, (0.12, 0.025, 0.01))], scale=6, rough=0.6, bump=0.2)
+    granite = mat("granite")
+    # Blood gone into the soil: dark, brown-red, matte, broken up.
+    soaked = reb.mat_surface("Soaked blood", [(0.15, (0.018, 0.007, 0.005)), (0.45, (0.04, 0.012, 0.007)), (0.75, (0.06, 0.022, 0.012)), (0.95, (0.05, 0.035, 0.022))], scale=28, detail=8, rough=0.95, bump=0.15)
 
-    # ---- Ground: the floor of the hollow, the banks, the way down from the woods.
-    reb.terrain("Hollow", soil, (X0 - 0.6, X1 + 0.6), (Y0 - 0.6, Y1 + 0.6), height, step=0.3)
-    reb.terrain("Banks", bank, (-14, 32), (-12, 34), lambda x, y: height(x, y) - (0.02 if X0 - 0.6 < x < X1 + 0.6 and Y0 - 0.6 < y < Y1 + 0.6 else 0.0), step=0.6)
-    kit.path_strip("Trampled way", reb.mat_plain("Trampled", (0.05, 0.035, 0.02), 0.9), [(8.8, 22.0), (8.8, 16.0), (8.7, 12.6), (8.9, 10.5), (9.6, 7.5), (10.2, 5.8)], height, width=0.6)
-    kit.drag_trail("The drag ends here", mat("old blood"), [(8.8, 15.0), (8.8, 12.5), (9.0, 10.4), (9.7, 7.6), (10.3, 5.9)], width=0.5, seed=3, height=height)
-    kit.drag_trail("Fresh drag", mat("blood"), [(8.8, 13.0), (9.1, 10.0), (9.8, 7.4), (10.4, 5.8)], width=0.32, seed=4, height=height)
+    # ---- Ground: the trampled floor, grass and ferns up the slopes, the way down from the woods.
+    trodden = lambda x, y: ((x - 9.4) / 3.0) ** 2 + ((y - 5.0) / 2.6) ** 2 < 1 + 0.35 * noise.noise(Vector((x * 0.6, y * 0.6, 3.0))) or (7.4 < x < 10.2 and y < 4.2) or abs(x - 8.9 - (y - 10.0) * 0.08) < 0.6 and y > 6.0
+    reb.terrain("Clearing floor", soil, (X0 - 0.8, X1 + 0.8), (Y0 - 2.4, Y1 + 0.8), height, step=0.25)
+    reb.terrain("Slopes", mat("grassed earth"), (-20, 38), (-20, 38), lambda x, y: height(x, y) - (0.03 if X0 - 0.8 < x < X1 + 0.8 and Y0 - 2.4 < y < Y1 + 0.8 else 0.0), step=0.5)
+    on_way = kit.dirt_path("Trampled way", [(8.8, 26.0), (8.8, 18.0), (8.7, 13.0), (8.9, 10.8)], height, width=0.9)
+    kit.lay_on_ground(kit.drag_trail("The drag ends here", soaked, [(8.8, 15.0), (8.8, 12.5), (9.0, 10.4), (9.6, 7.8), (10.1, 6.2)], width=0.28, seed=3, height=height), height, 0.012)
 
-    # ---- The overhang: granite blocks jutting out over the north of the floor, the face under it.
-    rv, rf = [], []
-    # The shelf: blocks whose flat undersides make the overhang's roof, about 3.2 m up.
-    for (x, y, sx, sy) in ((4.6, 1.6, 2.8, 3.0), (8.4, 2.0, 2.6, 2.6), (12.2, 1.7, 2.8, 2.9), (15.6, 1.0, 2.2, 2.6)):
-        kit.crag(rng, rv, rf, (x, y, 4.3), (sx, sy, 3.2), floor=-0.35)
-    # The face under it and the rock behind, down to the floor.
-    for (x, y, sx, sy, sz) in ((5.6, -0.6, 2.6, 2.0, 2.4), (9.6, -0.4, 2.4, 1.9, 2.3), (13.4, -0.6, 2.6, 2.0, 2.4), (2.0, 1.2, 2.2, 2.6, 3.6), (16.8, 2.0, 2.0, 2.2, 3.0), (9.0, -3.5, 6.0, 3.0, 6.0)):
-        kit.crag(rng, rv, rf, (x, y, 0.8), (sx, sy, sz), floor=-0.6)
-    granite = reb.mat_surface("Den granite", [(0.0, (0.025, 0.025, 0.023)), (0.45, (0.06, 0.058, 0.052)), (0.7, (0.035, 0.05, 0.025)), (1.0, (0.11, 0.105, 0.095))], scale=1.1, rough=0.6, bump=1.0)
-    reb.mesh_object("Overhang", rv, rf, granite, smooth=False)
-    # A spruce grows on top of the rock; its roots come down over the lip.
-    cv, cf = [], []
-    reb.conifer(rng, Vector((8.6, 0.8, 6.0)), 15, cv, cf)
-    reb.mesh_object("Spruce on the rock", cv, cf, mat("needles"))
-    reb.trunks("Its trunk", mat("bark"), [(Vector((8.6, 0.8, 5.6)), 15)])
-    mv, mf = [], []
-    for _ in range(14):
-        reb.fern(rng, (rng.uniform(3.5, 15.0), rng.uniform(1.5, 3.4), 6.6 + rng.uniform(-0.6, 0.3)), rng.uniform(0.4, 0.7), mv, mf)
-    reb.mesh_object("Ferns on the rock", mv, mf, mat("ferns"))
-    # She can't walk into the rock face at the back.
-    reb.wall(reb.prim("cube", "Rock face footprint", None, ((X0 + X1) / 2, Y0 - 0.2, 0.5), (X1 - X0 + 1, 0.6, 1.0))).hide_render = True
-    reb.wall(reb.prim("cube", "West rock footprint", None, (X0 + 0.6, Y0 + 1.0, 0.5), (1.6, 2.0, 1.0))).hide_render = True
-    reb.wall(reb.prim("cube", "East rock footprint", None, (X1 - 0.5, Y0 + 1.0, 0.5), (1.4, 2.0, 1.0))).hide_render = True
-    # Loose rocks fallen from it, one tagged where she'd bump it.
-    lv, lf = [], []
-    for (x, y, r) in ((4.0, 2.7, 0.55), (13.8, 3.4, 0.45), (3.6, 10.6, 0.5), (14.3, 9.5, 0.6), (5.8, 3.0, 0.25), (12.2, 8.4, 0.2)):
-        reb.boulder(rng, (x, y, height(x, y) - 0.05), r, lv, lf)
-        if r > 0.4:
-            reb.wall(reb.prim("cube", "Rock footprint", None, (x, y, r / 2), (r * 2.2, r * 1.9, r))).hide_render = True
-    for (x, y, r) in ((1.6, 6.4, 1.1), (16.4, 8.2, 1.2), (12.4, 13.8, 0.9), (4.8, 13.6, 1.0), (16.6, 11.8, 0.8), (1.4, 10.6, 0.9), (17.0, 4.6, 1.0)):
-        reb.boulder(rng, (x, y, height(x, y) - 0.2), r, lv, lf)
-    reb.mesh_object("Fallen rocks", lv, lf, mat("rock"))
-
-    # ---- Roots: hanging from the lip and the banks, snaking out over the floor's edges.
+    # ---- The tor: weathered granite blocks, the capstone across the mouth.
+    bv, bf = [], []
+    for i, ((cx, cy, cz), size, bump) in enumerate(BLOCKS):
+        # Sat into the ground on its low side, so it never hangs over the slope.
+        low = min(height(cx + math.cos(a) * size[0], cy + math.sin(a) * size[1]) for a in (k * math.tau / 12 for k in range(12)))
+        z = cz if i == 3 else min(low, height(cx, cy)) + cz
+        kit.crag(rng, bv, bf, (cx, cy, z), size, floor=-0.6)
+        if bump:
+            reb.wall(reb.prim("cube", "Rock footprint", None, (cx, cy, 0.5), (size[0] * 2.1, size[1] * 2.1, 1.0))).hide_render = True
+    tor = reb.mesh_object("Granite tor", bv, bf, granite, smooth=False)
+    tor.data.materials.append(mat("moss"))
+    for poly in tor.data.polygons:
+        if poly.normal.z > 0.75 and poly.center.z > 1.2:
+            poly.material_index = 1
+    # Grass and ferns on the tor's ledges and top, where soil has caught.
+    tops = [tuple(p.center) for p in tor.data.polygons if p.normal.z > 0.8 and p.center.z > 1.2]
+    kit.ledge_plants(rng, rng.sample(tops, min(len(tops), 900)), tufts=500, ferns=40, name="Tor")
+    # The back of the mouth, unlit: the dark the dogs lie up in.
+    reb.prim("cube", "Dark under the slab", mat("black"), (8.8, -0.6, 1.2), (3.0, 0.3, 2.6))
+    # Roots of the spruce on top come down over the slab's front edge.
     tv, tf = [], []
-    for i in range(34):
-        x = rng.uniform(X0, X1)
-        hanging_root(rng, tv, tf, (x, LIP_Y + rng.uniform(-0.6, 0.2), 3.0 + rng.uniform(0, 0.3)), rng.uniform(0.6, 1.9), rng.uniform(0.012, 0.035))
-    for i in range(26):
-        side = rng.choice(("w", "e"))
-        y = rng.uniform(Y0 + 1, Y1)
-        x = X0 - 0.4 if side == "w" else X1 + 0.4
-        z = height(x, y) + rng.uniform(0.3, 1.2)
-        hanging_root(rng, tv, tf, (x, y, z), rng.uniform(0.4, 1.2), rng.uniform(0.015, 0.04))
-    for i in range(10):
-        side = rng.choice((-1, 1))
-        y = rng.uniform(Y0 + 2, Y1)
-        x0 = X0 - 1.2 if side < 0 else X1 + 1.2
-        pts = [(x0, y, height(x0, y) + 0.1)]
-        for k in range(5):
-            xx = x0 - side * (k + 1) * 0.35
-            yy = y + rng.uniform(-0.3, 0.3)
-            pts.append((xx, yy, height(xx, yy) + 0.04 + 0.05 * (k == 2)))
-        tube(tv, tf, pts, rng.uniform(0.04, 0.08), 6, 0.6)
-    roots = reb.mesh_object("Roots", tv, tf, root_m)
+    for _ in range(12):
+        x = rng.uniform(6.6, 11.4)
+        hanging_root(rng, tv, tf, (x, 3.4 + rng.uniform(-0.3, 0.2), 2.6), rng.uniform(0.4, 1.1), rng.uniform(0.012, 0.03))
+    roots = reb.mesh_object("Roots under the slab", tv, tf, root_m)
+    top_base = Vector((9.0, -5.8, height(9.0, -5.8) - 0.2))
+    cv, cf = [], []
+    reb.conifer(rng, top_base, 17, cv, cf)
+    reb.mesh_object("Spruce over the tor", cv, cf, mat("needles"))
+    reb.trunks("Its trunk", mat("bark"), [(top_base, 17)])
+    kit.tree_roots(rng, [(top_base, 17)], height)
+    kit.rocks("Fallen rocks", rng, [(3.6, 3.3, 0.35), (14.2, 3.6, 0.4), (3.5, 10.6, 0.45), (14.4, 9.8, 0.4), (7.2, 3.6, 0.22), (10.6, 3.5, 0.18)], height, granite)
+    for (x, y, r) in ((3.5, 10.6, 0.45), (14.4, 9.8, 0.4)):
+        reb.wall(reb.prim("cube", "Rock footprint", None, (x, y, r / 2), (r * 2.2, r * 1.9, r))).hide_render = True
 
-    # ---- The pit they lie in: churned soil, hair, a collar with a broken chain.
-    kit.splat("The dogs' pit", churned, (PIT[0], PIT[1], height(*PIT) + 0.005), 1.0, seed=7, stretch=(1.3, 0.9), lumps=0.25)
+    # ---- The pit they lie in, under the slab: churned soil, hair, a collar with a broken chain.
+    kit.lay_on_ground(kit.splat("The dogs' pit", churned, (PIT[0], PIT[1], 0), 0.9, seed=7, stretch=(1.2, 0.8), lumps=0.25), height, 0.006)
     hv, hf = [], []
     for _ in range(500):
         a = rng.uniform(0, 2 * math.pi)
         d = rng.uniform(0, 1.0) ** 0.5
-        x, y = PIT[0] + math.cos(a) * d * 1.3, PIT[1] + math.sin(a) * d * 0.85
+        x, y = PIT[0] + math.cos(a) * d * 1.1, PIT[1] + math.sin(a) * d * 0.7
         reb.card(hv, hf, Vector((x, y, height(x, y) + 0.012)), Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)).normalized(), Vector((0, 0, 1)), 0.02, 0.09, 0.0)
     reb.mesh_object("Dog hair in the pit", hv, hf, hair)
-    cx, cy = PIT[0] + 1.6, PIT[1] + 0.9
-    collar = reb.prim("cyl", "Collar", reb.mat_plain("Collar leather", (0.04, 0.025, 0.015), 0.6), (cx, cy, 0.02), (0.22, 0.22, 0.04), segments=16)
-    reb.prim("cyl", "Collar hole", mat("black"), (cx, cy, 0.03), (0.17, 0.17, 0.02), segments=16)
-    reb.prim("cube", "Collar tag", mat("steel"), (cx + 0.12, cy, 0.01), (0.05, 0.04, 0.004))
+    cx, cy = PIT[0] - 1.0, PIT[1] + 0.8
+    cz = height(cx, cy)
+    collar = reb.prim("cyl", "Collar", reb.mat_plain("Collar leather", (0.04, 0.025, 0.015), 0.6), (cx, cy, cz + 0.02), (0.22, 0.22, 0.04), segments=16)
+    reb.prim("cyl", "Collar hole", mat("black"), (cx, cy, cz + 0.03), (0.17, 0.17, 0.02), segments=16)
+    reb.prim("cube", "Collar tag", mat("steel"), (cx + 0.12, cy, cz + 0.01), (0.05, 0.04, 0.004))
     for k in range(6):
-        reb.prim("cyl", f"Chain link {k}", mat("iron"), (cx - 0.16 - k * 0.055, cy + 0.02 * math.sin(k), 0.012), (0.05, 0.03, 0.01), rot=(0 if k % 2 else math.pi / 2, 0, 0.2), segments=8)
-    reb.prim("cube", "Broken link", mat("rust"), (cx - 0.52, cy + 0.04, 0.008), (0.04, 0.012, 0.012), rot=(0, 0, 0.8))
+        reb.prim("cyl", f"Chain link {k}", mat("iron"), (cx + 0.16 + k * 0.055, cy + 0.02 * math.sin(k), cz + 0.012), (0.05, 0.03, 0.01), rot=(0 if k % 2 else math.pi / 2, 0, 0.2), segments=8)
+    reb.prim("cube", "Broken link", mat("rust"), (cx + 0.52, cy + 0.04, cz + 0.008), (0.04, 0.012, 0.012), rot=(0, 0, 0.8))
 
-    # ---- The ranger: on his back under the lip, half eaten, the keys at his belt.
-    heading = math.radians(100)   # head toward the rock (north)
+    # ---- The ranger: on his back at the mouth, half eaten, the keys at his belt.
+    heading = math.radians(-100)   # head toward the mouth (north)
     rx, ry = RANGER
-    kit.body("The ranger", (rx, ry, height(rx, ry) + 0.01), heading, pose="back", top=mat("khaki"), legs=trousers, seed=8, missing=("l_hand", "r_foot"))
-    # His keys, by his hand, for his partner to give her (plan step truck-keys).
-    room.item("truck-keys", (rx + 0.45, ry + 0.35, height(rx + 0.45, ry + 0.35)))
-    kit.splat("His blood", mat("blood"), tuple(world((rx, ry, 0), heading, (1.05, 0, 0.0))), 0.42, rot=(0, 0, 0.4), seed=9, stretch=(1.5, 1.0))
-    kit.splat("His blood, older", mat("old blood"), tuple(world((rx, ry, 0), heading, (0.7, 0.3, -0.002))), 0.6, rot=(0, 0, 1.2), seed=10, stretch=(1.4, 1.0))
+    kit.ranger("The ranger", (rx, ry, height(rx, ry) + 0.01), heading, pose="back", seed=8, missing=("l_hand", "r_foot"))
+    room.item("truck-keys", tuple(world((rx, ry, height(rx, ry)), heading, (0.8, -0.55, 0.0))))
+    # His blood, gone into the soil round him in dark patches, not a pool on top.
+    for k, (lx, ly, r) in enumerate(((1.1, 0.1, 0.4), (0.7, 0.35, 0.22), (1.5, -0.3, 0.2), (0.25, -0.15, 0.16))):
+        p = world((rx, ry, 0), heading, (lx, ly, 0))
+        kit.lay_on_ground(kit.splat(f"His blood {k}", soaked, (p.x, p.y, 0), r, rot=(0, 0, rng.uniform(0, 6)), seed=9 + k, stretch=(1.4, 1.0), lumps=0.7), height, 0.005 + 0.001 * k)
     j = kit._POSES["back"]
-    chest = world((rx, ry, 0), heading, j["chest"])
-    pelvis = world((rx, ry, 0), heading, j["pelvis"])
-    reb.prim("sphere", "His opened chest", flesh, ((chest + pelvis) / 2) + Vector((0, 0, 0.06)), (0.34, 0.3, 0.12), rot=(0, 0, heading), segments=12)
-    for i in range(5):
-        p = chest.lerp(pelvis, i / 6)
-        for s in (-1, 1):
-            q = p + Matrix.Rotation(heading, 3, "Z") @ Vector((0, s * 0.15, 0))
-            kit.rod("Rib", mat("bone"), p + Vector((0, 0, 0.15)), q + Vector((0, 0, 0.1)), 0.01, 4)
-    for name, (lx, ly) in (("Stump of his arm", j["l_elbow"][:2]), ("Stump of his leg", j["r_knee"][:2])):
-        p = world((rx, ry, 0), heading, (lx, ly, 0.08))
-        reb.prim("sphere", name, flesh, p, (0.12, 0.12, 0.1), segments=10)
-    # The belt and the key ring.
-    belt_at = world((rx, ry, 0), heading, (0.9, 0, 0.17))
-    reb.prim("cyl", "Belt", reb.mat_plain("Belt leather", (0.03, 0.02, 0.012), 0.5), belt_at, (0.07, 0.36, 0.26), rot=(0, 0, heading), segments=12)
-    reb.prim("cube", "Buckle", reb.mat_metal("Brass", (0.55, 0.38, 0.12), 0.3), belt_at + Vector((0, 0, 0.13)), (0.06, 0.08, 0.01), rot=(0, 0, heading))
-    ring_at = world((rx, ry, 0), heading, (0.9, -0.2, 0.1))
+    # The key ring at his belt, and what else he carried: holster, torn sleeve.
+    ring_at = world((rx, ry, height(rx, ry)), heading, (0.9, -0.22, 0.1))
     reb.prim("cyl", "Key ring", mat("steel"), ring_at, (0.07, 0.07, 0.008), rot=(math.pi / 2, 0, heading), segments=12)
     for k in range(4):
         a = -0.6 + k * 0.4
         kp = ring_at + Matrix.Rotation(heading, 3, "Z") @ Vector((math.sin(a) * 0.06, -0.03, -math.cos(a) * 0.06 - 0.02))
         reb.prim("cube", f"Key {k}", reb.mat_metal("Bright keys", (0.7, 0.66, 0.55), 0.2), kp, (0.012, 0.025, 0.07), rot=(0, a, heading))
     reb.point("Glint on the keys", ring_at + Vector((0.2, 0.3, 0.6)), 0.6, (0.85, 0.88, 0.92), 0.05)
-    # His hat, his radio, shreds of his shirt.
-    hat_at = world((rx, ry, 0), heading, (2.4, 0.6, 0.0))
-    reb.prim("cyl", "Ranger hat brim", reb.mat_plain("Hat felt", (0.2, 0.15, 0.08), 0.8), hat_at + Vector((0, 0, 0.01)), (0.42, 0.42, 0.012), rot=(0.12, 0, 0), segments=18)
-    reb.prim("cone", "Ranger hat crown", reb.mat_plain("Hat felt", (0.2, 0.15, 0.08), 0.8), hat_at + Vector((0, 0.01, 0.07)), (0.2, 0.2, 0.12), rot=(0.12, 0, 0), segments=12, top=0.7)
+    holster_at = world((rx, ry, height(rx, ry)), heading, (0.86, 0.24, 0.1))
+    reb.prim("cube", "Empty holster", reb.mat_plain("Holster leather", (0.05, 0.03, 0.015), 0.5), holster_at, (0.18, 0.06, 0.1), rot=(0, 0, heading), bevel=0.015)
+    for name, (lx, ly) in (("Torn cuff", j["l_elbow"][:2]), ("Torn trouser leg", j["r_knee"][:2])):
+        p = world((rx, ry, 0), heading, (lx, ly, 0))
+        reb.cloth(name, mat("khaki") if "cuff" in name else kit.mat("black"), (p.x, p.y, height(p.x, p.y) + 0.02), (0.22, 0.14), rot=(0, 0, heading + rng.uniform(-0.5, 0.5)), cuts=5, lumps=0.02, seed=31)
+    hat_at = world((rx, ry, 0), heading, (2.3, 0.55, 0.0))
+    kit.campaign_hat("His hat", (hat_at.x, hat_at.y, height(hat_at.x, hat_at.y) + 0.005), heading=0.7, tilt=(0.12, 0.0))
     radio_at = world((rx, ry, 0), heading, (0.3, -0.9, 0.0))
-    reb.prim("cube", "His radio", reb.mat_plain("Radio black", (0.02, 0.02, 0.02), 0.5), radio_at + Vector((0, 0, 0.04)), (0.08, 0.2, 0.06), rot=(0, 0, 0.9))
-    kit.rod("Radio aerial", mat("black"), radio_at + Vector((0, 0, 0.05)), radio_at + Vector((0.18, 0.12, 0.05)), 0.004, 4)
-    for k in range(4):
-        p = world((rx, ry, 0), heading, (rng.uniform(0.2, 1.6), rng.uniform(-1.2, 1.2), 0))
-        reb.cloth(f"Shred of khaki {k}", mat("khaki"), (p.x, p.y, height(p.x, p.y) + 0.01), (rng.uniform(0.12, 0.25), rng.uniform(0.08, 0.15)), rot=(0, 0, rng.uniform(0, 6)), cuts=4, lumps=0.015, seed=k)
+    rz = height(radio_at.x, radio_at.y)
+    reb.prim("cube", "His radio", reb.mat_plain("Radio black", (0.02, 0.02, 0.02), 0.5), (radio_at.x, radio_at.y, rz + 0.04), (0.08, 0.2, 0.06), rot=(0, 0, 0.9))
+    kit.rod("Radio aerial", mat("black"), (radio_at.x, radio_at.y, rz + 0.05), (radio_at.x + 0.18, radio_at.y + 0.12, rz + 0.05), 0.004, 4)
 
-    # ---- What they ate before him: deer bones and older ones, a human skull, a hiker's jacket.
-    for k, (x, y, sk) in enumerate(((6.2, 4.2, False), (12.8, 4.0, True), (5.0, 6.4, False), (7.6, 8.4, False), (13.2, 7.0, False), (11.6, 2.8, False), (6.8, 2.4, True))):
-        kit.bones(f"Gnawed bones {k}", (x, y, height(x, y)), spread=0.7, seed=40 + k, skull=sk)
-    # A deer's skull with its antler, and a long jaw.
-    reb.prim("sphere", "Deer skull", mat("bone"), (5.4, 5.2, 0.08), (0.36, 0.15, 0.14), rot=(0, 0, 0.5), segments=12)
+    # ---- By the pit: one heap of old gnawed bones and a human skull, half buried.
+    kit.bones("Gnawed bones", (PIT[0] + 1.3, PIT[1] + 0.4, height(PIT[0] + 1.3, PIT[1] + 0.4)), spread=0.35, seed=40, skull=False)
+    sx, sy = PIT[0] + 0.9, PIT[1] - 0.3
+    reb.prim("sphere", "Human skull", mat("bone"), (sx, sy, height(sx, sy) + 0.04), (0.17, 0.2, 0.17), segments=14)
     for s in (-1, 1):
-        kit.rod("Antler", mat("bone"), (5.3, 5.2 + s * 0.05, 0.13), (5.0, 5.2 + s * 0.35, 0.45), 0.02, 5)
-        kit.rod("Antler tine", mat("bone"), (5.1, 5.2 + s * 0.24, 0.32), (5.25, 5.2 + s * 0.38, 0.52), 0.014, 5)
-    # The human skull, half buried by the pit.
-    reb.prim("sphere", "Human skull", mat("bone"), (9.7, 2.5, 0.06), (0.17, 0.2, 0.18), segments=14)
-    for s in (-1, 1):
-        reb.prim("sphere", "Eye socket", mat("black"), (9.79, 2.42 + s * 0.04, 0.08), (0.04, 0.05, 0.05), segments=8)
-    # The hiker's jacket, shredded over the west bank's roots, and its pieces.
-    reb.cloth("Hiker's jacket", jacket, (X1 - 0.45, 9.4, 0.5), (0.7, 0.55), rot=(0.25, 0.9, 0.3), cuts=12, lumps=0.07, seed=11)
-    reb.cloth("Torn sleeve", jacket, (X1 - 1.4, 9.0, 0.02), (0.55, 0.16), rot=(0, 0, 1.1), cuts=8, lumps=0.03, seed=12)
-    for k in range(6):
-        x, y = rng.uniform(11.0, 14.0), rng.uniform(7.5, 10.5)
+        reb.prim("sphere", "Eye socket", mat("black"), (sx + 0.03 * s, sy + 0.08, height(sx, sy) + 0.07), (0.04, 0.04, 0.05), segments=8)
+    # Windfall at the south-west, the hiker's jacket torn up on its stubs.
+    wa, wb = (4.2, 11.2), (7.4, 9.3)
+    windfall = kit.rough_log("Windfall", (wa[0], wa[1], height(*wa) + 0.16), (wb[0], wb[1], height(*wb) + 0.14), 0.26, seed=50, stubs=6)
+    for k in range(3):
+        p = Vector(wa).lerp(Vector(wb), 0.15 + 0.3 * k)
+        reb.wall(reb.prim("cube", "Windfall footprint", None, (p.x, p.y, 0.3), (1.3, 0.55, 0.6), rot=(0, 0, math.atan2(wb[1] - wa[1], wb[0] - wa[0])))).hide_render = True
+    jx, jy = 5.9, 10.15
+    torn = kit.drape("Hiker's jacket", jacket, [windfall], (jx, jy), (0.85, 0.6), yaw=math.atan2(wb[1] - wa[1], wb[0] - wa[0]) + math.pi / 2, base=height(jx, jy), cuts=16, lumps=0.03, seed=11)
+    # Torn up: a ragged outline and holes, not a square of cloth.
+    import bmesh
+    bm = bmesh.new()
+    bm.from_mesh(torn.data)
+    mw = torn.matrix_world
+    gone = []
+    for f in bm.faces:
+        c = mw @ f.calc_center_median()
+        d = math.hypot(c.x - jx, c.y - jy)
+        edge = 0.3 * (0.75 + 0.35 * noise.noise(Vector((c.x * 9, c.y * 9, 1.0))))
+        if d > edge or noise.noise(Vector((c.x * 14, c.y * 14, 4.0))) > 0.45:
+            gone.append(f)
+    bmesh.ops.delete(bm, geom=gone, context="FACES")
+    bm.to_mesh(torn.data)
+    bm.free()
+    for k in range(5):
+        x, y = rng.uniform(5.0, 7.6), rng.uniform(8.2, 9.4)
         reb.cloth(f"Shred of jacket {k}", jacket, (x, y, height(x, y) + 0.01), (rng.uniform(0.1, 0.22), rng.uniform(0.06, 0.12)), rot=(0, 0, rng.uniform(0, 6)), cuts=4, lumps=0.01, seed=20 + k)
-    kit.splat("Old stain on the jacket", mat("old blood"), (X1 - 0.5, 9.3, 0.57), 0.14, rot=(0.25, 0.9, 0.3), seed=13)
-    # A boot of the hiker's, laced, and his pack frame bent.
-    reb.prim("cube", "Hiker's boot", reb.mat_plain("Brown leather", (0.09, 0.05, 0.025), 0.6), (6.6, 9.8, 0.06), (0.3, 0.12, 0.13), rot=(0, 0, 0.4), bevel=0.03)
-    for a, b in (((5.4, 10.2, 0.03), (6.1, 10.6, 0.05)), ((5.5, 10.5, 0.03), (6.0, 9.9, 0.06)), ((5.4, 10.2, 0.03), (5.5, 10.5, 0.03))):
-        kit.rod("Bent pack frame", reb.mat_metal("Aluminium", (0.4, 0.4, 0.42), 0.4), a, b, 0.012, 6)
-    # A deer's spine and ribs dragged out into the open, older bones round it.
-    sx, sy = 7.2, 9.0
-    for k in range(9):
-        p = Vector((sx + k * 0.12, sy - k * 0.05, 0.05))
-        reb.prim("sphere", f"Vertebra {k}", mat("bone"), p, (0.08, 0.06, 0.06), segments=8)
-        if 2 <= k <= 7:
-            for s_ in (-1, 1):
-                kit.rod("Deer rib", mat("bone"), p, p + Vector((0.05, s_ * 0.3, 0.12 - 0.08 * (k % 2))), 0.012, 5)
-    kit.splat("Dark earth under the spine", mat("old blood"), (sx + 0.5, sy - 0.2, height(sx, sy)), 0.4, seed=15, stretch=(1.4, 0.8))
-    reb.cloth("Dragged hide", reb.mat_surface("Old hide", [(0.0, (0.06, 0.04, 0.025)), (1.0, (0.16, 0.11, 0.07))], scale=8, bump=0.4), (sx - 0.8, sy + 0.45, 0.04), (0.65, 0.42), rot=(0.1, 0.05, 0.9), cuts=10, lumps=0.09, seed=16)
-    for k, (x, y) in enumerate(((10.5, 9.6), (12.6, 11.0), (4.4, 10.8))):
-        kit.bones(f"Old bones {k}", (x, y, height(x, y)), spread=0.6, seed=60 + k, skull=False)
+    bx, by = 4.6, 8.6
+    reb.prim("cube", "Hiker's boot", reb.mat_plain("Brown leather", (0.09, 0.05, 0.025), 0.6), (bx, by, height(bx, by) + 0.06), (0.3, 0.12, 0.13), rot=(0, 0, 0.4), bevel=0.03)
     # Prints everywhere in the soft floor.
     pv, pf = [], []
     for k in range(70):
-        x, y = rng.uniform(X0 + 0.5, X1 - 0.5), rng.uniform(Y0 + 0.5, Y1 - 0.5)
+        x, y = rng.uniform(X0 + 1, X1 - 1), rng.uniform(Y0 + 0.5, Y1 - 0.5)
+        if not trodden(x, y):
+            continue
         kit._stain(pv, pf, rng, (x, y, height(x, y) + 0.006), 0.04, rng.uniform(0, 6), 0.2, (1, 1.1), k, points=8, drops=False)
     reb.mesh_object("Paw prints", pv, pf, churned, smooth=False)
 
-    # ---- Water dripping from the lip into a reddened puddle.
-    drip_at = (9.4, LIP_Y - 0.3, 2.95)
-    kit.splat("Puddle under the drip", reb.mat_plain("Red puddle", (0.04, 0.008, 0.006), 0.08), (drip_at[0], drip_at[1], height(drip_at[0], drip_at[1]) + 0.004), 0.32, seed=14, stretch=(1.3, 1.0))
+    # ---- Water dripping off the slab into a reddened puddle.
+    drip_at = (9.6, 3.55, 2.5)
+    kit.lay_on_ground(kit.splat("Puddle under the drip", reb.mat_plain("Red puddle", (0.025, 0.01, 0.007), 0.3), (drip_at[0], drip_at[1], 0), 0.28, seed=14, stretch=(1.3, 1.0)), height, 0.007)
 
-    # ---- Round the hollow: spruces on the banks, ferns, needles.
-    cams = ((8.6, 11.7), (4.6, 5.8), (14.6, 7.0))
-
-    def keep_out(x, y):
-        if X0 - 1.0 < x < X1 + 1.0 and Y0 - 3.5 < y < Y1 + 0.8:
-            return True
-        if y > Y1 and abs(x - 8.8) < 1.4:
-            return True
-        return any((x - cx) ** 2 + (y - cy) ** 2 < 9 for cx, cy in cams)
-    kit.forest(rng, height, keep_out, (-14, -12, 32, 34), count=95, spacing=1.8, tall=(13, 21), ferns=120, needles=900, dead=0.15)
+    # ---- The clearing's edges: grass, ferns, needles; the forest close round it.
+    floor_grass = kit.grass_ground(rng, (X0 - 1, Y0 - 1, X1 + 1, Y1 + 1), height, per_m2=14,
+                                   keep_out=lambda x, y: trodden(x, y) or in_rock(x, y) or on_way(x, y, 0.2))
+    slope_grass = kit.grass_ground(rng, (-12, -10, 30, 30), height, per_m2=5,
+                                   keep_out=lambda x, y: (X0 - 1 < x < X1 + 1 and Y0 - 1 < y < Y1 + 1) or in_rock(x, y) or on_way(x, y, 0.2))
     fv, ff = [], []
-    for _ in range(70):
-        side = rng.choice((0, 1, 2))
-        if side == 0:
-            x, y = rng.uniform(X0 - 0.4, X0 + 0.4), rng.uniform(Y0 + 2, Y1)
-        elif side == 1:
-            x, y = rng.uniform(X1 - 0.4, X1 + 0.4), rng.uniform(Y0 + 2, Y1)
-        else:
-            x, y = rng.uniform(X0, X1), rng.uniform(Y1 - 0.4, Y1 + 0.6)
-        if abs(x - 8.8) < 1.3 and y > Y1 - 1:
+    for _ in range(140):
+        x, y = rng.uniform(X0 - 6, X1 + 6), rng.uniform(Y0 - 3, Y1 + 6)
+        if trodden(x, y) or in_rock(x, y) or on_way(x, y, 0.4):
             continue
-        reb.fern(rng, (x, y, height(x, y)), rng.uniform(0.35, 0.6), fv, ff)
-    ferns = reb.mesh_object("Ferns on the banks", fv, ff, mat("ferns"))
+        reb.fern(rng, (x, y, height(x, y)), rng.uniform(0.35, 0.7), fv, ff)
+    ferns = reb.mesh_object("Ferns round the clearing", fv, ff, mat("ferns"))
+    nv, nf = [], []
+    for _ in range(4000):
+        x, y = rng.uniform(X0, X1), rng.uniform(Y0, Y1)
+        reb.card(nv, nf, Vector((x, y, height(x, y) + 0.008)), Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)).normalized(), Vector((0, 0, 1)), 0.012, 0.05, 0.0)
+    reb.mesh_object("Needles on the floor", nv, nf, reb.mat_cards("Needle litter", (0.05, 0.035, 0.02), (0.1, 0.075, 0.04)))
 
-    def on_bank(r_):
-        while True:
-            x, y = r_.uniform(X0 - 3, X1 + 3), r_.uniform(Y0 + 1.5, Y1 + 3)
-            if (x < X0 + 0.2 or x > X1 - 0.2 or y > Y1 - 0.2) and not (abs(x - 8.8) < 1.0 and y > Y1 - 0.5):
-                return x, y
-    grass = kit.meadow(rng, 2600, on_bank, height)
-    # Windfall on the rim: spruce trunks fallen into the hollow's edge, their bark split.
-    for k, (a, b) in enumerate((((1.2, 7.0), (3.6, 9.6)), ((16.8, 5.2), (14.4, 6.6)), ((12.0, 14.6), (15.6, 12.8)))):
-        za, zb = height(*a) + 0.25, height(*b) + 0.22
-        kit.rod(f"Windfall {k}", mat("bark"), (a[0], a[1], za), (b[0], b[1], zb), 0.24, 10)
+    def no_tree(x, y):
+        if X0 - 0.6 < x < X1 + 0.6 and Y0 - 0.6 < y < Y1 + 0.6:
+            return True
+        if in_rock(x, y, 0.6) or on_way(x, y, 1.2):
+            return True
+        return any((x - ex) ** 2 + (y - ey) ** 2 < 9 for (ex, ey, _), _ in CAMS)
+    kit.forest(rng, height, no_tree, (-16, -16, 34, 34), count=280, spacing=1.5, tall=(14, 22), ferns=160, needles=900, dead=0.06)
+    kit.forest(rng, height, no_tree, (-4, -6, 22, 20), count=90, spacing=1.2, tall=(13, 20), ferns=40, needles=300)
+    kit.far_spruces(rng, height, keep_out=lambda x, y: -16 < x < 34 and -16 < y < 34, count=900, area=(-70, -70, 90, 90))
 
-    # ---- Light: the cloud's flat light into the hollow, dark under the rock.
-    sun = kit.time_light("noon", sun_heading=200, sun_energy=2.6, mist=((9.0, 6.0, 4.0), (60.0, 60.0, 14.0), 0.008),
-                         sky=((0.6, 0.62, 0.63), (0.4, 0.42, 0.45), 1.1))
+    # ---- Light: the cloud's flat light into the clearing, dark under the rock.
+    sun = kit.time_light("noon", sun_heading=200, sun_energy=3.4, mist=((9.0, 6.0, 5.0), (80.0, 80.0, 16.0), 0.01),
+                         sky=((0.6, 0.62, 0.63), (0.4, 0.42, 0.45), 1.2))
     sun.data.angle = math.radians(18)
     sun.rotation_euler[0] = math.radians(30)
-    reb.spot("Sky into the hollow", (9.0, 16.0, 9.0), (9.5, 5.0, 0.0), 900, (0.8, 0.84, 0.9), 45, 0.9, 4.0)
-    reb.point("Under the rock", (9.0, 3.8, 1.6), 140, (0.6, 0.66, 0.75), 1.5)
+    kit.overcast_sky()
+
+    def far_land(x, y, z):
+        r = math.hypot(x - 9.0, y - 6.0)
+        w = max(0.0, min(1.0, (220.0 - r) / 160.0))
+        return z + (height(x, y) - 0.4 - z) * w * w * (3 - 2 * w)
+    kit.backdrop((9.0, 6.0, 3.2), spread=360, below=-6.0, near=70.0, forest_to=1500.0, trees=50000,
+                 keep_out=lambda x, y: math.hypot(x - 9.0, y - 6.0) < 70, shape=far_land, mist=25.0, rng=random.Random(9))
+    reb.spot("Sky into the clearing", (9.0, 14.0, 12.0), (9.0, 6.5, 0.0), 4200, (0.8, 0.84, 0.9), 70, 0.9, 5.0)
 
     anim = kit.Anim(16)
-    anim.flies((rx + 0.1, ry - 0.5, 0.15), count=16, radius=0.55)
-    anim.flies((PIT[0], PIT[1], 0.05), count=6, radius=0.6)
-    anim.drip(drip_at, fall=drip_at[2] - 0.02)
-    anim.sway(roots, amount=0.02, along=(1.0, 0.3), every=5, tip=3)
+    head = world((rx, ry, height(rx, ry)), heading, (1.1, 0, 0.15))
+    anim.flies(tuple(head), count=16, radius=0.55)
+    anim.flies((PIT[0], PIT[1], height(*PIT) + 0.05), count=6, radius=0.5)
+    anim.drip(drip_at, fall=drip_at[2] - height(drip_at[0], drip_at[1]) - 0.02)
+    anim.sway(roots, amount=0.015, along=(1.0, 0.3), every=5, tip=3)
     anim.sway(ferns, amount=0.02)
-    anim.sway(grass, amount=0.04)
+    anim.sway(floor_grass, amount=0.02)
+    anim.sway(slope_grass, amount=0.02)
+    anim.sway(torn, amount=0.02, along=(0.6, 1.0), every=2, tip=1)
 
     # ---- What the game needs.
     room.door("woods", (WAY[0], Y1 - 0.6, WAY[1], Y1), arrive=(8.9, 10.6), face=(0, -1))
-    room.check((rx - 1.0, ry - 1.2, rx + 0.8, ry + 0.8), "The ranger. What the dogs left of him.\nHis keys are still on his belt.")
-    room.check((PIT[0] - 1.2, PIT[1] - 0.8, PIT[0] + 0.9, PIT[1] + 0.8), "A pit scraped in the soil, matted with black hair.\nThis is where they sleep.")
-    room.check((cx - 0.7, cy - 0.4, cx + 0.4, cy + 0.4), "A heavy collar on a broken chain. The tag's too scratched to read.\nThese dogs belonged to someone.")
-    room.check((9.3, 2.0, 10.3, 3.0), "A human skull. It's been here a lot longer than he has.")
-    room.check((X1 - 1.9, 8.4, X1, 10.2), "A hiker's jacket, shredded on the roots.\nI don't want to know where the hiker is.")
-    room.check((4.8, 4.6, 6.0, 5.8), "A deer's skull, licked clean.")
-    room.check((8.9, 3.6, 10.0, 4.6), "Water dripping off the rock into a puddle. The puddle's red.")
+    hx, hy = world((rx, ry, 0), heading, (0.9, 0, 0)).xy
+    room.check((hx - 1.0, hy - 1.0, hx + 1.0, hy + 1.0), "The ranger. What the dogs left of him.\nHis keys are still on his belt.")
+    room.check((PIT[0] - 0.6, Y0, PIT[0] + 0.8, PIT[1] + 0.6), "A pit scraped in the soil under the rock, matted with black hair.\nThis is where they sleep.")
+    room.check((cx - 0.5, cy - 0.4, cx + 0.7, cy + 0.4), "A heavy collar on a broken chain. The tag's too scratched to read.\nThese dogs belonged to someone.")
+    room.check((sx - 0.5, Y0, sx + 0.6, sy + 0.5), "A human skull. It's been here a lot longer than he has.")
+    room.check((5.0, 9.0, 6.9, 10.6), "A hiker's jacket, torn up on the fallen tree.\nI don't want to know where the hiker is.")
+    room.check((drip_at[0] - 0.5, drip_at[1] - 0.5, drip_at[0] + 0.5, drip_at[1] + 0.5), "Water dripping off the rock into a puddle. The puddle's red.")
     room.export(anim)
 
 

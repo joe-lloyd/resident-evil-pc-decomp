@@ -7,22 +7,22 @@
     19890
    ],
    "to": [
-    15980,
-    -1020,
-    5440
+    15470,
+    -1530,
+    5100
    ],
    "fov": 200
   },
   {
    "from": [
-    7820,
-    -4760,
-    9860
+    6800,
+    -5100,
+    9180
    ],
    "to": [
-    19040,
-    -340,
-    19040
+    18700,
+    -510,
+    19380
    ],
    "fov": 200
   },
@@ -30,12 +30,12 @@
    "from": [
     24820,
     -6120,
-    11900
+    12580
    ],
    "to": [
-    8500,
-    -510,
-    10200
+    10200,
+    -1190,
+    6800
    ],
    "fov": 200
   }
@@ -43,59 +43,67 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 4250,
-   "z0": 2550,
-   "x1": 26350,
-   "z1": 3570,
-   "name": "Rock face footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 4760,
-   "z0": 3400,
-   "x1": 7480,
-   "z1": 6800,
-   "name": "West rock footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 23460,
-   "z0": 3400,
-   "x1": 25840,
-   "z1": 6800,
-   "name": "East rock footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 5771,
-   "z0": 3702,
-   "x1": 7829,
-   "z1": 5478,
+   "x0": 5950,
+   "z0": -833,
+   "x1": 13090,
+   "z1": 5593,
    "name": "Rock footprint"
   },
   {
    "shape": "box",
-   "x0": 22619,
-   "z0": 5053,
-   "x1": 24302,
-   "z1": 6507,
+   "x0": 16822,
+   "z0": -825,
+   "x1": 24319,
+   "z1": 5245,
    "name": "Rock footprint.001"
   },
   {
    "shape": "box",
-   "x0": 5185,
-   "z0": 17212,
-   "x1": 7055,
-   "z1": 18828,
+   "x0": 11390,
+   "z0": -4700,
+   "x1": 18530,
+   "z1": -59,
    "name": "Rock footprint.002"
   },
   {
    "shape": "box",
-   "x0": 23188,
-   "z0": 15181,
-   "x1": 25432,
-   "z1": 17119,
+   "x0": 5109,
+   "z0": 17293,
+   "x1": 6791,
+   "z1": 18747,
    "name": "Rock footprint.003"
+  },
+  {
+   "shape": "box",
+   "x0": 23732,
+   "z0": 16014,
+   "x1": 25228,
+   "z1": 17306,
+   "name": "Rock footprint.004"
+  },
+  {
+   "shape": "box",
+   "x0": 6767,
+   "z0": 17589,
+   "x1": 9145,
+   "z1": 19522,
+   "name": "Windfall footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 8399,
+   "z0": 16620,
+   "x1": 10777,
+   "z1": 18553,
+   "name": "Windfall footprint.001"
+  },
+  {
+   "shape": "box",
+   "x0": 10031,
+   "z0": 15651,
+   "x1": 12409,
+   "z1": 17584,
+   "name": "Windfall footprint.002"
   }
  ],
  "anim": {
@@ -132,64 +140,55 @@
  "checks": [
   {
    "zone": {
-    "x0": 16320,
-    "z0": 6460,
-    "x1": 19380,
-    "z1": 9860
+    "x0": 15714,
+    "z0": 6483,
+    "x1": 19114,
+    "z1": 9883
    },
    "text": "The ranger. What the dogs left of him.\nHis keys are still on his belt."
   },
   {
    "zone": {
-    "x0": 12410,
-    "z0": 3570,
+    "x0": 13600,
+    "z0": 3400,
     "x1": 15980,
-    "z1": 6290
+    "z1": 5780
    },
-   "text": "A pit scraped in the soil, matted with black hair.\nThis is where they sleep."
+   "text": "A pit scraped in the soil under the rock, matted with black hair.\nThis is where they sleep."
   },
   {
    "zone": {
-    "x0": 15980,
-    "z0": 5780,
-    "x1": 17850,
-    "z1": 7140
+    "x0": 12070,
+    "z0": 5440,
+    "x1": 14110,
+    "z1": 6800
    },
    "text": "A heavy collar on a broken chain. The tag's too scratched to read.\nThese dogs belonged to someone."
   },
   {
    "zone": {
-    "x0": 15810,
+    "x0": 15300,
     "z0": 3400,
-    "x1": 17510,
+    "x1": 17170,
     "z1": 5100
    },
    "text": "A human skull. It's been here a lot longer than he has."
   },
   {
    "zone": {
-    "x0": 22270,
-    "z0": 14280,
-    "x1": 25500,
-    "z1": 17340
+    "x0": 8500,
+    "z0": 15300,
+    "x1": 11730,
+    "z1": 18020
    },
-   "text": "A hiker's jacket, shredded on the roots.\nI don't want to know where the hiker is."
+   "text": "A hiker's jacket, torn up on the fallen tree.\nI don't want to know where the hiker is."
   },
   {
    "zone": {
-    "x0": 8160,
-    "z0": 7820,
-    "x1": 10200,
-    "z1": 9860
-   },
-   "text": "A deer's skull, licked clean."
-  },
-  {
-   "zone": {
-    "x0": 15130,
-    "z0": 6120,
-    "x1": 17000,
-    "z1": 7820
+    "x0": 15470,
+    "z0": 5185,
+    "x1": 17170,
+    "z1": 6885
    },
    "text": "Water dripping off the rock into a puddle. The puddle's red."
   }
@@ -198,16 +197,16 @@
  "items": [
   {
    "step": "truck-keys",
-   "x": 18785,
-   "y": 76,
-   "z": 9095
+   "x": 16523,
+   "y": 66,
+   "z": 8513
   }
  ],
  "spots": [],
  "entry": null,
  "notes": [
-  "from the way down: the hollow, the overhang, the ranger under the lip",
-  "from under the lip in the north-west: the ranger, the jacket on the east bank, the way back up",
-  "from the east bank: the den under the rock, the pit, the bones, the skull"
+  "from the way down: the clearing, the tor, the ranger at the cave mouth",
+  "from beside the west block: the drag in from the woods, the windfall and the jacket, the way back up",
+  "from the east: the mouth under the slab, the pit, the bones, the skull"
  ]
 }
