@@ -77,35 +77,59 @@
   },
   {
    "shape": "circle",
-   "x0": 9469,
-   "z0": 5422,
-   "x1": 10931,
-   "z1": 6863,
-   "name": "Spruce"
+   "x0": 9150,
+   "z0": 5070,
+   "x1": 11250,
+   "z1": 7170,
+   "name": "Spruce footprint"
   },
   {
    "shape": "circle",
-   "x0": 18675,
-   "z0": 4427,
-   "x1": 20085,
-   "z1": 5816,
-   "name": "Spruce.001"
+   "x0": 18391,
+   "z0": 4111,
+   "x1": 20369,
+   "z1": 6089,
+   "name": "Spruce footprint.001"
   },
   {
    "shape": "circle",
-   "x0": 13915,
-   "z0": 21938,
-   "x1": 15325,
-   "z1": 23325,
-   "name": "Spruce.002"
+   "x0": 13561,
+   "z0": 21551,
+   "x1": 15679,
+   "z1": 23669,
+   "name": "Spruce footprint.002"
   },
   {
    "shape": "circle",
-   "x0": 26140,
-   "z0": 21073,
-   "x1": 27580,
-   "z1": 22491,
-   "name": "Spruce.003"
+   "x0": 25780,
+   "z0": 20680,
+   "x1": 27940,
+   "z1": 22840,
+   "name": "Spruce footprint.003"
+  },
+  {
+   "shape": "circle",
+   "x0": 18377,
+   "z0": 22077,
+   "x1": 19704,
+   "z1": 23384,
+   "name": "Stump 0"
+  },
+  {
+   "shape": "circle",
+   "x0": 1113,
+   "z0": 22812,
+   "x1": 2254,
+   "z1": 23954,
+   "name": "Stump 1"
+  },
+  {
+   "shape": "circle",
+   "x0": 22297,
+   "z0": 23940,
+   "x1": 23862,
+   "z1": 25494,
+   "name": "Stump 2"
   }
  ],
  "anim": {
@@ -163,7 +187,7 @@
     "x1": 10710,
     "z1": 8840
    },
-   "text": "QUARANTINE. SICKNESS IN CAMP 4. NO ENTRY. TURN BACK.\nThe bottom half's torn off."
+   "text": "NO ENTRY. TURN BACK.\nPainted on a board and nailed up in a hurry."
   },
   {
    "zone": {

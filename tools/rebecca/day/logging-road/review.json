@@ -1,0 +1,13 @@
+{
+  "scene": "logging-road",
+  "steps": [
+    { "action": "hold", "frames": 60, "picture": "logging-road-notice" },
+    { "action": "walk", "x": 17000, "z": 9520, "picture": "logging-road-load" },
+    { "action": "walk", "x": 26350, "z": 10200, "picture": "logging-road-cab" },
+    { "action": "walk", "x": 30260, "z": 13940, "picture": "logging-road-grille" },
+    { "action": "hold", "frames": 60 },
+    { "action": "walk", "x": 26350, "z": 18360, "picture": "logging-road-open-door" },
+    { "action": "hold", "frames": 60 },
+    { "action": "exit", "x": 31790, "z": 14450, "to": "camp-gate" }
+  ]
+}
