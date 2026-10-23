@@ -307,8 +307,9 @@ def build():
     room.check((3.3, 2.1, 3.6, 2.95), "The first aid tin, emptied. Bandage wrappers everywhere.\nHe did what he could with it.")
     room.check((d0 - 0.75, Y1 - 0.5, d0, Y1), "A key on a hook by the door. The tag says QUARRY OFFICE.\nThe bolt's drawn and the bar's off the door.\nHe locked himself in, then thought better of it.")
     room.check((3.85, Y0, 4.9, Y0 + 1.0), "The sink is full of towels. They're soaked through.\nThe water's pink.")
-    room.check((2.35, Y0, 3.35, Y0 + 0.9), "A girl holding up a fish, grinning. The same photo was in the booth.\nA drawing under it, in crayon: DAD.")
-    room.check((2.0, Y0, 2.35, Y0 + 0.9), "The radio's on, hissing. Nothing on any channel.")
+    # The radio and the photos over it are one check: the table's chair leaves
+    # her only the drawers' east end to stand at.
+    room.check((2.0, Y0, 3.35, Y0 + 0.9), "The radio's on, hissing. Nothing on any channel.\nOver it, a girl holding up a fish, grinning. The same photo was in the booth.\nA drawing under it, in crayon: DAD.")
     room.check((1.4, 3.4, 2.4, Y1), "He dragged the chair to the window and sat watching the path.\nBinoculars. Cold coffee.")
     room.check((X0, Y0, X0 + 1.2, Y0 + 2.1), "The bed's been slept in, or tried. Blood on the pillow.")
     room.check((d1, Y1 - 0.6, X1, Y1), "Fishing rods, a creel, waders. A man who liked quiet.")
