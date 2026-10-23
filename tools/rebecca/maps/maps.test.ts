@@ -12,12 +12,14 @@ import { fileURLToPath } from 'node:url';
 import { dayRooms } from '../day/rooms.ts';
 import { day } from '../plan/day.ts';
 import { AREAS, MAP_ITEMS, STAGES } from '../plan/maps.ts';
-import { blockOf, FILL, MAP_SHOWN } from './draw.ts';
+import { blockOf, drawArea, FILL, MAP_SHOWN, MAP_W } from './draw.ts';
+import { floors, SIDES, UNITS } from './floors.ts';
+import { buildingFloor, CELL, inOutline, isFloor, organic, outlineOf } from './outline.ts';
 import { ENGINE_FILE, engineSource } from './engine.ts';
 import { areaFile, mapFiles, STAGE_FILES } from './files.ts';
 import { ARROWS, BASE_H, BASE_W, LABEL_H, LABEL_W, OV_H, OV_W, overview } from './overview.ts';
 import { mapIn } from './pickups.ts';
-import { planArea } from './plans.ts';
+import { doorInPlan, DOOR_REACH, inRoom, planArea } from './plans.ts';
 import { mapRooms } from './tables.ts';
 import { decodeTim8 } from './tim.ts';
 
@@ -46,6 +48,83 @@ test('no two rooms of an area are drawn over each other', () => {
     AREAS.flatMap((a) => planArea(a.id).overlaps.map((o) => `${a.id}: ${o}`)),
     [],
   );
+});
+
+test('outdoors and underground, a room is drawn round every spot she can stand on and every door she leaves by', () => {
+  const missed: string[] = [];
+  for (const f of floors().values()) {
+    if (!organic(f)) continue;
+    const o = outlineOf(f);
+    let n = 0;
+    const b = f.bounds;
+    // Her collision grid, every 10 cm (day/walkable.ts).
+    for (let z = b.z0; z <= b.z1; z += 170) for (let x = b.x0; x <= b.x1; x += 170) if (isFloor(f, x, z) && !inOutline(o, x / UNITS, z / UNITS)) n++;
+    if (n) missed.push(`${f.place}: ${n} spots outside its outline`);
+  }
+  assert.deepEqual(missed, []);
+});
+
+test('outdoors and underground a room is a free shape; a building keeps its straight walls', () => {
+  const boxy: string[] = [];
+  for (const f of floors().values()) {
+    const o = outlineOf(f);
+    let on = 0;
+    let [i0, j0, i1, j1] = [Infinity, Infinity, -1, -1];
+    for (let j = 0; j < o.rows; j++)
+      for (let i = 0; i < o.cols; i++) {
+        if (!o.cells[j * o.cols + i]) continue;
+        on++;
+        [i0, j0, i1, j1] = [Math.min(i0, i), Math.min(j0, j), Math.max(i1, i), Math.max(j1, j)];
+      }
+    const fill = on / ((i1 - i0 + 1) * (j1 - j0 + 1));
+    // A free shape leaves a good part of its bounding box empty.
+    if (organic(f) && fill > 0.92) boxy.push(`${f.place} fills ${(fill * 100).toFixed(0)}% of its box`);
+    if (!organic(f)) {
+      // A building's outline is its floor, cell for cell.
+      let off = 0;
+      for (let j = 0; j < o.rows; j++)
+        for (let i = 0; i < o.cols; i++) {
+          const x = (o.x0 + (i + 0.5) * CELL) * UNITS;
+          const z = (o.y0 + (j + 0.5) * CELL) * UNITS;
+          if (Number(buildingFloor(f, x, z)) !== o.cells[j * o.cols + i]) off++;
+        }
+      if (off) boxy.push(`${f.place}: ${off} cells off its floor`);
+    }
+  }
+  assert.deepEqual(boxy, []);
+});
+
+test("every door is drawn on its room's outline, or where it stands when it is out in the floor", () => {
+  const bad: string[] = [];
+  for (const a of AREAS) {
+    const d = drawArea(a.id);
+    for (const r of d.plan.rooms) {
+      const k = a.places.indexOf(r.floor.place);
+      for (const door of r.floor.doors) {
+        const at = d.doors.find((x) => x.place === r.floor.place && x.to === door.to);
+        if (!at) {
+          bad.push(`${a.id}: ${r.floor.place}'s door to ${door.to} is not drawn`);
+          continue;
+        }
+        if (d.owner[at.y * MAP_W + at.x] !== k) bad.push(`${a.id}: ${r.floor.place}'s door to ${door.to} is off its room`);
+        // A door with floor DOOR_REACH past it stands out in the room (a tower's in its clearing), drawn where it is.
+        const { at: face, side } = doorInPlan(r, door);
+        const [sx, sy] = SIDES[side]!;
+        const out = inRoom(r, { x: face.x + sx! * DOOR_REACH, y: face.y + sy! * DOOR_REACH });
+        const edge = [
+          [1, 0],
+          [-1, 0],
+          [0, 1],
+          [0, -1],
+        ].some(([dx, dy]) => {
+          const [x, y] = [at.x + dx!, at.y + dy!];
+          return x < 0 || y < 0 || x >= MAP_W || y >= MAP_SHOWN || d.owner[y * MAP_W + x] !== k;
+        });
+        if (!out && !edge) bad.push(`${a.id}: ${r.floor.place}'s door to ${door.to} is not on its outline`);
+      }
+    }
+  }
+  assert.deepEqual(bad, []);
 });
 
 test("the overview's four stages show more of the mountain each", () => {

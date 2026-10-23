@@ -7,6 +7,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { dayRooms } from '../day/rooms.ts';
+import { RADIUS, walkableBy, type RoomJson as SceneJson } from '../day/walkable.ts';
 import { day } from '../plan/day.ts';
 
 const dayDir = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'day');
@@ -41,13 +42,10 @@ export interface RoomFloor {
   readonly solids: readonly (Rect & { readonly round: boolean })[];
   readonly doors: readonly Door[];
   readonly inside: boolean;
+  /** Where her centre can stand, by the room's collision (day/walkable.ts). */
+  readonly stand: (x: number, z: number) => boolean;
 }
 
-interface RoomJson {
-  bounds: Rect;
-  voids?: Rect[];
-  walls?: (Rect & { shape: 'box' | 'circle'; name?: string })[];
-}
 
 /** The place a room name (ROOM_<stage><id>, stage from 1) is, if it is one of her day's. */
 function placeOfRoomName(name: string): string | undefined {
@@ -99,7 +97,7 @@ function sideOf(zone: Rect, bounds: Rect, arrive: { x: number; z: number } | und
 }
 
 /** Furniture this big or more, or anything named a footprint this big, is a hole in the floor plan; less is a mark. */
-const HOLE_M2 = 6;
+export const HOLE_M2 = 6;
 
 /** The mansion's 1F save room is RE1's own and has no scene: a room of its size, the hatch she comes up through in its floor. */
 const SAVE_ROOM: RoomFloor = {
@@ -109,6 +107,7 @@ const SAVE_ROOM: RoomFloor = {
   solids: [],
   doors: [{ to: 'crawl', zone: { x0: 2.6 * UNITS, z0: 2.6 * UNITS, x1: 3.6 * UNITS, z1: 3.6 * UNITS }, side: 2 }],
   inside: true,
+  stand: (x, z) => x > RADIUS && z > RADIUS && x < 7 * UNITS - RADIUS && z < 5 * UNITS - RADIUS,
 };
 
 let cache: Map<string, RoomFloor> | undefined;
@@ -123,7 +122,7 @@ export function floors(): ReadonlyMap<string, RoomFloor> {
     const slug = slugOfPlace(p.id);
     const file = path.join(dayDir, slug, 'renders', 'room.json');
     if (!existsSync(file)) continue;
-    const json = JSON.parse(readFileSync(file, 'utf8')) as RoomJson;
+    const json = JSON.parse(readFileSync(file, 'utf8')) as SceneJson;
     const spec = dayRooms.find((r) => r.slug === slug);
     const inside = spec && 'inside' in spec ? spec.inside : slug === 'lookout' || slug === 'shed';
     const doors = raw.get(p.id)!.map((d): Door => {
@@ -132,7 +131,7 @@ export function floors(): ReadonlyMap<string, RoomFloor> {
       return { to: d.to, zone: d.zone, side: sideOf(d.zone, json.bounds, back) };
     });
     const solids = (json.walls ?? []).map((w) => ({ x0: w.x0, z0: w.z0, x1: w.x1, z1: w.z1, round: w.shape === 'circle' }));
-    cache.set(p.id, { place: p.id, bounds: json.bounds, voids: json.voids ?? [], solids, doors, inside });
+    cache.set(p.id, { place: p.id, bounds: json.bounds, voids: json.voids ?? [], solids, doors, inside, stand: walkableBy(json) });
   }
   return cache;
 }
