@@ -409,122 +409,122 @@
       "room": "cabin",
       "quarter": 1,
       "visit": 1,
-      "start": 0.5,
-      "end": 41.5,
-      "roomStart": 0.5,
-      "posterTime": 12.0,
-      "file": "clips/cabin-review-20261021-638a9ba3.mp4",
-      "poster": "clips/cabin-review-20261021-638a9ba3.jpg",
+      "start": 2.0,
+      "end": 38.5,
+      "roomStart": 2.0,
+      "posterTime": 13.5,
+      "file": "clips/cabin-review-20261023-a7960806.mp4",
+      "poster": "clips/cabin-review-20261023-a7960806.jpg",
       "review": {
-        "recorded": "2026-10-21",
-        "sha256": "638a9ba3c5f6ac076b422d1510a0d19d6659f26d1e0bba798b395ba2f215c192",
-        "gameCommit": "742e789c379b9d44852bbccb83a08b7529513daa",
+        "recorded": "2026-10-23",
+        "sha256": "a796080698166d2d3cd0da798afe8a80b128532c8da23efd5936fd74db980b21",
+        "gameCommit": "26565d7e29d0352469aff3868e8064e82d83c060",
         "checkpoint": {
           "file": "lookout-entry.json",
           "sha256": "10333f36bbb9f81d7d43ca366973c66d59bacf955ea159d0e23909f3399135be"
         },
         "god": false,
         "audio": false,
-        "source": "recordings/lookout-20261021212114.mp4",
-        "log": "recordings/cabin-review-20261021-638a9ba3.json",
-        "logSha256": "856a1f6eb5b85ab75480c7cd6ddf2652df73125596f778a4436a5b6cae4feec1"
+        "source": "recordings/lookout-20261023104632.mp4",
+        "log": "recordings/cabin-review-20261023-a7960806.json",
+        "logSha256": "fc635c26c32127dce4a43681e2e66c34f890cc63e7a7b86e5c1a97fdbee1db04"
       },
-      "note": "Inspected frames: the typewriter on the desk, the pot-belly stove, the logbook taken from the corner table, the key sparkling on its board past the hat pegs. The key stays on its hook: taking it and then entering the yard crashes main when the dog spawns (render_entity).",
+      "note": "Floor probe collision and wider zones; frames checked at 2, 13.5 and 38.5 s",
       "events": [
         {
           "t": 0,
-          "frame": 1244,
+          "frame": 1248,
           "room": "lookout",
           "camera": 1,
           "what": "recording ready"
         },
         {
-          "t": 1.7,
-          "frame": 1295,
+          "t": 1.8,
+          "frame": 1300,
           "room": "lookout",
           "camera": 1,
           "what": "scene ready; items [{\"id\":2,\"qty\":15},{\"id\":1,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
           "t": 4.8,
-          "frame": 1387,
+          "frame": 1392,
           "room": "lookout",
           "camera": 1,
           "what": "hold cabin-entry"
         },
         {
-          "t": 6.9,
-          "frame": 1441,
+          "t": 6.7,
+          "frame": 1449,
           "room": "lookout",
           "camera": 1,
           "what": "walk cabin-stove"
         },
         {
-          "t": 8.2,
+          "t": 7.7,
           "frame": 1481,
           "room": "lookout",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 9.7,
-          "frame": 1517,
+          "t": 9,
+          "frame": 1520,
           "room": "lookout",
           "camera": 0,
           "what": "walk cabin-desk-typewriter"
         },
         {
-          "t": 14.3,
-          "frame": 1640,
+          "t": 13.5,
+          "frame": 1656,
           "room": "lookout",
           "camera": 0,
           "what": "hold cabin-north"
         },
         {
-          "t": 19.7,
-          "frame": 1859,
+          "t": 18.9,
+          "frame": 1874,
           "room": "lookout",
           "camera": 0,
           "what": "look cabin-took-logbook"
         },
         {
-          "t": 21.8,
-          "frame": 1924,
+          "t": 21,
+          "frame": 1939,
           "room": "lookout",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 22.9,
-          "frame": 1957,
+          "t": 22.4,
+          "frame": 1982,
           "room": "lookout",
           "camera": 1,
           "what": "walk cabin-rug"
         },
         {
-          "t": 24.9,
-          "frame": 2016,
+          "t": 24.1,
+          "frame": 2031,
           "room": "lookout",
           "camera": 1,
           "what": "walk cabin-key-board"
         },
         {
-          "t": 29.3,
-          "frame": 2151,
+          "t": 28.5,
+          "frame": 2166,
           "room": "lookout",
           "camera": 1,
           "what": "hold cabin-key-sparkle"
         },
         {
-          "t": 29.8,
-          "frame": 2153,
+          "t": 28.9,
+          "frame": 2168,
           "room": "lookout",
           "camera": 1,
           "what": "leaving for yard"
         },
         {
-          "t": 40.2,
-          "frame": 2621,
+          "t": 39.3,
+          "frame": 2646,
           "room": "yard",
           "camera": 1,
           "what": "arrived in yard"
@@ -871,87 +871,87 @@
       "room": "booth",
       "quarter": 1,
       "visit": 1,
-      "start": 1.8,
-      "end": 56.0,
-      "roomStart": 1.8,
-      "posterTime": 22.0,
-      "file": "clips/booth-review-20261022-b2931298.mp4",
-      "poster": "clips/booth-review-20261022-b2931298.jpg",
+      "start": 2.0,
+      "end": 55.5,
+      "roomStart": 2.0,
+      "posterTime": 31.0,
+      "file": "clips/booth-review-20261023-50eea36f.mp4",
+      "poster": "clips/booth-review-20261023-50eea36f.jpg",
       "review": {
-        "recorded": "2026-10-22",
-        "sha256": "b29312988067fb65abd270629312106f81f0997c933aa5b0722e06755d8073db",
-        "gameCommit": "86f114d87f40a8c1435eae7feca897f83e9378ad",
+        "recorded": "2026-10-23",
+        "sha256": "50eea36f0df8ccf267889c643e643aa88734bc2cf7c763cdc0d7fc0cd47ad26d",
+        "gameCommit": "26565d7e29d0352469aff3868e8064e82d83c060",
         "checkpoint": {
           "file": "booth-entry.json",
           "sha256": "d24ff105abd7765d9e62f8f913d6cf43b3cdec4d96661c67084b719b38cf1893"
         },
         "god": false,
         "audio": false,
-        "source": "recordings/booth-20261022204319.mp4",
-        "log": "recordings/booth-review-20261022-b2931298.json",
-        "logSha256": "d379ea02dc97627a0834f7b63d98ee1a91817793d99b99d465dd421337317103"
+        "source": "recordings/booth-20261023104757.mp4",
+        "log": "recordings/booth-review-20261023-50eea36f.json",
+        "logSha256": "83e1233fea010e2071b09f6b3b540da61ce80927a36c818240fa6e587678844c"
       },
-      "note": "Played in from the platform through the booth door with normal damage. Frames checked: camera 1's window shows the misty forest through clear glass, and the hole is see-through with the rail and trees behind it, ringed by crushed glass and cracks. Camera 2 unchanged. Out to the platform, no crash.",
+      "note": "Floor probe collision; she stops at the control desk; frames checked at 2, 31 and 56.5 s",
       "events": [
         {
           "t": 0,
-          "frame": 1299,
+          "frame": 1257,
           "room": "booth",
           "camera": 1,
           "what": "recording ready"
         },
         {
           "t": 1.7,
-          "frame": 1350,
+          "frame": 1309,
           "room": "booth",
           "camera": 1,
           "what": "scene ready; items [{\"id\":2,\"qty\":9},{\"id\":1,\"qty\":0},{\"id\":30,\"qty\":1},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
           "t": 15.7,
-          "frame": 1773,
+          "frame": 1731,
           "room": "booth",
           "camera": 1,
           "what": "hold booth-entry"
         },
         {
-          "t": 17.3,
-          "frame": 1821,
+          "t": 16.9,
+          "frame": 1769,
           "room": "booth",
           "camera": 0,
           "what": "walk"
         },
         {
-          "t": 31.3,
-          "frame": 2243,
+          "t": 30.9,
+          "frame": 2191,
           "room": "booth",
           "camera": 0,
           "what": "hold booth-camera0"
         },
         {
-          "t": 33.3,
-          "frame": 2306,
+          "t": 32.6,
+          "frame": 2243,
           "room": "booth",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 47.3,
-          "frame": 2729,
+          "t": 46.6,
+          "frame": 2666,
           "room": "booth",
           "camera": 1,
           "what": "hold booth-camera1"
         },
         {
-          "t": 48,
-          "frame": 2731,
+          "t": 47,
+          "frame": 2668,
           "room": "booth",
           "camera": 1,
           "what": "leaving for platform"
         },
         {
-          "t": 58.3,
-          "frame": 3214,
+          "t": 57.2,
+          "frame": 3142,
           "room": "platform",
           "camera": 1,
           "what": "arrived in platform"
@@ -1571,108 +1571,108 @@
       "room": "mess",
       "quarter": 1,
       "visit": 1,
-      "start": 0.5,
-      "end": 32.5,
-      "roomStart": 0.5,
+      "start": 2.0,
+      "end": 25.0,
+      "roomStart": 2.0,
       "posterTime": 10.0,
-      "file": "clips/mess-review-20261022-51ecd082.mp4",
-      "poster": "clips/mess-review-20261022-51ecd082.jpg",
+      "file": "clips/mess-review-20261023-36d77285.mp4",
+      "poster": "clips/mess-review-20261023-36d77285.jpg",
       "review": {
-        "recorded": "2026-10-22",
-        "sha256": "51ecd0826e39db105d4af8139064e07cdb325766208c7c1d1c743ee292826823",
-        "gameCommit": "ee9d7c9a61b7559c3c1f0772c5672a768283c279",
+        "recorded": "2026-10-23",
+        "sha256": "36d77285f2ade32ce55ff10de9624047269a5dd1e2c21ce56df5088cee4c6387",
+        "gameCommit": "26565d7e29d0352469aff3868e8064e82d83c060",
         "checkpoint": {
-          "file": "after-office-key.json",
+          "file": "mess-entry.json",
           "sha256": "41aabae65719ed3b4d721c1e842e5b20e5eca1bec233d47b8835a1ccf1f31c8e"
         },
-        "god": false,
+        "god": true,
         "audio": false,
-        "source": "recordings/mess-20261022074410.mp4",
-        "log": "recordings/mess-review-20261022-51ecd082.json",
-        "logSha256": "5c4d3eba84a4b43d328ee3046437a93de15f59ef78ac06368468c82ed0fa7dae"
+        "source": "recordings/mess-20261023105343.mp4",
+        "log": "recordings/mess-review-20261023-36d77285.json",
+        "logSha256": "1344a4c0753f4153671f4b270ed3031c7e864c9d48aee7135c6e9568769f1705"
       },
-      "note": "Played from inside after the office key: the tables, the stocked kitchen, out through the shut door. Inspected frames.",
+      "note": "Re-rendered: barrel and thrown chair moved so the kitchen and hatch can be reached; god mode; frames checked at 2, 10 and 26 s",
       "events": [
         {
           "t": 0,
-          "frame": 1262,
+          "frame": 1270,
           "room": "mess",
           "camera": 0,
           "what": "recording ready"
         },
         {
           "t": 1.7,
-          "frame": 1313,
+          "frame": 1320,
           "room": "mess",
           "camera": 0,
           "what": "scene ready; items [{\"id\":2,\"qty\":12},{\"id\":65,\"qty\":1},{\"id\":30,\"qty\":1},{\"id\":57,\"qty\":1},{\"id\":28,\"qty\":2},{\"id\":58,\"qty\":1}]"
         },
         {
           "t": 3.8,
-          "frame": 1375,
+          "frame": 1384,
           "room": "mess",
           "camera": 0,
           "what": "hold mess-cook"
         },
         {
-          "t": 7,
-          "frame": 1474,
+          "t": 7.1,
+          "frame": 1482,
           "room": "mess",
           "camera": 2,
           "what": "walk mess-tables"
         },
         {
-          "t": 9.5,
-          "frame": 1550,
+          "t": 9.6,
+          "frame": 1558,
           "room": "mess",
           "camera": 2,
           "what": "hold"
         },
         {
           "t": 11.8,
-          "frame": 1618,
+          "frame": 1625,
           "room": "mess",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 13.3,
-          "frame": 1664,
+          "t": 13,
+          "frame": 1663,
           "room": "mess",
           "camera": 3,
           "what": "walk mess-kitchen"
         },
         {
-          "t": 16.7,
+          "t": 16.5,
           "frame": 1768,
           "room": "mess",
           "camera": 3,
           "what": "hold"
         },
         {
-          "t": 22.5,
-          "frame": 1943,
+          "t": 18,
+          "frame": 1813,
           "room": "mess",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 23.6,
-          "frame": 1974,
+          "t": 18.7,
+          "frame": 1835,
           "room": "mess",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 23.6,
-          "frame": 1974,
+          "t": 18.7,
+          "frame": 1835,
           "room": "mess",
           "camera": 1,
           "what": "leaving for camp-yard"
         },
         {
-          "t": 34.2,
-          "frame": 2451,
+          "t": 28.4,
+          "frame": 2282,
           "room": "camp-yard",
           "camera": 5,
           "what": "arrived in camp-yard"
@@ -1683,108 +1683,108 @@
       "room": "bunkhouse",
       "quarter": 1,
       "visit": 1,
-      "start": 0.5,
-      "end": 32.0,
-      "roomStart": 0.5,
-      "posterTime": 10.0,
-      "file": "clips/bunkhouse-review-20261022-a785eaee.mp4",
-      "poster": "clips/bunkhouse-review-20261022-a785eaee.jpg",
+      "start": 2.0,
+      "end": 52.5,
+      "roomStart": 2.0,
+      "posterTime": 20.0,
+      "file": "clips/bunkhouse-review-20261023-266cb5a5.mp4",
+      "poster": "clips/bunkhouse-review-20261023-266cb5a5.jpg",
       "review": {
-        "recorded": "2026-10-22",
-        "sha256": "a785eaee6bf3d1977721f01cdb2d4a7efb4dec1611621bb61638b277f9d047dc",
-        "gameCommit": "ee9d7c9a61b7559c3c1f0772c5672a768283c279",
+        "recorded": "2026-10-23",
+        "sha256": "266cb5a55acbb9e4fd4e1ac8b13468baf3b5643d2829ad7193ebf4e8227ae2bc",
+        "gameCommit": "26565d7e29d0352469aff3868e8064e82d83c060",
         "checkpoint": {
-          "file": "after-calendar.json",
+          "file": "bunkhouse-entry.json",
           "sha256": "c4404e6108dd81d50bc7ba1d68ba8afe7ed71e3c2189fe5fd0438c22d90f72df"
         },
-        "god": false,
+        "god": true,
         "audio": false,
-        "source": "recordings/bunkhouse-20261022074140.mp4",
-        "log": "recordings/bunkhouse-review-20261022-a785eaee.json",
-        "logSha256": "cdf46876f198202fee0c5b538b395553e2e787b9fad245b59be4d119fa47ecf2"
+        "source": "recordings/bunkhouse-20261023105204.mp4",
+        "log": "recordings/bunkhouse-review-20261023-266cb5a5.json",
+        "logSha256": "0c01278875ead27c566f0e9d5b03c971ef344b4cb21715c87b62590e0e0a37ca"
       },
-      "note": "Played from inside after the calendar: the dead man under his blanket, the empty bunk with torn belts, out through the shut door. Inspected frames.",
+      "note": "Floor probe collision, god mode for the zombies; frames checked at 2, 20 and 52.5 s",
       "events": [
         {
           "t": 0,
-          "frame": 1268,
+          "frame": 1257,
           "room": "bunkhouse",
           "camera": 1,
           "what": "recording ready"
         },
         {
           "t": 1.7,
-          "frame": 1320,
+          "frame": 1309,
           "room": "bunkhouse",
           "camera": 1,
           "what": "scene ready; items [{\"id\":2,\"qty\":14},{\"id\":1,\"qty\":0},{\"id\":65,\"qty\":1},{\"id\":30,\"qty\":1},{\"id\":57,\"qty\":1},{\"id\":28,\"qty\":2}]"
         },
         {
           "t": 3.8,
-          "frame": 1383,
+          "frame": 1372,
           "room": "bunkhouse",
           "camera": 1,
           "what": "hold bunkhouse-calendar"
         },
         {
-          "t": 10.9,
-          "frame": 1599,
+          "t": 5.7,
+          "frame": 1429,
           "room": "bunkhouse",
           "camera": 2,
           "what": "walk bunkhouse-dead-in-his-bunk"
         },
         {
-          "t": 13.5,
-          "frame": 1677,
+          "t": 8.2,
+          "frame": 1504,
           "room": "bunkhouse",
           "camera": 2,
           "what": "hold"
         },
         {
-          "t": 15.9,
-          "frame": 1748,
+          "t": 14.5,
+          "frame": 1695,
           "room": "bunkhouse",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 17.1,
-          "frame": 1787,
+          "t": 15.9,
+          "frame": 1738,
           "room": "bunkhouse",
           "camera": 0,
           "what": "walk bunkhouse-west-end"
         },
         {
-          "t": 19.6,
-          "frame": 1863,
+          "t": 18.4,
+          "frame": 1814,
           "room": "bunkhouse",
           "camera": 0,
           "what": "hold"
         },
         {
-          "t": 22,
-          "frame": 1933,
+          "t": 20.3,
+          "frame": 1870,
           "room": "bunkhouse",
-          "camera": 0,
+          "camera": 1,
           "what": "walk bunkhouse-empty-bunk"
         },
         {
-          "t": 23.3,
-          "frame": 1974,
+          "t": 43.4,
+          "frame": 2569,
           "room": "bunkhouse",
           "camera": 0,
           "what": "walk"
         },
         {
-          "t": 23.3,
-          "frame": 1974,
+          "t": 43.4,
+          "frame": 2569,
           "room": "bunkhouse",
           "camera": 0,
           "what": "leaving for camp-yard"
         },
         {
-          "t": 34.1,
-          "frame": 2451,
+          "t": 53.4,
+          "frame": 3028,
           "room": "camp-yard",
           "camera": 3,
           "what": "arrived in camp-yard"
