@@ -185,6 +185,494 @@
    "x1": 6970,
    "z1": 15130,
    "name": "Lumber cart"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 4517,
+   "x1": 23785,
+   "z1": 4578,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 4772,
+   "x1": 2110,
+   "z1": 4833,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 4772,
+   "x1": 7720,
+   "z1": 4833,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13530,
+   "z0": 4772,
+   "x1": 13840,
+   "z1": 4833,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19395,
+   "z0": 4772,
+   "x1": 19705,
+   "z1": 4833,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23475,
+   "z0": 4772,
+   "x1": 23785,
+   "z1": 4833,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21180,
+   "z0": 5027,
+   "x1": 22000,
+   "z1": 5088,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 20925,
+   "z0": 5282,
+   "x1": 21745,
+   "z1": 5343,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 22962,
+   "z0": 7580,
+   "x1": 23023,
+   "z1": 7890,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23727,
+   "z0": 5030,
+   "x1": 23788,
+   "z1": 7890,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 22965,
+   "z0": 8087,
+   "x1": 23785,
+   "z1": 8148,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 5030,
+   "x1": 1858,
+   "z1": 9420,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23727,
+   "z0": 8345,
+   "x1": 23788,
+   "z1": 9420,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12762,
+   "z0": 9365,
+   "x1": 12823,
+   "z1": 9675,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16332,
+   "z0": 9365,
+   "x1": 16393,
+   "z1": 9675,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 9620,
+   "x1": 2110,
+   "z1": 9930,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 20670,
+   "z0": 9620,
+   "x1": 21490,
+   "z1": 9930,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 10127,
+   "x1": 1858,
+   "z1": 10188,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12252,
+   "z0": 10127,
+   "x1": 12313,
+   "z1": 10188,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23475,
+   "z0": 9620,
+   "x1": 23785,
+   "z1": 10185,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12255,
+   "z0": 10382,
+   "x1": 12565,
+   "z1": 10443,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16335,
+   "z0": 11402,
+   "x1": 17410,
+   "z1": 11463,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 14040,
+   "z0": 11657,
+   "x1": 15115,
+   "z1": 11718,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13530,
+   "z0": 13187,
+   "x1": 20725,
+   "z1": 13248,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13782,
+   "z0": 13445,
+   "x1": 13843,
+   "z1": 14520,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7152,
+   "z0": 13700,
+   "x1": 7213,
+   "z1": 14775,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 14040,
+   "z0": 14717,
+   "x1": 20725,
+   "z1": 14778,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3072,
+   "z0": 13700,
+   "x1": 3133,
+   "z1": 15030,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 15230,
+   "x1": 1858,
+   "z1": 15540,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23727,
+   "z0": 10385,
+   "x1": 23788,
+   "z1": 15540,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 15737,
+   "x1": 7975,
+   "z1": 15798,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19395,
+   "z0": 15737,
+   "x1": 19705,
+   "z1": 15798,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 15740,
+   "x1": 2110,
+   "z1": 16050,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7407,
+   "z0": 15992,
+   "x1": 7468,
+   "z1": 16053,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7917,
+   "z0": 15992,
+   "x1": 7978,
+   "z1": 16053,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 16247,
+   "x1": 7975,
+   "z1": 16308,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19395,
+   "z0": 16247,
+   "x1": 19705,
+   "z1": 16308,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23475,
+   "z0": 15740,
+   "x1": 23785,
+   "z1": 16305,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6387,
+   "z0": 17267,
+   "x1": 6448,
+   "z1": 17328,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4092,
+   "z0": 18032,
+   "x1": 4153,
+   "z1": 18093,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6135,
+   "z0": 17525,
+   "x1": 6445,
+   "z1": 18090,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3585,
+   "z0": 18287,
+   "x1": 4405,
+   "z1": 18348,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 32142,
+   "z0": 18035,
+   "x1": 32203,
+   "z1": 18345,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6387,
+   "z0": 18290,
+   "x1": 6448,
+   "z1": 18600,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3585,
+   "z0": 18545,
+   "x1": 4660,
+   "z1": 18855,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6390,
+   "z0": 18797,
+   "x1": 12565,
+   "z1": 18858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13530,
+   "z0": 18545,
+   "x1": 14350,
+   "z1": 18855,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3585,
+   "z0": 19052,
+   "x1": 4405,
+   "z1": 19113,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13275,
+   "z0": 19052,
+   "x1": 14605,
+   "z1": 19113,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4092,
+   "z0": 19307,
+   "x1": 4153,
+   "z1": 19368,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13530,
+   "z0": 19307,
+   "x1": 14350,
+   "z1": 19368,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 17610,
+   "z0": 19307,
+   "x1": 21745,
+   "z1": 19368,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13785,
+   "z0": 19562,
+   "x1": 14095,
+   "z1": 19623,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 16250,
+   "x1": 1858,
+   "z1": 20130,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23727,
+   "z0": 18035,
+   "x1": 23788,
+   "z1": 20130,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 20327,
+   "x1": 2110,
+   "z1": 20388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 20327,
+   "x1": 7720,
+   "z1": 20388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13530,
+   "z0": 20327,
+   "x1": 13840,
+   "z1": 20388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 17607,
+   "z0": 19565,
+   "x1": 17668,
+   "z1": 20385,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23475,
+   "z0": 20327,
+   "x1": 23785,
+   "z1": 20388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 20582,
+   "x1": 23785,
+   "z1": 20643,
+   "name": "Probe"
   }
  ],
  "anim": {
@@ -221,6 +709,76 @@
    "loop": true
   }
  ],
+ "probe": {
+  "Board stack": 51,
+  "Edger table": 30,
+  "Filer's bench": 24,
+  "Mill wall e.003": 22,
+  "Mill wall n.003": 16,
+  "Mill wall n.006": 16,
+  "Mill wall e": 16,
+  "Mill wall s.003": 16,
+  "Oil drum 0": 14,
+  "Oil drum 1": 14,
+  "Mill wall s.006": 14,
+  "Mill wall s": 12,
+  "Mill wall n": 11,
+  "Mill wall w.001": 11,
+  "Mill wall w.006": 11,
+  "Mill wall e.005": 11,
+  "Mill wall s.001": 10,
+  "Mill wall s.004": 10,
+  "Mill wall n.001": 9,
+  "Mill wall n.004": 9,
+  "Mill wall n.007": 8,
+  "Mill wall n.009": 8,
+  "Mill wall e.001": 8,
+  "Blood fan on the boards": 8,
+  "Mill post": 8,
+  "Mill wall s.007": 7,
+  "Mill wall s.009": 7,
+  "Thrown belt.001": 6,
+  "hoop.004": 6,
+  "hoop.007": 6,
+  "Bearing post": 5,
+  "Wall post.012": 5,
+  "Saw pulley": 5,
+  "Wall post.014": 5,
+  "Wall post.002": 4,
+  "Wall post.004": 4,
+  "Wall post.006": 4,
+  "Peavey 0": 4,
+  "Peavey 1": 4,
+  "Mill wall w.003": 4,
+  "Saw deck": 4,
+  "Wall post.013": 4,
+  "Warning sign": 4,
+  "Board on the cart.001": 4,
+  "Mill wall w.005": 4,
+  "Mill post.001": 4,
+  "Edged board": 4,
+  "Wall post.010": 3,
+  "Mill wall w": 3,
+  "Setworks lever": 3,
+  "Board on the cart.003": 3,
+  "Wall post.015": 3,
+  "Wall post.016": 3,
+  "Wall post.003": 3,
+  "Wall post.005": 3,
+  "Wall post.011": 2,
+  "Run down the boards": 2,
+  "Board on the cart": 2,
+  "Board on the cart.002": 2,
+  "Where he leant on the rail": 2,
+  "Mill wall w.008": 2,
+  "Wall post.017": 2,
+  "Wall post.007": 2,
+  "Wall post": 1,
+  "Thrown belt.002": 1,
+  "Thrown belt": 1,
+  "Sign post": 1,
+  "Tally sheets": 1
+ },
  "bounds": {
   "x0": 1700,
   "z0": 4420,

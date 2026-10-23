@@ -123,9 +123,10 @@ def build():
         stick, light, flame = kit.candle(f"Desk candle {k}", (x, y, z), energy=4.5, height=h)
         flames.append((light, flame))
     chair_m = reb.mat_wood("Chair", (0.17, 0.11, 0.06))
-    kit.chair("Desk chair", chair_m, (2.6, Y0 + 1.15, 0.0), rot=-math.pi / 2 + 0.25)
-    reb.cloth("Hal's jacket", reb.mat_surface("Skyway jacket", [(0.0, (0.03, 0.05, 0.1)), (1.0, (0.06, 0.09, 0.16))], scale=30, bump=0.2), (2.65, Y0 + 1.33, 0.82), (0.5, 0.6), rot=(math.pi / 2 - 0.15, 0, 0), cuts=10, lumps=0.05, seed=5)
-    reb.prim("cube", "Jacket patch", reb.mat_plain("Patch red", (0.35, 0.06, 0.03), 0.6), (2.55, Y0 + 1.39, 0.9), (0.08, 0.01, 0.05))
+    # Pushed in under the desk, so she can step up to it.
+    kit.chair("Desk chair", chair_m, (2.75, Y0 + 0.75, 0.0), rot=-math.pi / 2 + 0.25)
+    reb.cloth("Hal's jacket", reb.mat_surface("Skyway jacket", [(0.0, (0.03, 0.05, 0.1)), (1.0, (0.06, 0.09, 0.16))], scale=30, bump=0.2), (2.8, Y0 + 0.93, 0.82), (0.5, 0.6), rot=(math.pi / 2 - 0.15, 0, 0), cuts=10, lumps=0.05, seed=5)
+    reb.prim("cube", "Jacket patch", reb.mat_plain("Patch red", (0.35, 0.06, 0.03), 0.6), (2.7, Y0 + 0.99, 0.9), (0.08, 0.01, 0.05))
 
     # ---- West wall: the cot pulled out, the blanket, the bandage.
     cot_m = reb.mat_wood("Cot frame", (0.2, 0.15, 0.08))
