@@ -633,108 +633,108 @@
       "room": "bridge",
       "quarter": 1,
       "visit": 1,
-      "start": 0.5,
-      "end": 23.5,
-      "roomStart": 0.5,
-      "posterTime": 10.0,
-      "file": "clips/bridge-review-20261022-e4e7c534.mp4",
-      "poster": "clips/bridge-review-20261022-e4e7c534.jpg",
+      "start": 1.5,
+      "end": 24.3,
+      "roomStart": 1.5,
+      "posterTime": 9.0,
+      "file": "clips/bridge-review-20261023-ac15733f.mp4",
+      "poster": "clips/bridge-review-20261023-ac15733f.jpg",
       "review": {
-        "recorded": "2026-10-22",
-        "sha256": "e4e7c534206f08e98757092207907dc21aed891dcdd395ed5fe4a421965eb2b3",
-        "gameCommit": "2dc4d1b43f1e0ba79b149624652ef7b8f8765868",
+        "recorded": "2026-10-23",
+        "sha256": "ac15733f43820f0a756abcdc7fc4993958e483fe04c68f218f9578b5decfa169",
+        "gameCommit": "6ed50c1b27dad862181fc7ae2b172b81179c9b39",
         "checkpoint": {
           "file": "bridge-entry.json",
-          "sha256": "0c42d95f939c4286ac63f50b5a776e4dc448035e4b2d368c9cd3144f519fb122"
+          "sha256": "baeeddd491ff77c8c122ccadec4e0ad255f0ebe575dfcc15d3008d94c22dc904"
         },
         "god": false,
         "audio": false,
-        "source": "recordings/bridge-20261022121503.mp4",
-        "log": "recordings/bridge-review-20261022-e4e7c534.json",
-        "logSha256": "c4cc99c73cdf79e9d680fd78bf81fc778e08dc709f4df3aeb561014419483e82"
+        "source": "recordings/bridge-20261023171230.mp4",
+        "log": "recordings/bridge-review-20261023-ac15733f.json",
+        "logSha256": "fc081b8033a7742b2aa374651ece6aedac24931f95976fd86e40704a22dbecb7"
       },
-      "note": "Still-grass pass: banks fully grassed and still. Frames checked at 2 fps and diffed in the holds",
+      "note": "Re-recorded on the walk fixes: frames checked, she walks onto the deck, across and back",
       "events": [
         {
           "t": 0,
-          "frame": 1250,
+          "frame": 1280,
           "room": "bridge",
           "camera": 2,
           "what": "recording ready"
         },
         {
           "t": 1.8,
-          "frame": 1302,
+          "frame": 1333,
           "room": "bridge",
           "camera": 2,
-          "what": "scene ready; items [{\"id\":2,\"qty\":9},{\"id\":1,\"qty\":0},{\"id\":30,\"qty\":1},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
+          "what": "scene ready; items [{\"id\":2,\"qty\":15},{\"id\":1,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
           "t": 4.8,
-          "frame": 1394,
+          "frame": 1425,
           "room": "bridge",
           "camera": 2,
           "what": "hold bridge-far-bank"
         },
         {
-          "t": 5.9,
-          "frame": 1427,
+          "t": 5.8,
+          "frame": 1455,
           "room": "bridge",
           "camera": 2,
           "what": "walk"
         },
         {
-          "t": 7.7,
-          "frame": 1481,
+          "t": 7.6,
+          "frame": 1508,
           "room": "bridge",
           "camera": 1,
           "what": "walk bridge-over-the-drop"
         },
         {
-          "t": 11.2,
-          "frame": 1587,
+          "t": 11,
+          "frame": 1613,
           "room": "bridge",
           "camera": 1,
           "what": "hold"
         },
         {
-          "t": 13,
-          "frame": 1644,
+          "t": 12.9,
+          "frame": 1670,
           "room": "bridge",
           "camera": 0,
           "what": "walk bridge-near-bank"
         },
         {
-          "t": 15.5,
-          "frame": 1719,
+          "t": 15.4,
+          "frame": 1744,
           "room": "bridge",
           "camera": 0,
           "what": "hold"
         },
         {
-          "t": 18,
-          "frame": 1792,
+          "t": 17.8,
+          "frame": 1818,
           "room": "bridge",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 20,
-          "frame": 1852,
+          "t": 19.9,
+          "frame": 1881,
           "room": "bridge",
           "camera": 2,
           "what": "walk bridge-back-on-the-far-bank"
         },
         {
           "t": 20.5,
-          "frame": 1854,
+          "frame": 1884,
           "room": "bridge",
           "camera": 2,
           "what": "leaving for platform"
         },
         {
-          "t": 24.9,
-          "frame": 2072,
+          "t": 25.1,
+          "frame": 2112,
           "room": "platform",
           "camera": 1,
           "what": "arrived in platform"
@@ -745,122 +745,122 @@
       "room": "platform",
       "quarter": 1,
       "visit": 1,
-      "start": 1.8,
-      "end": 37.5,
-      "roomStart": 1.8,
-      "posterTime": 22.0,
-      "file": "clips/platform-review-20261022-85eb52b6.mp4",
-      "poster": "clips/platform-review-20261022-85eb52b6.jpg",
+      "start": 1.5,
+      "end": 42.5,
+      "roomStart": 1.5,
+      "posterTime": 12.0,
+      "file": "clips/platform-review-20261023-abd9e94f.mp4",
+      "poster": "clips/platform-review-20261023-abd9e94f.jpg",
       "review": {
-        "recorded": "2026-10-22",
-        "sha256": "85eb52b69fe7ed2dfb9a4c8d84de07dc4ac60e3875c1b6d8512db904ae9e0fbe",
-        "gameCommit": "86f114d87f40a8c1435eae7feca897f83e9378ad",
+        "recorded": "2026-10-23",
+        "sha256": "abd9e94f8ed7b55745d03c226a103b9764aa1d50f28ef89e047e81b310699205",
+        "gameCommit": "6ed50c1b27dad862181fc7ae2b172b81179c9b39",
         "checkpoint": {
-          "file": "platform-entry.json",
-          "sha256": "dc144f495937670d73884535d265913c29df12aecbce45c6f5fc50f058f98a7e"
+          "file": "platform-start.json",
+          "sha256": "86027ad33b4152a4b2838063311ca889b0a45483f83268dac3e33f400ac2ad0b"
         },
         "god": false,
         "audio": false,
-        "source": "recordings/platform-20261022204044.mp4",
-        "log": "recordings/platform-review-20261022-85eb52b6.json",
-        "logSha256": "f000ec87bb6806c4e599de8527f1ff8455fed98a847db4a12850ac65bbbb991b"
+        "source": "recordings/platform-20261023171058.mp4",
+        "log": "recordings/platform-review-20261023-abd9e94f.json",
+        "logSha256": "5339062f72ebdbace251fd1712ebb7e9e3953f3b300c5d97d1cfee7ee6b88814"
       },
-      "note": "Played from the platform's entry checkpoint with normal damage. Frames checked: the booth roof sits on its walls from every camera, the trail's dirt is trodden over the slab where it joins and muddy prints walk on toward the car and the booth, the ledge path's dirt laps over the concrete at the east corner. Out to the bridge, no crash.",
+      "note": "Re-recorded on the walk fixes: frames checked, the queue chain off its east post, she walks in to the car and out again",
       "events": [
         {
           "t": 0,
-          "frame": 1294,
+          "frame": 1256,
           "room": "platform",
           "camera": 1,
           "what": "recording ready"
         },
         {
-          "t": 1.8,
-          "frame": 1346,
+          "t": 1.7,
+          "frame": 1307,
           "room": "platform",
           "camera": 1,
-          "what": "scene ready; items [{\"id\":2,\"qty\":9},{\"id\":1,\"qty\":0},{\"id\":30,\"qty\":1},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
+          "what": "scene ready; items [{\"id\":2,\"qty\":15},{\"id\":1,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0},{\"id\":0,\"qty\":0}]"
         },
         {
-          "t": 4.8,
-          "frame": 1439,
+          "t": 4.7,
+          "frame": 1399,
           "room": "platform",
           "camera": 1,
           "what": "hold platform-from-the-booth"
         },
         {
-          "t": 7.2,
-          "frame": 1511,
+          "t": 6.9,
+          "frame": 1466,
           "room": "platform",
           "camera": 1,
           "what": "walk"
         },
         {
-          "t": 8.5,
-          "frame": 1550,
+          "t": 10.7,
+          "frame": 1579,
           "room": "platform",
           "camera": 2,
           "what": "walk platform-car"
         },
         {
-          "t": 12.2,
-          "frame": 1661,
+          "t": 14.2,
+          "frame": 1685,
           "room": "platform",
           "camera": 2,
           "what": "hold"
         },
         {
-          "t": 14.1,
-          "frame": 1718,
+          "t": 18.6,
+          "frame": 1820,
           "room": "platform",
-          "camera": 3,
+          "camera": 0,
           "what": "walk platform-wheel-house"
         },
         {
-          "t": 19.5,
-          "frame": 1883,
+          "t": 24.2,
+          "frame": 1990,
           "room": "platform",
           "camera": 5,
           "what": "walk platform-smear"
         },
         {
-          "t": 21.7,
-          "frame": 1949,
+          "t": 26.5,
+          "frame": 2057,
           "room": "platform",
           "camera": 5,
           "what": "walk platform-ledge"
         },
         {
-          "t": 25.4,
-          "frame": 2060,
+          "t": 29.9,
+          "frame": 2162,
           "room": "platform",
           "camera": 5,
           "what": "hold"
         },
         {
-          "t": 27.7,
-          "frame": 2130,
+          "t": 32.3,
+          "frame": 2234,
           "room": "platform",
           "camera": 5,
           "what": "walk"
         },
         {
-          "t": 31.3,
-          "frame": 2238,
+          "t": 36.3,
+          "frame": 2356,
           "room": "platform",
           "camera": 0,
           "what": "walk platform-trail-in"
         },
         {
-          "t": 32,
-          "frame": 2240,
+          "t": 36.7,
+          "frame": 2358,
           "room": "platform",
           "camera": 0,
           "what": "leaving for bridge"
         },
         {
-          "t": 37,
-          "frame": 2479,
+          "t": 41.6,
+          "frame": 2589,
           "room": "bridge",
           "camera": 2,
           "what": "arrived in bridge"
