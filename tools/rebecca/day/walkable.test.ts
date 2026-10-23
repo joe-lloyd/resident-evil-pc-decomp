@@ -7,7 +7,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { FRAME_H, FRAME_W } from '../masks.ts';
-import { check, KNEE_INSIDE, seenBy, unproject, type Camera, type RoomJson, type Script } from './walkable.ts';
+import { check, KNEE_INSIDE, reachability, routeGaps, seenBy, unproject, type Camera, type RoomJson, type Script } from './walkable.ts';
 
 type V3 = [number, number, number];
 const cam: Camera = { from: [5000, -3400, 0], to: [5000, 0, 6000], fov: 200 };
@@ -89,4 +89,37 @@ test('a zone she cannot get within reach of is listed', () => {
   ];
   const r = check(room([{ ...WALL, shape: 'box' }]), seen, [bounds], script(zones));
   assert.deepEqual(r.zones, ['a boot beyond the wall at (4800, 13000)-(5200, 13400), floor 5515 away', 'a door in the wall she stands in at (4800, 8000)-(5200, 8200), floor 515 away']);
+});
+
+// reachability: her collision alone, from each way in. The wall across the
+// room leaves a gap at x 4400 to `x1`; beyond it, at the far end, the door
+// on is a zone she must stand in.
+const ON = { what: 'the door to hut', zone: { x0: 4500, z0: 12800, x1: 5500, z1: 13400 }, at: 'her' as const, door: 'hut' };
+const split = (x1: number): RoomJson =>
+  room([
+    { x0: 0, z0: 8000, x1: 4400, z1: 8200, shape: 'box' },
+    { x0: x1, z0: 8000, x1: 10000, z1: 8200, shape: 'box' },
+  ]);
+
+test('a gap wider than her body leads on: every zone is in reach from every way in', () => {
+  // 1000 across: her centre keeps 380 from each side, which leaves her 240.
+  assert.deepEqual(reachability(split(5400), script([ON])), { cells: 2119, cut: [] });
+});
+
+test('a gap narrower than her body cuts the room in two, and the door beyond is listed for the way in it is cut off from', () => {
+  // 700 across: less than twice her radius.
+  const r = reachability(split(5100), script([ON], [IN, { from: 'hut', x: 5000, z: 12500 }]));
+  assert.deepEqual(r.cut, ['from yard: cannot reach the door to hut at (4500, 12800)-(5500, 13400)']);
+});
+
+test('a way in inside a wall, with no floor round it to push her onto, is listed', () => {
+  const r = reachability(room([{ x0: 0, z0: 5000, x1: 10000, z1: 7000, shape: 'box' }]), script([], [{ from: 'yard', x: 5000, z: 6000 }]));
+  assert.deepEqual(r.cut, ['from yard: she arrives in a wall at (5000, 6000)']);
+});
+
+test("a link of the day's plan with no door for it in the room it leaves is a gap in the way through", () => {
+  const trail: Script = { arrivals: [], zones: [{ what: 'the door to yard', zone: bounds, at: 'ahead', door: 'yard' }] };
+  const ridge = (door?: string): Script => ({ arrivals: [], zones: door ? [{ what: `the door to ${door}`, zone: bounds, at: 'ahead', door }] : [] });
+  assert.deepEqual(routeGaps(new Map([['ridge', ridge()], ['trail', trail]])), ['ridge -> trail (walk)']);
+  assert.deepEqual(routeGaps(new Map([['ridge', ridge('trail')], ['trail', trail]])), []);
 });
