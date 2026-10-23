@@ -30,27 +30,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 1700,
-   "z0": 1700,
-   "x1": 2448,
-   "z1": 4080,
-   "name": "Bench"
-  },
-  {
-   "shape": "box",
-   "x0": 5032,
-   "z0": 1700,
-   "x1": 5780,
-   "z1": 4080,
-   "name": "Bench.001"
-  },
-  {
-   "shape": "box",
-   "x0": 2562,
+   "x0": 1800,
    "z0": 1797,
-   "x1": 2623,
+   "x1": 2620,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Car wall n"
   },
   {
    "shape": "box",
@@ -58,7 +42,7 @@
    "z0": 1797,
    "x1": 3385,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Claw marks"
   },
   {
    "shape": "box",
@@ -66,15 +50,31 @@
    "z0": 1797,
    "x1": 3898,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Claw marks.001"
   },
   {
    "shape": "box",
    "x0": 4350,
    "z0": 1797,
-   "x1": 4915,
+   "x1": 5680,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Car wall n.001"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 2055,
+   "x1": 2365,
+   "z1": 3895,
+   "name": "Probe: Roof"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 2055,
+   "x1": 5680,
+   "z1": 3895,
+   "name": "Probe: Roof"
   },
   {
    "shape": "box",
@@ -82,7 +82,7 @@
    "z0": 4007,
    "x1": 5680,
    "z1": 4068,
-   "name": "Probe"
+   "name": "Probe: Car wall s"
   }
  ],
  "anim": {
@@ -90,10 +90,14 @@
   "ticks": 3
  },
  "probe": {
+  "Roof": 28,
   "Car wall s": 15,
-  "Car wall n.001": 3,
+  "Bench back": 9,
+  "Bench back.001": 9,
+  "Car wall n.001": 5,
+  "Torn cushion": 4,
+  "Car wall n": 3,
   "Claw marks": 2,
-  "Car wall n": 1,
   "Claw marks.001": 1,
   "Mullion.006": 1
  },

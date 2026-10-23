@@ -56,91 +56,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 18700,
-   "z0": 3400,
-   "x1": 27200,
-   "z1": 10200,
-   "name": "Cabin body"
+   "x0": 18290,
+   "z0": 3497,
+   "x1": 27780,
+   "z1": 3558,
+   "name": "Probe: Cabin body"
   },
   {
    "shape": "box",
-   "x0": 19380,
-   "z0": 10200,
-   "x1": 26520,
-   "z1": 12240,
-   "name": "Porch deck"
-  },
-  {
-   "shape": "box",
-   "x0": 17170,
-   "z0": 3740,
-   "x1": 18190,
-   "z1": 8840,
-   "name": "Woodpile"
-  },
-  {
-   "shape": "circle",
-   "x0": 15906,
-   "z0": 9095,
-   "x1": 16734,
-   "z1": 9945,
-   "name": "Chopping block"
-  },
-  {
-   "shape": "circle",
-   "x0": 26783,
-   "z0": 10540,
-   "x1": 27787,
-   "z1": 11560,
-   "name": "Rain barrel"
-  },
-  {
-   "shape": "box",
-   "x0": 4760,
-   "z0": 11220,
-   "x1": 9180,
-   "z1": 14960,
-   "name": "Shed footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 10115,
-   "z0": 15300,
-   "x1": 19295,
-   "z1": 20060,
-   "name": "Truck footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 9237,
-   "z0": 5661,
-   "x1": 9463,
-   "z1": 5899,
-   "name": "Sign post"
-  },
-  {
-   "shape": "box",
-   "x0": 11617,
-   "z0": 5661,
-   "x1": 11843,
-   "z1": 5899,
-   "name": "Sign post.001"
-  },
-  {
-   "shape": "box",
-   "x0": 3377,
-   "z0": 17245,
-   "x1": 8511,
-   "z1": 21183,
-   "name": "Rocks south-west"
-  },
-  {
-   "shape": "box",
-   "x0": 27612,
-   "z0": 17923,
-   "x1": 32901,
-   "z1": 21170,
-   "name": "Rocks south-east"
+   "x0": 18290,
+   "z0": 3755,
+   "x1": 18855,
+   "z1": 4065,
+   "name": "Probe: Cabin log.041"
   },
   {
    "shape": "box",
@@ -148,47 +76,31 @@
    "z0": 5537,
    "x1": 9423,
    "z1": 5598,
-   "name": "Probe"
+   "name": "Probe: Sign post"
   },
   {
    "shape": "box",
-   "x0": 11657,
+   "x0": 9872,
    "z0": 5537,
-   "x1": 11718,
+   "x1": 9933,
    "z1": 5598,
-   "name": "Probe"
+   "name": "Probe: Text"
   },
   {
    "shape": "box",
-   "x0": 9107,
+   "x0": 11405,
+   "z0": 5537,
+   "x1": 11715,
+   "z1": 5598,
+   "name": "Probe: Text"
+  },
+  {
+   "shape": "box",
+   "x0": 9110,
    "z0": 5792,
-   "x1": 9168,
+   "x1": 11970,
    "z1": 5853,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9620,
-   "z0": 5792,
-   "x1": 11460,
-   "z1": 5853,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 11912,
-   "z0": 5792,
-   "x1": 11973,
-   "z1": 5853,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 18290,
-   "z0": 3500,
-   "x1": 18600,
-   "z1": 8655,
-   "name": "Probe"
+   "name": "Probe: Sign board"
   },
   {
    "shape": "box",
@@ -196,103 +108,87 @@
    "z0": 8852,
    "x1": 14013,
    "z1": 8913,
-   "name": "Probe"
+   "name": "Probe: Flagpole"
   },
   {
    "shape": "box",
    "x0": 17270,
-   "z0": 8852,
-   "x1": 18600,
-   "z1": 8913,
-   "name": "Probe"
+   "z0": 4265,
+   "x1": 18855,
+   "z1": 8910,
+   "name": "Probe: Cabin log.041"
   },
   {
    "shape": "box",
-   "x0": 15992,
+   "x0": 15995,
    "z0": 9107,
-   "x1": 16053,
+   "x1": 16560,
    "z1": 9168,
-   "name": "Probe"
+   "name": "Probe: Chopping block"
   },
   {
    "shape": "box",
-   "x0": 16502,
-   "z0": 9107,
-   "x1": 16563,
-   "z1": 9168,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 16757,
+   "x0": 15995,
    "z0": 9365,
-   "x1": 16818,
+   "x1": 16815,
    "z1": 9675,
-   "name": "Probe"
+   "name": "Probe: Chopping block"
   },
   {
    "shape": "box",
-   "x0": 15992,
+   "x0": 15995,
    "z0": 9872,
-   "x1": 16053,
+   "x1": 16560,
    "z1": 9933,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 16502,
-   "z0": 9872,
-   "x1": 16563,
-   "z1": 9933,
-   "name": "Probe"
+   "name": "Probe: Chopping block"
   },
   {
    "shape": "box",
    "x0": 18290,
    "z0": 9110,
-   "x1": 18600,
-   "z1": 10185,
-   "name": "Probe"
+   "x1": 18855,
+   "z1": 9930,
+   "name": "Probe: Cabin log.041"
   },
   {
    "shape": "box",
    "x0": 27215,
-   "z0": 3500,
+   "z0": 3755,
    "x1": 27780,
-   "z1": 10185,
-   "name": "Probe"
+   "z1": 9930,
+   "name": "Probe: Cabin log.054"
+  },
+  {
+   "shape": "box",
+   "x0": 18035,
+   "z0": 10127,
+   "x1": 27780,
+   "z1": 10188,
+   "name": "Probe: Cabin body"
   },
   {
    "shape": "box",
    "x0": 18035,
    "z0": 10382,
-   "x1": 19365,
+   "x1": 21405,
    "z1": 10443,
-   "name": "Probe"
+   "name": "Probe: Cabin log.025"
   },
   {
    "shape": "box",
-   "x0": 26705,
+   "x0": 22625,
    "z0": 10382,
    "x1": 27780,
    "z1": 10443,
-   "name": "Probe"
+   "name": "Probe: Cabin log.021"
   },
   {
    "shape": "box",
-   "x0": 18290,
+   "x0": 18035,
    "z0": 10637,
-   "x1": 19365,
+   "x1": 27780,
    "z1": 10698,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 27722,
-   "z0": 10637,
-   "x1": 27783,
-   "z1": 10698,
-   "name": "Probe"
+   "name": "Probe: Cabin log.019"
   },
   {
    "shape": "box",
@@ -300,23 +196,23 @@
    "z0": 11147,
    "x1": 9420,
    "z1": 11208,
-   "name": "Probe"
+   "name": "Probe: Shed walls"
   },
   {
    "shape": "box",
-   "x0": 26702,
-   "z0": 10640,
-   "x1": 26763,
+   "x0": 26705,
+   "z0": 10895,
+   "x1": 27780,
    "z1": 11205,
-   "name": "Probe"
+   "name": "Probe: Rain barrel"
   },
   {
    "shape": "box",
-   "x0": 27722,
+   "x0": 26960,
    "z0": 11402,
-   "x1": 27783,
+   "x1": 27780,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Rain barrel"
   },
   {
    "shape": "box",
@@ -324,23 +220,71 @@
    "z0": 11657,
    "x1": 27273,
    "z1": 11718,
-   "name": "Probe"
+   "name": "Probe: Rain barrel"
   },
   {
    "shape": "box",
-   "x0": 19307,
+   "x0": 4775,
+   "z0": 11405,
+   "x1": 9165,
+   "z1": 11970,
+   "name": "Probe: Shed roof"
+  },
+  {
+   "shape": "box",
+   "x0": 19310,
    "z0": 11915,
-   "x1": 19368,
+   "x1": 21660,
    "z1": 12225,
-   "name": "Probe"
+   "name": "Probe: Porch rail"
   },
   {
    "shape": "box",
-   "x0": 9362,
+   "x0": 24410,
+   "z0": 11915,
+   "x1": 26505,
+   "z1": 12225,
+   "name": "Probe: Porch rail.001"
+  },
+  {
+   "shape": "box",
+   "x0": 4775,
    "z0": 12170,
-   "x1": 9423,
+   "x1": 9420,
+   "z1": 12480,
+   "name": "Probe: Shed walls"
+  },
+  {
+   "shape": "box",
+   "x0": 4772,
+   "z0": 12680,
+   "x1": 4833,
+   "z1": 13500,
+   "name": "Probe: Shed walls"
+  },
+  {
+   "shape": "box",
+   "x0": 9110,
+   "z0": 12680,
+   "x1": 9420,
+   "z1": 13500,
+   "name": "Probe: Shed door"
+  },
+  {
+   "shape": "box",
+   "x0": 4775,
+   "z0": 13700,
+   "x1": 9420,
    "z1": 14010,
-   "name": "Probe"
+   "name": "Probe: Shed walls"
+  },
+  {
+   "shape": "box",
+   "x0": 4775,
+   "z0": 14210,
+   "x1": 9165,
+   "z1": 14775,
+   "name": "Probe: Shed roof.001"
   },
   {
    "shape": "box",
@@ -348,7 +292,7 @@
    "z0": 14972,
    "x1": 9420,
    "z1": 15033,
-   "name": "Probe"
+   "name": "Probe: Shed walls"
   },
   {
    "shape": "box",
@@ -356,7 +300,7 @@
    "z0": 14972,
    "x1": 14523,
    "z1": 15033,
-   "name": "Probe"
+   "name": "Probe: Truck door"
   },
   {
    "shape": "box",
@@ -364,7 +308,39 @@
    "z0": 15227,
    "x1": 14775,
    "z1": 15288,
-   "name": "Probe"
+   "name": "Probe: Truck door"
+  },
+  {
+   "shape": "box",
+   "x0": 14720,
+   "z0": 15482,
+   "x1": 15030,
+   "z1": 15543,
+   "name": "Probe: Truck door"
+  },
+  {
+   "shape": "box",
+   "x0": 14975,
+   "z0": 15737,
+   "x1": 15285,
+   "z1": 15798,
+   "name": "Probe: Truck door"
+  },
+  {
+   "shape": "box",
+   "x0": 15230,
+   "z0": 15992,
+   "x1": 15540,
+   "z1": 16053,
+   "name": "Probe: Truck door"
+  },
+  {
+   "shape": "box",
+   "x0": 15485,
+   "z0": 16247,
+   "x1": 16050,
+   "z1": 16308,
+   "name": "Probe: Truck door"
   },
   {
    "shape": "box",
@@ -372,47 +348,223 @@
    "z0": 16502,
    "x1": 9423,
    "z1": 16563,
-   "name": "Probe"
+   "name": "Probe: Truck"
   },
   {
    "shape": "box",
-   "x0": 19307,
-   "z0": 17780,
-   "x1": 19368,
-   "z1": 18855,
-   "name": "Probe"
+   "x0": 15740,
+   "z0": 16502,
+   "x1": 16050,
+   "z1": 16563,
+   "name": "Probe: Truck door inside"
+  },
+  {
+   "shape": "box",
+   "x0": 18797,
+   "z0": 16502,
+   "x1": 18858,
+   "z1": 16563,
+   "name": "Probe: Truck"
+  },
+  {
+   "shape": "box",
+   "x0": 5540,
+   "z0": 17522,
+   "x1": 5850,
+   "z1": 17583,
+   "name": "Probe: Rocks south-west"
   },
   {
    "shape": "box",
    "x0": 9110,
    "z0": 16760,
-   "x1": 9930,
+   "x1": 19110,
+   "z1": 17580,
+   "name": "Probe: Truck"
+  },
+  {
+   "shape": "box",
+   "x0": 5285,
+   "z0": 17777,
+   "x1": 6105,
+   "z1": 17838,
+   "name": "Probe: Rocks south-west"
+  },
+  {
+   "shape": "box",
+   "x0": 5030,
+   "z0": 18032,
+   "x1": 6360,
+   "z1": 18093,
+   "name": "Probe: Rocks south-west"
+  },
+  {
+   "shape": "box",
+   "x0": 4262,
+   "z0": 18287,
+   "x1": 4323,
+   "z1": 18348,
+   "name": "Probe: Rocks south-west"
+  },
+  {
+   "shape": "box",
+   "x0": 5030,
+   "z0": 18287,
+   "x1": 6615,
+   "z1": 18348,
+   "name": "Probe: Rocks south-west"
+  },
+  {
+   "shape": "box",
+   "x0": 29255,
+   "z0": 18287,
+   "x1": 30500,
+   "z1": 18348,
+   "name": "Probe: Rocks south-east"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 18542,
+   "x1": 6870,
+   "z1": 18603,
+   "name": "Probe: Rocks south-west"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 18797,
+   "x1": 7125,
+   "z1": 18858,
+   "name": "Probe: Rocks south-west"
+  },
+  {
+   "shape": "box",
+   "x0": 9110,
+   "z0": 17780,
+   "x1": 19365,
+   "z1": 18855,
+   "name": "Probe: Truck"
+  },
+  {
+   "shape": "box",
+   "x0": 28745,
+   "z0": 18545,
+   "x1": 30500,
+   "z1": 18855,
+   "name": "Probe: Rocks south-east"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 19055,
+   "x1": 7380,
+   "z1": 19365,
+   "name": "Probe: Rocks south-west"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 19562,
+   "x1": 8145,
+   "z1": 19623,
+   "name": "Probe: Rocks south-west"
+  },
+  {
+   "shape": "box",
+   "x0": 3755,
+   "z0": 19817,
+   "x1": 6615,
+   "z1": 19878,
+   "name": "Probe: Rocks south-west"
+  },
+  {
+   "shape": "box",
+   "x0": 7070,
+   "z0": 19817,
+   "x1": 7890,
+   "z1": 19878,
+   "name": "Probe: Rocks south-west"
+  },
+  {
+   "shape": "box",
+   "x0": 9110,
+   "z0": 19055,
+   "x1": 19110,
    "z1": 19875,
-   "name": "Probe"
+   "name": "Probe: Truck"
+  },
+  {
+   "shape": "box",
+   "x0": 28490,
+   "z0": 19055,
+   "x1": 30500,
+   "z1": 19875,
+   "name": "Probe: Rocks south-east"
+  },
+  {
+   "shape": "box",
+   "x0": 4010,
+   "z0": 20072,
+   "x1": 7635,
+   "z1": 20133,
+   "name": "Probe: Rocks south-west"
   },
   {
    "shape": "box",
    "x0": 9365,
    "z0": 20072,
-   "x1": 13755,
+   "x1": 9675,
    "z1": 20133,
-   "name": "Probe"
+   "name": "Probe: Truck"
+  },
+  {
+   "shape": "box",
+   "x0": 10385,
+   "z0": 20072,
+   "x1": 10950,
+   "z1": 20133,
+   "name": "Probe: Truck"
+  },
+  {
+   "shape": "box",
+   "x0": 11405,
+   "z0": 20072,
+   "x1": 11970,
+   "z1": 20133,
+   "name": "Probe: Truck"
+  },
+  {
+   "shape": "box",
+   "x0": 13700,
+   "z0": 20072,
+   "x1": 14265,
+   "z1": 20133,
+   "name": "Probe: Truck"
   },
   {
    "shape": "box",
    "x0": 15995,
    "z0": 20072,
-   "x1": 16305,
+   "x1": 16560,
    "z1": 20133,
-   "name": "Probe"
+   "name": "Probe: Truck"
   },
   {
    "shape": "box",
-   "x0": 16760,
+   "x0": 17015,
    "z0": 20072,
-   "x1": 17835,
+   "x1": 17325,
    "z1": 20133,
-   "name": "Probe"
+   "name": "Probe: Truck"
+  },
+  {
+   "shape": "box",
+   "x0": 17777,
+   "z0": 20072,
+   "x1": 17838,
+   "z1": 20133,
+   "name": "Probe: Truck"
   },
   {
    "shape": "box",
@@ -420,7 +572,15 @@
    "z0": 20072,
    "x1": 18855,
    "z1": 20133,
-   "name": "Probe"
+   "name": "Probe: Truck"
+  },
+  {
+   "shape": "box",
+   "x0": 4520,
+   "z0": 20327,
+   "x1": 7635,
+   "z1": 20388,
+   "name": "Probe: Rocks south-west"
   },
   {
    "shape": "box",
@@ -428,7 +588,31 @@
    "z0": 20327,
    "x1": 16053,
    "z1": 20388,
-   "name": "Probe"
+   "name": "Probe: Truck"
+  },
+  {
+   "shape": "box",
+   "x0": 28745,
+   "z0": 20075,
+   "x1": 30500,
+   "z1": 20385,
+   "name": "Probe: Rocks south-east"
+  },
+  {
+   "shape": "box",
+   "x0": 5030,
+   "z0": 20582,
+   "x1": 7380,
+   "z1": 20643,
+   "name": "Probe: Rocks south-west"
+  },
+  {
+   "shape": "box",
+   "x0": 29000,
+   "z0": 20582,
+   "x1": 29820,
+   "z1": 20643,
+   "name": "Probe: Rocks south-east"
   }
  ],
  "anim": {
@@ -450,41 +634,76 @@
   }
  ],
  "probe": {
-  "Truck": 72,
+  "Truck": 471,
+  "Rocks south-west": 154,
+  "Cabin body": 91,
+  "Shed walls": 83,
+  "Rocks south-east": 78,
+  "Shed roof": 64,
+  "Shed roof.001": 64,
   "Cabin log.041": 58,
-  "Cabin log.054": 36,
-  "Shed walls": 29,
-  "Cabin log.047": 21,
+  "Tarp": 39,
+  "Cabin log.054": 38,
+  "Toolbox": 24,
+  "Cabin log.050": 16,
+  "Rain barrel": 16,
+  "Chopping block": 14,
+  "Cabin log.019": 14,
   "Cabin log.048": 12,
-  "Sign board": 10,
-  "Tarp": 9,
+  "Sign board": 12,
+  "Cabin log.018": 12,
+  "Porch rail": 12,
+  "Cabin log.025": 10,
+  "Porch rail.001": 10,
+  "Shed door": 9,
   "Cabin log.053": 8,
-  "Chopping block": 6,
+  "Split log.027": 8,
+  "Split log.028": 8,
+  "Split log.034": 8,
+  "Split log.035": 8,
+  "Split log.022": 7,
+  "Split log.033": 7,
+  "Winch cable": 7,
+  "Cabin log.021": 6,
+  "Cabin log.030": 6,
+  "Cabin door": 6,
+  "Window frame.002": 6,
   "Shed window frame": 6,
+  "Truck door": 6,
+  "Truck door inside": 6,
   "Blood under the window": 5,
-  "Split log.035": 4,
-  "Cabin log.017": 4,
-  "Cabin log.016": 4,
-  "Rain barrel": 4,
-  "Cabin log.025": 3,
-  "Shed door": 3,
-  "Cabin log.030": 2,
+  "Split log.021": 5,
+  "Cabin log.026": 5,
+  "Cabin log.049": 4,
+  "Split log.020": 4,
+  "Split log.029": 4,
+  "Split log.030": 4,
+  "Split log.031": 4,
+  "Split log.032": 4,
+  "Split log.023": 4,
+  "Porch post": 4,
+  "Porch post.002": 4,
+  "Porch post.003": 4,
+  "Porch post.001": 4,
+  "Text": 2,
+  "Cabin log.022": 2,
   "Shed corner post": 2,
-  "Porch post": 2,
   "Door jamb": 2,
   "Door jamb.001": 2,
-  "Truck door": 2,
-  "Winch frame": 2,
-  "Winch cable": 2,
+  "Jerrycan": 2,
+  "Winch drum": 2,
+  "Rope coil.003": 2,
+  "Broken window": 1,
   "Sign post": 1,
   "Sign post.001": 1,
+  "Split log.024": 1,
   "Flagpole": 1,
   "Shed corner post.002": 1,
   "Door brace": 1,
   "Shed corner post.001": 1,
   "Shed corner post.003": 1,
-  "Truck door inside": 1,
-  "Winch hook": 1
+  "Winch frame": 1,
+  "Crank socket": 1
  },
  "bounds": {
   "x0": 3400,

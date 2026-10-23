@@ -30,67 +30,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 5482,
-   "z0": 1870,
-   "x1": 6418,
-   "z1": 5950,
-   "name": "Potting bench"
-  },
-  {
-   "shape": "box",
-   "x0": 4590,
-   "z0": 4760,
-   "x1": 6460,
-   "z1": 6460,
-   "name": "Sacks footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 1785,
-   "z0": 1785,
-   "x1": 2805,
-   "z1": 2635,
-   "name": "Cans footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 3204,
-   "z0": 1751,
-   "x1": 4276,
-   "z1": 2227,
-   "name": "Shelves"
-  },
-  {
-   "shape": "box",
-   "x0": 2820,
-   "z0": 1797,
-   "x1": 3130,
-   "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4350,
+   "x0": 1800,
    "z0": 1797,
    "x1": 6360,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Wall n"
   },
   {
    "shape": "box",
-   "x0": 3072,
+   "x0": 3075,
    "z0": 2052,
-   "x1": 3133,
+   "x1": 4405,
    "z1": 2113,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4347,
-   "z0": 2052,
-   "x1": 4408,
-   "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Shelves"
   },
   {
    "shape": "box",
@@ -98,39 +50,39 @@
    "z0": 2307,
    "x1": 4150,
    "z1": 2368,
-   "name": "Probe"
+   "name": "Probe: Shelves"
   },
   {
    "shape": "box",
-   "x0": 2817,
-   "z0": 2562,
-   "x1": 2878,
-   "z1": 2623,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5367,
+   "x0": 1800,
    "z0": 2055,
-   "x1": 5428,
+   "x1": 2620,
+   "z1": 2620,
+   "name": "Probe: Tin roof"
+  },
+  {
+   "shape": "box",
+   "x0": 5370,
+   "z0": 2055,
+   "x1": 6360,
    "z1": 4660,
-   "name": "Probe"
+   "name": "Probe: Potting bench"
   },
   {
    "shape": "box",
-   "x0": 4347,
-   "z0": 5367,
-   "x1": 4408,
-   "z1": 5428,
-   "name": "Probe"
+   "x0": 4605,
+   "z0": 4860,
+   "x1": 6360,
+   "z1": 5425,
+   "name": "Probe: Tin roof"
   },
   {
    "shape": "box",
-   "x0": 4095,
+   "x0": 4350,
    "z0": 5622,
-   "x1": 4405,
+   "x1": 6360,
    "z1": 5683,
-   "name": "Probe"
+   "name": "Probe: Sack 1"
   },
   {
    "shape": "box",
@@ -138,15 +90,7 @@
    "z0": 2820,
    "x1": 1858,
    "z1": 5935,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3840,
-   "z0": 5877,
-   "x1": 4405,
-   "z1": 5938,
-   "name": "Probe"
+   "name": "Probe: Brace"
   },
   {
    "shape": "box",
@@ -154,23 +98,23 @@
    "z0": 6132,
    "x1": 2620,
    "z1": 6193,
-   "name": "Probe"
+   "name": "Probe: Hose coil"
   },
   {
    "shape": "box",
    "x0": 4095,
-   "z0": 6132,
-   "x1": 4405,
-   "z1": 6193,
-   "name": "Probe"
+   "z0": 5880,
+   "x1": 6360,
+   "z1": 6190,
+   "name": "Probe: Sack 1"
   },
   {
    "shape": "box",
    "x0": 1800,
    "z0": 6345,
-   "x1": 4405,
+   "x1": 6360,
    "z1": 6405,
-   "name": "Probe"
+   "name": "Probe: Wall s"
   }
  ],
  "anim": {
@@ -178,19 +122,24 @@
   "ticks": 3
  },
  "probe": {
-  "Potting bench": 11,
-  "Wall s": 11,
-  "Shelves": 8,
-  "Sack 3": 8,
-  "Wall n": 7,
-  "Brace": 5,
-  "Wall w": 4,
+  "Potting bench": 52,
+  "Wall e": 19,
+  "Tin roof": 18,
+  "Wall s": 18,
+  "Shelves": 15,
+  "Sack 1": 12,
+  "Wall n": 10,
+  "Wall w": 8,
+  "Tray soil": 6,
+  "Sack 3": 5,
+  "Brace": 4,
+  "Sack 0": 4,
+  "Sack 2": 3,
+  "Wall w.002": 3,
   "Wall w.003": 3,
   "Hose coil": 3,
-  "Wall w.002": 2,
-  "Wall e": 1,
-  "Can spout 1": 1,
-  "Sack 2": 1
+  "box.002": 1,
+  "Pot 2": 1
  },
  "bounds": {
   "x0": 1700,

@@ -69,131 +69,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 2278,
-   "z0": 16422,
-   "x1": 4522,
-   "z1": 18258,
-   "name": "Rock footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 1538,
-   "z0": 18691,
-   "x1": 3221,
-   "z1": 20068,
-   "name": "Rock footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 9511,
-   "z0": 15819,
-   "x1": 11568,
-   "z1": 17502,
-   "name": "Rock footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 2720,
-   "z0": 21930,
-   "x1": 5610,
-   "z1": 22134,
-   "name": "Hut wall n"
-  },
-  {
-   "shape": "box",
-   "x0": 5610,
-   "z0": 21930,
-   "x1": 7310,
-   "z1": 22134,
-   "name": "Hut wall n.001"
-  },
-  {
-   "shape": "box",
-   "x0": 7310,
-   "z0": 21930,
-   "x1": 10200,
-   "z1": 22134,
-   "name": "Hut wall n.002"
-  },
-  {
-   "shape": "box",
-   "x0": 2720,
-   "z0": 28526,
-   "x1": 10200,
-   "z1": 28730,
-   "name": "Hut wall s"
-  },
-  {
-   "shape": "box",
-   "x0": 2720,
-   "z0": 21930,
-   "x1": 2924,
-   "z1": 28730,
-   "name": "Hut wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 9996,
-   "z0": 21930,
-   "x1": 10200,
-   "z1": 28730,
-   "name": "Hut wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 7310,
-   "z0": 19720,
-   "x1": 10710,
-   "z1": 21420,
-   "name": "Fuel tank"
-  },
-  {
-   "shape": "box",
-   "x0": 2380,
-   "z0": 13770,
-   "x1": 2720,
-   "z1": 14110,
-   "name": "Sign footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 29085,
+   "x0": 29340,
    "z0": 5197,
-   "x1": 31435,
+   "x1": 30415,
    "z1": 5258,
-   "name": "Probe"
+   "name": "Probe: Rocks"
   },
   {
    "shape": "box",
-   "x0": 29592,
-   "z0": 5452,
-   "x1": 29653,
-   "z1": 5513,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 14292,
-   "z0": 5707,
-   "x1": 14353,
-   "z1": 5768,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 15567,
-   "z0": 7237,
-   "x1": 15628,
-   "z1": 7298,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 25767,
-   "z0": 8257,
-   "x1": 25828,
-   "z1": 8318,
-   "name": "Probe"
+   "x0": 31122,
+   "z0": 5197,
+   "x1": 31183,
+   "z1": 5258,
+   "name": "Probe: Rocks"
   },
   {
    "shape": "box",
@@ -201,7 +89,7 @@
    "z0": 8515,
    "x1": 25825,
    "z1": 8825,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 0"
   },
   {
    "shape": "box",
@@ -209,7 +97,7 @@
    "z0": 8767,
    "x1": 26593,
    "z1": 8828,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 0"
   },
   {
    "shape": "box",
@@ -217,7 +105,7 @@
    "z0": 9022,
    "x1": 26590,
    "z1": 9083,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 0"
   },
   {
    "shape": "box",
@@ -225,111 +113,7 @@
    "z0": 9277,
    "x1": 26338,
    "z1": 9338,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 20670,
-   "z0": 9787,
-   "x1": 20980,
-   "z1": 9848,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 27042,
-   "z0": 9787,
-   "x1": 27103,
-   "z1": 9848,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 20667,
-   "z0": 10042,
-   "x1": 20728,
-   "z1": 10103,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 28827,
-   "z0": 10042,
-   "x1": 28888,
-   "z1": 10103,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 18372,
-   "z0": 10297,
-   "x1": 18433,
-   "z1": 10358,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 31632,
-   "z0": 10807,
-   "x1": 31693,
-   "z1": 10868,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 22707,
-   "z0": 11062,
-   "x1": 22768,
-   "z1": 11123,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 26277,
-   "z0": 11062,
-   "x1": 26338,
-   "z1": 11123,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 28317,
-   "z0": 11062,
-   "x1": 28378,
-   "z1": 11123,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 31887,
-   "z0": 11062,
-   "x1": 31948,
-   "z1": 11123,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23727,
-   "z0": 11827,
-   "x1": 23788,
-   "z1": 11888,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4092,
-   "z0": 11830,
-   "x1": 4153,
-   "z1": 12140,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2817,
-   "z0": 12337,
-   "x1": 2878,
-   "z1": 12398,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 0"
   },
   {
    "shape": "box",
@@ -337,39 +121,23 @@
    "z0": 12847,
    "x1": 23533,
    "z1": 12908,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 30357,
-   "z0": 12847,
-   "x1": 30418,
-   "z1": 12908,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 1"
   },
   {
    "shape": "box",
    "x0": 23475,
    "z0": 13102,
-   "x1": 23785,
+   "x1": 24040,
    "z1": 13163,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 1"
   },
   {
    "shape": "box",
-   "x0": 26022,
-   "z0": 13102,
-   "x1": 26083,
-   "z1": 13163,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23985,
+   "x0": 23730,
    "z0": 13357,
    "x1": 24295,
    "z1": 13418,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 1"
   },
   {
    "shape": "box",
@@ -377,31 +145,23 @@
    "z0": 13105,
    "x1": 2623,
    "z1": 13670,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4857,
-   "z0": 13612,
-   "x1": 4918,
-   "z1": 13673,
-   "name": "Probe"
+   "name": "Probe: Track sign"
   },
   {
    "shape": "box",
    "x0": 24240,
    "z0": 13612,
-   "x1": 24805,
+   "x1": 24550,
    "z1": 13673,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 1"
   },
   {
    "shape": "box",
-   "x0": 2307,
+   "x0": 2310,
    "z0": 13867,
-   "x1": 2368,
+   "x1": 2620,
    "z1": 13928,
-   "name": "Probe"
+   "name": "Probe: Track sign post"
   },
   {
    "shape": "box",
@@ -409,55 +169,31 @@
    "z0": 13867,
    "x1": 23023,
    "z1": 13928,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 1"
   },
   {
    "shape": "box",
-   "x0": 24495,
+   "x0": 24747,
    "z0": 13867,
-   "x1": 24805,
+   "x1": 24808,
    "z1": 13928,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 1"
   },
   {
    "shape": "box",
    "x0": 22965,
    "z0": 14122,
-   "x1": 24040,
+   "x1": 23785,
    "z1": 14183,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 1"
   },
   {
    "shape": "box",
-   "x0": 26532,
-   "z0": 14122,
-   "x1": 26593,
-   "z1": 14183,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5877,
+   "x0": 23475,
    "z0": 14377,
-   "x1": 5938,
+   "x1": 24295,
    "z1": 14438,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23730,
-   "z0": 14377,
-   "x1": 24550,
-   "z1": 14438,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 26277,
-   "z0": 14632,
-   "x1": 26338,
-   "z1": 14693,
-   "name": "Probe"
+   "name": "Probe: Sawhorse 1"
   },
   {
    "shape": "box",
@@ -465,55 +201,87 @@
    "z0": 14125,
    "x1": 2623,
    "z1": 14945,
-   "name": "Probe"
+   "name": "Probe: Track sign"
+  },
+  {
+   "shape": "box",
+   "x0": 10215,
+   "z0": 16417,
+   "x1": 10525,
+   "z1": 16478,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 2817,
+   "z0": 16672,
+   "x1": 2878,
+   "z1": 16733,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 9960,
+   "z0": 16672,
+   "x1": 10525,
+   "z1": 16733,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 2565,
+   "z0": 16927,
+   "x1": 3640,
+   "z1": 16988,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 9960,
+   "z0": 16927,
+   "x1": 10780,
+   "z1": 16988,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 2565,
+   "z0": 17182,
+   "x1": 3895,
+   "z1": 17243,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 10215,
+   "z0": 17182,
+   "x1": 10525,
+   "z1": 17243,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 2820,
+   "z0": 17437,
+   "x1": 4150,
+   "z1": 17498,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 17692,
+   "x1": 4405,
+   "z1": 17753,
+   "name": "Probe: Rocks"
   },
   {
    "shape": "box",
    "x0": 11487,
-   "z0": 14887,
-   "x1": 11548,
-   "z1": 14948,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9192,
-   "z0": 15397,
-   "x1": 9253,
-   "z1": 15458,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6645,
-   "z0": 16672,
-   "x1": 6955,
-   "z1": 16733,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23472,
-   "z0": 17182,
-   "x1": 23533,
-   "z1": 17243,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23982,
-   "z0": 17182,
-   "x1": 24043,
-   "z1": 17243,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 11235,
    "z0": 18712,
-   "x1": 11545,
+   "x1": 11548,
    "z1": 18773,
-   "name": "Probe"
+   "name": "Probe: Empty drum"
   },
   {
    "shape": "box",
@@ -521,31 +289,15 @@
    "z0": 18967,
    "x1": 11545,
    "z1": 19028,
-   "name": "Probe"
+   "name": "Probe: Empty drum"
   },
   {
    "shape": "box",
-   "x0": 10470,
+   "x0": 10725,
    "z0": 19222,
    "x1": 11800,
    "z1": 19283,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23217,
-   "z0": 19222,
-   "x1": 23278,
-   "z1": 19283,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6132,
-   "z0": 19477,
-   "x1": 6193,
-   "z1": 19538,
-   "name": "Probe"
+   "name": "Probe: Empty drum"
   },
   {
    "shape": "box",
@@ -553,103 +305,55 @@
    "z0": 19477,
    "x1": 11800,
    "z1": 19538,
-   "name": "Probe"
+   "name": "Probe: Empty drum"
   },
   {
    "shape": "box",
-   "x0": 23727,
-   "z0": 19477,
-   "x1": 23788,
-   "z1": 19538,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4602,
+   "x0": 7155,
    "z0": 19732,
-   "x1": 4663,
+   "x1": 11545,
    "z1": 19793,
-   "name": "Probe"
+   "name": "Probe: Fuel tank"
   },
   {
    "shape": "box",
-   "x0": 10725,
-   "z0": 19732,
-   "x1": 11800,
-   "z1": 19793,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10725,
+   "x0": 7155,
    "z0": 19987,
-   "x1": 11290,
+   "x1": 11035,
    "z1": 20048,
-   "name": "Probe"
+   "name": "Probe: Fuel tank"
   },
   {
    "shape": "box",
-   "x0": 23472,
-   "z0": 19987,
-   "x1": 23533,
-   "z1": 20048,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 26277,
-   "z0": 19987,
-   "x1": 26338,
-   "z1": 20048,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7152,
-   "z0": 19735,
-   "x1": 7213,
+   "x0": 7155,
+   "z0": 20245,
+   "x1": 10780,
    "z1": 20810,
-   "name": "Probe"
+   "name": "Probe: Fuel tank"
   },
   {
    "shape": "box",
    "x0": 6900,
    "z0": 21007,
-   "x1": 7210,
+   "x1": 10780,
    "z1": 21068,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 22962,
-   "z0": 21007,
-   "x1": 23023,
-   "z1": 21068,
-   "name": "Probe"
+   "name": "Probe: Fuel tank"
   },
   {
    "shape": "box",
    "x0": 6645,
    "z0": 21177,
-   "x1": 7210,
+   "x1": 10780,
    "z1": 21238,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10722,
-   "z0": 20245,
-   "x1": 10783,
-   "z1": 21150,
-   "name": "Probe"
+   "name": "Probe: Fuel tank"
   },
   {
    "shape": "box",
    "x0": 13785,
    "z0": 21177,
-   "x1": 20980,
+   "x1": 20725,
    "z1": 21238,
-   "name": "Probe"
+   "name": "Probe: no floor"
   }
  ],
  "anim": {
@@ -657,21 +361,19 @@
   "ticks": 3
  },
  "probe": {
-  "Dust": 33,
-  "no floor": 29,
-  "Empty drum": 23,
-  "Sawhorse 1": 20,
-  "Rocks": 11,
-  "Sawhorse 0": 9,
-  "Fuel tank": 9,
+  "Fuel tank": 100,
+  "Rocks": 41,
+  "no floor": 28,
+  "Sawhorse 1": 19,
+  "Empty drum": 19,
+  "Sawhorse 0": 8,
   "Track sign": 7,
   "Fuel line": 5,
-  "Crow on the lip wing.001": 2,
-  "hoop.002": 2,
-  "Crow on the lip wing": 1,
-  "Track sign post": 1,
+  "Track sign post": 2,
+  "hoop.002": 1,
   "hoop.001": 1,
-  "hoop": 1
+  "hoop": 1,
+  "Hand pump": 1
  },
  "bounds": {
   "x0": 1700,

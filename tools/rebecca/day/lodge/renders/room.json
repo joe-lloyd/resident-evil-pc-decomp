@@ -56,115 +56,35 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 1700,
-   "z0": 5695,
-   "x1": 2890,
-   "z1": 7735,
-   "name": "Chimney breast"
-  },
-  {
-   "shape": "box",
-   "x0": 5440,
-   "z0": 6205,
-   "x1": 8925,
-   "z1": 7735,
-   "name": "Bed footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 3370,
-   "z0": 3393,
-   "x1": 5470,
-   "z1": 4767,
-   "name": "Table"
-  },
-  {
-   "shape": "box",
-   "x0": 1870,
-   "z0": 1785,
-   "x1": 4420,
-   "z1": 2635,
-   "name": "Potting bench"
-  },
-  {
-   "shape": "box",
-   "x0": 5601,
-   "z0": 1734,
-   "x1": 6706,
-   "z1": 2482,
-   "name": "Typing table"
-  },
-  {
-   "shape": "box",
-   "x0": 3221,
-   "z0": 6342,
-   "x1": 5398,
-   "z1": 7817,
-   "name": "Item box"
-  },
-  {
-   "shape": "box",
-   "x0": 7565,
-   "z0": 1793,
-   "x1": 8585,
-   "z1": 2558,
-   "name": "Washstand"
-  },
-  {
-   "shape": "box",
-   "x0": 4605,
-   "z0": 1797,
-   "x1": 5425,
-   "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6900,
-   "z0": 1797,
-   "x1": 7465,
-   "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8685,
+   "x0": 1800,
    "z0": 1797,
    "x1": 9080,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Sill"
   },
   {
    "shape": "box",
-   "x0": 4602,
+   "x0": 1800,
    "z0": 2052,
-   "x1": 4663,
+   "x1": 4660,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Seed tray 0"
   },
   {
    "shape": "box",
-   "x0": 6897,
+   "x0": 5625,
    "z0": 2055,
-   "x1": 6958,
+   "x1": 6955,
    "z1": 2365,
-   "name": "Probe"
+   "name": "Probe: His typewriter"
   },
   {
    "shape": "box",
-   "x0": 7407,
-   "z0": 2055,
-   "x1": 7468,
-   "z1": 2365,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8682,
-   "z0": 2055,
-   "x1": 8743,
-   "z1": 2365,
-   "name": "Probe"
+   "x0": 1800,
+   "z0": 2310,
+   "x1": 4405,
+   "z1": 2620,
+   "name": "Probe: Potting bench"
   },
   {
    "shape": "box",
@@ -172,15 +92,15 @@
    "z0": 2562,
    "x1": 6700,
    "z1": 2623,
-   "name": "Probe"
+   "name": "Probe: Typing table"
   },
   {
    "shape": "box",
    "x0": 7410,
-   "z0": 2562,
-   "x1": 8740,
-   "z1": 2623,
-   "name": "Probe"
+   "z0": 2055,
+   "x1": 8485,
+   "z1": 2620,
+   "name": "Probe: Washstand"
   },
   {
    "shape": "box",
@@ -188,7 +108,7 @@
    "z0": 2055,
    "x1": 9168,
    "z1": 2620,
-   "name": "Probe"
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
@@ -196,7 +116,7 @@
    "z0": 2817,
    "x1": 7468,
    "z1": 2878,
-   "name": "Probe"
+   "name": "Probe: Towel"
   },
   {
    "shape": "box",
@@ -204,31 +124,23 @@
    "z0": 2817,
    "x1": 9080,
    "z1": 2878,
-   "name": "Probe"
+   "name": "Probe: Door frame"
   },
   {
    "shape": "box",
    "x0": 3330,
    "z0": 3327,
-   "x1": 5425,
+   "x1": 4915,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Table"
   },
   {
    "shape": "box",
-   "x0": 5625,
-   "z0": 3582,
-   "x1": 6445,
-   "z1": 3643,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5625,
-   "z0": 3840,
+   "x0": 3330,
+   "z0": 3585,
    "x1": 6190,
    "z1": 4150,
-   "name": "Probe"
+   "name": "Probe: Table"
   },
   {
    "shape": "box",
@@ -236,23 +148,23 @@
    "z0": 3075,
    "x1": 9168,
    "z1": 4150,
-   "name": "Probe"
+   "name": "Probe: Ledge.001"
   },
   {
    "shape": "box",
-   "x0": 5880,
+   "x0": 6132,
    "z0": 4347,
-   "x1": 6190,
+   "x1": 6193,
    "z1": 4408,
-   "name": "Probe"
+   "name": "Probe: Chair"
   },
   {
    "shape": "box",
-   "x0": 3327,
-   "z0": 3585,
-   "x1": 3388,
+   "x0": 3330,
+   "z0": 4350,
+   "x1": 5425,
    "z1": 4660,
-   "name": "Probe"
+   "name": "Probe: Table"
   },
   {
    "shape": "box",
@@ -260,39 +172,15 @@
    "z0": 4350,
    "x1": 9080,
    "z1": 4660,
-   "name": "Probe"
+   "name": "Probe: Door frame.001"
   },
   {
    "shape": "box",
    "x0": 1797,
-   "z0": 1800,
+   "z0": 2820,
    "x1": 1858,
    "z1": 4915,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4350,
-   "z0": 4857,
-   "x1": 4660,
-   "z1": 4918,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5115,
-   "z0": 4857,
-   "x1": 5425,
-   "z1": 4918,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8682,
-   "z0": 4857,
-   "x1": 8743,
-   "z1": 4918,
-   "name": "Probe"
+   "name": "Probe: Wall w"
   },
   {
    "shape": "box",
@@ -300,23 +188,7 @@
    "z0": 4857,
    "x1": 9168,
    "z1": 4918,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3837,
-   "z0": 4860,
-   "x1": 3898,
-   "z1": 5170,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8685,
-   "z0": 5112,
-   "x1": 9080,
-   "z1": 5173,
-   "name": "Probe"
+   "name": "Probe: Wall e.002"
   },
   {
    "shape": "box",
@@ -324,39 +196,23 @@
    "z0": 5115,
    "x1": 2110,
    "z1": 5425,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4347,
-   "z0": 5115,
-   "x1": 4408,
-   "z1": 5425,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1800,
-   "z0": 5622,
-   "x1": 3130,
-   "z1": 5683,
-   "name": "Probe"
+   "name": "Probe: Hose"
   },
   {
    "shape": "box",
    "x0": 8940,
-   "z0": 5370,
+   "z0": 5115,
    "x1": 9080,
    "z1": 5680,
-   "name": "Probe"
+   "name": "Probe: Wall e.002"
   },
   {
    "shape": "box",
    "x0": 5625,
    "z0": 5877,
-   "x1": 6955,
+   "x1": 6190,
    "z1": 5938,
-   "name": "Probe"
+   "name": "Probe: Sheet, kicked down"
   },
   {
    "shape": "box",
@@ -364,7 +220,15 @@
    "z0": 5877,
    "x1": 9168,
    "z1": 5938,
-   "name": "Probe"
+   "name": "Probe: Wall e.002"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5625,
+   "x1": 3130,
+   "z1": 6190,
+   "name": "Probe: Ceiling"
   },
   {
    "shape": "box",
@@ -372,23 +236,15 @@
    "z0": 6132,
    "x1": 9080,
    "z1": 6193,
-   "name": "Probe"
+   "name": "Probe: Sheet, kicked down"
   },
   {
    "shape": "box",
-   "x0": 3072,
-   "z0": 5880,
-   "x1": 3133,
-   "z1": 7720,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8940,
+   "x0": 1800,
    "z0": 6390,
    "x1": 9080,
    "z1": 7720,
-   "name": "Probe"
+   "name": "Probe: Item box"
   }
  ],
  "anim": {
@@ -396,37 +252,54 @@
   "ticks": 3
  },
  "probe": {
-  "Sheet, kicked down": 17,
-  "Table": 16,
+  "Sheet, kicked down": 62,
+  "Item box": 54,
+  "Table": 47,
+  "Potting bench": 22,
+  "Ceiling": 21,
+  "Mantel": 17,
+  "Blood soaked in": 15,
   "Wall e.002": 13,
-  "Chair": 12,
-  "Mantel": 9,
-  "Washstand": 7,
+  "Chimney breast": 13,
+  "Typing table": 12,
+  "Chair": 10,
+  "Mattress": 10,
+  "Washstand": 9,
+  "Sill": 8,
+  "Pillow": 8,
   "Bed frame": 7,
+  "Basin": 6,
+  "His typewriter": 6,
   "Ledge.001": 6,
-  "Chair, tipped": 6,
-  "Wall n.003": 5,
-  "Typing table": 5,
-  "Sill": 4,
+  "Towel": 5,
+  "Wall w": 5,
+  "Wall n.003": 4,
   "Wall e": 4,
-  "Towel": 4,
+  "Seed tray 0": 4,
+  "Seed order": 4,
   "Hose": 4,
-  "Chimney breast": 4,
-  "Mattress": 3,
-  "Seed order": 2,
-  "Damp": 2,
-  "Spade head": 2,
+  "Damp": 3,
+  "Seed tray 1": 2,
+  "Tray soil 0": 2,
+  "Tray soil 1": 2,
+  "Seed tray 2": 2,
   "Door frame": 2,
   "Fork head": 2,
-  "Rake head": 2,
+  "Diary pages": 2,
   "Door frame.001": 2,
-  "Hoe head": 2,
-  "Boot": 2,
-  "Potting bench": 1,
-  "Wall w": 1,
+  "Tray soil 2": 1,
+  "Pot 0": 1,
+  "Pot 1": 1,
+  "Pot 2": 1,
   "Pot 3": 1,
+  "Jug": 1,
+  "Spade head": 1,
+  "Lamp": 1,
   "Rake handle": 1,
-  "Hook": 1,
+  "Plate": 1,
+  "Juice on the plate": 1,
+  "Hoe handle": 1,
+  "Key bow": 1,
   "Key tag": 1,
   "Hook.003": 1,
   "Mantel thing 2": 1

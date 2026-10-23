@@ -69,91 +69,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 18190,
-   "z0": 3740,
-   "x1": 21930,
-   "z1": 11900,
-   "name": "Pump footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 16915,
-   "z0": 11305,
-   "x1": 18105,
-   "z1": 11985,
-   "name": "Pipe footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 15555,
-   "z0": 11985,
-   "x1": 16745,
-   "z1": 12665,
-   "name": "Pipe footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 14025,
-   "z0": 12750,
-   "x1": 15215,
-   "z1": 13430,
-   "name": "Pipe footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 16958,
-   "z0": 2168,
-   "x1": 18062,
-   "z1": 3272,
-   "name": "Drum footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 5058,
-   "z0": 2040,
-   "x1": 6503,
-   "z1": 3230,
-   "name": "Crate footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 17299,
-   "z0": 6517,
-   "x1": 18571,
-   "z1": 8443,
-   "name": "Wrapped dog"
-  },
-  {
-   "shape": "box",
-   "x0": 2635,
-   "z0": 2890,
-   "x1": 4165,
-   "z1": 3910,
-   "name": "Reel footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 6885,
-   "z0": 1870,
-   "x1": 9945,
-   "z1": 3570,
-   "name": "Timber footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 6900,
-   "z0": 1797,
-   "x1": 7465,
-   "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
    "x0": 9195,
    "z0": 1797,
    "x1": 10270,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Call box"
   },
   {
    "shape": "box",
@@ -161,31 +81,15 @@
    "z0": 1797,
    "x1": 15880,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Lift sign"
   },
   {
    "shape": "box",
-   "x0": 20667,
-   "z0": 1797,
-   "x1": 20728,
-   "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21435,
-   "z0": 1797,
-   "x1": 22000,
-   "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9960,
+   "x0": 6900,
    "z0": 2052,
    "x1": 10270,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Timber prop.003"
   },
   {
    "shape": "box",
@@ -193,7 +97,23 @@
    "z0": 2052,
    "x1": 14605,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Collar post.001"
+  },
+  {
+   "shape": "box",
+   "x0": 6900,
+   "z0": 2307,
+   "x1": 10015,
+   "z1": 2368,
+   "name": "Probe: Timber prop.003"
+  },
+  {
+   "shape": "box",
+   "x0": 6900,
+   "z0": 2562,
+   "x1": 9760,
+   "z1": 2623,
+   "name": "Probe: Timber prop.004"
   },
   {
    "shape": "box",
@@ -201,31 +121,55 @@
    "z0": 2817,
    "x1": 3385,
    "z1": 2878,
-   "name": "Probe"
+   "name": "Probe: Cable reel"
   },
   {
    "shape": "box",
-   "x0": 9957,
-   "z0": 2310,
-   "x1": 10018,
+   "x0": 6900,
+   "z0": 2817,
+   "x1": 10015,
+   "z1": 2878,
+   "name": "Probe: Timber prop.004"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 2055,
+   "x1": 6445,
    "z1": 3130,
-   "name": "Probe"
+   "name": "Probe: Spares crate"
   },
   {
    "shape": "box",
-   "x0": 6387,
-   "z0": 3327,
-   "x1": 6448,
-   "z1": 3388,
-   "name": "Probe"
+   "x0": 17100,
+   "z0": 2310,
+   "x1": 17920,
+   "z1": 3130,
+   "name": "Probe: Oil drum"
   },
   {
    "shape": "box",
-   "x0": 2562,
+   "x0": 6900,
    "z0": 3075,
-   "x1": 2623,
+   "x1": 9760,
+   "z1": 3385,
+   "name": "Probe: Timber prop.002"
+  },
+  {
+   "shape": "box",
+   "x0": 2565,
+   "z0": 3075,
+   "x1": 4150,
    "z1": 3640,
-   "name": "Probe"
+   "name": "Probe: Cable reel"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 3837,
+   "x1": 4150,
+   "z1": 3898,
+   "name": "Probe: Cable reel"
   },
   {
    "shape": "box",
@@ -233,23 +177,47 @@
    "z0": 4092,
    "x1": 3898,
    "z1": 4153,
-   "name": "Probe"
+   "name": "Probe: Cable reel"
+  },
+  {
+   "shape": "box",
+   "x0": 18375,
+   "z0": 3840,
+   "x1": 21745,
+   "z1": 4915,
+   "name": "Probe: Pump bed"
   },
   {
    "shape": "box",
    "x0": 1797,
-   "z0": 4605,
+   "z0": 4350,
    "x1": 1858,
    "z1": 5170,
-   "name": "Probe"
+   "name": "Probe: West rock, north"
   },
   {
    "shape": "box",
-   "x0": 21942,
-   "z0": 4860,
-   "x1": 22003,
+   "x0": 18375,
+   "z0": 5115,
+   "x1": 22000,
    "z1": 5680,
-   "name": "Probe"
+   "name": "Probe: Pump motor"
+  },
+  {
+   "shape": "box",
+   "x0": 17610,
+   "z0": 6642,
+   "x1": 17920,
+   "z1": 6703,
+   "name": "Probe: Wrapped dog"
+  },
+  {
+   "shape": "box",
+   "x0": 18375,
+   "z0": 5880,
+   "x1": 21745,
+   "z1": 6700,
+   "name": "Probe: Pump motor"
   },
   {
    "shape": "box",
@@ -257,7 +225,15 @@
    "z0": 7407,
    "x1": 2110,
    "z1": 7468,
-   "name": "Probe"
+   "name": "Probe: Adit set post"
+  },
+  {
+   "shape": "box",
+   "x0": 17355,
+   "z0": 6900,
+   "x1": 21745,
+   "z1": 7465,
+   "name": "Probe: Flywheel"
   },
   {
    "shape": "box",
@@ -265,47 +241,79 @@
    "z0": 7665,
    "x1": 2365,
    "z1": 7975,
-   "name": "Probe"
+   "name": "Probe: Adit in"
+  },
+  {
+   "shape": "box",
+   "x0": 17610,
+   "z0": 7665,
+   "x1": 21745,
+   "z1": 7975,
+   "name": "Probe: Pump casing"
   },
   {
    "shape": "box",
    "x0": 17865,
+   "z0": 8172,
+   "x1": 21745,
+   "z1": 8233,
+   "name": "Probe: Pump casing"
+  },
+  {
+   "shape": "box",
+   "x0": 18375,
+   "z0": 8430,
+   "x1": 21745,
+   "z1": 10780,
+   "name": "Probe: Pump casing"
+  },
+  {
+   "shape": "box",
+   "x0": 18120,
    "z0": 10977,
-   "x1": 18175,
+   "x1": 21745,
    "z1": 11038,
-   "name": "Probe"
+   "name": "Probe: Pump bed"
   },
   {
    "shape": "box",
    "x0": 17610,
    "z0": 11232,
-   "x1": 18175,
+   "x1": 21745,
    "z1": 11293,
-   "name": "Probe"
+   "name": "Probe: Pump bed"
   },
   {
    "shape": "box",
-   "x0": 18117,
+   "x0": 17100,
    "z0": 11487,
-   "x1": 18178,
+   "x1": 21745,
    "z1": 11548,
-   "name": "Probe"
+   "name": "Probe: Pump bed"
   },
   {
    "shape": "box",
    "x0": 16590,
    "z0": 11742,
-   "x1": 16900,
+   "x1": 17920,
    "z1": 11803,
-   "name": "Probe"
+   "name": "Probe: Suction pipe.001"
   },
   {
    "shape": "box",
-   "x0": 16845,
+   "x0": 18375,
+   "z0": 11742,
+   "x1": 21745,
+   "z1": 11803,
+   "name": "Probe: Pump bed"
+  },
+  {
+   "shape": "box",
+   "x0": 16080,
    "z0": 11997,
    "x1": 17410,
    "z1": 12058,
-   "name": "Probe"
+   "name": "Probe: Suction pipe.001"
   },
   {
    "shape": "box",
@@ -313,31 +321,31 @@
    "z0": 12000,
    "x1": 2110,
    "z1": 12310,
-   "name": "Probe"
+   "name": "Probe: Adit in"
   },
   {
    "shape": "box",
-   "x0": 16842,
+   "x0": 15570,
    "z0": 12252,
-   "x1": 16903,
+   "x1": 16900,
    "z1": 12313,
-   "name": "Probe"
+   "name": "Probe: Suction pipe.001"
   },
   {
    "shape": "box",
    "x0": 15060,
    "z0": 12507,
-   "x1": 15370,
+   "x1": 16390,
    "z1": 12568,
-   "name": "Probe"
+   "name": "Probe: Suction pipe.001"
   },
   {
    "shape": "box",
-   "x0": 15315,
+   "x0": 14550,
    "z0": 12762,
    "x1": 15880,
    "z1": 12823,
-   "name": "Probe"
+   "name": "Probe: Suction pipe.001"
   },
   {
    "shape": "box",
@@ -345,15 +353,15 @@
    "z0": 12762,
    "x1": 22003,
    "z1": 12823,
-   "name": "Probe"
+   "name": "Probe: Switch panel"
   },
   {
    "shape": "box",
-   "x0": 15312,
+   "x0": 14295,
    "z0": 13017,
-   "x1": 15373,
+   "x1": 15370,
    "z1": 13078,
-   "name": "Probe"
+   "name": "Probe: Pipe elbow.001"
   },
   {
    "shape": "box",
@@ -361,23 +369,23 @@
    "z0": 13017,
    "x1": 22000,
    "z1": 13078,
-   "name": "Probe"
+   "name": "Probe: Switch panel"
   },
   {
    "shape": "box",
-   "x0": 13782,
+   "x0": 14040,
    "z0": 13272,
-   "x1": 13843,
+   "x1": 14860,
    "z1": 13333,
-   "name": "Probe"
+   "name": "Probe: Suction pipe.002"
   },
   {
    "shape": "box",
-   "x0": 13785,
+   "x0": 14037,
    "z0": 13527,
-   "x1": 14095,
+   "x1": 14098,
    "z1": 13588,
-   "name": "Probe"
+   "name": "Probe: Hand on the pipe"
   },
   {
    "shape": "box",
@@ -385,7 +393,7 @@
    "z0": 13275,
    "x1": 22000,
    "z1": 13585,
-   "name": "Probe"
+   "name": "Probe: Knife switch, off"
   },
   {
    "shape": "box",
@@ -393,7 +401,7 @@
    "z0": 13785,
    "x1": 22003,
    "z1": 14095,
-   "name": "Probe"
+   "name": "Probe: Switch panel"
   },
   {
    "shape": "box",
@@ -401,23 +409,15 @@
    "z0": 15825,
    "x1": 1858,
    "z1": 16135,
-   "name": "Probe"
+   "name": "Probe: West rock, south"
   },
   {
    "shape": "box",
-   "x0": 1800,
+   "x0": 20412,
    "z0": 16842,
-   "x1": 5425,
+   "x1": 20473,
    "z1": 16903,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 14805,
-   "z0": 16842,
-   "x1": 22000,
-   "z1": 16903,
-   "name": "Probe"
+   "name": "Probe: South rock, east"
   }
  ],
  "anim": {
@@ -432,30 +432,46 @@
   }
  ],
  "probe": {
-  "Floor": 44,
-  "Suction pipe.001": 13,
+  "Pump bed": 190,
+  "Pump motor": 93,
+  "Pump casing": 86,
+  "Pump volute": 34,
+  "Suction pipe.001": 34,
+  "Spares crate": 30,
+  "Cable reel": 30,
+  "Timber prop.002": 24,
+  "Timber prop.003": 22,
+  "Timber prop.004": 22,
+  "Wrapped dog": 22,
+  "Flywheel": 20,
+  "Oil drum": 16,
+  "Suction pipe": 15,
   "Adit in": 8,
-  "Cable reel": 7,
+  "Suction pipe.002": 7,
   "Switch panel": 6,
   "Knife switch, off": 6,
-  "Timber prop.003": 5,
   "Lift sign": 5,
+  "Timber prop.001": 5,
   "Collar post": 4,
   "Collar post.001": 4,
-  "North rock, east": 4,
-  "East rock": 4,
-  "West rock, north": 3,
-  "Suction pipe": 3,
-  "Hand on the pipe": 3,
-  "Call box": 2,
-  "Timber prop.004": 2,
+  "West rock, north": 4,
+  "Discharge pipe": 4,
+  "Call box": 3,
+  "Motor plate": 3,
+  "East rock": 3,
+  "Pipe elbow.001": 3,
   "Adit set post": 2,
+  "Gate valve wheel": 2,
   "Pipe elbow": 2,
   "Adit set post.001": 2,
   "West rock, south": 2,
   "Shaft west": 1,
-  "Spares crate": 1,
-  "Gauge": 1
+  "Flywheel spoke.004": 1,
+  "Flywheel spoke.005": 1,
+  "Discharge pipe.001": 1,
+  "Gauge": 1,
+  "Hand on the pipe": 1,
+  "South rock, east": 1
  },
  "bounds": {
   "x0": 1700,

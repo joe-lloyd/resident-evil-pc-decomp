@@ -56,51 +56,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 11157,
-   "z0": 7042,
-   "x1": 13323,
-   "z1": 8598,
-   "name": "Cart he hid on"
-  },
-  {
-   "shape": "box",
-   "x0": 5780,
-   "z0": 7905,
-   "x1": 7820,
-   "z1": 9265,
-   "name": "Cart in the water 0"
-  },
-  {
-   "shape": "box",
-   "x0": 20310,
-   "z0": 9715,
-   "x1": 22530,
-   "z1": 11365,
-   "name": "Cart in the water 1"
-  },
-  {
-   "shape": "box",
-   "x0": 8670,
-   "z0": 10795,
-   "x1": 10370,
-   "z1": 13005,
-   "name": "Tipped cart footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 14947,
-   "z0": 7916,
-   "x1": 18373,
-   "z1": 10444,
-   "name": "Hal footprint"
-  },
-  {
-   "shape": "box",
    "x0": 5622,
    "z0": 5282,
    "x1": 5683,
    "z1": 5343,
-   "name": "Probe"
+   "name": "Probe: Floating plank.001"
+  },
+  {
+   "shape": "box",
+   "x0": 5625,
+   "z0": 5540,
+   "x1": 5935,
+   "z1": 6105,
+   "name": "Probe: Floating plank.001"
   },
   {
    "shape": "box",
@@ -108,39 +76,47 @@
    "z0": 5285,
    "x1": 17668,
    "z1": 6105,
-   "name": "Probe"
+   "name": "Probe: Floating plank.003"
   },
   {
    "shape": "box",
-   "x0": 5625,
-   "z0": 5540,
-   "x1": 5935,
-   "z1": 6360,
-   "name": "Probe"
+   "x0": 5877,
+   "z0": 6302,
+   "x1": 5938,
+   "z1": 6363,
+   "name": "Probe: Floating plank.001"
   },
   {
    "shape": "box",
    "x0": 11235,
    "z0": 6812,
-   "x1": 12055,
+   "x1": 12310,
    "z1": 6873,
-   "name": "Probe"
+   "name": "Probe: Blanket on the cart"
   },
   {
    "shape": "box",
    "x0": 5880,
    "z0": 6560,
    "x1": 6190,
-   "z1": 7380,
-   "name": "Probe"
+   "z1": 7125,
+   "name": "Probe: Floating plank.001"
   },
   {
    "shape": "box",
-   "x0": 17355,
-   "z0": 7577,
-   "x1": 17665,
-   "z1": 7638,
-   "name": "Probe"
+   "x0": 6132,
+   "z0": 7322,
+   "x1": 6193,
+   "z1": 7383,
+   "name": "Probe: Floating plank.001"
+  },
+  {
+   "shape": "box",
+   "x0": 11235,
+   "z0": 7070,
+   "x1": 13330,
+   "z1": 7635,
+   "name": "Probe: Blanket on the cart"
   },
   {
    "shape": "box",
@@ -148,15 +124,7 @@
    "z0": 3500,
    "x1": 25488,
    "z1": 7635,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5880,
-   "z0": 7832,
-   "x1": 7720,
-   "z1": 7893,
-   "name": "Probe"
+   "name": "Probe: Winze dark"
   },
   {
    "shape": "box",
@@ -164,7 +132,7 @@
    "z0": 7832,
    "x1": 16138,
    "z1": 7893,
-   "name": "Probe"
+   "name": "Probe: Blood in the water"
   },
   {
    "shape": "box",
@@ -172,79 +140,103 @@
    "z0": 7832,
    "x1": 25400,
    "z1": 7893,
-   "name": "Probe"
+   "name": "Probe: Winze dark"
   },
   {
    "shape": "box",
-   "x0": 18375,
+   "x0": 15060,
    "z0": 8087,
-   "x1": 25400,
-   "z1": 8148,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10977,
-   "z0": 8090,
-   "x1": 11038,
-   "z1": 8400,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 18375,
-   "z0": 8342,
-   "x1": 19195,
-   "z1": 8403,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 11235,
-   "z0": 8597,
-   "x1": 13330,
-   "z1": 8658,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 18375,
-   "z0": 8597,
    "x1": 18940,
+   "z1": 8148,
+   "name": "Probe: Blood in the water"
+  },
+  {
+   "shape": "box",
+   "x0": 20415,
+   "z0": 8087,
+   "x1": 20725,
+   "z1": 8148,
+   "name": "Probe: Rope post.001"
+  },
+  {
+   "shape": "box",
+   "x0": 16080,
+   "z0": 8342,
+   "x1": 18940,
+   "z1": 8403,
+   "name": "Probe: Blood in the water"
+  },
+  {
+   "shape": "box",
+   "x0": 10980,
+   "z0": 7835,
+   "x1": 13330,
+   "z1": 8655,
+   "name": "Probe: Blanket on the cart"
+  },
+  {
+   "shape": "box",
+   "x0": 16080,
+   "z0": 8597,
+   "x1": 18685,
    "z1": 8658,
-   "name": "Probe"
+   "name": "Probe: Blood in the water"
   },
   {
    "shape": "box",
-   "x0": 13785,
-   "z0": 9107,
-   "x1": 14095,
-   "z1": 9168,
-   "name": "Probe"
+   "x0": 13020,
+   "z0": 8852,
+   "x1": 13330,
+   "z1": 8913,
+   "name": "Probe: Blanket on the cart"
   },
   {
    "shape": "box",
-   "x0": 14547,
+   "x0": 15312,
+   "z0": 8852,
+   "x1": 15373,
+   "z1": 8913,
+   "name": "Probe: Lamp bulb 1"
+  },
+  {
+   "shape": "box",
+   "x0": 15825,
+   "z0": 8852,
+   "x1": 18685,
+   "z1": 8913,
+   "name": "Probe: Blood in the water"
+  },
+  {
+   "shape": "box",
+   "x0": 15060,
    "z0": 9107,
-   "x1": 14608,
+   "x1": 18685,
    "z1": 9168,
-   "name": "Probe"
+   "name": "Probe: His shirt floating"
   },
   {
    "shape": "box",
    "x0": 5880,
-   "z0": 9362,
+   "z0": 7835,
    "x1": 7720,
-   "z1": 9423,
-   "name": "Probe"
+   "z1": 9420,
+   "name": "Probe: Cart in the water 0"
   },
   {
    "shape": "box",
-   "x0": 18375,
-   "z0": 8855,
-   "x1": 18685,
+   "x0": 13785,
+   "z0": 9110,
+   "x1": 14095,
    "z1": 9420,
-   "name": "Probe"
+   "name": "Probe: Floating plank.002"
+  },
+  {
+   "shape": "box",
+   "x0": 14550,
+   "z0": 9362,
+   "x1": 18430,
+   "z1": 9423,
+   "name": "Probe: Hal"
   },
   {
    "shape": "box",
@@ -252,15 +244,15 @@
    "z0": 9362,
    "x1": 23788,
    "z1": 9423,
-   "name": "Probe"
+   "name": "Probe: Lamp cable down"
   },
   {
    "shape": "box",
-   "x0": 13785,
-   "z0": 9365,
-   "x1": 14860,
-   "z1": 9675,
-   "name": "Probe"
+   "x0": 14040,
+   "z0": 9617,
+   "x1": 17410,
+   "z1": 9678,
+   "name": "Probe: Hal"
   },
   {
    "shape": "box",
@@ -268,7 +260,7 @@
    "z0": 9617,
    "x1": 20980,
    "z1": 9678,
-   "name": "Probe"
+   "name": "Probe: Cart in the water 1"
   },
   {
    "shape": "box",
@@ -276,15 +268,15 @@
    "z0": 9617,
    "x1": 24043,
    "z1": 9678,
-   "name": "Probe"
+   "name": "Probe: Lamp cable down"
   },
   {
    "shape": "box",
    "x0": 14040,
    "z0": 9872,
-   "x1": 14860,
+   "x1": 15880,
    "z1": 9933,
-   "name": "Probe"
+   "name": "Probe: Hal"
   },
   {
    "shape": "box",
@@ -292,7 +284,23 @@
    "z0": 9872,
    "x1": 24295,
    "z1": 9933,
-   "name": "Probe"
+   "name": "Probe: Lamp cable down"
+  },
+  {
+   "shape": "box",
+   "x0": 14040,
+   "z0": 10127,
+   "x1": 14350,
+   "z1": 10188,
+   "name": "Probe: Floating plank.002"
+  },
+  {
+   "shape": "box",
+   "x0": 15060,
+   "z0": 10127,
+   "x1": 15880,
+   "z1": 10188,
+   "name": "Probe: Hal"
   },
   {
    "shape": "box",
@@ -300,15 +308,31 @@
    "z0": 10127,
    "x1": 24298,
    "z1": 10188,
-   "name": "Probe"
+   "name": "Probe: Lamp cable down"
   },
   {
    "shape": "box",
-   "x0": 14040,
-   "z0": 10130,
-   "x1": 14605,
+   "x0": 14292,
+   "z0": 10382,
+   "x1": 14353,
+   "z1": 10443,
+   "name": "Probe: Floating plank.002"
+  },
+  {
+   "shape": "box",
+   "x0": 15312,
+   "z0": 10382,
+   "x1": 15373,
+   "z1": 10443,
+   "name": "Probe: Bandaged forearm"
+  },
+  {
+   "shape": "box",
+   "x0": 16332,
+   "z0": 9875,
+   "x1": 16393,
    "z1": 10440,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -316,7 +340,7 @@
    "z0": 10382,
    "x1": 24553,
    "z1": 10443,
-   "name": "Probe"
+   "name": "Probe: Lamp cable down"
   },
   {
    "shape": "box",
@@ -324,7 +348,15 @@
    "z0": 10637,
    "x1": 24805,
    "z1": 10698,
-   "name": "Probe"
+   "name": "Probe: Lamp cable down"
+  },
+  {
+   "shape": "box",
+   "x0": 8685,
+   "z0": 10892,
+   "x1": 9250,
+   "z1": 10953,
+   "name": "Probe: Cart on its side"
   },
   {
    "shape": "box",
@@ -332,7 +364,7 @@
    "z0": 10640,
    "x1": 14605,
    "z1": 10950,
-   "name": "Probe"
+   "name": "Probe: Floating plank.002"
   },
   {
    "shape": "box",
@@ -340,7 +372,15 @@
    "z0": 10892,
    "x1": 24808,
    "z1": 10953,
-   "name": "Probe"
+   "name": "Probe: Lamp cable down"
+  },
+  {
+   "shape": "box",
+   "x0": 20415,
+   "z0": 9875,
+   "x1": 22510,
+   "z1": 11205,
+   "name": "Probe: Cart in the water 1"
   },
   {
    "shape": "box",
@@ -348,7 +388,15 @@
    "z0": 11402,
    "x1": 5428,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Floating hard hat"
+  },
+  {
+   "shape": "box",
+   "x0": 7920,
+   "z0": 11150,
+   "x1": 9505,
+   "z1": 11460,
+   "name": "Probe: Cart on its side"
   },
   {
    "shape": "box",
@@ -356,7 +404,7 @@
    "z0": 11402,
    "x1": 22255,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Cart in the water 1"
   },
   {
    "shape": "box",
@@ -364,7 +412,7 @@
    "z0": 11402,
    "x1": 23023,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -372,7 +420,7 @@
    "z0": 5285,
    "x1": 2110,
    "z1": 11715,
-   "name": "Probe"
+   "name": "Probe: Decline floor"
   },
   {
    "shape": "box",
@@ -380,7 +428,7 @@
    "z0": 11657,
    "x1": 5680,
    "z1": 11718,
-   "name": "Probe"
+   "name": "Probe: Floating hard hat"
   },
   {
    "shape": "box",
@@ -388,7 +436,7 @@
    "z0": 11657,
    "x1": 23275,
    "z1": 11718,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -396,7 +444,23 @@
    "z0": 11912,
    "x1": 5680,
    "z1": 11973,
-   "name": "Probe"
+   "name": "Probe: Floating hard hat"
+  },
+  {
+   "shape": "box",
+   "x0": 7920,
+   "z0": 11660,
+   "x1": 9250,
+   "z1": 11970,
+   "name": "Probe: Cart on its side"
+  },
+  {
+   "shape": "box",
+   "x0": 20922,
+   "z0": 11912,
+   "x1": 20983,
+   "z1": 11973,
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -404,7 +468,15 @@
    "z0": 11912,
    "x1": 23020,
    "z1": 11973,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
+  },
+  {
+   "shape": "box",
+   "x0": 7920,
+   "z0": 12167,
+   "x1": 9505,
+   "z1": 12228,
+   "name": "Probe: Cart on its side"
   },
   {
    "shape": "box",
@@ -412,7 +484,7 @@
    "z0": 12167,
    "x1": 22765,
    "z1": 12228,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -420,15 +492,15 @@
    "z0": 12422,
    "x1": 22510,
    "z1": 12483,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
    "x0": 7920,
-   "z0": 11150,
-   "x1": 8485,
+   "z0": 12425,
+   "x1": 9760,
    "z1": 12735,
-   "name": "Probe"
+   "name": "Probe: Cart on its side"
   },
   {
    "shape": "box",
@@ -436,7 +508,7 @@
    "z0": 12170,
    "x1": 21235,
    "z1": 12735,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -444,15 +516,15 @@
    "z0": 12677,
    "x1": 22255,
    "z1": 12738,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
    "x0": 8175,
    "z0": 12932,
-   "x1": 8485,
+   "x1": 9505,
    "z1": 12993,
-   "name": "Probe"
+   "name": "Probe: Cart on its side"
   },
   {
    "shape": "box",
@@ -460,7 +532,7 @@
    "z0": 12932,
    "x1": 22000,
    "z1": 12993,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -468,7 +540,7 @@
    "z0": 13187,
    "x1": 21745,
    "z1": 13248,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -476,7 +548,7 @@
    "z0": 13442,
    "x1": 21490,
    "z1": 13503,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   }
  ],
  "anim": {
@@ -484,31 +556,38 @@
   "ticks": 3
  },
  "probe": {
-  "Winze dark": 62,
+  "Blanket on the cart": 69,
+  "Cart in the water 1": 58,
+  "Cart on its side": 58,
+  "Cart in the water 0": 54,
   "Decline floor": 52,
-  "Timber sets": 33,
-  "Blood in the water": 23,
-  "Cart on its side": 23,
-  "Floating plank.001": 17,
-  "Blanket on the cart": 15,
-  "Floating plank.002": 15,
-  "Cart in the water 0": 14,
-  "Hal": 9,
+  "Blood in the water": 43,
+  "Winze dark": 37,
+  "Timber sets": 37,
+  "Hal": 35,
+  "His shirt floating": 20,
+  "Floating plank.001": 15,
+  "Floating plank.002": 13,
   "Lamp cable down": 9,
   "Floating hard hat": 6,
-  "Cart in the water 1": 4,
-  "Hair spread on the water": 3,
+  "Floating plank": 5,
+  "Blood on the blanket": 4,
+  "Rail": 4,
+  "Rope post.001": 3,
+  "Bandaged forearm": 3,
   "Rope post.004": 2,
   "Floating plank.003": 2,
   "Rope.003": 2,
-  "Rope post.001": 2,
   "Rope.007": 2,
   "Floating plank.004": 2,
-  "Floating plank": 1,
+  "Hair spread on the water": 2,
   "Rope post": 1,
   "Rope.001": 1,
   "Rope.002": 1,
-  "Rope.004": 1
+  "Rope.004": 1,
+  "Hal's lantern": 1,
+  "Lamp bulb 1": 1,
+  "Rail.001": 1
  },
  "bounds": {
   "x0": 1700,

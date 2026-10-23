@@ -43,43 +43,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 1955,
-   "z0": 3060,
-   "x1": 4165,
-   "z1": 7480,
-   "name": "Plinth"
-  },
-  {
-   "shape": "box",
-   "x0": 2125,
-   "z0": 3230,
-   "x1": 3995,
-   "z1": 7310,
-   "name": "Generator footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 3910,
-   "z0": 7089,
-   "x1": 6290,
-   "z1": 8109,
-   "name": "Bench"
-  },
-  {
-   "shape": "box",
-   "x0": 7820,
-   "z0": 2210,
-   "x1": 9010,
-   "z1": 5610,
-   "name": "Cot footprint"
-  },
-  {
-   "shape": "box",
    "x0": 1800,
    "z0": 1797,
    "x1": 4405,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Day tank"
   },
   {
    "shape": "box",
@@ -87,7 +55,7 @@
    "z0": 1797,
    "x1": 9080,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Wall n.002"
   },
   {
    "shape": "box",
@@ -95,15 +63,23 @@
    "z0": 2052,
    "x1": 3640,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Day tank"
   },
   {
    "shape": "box",
-   "x0": 7920,
+   "x0": 9107,
    "z0": 2052,
-   "x1": 9080,
+   "x1": 9168,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 2055,
+   "x1": 1858,
+   "z1": 2875,
+   "name": "Probe: Wall w"
   },
   {
    "shape": "box",
@@ -111,31 +87,31 @@
    "z0": 2310,
    "x1": 2623,
    "z1": 2875,
-   "name": "Probe"
+   "name": "Probe: Fuel line"
   },
   {
    "shape": "box",
-   "x0": 7662,
+   "x0": 7920,
    "z0": 2310,
-   "x1": 7723,
-   "z1": 5425,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9107,
-   "z0": 2310,
-   "x1": 9168,
-   "z1": 5425,
-   "name": "Probe"
+   "x1": 9080,
+   "z1": 3640,
+   "name": "Probe: Cot canvas"
   },
   {
    "shape": "box",
    "x0": 7665,
+   "z0": 3840,
+   "x1": 9080,
+   "z1": 5425,
+   "name": "Probe: Blanket thrown back"
+  },
+  {
+   "shape": "box",
+   "x0": 8430,
    "z0": 5622,
    "x1": 9080,
    "z1": 5683,
-   "name": "Probe"
+   "name": "Probe: Blanket thrown back"
   },
   {
    "shape": "box",
@@ -143,15 +119,15 @@
    "z0": 5877,
    "x1": 9168,
    "z1": 5938,
-   "name": "Probe"
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
-   "x0": 5880,
-   "z0": 6897,
-   "x1": 6190,
-   "z1": 6958,
-   "name": "Probe"
+   "x0": 1800,
+   "z0": 3075,
+   "x1": 4150,
+   "z1": 6955,
+   "name": "Probe: Plinth"
   },
   {
    "shape": "box",
@@ -159,31 +135,31 @@
    "z0": 6135,
    "x1": 9080,
    "z1": 6955,
-   "name": "Probe"
+   "name": "Probe: Hanging coat"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 7155,
+   "x1": 6190,
+   "z1": 7465,
+   "name": "Probe: Bench"
   },
   {
    "shape": "box",
    "x0": 1797,
-   "z0": 2055,
+   "z0": 7665,
    "x1": 1858,
    "z1": 7975,
-   "name": "Probe"
+   "name": "Probe: Wall w.003"
   },
   {
    "shape": "box",
-   "x0": 3837,
+   "x0": 3840,
    "z0": 7665,
-   "x1": 3898,
+   "x1": 6445,
    "z1": 7975,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6387,
-   "z0": 7155,
-   "x1": 6448,
-   "z1": 7975,
-   "name": "Probe"
+   "name": "Probe: Bench"
   },
   {
    "shape": "box",
@@ -191,7 +167,7 @@
    "z0": 7155,
    "x1": 9168,
    "z1": 7975,
-   "name": "Probe"
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
@@ -199,7 +175,7 @@
    "z0": 8087,
    "x1": 9080,
    "z1": 8148,
-   "name": "Probe"
+   "name": "Probe: Wall s"
   }
  ],
  "anim": {
@@ -214,25 +190,45 @@
   }
  ],
  "probe": {
-  "Wall e": 24,
+  "Blanket thrown back": 48,
+  "Plinth": 42,
+  "Engine block": 33,
+  "Radiator": 25,
+  "Wall e": 22,
+  "Alternator": 22,
+  "Rocker cover": 21,
+  "Bench": 21,
   "Wall s": 19,
+  "Cot canvas": 13,
   "Day tank": 12,
+  "Pillow": 12,
   "Wall w": 11,
   "Wall n.002": 11,
-  "Cot frame": 10,
-  "Cot canvas": 8,
   "Wall w.003": 8,
-  "Blanket thrown back": 7,
   "Wall w.001": 6,
-  "Bench": 6,
   "Wall s.002": 6,
+  "Blood on the canvas": 5,
   "Back door": 5,
   "Wall n": 4,
+  "Fuel line": 4,
+  "Control panel": 4,
   "Hanging coat": 4,
-  "Fuel line": 3,
+  "Log book": 4,
+  "Radio": 4,
+  "Toolbox lid": 4,
+  "Maker's plate": 3,
+  "Alternator rib 1": 2,
+  "Alternator rib 2": 2,
+  "Alternator rib 4": 2,
+  "Spanner 3": 2,
   "Oily rag": 2,
+  "Toolbox": 2,
   "Rag on the door": 1,
-  "North door": 1
+  "North door": 1,
+  "Alternator rib 0": 1,
+  "Exhaust riser": 1,
+  "Spanner 1": 1,
+  "Mug": 1
  },
  "bounds": {
   "x0": 1700,

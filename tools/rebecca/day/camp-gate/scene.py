@@ -274,10 +274,6 @@ def build():
         a = (a[0], a[1], height(a[0], a[1]) + r * 0.8)
         b = (b[0], b[1], height(b[0], b[1]) + r * 0.8)
         reb.mask(kit.rough_log(f"Strewn log {k}", a, b, r, m=logs_m, seed=90 + k, stubs=1, sawn=end_m))
-        mid, d = (Vector(a) + Vector(b)) / 2, (Vector(b) - Vector(a)).normalized()
-        for t in (-0.9, 0.0, 0.9):
-            q = mid + d * t
-            reb.wall(reb.prim("cube", "Strewn log footprint", None, (q.x, q.y, 0.25), (0.7, 0.7, 0.5))).hide_render = True
     # The rest of it, shoved east along the fence when the pickup came out: logs, torn tin.
     shoved = [((12.5, 2.4), (15.2, 2.6), 0.26), ((15.4, 2.5), (17.9, 2.2), 0.25), ((12.9, 3.15), (15.6, 3.5), 0.24), ((14.2, 2.8), (16.8, 3.0), 0.23)]
     for k, ((ax, ay), (bx, by), r) in enumerate(shoved):
@@ -331,14 +327,12 @@ def build():
     for i, (x, y, r) in enumerate(((2.0, 7.4, 0.38), (17.5, 3.0, 0.38), (13.6, 11.6, 0.42), (17.2, 7.0, 0.35), (5.6, 12.0, 0.4))):
         st = kit.rough_log(f"Stump {i}", (x, y, height(x, y) - 0.3), (x + 0.03, y - 0.02, height(x, y) + 0.45), r, seed=220 + i, stubs=0, sawn=end_m)
         reb.mask(st)
-        reb.wall(reb.prim("cyl", f"Stump {i} footprint", None, (x, y, 0.3), (2 * r, 2 * r, 0.6)), "circle").hide_render = True
     kit.tree_roots(rng, [(Vector((x, y, height(x, y) - 0.2)), 3.0) for x, y in ((2.0, 7.4), (17.5, 3.0), (13.6, 11.6), (17.2, 7.0), (5.6, 12.0))], height)
     for k in range(9):
         x, y = rng.uniform(14.4, 17.6), rng.uniform(9.4, 11.8)
         a = rng.uniform(0, math.tau)
         L = rng.uniform(1.0, 2.2)
         kit.rough_log(f"Slash {k}", (x, y, height(x, y) + 0.04 + 0.05 * (k % 3)), (x + math.cos(a) * L, y + math.sin(a) * L * 0.6, height(x, y) + 0.1 + 0.04 * (k % 3)), rng.uniform(0.03, 0.07), seed=240 + k, stubs=3)
-    reb.wall(reb.prim("cube", "Slash footprint", None, (16.0, 10.6, 0.3), (3.4, 2.6, 0.6))).hide_render = True
     stencil_m = kit.dirtied(reb.mat_plain("Stencil white", (0.5, 0.48, 0.42), 0.6), 0.6, scale=20)
     d = kit.drum("Drum by the slash", kit.drum_paint("Gate drum paint", (0.3, 0.06, 0.03)), (13.2, 9.6, height(13.2, 9.6)), rot=0.4)
     kit.stencil(d, ["DIESEL", "No 55-4392"], stencil_m, size=0.11, turn=0.6)

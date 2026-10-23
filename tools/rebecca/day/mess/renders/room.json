@@ -56,259 +56,75 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 1700,
-   "z0": 6018,
-   "x1": 3060,
-   "z1": 6222,
-   "name": "Partition footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 7140,
-   "z0": 6018,
-   "x1": 9010,
-   "z1": 6222,
-   "name": "Partition footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 10540,
-   "z0": 6018,
-   "x1": 10880,
-   "z1": 6222,
-   "name": "Partition footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 3060,
-   "z0": 5695,
-   "x1": 7140,
-   "z1": 6545,
-   "name": "Counter footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 5950,
-   "z0": 1708,
-   "x1": 7650,
-   "z1": 2983,
-   "name": "Range"
-  },
-  {
-   "shape": "box",
-   "x0": 2040,
-   "z0": 3145,
-   "x1": 3570,
-   "z1": 5525,
-   "name": "Kitchen table"
-  },
-  {
-   "shape": "circle",
-   "x0": 4165,
-   "z0": 2550,
-   "x1": 5185,
-   "z1": 3570,
-   "name": "Block footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 1929,
-   "z0": 1751,
-   "x1": 4021,
-   "z1": 2261,
-   "name": "Kitchen shelves"
-  },
-  {
-   "shape": "box",
-   "x0": 8712,
-   "z0": 1955,
-   "x1": 10327,
-   "z1": 3485,
-   "name": "Sacks footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 9894,
-   "z0": 3400,
-   "x1": 10914,
-   "z1": 4420,
-   "name": "Water barrel"
-  },
-  {
-   "shape": "box",
-   "x0": 7735,
-   "z0": 1742,
-   "x1": 8755,
-   "z1": 2677,
-   "name": "Washstand"
-  },
-  {
-   "shape": "box",
-   "x0": 7097,
-   "z0": 4921,
-   "x1": 8882,
-   "z1": 5686,
-   "name": "Stores footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 3145,
-   "z0": 10200,
-   "x1": 4675,
-   "z1": 16320,
-   "name": "Long table 2.3"
-  },
-  {
-   "shape": "box",
-   "x0": 7055,
-   "z0": 10200,
-   "x1": 8585,
-   "z1": 16320,
-   "name": "Long table 4.6"
-  },
-  {
-   "shape": "box",
-   "x0": 2363,
-   "z0": 10540,
-   "x1": 2907,
-   "z1": 15980,
-   "name": "Bench 0"
-  },
-  {
-   "shape": "box",
-   "x0": 4405,
-   "z0": 11130,
-   "x1": 6016,
-   "z1": 16629,
-   "name": "Bench 1"
-  },
-  {
-   "shape": "box",
-   "x0": 6297,
-   "z0": 9575,
-   "x1": 8425,
-   "z1": 15045,
-   "name": "Bench 2"
-  },
-  {
-   "shape": "box",
-   "x0": 8714,
-   "z0": 10531,
-   "x1": 9476,
-   "z1": 15989,
-   "name": "Bench 3"
-  },
-  {
-   "shape": "box",
-   "x0": 4095,
-   "z0": 1797,
-   "x1": 5935,
-   "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8940,
+   "x0": 1800,
    "z0": 1797,
    "x1": 10780,
    "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1797,
-   "z0": 1800,
-   "x1": 1858,
-   "z1": 2110,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4092,
-   "z0": 2052,
-   "x1": 4153,
-   "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Wall n"
   },
   {
    "shape": "box",
    "x0": 1800,
-   "z0": 2307,
-   "x1": 4150,
-   "z1": 2368,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1797,
-   "z0": 2562,
-   "x1": 1858,
-   "z1": 2623,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4347,
-   "z0": 2562,
-   "x1": 4408,
-   "z1": 2623,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4857,
-   "z0": 2562,
-   "x1": 4918,
-   "z1": 2623,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1800,
-   "z0": 2817,
-   "x1": 2110,
-   "z1": 2878,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5112,
-   "z0": 2817,
-   "x1": 5173,
-   "z1": 2878,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5877,
    "z0": 2055,
-   "x1": 5938,
-   "z1": 2875,
-   "name": "Probe"
+   "x1": 4150,
+   "z1": 2365,
+   "name": "Probe: Kitchen shelves"
   },
   {
    "shape": "box",
-   "x0": 7662,
-   "z0": 1800,
-   "x1": 7723,
-   "z1": 2875,
-   "name": "Probe"
+   "x0": 1797,
+   "z0": 2562,
+   "x1": 1858,
+   "z1": 2623,
+   "name": "Probe: Wall w"
   },
   {
    "shape": "box",
-   "x0": 1800,
-   "z0": 3072,
-   "x1": 3640,
-   "z1": 3133,
-   "name": "Probe"
+   "x0": 4350,
+   "z0": 2562,
+   "x1": 4915,
+   "z1": 2623,
+   "name": "Probe: Butcher block"
   },
   {
    "shape": "box",
    "x0": 5880,
-   "z0": 3072,
+   "z0": 2055,
+   "x1": 10270,
+   "z1": 2620,
+   "name": "Probe: Range top"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 2817,
+   "x1": 2365,
+   "z1": 2878,
+   "name": "Probe: Plate shelf"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 2817,
+   "x1": 10015,
+   "z1": 2878,
+   "name": "Probe: Flour sack 2"
+  },
+  {
+   "shape": "box",
+   "x0": 5880,
+   "z0": 2820,
    "x1": 7720,
+   "z1": 3130,
+   "name": "Probe: Range"
+  },
+  {
+   "shape": "box",
+   "x0": 9195,
+   "z0": 3072,
+   "x1": 10015,
    "z1": 3133,
-   "name": "Probe"
+   "name": "Probe: Flour sack 2"
   },
   {
    "shape": "box",
@@ -316,39 +132,31 @@
    "z0": 2055,
    "x1": 10783,
    "z1": 3130,
-   "name": "Probe"
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
-   "x0": 4092,
+   "x0": 4095,
    "z0": 2820,
-   "x1": 4153,
+   "x1": 5170,
    "z1": 3385,
-   "name": "Probe"
+   "name": "Probe: Butcher block"
   },
   {
    "shape": "box",
-   "x0": 5112,
+   "x0": 7152,
    "z0": 3327,
-   "x1": 5173,
+   "x1": 7213,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Pan handle"
   },
   {
    "shape": "box",
-   "x0": 7155,
-   "z0": 3327,
-   "x1": 7465,
-   "z1": 3388,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10470,
+   "x0": 9195,
    "z0": 3327,
    "x1": 10780,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Flour sack 2"
   },
   {
    "shape": "box",
@@ -356,23 +164,15 @@
    "z0": 3582,
    "x1": 4915,
    "z1": 3643,
-   "name": "Probe"
+   "name": "Probe: Butcher block"
   },
   {
    "shape": "box",
-   "x0": 9957,
-   "z0": 3582,
-   "x1": 10018,
-   "z1": 3643,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9957,
-   "z0": 4347,
-   "x1": 10018,
-   "z1": 4408,
-   "name": "Probe"
+   "x0": 9960,
+   "z0": 3585,
+   "x1": 10780,
+   "z1": 4405,
+   "name": "Probe: Water barrel"
   },
   {
    "shape": "box",
@@ -380,95 +180,71 @@
    "z0": 4857,
    "x1": 8740,
    "z1": 4918,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3582,
-   "z0": 3330,
-   "x1": 3643,
-   "z1": 5425,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8937,
-   "z0": 5115,
-   "x1": 8998,
-   "z1": 5425,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1797,
-   "z0": 3330,
-   "x1": 1858,
-   "z1": 5680,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3075,
-   "z0": 5622,
-   "x1": 6955,
-   "z1": 5683,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10722,
-   "z0": 4350,
-   "x1": 10783,
-   "z1": 5680,
-   "name": "Probe"
+   "name": "Probe: Potato bin"
   },
   {
    "shape": "box",
    "x0": 1800,
-   "z0": 5877,
-   "x1": 2875,
-   "z1": 5938,
-   "name": "Probe"
+   "z0": 3075,
+   "x1": 3640,
+   "z1": 5425,
+   "name": "Probe: Kitchen table"
   },
   {
    "shape": "box",
    "x0": 7155,
-   "z0": 5877,
+   "z0": 5115,
+   "x1": 8740,
+   "z1": 5425,
+   "name": "Probe: Crate of tins"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5622,
+   "x1": 8740,
+   "z1": 5683,
+   "name": "Probe: Serving counter"
+  },
+  {
+   "shape": "box",
+   "x0": 10722,
+   "z0": 4605,
+   "x1": 10783,
+   "z1": 5680,
+   "name": "Probe: Window sill"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5880,
    "x1": 8995,
-   "z1": 5938,
-   "name": "Probe"
+   "z1": 6190,
+   "name": "Probe: Serving counter"
   },
   {
    "shape": "box",
    "x0": 10470,
-   "z0": 5877,
+   "z0": 5880,
    "x1": 10780,
-   "z1": 5938,
-   "name": "Probe"
+   "z1": 6190,
+   "name": "Probe: Kitchen door frame.001"
   },
   {
    "shape": "box",
-   "x0": 10467,
-   "z0": 6132,
-   "x1": 10528,
-   "z1": 6193,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7152,
+   "x0": 2820,
    "z0": 6387,
-   "x1": 7213,
+   "x1": 7210,
    "z1": 6448,
-   "name": "Probe"
+   "name": "Probe: Serving counter"
   },
   {
    "shape": "box",
-   "x0": 4605,
+   "x0": 3075,
    "z0": 6642,
-   "x1": 5425,
+   "x1": 7210,
    "z1": 6703,
-   "name": "Probe"
+   "name": "Probe: Serving counter"
   },
   {
    "shape": "box",
@@ -476,7 +252,7 @@
    "z0": 6897,
    "x1": 5680,
    "z1": 6958,
-   "name": "Probe"
+   "name": "Probe: The cook"
   },
   {
    "shape": "box",
@@ -484,119 +260,231 @@
    "z0": 7152,
    "x1": 5170,
    "z1": 7213,
-   "name": "Probe"
+   "name": "Probe: The cook"
   },
   {
    "shape": "box",
-   "x0": 4857,
-   "z0": 7407,
-   "x1": 4918,
-   "z1": 7468,
-   "name": "Probe"
+   "x0": 6900,
+   "z0": 9702,
+   "x1": 7210,
+   "z1": 9763,
+   "name": "Probe: Bench 2"
   },
   {
    "shape": "box",
-   "x0": 3072,
+   "x0": 6390,
+   "z0": 9957,
+   "x1": 7210,
+   "z1": 10018,
+   "name": "Probe: Bench 2"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
    "z0": 10212,
-   "x1": 3133,
+   "x1": 4660,
    "z1": 10273,
-   "name": "Probe"
+   "name": "Probe: Long table 2.3"
   },
   {
    "shape": "box",
-   "x0": 8682,
+   "x0": 6387,
    "z0": 10212,
-   "x1": 8743,
+   "x1": 6448,
    "z1": 10273,
-   "name": "Probe"
+   "name": "Probe: Bench 2"
   },
   {
    "shape": "box",
-   "x0": 2310,
-   "z0": 10467,
-   "x1": 3130,
-   "z1": 10528,
-   "name": "Probe"
+   "x0": 7155,
+   "z0": 10215,
+   "x1": 8485,
+   "z1": 10780,
+   "name": "Probe: Long table 4.6"
   },
   {
    "shape": "box",
-   "x0": 8685,
-   "z0": 10467,
+   "x0": 6900,
+   "z0": 10977,
+   "x1": 8485,
+   "z1": 11038,
+   "name": "Probe: Long table 4.6"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 11232,
+   "x1": 5425,
+   "z1": 11293,
+   "name": "Probe: Bench 1"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 11487,
+   "x1": 5935,
+   "z1": 11548,
+   "name": "Probe: Bench 1"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 11235,
+   "x1": 8485,
+   "z1": 11800,
+   "name": "Probe: Long table 4.6"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 10470,
    "x1": 9505,
-   "z1": 10528,
-   "name": "Probe"
+   "z1": 11800,
+   "name": "Probe: Bench 3"
   },
   {
    "shape": "box",
-   "x0": 9447,
-   "z0": 10725,
-   "x1": 9508,
-   "z1": 13840,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2307,
-   "z0": 10725,
-   "x1": 2368,
-   "z1": 15880,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3072,
-   "z0": 10725,
-   "x1": 3133,
-   "z1": 15880,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8682,
-   "z0": 10725,
-   "x1": 8743,
-   "z1": 15880,
-   "name": "Probe"
+   "x0": 7155,
+   "z0": 11997,
+   "x1": 9505,
+   "z1": 12058,
+   "name": "Probe: Long table 4.6"
   },
   {
    "shape": "box",
    "x0": 2310,
-   "z0": 16077,
-   "x1": 3130,
-   "z1": 16138,
-   "name": "Probe"
+   "z0": 10470,
+   "x1": 4660,
+   "z1": 12310,
+   "name": "Probe: Long table 2.3"
   },
   {
    "shape": "box",
-   "x0": 6132,
-   "z0": 16077,
-   "x1": 6193,
-   "z1": 16138,
-   "name": "Probe"
+   "x0": 5112,
+   "z0": 11745,
+   "x1": 5173,
+   "z1": 12310,
+   "name": "Probe: Bench 1"
   },
   {
    "shape": "box",
-   "x0": 6897,
-   "z0": 15060,
-   "x1": 6958,
-   "z1": 16135,
-   "name": "Probe"
+   "x0": 8940,
+   "z0": 12255,
+   "x1": 9505,
+   "z1": 12820,
+   "name": "Probe: Bench 3"
   },
   {
    "shape": "box",
-   "x0": 8685,
-   "z0": 16077,
+   "x0": 2310,
+   "z0": 12510,
+   "x1": 5170,
+   "z1": 13075,
+   "name": "Probe: Long table 2.3"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 12255,
+   "x1": 8485,
+   "z1": 13330,
+   "name": "Probe: Long table 4.6"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 13020,
    "x1": 9250,
+   "z1": 13330,
+   "name": "Probe: Bench 3"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 13530,
+   "x1": 9250,
+   "z1": 13840,
+   "name": "Probe: Bench 3"
+  },
+  {
+   "shape": "box",
+   "x0": 6900,
+   "z0": 14037,
+   "x1": 9250,
+   "z1": 14098,
+   "name": "Probe: Long table 4.6"
+  },
+  {
+   "shape": "box",
+   "x0": 2310,
+   "z0": 13275,
+   "x1": 4915,
+   "z1": 14605,
+   "name": "Probe: Long table 2.3"
+  },
+  {
+   "shape": "box",
+   "x0": 5370,
+   "z0": 15567,
+   "x1": 5935,
+   "z1": 15628,
+   "name": "Probe: Chair thrown"
+  },
+  {
+   "shape": "box",
+   "x0": 2310,
+   "z0": 14805,
+   "x1": 4660,
+   "z1": 15880,
+   "name": "Probe: Long table 2.3"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 15822,
+   "x1": 5425,
+   "z1": 15883,
+   "name": "Probe: Chair thrown"
+  },
+  {
+   "shape": "box",
+   "x0": 5877,
+   "z0": 15822,
+   "x1": 5938,
+   "z1": 15883,
+   "name": "Probe: Chair thrown"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 14295,
+   "x1": 9250,
+   "z1": 15880,
+   "name": "Probe: Long table 4.6"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 16077,
+   "x1": 5425,
    "z1": 16138,
-   "name": "Probe"
+   "name": "Probe: Long table 2.3"
+  },
+  {
+   "shape": "box",
+   "x0": 6900,
+   "z0": 16077,
+   "x1": 8485,
+   "z1": 16138,
+   "name": "Probe: Long table 4.6"
   },
   {
    "shape": "box",
    "x0": 3075,
    "z0": 16332,
-   "x1": 4405,
+   "x1": 5680,
    "z1": 16393,
-   "name": "Probe"
+   "name": "Probe: Long table 2.3"
   },
   {
    "shape": "box",
@@ -604,7 +492,7 @@
    "z0": 16332,
    "x1": 8485,
    "z1": 16393,
-   "name": "Probe"
+   "name": "Probe: Long table 4.6"
   },
   {
    "shape": "box",
@@ -612,7 +500,7 @@
    "z0": 6390,
    "x1": 1858,
    "z1": 16645,
-   "name": "Probe"
+   "name": "Probe: Wall w"
   },
   {
    "shape": "box",
@@ -620,7 +508,7 @@
    "z0": 6390,
    "x1": 10783,
    "z1": 16645,
-   "name": "Probe"
+   "name": "Probe: Window sill.001"
   },
   {
    "shape": "box",
@@ -628,7 +516,7 @@
    "z0": 16842,
    "x1": 10780,
    "z1": 16903,
-   "name": "Probe"
+   "name": "Probe: Wall s"
   }
  ],
  "anim": {
@@ -636,47 +524,78 @@
   "ticks": 3
  },
  "probe": {
+  "Long table 2.3": 151,
+  "Long table 4.6": 122,
+  "Serving counter": 72,
+  "Bench 0": 66,
+  "Bench 3": 64,
+  "Kitchen table": 52,
   "Wall w": 36,
   "Wall s": 36,
-  "Bench 3": 31,
-  "Long table 2.3": 28,
-  "Bench 0": 27,
-  "Long table 4.6": 21,
-  "Serving counter": 18,
-  "Kitchen table": 15,
+  "Kitchen shelves": 27,
+  "Bench 1": 25,
+  "Plates": 22,
+  "Range top": 19,
+  "Butcher block": 18,
+  "Stew on the plates": 16,
+  "Range": 15,
+  "Plate shelf": 15,
+  "Water barrel": 15,
   "Wall n": 14,
-  "Range": 13,
-  "The cook": 12,
-  "Kitchen shelves": 11,
-  "Butcher block": 10,
+  "Partition.003": 13,
+  "Potato bin": 12,
+  "Flour sack 2": 11,
+  "The cook": 11,
+  "Washstand": 10,
+  "Flour sack 0": 10,
+  "Window sill": 10,
+  "Partition": 10,
   "Window sill.001": 10,
-  "Plate shelf": 8,
+  "Flour sack 1": 9,
+  "Mugs": 9,
+  "Chair thrown": 9,
+  "Side of meat": 8,
+  "Crate of tins": 8,
   "Wall e.003": 8,
   "Wall e.008": 8,
-  "Window sill": 7,
+  "Meat juice": 7,
+  "Bench 2": 7,
   "Wall e.005": 7,
-  "Potato bin": 6,
-  "Partition.003": 6,
+  "Stew pot": 6,
   "Wall e": 5,
-  "Partition": 5,
   "Door, shut": 5,
-  "Stock pot 0": 3,
-  "Firebox door, ajar": 3,
-  "Water barrel": 3,
+  "Dragged across the table": 5,
+  "Potatoes": 4,
+  "Wash tub": 3,
+  "Block blood": 3,
   "Kitchen door frame.001": 3,
-  "Mugs": 3,
   "Coat 0": 3,
   "Coat 1": 3,
   "Coat 2": 3,
+  "Plate in the tub 2": 2,
+  "Frying pan": 2,
+  "Fat in the pan": 2,
   "Stacked plate 01": 2,
   "Range rail": 2,
+  "Stacked plate 11": 2,
+  "Serving bowl 0": 2,
+  "Serving bowl 2": 2,
+  "Serving bowl 4": 2,
+  "Serving bowl 5": 2,
   "Door frame.001": 2,
+  "Bread loaf": 2,
+  "Bottles": 2,
+  "Coffee pot": 1,
+  "Tin 1": 1,
+  "Tin 5": 1,
+  "Tin 9": 1,
+  "Mug in the tub 0": 1,
   "Stew down the range": 1,
   "Pan handle": 1,
-  "Stacked plate 11": 1,
+  "Onion 0": 1,
   "Kitchen door frame": 1,
-  "Door frame": 1,
-  "Chair thrown": 1
+  "Partition.005": 1,
+  "Door frame": 1
  },
  "bounds": {
   "x0": 1700,

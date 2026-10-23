@@ -82,219 +82,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 10994,
-   "z0": 14696,
-   "x1": 12806,
-   "z1": 16244,
-   "name": "Barrow pan"
-  },
-  {
-   "shape": "box",
-   "x0": 13005,
-   "z0": 8500,
-   "x1": 16235,
-   "z1": 10540,
-   "name": "Block footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 16575,
-   "z0": 8245,
-   "x1": 19465,
-   "z1": 10455,
-   "name": "Block footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 19805,
-   "z0": 8925,
-   "x1": 22355,
-   "z1": 10795,
-   "name": "Block footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 13515,
-   "z0": 11815,
-   "x1": 17085,
-   "z1": 14025,
-   "name": "Block footprint.003"
-  },
-  {
-   "shape": "box",
-   "x0": 17850,
-   "z0": 12240,
-   "x1": 20570,
-   "z1": 14280,
-   "name": "Block footprint.004"
-  },
-  {
-   "shape": "box",
-   "x0": 21335,
-   "z0": 13345,
-   "x1": 23545,
-   "z1": 15215,
-   "name": "Block footprint.005"
-  },
-  {
-   "shape": "box",
-   "x0": 5610,
-   "z0": 3060,
-   "x1": 7990,
-   "z1": 5440,
-   "name": "Mast footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 8160,
-   "z0": 5610,
-   "x1": 10880,
-   "z1": 7650,
-   "name": "Winch house"
-  },
-  {
-   "shape": "circle",
-   "x0": 23538,
-   "z0": 2516,
-   "x1": 23892,
-   "z1": 2924,
-   "name": "Crusher leg"
-  },
-  {
-   "shape": "circle",
-   "x0": 23538,
-   "z0": 6256,
-   "x1": 23892,
-   "z1": 6664,
-   "name": "Crusher leg.001"
-  },
-  {
-   "shape": "circle",
-   "x0": 27958,
-   "z0": 2516,
-   "x1": 28312,
-   "z1": 2924,
-   "name": "Crusher leg.002"
-  },
-  {
-   "shape": "circle",
-   "x0": 27958,
-   "z0": 6256,
-   "x1": 28312,
-   "z1": 6664,
-   "name": "Crusher leg.003"
-  },
-  {
-   "shape": "box",
-   "x0": 22950,
-   "z0": 2040,
-   "x1": 28900,
-   "z1": 7140,
-   "name": "Crusher footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 32300,
-   "z0": 1700,
-   "x1": 38420,
-   "z1": 7140,
-   "name": "Gravel heap"
-  },
-  {
-   "shape": "box",
-   "x0": 27789,
-   "z0": 9411,
-   "x1": 30011,
-   "z1": 11329,
-   "name": "Ore cart"
-  },
-  {
-   "shape": "box",
-   "x0": 3400,
-   "z0": 21012,
-   "x1": 9520,
-   "z1": 21148,
-   "name": "Hut wall n"
-  },
-  {
-   "shape": "box",
-   "x0": 3400,
-   "z0": 26112,
-   "x1": 9520,
-   "z1": 26248,
-   "name": "Hut wall s"
-  },
-  {
-   "shape": "box",
-   "x0": 3332,
-   "z0": 21080,
-   "x1": 3468,
-   "z1": 26180,
-   "name": "Hut wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 9452,
-   "z0": 21080,
-   "x1": 9588,
-   "z1": 26180,
-   "name": "Hut wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 3315,
-   "z0": 20995,
-   "x1": 9605,
-   "z1": 26265,
-   "name": "Hut footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 9775,
-   "z0": 21420,
-   "x1": 11135,
-   "z1": 24140,
-   "name": "Drums footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 2550,
-   "z0": 20570,
-   "x1": 2890,
-   "z1": 20910,
-   "name": "Siren pole"
-  },
-  {
-   "shape": "box",
-   "x0": 22440,
-   "z0": 24565,
-   "x1": 31960,
-   "z1": 28475,
-   "name": "Truck footprint"
-  },
-  {
-   "shape": "box",
    "x0": 1800,
    "z0": 1797,
    "x1": 3385,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Face slabs"
   },
   {
    "shape": "box",
    "x0": 4350,
    "z0": 1797,
-   "x1": 6445,
-   "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6900,
-   "z0": 1797,
    "x1": 7975,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Face slabs"
   },
   {
    "shape": "box",
@@ -302,15 +102,23 @@
    "z0": 1797,
    "x1": 9253,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Drill lines"
   },
   {
    "shape": "box",
-   "x0": 14550,
+   "x0": 14802,
+   "z0": 1797,
+   "x1": 14863,
+   "z1": 1858,
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 15315,
    "z0": 1797,
    "x1": 24295,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Face slabs"
   },
   {
    "shape": "box",
@@ -318,7 +126,7 @@
    "z0": 1797,
    "x1": 25060,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Face slabs"
   },
   {
    "shape": "box",
@@ -326,7 +134,7 @@
    "z0": 1797,
    "x1": 31690,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
@@ -334,7 +142,7 @@
    "z0": 2052,
    "x1": 2620,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Face slabs"
   },
   {
    "shape": "box",
@@ -342,39 +150,23 @@
    "z0": 2052,
    "x1": 7720,
    "z1": 2113,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 14802,
-   "z0": 2052,
-   "x1": 14863,
-   "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Face slabs"
   },
   {
    "shape": "box",
    "x0": 17355,
    "z0": 2052,
-   "x1": 22765,
+   "x1": 24295,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Face slabs"
   },
   {
    "shape": "box",
-   "x0": 29595,
+   "x0": 30612,
    "z0": 2052,
-   "x1": 29905,
+   "x1": 30673,
    "z1": 2113,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 30360,
-   "z0": 2052,
-   "x1": 31180,
-   "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
@@ -382,39 +174,79 @@
    "z0": 2307,
    "x1": 6445,
    "z1": 2368,
-   "name": "Probe"
+   "name": "Probe: Face slabs"
   },
   {
    "shape": "box",
-   "x0": 17355,
+   "x0": 17610,
    "z0": 2307,
-   "x1": 20470,
+   "x1": 19960,
    "z1": 2368,
-   "name": "Probe"
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
-   "x0": 21180,
-   "z0": 2307,
-   "x1": 21490,
-   "z1": 2368,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 17355,
+   "x0": 17610,
    "z0": 2562,
-   "x1": 20215,
+   "x1": 18940,
    "z1": 2623,
-   "name": "Probe"
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 19395,
+   "z0": 2562,
+   "x1": 19960,
+   "z1": 2623,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
    "x0": 17610,
    "z0": 2817,
-   "x1": 18430,
+   "x1": 18175,
    "z1": 2878,
-   "name": "Probe"
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 23475,
+   "z0": 2565,
+   "x1": 24040,
+   "z1": 2875,
+   "name": "Probe: Crusher leg"
+  },
+  {
+   "shape": "box",
+   "x0": 27810,
+   "z0": 2565,
+   "x1": 28375,
+   "z1": 2875,
+   "name": "Probe: Crusher leg.002"
+  },
+  {
+   "shape": "box",
+   "x0": 6390,
+   "z0": 3072,
+   "x1": 7210,
+   "z1": 3133,
+   "name": "Probe: Derrick foot"
+  },
+  {
+   "shape": "box",
+   "x0": 29082,
+   "z0": 3072,
+   "x1": 29143,
+   "z1": 3133,
+   "name": "Probe: Flywheel"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 3075,
+   "x1": 27865,
+   "z1": 3385,
+   "name": "Probe: Jaw box"
   },
   {
    "shape": "box",
@@ -422,7 +254,7 @@
    "z0": 3327,
    "x1": 29395,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Flywheel"
   },
   {
    "shape": "box",
@@ -430,127 +262,135 @@
    "z0": 3327,
    "x1": 30670,
    "z1": 3388,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 31635,
-   "z0": 3327,
-   "x1": 32200,
-   "z1": 3388,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29085,
-   "z0": 3582,
-   "x1": 30670,
-   "z1": 3643,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 31125,
-   "z0": 3582,
-   "x1": 32200,
-   "z1": 3643,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29085,
-   "z0": 3837,
-   "x1": 32200,
-   "z1": 3898,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29085,
-   "z0": 4092,
-   "x1": 30670,
-   "z1": 4153,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 31125,
-   "z0": 4092,
-   "x1": 32200,
-   "z1": 4153,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29085,
-   "z0": 4347,
-   "x1": 32200,
-   "z1": 4408,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8175,
-   "z0": 4602,
-   "x1": 8485,
-   "z1": 4663,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29085,
-   "z0": 4602,
-   "x1": 30925,
-   "z1": 4663,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8175,
-   "z0": 4857,
-   "x1": 8740,
-   "z1": 4918,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 31380,
-   "z0": 4605,
-   "x1": 32200,
-   "z1": 4915,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8175,
-   "z0": 5112,
-   "x1": 8995,
-   "z1": 5173,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10980,
-   "z0": 5112,
-   "x1": 11290,
-   "z1": 5173,
-   "name": "Probe"
+   "name": "Probe: Conveyor frame"
   },
   {
    "shape": "box",
    "x0": 31890,
-   "z0": 5112,
+   "z0": 3327,
    "x1": 32200,
-   "z1": 5173,
-   "name": "Probe"
+   "z1": 3388,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
-   "x0": 8175,
-   "z0": 5367,
+   "x0": 5880,
+   "z0": 3330,
+   "x1": 7720,
+   "z1": 3640,
+   "name": "Probe: Derrick foot"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 3582,
+   "x1": 30925,
+   "z1": 3643,
+   "name": "Probe: Jaw box"
+  },
+  {
+   "shape": "box",
+   "x0": 31380,
+   "z0": 3582,
+   "x1": 32200,
+   "z1": 3643,
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 5625,
+   "z0": 3840,
+   "x1": 7975,
+   "z1": 4150,
+   "name": "Probe: Derrick foot"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 3840,
+   "x1": 32200,
+   "z1": 4150,
+   "name": "Probe: Jaw box"
+  },
+  {
+   "shape": "box",
+   "x0": 5625,
+   "z0": 4347,
+   "x1": 8230,
+   "z1": 4408,
+   "name": "Probe: Derrick foot"
+  },
+  {
+   "shape": "box",
+   "x0": 5625,
+   "z0": 4602,
    "x1": 8485,
+   "z1": 4663,
+   "name": "Probe: Derrick foot"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 4350,
+   "x1": 30925,
+   "z1": 4660,
+   "name": "Probe: Jaw box"
+  },
+  {
+   "shape": "box",
+   "x0": 31380,
+   "z0": 4350,
+   "x1": 32200,
+   "z1": 4660,
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 5880,
+   "z0": 4857,
+   "x1": 8740,
+   "z1": 4918,
+   "name": "Probe: Derrick foot"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 4857,
+   "x1": 29395,
+   "z1": 4918,
+   "name": "Probe: Jaw box"
+  },
+  {
+   "shape": "box",
+   "x0": 31635,
+   "z0": 4857,
+   "x1": 32200,
+   "z1": 4918,
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 5880,
+   "z0": 5112,
+   "x1": 8995,
+   "z1": 5173,
+   "name": "Probe: Derrick foot"
+  },
+  {
+   "shape": "box",
+   "x0": 32142,
+   "z0": 5112,
+   "x1": 32203,
+   "z1": 5173,
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 6390,
+   "z0": 5367,
+   "x1": 8230,
    "z1": 5428,
-   "name": "Probe"
+   "name": "Probe: Derrick foot"
   },
   {
    "shape": "box",
@@ -558,47 +398,103 @@
    "z0": 5367,
    "x1": 8998,
    "z1": 5428,
-   "name": "Probe"
+   "name": "Probe: Boom chord.001"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 5115,
+   "x1": 27865,
+   "z1": 5425,
+   "name": "Probe: Jaw box"
+  },
+  {
+   "shape": "box",
+   "x0": 29085,
+   "z0": 5115,
+   "x1": 29395,
+   "z1": 5425,
+   "name": "Probe: Flywheel"
   },
   {
    "shape": "box",
    "x0": 7410,
    "z0": 5622,
-   "x1": 7975,
+   "x1": 11035,
    "z1": 5683,
-   "name": "Probe"
+   "name": "Probe: Winch house"
   },
   {
    "shape": "box",
-   "x0": 10980,
-   "z0": 5370,
-   "x1": 11545,
-   "z1": 5680,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7917,
+   "x0": 7920,
    "z0": 5877,
-   "x1": 7978,
+   "x1": 11035,
    "z1": 5938,
-   "name": "Probe"
+   "name": "Probe: Winch roof"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 5625,
+   "x1": 29395,
+   "z1": 5935,
+   "name": "Probe: Jaw box"
+  },
+  {
+   "shape": "box",
+   "x0": 23730,
+   "z0": 6132,
+   "x1": 29395,
+   "z1": 6193,
+   "name": "Probe: Jaw box"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 6387,
+   "x1": 1858,
+   "z1": 6448,
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 23475,
+   "z0": 6387,
+   "x1": 24040,
+   "z1": 6448,
+   "name": "Probe: Crusher leg.001"
   },
   {
    "shape": "box",
    "x0": 1800,
-   "z0": 6387,
-   "x1": 2110,
-   "z1": 6448,
-   "name": "Probe"
+   "z0": 6642,
+   "x1": 2365,
+   "z1": 6703,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
-   "x0": 29085,
-   "z0": 4860,
+   "x0": 23475,
+   "z0": 6642,
+   "x1": 23785,
+   "z1": 6703,
+   "name": "Probe: Crusher leg.001"
+  },
+  {
+   "shape": "box",
+   "x0": 27810,
+   "z0": 6390,
    "x1": 29395,
    "z1": 6955,
-   "name": "Probe"
+   "name": "Probe: Motor"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 6900,
+   "x1": 2620,
+   "z1": 7210,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
@@ -606,47 +502,31 @@
    "z0": 7152,
    "x1": 24040,
    "z1": 7213,
-   "name": "Probe"
+   "name": "Probe: Ladder rungs"
   },
   {
    "shape": "box",
    "x0": 1800,
-   "z0": 6645,
-   "x1": 2875,
-   "z1": 7465,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10977,
-   "z0": 5880,
-   "x1": 11038,
-   "z1": 7465,
-   "name": "Probe"
+   "z0": 7407,
+   "x1": 2365,
+   "z1": 7468,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
    "x0": 1800,
    "z0": 7662,
-   "x1": 2365,
+   "x1": 2110,
    "z1": 7723,
-   "name": "Probe"
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
    "x0": 8175,
-   "z0": 7662,
+   "z0": 6135,
    "x1": 11035,
-   "z1": 7723,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1800,
-   "z0": 7917,
-   "x1": 2110,
-   "z1": 7978,
-   "name": "Probe"
+   "z1": 7720,
+   "name": "Probe: Winch roof"
   },
   {
    "shape": "box",
@@ -654,7 +534,7 @@
    "z0": 8172,
    "x1": 18430,
    "z1": 8233,
-   "name": "Probe"
+   "name": "Probe: Cut blocks"
   },
   {
    "shape": "box",
@@ -662,15 +542,7 @@
    "z0": 7920,
    "x1": 10525,
    "z1": 8485,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 13020,
-   "z0": 8427,
-   "x1": 16135,
-   "z1": 8488,
-   "name": "Probe"
+   "name": "Probe: Cable drum"
   },
   {
    "shape": "box",
@@ -678,15 +550,55 @@
    "z0": 8175,
    "x1": 31693,
    "z1": 8485,
-   "name": "Probe"
+   "name": "Probe: Mine sign post"
   },
   {
    "shape": "box",
-   "x0": 9195,
+   "x0": 8685,
    "z0": 8682,
-   "x1": 9505,
+   "x1": 10525,
    "z1": 8743,
-   "name": "Probe"
+   "name": "Probe: Cable drum"
+  },
+  {
+   "shape": "box",
+   "x0": 28065,
+   "z0": 9447,
+   "x1": 29395,
+   "z1": 9508,
+   "name": "Probe: Ore cart"
+  },
+  {
+   "shape": "box",
+   "x0": 28065,
+   "z0": 9702,
+   "x1": 29905,
+   "z1": 9763,
+   "name": "Probe: Ore cart"
+  },
+  {
+   "shape": "box",
+   "x0": 19905,
+   "z0": 8940,
+   "x1": 22255,
+   "z1": 10015,
+   "name": "Probe: Cut blocks"
+  },
+  {
+   "shape": "box",
+   "x0": 16590,
+   "z0": 8430,
+   "x1": 19450,
+   "z1": 10270,
+   "name": "Probe: Cut blocks"
+  },
+  {
+   "shape": "box",
+   "x0": 13020,
+   "z0": 8430,
+   "x1": 16135,
+   "z1": 10525,
+   "name": "Probe: Cut blocks"
   },
   {
    "shape": "box",
@@ -694,15 +606,47 @@
    "z0": 10467,
    "x1": 19450,
    "z1": 10528,
-   "name": "Probe"
+   "name": "Probe: Drill half-holes"
   },
   {
    "shape": "box",
-   "x0": 22452,
+   "x0": 19905,
    "z0": 10215,
-   "x1": 22513,
+   "x1": 22510,
    "z1": 10525,
-   "name": "Probe"
+   "name": "Probe: Cut blocks"
+  },
+  {
+   "shape": "box",
+   "x0": 19905,
+   "z0": 10722,
+   "x1": 22255,
+   "z1": 10783,
+   "name": "Probe: Cut blocks"
+  },
+  {
+   "shape": "box",
+   "x0": 27810,
+   "z0": 9960,
+   "x1": 29905,
+   "z1": 10780,
+   "name": "Probe: Cart load"
+  },
+  {
+   "shape": "box",
+   "x0": 28320,
+   "z0": 10977,
+   "x1": 29905,
+   "z1": 11038,
+   "name": "Probe: Ore cart"
+  },
+  {
+   "shape": "box",
+   "x0": 29085,
+   "z0": 11232,
+   "x1": 29905,
+   "z1": 11293,
+   "name": "Probe: Ore cart"
   },
   {
    "shape": "box",
@@ -710,7 +654,7 @@
    "z0": 11742,
    "x1": 15880,
    "z1": 11803,
-   "name": "Probe"
+   "name": "Probe: Cut blocks"
   },
   {
    "shape": "box",
@@ -718,7 +662,15 @@
    "z0": 11742,
    "x1": 16393,
    "z1": 11803,
-   "name": "Probe"
+   "name": "Probe: Drill half-holes"
+  },
+  {
+   "shape": "box",
+   "x0": 13785,
+   "z0": 12000,
+   "x1": 17155,
+   "z1": 13330,
+   "name": "Probe: Cut blocks"
   },
   {
    "shape": "box",
@@ -726,7 +678,7 @@
    "z0": 13272,
    "x1": 23530,
    "z1": 13333,
-   "name": "Probe"
+   "name": "Probe: Cut blocks"
   },
   {
    "shape": "box",
@@ -734,15 +686,15 @@
    "z0": 12000,
    "x1": 1858,
    "z1": 13585,
-   "name": "Probe"
+   "name": "Probe: Face slabs"
   },
   {
    "shape": "box",
-   "x0": 17097,
-   "z0": 12000,
-   "x1": 17158,
+   "x0": 13530,
+   "z0": 13530,
+   "x1": 17155,
    "z1": 13840,
-   "name": "Probe"
+   "name": "Probe: Cut blocks"
   },
   {
    "shape": "box",
@@ -750,47 +702,87 @@
    "z0": 14037,
    "x1": 17155,
    "z1": 14098,
-   "name": "Probe"
+   "name": "Probe: Cut blocks"
   },
   {
    "shape": "box",
    "x0": 17865,
-   "z0": 14292,
+   "z0": 12255,
    "x1": 20470,
-   "z1": 14353,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 12255,
-   "z0": 14547,
-   "x1": 12565,
-   "z1": 14608,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10722,
-   "z0": 16077,
-   "x1": 10783,
-   "z1": 16138,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10470,
-   "z0": 16332,
-   "x1": 10780,
-   "z1": 16393,
-   "name": "Probe"
+   "z1": 14350,
+   "name": "Probe: Cut blocks"
   },
   {
    "shape": "box",
    "x0": 11235,
+   "z0": 14802,
+   "x1": 11800,
+   "z1": 14863,
+   "name": "Probe: Barrow pan"
+  },
+  {
+   "shape": "box",
+   "x0": 12510,
+   "z0": 14802,
+   "x1": 12820,
+   "z1": 14863,
+   "name": "Probe: Barrow wheel"
+  },
+  {
+   "shape": "box",
+   "x0": 11235,
+   "z0": 15057,
+   "x1": 12565,
+   "z1": 15118,
+   "name": "Probe: Barrow pan"
+  },
+  {
+   "shape": "box",
+   "x0": 21435,
+   "z0": 13530,
+   "x1": 23530,
+   "z1": 15115,
+   "name": "Probe: Cut blocks"
+  },
+  {
+   "shape": "box",
+   "x0": 10980,
+   "z0": 15315,
+   "x1": 12820,
+   "z1": 15625,
+   "name": "Probe: Barrow pan"
+  },
+  {
+   "shape": "box",
+   "x0": 10980,
+   "z0": 15822,
+   "x1": 12565,
+   "z1": 15883,
+   "name": "Probe: Barrow pan"
+  },
+  {
+   "shape": "box",
+   "x0": 10725,
+   "z0": 16077,
+   "x1": 11035,
+   "z1": 16138,
+   "name": "Probe: Barrow handle"
+  },
+  {
+   "shape": "box",
+   "x0": 11745,
+   "z0": 16077,
+   "x1": 12565,
+   "z1": 16138,
+   "name": "Probe: Barrow pan"
+  },
+  {
+   "shape": "box",
+   "x0": 10467,
    "z0": 16332,
-   "x1": 11545,
+   "x1": 10528,
    "z1": 16393,
-   "name": "Probe"
+   "name": "Probe: Barrow handle"
   },
   {
    "shape": "box",
@@ -798,7 +790,7 @@
    "z0": 16587,
    "x1": 11290,
    "z1": 16648,
-   "name": "Probe"
+   "name": "Probe: Barrow handle.001"
   },
   {
    "shape": "box",
@@ -806,7 +798,7 @@
    "z0": 16842,
    "x1": 11038,
    "z1": 16903,
-   "name": "Probe"
+   "name": "Probe: Barrow handle.001"
   },
   {
    "shape": "box",
@@ -814,31 +806,31 @@
    "z0": 17097,
    "x1": 32203,
    "z1": 17158,
-   "name": "Probe"
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
    "x0": 31125,
-   "z0": 17352,
+   "z0": 17355,
    "x1": 32200,
-   "z1": 17413,
-   "name": "Probe"
+   "z1": 18430,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
-   "x0": 30870,
-   "z0": 17610,
+   "x0": 31380,
+   "z0": 18627,
    "x1": 32200,
-   "z1": 18175,
-   "name": "Probe"
+   "z1": 18688,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
    "x0": 31125,
-   "z0": 18375,
+   "z0": 18885,
    "x1": 32200,
    "z1": 19450,
-   "name": "Probe"
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
@@ -846,31 +838,23 @@
    "z0": 19647,
    "x1": 32200,
    "z1": 19708,
-   "name": "Probe"
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
-   "x0": 31635,
+   "x0": 31890,
    "z0": 19902,
    "x1": 32200,
    "z1": 19963,
-   "name": "Probe"
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
    "x0": 2565,
-   "z0": 20922,
+   "z0": 20670,
    "x1": 2875,
-   "z1": 20983,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3330,
-   "z0": 20922,
-   "x1": 9505,
-   "z1": 20983,
-   "name": "Probe"
+   "z1": 20980,
+   "name": "Probe: Siren pole"
   },
   {
    "shape": "box",
@@ -878,7 +862,7 @@
    "z0": 21687,
    "x1": 2365,
    "z1": 21748,
-   "name": "Probe"
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
@@ -886,55 +870,95 @@
    "z0": 21942,
    "x1": 2620,
    "z1": 22003,
-   "name": "Probe"
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 9960,
+   "z0": 21690,
+   "x1": 10780,
+   "z1": 22510,
+   "name": "Probe: Diesel drum"
+  },
+  {
+   "shape": "box",
+   "x0": 10470,
+   "z0": 22707,
+   "x1": 11035,
+   "z1": 22768,
+   "name": "Probe: Diesel drum.001"
   },
   {
    "shape": "box",
    "x0": 1800,
    "z0": 22200,
    "x1": 2875,
-   "z1": 23275,
-   "name": "Probe"
+   "z1": 23020,
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 3330,
+   "z0": 20925,
+   "x1": 9505,
+   "z1": 23020,
+   "name": "Probe: Hut roof"
+  },
+  {
+   "shape": "box",
+   "x0": 9960,
+   "z0": 22962,
+   "x1": 11290,
+   "z1": 23023,
+   "name": "Probe: Diesel drum.001"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 23217,
+   "x1": 2620,
+   "z1": 23278,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
    "x0": 1800,
    "z0": 23472,
-   "x1": 2365,
-   "z1": 23533,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1800,
-   "z0": 23727,
    "x1": 2110,
-   "z1": 23788,
-   "name": "Probe"
+   "z1": 23533,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
-   "x0": 11232,
-   "z0": 22965,
-   "x1": 11293,
-   "z1": 23785,
-   "name": "Probe"
+   "x0": 3330,
+   "z0": 23220,
+   "x1": 11290,
+   "z1": 23530,
+   "name": "Probe: Hut roof"
   },
   {
    "shape": "box",
    "x0": 1797,
-   "z0": 23982,
+   "z0": 23727,
    "x1": 1858,
-   "z1": 24043,
-   "name": "Probe"
+   "z1": 23788,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
-   "x0": 9702,
-   "z0": 22965,
-   "x1": 9763,
-   "z1": 24040,
-   "name": "Probe"
+   "x0": 3330,
+   "z0": 23727,
+   "x1": 11035,
+   "z1": 23788,
+   "name": "Probe: Hut roof"
+  },
+  {
+   "shape": "box",
+   "x0": 9960,
+   "z0": 23982,
+   "x1": 10270,
+   "z1": 24043,
+   "name": "Probe: Diesel drum.001"
   },
   {
    "shape": "box",
@@ -942,7 +966,7 @@
    "z0": 24492,
    "x1": 28120,
    "z1": 24553,
-   "name": "Probe"
+   "name": "Probe: Truck bed"
   },
   {
    "shape": "box",
@@ -950,79 +974,79 @@
    "z0": 24492,
    "x1": 31180,
    "z1": 24553,
-   "name": "Probe"
+   "name": "Probe: Truck wheel.004"
   },
   {
    "shape": "box",
-   "x0": 12510,
-   "z0": 25767,
-   "x1": 13585,
-   "z1": 25828,
-   "name": "Probe"
+   "x0": 22200,
+   "z0": 24747,
+   "x1": 31180,
+   "z1": 24808,
+   "name": "Probe: Truck bed side"
+  },
+  {
+   "shape": "box",
+   "x0": 22200,
+   "z0": 25002,
+   "x1": 31945,
+   "z1": 25063,
+   "name": "Probe: Tarp on the bed"
   },
   {
    "shape": "box",
    "x0": 19905,
-   "z0": 25767,
-   "x1": 20215,
-   "z1": 25828,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19650,
    "z0": 26022,
-   "x1": 20725,
+   "x1": 20470,
    "z1": 26083,
-   "name": "Probe"
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
    "x0": 3330,
-   "z0": 26277,
+   "z0": 23985,
    "x1": 9505,
-   "z1": 26338,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 12000,
-   "z0": 26025,
-   "x1": 13585,
    "z1": 26335,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 12000,
-   "z0": 26532,
-   "x1": 13840,
-   "z1": 26593,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19650,
-   "z0": 26280,
-   "x1": 21490,
-   "z1": 26590,
-   "name": "Probe"
+   "name": "Probe: Hut roof"
   },
   {
    "shape": "box",
    "x0": 12255,
-   "z0": 26787,
+   "z0": 26025,
    "x1": 13585,
-   "z1": 26848,
-   "name": "Probe"
+   "z1": 26335,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
-   "x0": 12510,
-   "z0": 27042,
-   "x1": 13330,
-   "z1": 27103,
-   "name": "Probe"
+   "x0": 19905,
+   "z0": 26277,
+   "x1": 20725,
+   "z1": 26338,
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 12255,
+   "z0": 26532,
+   "x1": 13840,
+   "z1": 26593,
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 19650,
+   "z0": 26532,
+   "x1": 21490,
+   "z1": 26593,
+   "name": "Probe: Rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 13020,
+   "z0": 26787,
+   "x1": 13585,
+   "z1": 26848,
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
@@ -1030,23 +1054,15 @@
    "z0": 26790,
    "x1": 21490,
    "z1": 27100,
-   "name": "Probe"
+   "name": "Probe: Rubble"
   },
   {
    "shape": "box",
-   "x0": 22197,
-   "z0": 24750,
-   "x1": 22258,
-   "z1": 27100,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 32142,
+   "x0": 22200,
    "z0": 25260,
-   "x1": 32203,
+   "x1": 32200,
    "z1": 27100,
-   "name": "Probe"
+   "name": "Probe: Tarp on the bed"
   }
  ],
  "anim": {
@@ -1054,40 +1070,63 @@
   "ticks": 3
  },
  "probe": {
-  "Rubble": 321,
-  "Face slabs": 91,
-  "Cut blocks": 68,
-  "Cable drum": 34,
-  "Hut wall s": 25,
-  "Conveyor belt": 24,
-  "Truck bed": 22,
-  "Conveyor frame": 17,
-  "Hut wall n": 12,
-  "Winch house": 11,
-  "Flywheel": 10,
-  "Motor": 10,
-  "Drill half-holes": 10,
-  "Diesel drum.001": 9,
-  "Boom chord.001": 8,
+  "Cut blocks": 594,
+  "Hut roof": 414,
+  "Rubble": 241,
+  "Jaw box": 198,
+  "Tarp on the bed": 171,
+  "Face slabs": 105,
+  "Derrick foot": 68,
+  "Truck chassis": 63,
+  "Cable drum": 61,
+  "Truck bonnet": 59,
+  "Truck bed": 49,
+  "Hut wall s": 48,
+  "Conveyor belt": 45,
+  "Motor": 40,
+  "Winch house": 35,
+  "Hut wall n": 35,
+  "Winch roof": 33,
+  "Barrow pan": 33,
+  "Conveyor frame": 30,
+  "Cart load": 28,
+  "Diesel drum.001": 28,
+  "Ore cart": 25,
+  "Truck bed side": 22,
+  "Truck cab": 22,
+  "Drill half-holes": 21,
+  "Hut wall w": 20,
+  "Hut wall e": 20,
+  "Truck wheel.004": 19,
+  "Boom lacing": 16,
+  "Diesel drum": 16,
+  "Boom chord.001": 12,
+  "Flywheel": 11,
+  "Boom chord": 9,
+  "Mine rails rails": 8,
+  "Crusher leg": 6,
+  "Crusher leg.002": 6,
+  "Crusher leg.001": 6,
   "Danger board": 6,
   "Truck wheel": 6,
   "Truck wheel.002": 6,
-  "Truck wheel.004": 6,
-  "Boom lacing": 5,
-  "Barrow handle.001": 5,
+  "Boom chord.002": 5,
+  "Barrow handle": 5,
   "Hut door": 5,
-  "Boom chord": 3,
+  "Derrick mast": 4,
+  "Barrow handle.001": 4,
+  "Siren pole": 4,
   "Ladder rungs": 3,
-  "Barrow handle": 3,
   "Mine sign post": 2,
-  "Winch lever.001": 2,
   "Barrow wheel": 2,
-  "Siren pole": 2,
   "Drill lines": 1,
   "Ladder rail": 1,
   "Winch lever": 1,
   "Hasp": 1,
-  "Hut door frame.001": 1
+  "Hut door frame.001": 1,
+  "hoop.003": 1,
+  "hoop.004": 1,
+  "hoop.005": 1
  },
  "bounds": {
   "x0": 1700,

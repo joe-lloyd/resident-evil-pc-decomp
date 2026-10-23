@@ -43,19 +43,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 14176,
-   "z0": 7481,
-   "x1": 15064,
-   "z1": 7989,
-   "name": "Toolbox"
-  },
-  {
-   "shape": "box",
    "x0": 6560,
    "z0": 6897,
    "x1": 18600,
    "z1": 6958,
-   "name": "Probe"
+   "name": "Probe: Platform rails"
+  },
+  {
+   "shape": "box",
+   "x0": 14210,
+   "z0": 7665,
+   "x1": 15030,
+   "z1": 7975,
+   "name": "Probe: Toolbox"
   },
   {
    "shape": "box",
@@ -63,7 +63,7 @@
    "z0": 6900,
    "x1": 3558,
    "z1": 8485,
-   "name": "Probe"
+   "name": "Probe: Platform rails"
   },
   {
    "shape": "box",
@@ -71,7 +71,7 @@
    "z0": 7155,
    "x1": 18603,
    "z1": 8485,
-   "name": "Probe"
+   "name": "Probe: Platform rails"
   },
   {
    "shape": "box",
@@ -79,15 +79,15 @@
    "z0": 8682,
    "x1": 10185,
    "z1": 8743,
-   "name": "Probe"
+   "name": "Probe: Platform rails"
   },
   {
    "shape": "box",
-   "x0": 13700,
+   "x0": 13445,
    "z0": 8682,
    "x1": 18600,
    "z1": 8743,
-   "name": "Probe"
+   "name": "Probe: Platform rails"
   },
   {
    "shape": "box",
@@ -95,7 +95,7 @@
    "z0": 10722,
    "x1": 12735,
    "z1": 10783,
-   "name": "Probe"
+   "name": "Probe: Ladder hatch, open"
   },
   {
    "shape": "box",
@@ -103,7 +103,7 @@
    "z0": 11742,
    "x1": 12735,
    "z1": 11803,
-   "name": "Probe"
+   "name": "Probe: Ladder hoop"
   }
  ],
  "anim": {
@@ -111,7 +111,8 @@
   "ticks": 3
  },
  "probe": {
-  "Platform rails": 108,
+  "Platform rails": 109,
+  "Toolbox": 8,
   "Ladder hatch, open": 7,
   "Ladder hoop": 5,
   "Ladder hoop rail": 1,

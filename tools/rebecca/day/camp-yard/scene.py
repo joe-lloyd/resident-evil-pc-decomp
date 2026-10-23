@@ -461,7 +461,7 @@ def build():
             lum.append(reb.prim("cube", "Sawn board", mat("pine"), (mx0 - 0.9, y, 0.12 + row * 0.07), (1.4, 0.28, 0.05), rot=(0, 0, rng.uniform(-0.03, 0.03))))
     for x in (mx0 - 1.4, mx0 - 0.4):
         lum.append(reb.prim("cube", "Bearer", mat("dark wood"), (x, 10.3, 0.05), (0.1, 1.7, 0.1)))
-    reb.wall(kit.join("Sawn boards", lum))
+    kit.join("Sawn boards", lum)
 
     # ---- Fences: the slab fence round the camp where no building stands, the depot's wire.
     rng_f = random.Random(5)
@@ -676,7 +676,7 @@ def build():
     kit.join("Choker chains", chain)
     room_wall_logs = reb.prim("cube", "Choked logs footprint", None, (sx0 - 2.2, sy, 0.3), (3.8, 1.2, 0.6))
     room_wall_logs.hide_render = True
-    reb.mask(reb.wall(room_wall_logs))
+    reb.mask(room_wall_logs)
 
     # ---- The sawhorses by the gate: a log half cut through, the chainsaw left on it.
     hx, hy = 11.8, 15.4

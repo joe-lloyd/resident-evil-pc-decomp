@@ -56,195 +56,35 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 12027,
-   "z0": 6630,
-   "x1": 13473,
-   "z1": 7820,
-   "name": "Footlocker footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 1793,
-   "z0": 1742,
-   "x1": 5177,
-   "z1": 3255,
-   "name": "Bunk 00"
-  },
-  {
-   "shape": "box",
-   "x0": 5364,
-   "z0": 1742,
-   "x1": 8746,
-   "z1": 3255,
-   "name": "Bunk 01"
-  },
-  {
-   "shape": "box",
-   "x0": 12844,
-   "z0": 1742,
-   "x1": 16227,
-   "z1": 3255,
-   "name": "Bunk 02"
-  },
-  {
-   "shape": "box",
-   "x0": 16413,
-   "z0": 1742,
-   "x1": 19796,
-   "z1": 3255,
-   "name": "Bunk 03"
-  },
-  {
-   "shape": "box",
-   "x0": 1793,
-   "z0": 8645,
-   "x1": 5177,
-   "z1": 10158,
-   "name": "Bunk 10"
-  },
-  {
-   "shape": "box",
-   "x0": 5364,
-   "z0": 8645,
-   "x1": 8746,
-   "z1": 10158,
-   "name": "Bunk 11"
-  },
-  {
-   "shape": "box",
-   "x0": 11909,
-   "z0": 8645,
-   "x1": 15291,
-   "z1": 10158,
-   "name": "Bunk 12"
-  },
-  {
-   "shape": "box",
-   "x0": 15479,
-   "z0": 8645,
-   "x1": 18862,
-   "z1": 10158,
-   "name": "Bunk 13"
-  },
-  {
-   "shape": "box",
-   "x0": 2307,
-   "z0": 3277,
-   "x1": 3705,
-   "z1": 4033,
-   "name": "Footlocker 00"
-  },
-  {
-   "shape": "box",
-   "x0": 6278,
-   "z0": 3243,
-   "x1": 7711,
-   "z1": 4067,
-   "name": "Footlocker 01"
-  },
-  {
-   "shape": "box",
-   "x0": 13849,
-   "z0": 3265,
-   "x1": 15260,
-   "z1": 4045,
-   "name": "Footlocker 02"
-  },
-  {
-   "shape": "box",
-   "x0": 17398,
-   "z0": 3263,
-   "x1": 18811,
-   "z1": 4047,
-   "name": "Footlocker 03"
-  },
-  {
-   "shape": "box",
-   "x0": 2732,
-   "z0": 7847,
-   "x1": 4151,
-   "z1": 8643,
-   "name": "Footlocker 10"
-  },
-  {
-   "shape": "box",
-   "x0": 6838,
-   "z0": 7817,
-   "x1": 8287,
-   "z1": 8673,
-   "name": "Footlocker 11"
-  },
-  {
-   "shape": "box",
-   "x0": 16808,
-   "z0": 7848,
-   "x1": 18226,
-   "z1": 8642,
-   "name": "Footlocker 13"
-  },
-  {
-   "shape": "circle",
-   "x0": 10370,
-   "z0": 2040,
-   "x1": 11390,
-   "z1": 3060,
-   "name": "Pot-belly stove"
-  },
-  {
-   "shape": "box",
-   "x0": 7735,
-   "z0": 5355,
-   "x1": 9605,
-   "z1": 6715,
-   "name": "Card table"
-  },
-  {
-   "shape": "box",
-   "x0": 8940,
-   "z0": 1797,
-   "x1": 12820,
-   "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19905,
+   "x0": 1800,
    "z0": 1797,
    "x1": 20300,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Wall n"
   },
   {
    "shape": "box",
-   "x0": 9705,
+   "x0": 9450,
    "z0": 2052,
-   "x1": 10525,
+   "x1": 11290,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Shelf over the stove"
   },
   {
    "shape": "box",
-   "x0": 11232,
-   "z0": 2052,
-   "x1": 11293,
-   "z1": 2113,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10212,
+   "x0": 10215,
    "z0": 2310,
-   "x1": 10273,
+   "x1": 11545,
    "z1": 2875,
-   "name": "Probe"
+   "name": "Probe: Stove top"
   },
   {
    "shape": "box",
-   "x0": 11487,
-   "z0": 2310,
-   "x1": 11548,
-   "z1": 2875,
-   "name": "Probe"
+   "x0": 1800,
+   "z0": 2055,
+   "x1": 8740,
+   "z1": 3130,
+   "name": "Probe: Blanket thrown back"
   },
   {
    "shape": "box",
@@ -252,31 +92,23 @@
    "z0": 3072,
    "x1": 11290,
    "z1": 3133,
-   "name": "Probe"
+   "name": "Probe: Stove belly"
   },
   {
    "shape": "box",
-   "x0": 12762,
+   "x0": 12765,
    "z0": 2055,
-   "x1": 12823,
+   "x1": 19705,
    "z1": 3130,
-   "name": "Probe"
+   "name": "Probe: His blanket"
   },
   {
    "shape": "box",
-   "x0": 16332,
-   "z0": 1800,
-   "x1": 16393,
-   "z1": 3130,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3837,
+   "x0": 2310,
    "z0": 3327,
-   "x1": 3898,
+   "x1": 4150,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Bunk 00 blanket"
   },
   {
    "shape": "box",
@@ -284,7 +116,7 @@
    "z0": 3327,
    "x1": 5425,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Bunk 01"
   },
   {
    "shape": "box",
@@ -292,31 +124,39 @@
    "z0": 3327,
    "x1": 8743,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Bunk 01"
   },
   {
    "shape": "box",
    "x0": 12765,
    "z0": 3327,
-   "x1": 13840,
+   "x1": 13330,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: His blanket"
   },
   {
    "shape": "box",
-   "x0": 15312,
+   "x0": 14040,
    "z0": 3327,
-   "x1": 15373,
+   "x1": 15370,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: His blanket"
   },
   {
    "shape": "box",
    "x0": 16080,
    "z0": 3327,
-   "x1": 17410,
+   "x1": 16390,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Bunk 03"
+  },
+  {
+   "shape": "box",
+   "x0": 17100,
+   "z0": 3327,
+   "x1": 18685,
+   "z1": 3388,
+   "name": "Probe: Bunk 03 blanket"
   },
   {
    "shape": "box",
@@ -324,175 +164,135 @@
    "z0": 3327,
    "x1": 19708,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Bunk 03"
   },
   {
    "shape": "box",
-   "x0": 13782,
+   "x0": 16590,
+   "z0": 3582,
+   "x1": 17155,
+   "z1": 3643,
+   "name": "Probe: Mattress pulled half off"
+  },
+  {
+   "shape": "box",
+   "x0": 17610,
+   "z0": 3582,
+   "x1": 18685,
+   "z1": 3643,
+   "name": "Probe: Ceiling"
+  },
+  {
+   "shape": "box",
+   "x0": 2310,
    "z0": 3585,
-   "x1": 13843,
+   "x1": 3640,
    "z1": 3895,
-   "name": "Probe"
+   "name": "Probe: Ceiling"
+  },
+  {
+   "shape": "box",
+   "x0": 6390,
+   "z0": 3330,
+   "x1": 7720,
+   "z1": 3895,
+   "name": "Probe: Ceiling"
+  },
+  {
+   "shape": "box",
+   "x0": 14040,
+   "z0": 3585,
+   "x1": 15115,
+   "z1": 3895,
+   "name": "Probe: Ceiling"
   },
   {
    "shape": "box",
    "x0": 16335,
-   "z0": 3585,
-   "x1": 17410,
-   "z1": 3895,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 18885,
-   "z0": 3585,
+   "z0": 3837,
    "x1": 19450,
-   "z1": 3895,
-   "name": "Probe"
+   "z1": 3898,
+   "name": "Probe: Mattress pulled half off"
   },
   {
    "shape": "box",
-   "x0": 7410,
-   "z0": 4092,
-   "x1": 7720,
-   "z1": 4153,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 17100,
+   "x0": 18630,
    "z0": 4092,
    "x1": 19450,
    "z1": 4153,
-   "name": "Probe"
+   "name": "Probe: Mattress pulled half off"
   },
   {
    "shape": "box",
-   "x0": 9960,
+   "x0": 10212,
    "z0": 4602,
-   "x1": 10270,
+   "x1": 10273,
    "z1": 4663,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9450,
-   "z0": 4857,
-   "x1": 10270,
-   "z1": 4918,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7662,
-   "z0": 5367,
-   "x1": 7723,
-   "z1": 5428,
-   "name": "Probe"
+   "name": "Probe: Card chair.001"
   },
   {
    "shape": "box",
    "x0": 9705,
-   "z0": 5115,
+   "z0": 4857,
+   "x1": 10270,
+   "z1": 4918,
+   "name": "Probe: Card chair.001"
+  },
+  {
+   "shape": "box",
+   "x0": 9705,
+   "z0": 5112,
    "x1": 10525,
-   "z1": 5425,
-   "name": "Probe"
+   "z1": 5173,
+   "name": "Probe: Card chair.001"
+  },
+  {
+   "shape": "box",
+   "x0": 7665,
+   "z0": 5367,
+   "x1": 10525,
+   "z1": 5428,
+   "name": "Probe: Card table"
   },
   {
    "shape": "box",
    "x0": 7155,
    "z0": 5622,
-   "x1": 7720,
+   "x1": 9760,
    "z1": 5683,
-   "name": "Probe"
+   "name": "Probe: Card table"
   },
   {
    "shape": "box",
    "x0": 6900,
    "z0": 5880,
-   "x1": 7720,
-   "z1": 6190,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7155,
-   "z0": 6387,
-   "x1": 7720,
-   "z1": 6448,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7662,
-   "z0": 6642,
-   "x1": 7723,
-   "z1": 6703,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9702,
-   "z0": 5625,
-   "x1": 9763,
-   "z1": 6700,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 13527,
-   "z0": 7152,
-   "x1": 13588,
-   "z1": 7213,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9195,
-   "z0": 7407,
-   "x1": 9505,
-   "z1": 7468,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8940,
-   "z0": 7662,
    "x1": 9760,
-   "z1": 7723,
-   "name": "Probe"
+   "z1": 6190,
+   "name": "Probe: Card table"
   },
   {
    "shape": "box",
-   "x0": 8937,
-   "z0": 7917,
-   "x1": 8998,
-   "z1": 7978,
-   "name": "Probe"
+   "x0": 7665,
+   "z0": 6390,
+   "x1": 9760,
+   "z1": 6700,
+   "name": "Probe: Card table"
   },
   {
    "shape": "box",
-   "x0": 9702,
-   "z0": 7917,
-   "x1": 9763,
-   "z1": 7978,
-   "name": "Probe"
+   "x0": 12000,
+   "z0": 6645,
+   "x1": 13330,
+   "z1": 7720,
+   "name": "Probe: Ceiling"
   },
   {
    "shape": "box",
-   "x0": 13017,
-   "z0": 7917,
-   "x1": 13078,
-   "z1": 7978,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9447,
-   "z0": 8172,
-   "x1": 9508,
-   "z1": 8233,
-   "name": "Probe"
+   "x0": 2820,
+   "z0": 7920,
+   "x1": 4150,
+   "z1": 8230,
+   "name": "Probe: Ceiling"
   },
   {
    "shape": "box",
@@ -500,39 +300,63 @@
    "z0": 3330,
    "x1": 1858,
    "z1": 8485,
-   "name": "Probe"
+   "name": "Probe: Wall w"
   },
   {
    "shape": "box",
-   "x0": 4347,
+   "x0": 2820,
    "z0": 8427,
-   "x1": 4408,
+   "x1": 4915,
    "z1": 8488,
-   "name": "Probe"
+   "name": "Probe: Ceiling"
   },
   {
    "shape": "box",
-   "x0": 6132,
-   "z0": 8427,
-   "x1": 6193,
-   "z1": 8488,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9195,
-   "z0": 8427,
-   "x1": 9505,
-   "z1": 8488,
-   "name": "Probe"
+   "x0": 6900,
+   "z0": 7920,
+   "x1": 8230,
+   "z1": 8485,
+   "name": "Probe: Ceiling"
   },
   {
    "shape": "box",
    "x0": 13020,
    "z0": 8427,
-   "x1": 13585,
+   "x1": 13840,
    "z1": 8488,
-   "name": "Probe"
+   "name": "Probe: Bunk 12 blanket"
+  },
+  {
+   "shape": "box",
+   "x0": 16845,
+   "z0": 7920,
+   "x1": 18175,
+   "z1": 8485,
+   "name": "Probe: Ceiling"
+  },
+  {
+   "shape": "box",
+   "x0": 12000,
+   "z0": 8682,
+   "x1": 18940,
+   "z1": 8743,
+   "name": "Probe: Bunk 13 mattress"
+  },
+  {
+   "shape": "box",
+   "x0": 12000,
+   "z0": 8940,
+   "x1": 18685,
+   "z1": 9760,
+   "name": "Probe: Bunk 13 mattress"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 8685,
+   "x1": 8740,
+   "z1": 10015,
+   "name": "Probe: Bunk 10 mattress"
   },
   {
    "shape": "box",
@@ -540,23 +364,15 @@
    "z0": 9957,
    "x1": 10783,
    "z1": 10018,
-   "name": "Probe"
+   "name": "Probe: Axe blade through"
   },
   {
    "shape": "box",
-   "x0": 15312,
-   "z0": 8685,
-   "x1": 15373,
-   "z1": 10015,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 18882,
-   "z0": 8685,
-   "x1": 18943,
-   "z1": 10015,
-   "name": "Probe"
+   "x0": 12000,
+   "z0": 9957,
+   "x1": 18940,
+   "z1": 10018,
+   "name": "Probe: Bunk 13 mattress"
   },
   {
    "shape": "box",
@@ -564,7 +380,7 @@
    "z0": 2055,
    "x1": 20388,
    "z1": 10015,
-   "name": "Probe"
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
@@ -572,7 +388,7 @@
    "z0": 10127,
    "x1": 20300,
    "z1": 10188,
-   "name": "Probe"
+   "name": "Probe: Wall s.001"
   }
  ],
  "anim": {
@@ -580,46 +396,63 @@
   "ticks": 3
  },
  "probe": {
+  "Ceiling": 124,
+  "Bunk 13 mattress": 77,
+  "His blanket": 64,
+  "Bunk 03 blanket": 47,
+  "Card table": 45,
+  "Bunk 01 mattress": 37,
+  "Blanket thrown back": 36,
+  "Bunk 03 mattress": 36,
   "Wall e": 34,
-  "Mattress pulled half off": 29,
+  "Bunk 12 blanket": 33,
+  "Bunk 00 blanket": 29,
+  "Bunk 11 blanket": 29,
+  "Bunk 10 mattress": 29,
+  "Bunk 00 mattress": 25,
+  "Bunk 10 blanket": 25,
+  "Bedding kicked off 1": 25,
+  "Bedding kicked off 2": 25,
+  "Bedding kicked off 3": 24,
+  "Bedding kicked off 0": 24,
+  "Bunk 11 mattress": 23,
+  "Bunk 12 mattress": 21,
   "Wall w": 20,
-  "Card chair.001": 15,
-  "Card chair": 14,
+  "Mattress pulled half off": 20,
+  "Bunk 02 mattress": 15,
+  "Bunk 00": 14,
+  "Bunk 01": 14,
+  "Card chair.001": 12,
+  "Card chair": 12,
+  "Bunk 10": 12,
+  "Bunk 11": 12,
   "Wall n": 11,
+  "Shelf over the stove": 11,
   "Stove belly": 11,
-  "Chair from the barricade": 11,
-  "His blanket": 9,
-  "Shelf over the stove": 8,
-  "Wall s": 7,
+  "Dead in his bunk": 10,
+  "Bunk 03": 9,
+  "Stove top": 8,
+  "Bunk 12": 7,
   "Wall s.001": 7,
   "Wall s.004": 7,
   "Wall s.006": 7,
-  "Wall s.011": 7,
+  "Wall s.008": 7,
   "Wall s.012": 7,
-  "Card table": 6,
   "Door, shut": 6,
-  "Wall s.008": 6,
   "Wall s.009": 6,
+  "Wall s.011": 6,
   "Wall s.014": 6,
-  "Wall s.003": 5,
+  "Wall s": 5,
   "Bunk 02": 4,
-  "Bunk 03": 4,
-  "Bunk 03 mattress": 4,
-  "Bunk 12 mattress": 4,
-  "Bunk 13 mattress": 4,
-  "Bunk 12 blanket": 3,
+  "Pot-belly stove": 4,
+  "Wall s.003": 4,
+  "Magazine": 3,
+  "Playing cards": 3,
   "Radio": 2,
-  "Bunk 00": 2,
-  "Bunk 01": 2,
-  "Footlocker 02": 2,
-  "Footlocker 01": 2,
-  "Footlocker shoved back": 2,
-  "Bunk 12": 2,
   "Bunk 13": 2,
-  "Bunk 00 blanket": 1,
-  "Bunk 03 blanket": 1,
-  "Bedding kicked off 0": 1,
-  "Bedding kicked off 1": 1,
+  "Diary page": 2,
+  "Bottles on the table": 1,
+  "Torn belt 0": 1,
   "Axe blade through": 1,
   "Door frame.001": 1,
   "Rag in the window": 1

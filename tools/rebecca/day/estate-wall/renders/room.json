@@ -95,179 +95,163 @@
  "walls": [
   {
    "shape": "box",
-   "x0": -37400,
-   "z0": 32470,
-   "x1": 14280,
-   "z1": 33490,
-   "name": "Wall"
+   "x0": 22880,
+   "z0": 4517,
+   "x1": 23955,
+   "z1": 4578,
+   "name": "Probe: Park wall pier"
   },
   {
    "shape": "box",
-   "x0": 19720,
-   "z0": 32470,
-   "x1": 71400,
-   "z1": 33490,
-   "name": "Wall.001"
+   "x0": 22880,
+   "z0": 4772,
+   "x1": 23190,
+   "z1": 4833,
+   "name": "Probe: Park wall pier"
   },
   {
    "shape": "box",
-   "x0": -5610,
-   "z0": 31790,
-   "x1": -4590,
-   "z1": 32470,
-   "name": "Buttress"
-  },
-  {
-   "shape": "box",
-   "x0": 2890,
-   "z0": 31790,
-   "x1": 3910,
-   "z1": 32470,
-   "name": "Buttress.001"
-  },
-  {
-   "shape": "box",
-   "x0": 9690,
-   "z0": 31790,
-   "x1": 10710,
-   "z1": 32470,
-   "name": "Buttress.002"
-  },
-  {
-   "shape": "box",
-   "x0": 23290,
-   "z0": 31790,
-   "x1": 24310,
-   "z1": 32470,
-   "name": "Buttress.003"
-  },
-  {
-   "shape": "box",
-   "x0": 30090,
-   "z0": 31790,
-   "x1": 31110,
-   "z1": 32470,
-   "name": "Buttress.004"
-  },
-  {
-   "shape": "box",
-   "x0": 38590,
-   "z0": 31790,
-   "x1": 39610,
-   "z1": 32470,
-   "name": "Buttress.005"
-  },
-  {
-   "shape": "box",
-   "x0": 14280,
-   "z0": 32088,
-   "x1": 15640,
-   "z1": 33532,
-   "name": "Gate pier"
-  },
-  {
-   "shape": "box",
-   "x0": 18360,
-   "z0": 32088,
-   "x1": 19720,
-   "z1": 33532,
-   "name": "Gate pier.001"
-  },
-  {
-   "shape": "box",
-   "x0": 15640,
-   "z0": 32640,
-   "x1": 18360,
-   "z1": 32980,
-   "name": "Gate footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 23120,
-   "z0": 5100,
-   "x1": 24140,
-   "z1": 13940,
-   "name": "Park wall"
-  },
-  {
-   "shape": "box",
-   "x0": 24140,
-   "z0": -56780,
-   "x1": 25160,
-   "z1": 5100,
-   "name": "Park wall.001"
-  },
-  {
-   "shape": "box",
-   "x0": 23035,
-   "z0": 4505,
-   "x1": 25245,
-   "z1": 5695,
-   "name": "Park wall pier"
-  },
-  {
-   "shape": "box",
-   "x0": 23120,
-   "z0": 13940,
-   "x1": 24140,
-   "z1": 14960,
-   "name": "Park wall stump"
-  },
-  {
-   "shape": "box",
-   "x0": 1700,
-   "z0": 12920,
-   "x1": 7310,
-   "z1": 20060,
-   "name": "Thicket footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 25160,
-   "z0": 12920,
-   "x1": 30600,
-   "z1": 19040,
-   "name": "Thicket footprint.001"
+   "x0": 22880,
+   "z0": 5027,
+   "x1": 23955,
+   "z1": 5088,
+   "name": "Probe: Park wall"
   },
   {
    "shape": "box",
    "x0": 22877,
-   "z0": 4520,
+   "z0": 5285,
    "x1": 22938,
    "z1": 5595,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 24152,
-   "z0": 14717,
-   "x1": 24213,
-   "z1": 14778,
-   "name": "Probe"
+   "name": "Probe: Park wall pier"
   },
   {
    "shape": "box",
    "x0": 23135,
-   "z0": 14972,
+   "z0": 14720,
    "x1": 24210,
+   "z1": 15030,
+   "name": "Probe: Park wall stump"
+  },
+  {
+   "shape": "box",
+   "x0": 27725,
+   "z0": 14972,
+   "x1": 28035,
    "z1": 15033,
-   "name": "Probe"
+   "name": "Probe: Thicket rocks"
   },
   {
    "shape": "box",
-   "x0": 4007,
-   "z0": 31805,
-   "x1": 4068,
-   "z1": 32115,
-   "name": "Probe"
+   "x0": 27470,
+   "z0": 15227,
+   "x1": 28290,
+   "z1": 15288,
+   "name": "Probe: Thicket rocks"
   },
   {
    "shape": "box",
-   "x0": 9617,
+   "x0": 4517,
+   "z0": 15482,
+   "x1": 4578,
+   "z1": 15543,
+   "name": "Probe: Thicket rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 26960,
+   "z0": 15482,
+   "x1": 28545,
+   "z1": 15543,
+   "name": "Probe: Thicket rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 4010,
+   "z0": 15737,
+   "x1": 5085,
+   "z1": 15798,
+   "name": "Probe: Thicket rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 15992,
+   "x1": 5085,
+   "z1": 16053,
+   "name": "Probe: Thicket rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 16250,
+   "x1": 5595,
+   "z1": 16560,
+   "name": "Probe: Thicket rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 25172,
+   "z0": 14975,
+   "x1": 25233,
+   "z1": 16560,
+   "name": "Probe: Fallen wall stones"
+  },
+  {
+   "shape": "box",
+   "x0": 26960,
+   "z0": 15740,
+   "x1": 28800,
+   "z1": 16560,
+   "name": "Probe: Thicket rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 16757,
+   "x1": 5340,
+   "z1": 16818,
+   "name": "Probe: Thicket rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 27215,
+   "z0": 16757,
+   "x1": 28290,
+   "z1": 16818,
+   "name": "Probe: Thicket rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 3755,
+   "z0": 17012,
+   "x1": 5085,
+   "z1": 17073,
+   "name": "Probe: Thicket rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 4265,
+   "z0": 17267,
+   "x1": 4830,
+   "z1": 17328,
+   "name": "Probe: Thicket rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
    "z0": 31805,
-   "x1": 9678,
+   "x1": 4065,
    "z1": 32115,
-   "name": "Probe"
+   "name": "Probe: Buttress.001"
+  },
+  {
+   "shape": "box",
+   "x0": 9620,
+   "z0": 31805,
+   "x1": 10695,
+   "z1": 32115,
+   "name": "Probe: Buttress.002"
   },
   {
    "shape": "box",
@@ -275,7 +259,7 @@
    "z0": 32057,
    "x1": 15795,
    "z1": 32118,
-   "name": "Probe"
+   "name": "Probe: Gate pier"
   },
   {
    "shape": "box",
@@ -283,47 +267,31 @@
    "z0": 32057,
    "x1": 19875,
    "z1": 32118,
-   "name": "Probe"
+   "name": "Probe: Gate pier.001"
   },
   {
    "shape": "box",
-   "x0": 23132,
+   "x0": 23135,
    "z0": 31805,
-   "x1": 23193,
+   "x1": 24465,
    "z1": 32115,
-   "name": "Probe"
+   "name": "Probe: Buttress.003"
   },
   {
    "shape": "box",
-   "x0": 24407,
-   "z0": 31805,
-   "x1": 24468,
-   "z1": 32115,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4010,
-   "z0": 32227,
-   "x1": 9675,
-   "z1": 32288,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10895,
+   "x0": 3500,
    "z0": 32227,
    "x1": 14265,
    "z1": 32288,
-   "name": "Probe"
+   "name": "Probe: Moss at the foot"
   },
   {
    "shape": "box",
-   "x0": 15737,
+   "x0": 15485,
    "z0": 32227,
-   "x1": 15798,
+   "x1": 15795,
    "z1": 32288,
-   "name": "Probe"
+   "name": "Probe: Gate pier"
   },
   {
    "shape": "box",
@@ -331,23 +299,15 @@
    "z0": 32227,
    "x1": 18348,
    "z1": 32288,
-   "name": "Probe"
+   "name": "Probe: Gate pier.001"
   },
   {
    "shape": "box",
-   "x0": 19820,
-   "z0": 32227,
-   "x1": 23190,
-   "z1": 32288,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 24410,
+   "x0": 19565,
    "z0": 32227,
    "x1": 28800,
    "z1": 32288,
-   "name": "Probe"
+   "name": "Probe: Moss at the foot.001"
   }
  ],
  "anim": {
@@ -366,15 +326,18 @@
   }
  ],
  "probe": {
-  "Moss at the foot": 35,
-  "Moss at the foot.001": 32,
-  "Gate pier": 9,
-  "Gate pier.001": 8,
-  "Park wall stump": 6,
-  "Park wall pier": 5,
-  "Buttress.003": 4,
-  "Buttress.002": 3,
-  "Buttress.001": 2
+  "Thicket rocks": 98,
+  "Moss at the foot": 40,
+  "Moss at the foot.001": 36,
+  "Buttress.002": 12,
+  "Buttress.003": 12,
+  "Park wall pier": 10,
+  "Park wall stump": 10,
+  "Gate pier": 10,
+  "Gate pier.001": 9,
+  "Fallen wall stones": 7,
+  "Buttress.001": 6,
+  "Park wall": 4
  },
  "bounds": {
   "x0": 3400,

@@ -43,107 +43,75 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 8500,
-   "z0": 8483,
-   "x1": 13600,
-   "z1": 8687,
-   "name": "West rail footprint"
+   "x0": 15485,
+   "z0": 3500,
+   "x1": 17070,
+   "z1": 3810,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 17000,
-   "z0": 8483,
-   "x1": 23800,
-   "z1": 8687,
-   "name": "East rail footprint"
+   "x0": 15482,
+   "z0": 4007,
+   "x1": 15543,
+   "z1": 4068,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 13600,
-   "z0": 3400,
-   "x1": 13770,
-   "z1": 8500,
-   "name": "Catwalk rail footprint"
+   "x0": 15485,
+   "z0": 4262,
+   "x1": 15795,
+   "z1": 4323,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 15181,
-   "z0": 3400,
-   "x1": 17119,
-   "z1": 19720,
-   "name": "Trough footprint"
+   "x0": 16250,
+   "z0": 4010,
+   "x1": 17070,
+   "z1": 4320,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 14110,
-   "z0": 19550,
-   "x1": 15300,
-   "z1": 19720,
-   "name": "Headbox n"
+   "x0": 15485,
+   "z0": 4520,
+   "x1": 17070,
+   "z1": 6360,
+   "name": "Probe: Flume water"
   },
   {
    "shape": "box",
-   "x0": 15300,
-   "z0": 19550,
-   "x1": 17000,
-   "z1": 19720,
-   "name": "Headbox n.001"
-  },
-  {
-   "shape": "box",
-   "x0": 17000,
-   "z0": 19550,
-   "x1": 18190,
-   "z1": 19720,
-   "name": "Headbox n.002"
-  },
-  {
-   "shape": "box",
-   "x0": 14110,
-   "z0": 22780,
-   "x1": 18190,
-   "z1": 22950,
-   "name": "Headbox s"
-  },
-  {
-   "shape": "box",
-   "x0": 14110,
-   "z0": 19550,
-   "x1": 14280,
-   "z1": 22950,
-   "name": "Headbox w"
-  },
-  {
-   "shape": "box",
-   "x0": 18020,
-   "z0": 19550,
-   "x1": 18190,
-   "z1": 22950,
-   "name": "Headbox e"
+   "x0": 15485,
+   "z0": 6560,
+   "x1": 16815,
+   "z1": 7890,
+   "name": "Probe: Flume water"
   },
   {
    "shape": "box",
    "x0": 13697,
-   "z0": 8597,
+   "z0": 3500,
    "x1": 13758,
-   "z1": 8658,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23900,
-   "z0": 8597,
-   "x1": 25400,
-   "z1": 8658,
-   "name": "Probe"
+   "z1": 8400,
+   "name": "Probe: Catwalk rail"
   },
   {
    "shape": "box",
    "x0": 3500,
-   "z0": 8600,
-   "x1": 8400,
-   "z1": 8910,
-   "name": "Probe"
+   "z0": 8597,
+   "x1": 13755,
+   "z1": 8658,
+   "name": "Probe: Rocks at the lip"
+  },
+  {
+   "shape": "box",
+   "x0": 17015,
+   "z0": 8597,
+   "x1": 25400,
+   "z1": 8658,
+   "name": "Probe: Deck rail.003"
   },
   {
    "shape": "box",
@@ -151,15 +119,15 @@
    "z0": 8852,
    "x1": 25400,
    "z1": 8913,
-   "name": "Probe"
+   "name": "Probe: Rocks at the lip"
   },
   {
    "shape": "box",
    "x0": 4520,
-   "z0": 9107,
+   "z0": 8855,
    "x1": 8400,
-   "z1": 9168,
-   "name": "Probe"
+   "z1": 9165,
+   "name": "Probe: Rocks at the lip"
   },
   {
    "shape": "box",
@@ -167,7 +135,7 @@
    "z0": 9107,
    "x1": 25400,
    "z1": 9168,
-   "name": "Probe"
+   "name": "Probe: Rocks at the lip"
   },
   {
    "shape": "box",
@@ -175,7 +143,7 @@
    "z0": 9362,
    "x1": 8145,
    "z1": 9423,
-   "name": "Probe"
+   "name": "Probe: Rocks at the lip"
   },
   {
    "shape": "box",
@@ -183,55 +151,87 @@
    "z0": 9362,
    "x1": 25400,
    "z1": 9423,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4775,
-   "z0": 9617,
-   "x1": 7380,
-   "z1": 9678,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 24665,
-   "z0": 9617,
-   "x1": 25400,
-   "z1": 9678,
-   "name": "Probe"
+   "name": "Probe: Rocks at the lip"
   },
   {
    "shape": "box",
    "x0": 5030,
+   "z0": 9617,
+   "x1": 6870,
+   "z1": 9678,
+   "name": "Probe: Rocks at the lip"
+  },
+  {
+   "shape": "box",
+   "x0": 24920,
+   "z0": 9617,
+   "x1": 25400,
+   "z1": 9678,
+   "name": "Probe: Rocks at the lip"
+  },
+  {
+   "shape": "box",
+   "x0": 5285,
    "z0": 9872,
-   "x1": 6105,
+   "x1": 5850,
    "z1": 9933,
-   "name": "Probe"
+   "name": "Probe: Rocks at the lip"
   },
   {
    "shape": "box",
-   "x0": 3500,
+   "x0": 17012,
+   "z0": 10640,
+   "x1": 17073,
+   "z1": 10950,
+   "name": "Probe: Flume trough"
+  },
+  {
+   "shape": "box",
+   "x0": 3497,
    "z0": 12167,
-   "x1": 3810,
+   "x1": 3558,
    "z1": 12228,
-   "name": "Probe"
+   "name": "Probe: Rocks at the lip"
   },
   {
    "shape": "box",
    "x0": 3500,
-   "z0": 12425,
-   "x1": 4065,
-   "z1": 13245,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3500,
-   "z0": 13442,
+   "z0": 12422,
    "x1": 3810,
-   "z1": 13503,
-   "name": "Probe"
+   "z1": 12483,
+   "name": "Probe: Rocks at the lip"
+  },
+  {
+   "shape": "box",
+   "x0": 15227,
+   "z0": 12422,
+   "x1": 15288,
+   "z1": 12483,
+   "name": "Probe: Mooring rope"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 12680,
+   "x1": 4065,
+   "z1": 12990,
+   "name": "Probe: Rocks at the lip"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 13190,
+   "x1": 3810,
+   "z1": 13500,
+   "name": "Probe: Rocks at the lip"
+  },
+  {
+   "shape": "box",
+   "x0": 17012,
+   "z0": 13190,
+   "x1": 17073,
+   "z1": 13500,
+   "name": "Probe: Flume trough"
   },
   {
    "shape": "box",
@@ -239,7 +239,63 @@
    "z0": 13700,
    "x1": 3558,
    "z1": 14010,
-   "name": "Probe"
+   "name": "Probe: Rocks at the lip"
+  },
+  {
+   "shape": "box",
+   "x0": 15227,
+   "z0": 13952,
+   "x1": 15288,
+   "z1": 14013,
+   "name": "Probe: Flume trough"
+  },
+  {
+   "shape": "box",
+   "x0": 15227,
+   "z0": 15737,
+   "x1": 15288,
+   "z1": 15798,
+   "name": "Probe: Flume trough"
+  },
+  {
+   "shape": "box",
+   "x0": 17012,
+   "z0": 15740,
+   "x1": 17073,
+   "z1": 16050,
+   "name": "Probe: Flume trough"
+  },
+  {
+   "shape": "box",
+   "x0": 15227,
+   "z0": 16502,
+   "x1": 15288,
+   "z1": 16563,
+   "name": "Probe: Flume trough"
+  },
+  {
+   "shape": "box",
+   "x0": 15227,
+   "z0": 17012,
+   "x1": 15288,
+   "z1": 17073,
+   "name": "Probe: Hand on the lip"
+  },
+  {
+   "shape": "box",
+   "x0": 15227,
+   "z0": 18287,
+   "x1": 15288,
+   "z1": 18348,
+   "name": "Probe: Flume trough"
+  },
+  {
+   "shape": "box",
+   "x0": 17012,
+   "z0": 18290,
+   "x1": 17073,
+   "z1": 18600,
+   "name": "Probe: Flume trough"
   },
   {
    "shape": "box",
@@ -247,7 +303,23 @@
    "z0": 19307,
    "x1": 12228,
    "z1": 19368,
-   "name": "Probe"
+   "name": "Probe: Sign post"
+  },
+  {
+   "shape": "box",
+   "x0": 15227,
+   "z0": 19055,
+   "x1": 15288,
+   "z1": 19365,
+   "name": "Probe: Spill"
+  },
+  {
+   "shape": "box",
+   "x0": 17012,
+   "z0": 19055,
+   "x1": 17073,
+   "z1": 19365,
+   "name": "Probe: Spill"
   },
   {
    "shape": "box",
@@ -255,39 +327,55 @@
    "z0": 19562,
    "x1": 13245,
    "z1": 19623,
-   "name": "Probe"
+   "name": "Probe: Flume sign"
   },
   {
    "shape": "box",
-   "x0": 14465,
+   "x0": 13955,
+   "z0": 19562,
+   "x1": 15285,
+   "z1": 19623,
+   "name": "Probe: Headbox n"
+  },
+  {
+   "shape": "box",
+   "x0": 17015,
+   "z0": 19562,
+   "x1": 18345,
+   "z1": 19623,
+   "name": "Probe: Headbox n.002"
+  },
+  {
+   "shape": "box",
+   "x0": 13955,
    "z0": 19817,
-   "x1": 17835,
+   "x1": 18345,
    "z1": 19878,
-   "name": "Probe"
+   "name": "Probe: Headbox n.001"
   },
   {
    "shape": "box",
-   "x0": 15740,
+   "x0": 15485,
    "z0": 20072,
-   "x1": 16560,
+   "x1": 16815,
    "z1": 20133,
-   "name": "Probe"
+   "name": "Probe: Headgate wheel"
   },
   {
    "shape": "box",
-   "x0": 13952,
-   "z0": 19565,
-   "x1": 14013,
+   "x0": 13955,
+   "z0": 20075,
+   "x1": 14265,
    "z1": 20980,
-   "name": "Probe"
+   "name": "Probe: Headbox w"
   },
   {
    "shape": "box",
-   "x0": 18287,
-   "z0": 19565,
-   "x1": 18348,
+   "x0": 18035,
+   "z0": 20075,
+   "x1": 18345,
    "z1": 20980,
-   "name": "Probe"
+   "name": "Probe: Headbox e"
   }
  ],
  "anim": {
@@ -295,17 +383,37 @@
   "ticks": 3
  },
  "probe": {
-  "Rocks at the lip": 141,
+  "Rocks at the lip": 128,
+  "Flume water": 62,
+  "Flume trough": 24,
+  "Deck rail.003": 24,
+  "no floor": 20,
+  "Catwalk rail": 18,
+  "Deck rail.001": 18,
+  "Mountainside": 16,
+  "Headbox e": 13,
+  "Headbox n": 10,
   "Flume sign": 9,
+  "Headbox n.002": 9,
+  "Headbox w": 9,
   "Headbox n.001": 6,
-  "Headbox e": 6,
-  "Headbox n": 5,
-  "Headbox n.002": 5,
-  "Headbox w": 5,
-  "Headgate wheel": 4,
+  "Headgate wheel": 6,
+  "Foam on the current 4": 4,
+  "Spill": 4,
+  "Foam on the current 5": 3,
+  "Headbox ladder": 2,
+  "Catwalk post.001": 1,
+  "Catwalk post": 1,
+  "Rail post": 1,
+  "Rail post.002": 1,
   "Deck rail": 1,
+  "Deck rail.002": 1,
+  "Rail post.003": 1,
+  "Rail post.005": 1,
+  "Mooring rope": 1,
+  "Hand on the lip": 1,
   "Sign post": 1,
-  "Headbox ladder": 1
+  "Headbox rung.001": 1
  },
  "bounds": {
   "x0": 3400,
@@ -342,6 +450,12 @@
    "z0": 3400,
    "x1": 25500,
    "z1": 8500
+  },
+  {
+   "x0": 15300,
+   "z0": 8500,
+   "x1": 17000,
+   "z1": 19720
   }
  ],
  "doors": [
@@ -390,7 +504,7 @@
   },
   {
    "zone": {
-    "x0": 17000,
+    "x0": 15300,
     "z0": 10030,
     "x1": 18360,
     "z1": 11730

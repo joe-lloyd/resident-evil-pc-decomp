@@ -27,16 +27,7 @@
    "fov": 250
   }
  ],
- "walls": [
-  {
-   "shape": "box",
-   "x0": 5476,
-   "z0": 10421,
-   "x1": 5714,
-   "z1": 10659,
-   "name": "Marker post"
-  }
- ],
+ "walls": [],
  "probe": {},
  "bounds": {
   "x0": 2000,

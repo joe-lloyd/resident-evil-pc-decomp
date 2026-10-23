@@ -34,7 +34,7 @@
    "z0": 1800,
    "x1": 4875,
    "z1": 2110,
-   "name": "Probe"
+   "name": "Probe: Cage sides"
   },
   {
    "shape": "box",
@@ -42,7 +42,7 @@
    "z0": 2310,
    "x1": 4830,
    "z1": 2620,
-   "name": "Probe"
+   "name": "Probe: Bell handle"
   },
   {
    "shape": "box",
@@ -50,7 +50,7 @@
    "z0": 2817,
    "x1": 4875,
    "z1": 2878,
-   "name": "Probe"
+   "name": "Probe: Cage sides"
   },
   {
    "shape": "box",
@@ -58,7 +58,7 @@
    "z0": 3072,
    "x1": 4830,
    "z1": 3133,
-   "name": "Probe"
+   "name": "Probe: Control box"
   },
   {
    "shape": "box",
@@ -66,15 +66,15 @@
    "z0": 2820,
    "x1": 1858,
    "z1": 3385,
-   "name": "Probe"
+   "name": "Probe: Capacity words"
   },
   {
    "shape": "box",
-   "x0": 4350,
+   "x0": 4095,
    "z0": 3327,
    "x1": 4830,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Control box"
   },
   {
    "shape": "box",
@@ -82,7 +82,7 @@
    "z0": 3582,
    "x1": 4830,
    "z1": 3643,
-   "name": "Probe"
+   "name": "Probe: Control DOWN"
   },
   {
    "shape": "box",
@@ -90,7 +90,7 @@
    "z0": 3840,
    "x1": 4875,
    "z1": 4150,
-   "name": "Probe"
+   "name": "Probe: Cage sides"
   },
   {
    "shape": "box",
@@ -98,7 +98,7 @@
    "z0": 4262,
    "x1": 4830,
    "z1": 4323,
-   "name": "Probe"
+   "name": "Probe: South gate"
   }
  ],
  "anim": {
@@ -119,10 +119,12 @@
  "probe": {
   "South gate": 13,
   "Cage sides": 8,
-  "Control box": 5,
+  "Control box": 4,
   "Capacity words": 3,
   "Bell handle": 2,
-  "Control lever": 1
+  "Lever knob": 1,
+  "Control lever": 1,
+  "Control DOWN": 1
  },
  "bounds": {
   "x0": 1700,

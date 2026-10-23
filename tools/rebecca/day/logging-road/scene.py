@@ -381,7 +381,6 @@ def build():
         reb.mask(kit.felled_log("Cold deck log", (x0, y, height(x0, y) + z - 0.05), (x1, y + rng.uniform(-0.1, 0.1), height(x1, y) + z - 0.05), r, deck_m, deck_ends, seed=200 + k))
     for k, (x, y, r) in enumerate(((11.2, 13.4, 0.38), (1.0, 13.8, 0.34), (13.6, 14.6, 0.42))):
         st = kit.rough_log(f"Stump {k}", (x, y, height(x, y) - 0.3), (x + 0.03, y - 0.02, height(x, y) + 0.45), r, seed=220 + k, stubs=0, sawn=deck_ends)
-        reb.wall(st, "circle")
     kit.tree_roots(rng, [(Vector((x, y, height(x, y) - 0.1)), 12) for x, y in ((11.2, 13.4), (1.0, 13.8), (13.6, 14.6))], height)
     for k in range(9):
         x, y = 10.0 + rng.uniform(-1.0, 1.5), 14.6 + rng.uniform(-0.5, 0.6)

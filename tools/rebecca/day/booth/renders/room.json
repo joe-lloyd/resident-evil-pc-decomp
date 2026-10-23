@@ -30,51 +30,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 1734,
-   "z0": 2125,
-   "x1": 2754,
-   "z1": 5695,
-   "name": "Control desk"
-  },
-  {
-   "shape": "box",
-   "x0": 2338,
-   "z0": 5457,
-   "x1": 2932,
-   "z1": 5763,
-   "name": "Heater"
-  },
-  {
-   "shape": "box",
-   "x0": 2720,
-   "z0": 1700,
-   "x1": 3468,
-   "z1": 2210,
-   "name": "Typing stand"
-  },
-  {
-   "shape": "box",
-   "x0": 6169,
-   "z0": 4134,
-   "x1": 7140,
-   "z1": 5555,
-   "name": "Item box"
-  },
-  {
-   "shape": "box",
-   "x0": 3585,
+   "x0": 1800,
    "z0": 1797,
    "x1": 7040,
    "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1800,
-   "z0": 1800,
-   "x1": 2620,
-   "z1": 2110,
-   "name": "Probe"
+   "name": "Probe: Wainscot"
   },
   {
    "shape": "box",
@@ -82,15 +42,15 @@
    "z0": 2052,
    "x1": 7128,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
-   "x0": 2820,
-   "z0": 2307,
+   "x0": 1800,
+   "z0": 2055,
    "x1": 3385,
-   "z1": 2368,
-   "name": "Probe"
+   "z1": 2365,
+   "name": "Probe: Control desk"
   },
   {
    "shape": "box",
@@ -98,7 +58,7 @@
    "z0": 2307,
    "x1": 7040,
    "z1": 2368,
-   "name": "Probe"
+   "name": "Probe: Fuse box door"
   },
   {
    "shape": "box",
@@ -106,15 +66,7 @@
    "z0": 2562,
    "x1": 7040,
    "z1": 2623,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3330,
-   "z0": 2817,
-   "x1": 4150,
-   "z1": 2878,
-   "name": "Probe"
+   "name": "Probe: Fuse box door"
   },
   {
    "shape": "box",
@@ -122,23 +74,7 @@
    "z0": 2820,
    "x1": 7040,
    "z1": 3130,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4092,
-   "z0": 3075,
-   "x1": 4153,
-   "z1": 3385,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3330,
-   "z0": 3582,
-   "x1": 4150,
-   "z1": 3643,
-   "name": "Probe"
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
@@ -146,7 +82,7 @@
    "z0": 3330,
    "x1": 7040,
    "z1": 3640,
-   "name": "Probe"
+   "name": "Probe: First aid lid"
   },
   {
    "shape": "box",
@@ -154,47 +90,23 @@
    "z0": 3837,
    "x1": 7040,
    "z1": 3898,
-   "name": "Probe"
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
-   "x0": 6135,
-   "z0": 4092,
-   "x1": 7040,
-   "z1": 4153,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2817,
+   "x0": 1800,
    "z0": 2565,
-   "x1": 2878,
-   "z1": 5425,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6132,
-   "z0": 4350,
-   "x1": 6193,
-   "z1": 5425,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7067,
-   "z0": 4350,
-   "x1": 7128,
-   "z1": 5425,
-   "name": "Probe"
+   "x1": 2875,
+   "z1": 5680,
+   "name": "Probe: Desk slope"
   },
   {
    "shape": "box",
    "x0": 6135,
-   "z0": 5622,
+   "z0": 4095,
    "x1": 7040,
-   "z1": 5683,
-   "name": "Probe"
+   "z1": 5680,
+   "name": "Probe: Item box"
   },
   {
    "shape": "box",
@@ -202,7 +114,15 @@
    "z0": 5877,
    "x1": 1858,
    "z1": 5938,
-   "name": "Probe"
+   "name": "Probe: Wall w.003"
+  },
+  {
+   "shape": "box",
+   "x0": 2820,
+   "z0": 5877,
+   "x1": 3130,
+   "z1": 5938,
+   "name": "Probe: Cap"
   },
   {
    "shape": "box",
@@ -210,7 +130,7 @@
    "z0": 5877,
    "x1": 4405,
    "z1": 5938,
-   "name": "Probe"
+   "name": "Probe: Handprint"
   },
   {
    "shape": "box",
@@ -218,7 +138,7 @@
    "z0": 5877,
    "x1": 6190,
    "z1": 5938,
-   "name": "Probe"
+   "name": "Probe: Door frame.001"
   },
   {
    "shape": "box",
@@ -226,7 +146,7 @@
    "z0": 5877,
    "x1": 7128,
    "z1": 5938,
-   "name": "Probe"
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
@@ -234,7 +154,7 @@
    "z0": 6047,
    "x1": 4405,
    "z1": 6108,
-   "name": "Probe"
+   "name": "Probe: Wall s"
   },
   {
    "shape": "box",
@@ -242,7 +162,7 @@
    "z0": 6047,
    "x1": 7040,
    "z1": 6108,
-   "name": "Probe"
+   "name": "Probe: Wall s.002"
   }
  ],
  "anim": {
@@ -265,25 +185,31 @@
   }
  ],
  "probe": {
-  "Wainscot.001": 17,
+  "Desk slope": 45,
+  "Item box": 27,
+  "Wall e": 18,
   "Control desk": 16,
-  "Item box": 13,
   "Wainscot": 10,
-  "Operator's chair": 10,
   "Wall s": 10,
+  "His typewriter": 8,
   "Chalk ledge": 8,
   "Wall s.002": 5,
+  "Radio": 4,
   "Fuse box door": 4,
   "Fuse box": 3,
+  "Run sheet": 3,
   "First aid lid": 3,
-  "His typewriter": 2,
+  "Clipboard": 2,
   "First aid box": 2,
+  "Heater": 2,
+  "Cap": 2,
   "Door frame": 2,
   "Door frame.001": 2,
-  "Heater": 1,
+  "Photo": 1,
+  "Handset": 1,
+  "Stop collar": 1,
   "Wall w.003": 1,
-  "Handprint": 1,
-  "Wall e": 1
+  "Handprint": 1
  },
  "bounds": {
   "x0": 1700,

@@ -189,8 +189,6 @@ def build():
     reb.trunks("Its trunk", mat("bark"), [(top_base, 17)])
     kit.tree_roots(rng, [(top_base, 17)], height)
     kit.rocks("Fallen rocks", rng, [(3.6, 3.3, 0.35), (14.2, 3.6, 0.4), (3.5, 10.6, 0.45), (14.4, 9.8, 0.4), (7.2, 3.6, 0.22), (10.6, 3.5, 0.18)], height, granite)
-    for (x, y, r) in ((3.5, 10.6, 0.45), (14.4, 9.8, 0.4)):
-        reb.wall(reb.prim("cube", "Rock footprint", None, (x, y, r / 2), (r * 2.2, r * 1.9, r))).hide_render = True
 
     # ---- The pit they lie in, under the slab: churned soil, hair, a collar with a broken chain.
     kit.lay_on_ground(kit.splat("The dogs' pit", churned, (PIT[0], PIT[1], 0), 0.9, seed=7, stretch=(1.2, 0.8), lumps=0.25), height, 0.006)
@@ -243,9 +241,6 @@ def build():
     # Windfall at the south-west, the hiker's jacket torn up on its stubs.
     wa, wb = (4.2, 11.2), (7.4, 9.3)
     windfall = kit.rough_log("Windfall", (wa[0], wa[1], height(*wa) + 0.16), (wb[0], wb[1], height(*wb) + 0.14), 0.26, seed=50, stubs=6)
-    for k in range(3):
-        p = Vector(wa).lerp(Vector(wb), 0.15 + 0.3 * k)
-        reb.wall(reb.prim("cube", "Windfall footprint", None, (p.x, p.y, 0.3), (1.3, 0.55, 0.6), rot=(0, 0, math.atan2(wb[1] - wa[1], wb[0] - wa[0])))).hide_render = True
     jx, jy = 5.9, 10.15
     torn = kit.drape("Hiker's jacket", jacket, [windfall], (jx, jy), (0.85, 0.6), yaw=math.atan2(wb[1] - wa[1], wb[0] - wa[0]) + math.pi / 2, base=height(jx, jy), cuts=16, lumps=0.03, seed=11)
     # Torn up: a ragged outline and holes, not a square of cloth.

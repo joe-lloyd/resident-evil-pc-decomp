@@ -77,8 +77,10 @@ test('outdoors and underground a room is a free shape; a building keeps its stra
         [i0, j0, i1, j1] = [Math.min(i0, i), Math.min(j0, j), Math.max(i1, i), Math.max(j1, j)];
       }
     const fill = on / ((i1 - i0 + 1) * (j1 - j0 + 1));
-    // A free shape leaves a good part of its bounding box empty.
-    if (organic(f) && fill > 0.92) boxy.push(`${f.place} fills ${(fill * 100).toFixed(0)}% of its box`);
+    // A free shape leaves part of its bounding box empty. The woods and the
+    // valley path are walkable nearly to their bounds once she steps over
+    // debris (#32), so they fill about 93%; a box fills 100%.
+    if (organic(f) && fill > 0.95) boxy.push(`${f.place} fills ${(fill * 100).toFixed(0)}% of its box`);
     if (!organic(f)) {
       // A building's outline is its floor, cell for cell.
       let off = 0;

@@ -82,83 +82,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 19839,
-   "z0": 3859,
-   "x1": 20451,
-   "z1": 4471,
-   "name": "Post footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 23749,
-   "z0": 3859,
-   "x1": 24361,
-   "z1": 4471,
-   "name": "Post footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 21845,
-   "z0": 3740,
-   "x1": 25500,
-   "z1": 7310,
-   "name": "Rockfall footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 13279,
-   "z0": 10616,
-   "x1": 15961,
-   "z1": 13014,
-   "name": "Cart footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 25401,
-   "z0": 9795,
-   "x1": 28319,
-   "z1": 12645,
-   "name": "Tipped cart footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 27115,
-   "z0": 14747,
-   "x1": 27965,
-   "z1": 15512,
-   "name": "Plunger footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 25925,
-   "z0": 12835,
-   "x1": 28475,
-   "z1": 14875,
-   "name": "Shelter boulder footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 26690,
-   "z0": 6970,
-   "x1": 31110,
-   "z1": 9180,
-   "name": "Props footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 4900,
-   "z0": 12509,
-   "x1": 7340,
-   "z1": 14521,
-   "name": "Trestle cart footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 8597,
+   "x0": 19820,
    "z0": 4347,
-   "x1": 8658,
+   "x1": 20385,
    "z1": 4408,
-   "name": "Probe"
+   "name": "Probe: Portal post"
   },
   {
    "shape": "box",
@@ -166,15 +94,15 @@
    "z0": 4347,
    "x1": 32200,
    "z1": 4408,
-   "name": "Probe"
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
-   "x0": 8600,
+   "x0": 8597,
    "z0": 4602,
-   "x1": 8910,
+   "x1": 8658,
    "z1": 4663,
-   "name": "Probe"
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
@@ -182,15 +110,23 @@
    "z0": 4857,
    "x1": 9165,
    "z1": 4918,
-   "name": "Probe"
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
-   "x0": 20585,
-   "z0": 4857,
-   "x1": 21405,
-   "z1": 4918,
-   "name": "Probe"
+   "x0": 21857,
+   "z0": 4350,
+   "x1": 21918,
+   "z1": 4915,
+   "name": "Probe: Blasted rubble"
+  },
+  {
+   "shape": "box",
+   "x0": 22370,
+   "z0": 4350,
+   "x1": 25230,
+   "z1": 4915,
+   "name": "Probe: Rockfall"
   },
   {
    "shape": "box",
@@ -198,175 +134,175 @@
    "z0": 5112,
    "x1": 9420,
    "z1": 5173,
-   "name": "Probe"
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
-   "x0": 21350,
+   "x0": 22370,
    "z0": 5112,
-   "x1": 21660,
+   "x1": 25485,
    "z1": 5173,
-   "name": "Probe"
+   "name": "Probe: Rockfall"
   },
   {
    "shape": "box",
-   "x0": 8600,
+   "x0": 22115,
    "z0": 5367,
-   "x1": 9675,
+   "x1": 25485,
    "z1": 5428,
-   "name": "Probe"
+   "name": "Probe: Rockfall"
+  },
+  {
+   "shape": "box",
+   "x0": 22112,
+   "z0": 5622,
+   "x1": 22173,
+   "z1": 5683,
+   "name": "Probe: Rails rails"
   },
   {
    "shape": "box",
    "x0": 30530,
    "z0": 4605,
    "x1": 32200,
-   "z1": 5425,
-   "name": "Probe"
+   "z1": 5680,
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
    "x0": 8600,
-   "z0": 5622,
-   "x1": 9930,
-   "z1": 5683,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 17270,
-   "z0": 5622,
-   "x1": 17580,
-   "z1": 5683,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8600,
-   "z0": 5877,
+   "z0": 5370,
    "x1": 9675,
+   "z1": 5935,
+   "name": "Probe: Boulders"
+  },
+  {
+   "shape": "box",
+   "x0": 21860,
+   "z0": 5877,
+   "x1": 22170,
    "z1": 5938,
-   "name": "Probe"
+   "name": "Probe: Rails rails"
+  },
+  {
+   "shape": "box",
+   "x0": 30275,
+   "z0": 5877,
+   "x1": 32200,
+   "z1": 5938,
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
    "x0": 8600,
    "z0": 6132,
-   "x1": 9420,
+   "x1": 8910,
    "z1": 6193,
-   "name": "Probe"
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
-   "x0": 30275,
+   "x0": 21857,
+   "z0": 6132,
+   "x1": 21918,
+   "z1": 6193,
+   "name": "Probe: Rails rails"
+  },
+  {
+   "shape": "box",
+   "x0": 22625,
    "z0": 5625,
-   "x1": 32200,
+   "x1": 25485,
    "z1": 6190,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8600,
-   "z0": 6387,
-   "x1": 9165,
-   "z1": 6448,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19310,
-   "z0": 6135,
-   "x1": 21660,
-   "z1": 6445,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 25685,
-   "z0": 6135,
-   "x1": 27015,
-   "z1": 6445,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8597,
-   "z0": 6642,
-   "x1": 8658,
-   "z1": 6703,
-   "name": "Probe"
+   "name": "Probe: Rockfall"
   },
   {
    "shape": "box",
    "x0": 30530,
-   "z0": 6390,
+   "z0": 6132,
    "x1": 32200,
+   "z1": 6193,
+   "name": "Probe: Boulders"
+  },
+  {
+   "shape": "box",
+   "x0": 8597,
+   "z0": 6387,
+   "x1": 8658,
+   "z1": 6448,
+   "name": "Probe: Boulders"
+  },
+  {
+   "shape": "box",
+   "x0": 21860,
+   "z0": 6390,
+   "x1": 25485,
    "z1": 6700,
-   "name": "Probe"
+   "name": "Probe: Rockfall"
+  },
+  {
+   "shape": "box",
+   "x0": 22625,
+   "z0": 6897,
+   "x1": 25485,
+   "z1": 6958,
+   "name": "Probe: Rockfall"
   },
   {
    "shape": "box",
    "x0": 26705,
    "z0": 6897,
-   "x1": 28290,
+   "x1": 27525,
    "z1": 6958,
-   "name": "Probe"
+   "name": "Probe: Prop.004"
   },
   {
    "shape": "box",
    "x0": 30785,
-   "z0": 6897,
+   "z0": 6390,
    "x1": 32200,
-   "z1": 6958,
-   "name": "Probe"
+   "z1": 6955,
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
-   "x0": 21602,
+   "x0": 21860,
    "z0": 7152,
-   "x1": 21663,
+   "x1": 22425,
    "z1": 7213,
-   "name": "Probe"
+   "name": "Probe: Blasted rubble"
   },
   {
    "shape": "box",
-   "x0": 22370,
-   "z0": 7407,
-   "x1": 23955,
-   "z1": 7468,
-   "name": "Probe"
+   "x0": 23390,
+   "z0": 7152,
+   "x1": 24465,
+   "z1": 7213,
+   "name": "Probe: Rockfall"
   },
   {
    "shape": "box",
-   "x0": 31295,
+   "x0": 24920,
+   "z0": 7152,
+   "x1": 25485,
+   "z1": 7213,
+   "name": "Probe: Rockfall"
+  },
+  {
+   "shape": "box",
+   "x0": 26705,
    "z0": 7155,
    "x1": 32200,
    "z1": 7465,
-   "name": "Probe"
+   "name": "Probe: Prop.004"
   },
   {
    "shape": "box",
-   "x0": 23900,
-   "z0": 7662,
-   "x1": 25485,
-   "z1": 7723,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 31292,
-   "z0": 7662,
-   "x1": 31353,
-   "z1": 7723,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 25685,
-   "z0": 7917,
-   "x1": 26505,
-   "z1": 7978,
-   "name": "Probe"
+   "x0": 26705,
+   "z0": 7665,
+   "x1": 31095,
+   "z1": 8995,
+   "name": "Probe: Prop.006"
   },
   {
    "shape": "box",
@@ -374,15 +310,7 @@
    "z0": 10212,
    "x1": 1518,
    "z1": 10273,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3752,
-   "z0": 10212,
-   "x1": 3813,
-   "z1": 10273,
-   "name": "Probe"
+   "name": "Probe: Rail post.001"
   },
   {
    "shape": "box",
@@ -390,7 +318,7 @@
    "z0": 10212,
    "x1": 6618,
    "z1": 10273,
-   "name": "Probe"
+   "name": "Probe: Rail post.003"
   },
   {
    "shape": "box",
@@ -398,7 +326,7 @@
    "z0": 10212,
    "x1": 8148,
    "z1": 10273,
-   "name": "Probe"
+   "name": "Probe: Rail post.004"
   },
   {
    "shape": "box",
@@ -406,7 +334,15 @@
    "z0": 10212,
    "x1": 32288,
    "z1": 10273,
-   "name": "Probe"
+   "name": "Probe: Boulders"
+  },
+  {
+   "shape": "box",
+   "x0": 25940,
+   "z0": 10467,
+   "x1": 26250,
+   "z1": 10528,
+   "name": "Probe: Cart on its side"
   },
   {
    "shape": "box",
@@ -414,7 +350,39 @@
    "z0": 10467,
    "x1": 32200,
    "z1": 10528,
-   "name": "Probe"
+   "name": "Probe: Boulders"
+  },
+  {
+   "shape": "box",
+   "x0": 14720,
+   "z0": 10722,
+   "x1": 15540,
+   "z1": 10783,
+   "name": "Probe: Rails rails"
+  },
+  {
+   "shape": "box",
+   "x0": 14210,
+   "z0": 10977,
+   "x1": 15540,
+   "z1": 11038,
+   "name": "Probe: Ore cart"
+  },
+  {
+   "shape": "box",
+   "x0": 25685,
+   "z0": 10725,
+   "x1": 26505,
+   "z1": 11035,
+   "name": "Probe: Cart on its side"
+  },
+  {
+   "shape": "box",
+   "x0": 13445,
+   "z0": 11232,
+   "x1": 15540,
+   "z1": 11293,
+   "name": "Probe: Ore cart"
   },
   {
    "shape": "box",
@@ -422,39 +390,39 @@
    "z0": 10725,
    "x1": 32200,
    "z1": 11290,
-   "name": "Probe"
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
-   "x0": 25172,
+   "x0": 25430,
+   "z0": 11235,
+   "x1": 27525,
+   "z1": 11545,
+   "name": "Probe: Cart on its side"
+  },
+  {
+   "shape": "box",
+   "x0": 25175,
    "z0": 11742,
-   "x1": 25233,
+   "x1": 27780,
    "z1": 11803,
-   "name": "Probe"
+   "name": "Probe: Cart on its side"
   },
   {
    "shape": "box",
-   "x0": 2987,
+   "x0": 13445,
    "z0": 11490,
-   "x1": 3048,
+   "x1": 15795,
    "z1": 12055,
-   "name": "Probe"
+   "name": "Probe: Ore cart"
   },
   {
    "shape": "box",
-   "x0": 3752,
-   "z0": 10725,
-   "x1": 3813,
-   "z1": 12055,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4517,
-   "z0": 11745,
-   "x1": 4578,
-   "z1": 12055,
-   "name": "Probe"
+   "x0": 25430,
+   "z0": 11997,
+   "x1": 27525,
+   "z1": 12058,
+   "name": "Probe: Cart on its side"
   },
   {
    "shape": "box",
@@ -462,7 +430,23 @@
    "z0": 11490,
    "x1": 32200,
    "z1": 12055,
-   "name": "Probe"
+   "name": "Probe: Boulders"
+  },
+  {
+   "shape": "box",
+   "x0": 13445,
+   "z0": 12252,
+   "x1": 15540,
+   "z1": 12313,
+   "name": "Probe: Ore cart"
+  },
+  {
+   "shape": "box",
+   "x0": 25940,
+   "z0": 12252,
+   "x1": 27270,
+   "z1": 12313,
+   "name": "Probe: Cart on its side"
   },
   {
    "shape": "box",
@@ -470,71 +454,103 @@
    "z0": 12252,
    "x1": 32288,
    "z1": 12313,
-   "name": "Probe"
+   "name": "Probe: Boulders"
+  },
+  {
+   "shape": "box",
+   "x0": 5030,
+   "z0": 12507,
+   "x1": 5595,
+   "z1": 12568,
+   "name": "Probe: Cart on the trestle"
+  },
+  {
+   "shape": "box",
+   "x0": 13445,
+   "z0": 12507,
+   "x1": 15030,
+   "z1": 12568,
+   "name": "Probe: Ore cart"
+  },
+  {
+   "shape": "box",
+   "x0": 26195,
+   "z0": 12507,
+   "x1": 27525,
+   "z1": 12568,
+   "name": "Probe: Cart on its side"
+  },
+  {
+   "shape": "box",
+   "x0": 13955,
+   "z0": 12762,
+   "x1": 14265,
+   "z1": 12823,
+   "name": "Probe: Ore cart"
   },
   {
    "shape": "box",
    "x0": 26705,
    "z0": 12762,
-   "x1": 27270,
+   "x1": 27015,
    "z1": 12823,
-   "name": "Probe"
+   "name": "Probe: Cart on its side"
   },
   {
    "shape": "box",
-   "x0": 2222,
-   "z0": 13530,
-   "x1": 2283,
-   "z1": 13840,
-   "name": "Probe"
+   "x0": 25940,
+   "z0": 13017,
+   "x1": 28035,
+   "z1": 13078,
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
-   "x0": 2987,
-   "z0": 12510,
-   "x1": 3048,
-   "z1": 13840,
-   "name": "Probe"
+   "x0": 5030,
+   "z0": 12765,
+   "x1": 7125,
+   "z1": 13585,
+   "name": "Probe: Cart on the trestle"
   },
   {
    "shape": "box",
-   "x0": 3752,
-   "z0": 12510,
-   "x1": 3813,
-   "z1": 13840,
-   "name": "Probe"
+   "x0": 5030,
+   "z0": 13785,
+   "x1": 6870,
+   "z1": 14095,
+   "name": "Probe: Cart on the trestle"
   },
   {
    "shape": "box",
-   "x0": 4517,
-   "z0": 12510,
-   "x1": 4578,
-   "z1": 13840,
-   "name": "Probe"
+   "x0": 25940,
+   "z0": 13275,
+   "x1": 28290,
+   "z1": 14350,
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
-   "x0": 28487,
-   "z0": 14037,
-   "x1": 28548,
-   "z1": 14098,
-   "name": "Probe"
+   "x0": 26195,
+   "z0": 14550,
+   "x1": 28290,
+   "z1": 14860,
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
-   "x0": 8600,
+   "x0": 27215,
+   "z0": 15060,
+   "x1": 27780,
+   "z1": 15370,
+   "name": "Probe: Plunger box"
+  },
+  {
+   "shape": "box",
+   "x0": 8852,
    "z0": 18585,
-   "x1": 9420,
+   "x1": 8913,
    "z1": 18645,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 16760,
-   "z0": 18585,
-   "x1": 17325,
-   "z1": 18645,
-   "name": "Probe"
+   "name": "Probe: Boulders"
   }
  ],
  "anim": {
@@ -549,17 +565,26 @@
   }
  ],
  "probe": {
-  "Boulders": 164,
-  "Dust 0": 32,
-  "no floor": 32,
-  "Dust 1": 19,
-  "Prop.004": 7,
-  "Dust 2": 6,
-  "Bucket": 2,
+  "Boulders": 222,
+  "Rockfall": 144,
+  "Cart on its side": 60,
+  "Ore cart": 59,
+  "Cart on the trestle": 49,
+  "Prop.004": 38,
+  "Prop.006": 38,
+  "Prop.005": 36,
+  "Prop.003": 30,
+  "Rails rails": 20,
+  "Blasted rubble": 10,
+  "Prop.002": 4,
+  "Plunger box": 4,
+  "Portal post": 1,
+  "Hand on the post": 1,
   "Rail post.001": 1,
   "Rail post.003": 1,
   "Rail post.004": 1,
-  "Cart on its side": 1
+  "Blasting wire": 1,
+  "T-handle": 1
  },
  "bounds": {
   "x0": 1105,

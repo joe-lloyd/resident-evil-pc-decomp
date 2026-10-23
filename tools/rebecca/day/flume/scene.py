@@ -325,7 +325,10 @@ def build():
     room.door("pond", (5.4, Y1 - 0.6, 7.6, Y1), arrive=(6.4, 10.9), face=(0, -1))
     room.door("bridge", (7.9, BOAT[1] - 0.6, TROUGH[0] - 0.05, BOAT[1] + 0.6), arrive=(6.6, BOAT[1]), face=(-1, 0))
     room.check((TROUGH[0] - 1.0, 9.8, TROUGH[0], 10.8), "A cleat with a rope cut through. Blood all round it.\nSomebody took a boat down hurt.")
-    room.check((TROUGH[1], 5.9, TROUGH[1] + 0.8, 6.9), "A cap, caught in the water against the side.")
+    # The trough's water, from the headbox to the edge: she does not wade in it.
+    room.void((TROUGH[0], EDGE_Y, TROUGH[1], HEADBOX[2]))
+    # Seen across the trough from the west bank: the far bank is not hers.
+    room.check((TROUGH[0], 5.9, TROUGH[1] + 0.8, 6.9), "A cap, caught in the water against the side.")
     room.check((CATWALK[0], 5.0, CATWALK[1], 6.0), "A mitten, snagged on a nail. The water's freezing.")
     room.check((7.0, 11.0, 8.2, 11.8), "CAMP 4 FLUME. NO RIDING.\nSomebody didn't listen.")
     room.check((CATWALK[0], Y0, CATWALK[1], 3.0), "It goes all the way down. The trestles get taller and taller.\nI can't see the bottom for the mist.")

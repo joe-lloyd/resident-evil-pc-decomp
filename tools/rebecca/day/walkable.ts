@@ -12,6 +12,11 @@
 // the zones she cannot set off from anywhere she can stand.
 //
 //   node tools/rebecca/day/walkable.ts [--map] [--renders <dir>] [--day <dir>] [slug ...]
+//   node tools/rebecca/day/walkable.ts --reach [--renders <dir>] [--day <dir>] [slug ...]
+//
+// --reach needs no pictures: per room it floods the floor from every way in
+// with her radius and lists what a way in cannot get to (reachability), then
+// the day's links with no door (routeGaps). Exits 1 if anything is cut.
 //
 // No slug checks every room with renders. To compare a before and after,
 // --renders reads <dir>/<slug>.json for the room.json (the pictures stay the
@@ -22,7 +27,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { FRAME_H, FRAME_W } from '../masks.ts';
 import { autoFloors, project, readDepth, type Rect } from './floors.ts';
-import { dayRooms } from './rooms.ts';
+import { day as plan } from '../plan/day.ts';
+import { dayRooms, dayStart } from './rooms.ts';
 
 type V3 = [number, number, number];
 export interface Camera {
@@ -33,8 +39,12 @@ export interface Camera {
 
 /** Grid cells this many game units across (10 cm). */
 export const CELL = 170;
-/** A surface higher than this above the floor is in her way, indoors and out (game units: 35 cm and 90 cm). */
-export const KNEE_INSIDE = 600;
+/**
+ * A surface higher than this above the floor is in her way, indoors and out
+ * (game units: 45 cm and 90 cm). Lower she walks over, as blender reb.py
+ * floor_probe has it (PROBE_LOW): a plank, a log, a tipped chair.
+ */
+export const KNEE_INSIDE = 765;
 export const KNEE_OUTSIDE = 1530;
 /** The top of her head. */
 const HEAD = 2700;
@@ -153,8 +163,40 @@ export function walkableBy(json: RoomJson): (x: number, z: number) => boolean {
     );
 }
 
+/** The cells check() and reachability() walk: the bounds, and out through the exits a hand-written room leaves in them, on a grid lined up with the cameras'. */
+interface Grid {
+  readonly x0: number;
+  readonly z0: number;
+  readonly cols: number;
+  readonly rows: number;
+}
+
+function gridOf(json: RoomJson): Grid {
+  const b = json.bounds;
+  const exits = [...(json.exits ?? []), ...(json.exit ? [json.exit] : [])];
+  const pad = (lo: number, out: number) => Math.ceil(Math.max(0, lo - out) / CELL);
+  const [pl, pt] = [pad(b.x0, Math.min(b.x0, ...exits.map((e) => e.x0))), pad(b.z0, Math.min(b.z0, ...exits.map((e) => e.z0)))];
+  const [pr, pb] = [pad(Math.max(b.x1, ...exits.map((e) => e.x1)), b.x1), pad(Math.max(b.z1, ...exits.map((e) => e.z1)), b.z1)];
+  return { x0: b.x0 - pl * CELL, z0: b.z0 - pt * CELL, cols: Math.ceil((b.x1 - b.x0) / CELL) + pl + pr, rows: Math.ceil((b.z1 - b.z0) / CELL) + pt + pb };
+}
+
+/** Is (x, z) a cell of `cells` (on grid `g`)? */
+const onGrid = (g: Grid, cells: Uint8Array) => (x: number, z: number) => {
+  const i = Math.floor((x - g.x0) / CELL);
+  const j = Math.floor((z - g.z0) / CELL);
+  return i >= 0 && j >= 0 && i < g.cols && j < g.rows && cells[j * g.cols + i] === 1;
+};
+
+/** Somewhere she can stand (`walk`) inside `r` grown by `reachBy`, and a cell for the grid's coarseness. */
+function standsWithin(walk: (x: number, z: number) => boolean, r: Rect, reachBy: number): boolean {
+  const grow = reachBy + CELL;
+  for (let x = r.x0 - grow + CELL / 2; x < r.x1 + grow; x += CELL / 2) for (let z = r.z0 - grow + CELL / 2; z < r.z1 + grow; z += CELL / 2) if (walk(x, z)) return true;
+  return false;
+}
+
 /** The cells she can walk to from where she comes in (`seeds`, the arrivals); every walkable cell when nothing leads in. */
-function reachable(seeds: readonly { x: number; z: number }[], can: (x: number, z: number) => boolean, x0: number, z0: number, cols: number, rows: number): Uint8Array {
+function reachable(seeds: readonly { x: number; z: number }[], can: (x: number, z: number) => boolean, g: Grid): Uint8Array {
+  const { x0, z0, cols, rows } = g;
   const at = (i: number, j: number) => [x0 + (i + 0.5) * CELL, z0 + (j + 0.5) * CELL] as const;
   const out = new Uint8Array(cols * rows);
   if (!seeds.length) {
@@ -242,14 +284,10 @@ export function check(json: RoomJson, seen: readonly (Seen | undefined)[], floor
   const z0 = b.z0;
   const cols = Math.ceil((b.x1 - b.x0) / CELL);
   const rows = Math.ceil((b.z1 - b.z0) / CELL);
-  // Where she can go: the bounds, and out through the exits a hand-written
-  // room leaves in them, on a grid lined up with the cameras'.
-  const exits = [...(json.exits ?? []), ...(json.exit ? [json.exit] : [])];
-  const pad = (lo: number, out: number) => Math.ceil(Math.max(0, lo - out) / CELL);
-  const [pl, pt] = [pad(x0, Math.min(x0, ...exits.map((e) => e.x0))), pad(z0, Math.min(z0, ...exits.map((e) => e.z0)))];
-  const [pr, pb] = [pad(Math.max(b.x1, ...exits.map((e) => e.x1)), b.x1), pad(Math.max(b.z1, ...exits.map((e) => e.z1)), b.z1)];
-  const [ax0, az0, acols, arows] = [x0 - pl * CELL, z0 - pt * CELL, cols + pl + pr, rows + pt + pb];
-  const around = reachable(script.arrivals, can, ax0, az0, acols, arows);
+  const g = gridOf(json);
+  const { x0: ax0, z0: az0, cols: acols } = g;
+  const [pl, pt] = [Math.round((x0 - ax0) / CELL), Math.round((z0 - az0) / CELL)];
+  const around = reachable(script.arrivals, can, g);
   const reach = new Uint8Array(cols * rows);
   for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) reach[j * cols + i] = around[(j + pt) * acols + i + pl]!;
   const body = Math.round(BODY / CELL);
@@ -286,17 +324,8 @@ export function check(json: RoomJson, seen: readonly (Seen | undefined)[], floor
     }
     lines.push(row);
   }
-  const walk = (x: number, z: number) => {
-    const i = Math.floor((x - ax0) / CELL);
-    const j = Math.floor((z - az0) / CELL);
-    return i >= 0 && j >= 0 && i < acols && j < arows && around[j * acols + i] === 1;
-  };
-  /** Somewhere she can stand inside `r`, grown by `grow` (and a cell, for the grid's coarseness). */
-  const standsIn = (r: Rect, reachBy: number) => {
-    const grow = reachBy + CELL;
-    for (let x = r.x0 - grow + CELL / 2; x < r.x1 + grow; x += CELL / 2) for (let z = r.z0 - grow + CELL / 2; z < r.z1 + grow; z += CELL / 2) if (walk(x, z)) return true;
-    return false;
-  };
+  const walk = onGrid(g, around);
+  const standsIn = (r: Rect, reachBy: number) => standsWithin(walk, r, reachBy);
   const doors: string[] = [];
   const zones: string[] = [];
   const arrivals = script.arrivals.filter((a) => !can(a.x, a.z)).map((a) => `from ${a.from} at (${a.x}, ${a.z})`);
@@ -339,6 +368,59 @@ export function check(json: RoomJson, seen: readonly (Seen | undefined)[], floor
   return { cameras: cams, doors, arrivals, zones, map: lines.join('\n') };
 }
 
+/** What she can get to in a room by its collision alone, from each way in. */
+export interface Reach {
+  /** The floor she can stand on from some way in, in cells CELL square. */
+  readonly cells: number;
+  /** Each way in that is cut off: in a wall, or short of a door, exit, pickup or check. Empty when every zone is reachable from every way in. */
+  readonly cut: string[];
+}
+
+/**
+ * Flood the room's floor from each arrival with her radius (walkableBy), and
+ * list every zone of its script (doors and the walks she leaves by, pickups,
+ * checks, item uses) she cannot set off from, per arrival. A zone fires
+ * where she stands (`her`) or REACH in front of her (`ahead`), as in check().
+ */
+export function reachability(json: RoomJson, script: Script): Reach {
+  const can = walkableBy(json);
+  const g = gridOf(json);
+  const cut: string[] = [];
+  const any = new Uint8Array(g.cols * g.rows);
+  if (!script.arrivals.length) cut.push('no way in: no door leads here');
+  for (const a of script.arrivals) {
+    const cells = reachable([a], can, g);
+    if (!cells.includes(1)) {
+      cut.push(`from ${a.from}: she arrives in a wall at (${a.x}, ${a.z})`);
+      continue;
+    }
+    for (let k = 0; k < any.length; k++) any[k] |= cells[k]!;
+    const walk = onGrid(g, cells);
+    for (const z of script.zones) if (!standsWithin(walk, z.zone, z.at === 'her' ? 0 : REACH)) cut.push(`from ${a.from}: cannot reach ${z.what} at (${z.zone.x0}, ${z.zone.z0})-(${z.zone.x1}, ${z.zone.z1})`);
+  }
+  return { cells: any.reduce((n, c) => n + c, 0), cut };
+}
+
+/** Plan place ids that are built under another slug (the cabin is lookout). */
+const slugOfPlace = (id: string) => plan.places.find((p) => p.id === id)?.room ?? id;
+
+/**
+ * The day's way through, plan/day.ts's links, on the rooms' scripts: each
+ * link out of a room with a script needs a door there that leads on, and the
+ * doors are what reachability() holds every way in to. Returns the links
+ * with no door, as "from -> to".
+ */
+export function routeGaps(scripts: ReadonlyMap<string, Script>): string[] {
+  const gaps: string[] = [];
+  for (const l of plan.links) {
+    const [from, to] = [slugOfPlace(l.from), slugOfPlace(l.to)];
+    const s = scripts.get(from);
+    if (!s || !scripts.has(to)) continue;
+    if (!s.zones.some((z) => z.door === to)) gaps.push(`${from} -> ${to} (${l.kind})`);
+  }
+  return gaps;
+}
+
 const here = path.dirname(fileURLToPath(import.meta.url));
 const BUILT_INSIDE = new Set(['lookout', 'shed']);
 
@@ -371,6 +453,8 @@ export function readScript(slug: string, day = here): Script {
       if (d && slugOf(d[10]!) === slug) arrivals.push({ from: other, x: Number(d[11]), z: Number(d[13]) });
     }
   }
+  const start = dayRooms.find((r) => r.stage === dayStart.stage && r.room === dayStart.room);
+  if (start?.slug === slug) arrivals.push({ from: 'a new game', x: dayStart.x, z: dayStart.z });
   const msgFile = path.join(day, slug, 'room.msg.txt');
   const msgs = existsSync(msgFile) ? readFileSync(msgFile, 'utf8').split('\n') : [];
   const text = (id: number) => (msgs.find((l) => l.startsWith(`${id - 128}:`)) ?? '').replace(/^\d+: /, '').replace(/\\[a-z]\{?\d*\}?|\\[no]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 32);
@@ -428,6 +512,23 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const named = args.filter((a, i) => !a.startsWith('--') && !(at >= 0 && i === at + 1) && !(dayAt >= 0 && i === dayAt + 1));
   const slugs = named.length ? named : readdirSync(here).filter((s) => existsSync(path.join(here, s, 'renders', 'room.json'))).sort();
   const pct = (n: number, of: number) => `${((n / Math.max(1, of)) * 100).toFixed(1)}%`;
+  if (args.includes('--reach')) {
+    let bad = 0;
+    const scripts = new Map<string, Script>();
+    for (const slug of slugs) {
+      const record = recordDir ? path.join(recordDir, `${slug}.json`) : path.join(here, slug, 'renders', 'room.json');
+      if (!existsSync(record)) continue;
+      const script = readScript(slug, dayDir);
+      scripts.set(slug, script);
+      const r = reachability(JSON.parse(readFileSync(record, 'utf8')) as RoomJson, script);
+      bad += r.cut.length;
+      console.log(`${r.cut.length ? 'CUT ' : 'ok  '}${slug}: ${((r.cells * CELL * CELL) / 1700 / 1700).toFixed(1)} m² to stand on, ${script.arrivals.length} ways in, ${script.zones.length} zones`);
+      for (const c of r.cut) console.log(`  ${c}`);
+    }
+    const gaps = routeGaps(scripts);
+    for (const g of gaps) console.log(`no door on the day's way: ${g}`);
+    process.exit(bad + gaps.length ? 1 : 0);
+  }
   for (const slug of slugs) {
     const record = recordDir ? path.join(recordDir, `${slug}.json`) : undefined;
     if (record && !existsSync(record)) continue;

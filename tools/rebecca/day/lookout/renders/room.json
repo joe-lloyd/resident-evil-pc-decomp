@@ -30,459 +30,163 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 3910,
-   "z0": 3485,
-   "x1": 6630,
-   "z1": 4675,
-   "name": "Desk"
-  },
-  {
-   "shape": "box",
-   "x0": 6749,
-   "z0": 4114,
-   "x1": 7463,
-   "z1": 4828,
-   "name": "Desk chair"
-  },
-  {
-   "shape": "box",
-   "x0": 7710,
-   "z0": 3434,
-   "x1": 7761,
-   "z1": 4046,
-   "name": "Shelf side"
-  },
-  {
-   "shape": "box",
-   "x0": 9920,
-   "z0": 3434,
-   "x1": 9970,
-   "z1": 4046,
-   "name": "Shelf side.001"
-  },
-  {
-   "shape": "box",
-   "x0": 7735,
-   "z0": 3434,
-   "x1": 9945,
-   "z1": 4046,
-   "name": "Shelf body"
-  },
-  {
-   "shape": "box",
-   "x0": 6715,
-   "z0": 6162,
-   "x1": 8585,
-   "z1": 7438,
-   "name": "Table"
-  },
-  {
-   "shape": "box",
-   "x0": 5941,
-   "z0": 6451,
-   "x1": 6809,
-   "z1": 7319,
-   "name": "Table chair"
-  },
-  {
-   "shape": "box",
-   "x0": 8944,
-   "z0": 7525,
-   "x1": 9586,
-   "z1": 7945,
-   "name": "Fallen chair"
-  },
-  {
-   "shape": "box",
-   "x0": 10285,
-   "z0": 7140,
-   "x1": 11815,
-   "z1": 10200,
-   "name": "Bunk"
-  },
-  {
-   "shape": "box",
-   "x0": 10340,
-   "z0": 6143,
-   "x1": 11760,
-   "z1": 7115,
-   "name": "Item box"
-  },
-  {
-   "shape": "box",
-   "x0": 10361,
-   "z0": 3451,
-   "x1": 11807,
-   "z1": 4165,
-   "name": "Corner table"
-  },
-  {
-   "shape": "box",
-   "x0": 3689,
-   "z0": 7429,
-   "x1": 4811,
-   "z1": 8551,
-   "name": "Stove belly"
-  },
-  {
-   "shape": "box",
-   "x0": 3835,
-   "z0": 8967,
-   "x1": 3985,
-   "z1": 9733,
-   "name": "Firewood"
-  },
-  {
-   "shape": "box",
-   "x0": 3978,
-   "z0": 8963,
-   "x1": 4182,
-   "z1": 9737,
-   "name": "Firewood.001"
-  },
-  {
-   "shape": "box",
-   "x0": 4155,
-   "z0": 8967,
-   "x1": 4345,
-   "z1": 9733,
-   "name": "Firewood.002"
-  },
-  {
-   "shape": "box",
-   "x0": 4321,
-   "z0": 8965,
-   "x1": 4519,
-   "z1": 9735,
-   "name": "Firewood.003"
-  },
-  {
-   "shape": "box",
-   "x0": 4484,
-   "z0": 8963,
-   "x1": 4696,
-   "z1": 9737,
-   "name": "Firewood.004"
-  },
-  {
-   "shape": "box",
-   "x0": 3897,
-   "z0": 8964,
-   "x1": 4093,
-   "z1": 9736,
-   "name": "Firewood.005"
-  },
-  {
-   "shape": "box",
-   "x0": 4036,
-   "z0": 8961,
-   "x1": 4294,
-   "z1": 9739,
-   "name": "Firewood.006"
-  },
-  {
-   "shape": "box",
-   "x0": 4239,
-   "z0": 8964,
-   "x1": 4431,
-   "z1": 9736,
-   "name": "Firewood.007"
-  },
-  {
-   "shape": "box",
-   "x0": 4395,
-   "z0": 8963,
-   "x1": 4615,
-   "z1": 9737,
-   "name": "Firewood.008"
-  },
-  {
-   "shape": "box",
-   "x0": 4594,
-   "z0": 8966,
-   "x1": 4756,
-   "z1": 9734,
-   "name": "Firewood.009"
-  },
-  {
-   "shape": "box",
-   "x0": 3810,
-   "z0": 8963,
-   "x1": 4010,
-   "z1": 9737,
-   "name": "Firewood.010"
-  },
-  {
-   "shape": "box",
-   "x0": 3988,
-   "z0": 8965,
-   "x1": 4172,
-   "z1": 9735,
-   "name": "Firewood.011"
-  },
-  {
-   "shape": "box",
-   "x0": 4135,
-   "z0": 8964,
-   "x1": 4365,
-   "z1": 9736,
-   "name": "Firewood.012"
-  },
-  {
-   "shape": "box",
-   "x0": 4315,
-   "z0": 8964,
-   "x1": 4525,
-   "z1": 9736,
-   "name": "Firewood.013"
-  },
-  {
-   "shape": "box",
-   "x0": 4485,
-   "z0": 8966,
-   "x1": 4695,
-   "z1": 9734,
-   "name": "Firewood.014"
-  },
-  {
-   "shape": "box",
-   "x0": 3884,
-   "z0": 8962,
-   "x1": 4106,
-   "z1": 9738,
-   "name": "Firewood.015"
-  },
-  {
-   "shape": "box",
-   "x0": 6815,
-   "z0": 3497,
-   "x1": 7635,
-   "z1": 3558,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10127,
-   "z0": 3497,
-   "x1": 10188,
-   "z1": 3558,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7577,
-   "z0": 3752,
-   "x1": 7638,
-   "z1": 3813,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6815,
-   "z0": 4007,
-   "x1": 7635,
-   "z1": 4068,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 11827,
-   "z0": 3500,
-   "x1": 11888,
-   "z1": 4065,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
    "x0": 3500,
-   "z0": 3500,
-   "x1": 3810,
-   "z1": 4575,
-   "name": "Probe"
+   "z0": 3497,
+   "x1": 11800,
+   "z1": 3558,
+   "name": "Probe: Shelf.003"
   },
   {
    "shape": "box",
    "x0": 4010,
-   "z0": 4772,
+   "z0": 3752,
    "x1": 6615,
-   "z1": 4833,
-   "name": "Probe"
+   "z1": 3813,
+   "name": "Probe: Desk"
   },
   {
    "shape": "box",
-   "x0": 11660,
-   "z0": 4265,
-   "x1": 11800,
-   "z1": 5850,
-   "name": "Probe"
+   "x0": 7580,
+   "z0": 3752,
+   "x1": 9930,
+   "z1": 3813,
+   "name": "Probe: Shelf.003"
   },
   {
    "shape": "box",
-   "x0": 6815,
-   "z0": 6047,
-   "x1": 8655,
-   "z1": 6108,
-   "name": "Probe"
+   "x0": 4010,
+   "z0": 4007,
+   "x1": 9930,
+   "z1": 4068,
+   "name": "Probe: Shelf.003"
   },
   {
    "shape": "box",
    "x0": 10385,
-   "z0": 6047,
+   "z0": 3755,
    "x1": 11800,
-   "z1": 6108,
-   "name": "Probe"
+   "z1": 4320,
+   "name": "Probe: Corner table"
   },
   {
    "shape": "box",
-   "x0": 6047,
-   "z0": 6302,
-   "x1": 6108,
-   "z1": 6363,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6557,
-   "z0": 6302,
-   "x1": 6618,
-   "z1": 6363,
-   "name": "Probe"
+   "x0": 4010,
+   "z0": 4265,
+   "x1": 7380,
+   "z1": 4575,
+   "name": "Probe: Desk"
   },
   {
    "shape": "box",
    "x0": 5792,
-   "z0": 7067,
+   "z0": 4772,
    "x1": 5853,
-   "z1": 7128,
-   "name": "Probe"
+   "z1": 4833,
+   "name": "Probe: Desk leg.001"
   },
   {
    "shape": "box",
-   "x0": 10127,
-   "z0": 7067,
-   "x1": 10188,
-   "z1": 7128,
-   "name": "Probe"
+   "x0": 6560,
+   "z0": 4772,
+   "x1": 7380,
+   "z1": 4833,
+   "name": "Probe: Desk chair"
   },
   {
    "shape": "box",
-   "x0": 4010,
-   "z0": 7322,
-   "x1": 4575,
-   "z1": 7383,
-   "name": "Probe"
+   "x0": 11660,
+   "z0": 4520,
+   "x1": 11800,
+   "z1": 5850,
+   "name": "Probe: Window bar.005"
   },
   {
    "shape": "box",
-   "x0": 6305,
-   "z0": 7322,
-   "x1": 6615,
-   "z1": 7383,
-   "name": "Probe"
+   "x0": 6815,
+   "z0": 6050,
+   "x1": 8655,
+   "z1": 6360,
+   "name": "Probe: Table"
   },
   {
    "shape": "box",
-   "x0": 8597,
-   "z0": 6305,
-   "x1": 8658,
-   "z1": 7380,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8852,
-   "z0": 7832,
-   "x1": 8913,
-   "z1": 7893,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9617,
-   "z0": 7580,
-   "x1": 9678,
-   "z1": 7890,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10127,
-   "z0": 7580,
-   "x1": 10188,
-   "z1": 7890,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9107,
-   "z0": 8087,
-   "x1": 9168,
-   "z1": 8148,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9875,
-   "z0": 8087,
-   "x1": 10185,
-   "z1": 8148,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5027,
-   "z0": 8090,
-   "x1": 5088,
-   "z1": 8400,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9110,
-   "z0": 8342,
-   "x1": 9420,
-   "z1": 8403,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4010,
-   "z0": 8597,
-   "x1": 4575,
-   "z1": 8658,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9362,
-   "z0": 8597,
-   "x1": 9423,
-   "z1": 8658,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4007,
-   "z0": 8852,
-   "x1": 4068,
-   "z1": 8913,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10127,
-   "z0": 8345,
-   "x1": 10188,
-   "z1": 9420,
-   "name": "Probe"
+   "x0": 6050,
+   "z0": 6560,
+   "x1": 8655,
+   "z1": 7125,
+   "name": "Probe: Table"
   },
   {
    "shape": "box",
    "x0": 3497,
-   "z0": 4775,
+   "z0": 3755,
+   "x1": 3558,
+   "z1": 7380,
+   "name": "Probe: Log 1.9 4.001"
+  },
+  {
+   "shape": "box",
+   "x0": 4010,
+   "z0": 7322,
+   "x1": 4320,
+   "z1": 7383,
+   "name": "Probe: Stove band.001"
+  },
+  {
+   "shape": "box",
+   "x0": 6560,
+   "z0": 7322,
+   "x1": 8655,
+   "z1": 7383,
+   "name": "Probe: Table"
+  },
+  {
+   "shape": "box",
+   "x0": 9110,
+   "z0": 7580,
+   "x1": 9420,
+   "z1": 7890,
+   "name": "Probe: Ceiling"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 7580,
+   "x1": 4830,
+   "z1": 8145,
+   "name": "Probe: Stove top"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 8342,
+   "x1": 5085,
+   "z1": 8403,
+   "name": "Probe: Stove belly"
+  },
+  {
+   "shape": "box",
+   "x0": 4010,
+   "z0": 8597,
+   "x1": 4320,
+   "z1": 8658,
+   "name": "Probe: Stove band.001"
+  },
+  {
+   "shape": "box",
+   "x0": 4010,
+   "z0": 9110,
+   "x1": 4575,
+   "z1": 9675,
+   "name": "Probe: Ceiling"
+  },
+  {
+   "shape": "box",
+   "x0": 3497,
+   "z0": 8600,
    "x1": 3558,
    "z1": 9930,
-   "name": "Probe"
+   "name": "Probe: Log 1.9 4.001"
   },
   {
    "shape": "box",
@@ -490,23 +194,23 @@
    "z0": 9872,
    "x1": 5595,
    "z1": 9933,
-   "name": "Probe"
+   "name": "Probe: Rack shelf"
+  },
+  {
+   "shape": "box",
+   "x0": 10385,
+   "z0": 6050,
+   "x1": 11800,
+   "z1": 9930,
+   "name": "Probe: Blanket"
   },
   {
    "shape": "box",
    "x0": 3500,
    "z0": 10085,
-   "x1": 10185,
+   "x1": 11800,
    "z1": 10145,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 11827,
-   "z0": 6305,
-   "x1": 11888,
-   "z1": 10100,
-   "name": "Probe"
+   "name": "Probe: Log 6.1 5"
   }
  ],
  "anim": {
@@ -514,44 +218,75 @@
   "ticks": 3
  },
  "probe": {
-  "Log 1.9 2.001": 17,
+  "Table": 41,
+  "Ceiling": 37,
+  "Desk": 33,
+  "Blanket": 32,
+  "Item box": 30,
+  "Shelf.003": 21,
+  "Log 1.9 4.001": 17,
   "Log 7.1 9": 17,
-  "Desk": 13,
-  "Table": 12,
+  "Log 6.1 5": 14,
+  "Corner table": 12,
+  "Desk chair": 11,
+  "Pillow": 10,
+  "Table chair": 9,
+  "Radio": 8,
+  "Stove belly": 8,
   "Rack shelf": 8,
-  "Log 6.1 3": 8,
   "Heat shield": 7,
-  "Log 1.9 2": 6,
+  "Stove top": 7,
+  "Window bar": 6,
   "Window bar.005": 6,
-  "Item box": 6,
-  "Stove band.001": 6,
-  "Blanket end": 6,
   "Curtain": 5,
-  "Log 6.1 2": 5,
+  "Log 6.1 4": 5,
+  "Log 1.9 6": 4,
   "Log 7.1 8": 4,
-  "Table chair": 4,
-  "Fallen chair leg.003": 4,
+  "Typewriter": 4,
+  "Logbook page": 4,
   "Shelf side": 3,
-  "Desk chair": 3,
-  "Door rail": 3,
+  "Stove band.001": 3,
+  "Survey map": 2,
+  "First aid tin": 2,
+  "Logbook page.001": 2,
+  "Paper.005": 2,
   "Window bar.003": 2,
-  "Fallen chair": 2,
-  "Fallen chair leg.001": 2,
-  "Handle spring": 2,
-  "Blanket": 2,
+  "Pipe joint.001": 2,
+  "Fire door": 2,
+  "Door plank.002": 2,
   "Door post.001": 2,
   "Key board": 2,
+  "Window post": 1,
+  "Paper.003": 1,
+  "Paper.004": 1,
+  "Paper.002": 1,
+  "Mug": 1,
+  "Jar.009": 1,
+  "Jar contents.010": 1,
+  "Tin.018": 1,
+  "Jar.013": 1,
+  "Desk chair back post.001": 1,
+  "Mic base": 1,
+  "Ashtray": 1,
   "Desk leg.001": 1,
   "Desk leg.003": 1,
   "Table leg.002": 1,
-  "Bunk leg": 1,
+  "Plate": 1,
+  "Card.001": 1,
+  "Card.003": 1,
+  "Card.005": 1,
+  "Coffee pot": 1,
+  "Table chair back post": 1,
   "Table leg.003": 1,
+  "Door hinge": 1,
+  "Kettle": 1,
   "Soot up the shield": 1,
-  "Firewood.015": 1,
+  "Handle spring": 1,
   "Rack bracket.003": 1,
   "Door post": 1,
   "Door latch": 1,
-  "Door brace": 1
+  "Door brace": 1,
+  "Door plank.003": 1
  },
  "bounds": {
   "x0": 3400,

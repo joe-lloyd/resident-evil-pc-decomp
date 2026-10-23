@@ -43,91 +43,99 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 5950,
-   "z0": -833,
-   "x1": 13090,
-   "z1": 5593,
-   "name": "Rock footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 16822,
-   "z0": -825,
-   "x1": 24319,
-   "z1": 5245,
-   "name": "Rock footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 11390,
-   "z0": -4700,
-   "x1": 18530,
-   "z1": -59,
-   "name": "Rock footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 5109,
-   "z0": 17293,
-   "x1": 6791,
-   "z1": 18747,
-   "name": "Rock footprint.003"
-  },
-  {
-   "shape": "box",
-   "x0": 23732,
-   "z0": 16014,
-   "x1": 25228,
-   "z1": 17306,
-   "name": "Rock footprint.004"
-  },
-  {
-   "shape": "box",
-   "x0": 6767,
-   "z0": 17589,
-   "x1": 9145,
-   "z1": 19522,
-   "name": "Windfall footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 8399,
-   "z0": 16620,
-   "x1": 10777,
-   "z1": 18553,
-   "name": "Windfall footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 10031,
-   "z0": 15651,
-   "x1": 12409,
-   "z1": 17584,
-   "name": "Windfall footprint.002"
-  },
-  {
-   "shape": "box",
    "x0": 5455,
-   "z0": 3497,
-   "x1": 5765,
-   "z1": 3558,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 13105,
    "z0": 3497,
    "x1": 13415,
    "z1": 3558,
-   "name": "Probe"
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
-   "x0": 13102,
-   "z0": 3755,
-   "x1": 13163,
-   "z1": 4575,
-   "name": "Probe"
+   "x0": 5965,
+   "z0": 3752,
+   "x1": 13160,
+   "z1": 3813,
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 6220,
+   "z0": 4007,
+   "x1": 13160,
+   "z1": 4068,
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 6985,
+   "z0": 4262,
+   "x1": 13160,
+   "z1": 4323,
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 16930,
+   "z0": 3500,
+   "x1": 23870,
+   "z1": 4320,
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 7240,
+   "z0": 4517,
+   "x1": 13160,
+   "z1": 4578,
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 16930,
+   "z0": 4517,
+   "x1": 23615,
+   "z1": 4578,
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 7240,
+   "z0": 4772,
+   "x1": 12905,
+   "z1": 4833,
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 5962,
+   "z0": 5027,
+   "x1": 6023,
+   "z1": 5088,
+   "name": "Probe: Fallen rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 7495,
+   "z0": 5027,
+   "x1": 12905,
+   "z1": 5088,
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 16930,
+   "z0": 4775,
+   "x1": 23105,
+   "z1": 5085,
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 8005,
+   "z0": 5282,
+   "x1": 12905,
+   "z1": 5343,
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
@@ -135,7 +143,39 @@
    "z0": 5282,
    "x1": 22850,
    "z1": 5343,
-   "name": "Probe"
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 5965,
+   "z0": 5285,
+   "x1": 6785,
+   "z1": 5595,
+   "name": "Probe: Fallen rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 8515,
+   "z0": 5537,
+   "x1": 9080,
+   "z1": 5598,
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 9535,
+   "z0": 5537,
+   "x1": 9845,
+   "z1": 5598,
+   "name": "Probe: Granite tor"
+  },
+  {
+   "shape": "box",
+   "x0": 12085,
+   "z0": 5537,
+   "x1": 12905,
+   "z1": 5598,
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
@@ -143,7 +183,7 @@
    "z0": 5537,
    "x1": 21830,
    "z1": 5598,
-   "name": "Probe"
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
@@ -151,7 +191,7 @@
    "z0": 5792,
    "x1": 16733,
    "z1": 5853,
-   "name": "Probe"
+   "name": "Probe: Roots under the slab"
   },
   {
    "shape": "box",
@@ -159,15 +199,7 @@
    "z0": 5792,
    "x1": 21065,
    "z1": 5853,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 25342,
-   "z0": 5540,
-   "x1": 25403,
-   "z1": 5850,
-   "name": "Probe"
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
@@ -175,31 +207,31 @@
    "z0": 6047,
    "x1": 14438,
    "z1": 6108,
-   "name": "Probe"
+   "name": "Probe: Roots under the slab"
+  },
+  {
+   "shape": "box",
+   "x0": 25342,
+   "z0": 5795,
+   "x1": 25403,
+   "z1": 6105,
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
    "x0": 25090,
-   "z0": 6047,
+   "z0": 6305,
    "x1": 25400,
-   "z1": 6108,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5197,
-   "z0": 6302,
-   "x1": 5258,
-   "z1": 6363,
-   "name": "Probe"
+   "z1": 6615,
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
    "x0": 24835,
-   "z0": 6305,
+   "z0": 6812,
    "x1": 25400,
-   "z1": 6870,
-   "name": "Probe"
+   "z1": 6873,
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
@@ -207,7 +239,7 @@
    "z0": 7067,
    "x1": 25400,
    "z1": 7128,
-   "name": "Probe"
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
@@ -215,7 +247,7 @@
    "z0": 6560,
    "x1": 5510,
    "z1": 7380,
-   "name": "Probe"
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
@@ -223,7 +255,7 @@
    "z0": 7322,
    "x1": 25403,
    "z1": 7383,
-   "name": "Probe"
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
@@ -231,47 +263,31 @@
    "z0": 7577,
    "x1": 6020,
    "z1": 7638,
-   "name": "Probe"
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
    "x0": 5200,
-   "z0": 7832,
+   "z0": 7835,
    "x1": 5765,
-   "z1": 7893,
-   "name": "Probe"
+   "z1": 8910,
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
    "x0": 5200,
-   "z0": 8090,
-   "x1": 6020,
-   "z1": 8655,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5200,
-   "z0": 8852,
-   "x1": 5765,
-   "z1": 8913,
-   "name": "Probe"
+   "z0": 9107,
+   "x1": 5510,
+   "z1": 9168,
+   "name": "Probe: Granite tor"
   },
   {
    "shape": "box",
    "x0": 5197,
-   "z0": 9110,
+   "z0": 18545,
    "x1": 5258,
-   "z1": 9420,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5197,
-   "z0": 18800,
-   "x1": 5258,
-   "z1": 19110,
-   "name": "Probe"
+   "z1": 18855,
+   "name": "Probe: Spruce trunks.001"
   }
  ],
  "anim": {
@@ -279,7 +295,8 @@
   "ticks": 3
  },
  "probe": {
-  "Granite tor": 81,
+  "Granite tor": 466,
+  "Fallen rocks": 9,
   "Roots under the slab": 2,
   "Spruce trunks.001": 2
  },

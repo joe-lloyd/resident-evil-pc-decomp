@@ -2,8 +2,7 @@
 1: \nThe first aid tin,\nemptied. Bandage wrappers\neverywhere.\p{0}\nHe did what he could with\nit.
 2: \nA key on a hook by the\ndoor. The tag says QUARRY\nOFFICE.\p{0}\nThe bolt's drawn and the\nbar's off the door.\p{0}\nHe locked himself in, then\nthought better of it.
 3: \nThe sink is full of\ntowels. They're soaked\nthrough.\p{0}\nThe water's pink.
-4: \nA girl holding up a fish,\ngrinning. The same photo\nwas in the booth.\p{0}\nA drawing under it, in\ncrayon: DAD.
-5: \nThe radio's on, hissing.\nNothing on any channel.
-6: \nHe dragged the chair to\nthe window and sat\nwatching the path.\p{0}\nBinoculars. Cold coffee.
-7: \nThe bed's been slept in,\nor tried. Blood on the\npillow.
-8: \nFishing rods, a creel,\nwaders. A man who liked\nquiet.
+4: \nThe radio's on, hissing.\nNothing on any channel.\p{0}\nOver it, a girl holding up\na fish, grinning. The same\nphoto was in the booth.\p{0}\nA drawing under it, in\ncrayon: DAD.
+5: \nHe dragged the chair to\nthe window and sat\nwatching the path.\p{0}\nBinoculars. Cold coffee.
+6: \nThe bed's been slept in,\nor tried. Blood on the\npillow.
+7: \nFishing rods, a creel,\nwaders. A man who liked\nquiet.

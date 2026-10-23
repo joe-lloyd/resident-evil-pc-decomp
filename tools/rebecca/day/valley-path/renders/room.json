@@ -69,155 +69,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 20655,
-   "z0": 4165,
-   "x1": 22525,
-   "z1": 6035,
-   "name": "Footing.002"
-  },
-  {
-   "shape": "box",
-   "x0": 9775,
-   "z0": 4165,
-   "x1": 11645,
-   "z1": 6035,
-   "name": "Footing.003"
-  },
-  {
-   "shape": "circle",
-   "x0": 29770,
-   "z0": 10050,
-   "x1": 30750,
-   "z1": 11030,
-   "name": "Spruce trunk"
-  },
-  {
-   "shape": "circle",
-   "x0": 2965,
-   "z0": 19285,
-   "x1": 3835,
-   "z1": 20155,
-   "name": "Spruce trunk.001"
-  },
-  {
-   "shape": "circle",
-   "x0": 10390,
-   "z0": 26540,
-   "x1": 11370,
-   "z1": 27520,
-   "name": "Spruce trunk.002"
-  },
-  {
-   "shape": "circle",
-   "x0": 27506,
-   "z0": 18156,
-   "x1": 28594,
-   "z1": 19244,
-   "name": "Spruce trunk.003"
-  },
-  {
-   "shape": "box",
-   "x0": 23021,
-   "z0": 23662,
-   "x1": 30359,
-   "z1": 25978,
-   "name": "Fallen log"
-  },
-  {
-   "shape": "circle",
-   "x0": 10344,
-   "z0": 18836,
-   "x1": 11416,
-   "z1": 19891,
-   "name": "Stump"
-  },
-  {
-   "shape": "circle",
-   "x0": 4243,
-   "z0": 24808,
-   "x1": 6791,
-   "z1": 26973,
-   "name": "Mossy rock"
-  },
-  {
-   "shape": "circle",
-   "x0": 26967,
-   "z0": 2112,
-   "x1": 30052,
-   "z1": 4879,
-   "name": "Mossy rock.001"
-  },
-  {
-   "shape": "circle",
-   "x0": 22128,
-   "z0": 10354,
-   "x1": 24082,
-   "z1": 12018,
-   "name": "Mossy rock.002"
-  },
-  {
-   "shape": "circle",
-   "x0": 12667,
-   "z0": 24023,
-   "x1": 14703,
-   "z1": 25756,
-   "name": "Mossy rock.003"
-  },
-  {
-   "shape": "circle",
-   "x0": 18428,
-   "z0": 13838,
-   "x1": 18632,
-   "z1": 14042,
-   "name": "Signpost"
-  },
-  {
-   "shape": "circle",
-   "x0": 6426,
-   "z0": 12036,
-   "x1": 6834,
-   "z1": 12444,
-   "name": "Snag trunk"
-  },
-  {
-   "shape": "box",
-   "x0": 28065,
-   "z0": 1797,
-   "x1": 32200,
-   "z1": 1858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29340,
-   "z0": 2052,
-   "x1": 32200,
-   "z1": 2113,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29595,
-   "z0": 2307,
-   "x1": 32200,
-   "z1": 2368,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29850,
-   "z0": 2562,
-   "x1": 32200,
-   "z1": 2623,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
    "x0": 15825,
    "z0": 3327,
    "x1": 16390,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Pylon ladder"
   },
   {
    "shape": "box",
@@ -225,7 +81,7 @@
    "z0": 3327,
    "x1": 17410,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Ladder gate"
   },
   {
    "shape": "box",
@@ -233,7 +89,7 @@
    "z0": 3582,
    "x1": 17155,
    "z1": 3643,
-   "name": "Probe"
+   "name": "Probe: Pylon ladder"
   },
   {
    "shape": "box",
@@ -241,95 +97,23 @@
    "z0": 3837,
    "x1": 16900,
    "z1": 3898,
-   "name": "Probe"
+   "name": "Probe: Ladder gate"
   },
   {
    "shape": "box",
    "x0": 9705,
-   "z0": 4092,
+   "z0": 4095,
    "x1": 11545,
-   "z1": 4153,
-   "name": "Probe"
+   "z1": 5935,
+   "name": "Probe: Footing.003"
   },
   {
    "shape": "box",
    "x0": 20670,
-   "z0": 4092,
+   "z0": 4095,
    "x1": 22510,
-   "z1": 4153,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 30105,
-   "z0": 2820,
-   "x1": 32200,
-   "z1": 4150,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29850,
-   "z0": 4347,
-   "x1": 32200,
-   "z1": 4408,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29595,
-   "z0": 4602,
-   "x1": 32200,
-   "z1": 4663,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29340,
-   "z0": 4857,
-   "x1": 32200,
-   "z1": 4918,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9702,
-   "z0": 4350,
-   "x1": 9763,
    "z1": 5935,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 11742,
-   "z0": 4350,
-   "x1": 11803,
-   "z1": 5935,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9960,
-   "z0": 6132,
-   "x1": 11545,
-   "z1": 6193,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 20670,
-   "z0": 6132,
-   "x1": 22510,
-   "z1": 6193,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 28065,
-   "z0": 5115,
-   "x1": 32200,
-   "z1": 6190,
-   "name": "Probe"
+   "name": "Probe: Footing.002"
   },
   {
    "shape": "box",
@@ -337,23 +121,39 @@
    "z0": 9957,
    "x1": 30415,
    "z1": 10018,
-   "name": "Probe"
+   "name": "Probe: Spruce trunk"
+  },
+  {
+   "shape": "box",
+   "x0": 29850,
+   "z0": 10212,
+   "x1": 30670,
+   "z1": 10273,
+   "name": "Probe: Spruce trunk"
   },
   {
    "shape": "box",
    "x0": 29847,
-   "z0": 10977,
+   "z0": 10470,
    "x1": 29908,
-   "z1": 11038,
-   "name": "Probe"
+   "z1": 10780,
+   "name": "Probe: Spruce trunk"
   },
   {
    "shape": "box",
    "x0": 30612,
-   "z0": 10977,
+   "z0": 10470,
    "x1": 30673,
+   "z1": 10780,
+   "name": "Probe: Spruce trunk"
+  },
+  {
+   "shape": "box",
+   "x0": 29850,
+   "z0": 10977,
+   "x1": 30670,
    "z1": 11038,
-   "name": "Probe"
+   "name": "Probe: Spruce trunk"
   },
   {
    "shape": "box",
@@ -361,23 +161,15 @@
    "z0": 11997,
    "x1": 6700,
    "z1": 12058,
-   "name": "Probe"
+   "name": "Probe: Snag trunk"
   },
   {
    "shape": "box",
-   "x0": 6387,
+   "x0": 6390,
    "z0": 12252,
-   "x1": 6448,
+   "x1": 6955,
    "z1": 12313,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6897,
-   "z0": 12252,
-   "x1": 6958,
-   "z1": 12313,
-   "name": "Probe"
+   "name": "Probe: Snag trunk"
   },
   {
    "shape": "box",
@@ -385,7 +177,7 @@
    "z0": 12507,
    "x1": 7210,
    "z1": 12568,
-   "name": "Probe"
+   "name": "Probe: Snapped branch"
   },
   {
    "shape": "box",
@@ -393,7 +185,7 @@
    "z0": 12762,
    "x1": 7465,
    "z1": 12823,
-   "name": "Probe"
+   "name": "Probe: Snapped branch"
   },
   {
    "shape": "box",
@@ -401,15 +193,7 @@
    "z0": 13017,
    "x1": 7720,
    "z1": 13078,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7662,
-   "z0": 13272,
-   "x1": 7723,
-   "z1": 13333,
-   "name": "Probe"
+   "name": "Probe: Torn sleeve"
   },
   {
    "shape": "box",
@@ -417,7 +201,7 @@
    "z0": 13782,
    "x1": 19450,
    "z1": 13843,
-   "name": "Probe"
+   "name": "Probe: Sign board 2"
   },
   {
    "shape": "box",
@@ -425,7 +209,7 @@
    "z0": 14037,
    "x1": 18685,
    "z1": 14098,
-   "name": "Probe"
+   "name": "Probe: Signpost"
   },
   {
    "shape": "box",
@@ -433,7 +217,7 @@
    "z0": 18117,
    "x1": 27103,
    "z1": 18178,
-   "name": "Probe"
+   "name": "Probe: The hiker"
   },
   {
    "shape": "box",
@@ -441,55 +225,39 @@
    "z0": 18117,
    "x1": 28375,
    "z1": 18178,
-   "name": "Probe"
+   "name": "Probe: Spruce trunk.003"
   },
   {
    "shape": "box",
-   "x0": 26535,
+   "x0": 28320,
    "z0": 18372,
-   "x1": 27610,
+   "x1": 28630,
    "z1": 18433,
-   "name": "Probe"
+   "name": "Probe: Spruce trunk.003"
   },
   {
    "shape": "box",
    "x0": 26790,
-   "z0": 18627,
-   "x1": 27355,
-   "z1": 18688,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10467,
-   "z0": 18882,
-   "x1": 10528,
-   "z1": 18943,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 11232,
-   "z0": 18882,
-   "x1": 11293,
-   "z1": 18943,
-   "name": "Probe"
+   "z0": 18375,
+   "x1": 27610,
+   "z1": 18685,
+   "name": "Probe: The hiker"
   },
   {
    "shape": "box",
    "x0": 27045,
    "z0": 18882,
-   "x1": 27355,
+   "x1": 27610,
    "z1": 18943,
-   "name": "Probe"
+   "name": "Probe: The hiker"
   },
   {
    "shape": "box",
    "x0": 28572,
-   "z0": 18375,
+   "z0": 18630,
    "x1": 28633,
    "z1": 18940,
-   "name": "Probe"
+   "name": "Probe: Spruce trunk.003"
   },
   {
    "shape": "box",
@@ -497,63 +265,79 @@
    "z0": 19137,
    "x1": 3388,
    "z1": 19198,
-   "name": "Probe"
+   "name": "Probe: Spruce trunk.001"
+  },
+  {
+   "shape": "box",
+   "x0": 10470,
+   "z0": 18885,
+   "x1": 11290,
+   "z1": 19195,
+   "name": "Probe: Stump"
   },
   {
    "shape": "box",
    "x0": 27045,
    "z0": 19137,
-   "x1": 27610,
+   "x1": 28375,
    "z1": 19198,
-   "name": "Probe"
+   "name": "Probe: Spruce trunk.003"
   },
   {
    "shape": "box",
-   "x0": 28317,
-   "z0": 19137,
-   "x1": 28378,
-   "z1": 19198,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10212,
+   "x0": 3075,
    "z0": 19392,
-   "x1": 10273,
+   "x1": 3640,
    "z1": 19453,
-   "name": "Probe"
+   "name": "Probe: Spruce trunk.001"
   },
   {
    "shape": "box",
-   "x0": 11487,
+   "x0": 10215,
    "z0": 19392,
-   "x1": 11548,
+   "x1": 11545,
    "z1": 19453,
-   "name": "Probe"
+   "name": "Probe: Stump"
   },
   {
    "shape": "box",
-   "x0": 2817,
+   "x0": 2820,
    "z0": 19647,
-   "x1": 2878,
+   "x1": 3130,
    "z1": 19708,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 27042,
-   "z0": 19647,
-   "x1": 27103,
-   "z1": 19708,
-   "name": "Probe"
+   "name": "Probe: Spruce trunk.001"
   },
   {
    "shape": "box",
    "x0": 3837,
-   "z0": 19650,
+   "z0": 19647,
    "x1": 3898,
-   "z1": 19960,
-   "name": "Probe"
+   "z1": 19708,
+   "name": "Probe: Spruce trunk.001"
+  },
+  {
+   "shape": "box",
+   "x0": 10470,
+   "z0": 19647,
+   "x1": 11290,
+   "z1": 19708,
+   "name": "Probe: Stump"
+  },
+  {
+   "shape": "box",
+   "x0": 3072,
+   "z0": 19902,
+   "x1": 3133,
+   "z1": 19963,
+   "name": "Probe: Spruce trunk.001"
+  },
+  {
+   "shape": "box",
+   "x0": 3585,
+   "z0": 19902,
+   "x1": 3895,
+   "z1": 19963,
+   "name": "Probe: Spruce trunk.001"
   },
   {
    "shape": "box",
@@ -561,23 +345,15 @@
    "z0": 19902,
    "x1": 11035,
    "z1": 19963,
-   "name": "Probe"
+   "name": "Probe: Stump"
   },
   {
    "shape": "box",
-   "x0": 26790,
-   "z0": 19905,
-   "x1": 27100,
-   "z1": 20215,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 27042,
-   "z0": 20412,
-   "x1": 27103,
-   "z1": 20473,
-   "name": "Probe"
+   "x0": 3330,
+   "z0": 20157,
+   "x1": 3640,
+   "z1": 20218,
+   "name": "Probe: Spruce trunk.001"
   },
   {
    "shape": "box",
@@ -585,7 +361,7 @@
    "z0": 22707,
    "x1": 31435,
    "z1": 22768,
-   "name": "Probe"
+   "name": "Probe: Log stub"
   },
   {
    "shape": "box",
@@ -593,7 +369,7 @@
    "z0": 22962,
    "x1": 31435,
    "z1": 23023,
-   "name": "Probe"
+   "name": "Probe: Log stub"
   },
   {
    "shape": "box",
@@ -601,7 +377,7 @@
    "z0": 23217,
    "x1": 31180,
    "z1": 23278,
-   "name": "Probe"
+   "name": "Probe: Log stub"
   },
   {
    "shape": "box",
@@ -609,119 +385,111 @@
    "z0": 23472,
    "x1": 30925,
    "z1": 23533,
-   "name": "Probe"
+   "name": "Probe: Log stub"
   },
   {
    "shape": "box",
-   "x0": 30360,
-   "z0": 23730,
+   "x0": 29595,
+   "z0": 23727,
    "x1": 30670,
-   "z1": 24040,
-   "name": "Probe"
+   "z1": 23788,
+   "name": "Probe: Fallen log"
   },
   {
    "shape": "box",
-   "x0": 1800,
-   "z0": 20160,
-   "x1": 6190,
-   "z1": 24550,
-   "name": "Probe"
+   "x0": 28320,
+   "z0": 23982,
+   "x1": 30670,
+   "z1": 24043,
+   "name": "Probe: Fallen log"
   },
   {
    "shape": "box",
-   "x0": 30357,
-   "z0": 24240,
-   "x1": 30418,
-   "z1": 24550,
-   "name": "Probe"
+   "x0": 27300,
+   "z0": 24237,
+   "x1": 30415,
+   "z1": 24298,
+   "name": "Probe: Fallen log"
   },
   {
    "shape": "box",
-   "x0": 1800,
+   "x0": 26025,
+   "z0": 24492,
+   "x1": 30415,
+   "z1": 24553,
+   "name": "Probe: Fallen log"
+  },
+  {
+   "shape": "box",
+   "x0": 24750,
    "z0": 24747,
-   "x1": 4915,
+   "x1": 29395,
    "z1": 24808,
-   "name": "Probe"
+   "name": "Probe: Fallen log"
   },
   {
    "shape": "box",
-   "x0": 6132,
-   "z0": 24747,
-   "x1": 6193,
-   "z1": 24808,
-   "name": "Probe"
+   "x0": 23475,
+   "z0": 25002,
+   "x1": 28120,
+   "z1": 25063,
+   "name": "Probe: Fallen log"
   },
   {
    "shape": "box",
-   "x0": 1800,
-   "z0": 25005,
-   "x1": 4405,
-   "z1": 25315,
-   "name": "Probe"
+   "x0": 22965,
+   "z0": 25257,
+   "x1": 26590,
+   "z1": 25318,
+   "name": "Probe: Fallen log"
   },
   {
    "shape": "box",
-   "x0": 22962,
-   "z0": 25005,
-   "x1": 23023,
-   "z1": 25570,
-   "name": "Probe"
+   "x0": 22965,
+   "z0": 25512,
+   "x1": 25060,
+   "z1": 25573,
+   "name": "Probe: Fallen log"
   },
   {
    "shape": "box",
-   "x0": 1800,
-   "z0": 25515,
-   "x1": 4150,
-   "z1": 26335,
-   "name": "Probe"
+   "x0": 23220,
+   "z0": 25767,
+   "x1": 23785,
+   "z1": 25828,
+   "name": "Probe: Fallen log"
   },
   {
    "shape": "box",
-   "x0": 1800,
+   "x0": 10470,
    "z0": 26532,
-   "x1": 4405,
+   "x1": 11290,
    "z1": 26593,
-   "name": "Probe"
+   "name": "Probe: Spruce trunk.002"
   },
   {
    "shape": "box",
    "x0": 10467,
-   "z0": 26532,
+   "z0": 26790,
    "x1": 10528,
-   "z1": 26593,
-   "name": "Probe"
+   "z1": 27100,
+   "name": "Probe: Spruce trunk.002"
   },
   {
    "shape": "box",
    "x0": 11232,
-   "z0": 26532,
+   "z0": 26790,
    "x1": 11293,
-   "z1": 26593,
-   "name": "Probe"
+   "z1": 27100,
+   "name": "Probe: Spruce trunk.002"
   },
   {
    "shape": "box",
-   "x0": 1800,
-   "z0": 26787,
-   "x1": 4660,
-   "z1": 26848,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1800,
-   "z0": 27042,
-   "x1": 4915,
-   "z1": 27103,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6132,
-   "z0": 27042,
-   "x1": 6193,
-   "z1": 27103,
-   "name": "Probe"
+   "x0": 10470,
+   "z0": 27297,
+   "x1": 11290,
+   "z1": 27358,
+   "name": "Probe: Spruce trunk.002"
   },
   {
    "shape": "box",
@@ -729,15 +497,7 @@
    "z0": 27552,
    "x1": 11035,
    "z1": 27613,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1800,
-   "z0": 27300,
-   "x1": 6190,
-   "z1": 28800,
-   "name": "Probe"
+   "name": "Probe: Spruce trunk.002"
   }
  ],
  "anim": {
@@ -745,28 +505,25 @@
   "ticks": 3
  },
  "probe": {
-  "Mist 4": 561,
-  "Mist 5": 222,
-  "Footing.003": 29,
-  "Footing.002": 16,
+  "Fallen log": 107,
+  "Footing.003": 63,
+  "Footing.002": 63,
+  "Stump": 20,
+  "Spruce trunk": 14,
+  "Spruce trunk.003": 14,
   "Log stub": 14,
-  "The hiker": 12,
-  "Spruce trunk.003": 9,
+  "Spruce trunk.002": 14,
+  "Spruce trunk.001": 12,
+  "The hiker": 11,
   "Pylon ladder": 7,
   "Ladder gate": 6,
   "Sign board 2": 6,
-  "Stump": 6,
-  "Spruce trunk.001": 6,
-  "Pack, split": 6,
   "Snag trunk": 5,
-  "Fallen log": 5,
-  "Spruce trunk": 4,
-  "Snapped branch": 4,
-  "Spruce trunk.002": 4,
+  "Snapped branch": 5,
+  "Pylon tower": 2,
   "Torn sleeve": 2,
   "Claw marks on the post": 2,
-  "Signpost": 2,
-  "Branch split": 1
+  "Signpost": 2
  },
  "bounds": {
   "x0": 1700,

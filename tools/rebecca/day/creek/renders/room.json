@@ -69,147 +69,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 21845,
-   "z0": 10149,
-   "x1": 23035,
-   "z1": 11339,
-   "name": "Log footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 26605,
-   "z0": 15861,
-   "x1": 27795,
-   "z1": 17051,
-   "name": "Log footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 4080,
-   "z0": 17680,
-   "x1": 6120,
-   "z1": 18530,
-   "name": "Lodge wall n"
-  },
-  {
-   "shape": "box",
-   "x0": 6120,
-   "z0": 17680,
-   "x1": 7820,
-   "z1": 18530,
-   "name": "Lodge wall n.001"
-  },
-  {
-   "shape": "box",
-   "x0": 6120,
-   "z0": 17680,
-   "x1": 7820,
-   "z1": 18530,
-   "name": "Lodge wall n.002"
-  },
-  {
-   "shape": "box",
-   "x0": 7820,
-   "z0": 17680,
-   "x1": 10880,
-   "z1": 18530,
-   "name": "Lodge wall n.003"
-  },
-  {
-   "shape": "box",
-   "x0": 4080,
-   "z0": 23630,
-   "x1": 10880,
-   "z1": 24480,
-   "name": "Lodge wall s"
-  },
-  {
-   "shape": "box",
-   "x0": 4080,
-   "z0": 17680,
-   "x1": 4930,
-   "z1": 24480,
-   "name": "Lodge wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 10030,
-   "z0": 17680,
-   "x1": 10880,
-   "z1": 19720,
-   "name": "Lodge wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 10030,
-   "z0": 19720,
-   "x1": 10880,
-   "z1": 21250,
-   "name": "Lodge wall e.001"
-  },
-  {
-   "shape": "box",
-   "x0": 10030,
-   "z0": 21250,
-   "x1": 10880,
-   "z1": 24480,
-   "name": "Lodge wall e.002"
-  },
-  {
-   "shape": "box",
-   "x0": 4675,
-   "z0": 16575,
-   "x1": 9775,
-   "z1": 17765,
-   "name": "Woodpile footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 12070,
-   "z0": 22100,
-   "x1": 13090,
-   "z1": 23120,
-   "name": "Block footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 11050,
-   "z0": 22950,
-   "x1": 12070,
-   "z1": 23970,
-   "name": "Butt footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 17212,
-   "z0": 9733,
-   "x1": 17467,
-   "z1": 9988,
-   "name": "Sign footprint"
-  },
-  {
-   "shape": "box",
    "x0": 17015,
    "z0": 9617,
-   "x1": 17835,
+   "x1": 17580,
    "z1": 9678,
-   "name": "Probe"
+   "name": "Probe: Sign words"
   },
   {
    "shape": "box",
    "x0": 16505,
    "z0": 9872,
-   "x1": 17070,
-   "z1": 9933,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 17525,
-   "z0": 9872,
    "x1": 18090,
    "z1": 9933,
-   "name": "Probe"
+   "name": "Probe: Estate sign"
   },
   {
    "shape": "box",
@@ -217,15 +89,15 @@
    "z0": 10382,
    "x1": 23955,
    "z1": 10443,
-   "name": "Probe"
+   "name": "Probe: Dead branch.003"
   },
   {
    "shape": "box",
-   "x0": 23390,
+   "x0": 23387,
    "z0": 10637,
-   "x1": 23700,
+   "x1": 23448,
    "z1": 10698,
-   "name": "Probe"
+   "name": "Probe: Dead branch.003"
   },
   {
    "shape": "box",
@@ -233,23 +105,7 @@
    "z0": 11147,
    "x1": 23193,
    "z1": 11208,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 27725,
-   "z0": 11147,
-   "x1": 28800,
-   "z1": 11208,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 25937,
-   "z0": 15992,
-   "x1": 25998,
-   "z1": 16053,
-   "name": "Probe"
+   "name": "Probe: Dead branch.004"
   },
   {
    "shape": "box",
@@ -257,15 +113,15 @@
    "z0": 16247,
    "x1": 25995,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Dead branch"
   },
   {
    "shape": "box",
-   "x0": 5285,
+   "x0": 5540,
    "z0": 16502,
-   "x1": 9420,
+   "x1": 9165,
    "z1": 16563,
-   "name": "Probe"
+   "name": "Probe: Woodpile"
   },
   {
    "shape": "box",
@@ -273,7 +129,23 @@
    "z0": 16502,
    "x1": 25740,
    "z1": 16563,
-   "name": "Probe"
+   "name": "Probe: Dead branch"
+  },
+  {
+   "shape": "box",
+   "x0": 27467,
+   "z0": 17012,
+   "x1": 27528,
+   "z1": 17073,
+   "name": "Probe: Dead branch.005"
+  },
+  {
+   "shape": "box",
+   "x0": 4775,
+   "z0": 16760,
+   "x1": 9675,
+   "z1": 17325,
+   "name": "Probe: Woodpile"
   },
   {
    "shape": "box",
@@ -281,23 +153,7 @@
    "z0": 17267,
    "x1": 27780,
    "z1": 17328,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4010,
-   "z0": 17522,
-   "x1": 4575,
-   "z1": 17583,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9875,
-   "z0": 17522,
-   "x1": 10950,
-   "z1": 17583,
-   "name": "Probe"
+   "name": "Probe: Dead branch.005"
   },
   {
    "shape": "box",
@@ -305,39 +161,159 @@
    "z0": 17522,
    "x1": 27783,
    "z1": 17583,
-   "name": "Probe"
+   "name": "Probe: Dead branch.005"
   },
   {
    "shape": "box",
-   "x0": 5030,
-   "z0": 18542,
-   "x1": 9930,
-   "z1": 18603,
-   "name": "Probe"
+   "x0": 4010,
+   "z0": 17525,
+   "x1": 10950,
+   "z1": 17835,
+   "name": "Probe: Woodpile"
   },
   {
    "shape": "box",
-   "x0": 9872,
-   "z0": 18800,
-   "x1": 9933,
-   "z1": 19620,
-   "name": "Probe"
+   "x0": 5795,
+   "z0": 18032,
+   "x1": 8145,
+   "z1": 18093,
+   "name": "Probe: Lodge wall n.001"
+  },
+  {
+   "shape": "box",
+   "x0": 4007,
+   "z0": 18035,
+   "x1": 4068,
+   "z1": 18345,
+   "name": "Probe: Lodge wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 4775,
+   "z0": 18035,
+   "x1": 5085,
+   "z1": 18345,
+   "name": "Probe: Lodge wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 6050,
+   "z0": 18287,
+   "x1": 7890,
+   "z1": 18348,
+   "name": "Probe: Lodge wall n.001"
+  },
+  {
+   "shape": "box",
+   "x0": 9875,
+   "z0": 18035,
+   "x1": 10185,
+   "z1": 18345,
+   "name": "Probe: Lodge wall e"
   },
   {
    "shape": "box",
    "x0": 10892,
-   "z0": 17780,
+   "z0": 18035,
    "x1": 10953,
-   "z1": 19875,
-   "name": "Probe"
+   "z1": 18345,
+   "name": "Probe: Lodge wall n.003"
+  },
+  {
+   "shape": "box",
+   "x0": 4010,
+   "z0": 18542,
+   "x1": 10950,
+   "z1": 18603,
+   "name": "Probe: Lodge wall n.003"
+  },
+  {
+   "shape": "box",
+   "x0": 9875,
+   "z0": 18800,
+   "x1": 10185,
+   "z1": 19365,
+   "name": "Probe: Lodge wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 10892,
+   "z0": 18800,
+   "x1": 10953,
+   "z1": 19365,
+   "name": "Probe: Lodge wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 9875,
+   "z0": 19562,
+   "x1": 10950,
+   "z1": 19623,
+   "name": "Probe: Lodge wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 10130,
+   "z0": 19817,
+   "x1": 10950,
+   "z1": 19878,
+   "name": "Probe: Lodge wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 10130,
+   "z0": 20075,
+   "x1": 10695,
+   "z1": 20895,
+   "name": "Probe: Door lintel"
+  },
+  {
+   "shape": "box",
+   "x0": 10130,
+   "z0": 21092,
+   "x1": 10950,
+   "z1": 21153,
+   "name": "Probe: Lodge wall e.002"
+  },
+  {
+   "shape": "box",
+   "x0": 9875,
+   "z0": 21347,
+   "x1": 10950,
+   "z1": 21408,
+   "name": "Probe: Lodge wall e.002"
+  },
+  {
+   "shape": "box",
+   "x0": 12425,
+   "z0": 22112,
+   "x1": 12735,
+   "z1": 22173,
+   "name": "Probe: Chopping block"
+  },
+  {
+   "shape": "box",
+   "x0": 12170,
+   "z0": 22370,
+   "x1": 12990,
+   "z1": 22680,
+   "name": "Probe: Chopping block"
+  },
+  {
+   "shape": "box",
+   "x0": 10892,
+   "z0": 21605,
+   "x1": 10953,
+   "z1": 22935,
+   "name": "Probe: Lodge wall e.002"
   },
   {
    "shape": "box",
    "x0": 11405,
    "z0": 22877,
-   "x1": 11970,
+   "x1": 12990,
    "z1": 22938,
-   "name": "Probe"
+   "name": "Probe: Chopping block"
   },
   {
    "shape": "box",
@@ -345,47 +321,47 @@
    "z0": 23132,
    "x1": 12735,
    "z1": 23193,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5027,
-   "z0": 18800,
-   "x1": 5088,
-   "z1": 23445,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9872,
-   "z0": 21350,
-   "x1": 9933,
-   "z1": 23445,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 12167,
-   "z0": 23387,
-   "x1": 12228,
-   "z1": 23448,
-   "name": "Probe"
+   "name": "Probe: Chopping block"
   },
   {
    "shape": "box",
    "x0": 4007,
-   "z0": 17780,
+   "z0": 18800,
    "x1": 4068,
-   "z1": 23700,
-   "name": "Probe"
+   "z1": 23445,
+   "name": "Probe: Lodge wall w"
   },
   {
    "shape": "box",
-   "x0": 10892,
-   "z0": 21095,
-   "x1": 10953,
-   "z1": 23700,
-   "name": "Probe"
+   "x0": 4775,
+   "z0": 18800,
+   "x1": 5085,
+   "z1": 23445,
+   "name": "Probe: Lodge wall w"
+  },
+  {
+   "shape": "box",
+   "x0": 9875,
+   "z0": 21605,
+   "x1": 10185,
+   "z1": 23445,
+   "name": "Probe: Lodge wall e.002"
+  },
+  {
+   "shape": "box",
+   "x0": 10895,
+   "z0": 23135,
+   "x1": 11970,
+   "z1": 23445,
+   "name": "Probe: Water butt"
+  },
+  {
+   "shape": "box",
+   "x0": 4010,
+   "z0": 23642,
+   "x1": 11970,
+   "z1": 23703,
+   "name": "Probe: Lodge wall s"
   }
  ],
  "anim": {
@@ -393,25 +369,28 @@
   "ticks": 3
  },
  "probe": {
-  "Lodge wall w": 44,
-  "Lodge wall e.002": 20,
-  "Woodpile": 17,
-  "Lodge wall e": 14,
-  "Lodge wall n.003": 13,
-  "Lodge wall n": 7,
-  "Lodge wall n.001": 6,
+  "Woodpile": 93,
+  "Lodge wall w": 74,
+  "Lodge wall e.002": 31,
+  "Lodge wall e": 29,
+  "Lodge wall n.003": 27,
+  "Lodge wall s": 27,
+  "Lodge wall n.001": 26,
+  "Chopping block": 14,
+  "Water butt": 14,
+  "Lodge wall n": 11,
+  "Door lintel": 8,
+  "Lodge door": 7,
   "Estate sign": 5,
-  "no floor": 5,
-  "Dead branch.003": 4,
   "Dead branch": 4,
-  "Sign words 2": 3,
-  "Dead branch.005": 3,
-  "hoop.001": 3,
-  "Sign post": 2,
-  "Chopping block": 2,
+  "Dead branch.005": 4,
+  "Sill": 4,
+  "Sign post": 3,
+  "Dead branch.003": 3,
+  "Sign words": 2,
+  "Axe handle": 2,
   "Dead branch.004": 1,
-  "Dead branch.001": 1,
-  "Axe handle": 1
+  "Axe head": 1
  },
  "bounds": {
   "x0": 3400,

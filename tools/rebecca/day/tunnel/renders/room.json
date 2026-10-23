@@ -69,115 +69,67 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 15300,
-   "z0": 17510,
-   "x1": 32300,
-   "z1": 32300,
-   "name": "Rock round the bend"
+   "x0": 5710,
+   "z0": 11827,
+   "x1": 12650,
+   "z1": 11888,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 11390,
-   "z0": 21420,
-   "x1": 15300,
-   "z1": 32300,
-   "name": "Rock round the bend.001"
-  },
-  {
-   "shape": "box",
-   "x0": 12750,
-   "z0": 18870,
-   "x1": 15300,
-   "z1": 21420,
-   "name": "Rock round the bend.002"
-  },
-  {
-   "shape": "box",
-   "x0": 5610,
-   "z0": 11730,
-   "x1": 8500,
-   "z1": 14620,
-   "name": "Rock round the bend.003"
-  },
-  {
-   "shape": "box",
-   "x0": 5610,
-   "z0": 14620,
-   "x1": 6800,
-   "z1": 17340,
-   "name": "Rock round the bend.004"
-  },
-  {
-   "shape": "box",
-   "x0": 8500,
-   "z0": 11730,
-   "x1": 11220,
-   "z1": 12750,
-   "name": "Rock round the bend.005"
-  },
-  {
-   "shape": "box",
-   "x0": 8415,
-   "z0": 14620,
-   "x1": 9605,
-   "z1": 15810,
-   "name": "Wrapped man footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 22185,
-   "z0": 13940,
-   "x1": 24055,
-   "z1": 15300,
-   "name": "Cart in the tunnel"
-  },
-  {
-   "shape": "box",
-   "x0": 11320,
+   "x0": 13360,
    "z0": 11827,
    "x1": 32200,
    "z1": 11888,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
-   "x0": 11320,
+   "x0": 5710,
    "z0": 12082,
-   "x1": 24380,
+   "x1": 24635,
    "z1": 12143,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
-   "x0": 26110,
+   "x0": 25855,
    "z0": 12082,
    "x1": 29225,
    "z1": 12143,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
-   "x0": 30445,
+   "x0": 30190,
    "z0": 12082,
    "x1": 32200,
    "z1": 12143,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
-   "x0": 11320,
+   "x0": 5710,
    "z0": 12337,
-   "x1": 14690,
+   "x1": 15455,
    "z1": 12398,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 17947,
+   "x0": 17695,
    "z0": 12337,
-   "x1": 18008,
+   "x1": 18260,
    "z1": 12398,
-   "name": "Probe"
+   "name": "Probe: Adit"
+  },
+  {
+   "shape": "box",
+   "x0": 21262,
+   "z0": 12337,
+   "x1": 21323,
+   "z1": 12398,
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
@@ -185,23 +137,23 @@
    "z0": 12337,
    "x1": 22343,
    "z1": 12398,
-   "name": "Probe"
+   "name": "Probe: Office door post.001"
   },
   {
    "shape": "box",
-   "x0": 11320,
+   "x0": 5710,
    "z0": 12592,
-   "x1": 13415,
+   "x1": 13670,
    "z1": 12653,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
    "x0": 15145,
-   "z0": 12340,
+   "z0": 12592,
    "x1": 15455,
-   "z1": 12650,
-   "name": "Probe"
+   "z1": 12653,
+   "name": "Probe: Hand on a post"
   },
   {
    "shape": "box",
@@ -209,7 +161,7 @@
    "z0": 12340,
    "x1": 19535,
    "z1": 12650,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -217,7 +169,7 @@
    "z0": 12340,
    "x1": 23615,
    "z1": 12650,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -225,7 +177,7 @@
    "z0": 12340,
    "x1": 27695,
    "z1": 12650,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -233,15 +185,15 @@
    "z0": 12340,
    "x1": 31775,
    "z1": 12650,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
-   "x0": 8515,
+   "x0": 5710,
    "z0": 12847,
    "x1": 11885,
    "z1": 12908,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -249,39 +201,39 @@
    "z0": 12847,
    "x1": 13415,
    "z1": 12908,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
-   "x0": 8515,
+   "x0": 5710,
    "z0": 13102,
    "x1": 11375,
    "z1": 13163,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 8515,
+   "x0": 5710,
    "z0": 13357,
    "x1": 10865,
    "z1": 13418,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 8515,
+   "x0": 5710,
    "z0": 13612,
    "x1": 10355,
    "z1": 13673,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 8515,
+   "x0": 5710,
    "z0": 13867,
    "x1": 10100,
    "z1": 13928,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -289,47 +241,47 @@
    "z0": 13867,
    "x1": 24125,
    "z1": 13928,
-   "name": "Probe"
+   "name": "Probe: Cart in the tunnel"
   },
   {
    "shape": "box",
-   "x0": 8515,
+   "x0": 5710,
    "z0": 14122,
    "x1": 9590,
    "z1": 14183,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 8515,
+   "x0": 5710,
    "z0": 14377,
    "x1": 9335,
    "z1": 14438,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 22027,
-   "z0": 14125,
-   "x1": 22088,
-   "z1": 15200,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 24067,
-   "z0": 14125,
-   "x1": 24128,
-   "z1": 15200,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6985,
+   "x0": 5710,
    "z0": 14635,
-   "x1": 8315,
-   "z1": 15455,
-   "name": "Probe"
+   "x1": 9590,
+   "z1": 15200,
+   "name": "Probe: no floor"
+  },
+  {
+   "shape": "box",
+   "x0": 22030,
+   "z0": 14125,
+   "x1": 24125,
+   "z1": 15200,
+   "name": "Probe: Cart in the tunnel"
+  },
+  {
+   "shape": "box",
+   "x0": 5710,
+   "z0": 15397,
+   "x1": 9335,
+   "z1": 15458,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -337,31 +289,55 @@
    "z0": 15397,
    "x1": 23870,
    "z1": 15458,
-   "name": "Probe"
+   "name": "Probe: Cart in the tunnel"
   },
   {
    "shape": "box",
-   "x0": 6985,
+   "x0": 5710,
    "z0": 15652,
    "x1": 8060,
    "z1": 15713,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 6985,
+   "x0": 8515,
+   "z0": 15652,
+   "x1": 9590,
+   "z1": 15713,
+   "name": "Probe: Timber sets"
+  },
+  {
+   "shape": "box",
+   "x0": 5710,
+   "z0": 15907,
+   "x1": 7040,
+   "z1": 15968,
+   "name": "Probe: no floor"
+  },
+  {
+   "shape": "box",
+   "x0": 7495,
    "z0": 15907,
    "x1": 7805,
    "z1": 15968,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
-   "x0": 6985,
+   "x0": 5710,
    "z0": 16162,
    "x1": 7550,
    "z1": 16223,
-   "name": "Probe"
+   "name": "Probe: no floor"
+  },
+  {
+   "shape": "box",
+   "x0": 5710,
+   "z0": 16417,
+   "x1": 6785,
+   "z1": 16478,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -369,7 +345,23 @@
    "z0": 16417,
    "x1": 7550,
    "z1": 16478,
-   "name": "Probe"
+   "name": "Probe: Adit"
+  },
+  {
+   "shape": "box",
+   "x0": 5710,
+   "z0": 16672,
+   "x1": 6530,
+   "z1": 16733,
+   "name": "Probe: no floor"
+  },
+  {
+   "shape": "box",
+   "x0": 6985,
+   "z0": 16672,
+   "x1": 7295,
+   "z1": 16733,
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
@@ -377,7 +369,7 @@
    "z0": 16672,
    "x1": 14183,
    "z1": 16733,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -385,7 +377,7 @@
    "z0": 16672,
    "x1": 27695,
    "z1": 16733,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -393,15 +385,15 @@
    "z0": 16672,
    "x1": 31775,
    "z1": 16733,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
-   "x0": 6985,
-   "z0": 16675,
+   "x0": 5710,
+   "z0": 16927,
    "x1": 7295,
-   "z1": 16985,
-   "name": "Probe"
+   "z1": 16988,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -409,7 +401,7 @@
    "z0": 16927,
    "x1": 14435,
    "z1": 16988,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -417,7 +409,7 @@
    "z0": 16675,
    "x1": 15455,
    "z1": 16985,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -425,7 +417,7 @@
    "z0": 16675,
    "x1": 19535,
    "z1": 16985,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -433,7 +425,7 @@
    "z0": 16675,
    "x1": 23615,
    "z1": 16985,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -441,7 +433,7 @@
    "z0": 16927,
    "x1": 29990,
    "z1": 16988,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
@@ -449,15 +441,15 @@
    "z0": 16927,
    "x1": 32200,
    "z1": 16988,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
-   "x0": 6982,
+   "x0": 5710,
    "z0": 17182,
-   "x1": 7043,
+   "x1": 7040,
    "z1": 17243,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
@@ -465,39 +457,39 @@
    "z0": 17182,
    "x1": 16985,
    "z1": 17243,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 18205,
    "z0": 17182,
-   "x1": 24125,
+   "x1": 24380,
    "z1": 17243,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
-   "x0": 25345,
+   "x0": 25090,
    "z0": 17182,
    "x1": 32200,
    "z1": 17243,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 13615,
    "z0": 17437,
-   "x1": 20300,
+   "x1": 20045,
    "z1": 17498,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
-   "x0": 20755,
+   "x0": 21010,
    "z0": 17437,
    "x1": 23360,
    "z1": 17498,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
@@ -505,15 +497,23 @@
    "z0": 17437,
    "x1": 32200,
    "z1": 17498,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 13360,
    "z0": 17692,
-   "x1": 15200,
+   "x1": 14435,
    "z1": 17753,
-   "name": "Probe"
+   "name": "Probe: Adit"
+  },
+  {
+   "shape": "box",
+   "x0": 14890,
+   "z0": 17692,
+   "x1": 32200,
+   "z1": 17753,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -521,15 +521,15 @@
    "z0": 17440,
    "x1": 6785,
    "z1": 18005,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 12850,
    "z0": 17947,
-   "x1": 15200,
+   "x1": 32200,
    "z1": 18008,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -537,71 +537,79 @@
    "z0": 18202,
    "x1": 11885,
    "z1": 18263,
-   "name": "Probe"
+   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
    "x0": 12595,
    "z0": 18202,
-   "x1": 15200,
+   "x1": 32200,
    "z1": 18263,
-   "name": "Probe"
+   "name": "Probe: no floor"
+  },
+  {
+   "shape": "box",
+   "x0": 11575,
+   "z0": 18457,
+   "x1": 32200,
+   "z1": 18518,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
    "x0": 5710,
    "z0": 18205,
    "x1": 6530,
-   "z1": 18515,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 11575,
-   "z0": 18457,
-   "x1": 15200,
-   "z1": 18518,
-   "name": "Probe"
+   "z1": 18770,
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 11830,
-   "z0": 18712,
-   "x1": 15200,
-   "z1": 18773,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 11830,
-   "z0": 18967,
-   "x1": 12650,
-   "z1": 19028,
-   "name": "Probe"
+   "z0": 18715,
+   "x1": 32200,
+   "z1": 19025,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
    "x0": 11575,
    "z0": 19222,
-   "x1": 12650,
+   "x1": 32200,
    "z1": 19283,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
    "x0": 5710,
-   "z0": 18715,
+   "z0": 18970,
    "x1": 6275,
    "z1": 19535,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 11320,
-   "z0": 19480,
-   "x1": 12650,
+   "z0": 19477,
+   "x1": 32200,
+   "z1": 19538,
+   "name": "Probe: no floor"
+  },
+  {
+   "shape": "box",
+   "x0": 11320,
+   "z0": 19735,
+   "x1": 11630,
    "z1": 20300,
-   "name": "Probe"
+   "name": "Probe: Adit"
+  },
+  {
+   "shape": "box",
+   "x0": 12085,
+   "z0": 19735,
+   "x1": 32200,
+   "z1": 20300,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -609,31 +617,23 @@
    "z0": 19735,
    "x1": 6020,
    "z1": 20555,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 11065,
    "z0": 20500,
-   "x1": 12650,
+   "x1": 32200,
    "z1": 20810,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
    "x0": 10810,
    "z0": 21010,
-   "x1": 12650,
-   "z1": 21320,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10810,
-   "z0": 21517,
-   "x1": 11375,
-   "z1": 21578,
-   "name": "Probe"
+   "x1": 32200,
+   "z1": 21830,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -641,7 +641,7 @@
    "z0": 20755,
    "x1": 5768,
    "z1": 22085,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
@@ -649,15 +649,15 @@
    "z0": 22285,
    "x1": 6020,
    "z1": 23105,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 11065,
-   "z0": 21775,
-   "x1": 11375,
+   "z0": 22030,
+   "x1": 32200,
    "z1": 23105,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -665,23 +665,23 @@
    "z0": 23305,
    "x1": 6530,
    "z1": 23615,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 10555,
    "z0": 23305,
-   "x1": 11375,
+   "x1": 32200,
    "z1": 23615,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
    "x0": 11065,
    "z0": 23815,
-   "x1": 11375,
+   "x1": 32200,
    "z1": 25400,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -689,15 +689,15 @@
    "z0": 23815,
    "x1": 6020,
    "z1": 27440,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 10810,
    "z0": 25600,
-   "x1": 11375,
+   "x1": 32200,
    "z1": 27440,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -705,31 +705,23 @@
    "z0": 27640,
    "x1": 6530,
    "z1": 27950,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8512,
-   "z0": 27892,
-   "x1": 8573,
-   "z1": 27953,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 10555,
    "z0": 27640,
-   "x1": 11375,
+   "x1": 32200,
    "z1": 27950,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
    "x0": 10810,
    "z0": 28150,
-   "x1": 11375,
+   "x1": 32200,
    "z1": 29735,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -737,39 +729,47 @@
    "z0": 28150,
    "x1": 6020,
    "z1": 31010,
-   "name": "Probe"
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 5710,
    "z0": 31210,
    "x1": 6275,
-   "z1": 31775,
-   "name": "Probe"
+   "z1": 31520,
+   "name": "Probe: Adit"
+  },
+  {
+   "shape": "box",
+   "x0": 5710,
+   "z0": 31717,
+   "x1": 6785,
+   "z1": 31778,
+   "name": "Probe: Adit"
   },
   {
    "shape": "box",
    "x0": 11065,
    "z0": 29935,
-   "x1": 11375,
+   "x1": 32200,
    "z1": 31775,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
    "x0": 5710,
    "z0": 31972,
-   "x1": 7040,
+   "x1": 7295,
    "z1": 32033,
-   "name": "Probe"
+   "name": "Probe: Back of the fall"
   },
   {
    "shape": "box",
    "x0": 10045,
    "z0": 31972,
-   "x1": 11375,
+   "x1": 32200,
    "z1": 32033,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -777,23 +777,15 @@
    "z0": 32185,
    "x1": 7550,
    "z1": 32245,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8770,
-   "z0": 32185,
-   "x1": 9080,
-   "z1": 32245,
-   "name": "Probe"
+   "name": "Probe: Back of the fall"
   },
   {
    "shape": "box",
    "x0": 9535,
    "z0": 32185,
-   "x1": 11375,
+   "x1": 32200,
    "z1": 32245,
-   "name": "Probe"
+   "name": "Probe: no floor"
   }
  ],
  "anim": {
@@ -801,15 +793,17 @@
   "ticks": 3
  },
  "probe": {
-  "Adit": 641,
-  "no floor": 130,
-  "Timber sets": 71,
-  "Cart in the tunnel": 25,
-  "Back of the fall": 20,
+  "no floor": 4969,
+  "Adit": 664,
+  "Timber sets": 74,
+  "Cart in the tunnel": 45,
+  "Back of the fall": 21,
+  "Cart ore": 15,
+  "Wrapped man": 11,
   "Door ledge.001": 5,
   "Hand on a post": 2,
   "Office door post.001": 1,
-  "Lunch pail": 1
+  "Boot out of the silk": 1
  },
  "bounds": {
   "x0": 5610,

@@ -30,43 +30,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 1700,
-   "z0": 2550,
-   "x1": 2550,
-   "z1": 4080,
-   "name": "Bench footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 1708,
-   "z0": 4420,
-   "x1": 2643,
-   "z1": 5780,
-   "name": "Explosives locker"
-  },
-  {
-   "shape": "box",
-   "x0": 6290,
-   "z0": 2975,
-   "x1": 7480,
-   "z1": 5355,
-   "name": "Desk"
-  },
-  {
-   "shape": "box",
-   "x0": 6545,
-   "z0": 5525,
-   "x1": 7395,
-   "z1": 6375,
-   "name": "Coffee table"
-  },
-  {
-   "shape": "box",
    "x0": 1800,
    "z0": 1797,
    "x1": 3895,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Lining"
   },
   {
    "shape": "box",
@@ -74,7 +42,7 @@
    "z0": 1797,
    "x1": 7380,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Window sill"
   },
   {
    "shape": "box",
@@ -82,7 +50,15 @@
    "z0": 2052,
    "x1": 3130,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Card slot"
+  },
+  {
+   "shape": "box",
+   "x0": 6135,
+   "z0": 2052,
+   "x1": 7380,
+   "z1": 2113,
+   "name": "Probe: Window sill"
   },
   {
    "shape": "box",
@@ -90,111 +66,63 @@
    "z0": 2055,
    "x1": 1858,
    "z1": 2365,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6390,
-   "z0": 2310,
-   "x1": 6955,
-   "z1": 2620,
-   "name": "Probe"
+   "name": "Probe: Lining.003"
   },
   {
    "shape": "box",
    "x0": 7365,
-   "z0": 2055,
+   "z0": 2310,
    "x1": 7425,
-   "z1": 2620,
-   "name": "Probe"
+   "z1": 2875,
+   "name": "Probe: Lining.004"
+  },
+  {
+   "shape": "box",
+   "x0": 5622,
+   "z0": 3837,
+   "x1": 5683,
+   "z1": 3898,
+   "name": "Probe: Desk chair"
   },
   {
    "shape": "box",
    "x0": 6390,
-   "z0": 2817,
-   "x1": 7380,
-   "z1": 2878,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6132,
    "z0": 3075,
-   "x1": 6193,
-   "z1": 3640,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2562,
-   "z0": 2565,
-   "x1": 2623,
+   "x1": 7380,
    "z1": 3895,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5625,
-   "z0": 3837,
-   "x1": 6190,
-   "z1": 3898,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1800,
-   "z0": 4095,
-   "x1": 2620,
-   "z1": 4405,
-   "name": "Probe"
+   "name": "Probe: Desk"
   },
   {
    "shape": "box",
    "x0": 5370,
    "z0": 4095,
-   "x1": 6190,
-   "z1": 4660,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5880,
-   "z0": 4857,
-   "x1": 6190,
-   "z1": 4918,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2817,
-   "z0": 5112,
-   "x1": 2878,
-   "z1": 5173,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6132,
-   "z0": 5112,
-   "x1": 6193,
-   "z1": 5173,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6390,
-   "z0": 5367,
    "x1": 7380,
-   "z1": 5428,
-   "name": "Probe"
+   "z1": 4660,
+   "name": "Probe: Desk chair"
   },
   {
    "shape": "box",
    "x0": 1800,
-   "z0": 5877,
+   "z0": 2565,
    "x1": 2620,
-   "z1": 5938,
-   "name": "Probe"
+   "z1": 4915,
+   "name": "Probe: Bench"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5112,
+   "x1": 2875,
+   "z1": 5173,
+   "name": "Probe: Ceiling"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5370,
+   "x1": 2620,
+   "z1": 5935,
+   "name": "Probe: Explosives locker"
   },
   {
    "shape": "box",
@@ -202,15 +130,15 @@
    "z0": 6132,
    "x1": 1858,
    "z1": 6193,
-   "name": "Probe"
+   "name": "Probe: Lining.003"
   },
   {
    "shape": "box",
-   "x0": 7365,
-   "z0": 5625,
-   "x1": 7425,
+   "x0": 6390,
+   "z0": 4860,
+   "x1": 7380,
    "z1": 6190,
-   "name": "Probe"
+   "name": "Probe: Coffee table"
   },
   {
    "shape": "box",
@@ -218,7 +146,7 @@
    "z0": 6345,
    "x1": 7380,
    "z1": 6405,
-   "name": "Probe"
+   "name": "Probe: Lining.002"
   }
  ],
  "anim": {
@@ -226,28 +154,40 @@
   "ticks": 3
  },
  "probe": {
-  "Desk chair": 15,
+  "Desk": 18,
   "Lining.002": 15,
+  "Explosives locker": 14,
+  "Desk chair": 13,
+  "Coffee table": 11,
+  "Window sill": 10,
   "Lining.004": 10,
-  "Desk": 10,
-  "Explosives locker": 7,
-  "Bin": 6,
-  "Lining.003": 5,
-  "Time clock": 5,
-  "Window sill": 5,
+  "Lining.003": 9,
+  "Bench": 9,
+  "Roster board": 9,
+  "Caps shelf": 8,
+  "Blotter": 8,
+  "Ceiling": 8,
+  "Lining": 5,
   "Bench leg.001": 5,
-  "Lining": 4,
-  "Bench": 4,
+  "Time clock": 4,
+  "Caps box": 4,
+  "Report": 4,
+  "Ledger": 4,
   "Safety board": 3,
   "Number plate": 3,
   "Door frame.001": 2,
+  "Card slot": 2,
   "Desk drawers": 2,
-  "Ledger": 2,
   "Door frame": 1,
   "Lining.001": 1,
-  "Card slot": 1,
   "Bench leg": 1,
+  "Blasting log": 1,
+  "Desk lamp base": 1,
+  "Desk lamp shade": 1,
+  "Phone": 1,
+  "Ashtray": 1,
   "Locker padlock": 1,
+  "Coffee pot": 1,
   "Poster words": 1
  },
  "bounds": {

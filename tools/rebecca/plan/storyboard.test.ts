@@ -80,9 +80,10 @@ test('the ending keeps its written lines alongside inherited control messages', 
   const save = board.scenes.find((s) => s.place.id === 'save');
   assert.ok(save?.msgs.some((m) => m.text === '"Freeze!"'));
   assert.ok(save?.cuts.some((c) => c.beats.some((b) => b.kind === 'say' && b.text === '"Freeze!"')));
-  // 594: the tool locks (day/scripts.ts USE_LOCKS) add her line before and on
-  // using the tool, and one from the far side, at each of three.
-  assert.equal(board.scenes.reduce((n, s) => n + s.msgs.length, 0), 594);
+  // 593: the tool locks (day/scripts.ts USE_LOCKS) add her line before and on
+  // using the tool, and one from the far side, at each of three; the
+  // cottage's radio and photos are one check, as she can stand at only one.
+  assert.equal(board.scenes.reduce((n, s) => n + s.msgs.length, 0), 593);
 });
 
 test('each recorded visit has its own player and each room card shows coverage', () => {

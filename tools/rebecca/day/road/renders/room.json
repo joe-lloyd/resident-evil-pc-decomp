@@ -68,68 +68,12 @@
  ],
  "walls": [
   {
-   "shape": "circle",
-   "x0": 13481,
-   "z0": 7191,
-   "x1": 13719,
-   "z1": 7429,
-   "name": "Latch post"
-  },
-  {
-   "shape": "circle",
-   "x0": 13481,
-   "z0": 16371,
-   "x1": 13719,
-   "z1": 16609,
-   "name": "Hinge post"
-  },
-  {
    "shape": "box",
-   "x0": 13388,
-   "z0": 7310,
-   "x1": 13812,
-   "z1": 16490,
-   "name": "Gate leaf footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 13430,
-   "z0": 4250,
-   "x1": 13770,
-   "z1": 7310,
-   "name": "North fence"
-  },
-  {
-   "shape": "box",
-   "x0": 13430,
-   "z0": 16490,
-   "x1": 13770,
-   "z1": 19550,
-   "name": "South fence"
-  },
-  {
-   "shape": "circle",
-   "x0": 18581,
-   "z0": 3876,
-   "x1": 18819,
-   "z1": 4114,
-   "name": "Sign post"
-  },
-  {
-   "shape": "circle",
-   "x0": 18581,
-   "z0": 7106,
-   "x1": 18819,
-   "z1": 7344,
-   "name": "Sign post.001"
-  },
-  {
-   "shape": "box",
-   "x0": 20740,
-   "z0": 17680,
-   "x1": 26180,
-   "z1": 19788,
-   "name": "Log stack"
+   "x0": 26957,
+   "z0": 6302,
+   "x1": 27018,
+   "z1": 6363,
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
@@ -137,15 +81,23 @@
    "z0": 6050,
    "x1": 18858,
    "z1": 6870,
-   "name": "Probe"
+   "name": "Probe: Forest sign"
   },
   {
    "shape": "box",
-   "x0": 26957,
+   "x0": 28487,
+   "z0": 6812,
+   "x1": 28548,
+   "z1": 6873,
+   "name": "Probe: Dust, far"
+  },
+  {
+   "shape": "box",
+   "x0": 25937,
    "z0": 7067,
-   "x1": 27018,
+   "x1": 25998,
    "z1": 7128,
-   "name": "Probe"
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
@@ -153,7 +105,7 @@
    "z0": 7070,
    "x1": 18855,
    "z1": 7380,
-   "name": "Probe"
+   "name": "Probe: Sign post.001"
   },
   {
    "shape": "box",
@@ -161,23 +113,7 @@
    "z0": 7577,
    "x1": 18858,
    "z1": 7638,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 24152,
-   "z0": 7832,
-   "x1": 24213,
-   "z1": 7893,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 25427,
-   "z0": 7832,
-   "x1": 25488,
-   "z1": 7893,
-   "name": "Probe"
+   "name": "Probe: Forest sign"
   },
   {
    "shape": "box",
@@ -185,23 +121,7 @@
    "z0": 7832,
    "x1": 26508,
    "z1": 7893,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29762,
-   "z0": 7832,
-   "x1": 29823,
-   "z1": 7893,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 22877,
-   "z0": 8087,
-   "x1": 22938,
-   "z1": 8148,
-   "name": "Probe"
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
@@ -209,15 +129,15 @@
    "z0": 8597,
    "x1": 28548,
    "z1": 8658,
-   "name": "Probe"
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
-   "x0": 24662,
+   "x0": 25682,
    "z0": 8852,
-   "x1": 24723,
+   "x1": 25743,
    "z1": 8913,
-   "name": "Probe"
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
@@ -225,15 +145,7 @@
    "z0": 8852,
    "x1": 29313,
    "z1": 8913,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 31547,
-   "z0": 8852,
-   "x1": 31608,
-   "z1": 8913,
-   "name": "Probe"
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
@@ -241,39 +153,15 @@
    "z0": 9107,
    "x1": 25998,
    "z1": 9168,
-   "name": "Probe"
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
-   "x0": 27977,
-   "z0": 9107,
-   "x1": 28038,
-   "z1": 9168,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23387,
-   "z0": 9617,
-   "x1": 23448,
-   "z1": 9678,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 27722,
-   "z0": 9617,
-   "x1": 27783,
-   "z1": 9678,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 32057,
-   "z0": 9617,
-   "x1": 32118,
-   "z1": 9678,
-   "name": "Probe"
+   "x0": 29510,
+   "z0": 9872,
+   "x1": 29820,
+   "z1": 9933,
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
@@ -281,15 +169,7 @@
    "z0": 10127,
    "x1": 31608,
    "z1": 10188,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21602,
-   "z0": 10382,
-   "x1": 21663,
-   "z1": 10443,
-   "name": "Probe"
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
@@ -297,47 +177,23 @@
    "z0": 10382,
    "x1": 25998,
    "z1": 10443,
-   "name": "Probe"
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
-   "x0": 29252,
-   "z0": 10382,
-   "x1": 29313,
-   "z1": 10443,
-   "name": "Probe"
+   "x0": 26702,
+   "z0": 10637,
+   "x1": 26763,
+   "z1": 10698,
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
    "x0": 23642,
-   "z0": 10637,
+   "z0": 10640,
    "x1": 23703,
-   "z1": 10698,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21602,
-   "z0": 11657,
-   "x1": 21663,
-   "z1": 11718,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23387,
-   "z0": 11660,
-   "x1": 23448,
-   "z1": 11970,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 27722,
-   "z0": 13187,
-   "x1": 27783,
-   "z1": 13248,
-   "name": "Probe"
+   "z1": 10950,
+   "name": "Probe: Dust, far"
   },
   {
    "shape": "box",
@@ -345,7 +201,7 @@
    "z0": 17267,
    "x1": 27270,
    "z1": 17328,
-   "name": "Probe"
+   "name": "Probe: Milepost"
   },
   {
    "shape": "box",
@@ -353,15 +209,15 @@
    "z0": 17522,
    "x1": 27273,
    "z1": 17583,
-   "name": "Probe"
+   "name": "Probe: Milepost"
   },
   {
    "shape": "box",
-   "x0": 26192,
+   "x0": 20840,
    "z0": 17735,
-   "x1": 26253,
+   "x1": 26250,
    "z1": 17795,
-   "name": "Probe"
+   "name": "Probe: Log stack"
   }
  ],
  "anim": {
@@ -380,8 +236,8 @@
   }
  ],
  "probe": {
-  "Dust": 16,
-  "Dust, far": 8,
+  "Log stack": 21,
+  "Dust, far": 15,
   "Forest sign": 7,
   "Milepost": 3,
   "Sign post.001": 2,

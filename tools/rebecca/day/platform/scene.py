@@ -554,10 +554,13 @@ def build():
     reb.prim("cube", "Lone boot", mat("rubber"), (10.4, 8.6, 0.07), (0.3, 0.12, 0.14), rot=(0, 0, 2.1), bevel=0.03)
     kit.papers("Trail map", (11.0, 6.6, 0.0), spread=0.3, count=2, seed=1)
 
-    # ---- OUT OF SERVICE, hung across the queue's head on a chain between
-    # its two front posts, slipped down at one end.
+    # ---- OUT OF SERVICE, hung across the queue's head on a chain from its
+    # west front post. The chain has slipped off the east post and lies on
+    # the concrete, so the queue's head is open on that side: the way to the
+    # car and back.
     kit.rod("Queue head chain", mat("iron"), (7.0, 6.5, 0.92), (8.3, 6.5, 0.72), 0.01, 4)
-    kit.rod("Queue head chain", mat("iron"), (8.3, 6.5, 0.72), (9.6, 6.5, 0.92), 0.01, 4)
+    kit.rod("Queue head chain", mat("iron"), (8.3, 6.5, 0.72), (8.6, 6.55, 0.02), 0.01, 4)
+    kit.rod("Queue head chain", mat("iron"), (8.6, 6.55, 0.02), (9.45, 6.7, 0.02), 0.01, 4)
     board = reb.prim("cube", "Service board", reb.mat_plain("Board white", (0.5, 0.48, 0.42), 0.8), (0, -0.03, -0.26), (0.9, 0.03, 0.42))
     kit.text("Board words", "OUT OF", mat("red paint"), (0, -0.05, -0.17), size=0.14, rot=(math.pi / 2, 0, math.pi))
     kit.text("Board words 2", "SERVICE", mat("red paint"), (0, -0.05, -0.35), size=0.14, rot=(math.pi / 2, 0, math.pi))
