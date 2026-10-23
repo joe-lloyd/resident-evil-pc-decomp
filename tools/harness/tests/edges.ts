@@ -8,8 +8,13 @@
 //   locks   the road gate and the depot gate: tried with the bolt cutters in
 //           her case they stay shut; used from her case they open; from the
 //           far side they stay shut until then.
+//   paths   she walks the ways the owner was stopped on: out of the flume,
+//           between the yard's truck and shed both ways, onto and across the
+//           bridge, and over planks, logs and rocks lying on the ground.
+//           Tank controls, as a player walks (flows.ts walkTo); a stop short
+//           of the next point fails. Pictures at each point.
 //
-//   node tools/harness/tests/edges.ts [walls] [reach] [locks]   (default: all)
+//   node tools/harness/tests/edges.ts [walls] [reach] [locks] [paths]   (default: all)
 //
 // Needs the engine and the overlay deployed (see mountain-trail.ts). OUT names
 // the folder for the pictures (default /tmp/rae-tests/edges). Exits 1 if any
@@ -17,7 +22,7 @@
 import path from 'node:path';
 import { open } from '../lab.ts';
 import { Key, type GameLink } from '../link.ts';
-import { headingTo, face, settle, useItem } from '../flows.ts';
+import { headingTo, face, settle, StuckError, useItem, walkTo } from '../flows.ts';
 import { snapshot } from '../snapshot.ts';
 import { Bank, flag, messageOnScreen, type GameState } from '../state.ts';
 import { dayRooms } from '../../rebecca/day/rooms.ts';
@@ -60,7 +65,8 @@ const WALLS: WallCase[] = [
   { room: 'camp-gate', what: "the gate hut", from: { x: 18558, z: 7752 }, toward: { x: 19805, z: 8585 }, stop: near(19805, 8585) },
   { room: 'workshop', what: "the bench", from: { x: 8785, z: 3485 }, toward: { x: 10285, z: 3485 }, stop: near(10285, 3485) },
   { room: 'bunkhouse', what: "the bunks", from: { x: 9176, z: 2687 }, toward: { x: 9605, z: 4845 }, stop: near(9605, 4845) },
-  { room: 'booth', what: "the control desk", from: { x: 5625, z: 2805 }, toward: { x: 3825, z: 2805 }, stop: near(3825, 2805) },
+  // Over the tipped chair (lower than her stride) to the desk's end.
+  { room: 'booth', what: "the control desk", from: { x: 5625, z: 2805 }, toward: { x: 2805, z: 2805 }, stop: near(2805, 2805) },
   { room: 'mess', what: "the cook at the counter", from: { x: 3459, z: 7799 }, toward: { x: 4845, z: 7225 }, stop: near(4845, 7225) },
   { room: 'office', what: "the office wall", from: { x: 7225, z: 4645 }, toward: { x: 7225, z: 3145 }, stop: near(7225, 3145) },
 ];
@@ -75,6 +81,31 @@ const REACH: ReachCase[] = [
   { room: 'office', check: 'A safe', at: { x: 4135, z: 5228 }, toward: { x: 2635, z: 5228 } },
   { room: 'bunkhouse', check: 'Belts, buckled round', at: { x: 19420, z: 7438 }, toward: { x: 17170, z: 7438 } },
   { room: 'platform', check: 'Car 4. The door has', at: { x: 14680, z: 18105 }, toward: { x: 11730, z: 18105 } },
+];
+
+/** She walks from `from` through each of `via` in turn; `leaves` names the room the last point takes her into. */
+interface PathCase {
+  room: string;
+  what: string;
+  from: P;
+  via: P[];
+  leaves?: string;
+}
+// Chosen on the rooms' collision (walkable.ts --reach): each way is open
+// there, so a stop is the engine snagging her, or the collision wrong.
+const PATHS: PathCase[] = [
+  // The owner could not leave the log flume: from the boat, down the path and out to the pond.
+  { room: 'flume', what: 'out to the pond', from: { x: 11220, z: 13600 }, via: [{ x: 10200, z: 17500 }, { x: 10200, z: 19900 }, { x: 10200, z: 21300 }], leaves: 'pond' },
+  // Nor get between the truck and the shed in the yard: from the shed door round to the road, and back.
+  { room: 'yard', what: 'from the shed door past the truck', from: { x: 10880, z: 13600 }, via: [{ x: 10200, z: 15800 }, { x: 6120, z: 15900 }, { x: 5100, z: 17200 }] },
+  { room: 'yard', what: 'back past the truck to the shed door', from: { x: 5100, z: 17200 }, via: [{ x: 6120, z: 15900 }, { x: 10200, z: 15800 }, { x: 10880, z: 13600 }] },
+  // Nor onto the bridge: from the yard's trail, across the deck and on to the platform.
+  { room: 'bridge', what: 'across the bridge', from: { x: 10200, z: 6120 }, via: [{ x: 10200, z: 10500 }, { x: 10200, z: 18700 }, { x: 10200, z: 26500 }, { x: 9520, z: 30800 }], leaves: 'platform' },
+  // Logs lying on the ground, lower than her stride: over them, not round. The
+  // first point is on the log.
+  { room: 'camp-gate', what: 'over a strewn log by the gate', from: { x: 16490, z: 12240 }, via: [{ x: 16490, z: 13855 }, { x: 16490, z: 15640 }] },
+  { room: 'camp-gate', what: 'over a strewn log by the cold deck', from: { x: 8500, z: 10200 }, via: [{ x: 8500, z: 11475 }, { x: 8500, z: 12920 }] },
+  { room: 'den', what: 'over the windfall', from: { x: 9010, z: 16320 }, via: [{ x: 9860, z: 17425 }, { x: 10710, z: 18530 }] },
 ];
 
 /** Into the room, cutscenes seen, standing in control. */
@@ -224,6 +255,36 @@ async function locks(link: GameLink, fail: (s: string) => void): Promise<void> {
   }
 }
 
+async function paths(link: GameLink, fail: (s: string) => void): Promise<void> {
+  for (const c of PATHS) {
+    await enter(link, c.room);
+    const start = await placeFacing(link, c.from, c.via[0]!);
+    const name = (k: number) => `paths-${c.room}-${c.what.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}-${k}`;
+    let why = '';
+    let s = start;
+    for (const [k, p] of c.via.entries()) {
+      const last = k === c.via.length - 1;
+      try {
+        // The last point of a way out is past the edge: she walks till the room changes.
+        s = await walkTo(link, p.x, p.z, { radius: last && c.leaves ? 0 : 300, timeoutMs: 40_000 });
+      } catch (err) {
+        if (!(err instanceof StuckError)) throw err;
+        why = `stopped at (${err.state.player.x}, ${err.state.player.z}) short of (${p.x}, ${p.z})`;
+        await snapshot(link, out, name(k));
+        break;
+      }
+      if (s.room !== start.room) break;
+      await snapshot(link, out, name(k));
+    }
+    s = await settle(link);
+    const left = s.stage !== start.stage || s.room !== start.room;
+    const want = c.leaves ? bySlug.get(c.leaves)! : undefined;
+    const ok = !why && (want ? left && s.stage === want.stage && s.room === want.room : !left);
+    console.log(`${ok ? 'ok  ' : 'FAIL'} paths ${c.room}: ${c.what}: ${ok ? (want ? `out into ${c.leaves}` : `through to (${s.player.x}, ${s.player.z})`) : why || `ended in stage ${s.stage} room ${s.room.toString(16)}`}`);
+    if (!ok) fail(`${c.room}: ${c.what}: ${why || 'did not get through'}`);
+  }
+}
+
 const first = bySlug.get('platform')!;
 const session = await open(Number(process.env.PORT ?? 7801), `--mode REB --boot rebecca:${first.stage}:${first.room}`);
 const link = session.link;
@@ -237,6 +298,7 @@ try {
   if (runs('walls')) await walls(link, fail);
   if (runs('reach')) await reach(link, fail);
   if (runs('locks')) await locks(link, fail);
+  if (runs('paths')) await paths(link, fail);
 } finally {
   session.end();
 }
