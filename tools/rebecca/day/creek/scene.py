@@ -237,9 +237,6 @@ def build():
     for t in (0.0, 1.0):
         p = Vector((12.6, 5.6)).lerp(Vector((16.6, 10.4)), t)
         reb.prim("cyl", "Log end", reb.mat_wood("Rotten heartwood", (0.25, 0.17, 0.09)), (p.x, p.y, 0.03), (0.54, 0.54, 0.02), rot=(math.pi / 2, 0, math.atan2(4.8, 4.0) + math.pi / 2), segments=10)
-    for k in (0.15, 0.85):
-        p = Vector((12.6, 5.6)).lerp(Vector((16.6, 10.4)), k)
-        reb.wall(reb.prim("cube", "Log footprint", None, (p.x, p.y, 0.3), (0.7, 0.7, 0.6))).hide_render = True
     for i in range(6):
         p = Vector((12.6, 5.6, 0.05)).lerp(Vector((16.6, 10.4, 0.0)), rng.uniform(0.1, 0.9))
         a = rng.uniform(0, 2 * math.pi)

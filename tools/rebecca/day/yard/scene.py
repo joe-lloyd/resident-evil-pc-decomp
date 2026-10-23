@@ -365,7 +365,7 @@ def build():
     # The door, the porch deck, its steps, posts and roof.
     reb.prim("cube", "Cabin door", planks, ((DOOR[0] + DOOR[1]) / 2, cy1 + 0.27, 1.0), (DOOR[1] - DOOR[0], 0.05, 2.0), bevel=0.01)
     px0, px1, py0, py1 = PORCH
-    reb.wall(reb.prim("cube", "Porch deck", planks, ((px0 + px1) / 2, (py0 + py1) / 2, 0.11), (px1 - px0, py1 - py0, 0.22), bevel=0.01))
+    reb.prim("cube", "Porch deck", planks, ((px0 + px1) / 2, (py0 + py1) / 2, 0.11), (px1 - px0, py1 - py0, 0.22), bevel=0.01)
     reb.prim("cube", "Porch step", planks, ((DOOR[0] + DOOR[1]) / 2, py1 + 0.2, 0.06), (1.2, 0.4, 0.12), bevel=0.01)
     for x in (px0 + 0.1, px1 - 0.1, (px0 + px1) / 2 - 0.9, (px0 + px1) / 2 + 0.9):
         reb.mask(reb.prim("cyl", "Porch post", logs, (x, py1 - 0.1, 1.3), (0.16, 0.16, 2.2), segments=10))

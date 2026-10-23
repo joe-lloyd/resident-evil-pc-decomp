@@ -171,7 +171,7 @@ def burnt_swath(rng, splinter, navy):
     for k in range(5):
         reb.prim("cube", "Bark chip", char, (tx - 0.6 - rng.uniform(0, 0.8), ty + rng.uniform(-0.3, 0.3), tz + 0.02), (0.12, 0.06, 0.02), rot=(0, 0, rng.uniform(0, 3)))
     # The smouldering trunk south of the path: embers in its split, smoke off it.
-    reb.wall(kit.rod("Smouldering trunk", char, (17.3, 10.6, height(17.3, 10.6) + 0.3), (20.2, 11.1, height(20.2, 11.1) + 0.3), 0.32, 12))
+    kit.rod("Smouldering trunk", char, (17.3, 10.6, height(17.3, 10.6) + 0.3), (20.2, 11.1, height(20.2, 11.1) + 0.3), 0.32, 12)
     ember_m = reb.mat_emit("Smoulder", (1.0, 0.28, 0.05), 6)
     for k in range(9):
         t = rng.uniform(0.2, 0.8)
@@ -438,7 +438,6 @@ def build():
         kit.rod("Snapped trunk", mat("bark"), (x, y, height(x, y) - 0.1), (x, y, height(x, y) + h), 0.22, 9)
         reb.prim("cone", "Splintered top", splinter, (x, y, height(x, y) + h + 0.2), (0.4, 0.4, 0.45), segments=7, top=0.15)
     log = kit.rod("Fallen spruce", mat("bark"), (2.6, 2.4, 0.3), (7.8, 1.6, 0.28), 0.3, 10)
-    reb.wall(log)
     reb.mask(log)
     bv, bf = [], []
     for i in range(70):

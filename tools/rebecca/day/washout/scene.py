@@ -456,8 +456,6 @@ def build():
     for (x, y, r) in ((7.9, 10.6, 0.5), (12.3, 9.4, 0.45), (8.4, 12.8, 0.55), (11.9, 13.2, 0.6), (8.8, 8.0, 0.3), (11.0, 12.4, 0.3), (9.2, 13.6, 0.35)):
         reb.boulder(rng, (x, y, height(x, y)), r, rv, rf)
     reb.mesh_object("Gully rocks", rv, rf, mat("wet rock"))
-    for x, y, r in ((2.0, 10.2, 0.6), (1.4, 11.4, 0.45), (6.2, 9.8, 0.55)):
-        reb.wall(reb.prim("cube", "Rock footprint", None, (x, y, 0.3), (r * 2.2, r * 1.8, 0.6))).hide_render = True
 
     # ---- The creek: out of the blocked culvert, over the road, off the edge, into the pool.
     culvert = kit.rod("Culvert", mat("rust"), (10.0, 1.2, -0.25), (10.0, 3.1, -0.25), 0.45, 16)

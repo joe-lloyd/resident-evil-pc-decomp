@@ -108,18 +108,6 @@ def high_crown(rng, base, h, lift, verts, faces):
             faces.append(tuple(range(k, k + len(face))))
 
 
-def log_walls(name, a, b, r, step=1.2):
-    """Hidden boxes along a fallen trunk, so she can't walk through it but its
-    footprint doesn't swallow the floor beside it."""
-    a, b = Vector(a), Vector(b)
-    n = max(1, int((b - a).length / step))
-    yaw = math.atan2((b - a).y, (b - a).x)
-    for i in range(n):
-        p = a.lerp(b, (i + 0.5) / n)
-        ob = reb.prim("cube", f"{name} footprint", None, (p.x, p.y, r), ((b - a).length / n * 0.9, 1.8 * r, 2 * r), rot=(0, 0, yaw))
-        reb.wall(ob).hide_render = True
-
-
 def paw_prints(name, rng, path, m, every=0.45):
     """A big dog's prints beside a path: a pad and four toes each, one mesh."""
     verts, faces = [], []
@@ -285,7 +273,6 @@ def build():
         a3 = Vector((a[0], a[1], height(*a) + r * 0.7))
         b3 = Vector((b[0], b[1], height(*b) + r * 0.6))
         reb.mask(kit.rough_log(f"Blowdown {i}", a3, b3, r, seed=7 + i, stubs=7 if i == 0 else 4))
-        log_walls(f"Blowdown {i}", a, b, r)
         # Its stump at the west end, splintered where it went over.
         d = (b3 - a3).normalized()
         sx, sy = a[0] - d.x * 0.5, a[1] - d.y * 0.5
@@ -334,16 +321,13 @@ def build():
     rock = reb.mat_surface("Mossy rock", [(0.0, (0.03, 0.04, 0.025)), (0.5, (0.08, 0.08, 0.07)), (1.0, (0.14, 0.13, 0.11))], scale=3, bump=0.9)
     spots = [(14.2, 13.4, 0.7), (4.4, 2.6, 0.5), (17.6, 6.4, 0.45), (10.8, 7.6, 0.35), (0.8, 4.0, 1.1), (19.5, 13.8, 1.0)]
     kit.rocks("Rocks", rng, spots, height, rock)
-    for (x, y, r) in spots:
-        if X0 < x < X1 and Y0 < y < Y1:
-            reb.wall(reb.prim("cube", "Rock footprint", None, (x, y, r / 2), (r * 2, r * 1.8, r))).hide_render = True
 
     # ---- Toward the road: old stumps with the saw cut showing, a blazed tree, a survey ribbon.
     pale_wood = reb.mat_surface("Cut face", [(0.0, (0.2, 0.14, 0.08)), (1.0, (0.34, 0.25, 0.14))], scale=14, bump=0.2)
     stump_bases = []
     for i, (x, y, r) in enumerate(((15.4, 12.8, 0.42), (13.6, 8.0, 0.36), (17.2, 7.0, 0.4))):
         st = reb.prim("cyl", f"Stump {i}", kit.mat("bark"), (x, y, 0.1), (2 * r, 2 * r, 0.75), segments=11)
-        reb.mask(reb.wall(st, "circle"))
+        reb.mask(st)
         reb.prim("cyl", f"Stump top {i}", pale_wood, (x, y, 0.475), (2 * r - 0.04, 2 * r - 0.04, 0.01), rot=(0.05, 0.04, 0), segments=11)
         stump_bases.append((Vector((x, y, height(x, y) - 0.1)), 12))
     kit.tree_roots(rng, stump_bases, height)

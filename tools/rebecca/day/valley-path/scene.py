@@ -239,15 +239,14 @@ def build():
         t = kit.rod("Spruce trunk", mat("bark"), base, base + Vector((0, 0, h * 0.85)), h * 0.016, 8)
         trunks.append(reb.mask(reb.wall(t, "circle")))
     reb.mesh_object("Spruces over the floor", sv, sf, mat("needles"))
-    log = kit.rod("Fallen log", mat("bark"), (13.6, 15.0, 0.25), (17.8, 14.2, 0.32), 0.3, 10)
-    reb.wall(log)
+    kit.rod("Fallen log", mat("bark"), (13.6, 15.0, 0.25), (17.8, 14.2, 0.32), 0.3, 10)
     kit.rod("Log stub", mat("bark"), (17.8, 14.2, 0.32), (18.4, 13.4, 0.9), 0.08, 6)
-    reb.wall(kit.rod("Stump", mat("bark"), (6.4, 11.4, 0), (6.4, 11.4, 0.55), 0.32, 9), "circle")
+    kit.rod("Stump", mat("bark"), (6.4, 11.4, 0), (6.4, 11.4, 0.55), 0.32, 9)
     moss_rock = kit.dirtied(mat("rock"), 0.7, scale=1.0)
     for (x, y, r) in ((3.2, 15.2, 0.6), (16.8, 2.0, 0.7), (13.6, 6.6, 0.45), (8.0, 14.6, 0.5)):
         rv, rf = [], []
         reb.boulder(rng, (x, y, height(x, y) - 0.1), r, rv, rf, squash=0.7)
-        reb.wall(reb.mesh_object("Mossy rock", rv, rf, moss_rock), "circle")
+        reb.mesh_object("Mossy rock", rv, rf, moss_rock)
     fv, ff = [], []
     for _ in range(26):
         x, y = rng.uniform(X0, X1), rng.uniform(Y0, Y1)

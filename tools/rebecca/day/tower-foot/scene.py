@@ -358,9 +358,6 @@ def build():
     for (x, y, r) in ((14.6, 8.9, 0.6), (13.2, 9.3, 0.45), (15.3, 7.6, 0.4), (12.8, 7.8, 0.3), (2.0, 3.0, 0.8), (1.6, 10.6, 0.7), (18.2, 11.6, 0.6), (6.0, 11.4, 0.5), (11.0, 2.4, 0.45)):
         reb.boulder(rng, (x, y, height(x, y) - 0.05), r, rv, rf, squash=0.6)
     reb.mesh_object("Rocks", rv, rf, mat("rock"))
-    for x, y, r in ((14.6, 8.9, 0.6), (13.2, 9.3, 0.45), (15.3, 7.6, 0.4), (6.0, 11.4, 0.5), (11.0, 2.4, 0.45), (18.2, 11.6, 0.6)):
-        if X0 < x < X1 and Y0 < y < Y1:
-            reb.wall(reb.prim("cube", "Rock footprint", None, (x, y, 0.3), (r * 2.0, r * 1.7, 0.6))).hide_render = True
 
     # ---- The tower: its frame (a mask), its footings, the cage round the stair's foot.
     bm, fbm = Beams(), Beams()

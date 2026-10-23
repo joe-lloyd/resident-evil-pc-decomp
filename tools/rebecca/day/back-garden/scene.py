@@ -210,13 +210,13 @@ def build():
     reb.prim("cube", "Door surround", stone, ((bd[0] + bd[1]) / 2, HOUSE_Y - 0.08, 2.75), (bd[1] - bd[0] + 0.5, 0.16, 0.4))
     for x in (bd[0] - 0.15, bd[1] + 0.15):
         reb.prim("cube", "Door pilaster", stone, (x, HOUSE_Y - 0.08, 1.3), (0.25, 0.16, 2.6))
-    reb.wall(reb.prim("cube", "Back step", stone, ((bd[0] + bd[1]) / 2, HOUSE_Y - 0.35, 0.09), (bd[1] - bd[0] + 0.8, 0.7, 0.18)))
+    reb.prim("cube", "Back step", stone, ((bd[0] + bd[1]) / 2, HOUSE_Y - 0.35, 0.09), (bd[1] - bd[0] + 0.8, 0.7, 0.18))
     kit.barricade("Boards over the door", mat("planks"), (bd[0] - 0.1, HOUSE_Y - 0.1), (bd[1] + 0.1, HOUSE_Y - 0.1), z0=0.4, z1=2.2, count=5, seed=3)
     kit.text("Daubed", "KEEP OUT", mat("white paint"), ((bd[0] + bd[1]) / 2, HOUSE_Y - 0.14, 1.05), size=0.16)
     # The bulkhead: two sloping iron doors in a stone curb, shut, chained.
     cx0, cx1, cy0, cy1 = BULKHEAD
     rise = math.atan2(0.75, cy1 - cy0)
-    reb.wall(reb.prim("cube", "Bulkhead curb", stone, ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 0.2), (cx1 - cx0 + 0.3, cy1 - cy0, 0.4)))
+    reb.prim("cube", "Bulkhead curb", stone, ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 0.2), (cx1 - cx0 + 0.3, cy1 - cy0, 0.4))
     for i, (a, b) in enumerate(((cx0, (cx0 + cx1) / 2 - 0.01), ((cx0 + cx1) / 2 + 0.01, cx1))):
         reb.prim("cube", f"Bulkhead door {i}", bulk_m, ((a + b) / 2, (cy0 + cy1) / 2, 0.6), (b - a, (cy1 - cy0) / math.cos(rise), 0.05), rot=(rise, 0, 0))
         for t in (0.25, 0.75):
