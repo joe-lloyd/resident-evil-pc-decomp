@@ -11,8 +11,9 @@
 // Room k is the area's k-th place in maps.ts. The colours are RE1's own map
 // colours: grey walls, gold doors, green floors.
 import { AREAS } from '../plan/maps.ts';
-import { isHole, SIDES, type Rect } from './floors.ts';
-import { doorInPlan, extent, fromPlan, planArea, type AreaPlan, type Placed, type Pt } from './plans.ts';
+import { isHole, SIDES, UNITS } from './floors.ts';
+import { organic } from './outline.ts';
+import { doorOnOutline, extent, inRoom, planArea, type AreaPlan, type Placed, type Pt } from './plans.ts';
 import { ps1, rgbOf, type Tim8 } from './tim.ts';
 
 export const MAP_W = 128;
@@ -52,32 +53,27 @@ export function mapClut(rooms: number): Uint16Array {
 
 /** The most pixels to a metre: a small area stays at a size RE1's maps draw rooms. */
 const MAX_SCALE = 5;
-const MARGIN = 5;
+const MARGIN = 4;
+/** A trail's width in metres; never under three pixels, a floor between two walls. */
+const TRAIL_W = 1.6;
 
 export interface Drawn {
   readonly plan: AreaPlan;
   /** MAP_W x MAP_H indices. */
   readonly pixels: Uint8Array;
+  /** Which room's outline each pixel is in, by palette block (-1: none; the ways between are not counted). */
+  readonly owner: Int16Array;
+  /** Each door's pixel on its room's outline. */
+  readonly doors: readonly { readonly place: string; readonly to: string; readonly x: number; readonly y: number }[];
   /** Pixels to a metre, and where the plan's origin falls. */
   readonly scale: number;
   readonly origin: Pt;
 }
 
-const inRect = (x: number, z: number, r: Rect) => x >= r.x0 && x < r.x1 && z >= r.z0 && z < r.z1;
-
-/** Whether a room point is its floor (or a mark on it), and which. */
-function floorAt(r: Placed, x: number, z: number): 'floor' | 'mark' | undefined {
-  const f = r.floor;
-  if (!inRect(x, z, f.bounds) || f.voids.some((v) => inRect(x, z, v))) return undefined;
-  for (const s of f.solids) {
-    const hit = s.round
-      ? Math.hypot((x - (s.x0 + s.x1) / 2) / Math.max(1, (s.x1 - s.x0) / 2), (z - (s.z0 + s.z1) / 2) / Math.max(1, (s.z1 - s.z0) / 2)) <= 1
-      : inRect(x, z, s);
-    if (!hit) continue;
-    if (isHole(s)) return undefined;
-    if (f.inside) return 'mark';
-  }
-  return 'floor';
+/** Whether a room point is furniture in a building, drawn as a mark on its floor. */
+function markAt(r: Placed, x: number, z: number): boolean {
+  if (!r.floor.inside) return false;
+  return r.floor.solids.some((s) => !isHole(s) && (s.round ? Math.hypot((x - (s.x0 + s.x1) / 2) / Math.max(1, (s.x1 - s.x0) / 2), (z - (s.z0 + s.z1) / 2) / Math.max(1, (s.z1 - s.z0) / 2)) <= 1 : x >= s.x0 && x < s.x1 && z >= s.z0 && z < s.z1));
 }
 
 export function drawArea(areaId: string): Drawn {
@@ -90,41 +86,57 @@ export function drawArea(areaId: string): Drawn {
   };
   const toPx = (p: Pt) => ({ x: p.x * scale + origin.x, y: p.y * scale + origin.y });
   const centreOf = (px: number, py: number): Pt => ({ x: (px + 0.5 - origin.x) / scale, y: (py + 0.5 - origin.y) / scale });
-  // Which room each pixel is floor of (-1: none), and whether it is a mark.
   const owner = new Int16Array(MAP_W * MAP_H).fill(-1);
+  const roomOf = new Int16Array(MAP_W * MAP_H).fill(-1);
   const mark = new Uint8Array(MAP_W * MAP_H);
+  const cable = new Uint8Array(MAP_W * MAP_H);
+  const set = (px: number, py: number, k: number) => {
+    if (px >= 0 && py >= 0 && px < MAP_W && py < MAP_SHOWN) owner[py * MAP_W + px] = k;
+  };
   // Each room's palette block is its place in the area's list (maps.ts), drawn or not.
   const places = AREAS.find((a) => a.id === areaId)!.places;
   const index = new Map(plan.rooms.map((r) => [r.floor.place, places.indexOf(r.floor.place)]));
-  // Trails first, each half in the colours of the room at its end.
-  const width = Math.max(2, Math.round(1.2 * scale));
+  // The ways first, under the rooms; each half in the colours of the room at its end.
+  const r = Math.max(1.5, (TRAIL_W * scale) / 2);
   for (const t of plan.trails) {
-    const a = toPx(t.a);
-    const b = toPx(t.b);
-    const steps = Math.ceil(Math.hypot(b.x - a.x, b.y - a.y) * 2) + 1;
-    for (let i = 0; i <= steps; i++) {
-      const f = i / steps;
-      const cx = a.x + (b.x - a.x) * f;
-      const cy = a.y + (b.y - a.y) * f;
-      const k = index.get(f < 0.5 ? t.from : t.to)!;
-      for (let dy = 0; dy < width; dy++)
-        for (let dx = 0; dx < width; dx++) {
-          const px = Math.floor(cx - width / 2 + dx + 0.5);
-          const py = Math.floor(cy - width / 2 + dy + 0.5);
-          if (px >= 0 && py >= 0 && px < MAP_W && py < MAP_SHOWN) owner[py * MAP_W + px] = k;
+    const pts = t.points.map(toPx);
+    let total = 0;
+    const lengths = pts.slice(1).map((p, i) => Math.hypot(p.x - pts[i]!.x, p.y - pts[i]!.y));
+    const all = lengths.reduce((s, l) => s + l, 0);
+    for (let i = 1; i < pts.length; i++) {
+      const [a, b] = [pts[i - 1]!, pts[i]!];
+      const n = Math.max(1, Math.ceil(lengths[i - 1]! * 2));
+      for (let s = 0; s <= n; s++) {
+        const x = a.x + ((b.x - a.x) * s) / n;
+        const y = a.y + ((b.y - a.y) * s) / n;
+        const along = (total + (lengths[i - 1]! * s) / n) / (all || 1);
+        const k = index.get(t.to !== undefined && along >= 0.5 ? t.to : t.from)!;
+        if (t.kind === 'cable') {
+          // A ride's cable: a dashed line, a pixel wide, in the walls' colour.
+          if (Math.floor((total + (lengths[i - 1]! * s) / n) / 3) % 2 === 0) {
+            const px = Math.floor(x);
+            const py = Math.floor(y);
+            if (px >= 0 && py >= 0 && px < MAP_W && py < MAP_SHOWN) cable[py * MAP_W + px] = 1;
+          }
+          continue;
         }
+        const w = t.kind === 'step' ? Math.max(1.5, r * 0.8) : r;
+        for (let py = Math.floor(y - w); py <= Math.ceil(y + w); py++)
+          for (let px = Math.floor(x - w); px <= Math.ceil(x + w); px++) if (Math.hypot(px + 0.5 - x, py + 0.5 - y) <= w) set(px, py, k);
+      }
+      total += lengths[i - 1]!;
     }
   }
-  // Outdoor rooms, then buildings over the holes the yards leave for them.
-  const order = plan.rooms.map((r) => [r, index.get(r.floor.place)!] as const).sort(([a], [b]) => Number(a.floor.inside) - Number(b.floor.inside));
-  for (const [r, k] of order) {
+  // Outdoor rooms, then buildings: a building's straight walls are drawn over a yard's wandering edge.
+  const order = plan.rooms.map((rm) => [rm, index.get(rm.floor.place)!] as const).sort(([a], [b]) => Number(organic(b.floor)) - Number(organic(a.floor)));
+  for (const [rm, k] of order) {
     for (let py = 0; py < MAP_SHOWN; py++)
       for (let px = 0; px < MAP_W; px++) {
-        const p = fromPlan(r, centreOf(px, py));
-        const what = floorAt(r, p.x, p.z);
-        if (!what) continue;
+        const p = centreOf(px, py);
+        if (!inRoom(rm, p)) continue;
         owner[py * MAP_W + px] = k;
-        mark[py * MAP_W + px] = what === 'mark' ? 1 : 0;
+        roomOf[py * MAP_W + px] = k;
+        mark[py * MAP_W + px] = markAt(rm, (p.x - rm.at.x) * UNITS, (p.y - rm.at.y) * UNITS) ? 1 : 0;
       }
   }
   const pixels = new Uint8Array(MAP_W * MAP_H);
@@ -132,36 +144,44 @@ export function drawArea(areaId: string): Drawn {
   for (let y = 0; y < MAP_SHOWN; y++)
     for (let x = 0; x < MAP_W; x++) {
       const k = own(x, y);
-      if (k < 0) continue;
+      if (k < 0) {
+        if (cable[y * MAP_W + x]) pixels[y * MAP_W + x] = WALL;
+        continue;
+      }
       // A wall where the floor meets nothing, or a room drawn later in the
       // area's order: one pixel between two rooms, as RE1's walls are.
       const edge = [own(x - 1, y), own(x + 1, y), own(x, y - 1), own(x, y + 1)].some((n) => n < 0 || n > k);
       pixels[y * MAP_W + x] = edge ? WALL : blockOf(k) + (mark[y * MAP_W + x] ? MARK : FILL);
     }
-  // Doors: on the wall where each opens, and a pixel into the room.
-  for (const r of plan.rooms) {
-    const k = index.get(r.floor.place)!;
-    for (const d of r.floor.doors) {
-      const { at, side } = doorInPlan(r, d);
+  // Doors: on the outline where each opens (plans.ts doorOnOutline), two pixels deep.
+  const doors: { place: string; to: string; x: number; y: number }[] = [];
+  const inside = (x: number, y: number) => (x < 0 || y < 0 || x >= MAP_W || y >= MAP_SHOWN ? -1 : roomOf[y * MAP_W + x]!);
+  for (const rm of plan.rooms) {
+    const k = index.get(rm.floor.place)!;
+    for (const d of rm.floor.doors) {
+      const side = d.side;
       const [dx, dy] = SIDES[side]!;
+      const { at, edge } = doorOnOutline(rm, d);
       const p = toPx(at);
-      const along = side % 2 === 0 ? (d.zone.x1 - d.zone.x0) : (d.zone.z1 - d.zone.z0);
-      const span = Math.max(2, Math.min(4, Math.round((along / 1700) * scale)));
-      // Step in from outside until the room's own floor, its wall.
-      let wx = Math.floor(p.x + dx * 2);
-      let wy = Math.floor(p.y + dy * 2);
-      for (let i = 0; i < 8 && own(wx, wy) !== k; i++) [wx, wy] = [wx - dx, wy - dy];
-      if (own(wx, wy) !== k) continue;
+      let wx = Math.floor(p.x);
+      let wy = Math.floor(p.y);
+      // The point in metres lands on a pixel: onto the room's, and on its edge.
+      for (let i = 0; i < 2 && inside(wx, wy) !== k; i++) [wx, wy] = [wx - dx, wy - dy];
+      if (inside(wx, wy) !== k) continue;
+      for (let i = 0; edge && i < 2 && inside(wx + dx, wy + dy) === k; i++) [wx, wy] = [wx + dx, wy + dy];
+      doors.push({ place: rm.floor.place, to: d.to, x: wx, y: wy });
+      const along = side % 2 === 0 ? d.zone.x1 - d.zone.x0 : d.zone.z1 - d.zone.z0;
+      const span = Math.max(2, Math.min(4, Math.round((along / UNITS) * scale)));
       for (let depth = 0; depth < 2; depth++)
         for (let s = 0; s < span; s++) {
           const off = s - Math.floor((span - 1) / 2);
           const x = wx - dx * depth + (dy !== 0 ? off : 0);
           const y = wy - dy * depth + (dx !== 0 ? off : 0);
-          if (own(x, y) === k || (depth === 0 && own(x, y) >= 0)) pixels[y * MAP_W + x] = blockOf(k) + DOOR;
+          if (inside(x, y) === k) pixels[y * MAP_W + x] = blockOf(k) + DOOR;
         }
     }
   }
-  return { plan, pixels, scale, origin };
+  return { plan, pixels, owner: roomOf, doors, scale, origin };
 }
 
 /** An area's map file: its picture and palette, placed in VRAM where RE1's map files are. */
