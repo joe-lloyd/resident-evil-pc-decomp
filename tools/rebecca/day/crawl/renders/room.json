@@ -112,11 +112,73 @@
    "x1": 12920,
    "z1": 4335,
    "name": "Ladder footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 10980,
+   "z0": 1797,
+   "x1": 13500,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10980,
+   "z0": 2055,
+   "x1": 11290,
+   "z1": 7465,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 7665,
+   "x1": 11290,
+   "z1": 7975,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 8175,
+   "x1": 1858,
+   "z1": 9760,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13275,
+   "z0": 2055,
+   "x1": 13500,
+   "z1": 9760,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 9957,
+   "x1": 13500,
+   "z1": 10018,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Iron main": 69,
+  "Lead pipe": 46,
+  "Iron main, north": 45,
+  "Sleeper wall.001": 33,
+  "Lead pipe, up": 31,
+  "Sleeper wall.004": 9,
+  "Over the hole": 5,
+  "Main collar": 2,
+  "Main collar.002": 2,
+  "Main collar.001": 2,
+  "West end": 2,
+  "Sleeper wall.003": 1
  },
  "bounds": {
   "x0": 1700,

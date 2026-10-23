@@ -197,11 +197,432 @@
    "x1": 9605,
    "z1": 6715,
    "name": "Card table"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 1797,
+   "x1": 12820,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19905,
+   "z0": 1797,
+   "x1": 20300,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9705,
+   "z0": 2052,
+   "x1": 10525,
+   "z1": 2113,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11232,
+   "z0": 2052,
+   "x1": 11293,
+   "z1": 2113,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10212,
+   "z0": 2310,
+   "x1": 10273,
+   "z1": 2875,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11487,
+   "z0": 2310,
+   "x1": 11548,
+   "z1": 2875,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10470,
+   "z0": 3072,
+   "x1": 11290,
+   "z1": 3133,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12762,
+   "z0": 2055,
+   "x1": 12823,
+   "z1": 3130,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16332,
+   "z0": 1800,
+   "x1": 16393,
+   "z1": 3130,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3837,
+   "z0": 3327,
+   "x1": 3898,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 3327,
+   "x1": 5425,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8682,
+   "z0": 3327,
+   "x1": 8743,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12765,
+   "z0": 3327,
+   "x1": 13840,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15312,
+   "z0": 3327,
+   "x1": 15373,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16080,
+   "z0": 3327,
+   "x1": 17410,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19647,
+   "z0": 3327,
+   "x1": 19708,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13782,
+   "z0": 3585,
+   "x1": 13843,
+   "z1": 3895,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16335,
+   "z0": 3585,
+   "x1": 17410,
+   "z1": 3895,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 18885,
+   "z0": 3585,
+   "x1": 19450,
+   "z1": 3895,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 4092,
+   "x1": 7720,
+   "z1": 4153,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 17100,
+   "z0": 4092,
+   "x1": 19450,
+   "z1": 4153,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9960,
+   "z0": 4602,
+   "x1": 10270,
+   "z1": 4663,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9450,
+   "z0": 4857,
+   "x1": 10270,
+   "z1": 4918,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7662,
+   "z0": 5367,
+   "x1": 7723,
+   "z1": 5428,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9705,
+   "z0": 5115,
+   "x1": 10525,
+   "z1": 5425,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 5622,
+   "x1": 7720,
+   "z1": 5683,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6900,
+   "z0": 5880,
+   "x1": 7720,
+   "z1": 6190,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 6387,
+   "x1": 7720,
+   "z1": 6448,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7662,
+   "z0": 6642,
+   "x1": 7723,
+   "z1": 6703,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9702,
+   "z0": 5625,
+   "x1": 9763,
+   "z1": 6700,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13527,
+   "z0": 7152,
+   "x1": 13588,
+   "z1": 7213,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9195,
+   "z0": 7407,
+   "x1": 9505,
+   "z1": 7468,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 7662,
+   "x1": 9760,
+   "z1": 7723,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8937,
+   "z0": 7917,
+   "x1": 8998,
+   "z1": 7978,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9702,
+   "z0": 7917,
+   "x1": 9763,
+   "z1": 7978,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13017,
+   "z0": 7917,
+   "x1": 13078,
+   "z1": 7978,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9447,
+   "z0": 8172,
+   "x1": 9508,
+   "z1": 8233,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 3330,
+   "x1": 1858,
+   "z1": 8485,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4347,
+   "z0": 8427,
+   "x1": 4408,
+   "z1": 8488,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6132,
+   "z0": 8427,
+   "x1": 6193,
+   "z1": 8488,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9195,
+   "z0": 8427,
+   "x1": 9505,
+   "z1": 8488,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13020,
+   "z0": 8427,
+   "x1": 13585,
+   "z1": 8488,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10722,
+   "z0": 9957,
+   "x1": 10783,
+   "z1": 10018,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15312,
+   "z0": 8685,
+   "x1": 15373,
+   "z1": 10015,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 18882,
+   "z0": 8685,
+   "x1": 18943,
+   "z1": 10015,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 20327,
+   "z0": 2055,
+   "x1": 20388,
+   "z1": 10015,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 10127,
+   "x1": 20300,
+   "z1": 10188,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 48,
   "ticks": 3
+ },
+ "probe": {
+  "Wall e": 34,
+  "Mattress pulled half off": 29,
+  "Wall w": 20,
+  "Card chair.001": 15,
+  "Card chair": 14,
+  "Wall n": 11,
+  "Stove belly": 11,
+  "Chair from the barricade": 11,
+  "His blanket": 9,
+  "Shelf over the stove": 8,
+  "Wall s": 7,
+  "Wall s.001": 7,
+  "Wall s.004": 7,
+  "Wall s.006": 7,
+  "Wall s.011": 7,
+  "Wall s.012": 7,
+  "Card table": 6,
+  "Door, shut": 6,
+  "Wall s.008": 6,
+  "Wall s.009": 6,
+  "Wall s.014": 6,
+  "Wall s.003": 5,
+  "Bunk 02": 4,
+  "Bunk 03": 4,
+  "Bunk 03 mattress": 4,
+  "Bunk 12 mattress": 4,
+  "Bunk 13 mattress": 4,
+  "Bunk 12 blanket": 3,
+  "Radio": 2,
+  "Bunk 00": 2,
+  "Bunk 01": 2,
+  "Footlocker 02": 2,
+  "Footlocker 01": 2,
+  "Footlocker shoved back": 2,
+  "Bunk 12": 2,
+  "Bunk 13": 2,
+  "Bunk 00 blanket": 1,
+  "Bunk 03 blanket": 1,
+  "Bedding kicked off 0": 1,
+  "Bedding kicked off 1": 1,
+  "Axe blade through": 1,
+  "Door frame.001": 1,
+  "Rag in the window": 1
  },
  "bounds": {
   "x0": 1700,

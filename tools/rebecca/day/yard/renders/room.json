@@ -141,6 +141,294 @@
    "x1": 32901,
    "z1": 21170,
    "name": "Rocks south-east"
+  },
+  {
+   "shape": "box",
+   "x0": 9362,
+   "z0": 5537,
+   "x1": 9423,
+   "z1": 5598,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11657,
+   "z0": 5537,
+   "x1": 11718,
+   "z1": 5598,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 5792,
+   "x1": 9168,
+   "z1": 5853,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9620,
+   "z0": 5792,
+   "x1": 11460,
+   "z1": 5853,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11912,
+   "z0": 5792,
+   "x1": 11973,
+   "z1": 5853,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 18290,
+   "z0": 3500,
+   "x1": 18600,
+   "z1": 8655,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13952,
+   "z0": 8852,
+   "x1": 14013,
+   "z1": 8913,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 17270,
+   "z0": 8852,
+   "x1": 18600,
+   "z1": 8913,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15992,
+   "z0": 9107,
+   "x1": 16053,
+   "z1": 9168,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16502,
+   "z0": 9107,
+   "x1": 16563,
+   "z1": 9168,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16757,
+   "z0": 9365,
+   "x1": 16818,
+   "z1": 9675,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15992,
+   "z0": 9872,
+   "x1": 16053,
+   "z1": 9933,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16502,
+   "z0": 9872,
+   "x1": 16563,
+   "z1": 9933,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 18290,
+   "z0": 9110,
+   "x1": 18600,
+   "z1": 10185,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27215,
+   "z0": 3500,
+   "x1": 27780,
+   "z1": 10185,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 18035,
+   "z0": 10382,
+   "x1": 19365,
+   "z1": 10443,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 26705,
+   "z0": 10382,
+   "x1": 27780,
+   "z1": 10443,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 18290,
+   "z0": 10637,
+   "x1": 19365,
+   "z1": 10698,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27722,
+   "z0": 10637,
+   "x1": 27783,
+   "z1": 10698,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4520,
+   "z0": 11147,
+   "x1": 9420,
+   "z1": 11208,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 26702,
+   "z0": 10640,
+   "x1": 26763,
+   "z1": 11205,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27722,
+   "z0": 11402,
+   "x1": 27783,
+   "z1": 11463,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27212,
+   "z0": 11657,
+   "x1": 27273,
+   "z1": 11718,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19307,
+   "z0": 11915,
+   "x1": 19368,
+   "z1": 12225,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9362,
+   "z0": 12170,
+   "x1": 9423,
+   "z1": 14010,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4520,
+   "z0": 14972,
+   "x1": 9420,
+   "z1": 15033,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 14462,
+   "z0": 14972,
+   "x1": 14523,
+   "z1": 15033,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 14465,
+   "z0": 15227,
+   "x1": 14775,
+   "z1": 15288,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9362,
+   "z0": 16502,
+   "x1": 9423,
+   "z1": 16563,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19307,
+   "z0": 17780,
+   "x1": 19368,
+   "z1": 18855,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9110,
+   "z0": 16760,
+   "x1": 9930,
+   "z1": 19875,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9365,
+   "z0": 20072,
+   "x1": 13755,
+   "z1": 20133,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15995,
+   "z0": 20072,
+   "x1": 16305,
+   "z1": 20133,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16760,
+   "z0": 20072,
+   "x1": 17835,
+   "z1": 20133,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 18545,
+   "z0": 20072,
+   "x1": 18855,
+   "z1": 20133,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15992,
+   "z0": 20327,
+   "x1": 16053,
+   "z1": 20388,
+   "name": "Probe"
   }
  ],
  "anim": {
@@ -161,6 +449,43 @@
    ]
   }
  ],
+ "probe": {
+  "Truck": 72,
+  "Cabin log.041": 58,
+  "Cabin log.054": 36,
+  "Shed walls": 29,
+  "Cabin log.047": 21,
+  "Cabin log.048": 12,
+  "Sign board": 10,
+  "Tarp": 9,
+  "Cabin log.053": 8,
+  "Chopping block": 6,
+  "Shed window frame": 6,
+  "Blood under the window": 5,
+  "Split log.035": 4,
+  "Cabin log.017": 4,
+  "Cabin log.016": 4,
+  "Rain barrel": 4,
+  "Cabin log.025": 3,
+  "Shed door": 3,
+  "Cabin log.030": 2,
+  "Shed corner post": 2,
+  "Porch post": 2,
+  "Door jamb": 2,
+  "Door jamb.001": 2,
+  "Truck door": 2,
+  "Winch frame": 2,
+  "Winch cable": 2,
+  "Sign post": 1,
+  "Sign post.001": 1,
+  "Flagpole": 1,
+  "Shed corner post.002": 1,
+  "Door brace": 1,
+  "Shed corner post.001": 1,
+  "Shed corner post.003": 1,
+  "Truck door inside": 1,
+  "Winch hook": 1
+ },
  "bounds": {
   "x0": 3400,
   "z0": 3400,

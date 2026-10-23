@@ -14,9 +14,9 @@
 // init procedure 0
 door_aot_set(0, 11400, 3800, 1600, 3000, 0, 15, 48, 4, 0, ROOM_312, 3500, 0, 1200, 3072, UNLOCKED, 1);
 // The edge, all along the south side of the clearing.
-aot_set(1, 3000, 9200, 8000, 1000, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
+aot_set(1, 2490, 8690, 9020, 2020, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 // The rock face at the back.
-aot_set(2, 3000, 3000, 8000, 900, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
+aot_set(2, 2490, 2490, 8910, 1410, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 // CUTSCENES INIT (day/scripts.ts writes these)
 // cut-opening (day/cutscenes.ts): its people, and what starts it. FG_COMMON 125 once it has run.
 // END CUTSCENES INIT

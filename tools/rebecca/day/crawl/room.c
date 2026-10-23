@@ -1,13 +1,13 @@
 // crawl (11F), written by day/scripts.ts from day/crawl/scene.py: edit the scene, not this file.
 // init procedure 0
 // To cellar.
-door_aot_set(0, 1700, 7480, 1020, 2720, 1, 0, 7, 1, 0, ROOM_11D, 3570, 0, 9180, 0, UNLOCKED, 193);
+door_aot_set(0, 1190, 6970, 2040, 3740, 1, 0, 7, 1, 0, ROOM_11D, 3570, 0, 9180, 0, UNLOCKED, 193);
 // To save.
-door_aot_set(1, 11560, 2040, 1360, 2890, 0, 11, 27, 64, 0, ROOM_100, 5200, 0, 5600, 443, UNLOCKED, 193);
-aot_set(2, 11220, 4080, 2380, 2380, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
-aot_set(3, 8840, 7480, 1700, 1190, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
-aot_set(4, 5100, 7480, 3400, 2720, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
-aot_set(5, 12580, 7480, 1020, 2720, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
+door_aot_set(1, 11050, 1530, 1870, 3400, 0, 11, 27, 64, 0, ROOM_100, 5200, 0, 5600, 443, UNLOCKED, 193);
+aot_set(2, 11220, 4080, 2890, 2890, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
+aot_set(3, 8670, 6970, 2380, 1700, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
+aot_set(4, 4590, 7480, 4080, 3230, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
+aot_set(5, 12070, 6970, 2040, 3740, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
 // cut-leave-gear (day/cutscenes.ts): its people, and what starts it. FG_COMMON 129 once it has run.
 if (ck(FG_COMMON, 129, 1)) {
     aot_set(6, 10880, 6460, 2720, 1020, SCE_EVENT, 1, 9, 0, 0, 0, 0, 0);

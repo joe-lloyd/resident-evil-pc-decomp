@@ -80,8 +80,8 @@ export function keyItemModels(spots: readonly ItemSpot[]): PickupModel[] {
 }
 
 const word = (n: number) => `${n & 0xff}, ${(n >> 8) & 0xff}`;
-/** A key item's zone, square on it: her reach (600 ahead) lands in it from a step away, and it leaves the room's checks beside it theirs. */
-const ZONE = 1200;
+/** A key item's zone, square on it: her reach (600 ahead) lands in it from a step away, on a table she stands her radius off, and it leaves the room's checks beside it theirs. */
+const ZONE = 1500;
 
 /**
  * A room's key item pickups: each where its scene put it, kept once taken by

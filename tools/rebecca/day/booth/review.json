@@ -2,7 +2,7 @@
   "scene": "booth",
   "steps": [
     { "action": "hold", "frames": 420, "picture": "booth-entry" },
-    { "action": "walk", "x": 3700, "z": 2900 },
+    { "action": "walk", "x": 4720, "z": 2900 },
     { "action": "hold", "frames": 420, "camera": 0, "picture": "booth-camera0" },
     { "action": "walk", "x": 5600, "z": 4600 },
     { "action": "hold", "frames": 420, "camera": 1, "picture": "booth-camera1" },

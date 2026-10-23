@@ -250,11 +250,223 @@
    "x1": 33490,
    "z1": 19125,
    "name": "East fence south"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5200,
+   "x1": 2110,
+   "z1": 7550,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 8515,
+   "x1": 1858,
+   "z1": 10610,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2820,
+   "z0": 11572,
+   "x1": 3130,
+   "z1": 11633,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 11827,
+   "x1": 3130,
+   "z1": 11888,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 12082,
+   "x1": 2110,
+   "z1": 12143,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 12340,
+   "x1": 1858,
+   "z1": 14180,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 20667,
+   "z0": 14377,
+   "x1": 20728,
+   "z1": 14438,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 20667,
+   "z0": 14887,
+   "x1": 20728,
+   "z1": 14948,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9450,
+   "z0": 15142,
+   "x1": 12565,
+   "z1": 15203,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 24750,
+   "z0": 15142,
+   "x1": 27865,
+   "z1": 15203,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10725,
+   "z0": 15397,
+   "x1": 11290,
+   "z1": 15458,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13020,
+   "z0": 15397,
+   "x1": 13330,
+   "z1": 15458,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 26025,
+   "z0": 15397,
+   "x1": 26590,
+   "z1": 15458,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 28320,
+   "z0": 15397,
+   "x1": 28630,
+   "z1": 15458,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13272,
+   "z0": 15652,
+   "x1": 13333,
+   "z1": 15713,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 28572,
+   "z0": 15652,
+   "x1": 28633,
+   "z1": 15713,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13020,
+   "z0": 15910,
+   "x1": 13330,
+   "z1": 16985,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 28320,
+   "z0": 15910,
+   "x1": 28630,
+   "z1": 16985,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13017,
+   "z0": 17185,
+   "x1": 13078,
+   "z1": 17495,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 28317,
+   "z0": 17185,
+   "x1": 28378,
+   "z1": 17495,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 18627,
+   "x1": 3640,
+   "z1": 18688,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8937,
+   "z0": 15400,
+   "x1": 8998,
+   "z1": 18600,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13020,
+   "z0": 17695,
+   "x1": 13330,
+   "z1": 18600,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 24237,
+   "z0": 15400,
+   "x1": 24298,
+   "z1": 18600,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 28320,
+   "z0": 17695,
+   "x1": 28630,
+   "z1": 18600,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Pylons, Galvanised": 110,
+  "Generator hut wall e": 18,
+  "Switch door": 10,
+  "Switch house wall e": 9,
+  "Switch house wall e.002": 7,
+  "Terminal pole": 3,
+  "Generator hut wall s": 2,
+  "Switch house wall s.003": 1,
+  "Crow in the grass wing.001": 1,
+  "Crow in the grass wing": 1
  },
  "bounds": {
   "x0": 1700,

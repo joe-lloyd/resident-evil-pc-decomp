@@ -107,11 +107,129 @@
    "x1": 5270,
    "z1": 5253,
    "name": "Fuel can.001"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 1797,
+   "x1": 3895,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4860,
+   "z0": 1797,
+   "x1": 5425,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5880,
+   "z0": 1797,
+   "x1": 6020,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6047,
+   "z0": 2055,
+   "x1": 6108,
+   "z1": 2620,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5880,
+   "z0": 2820,
+   "x1": 6020,
+   "z1": 4405,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4860,
+   "z0": 4857,
+   "x1": 5170,
+   "z1": 4918,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2817,
+   "z0": 2055,
+   "x1": 2878,
+   "z1": 5170,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6047,
+   "z0": 4605,
+   "x1": 6108,
+   "z1": 5170,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5325,
+   "x1": 3640,
+   "z1": 5385,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4860,
+   "z0": 5325,
+   "x1": 6020,
+   "z1": 5385,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 96,
   "ticks": 2
+ },
+ "probe": {
+  "Bench top": 15,
+  "Toolbox lid": 5,
+  "Door diagonal brace": 4,
+  "Board.040": 2,
+  "Door jamb.001": 2,
+  "Fuel can.001": 2,
+  "Board.044": 2,
+  "Board.019": 2,
+  "Board.023": 2,
+  "North rack chisel blade": 1,
+  "North rack chisel blade.003": 1,
+  "North rack clamp jaw": 1,
+  "Broom handle": 1,
+  "Board.039": 1,
+  "Bench leg.002": 1,
+  "Board.041": 1,
+  "Door jamb": 1,
+  "Door side infill": 1,
+  "Door plank": 1,
+  "Door plank.001": 1,
+  "Door plank.002": 1,
+  "Door plank.003": 1,
+  "Door plank.004": 1,
+  "Board.042": 1,
+  "Board.043": 1,
+  "Bench leg.003": 1,
+  "Board.015": 1,
+  "Board.016": 1,
+  "Board.017": 1,
+  "Board.018": 1,
+  "Board.020": 1,
+  "Board.021": 1,
+  "Board.022": 1,
+  "Board.024": 1,
+  "Board.025": 1,
+  "Board.045": 1
  },
  "bounds": {
   "x0": 1700,

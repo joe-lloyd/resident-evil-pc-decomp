@@ -300,7 +300,7 @@ def build():
     for i in range(3):
         kit.rod(f"Pan hook {i}", mat("iron"), (2.65 + i * 0.27, 1.05, 2.3), (2.65 + i * 0.27, 1.1, 1.9), 0.008, 4)
         reb.prim("cyl", f"Hanging pan {i}", mat("iron"), (2.65 + i * 0.27, 1.12, 1.75), (0.26 - i * 0.03, 0.04, 0.26 - i * 0.03), rot=(math.pi / 2, 0, 0), segments=14)
-    reb.wall(reb.prim("cube", "Water barrel", mat("logs"), (6.05, 2.5, 0.45), (0.6, 0.6, 0.9), bevel=0.15), "circle")
+    reb.wall(reb.prim("cube", "Water barrel", mat("logs"), (6.12, 2.3, 0.45), (0.6, 0.6, 0.9), bevel=0.15), "circle")
     kitchen_things(rng, enamel, table_m, frame_m, rx)
 
     # ---- The counter: the cook, dead against it in his apron, keys on his belt, the cleaver by his hand.
@@ -343,7 +343,9 @@ def build():
             b.location = (bx, by, 0.0)
             b.rotation_euler = (0, 0, yaw)
         reb.mask(reb.wall(b))
-    kit.chair("Chair thrown", table_m, (3.5, 5.0, 0.0), rot=1.0, tipped=True)
+    # Thrown to the far end of the aisle between the tables, clear of the
+    # way round the cook to the hatch.
+    kit.chair("Chair thrown", table_m, (3.45, 9.6, 0.0), rot=1.0, tipped=True)
     pv, pf, sv, sf, cv, cf = [], [], [], [], [], []
     for tx in TABLES:
         for side in (-1, 1):

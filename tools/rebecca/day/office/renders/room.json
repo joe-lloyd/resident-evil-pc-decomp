@@ -96,11 +96,214 @@
    "x1": 7253,
    "z1": 6807,
    "name": "Item box"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 1797,
+   "x1": 4660,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 2055,
+   "x1": 1858,
+   "z1": 2365,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 2562,
+   "x1": 3130,
+   "z1": 2623,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7662,
+   "z0": 1800,
+   "x1": 7723,
+   "z1": 2620,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6900,
+   "z0": 2820,
+   "x1": 7720,
+   "z1": 3130,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 2820,
+   "x1": 1858,
+   "z1": 3385,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3072,
+   "z0": 2820,
+   "x1": 3133,
+   "z1": 3385,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4350,
+   "z0": 3327,
+   "x1": 7720,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 3582,
+   "x1": 2875,
+   "z1": 3643,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 3840,
+   "x1": 2365,
+   "z1": 4405,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6642,
+   "z0": 3585,
+   "x1": 6703,
+   "z1": 4405,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4350,
+   "z0": 4602,
+   "x1": 6700,
+   "z1": 4663,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 4605,
+   "x1": 1858,
+   "z1": 5170,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5367,
+   "x1": 2875,
+   "z1": 5428,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 5877,
+   "x1": 4150,
+   "z1": 5938,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 5625,
+   "x1": 1858,
+   "z1": 6445,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4092,
+   "z0": 6135,
+   "x1": 4153,
+   "z1": 6445,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5877,
+   "z0": 5880,
+   "x1": 5938,
+   "z1": 6445,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7662,
+   "z0": 3585,
+   "x1": 7723,
+   "z1": 6445,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 6642,
+   "x1": 2875,
+   "z1": 6703,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4095,
+   "z0": 6642,
+   "x1": 5935,
+   "z1": 6703,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 6642,
+   "x1": 7720,
+   "z1": 6703,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 48,
   "ticks": 3
+ },
+ "probe": {
+  "Wall w": 11,
+  "Wall n": 11,
+  "Box stove": 10,
+  "Foreman's desk": 10,
+  "Desk front": 10,
+  "Drawer pulled out": 9,
+  "Woodbox": 9,
+  "East sill": 8,
+  "Typing stand": 7,
+  "Gun rack foot": 6,
+  "Door ledge": 6,
+  "Filing cabinet": 4,
+  "Safe": 4,
+  "Item box": 4,
+  "Jacket over the safe": 4,
+  "His chair, over": 3,
+  "Safe door": 3,
+  "Split log 4": 2,
+  "Wall e.003": 2,
+  "Drawers": 1,
+  "Split log 3": 1,
+  "Safe handle": 1,
+  "Wall s": 1,
+  "Door frame": 1,
+  "South sill": 1
  },
  "bounds": {
   "x0": 1700,

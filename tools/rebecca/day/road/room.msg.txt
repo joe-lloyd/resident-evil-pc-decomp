@@ -1,9 +1,11 @@
 0: \n...
-1: \nGATE 7. A steel chain\nround the gate and its\npost,\p{0}\nand a padlock on it.
-2: \nA ranger's clipboard. The\ncheck sheet: GATE 7,\p{0}\nCHAINED AND LOCKED, 23\nJUL, 18.00.\p{0}\nHe never came back for it.
-3: \nA county notice, torn half\naway.\p{0}\n...ARKLAY AREA CLOSED\nUNTIL FURTHER...\p{0}\n...HIKERS... ...DO NOT\nAPPROACH...
-4: \nARKLAY NATIONAL FOREST.\nFOREST ROAD 7.\p{0}\nSomeone's used it for\ntarget practice.
-5: \nGlass from a headlamp, and\nblood. Grey fur.\p{0}\nSomething big ran out in\nfront of a truck here.
-6: \nPaw prints, crossing the\nroad. Big ones.\p{0}\nThe dogs came down this\nway.
-7: \nA ranger's hat, in the\nditch.
-8: \nA Forest Service road map.\nThe road, the tower, the\nline, the quarry.
+1: \nThe chain holds the gate\nshut.\p{0}\nBolt cutters would go\nthrough it.
+2: \nI set the jaws on a link\nand lean on the handles.\p{0}\nThe chain snaps and slides\noff the gate.
+3: \nGATE 7. A steel chain\nround the gate and its\npost,\p{0}\nand a padlock on it.
+4: \nA ranger's clipboard. The\ncheck sheet: GATE 7,\p{0}\nCHAINED AND LOCKED, 23\nJUL, 18.00.\p{0}\nHe never came back for it.
+5: \nA county notice, torn half\naway.\p{0}\n...ARKLAY AREA CLOSED\nUNTIL FURTHER...\p{0}\n...HIKERS... ...DO NOT\nAPPROACH...
+6: \nARKLAY NATIONAL FOREST.\nFOREST ROAD 7.\p{0}\nSomeone's used it for\ntarget practice.
+7: \nGlass from a headlamp, and\nblood. Grey fur.\p{0}\nSomething big ran out in\nfront of a truck here.
+8: \nPaw prints, crossing the\nroad. Big ones.\p{0}\nThe dogs came down this\nway.
+9: \nA ranger's hat, in the\nditch.
+10: \nA Forest Service road map.\nThe road, the tower, the\nline, the quarry.

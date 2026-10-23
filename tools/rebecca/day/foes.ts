@@ -74,15 +74,21 @@ const SPREAD = 2000; // between two enemies
 const outside = (x: number, z: number, r: Rect, pad: number) => x < r.x0 - pad || x > r.x1 + pad || z < r.z0 - pad || z > r.z1 + pad;
 const toRect = (x: number, z: number, r: Rect) => Math.hypot(Math.max(r.x0 - x, 0, x - r.x1), Math.max(r.z0 - z, 0, z - r.z1));
 
-/** Points of floor a fifth of a metre apart that something can stand on: inside the edge, clear of walls, gaps and doors. */
-export function freeFloor(floor: Floor): { x: number; z: number }[] {
+/**
+ * Points of floor a fifth of a metre apart that something can stand on:
+ * clear of walls, gaps and the floor's edge by `pad` (the edge by a little
+ * more), and of doors' zones by `door`.
+ */
+export function freeFloor(floor: Floor, pad = WALL, door = DOOR): { x: number; z: number }[] {
   const b = floor.bounds;
   const free: { x: number; z: number }[] = [];
-  for (let x = b.x0 + EDGE; x <= b.x1 - EDGE; x += STEP)
-    for (let z = b.z0 + EDGE; z <= b.z1 - EDGE; z += STEP) {
-      if (!floor.walls.every((w) => outside(x, z, w, WALL))) continue;
-      if (!(floor.voids ?? []).every((v) => outside(x, z, v, WALL))) continue;
-      if (floor.doors.some((d) => toRect(x, z, d.zone) < DOOR)) continue;
+  // The floor's edge is a wall too: as far from it, and a little more.
+  const edge = pad + EDGE - WALL;
+  for (let x = b.x0 + edge; x <= b.x1 - edge; x += STEP)
+    for (let z = b.z0 + edge; z <= b.z1 - edge; z += STEP) {
+      if (!floor.walls.every((w) => outside(x, z, w, pad))) continue;
+      if (!(floor.voids ?? []).every((v) => outside(x, z, v, pad))) continue;
+      if (floor.doors.some((d) => toRect(x, z, d.zone) < door)) continue;
       free.push({ x, z });
     }
   return free;

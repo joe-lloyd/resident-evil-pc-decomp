@@ -417,7 +417,8 @@ def build():
             stool.append(reb.prim("cube", "leg", timber, (dx, dy, 0.38), (0.04, 0.04, 0.46)))
             stool.append(reb.prim("cyl", "insulator", mat("glass"), (dx, dy, 0.07), (0.1, 0.1, 0.14), segments=10))
     st = flat_join("Lightning stool", stool)
-    st.location = P(-0.1, 1.6, 0.0)
+    # In the corner by the wall, out of the way between the hatch and the door.
+    st.location = P(-CW + 0.35, CW - 0.35, 0.0)
     st.rotation_euler = (0, 0, 0.3)
 
     # ---- The desk along the north wall: the log, the binoculars, the dead radio, a lamp.

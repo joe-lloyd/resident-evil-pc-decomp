@@ -1,11 +1,13 @@
 0: \n...
-1: \nA log on the sawhorses,\ncut halfway through.\p{0}\nThe chainsaw's still\nsitting on it.
-2: \nSomeone was burned here.\nWhat's left is curled up\nblack in the ash.\p{0}\nIt's still smoking.
-3: \nA fire axe, buried in the\ndoor. Someone was holding\nit shut from inside.
-4: \nHe sat down against the\nlogs with a shotgun and\nfired until it was empty.\p{0}\nShells everywhere.
-5: \nThe cookhouse woodpile.\nSplit and stacked, enough\nfor weeks.
-6: \nThe cookhouse bell. The\nrope's been cut short.
-7: \nThe skidder. Its blade is\ndown in the mud, the\nchokers still on the logs.\p{0}\nThe key's gone.
-8: \nLaundry on the line.\nNobody's coming for it.
-9: \nDiesel, leaking from a\ndrum into the mud.
-10: \nThe fuel depot. The gate's\nchained shut, a padlock on\nit.
+1: \nThe padlock won't give.\p{0}\nBolt cutters would go\nthrough the shackle.
+2: \nThe cutters bite through\nthe shackle.\p{0}\nThe padlock drops, and the\ngate swings free.
+3: \nA log on the sawhorses,\ncut halfway through.\p{0}\nThe chainsaw's still\nsitting on it.
+4: \nSomeone was burned here.\nWhat's left is curled up\nblack in the ash.\p{0}\nIt's still smoking.
+5: \nA fire axe, buried in the\ndoor. Someone was holding\nit shut from inside.
+6: \nHe sat down against the\nlogs with a shotgun and\nfired until it was empty.\p{0}\nShells everywhere.
+7: \nThe cookhouse woodpile.\nSplit and stacked, enough\nfor weeks.
+8: \nThe cookhouse bell. The\nrope's been cut short.
+9: \nThe skidder. Its blade is\ndown in the mud, the\nchokers still on the logs.\p{0}\nThe key's gone.
+10: \nLaundry on the line.\nNobody's coming for it.
+11: \nDiesel, leaking from a\ndrum into the mud.
+12: \nThe fuel depot. The gate's\nchained shut, a padlock on\nit.

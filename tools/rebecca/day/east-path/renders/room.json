@@ -237,11 +237,441 @@
    "x1": 24905,
    "z1": 18445,
    "name": "Windsock mast"
+  },
+  {
+   "shape": "box",
+   "x0": 27045,
+   "z0": 2647,
+   "x1": 29650,
+   "z1": 2708,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27045,
+   "z0": 2902,
+   "x1": 28375,
+   "z1": 2963,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 29085,
+   "z0": 2902,
+   "x1": 29395,
+   "z1": 2963,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19647,
+   "z0": 2650,
+   "x1": 19708,
+   "z1": 3725,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19650,
+   "z0": 3922,
+   "x1": 20470,
+   "z1": 3983,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 3925,
+   "x1": 24295,
+   "z1": 4235,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 22965,
+   "z0": 4432,
+   "x1": 23530,
+   "z1": 4493,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21945,
+   "z0": 4687,
+   "x1": 23020,
+   "z1": 4748,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 20670,
+   "z0": 4942,
+   "x1": 22255,
+   "z1": 5003,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19650,
+   "z0": 5197,
+   "x1": 20725,
+   "z1": 5258,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11997,
+   "z0": 2650,
+   "x1": 12058,
+   "z1": 5510,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19137,
+   "z0": 2650,
+   "x1": 19198,
+   "z1": 5510,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12000,
+   "z0": 5707,
+   "x1": 19195,
+   "z1": 5768,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15060,
+   "z0": 5962,
+   "x1": 15370,
+   "z1": 6023,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15315,
+   "z0": 6217,
+   "x1": 15625,
+   "z1": 6278,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10467,
+   "z0": 2650,
+   "x1": 10528,
+   "z1": 6530,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11997,
+   "z0": 5965,
+   "x1": 12058,
+   "z1": 6530,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15570,
+   "z0": 6472,
+   "x1": 15880,
+   "z1": 6533,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11487,
+   "z0": 6727,
+   "x1": 11548,
+   "z1": 6788,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12000,
+   "z0": 6727,
+   "x1": 14605,
+   "z1": 6788,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15825,
+   "z0": 6727,
+   "x1": 19195,
+   "z1": 6788,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19647,
+   "z0": 5455,
+   "x1": 19708,
+   "z1": 6785,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 20412,
+   "z0": 6727,
+   "x1": 20473,
+   "z1": 6788,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11490,
+   "z0": 6982,
+   "x1": 14605,
+   "z1": 7043,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16080,
+   "z0": 6982,
+   "x1": 19450,
+   "z1": 7043,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9195,
+   "z0": 7492,
+   "x1": 9760,
+   "z1": 7553,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19647,
+   "z0": 7492,
+   "x1": 19708,
+   "z1": 7553,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 20667,
+   "z0": 6985,
+   "x1": 20728,
+   "z1": 7550,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19905,
+   "z0": 7747,
+   "x1": 20470,
+   "z1": 7808,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8937,
+   "z0": 7750,
+   "x1": 8998,
+   "z1": 8060,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9957,
+   "z0": 7750,
+   "x1": 10018,
+   "z1": 8315,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9450,
+   "z0": 8512,
+   "x1": 9760,
+   "z1": 8573,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21432,
+   "z0": 9532,
+   "x1": 21493,
+   "z1": 9593,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21180,
+   "z0": 9787,
+   "x1": 23020,
+   "z1": 9848,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11742,
+   "z0": 11062,
+   "x1": 11803,
+   "z1": 11123,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11487,
+   "z0": 11317,
+   "x1": 11548,
+   "z1": 11378,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11745,
+   "z0": 11572,
+   "x1": 12055,
+   "z1": 11633,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 22455,
+   "z0": 16927,
+   "x1": 22765,
+   "z1": 16988,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 26790,
+   "z0": 16927,
+   "x1": 27100,
+   "z1": 16988,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 22710,
+   "z0": 17182,
+   "x1": 23275,
+   "z1": 17243,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 26535,
+   "z0": 17182,
+   "x1": 26845,
+   "z1": 17243,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23217,
+   "z0": 17437,
+   "x1": 23278,
+   "z1": 17498,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 26277,
+   "z0": 17437,
+   "x1": 26338,
+   "z1": 17498,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 24495,
+   "z0": 18202,
+   "x1": 25315,
+   "z1": 18263,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 24747,
+   "z0": 18457,
+   "x1": 24808,
+   "z1": 18518,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6897,
+   "z0": 18715,
+   "x1": 6958,
+   "z1": 19280,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9957,
+   "z0": 18715,
+   "x1": 10018,
+   "z1": 19280,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 19477,
+   "x1": 10015,
+   "z1": 19538,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 31335,
+   "z0": 19735,
+   "x1": 31395,
+   "z1": 20045,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Cottage inside": 53,
+  "Rocks": 21,
+  "Bench": 18,
+  "Woodpile": 16,
+  "Chopping block": 9,
+  "Chimney": 8,
+  "Cottage door": 8,
+  "Cottage wall s.005": 8,
+  "Cottage wall e.003": 7,
+  "Cottage wall s": 7,
+  "Sign arm 2": 7,
+  "Washing 2": 6,
+  "Washing 1": 6,
+  "Cottage wall s.008": 6,
+  "Window sill 0": 6,
+  "Window sill 1": 6,
+  "Mast stay.001": 6,
+  "Cottage wall s.006": 5,
+  "Mast stay": 5,
+  "Cottage wall e.001": 4,
+  "Line pole": 4,
+  "Washing 0": 4,
+  "Cottage wall w": 4,
+  "Cottage wall s.001": 4,
+  "Cottage wall s.003": 4,
+  "Butt hoop.001": 4,
+  "Water butt": 4,
+  "Mast sign": 3,
+  "Corner post.001": 2,
+  "Sign post": 2,
+  "Crow at the drips wing.001": 2,
+  "Crow at the drips wing": 2,
+  "Windsock mast": 2,
+  "Tin bath": 1,
+  "Door frame": 1,
+  "Axe haft": 1
  },
  "bounds": {
   "x0": 1700,

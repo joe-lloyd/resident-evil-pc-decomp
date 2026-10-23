@@ -15,26 +15,26 @@
 // Back up the trail to the ridge, on touch at the yard's north-west corner.
 door_aot_set(0, 3400, 3400, 4250, 850, 0, 15, 48, 4, 0, ROOM_312, 3500, 0, 14400, 1024, UNLOCKED, 1);
 // The cabin door, from the porch steps: inside the door, facing in (-Z).
-door_aot_set(1, 21080, 12325, 1870, 1020, 1, 0, 7, 1, 0, ROOM_314, 6715, 0, 9180, 1024, UNLOCKED, 129);
+door_aot_set(1, 20570, 11815, 2890, 2040, 1, 0, 7, 1, 0, ROOM_314, 6715, 0, 9180, 1024, UNLOCKED, 129);
 // The shed, padlocked: lock 60 (0x80 | 60 = 188) opens with the Small Key.
-door_aot_set(2, 9180, 12410, 1190, 1360, 1, 0, 7, 1, 188, ROOM_316, 4845, 0, 3570, 2048, 61 /* Small Key */, 129);
+door_aot_set(2, 8670, 11900, 2210, 2380, 1, 0, 7, 1, 188, ROOM_316, 4845, 0, 3570, 2048, 61 /* Small Key */, 129);
 // The trail down: the pine blocks it until it is dragged clear.
 // In front of the winch, while the pine is down: the Hex Crank can be used
 // here (item-use bank 9, bit 30 - 27 = 3). Only then: each use spends one of
 // the crank's two, and the pond's sluice needs the other.
 if (ck(FG_COMMON, 205, 1)) {
-    aot_set(3, 24310, 19380, 4930, 1360, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
-    aot_set(4, 19210, 17170, 1700, 2380, SCE_USEITEM, 1, 9, 0, 3, 0, 1, 0);
+    aot_set(3, 23800, 18870, 5950, 2380, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
+    aot_set(4, 18700, 16660, 2720, 3400, SCE_USEITEM, 1, 9, 0, 3, 0, 1, 0);
 } else {
-    door_aot_set(3, 24310, 19380, 4930, 1360, 0, 15, 48, 4, 0, ROOM_317, 10200, 0, 6120, 3072, UNLOCKED, 1);
+    door_aot_set(3, 23800, 18870, 5950, 2380, 0, 15, 48, 4, 0, ROOM_317, 10200, 0, 6120, 3072, UNLOCKED, 1);
 }
 // Checking the winch says what it needs.
-aot_set(5, 19210, 17170, 1700, 2380, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
-aot_set(6, 14450, 14280, 2210, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);   // the truck's open door
-aot_set(7, 9180, 6120, 2720, 1360, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);     // the station sign
-aot_set(8, 26010, 13260, 2210, 2040, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);   // his rifle in the grass
-aot_set(9, 27540, 4420, 1360, 1700, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);    // the smashed window
-aot_set(10, 27540, 9860, 2380, 2040, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);   // drag marks into the trees
+aot_set(5, 18700, 16660, 2720, 3400, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
+aot_set(6, 14025, 13770, 3145, 2040, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);   // the truck's open door
+aot_set(7, 8670, 5610, 3740, 2380, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);     // the station sign
+aot_set(8, 25500, 12750, 3230, 3060, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);   // his rifle in the grass
+aot_set(9, 27030, 3910, 2380, 2720, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);    // the smashed window
+aot_set(10, 27030, 9860, 2890, 2550, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);   // drag marks into the trees
 // The truck's toolbox, in the bed behind the cab, examined from the bed's
 // south side: locked until she carries the ranger's keys (RANGER KEYS, item
 // 57); then the bolt cutters inside (BOLT CUTTERS, item 28), model slot 0 at
@@ -43,9 +43,9 @@ aot_set(10, 27540, 9860, 2380, 2040, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);   
 if (ck(FG_ITEM, 246, 0)) {
     if (item_ck(57)) {
         // Two uses: the depot's padlock and the road gate's chain each spend one.
-        item_aot_set(13, 11050, 15300, 2550, 1190, 28, 2, 0, 255, 116, 54, 8, 248, 184, 71, 0, 0, 246, 129, 0, 0);
+        item_aot_set(13, 10540, 14790, 3485, 2210, 28, 2, 0, 255, 116, 54, 8, 248, 184, 71, 0, 0, 246, 129, 0, 0);
     } else {
-        aot_set(13, 11050, 15300, 2550, 1190, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);   // the toolbox, locked
+        aot_set(13, 10540, 14790, 3485, 2210, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);   // the toolbox, locked
     }
 }
 // The dog comes out of the trees once she has the key: from behind the
@@ -97,7 +97,7 @@ if (ck(FG_COMMON, 205, 1)) {
         // the player-property op's sub-command 7 stands her back up.
         sys_multi(7);
         set(FG_COMMON, 205, 0);
-        door_aot_set(3, 24310, 19380, 4930, 1360, 0, 15, 48, 4, 0, ROOM_317, 10200, 0, 6120, 3072, UNLOCKED, 1);
+        door_aot_set(3, 23800, 18870, 5950, 2380, 0, 15, 48, 4, 0, ROOM_317, 10200, 0, 6120, 3072, UNLOCKED, 1);
         message(136, 255, 0);
     }
 }

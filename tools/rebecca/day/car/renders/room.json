@@ -43,11 +43,59 @@
    "x1": 5780,
    "z1": 4080,
    "name": "Bench.001"
+  },
+  {
+   "shape": "box",
+   "x0": 2562,
+   "z0": 1797,
+   "x1": 2623,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 1797,
+   "x1": 3385,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3837,
+   "z0": 1797,
+   "x1": 3898,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4350,
+   "z0": 1797,
+   "x1": 4915,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 4007,
+   "x1": 5680,
+   "z1": 4068,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Car wall s": 15,
+  "Car wall n.001": 3,
+  "Claw marks": 2,
+  "Car wall n": 1,
+  "Claw marks.001": 1,
+  "Mullion.006": 1
  },
  "bounds": {
   "x0": 1700,

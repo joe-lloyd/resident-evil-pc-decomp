@@ -309,11 +309,510 @@
    "x1": 29325,
    "z1": 24395,
    "name": "Head house inside"
+  },
+  {
+   "shape": "box",
+   "x0": 9705,
+   "z0": 1797,
+   "x1": 10015,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12507,
+   "z0": 1797,
+   "x1": 12568,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12252,
+   "z0": 2052,
+   "x1": 12313,
+   "z1": 2113,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21690,
+   "z0": 1800,
+   "x1": 27355,
+   "z1": 2110,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11997,
+   "z0": 2307,
+   "x1": 12058,
+   "z1": 2368,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21690,
+   "z0": 2307,
+   "x1": 27100,
+   "z1": 2368,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11742,
+   "z0": 2562,
+   "x1": 11803,
+   "z1": 2623,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21945,
+   "z0": 2562,
+   "x1": 27100,
+   "z1": 2623,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 22200,
+   "z0": 2817,
+   "x1": 26845,
+   "z1": 2878,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 22710,
+   "z0": 3072,
+   "x1": 25570,
+   "z1": 3133,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10725,
+   "z0": 3327,
+   "x1": 11035,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 4347,
+   "x1": 9250,
+   "z1": 4408,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12255,
+   "z0": 6642,
+   "x1": 13585,
+   "z1": 6703,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12252,
+   "z0": 6900,
+   "x1": 12313,
+   "z1": 7465,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13527,
+   "z0": 6900,
+   "x1": 13588,
+   "z1": 7465,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2562,
+   "z0": 4095,
+   "x1": 2623,
+   "z1": 7720,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12510,
+   "z0": 7662,
+   "x1": 13330,
+   "z1": 7723,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13017,
+   "z0": 7917,
+   "x1": 13078,
+   "z1": 7978,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13020,
+   "z0": 8172,
+   "x1": 13330,
+   "z1": 8233,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2055,
+   "z0": 7920,
+   "x1": 2620,
+   "z1": 8485,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13272,
+   "z0": 8427,
+   "x1": 13333,
+   "z1": 8488,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3072,
+   "z0": 4605,
+   "x1": 3133,
+   "z1": 8995,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9192,
+   "z0": 4605,
+   "x1": 9253,
+   "z1": 8995,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 9192,
+   "x1": 9250,
+   "z1": 9253,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2562,
+   "z0": 8685,
+   "x1": 2623,
+   "z1": 9505,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4857,
+   "z0": 9702,
+   "x1": 4918,
+   "z1": 9763,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4605,
+   "z0": 9957,
+   "x1": 4915,
+   "z1": 10018,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4602,
+   "z0": 10215,
+   "x1": 4663,
+   "z1": 10525,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4350,
+   "z0": 10722,
+   "x1": 4660,
+   "z1": 10783,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16332,
+   "z0": 11742,
+   "x1": 16393,
+   "z1": 11803,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19392,
+   "z0": 11742,
+   "x1": 19453,
+   "z1": 11803,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19902,
+   "z0": 11742,
+   "x1": 19963,
+   "z1": 11803,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15315,
+   "z0": 11997,
+   "x1": 17155,
+   "z1": 12058,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19392,
+   "z0": 12762,
+   "x1": 19453,
+   "z1": 12823,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19140,
+   "z0": 13020,
+   "x1": 19705,
+   "z1": 13330,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21432,
+   "z0": 13782,
+   "x1": 21493,
+   "z1": 13843,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 26790,
+   "z0": 17352,
+   "x1": 27100,
+   "z1": 17413,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27042,
+   "z0": 17607,
+   "x1": 27103,
+   "z1": 17668,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27045,
+   "z0": 17862,
+   "x1": 27355,
+   "z1": 17923,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27297,
+   "z0": 18117,
+   "x1": 27358,
+   "z1": 18178,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27300,
+   "z0": 18372,
+   "x1": 27610,
+   "z1": 18433,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 22965,
+   "z0": 18627,
+   "x1": 25315,
+   "z1": 18688,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27045,
+   "z0": 18627,
+   "x1": 29905,
+   "z1": 18688,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23220,
+   "z0": 18882,
+   "x1": 25315,
+   "z1": 18943,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27045,
+   "z0": 18882,
+   "x1": 29395,
+   "z1": 18943,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21945,
+   "z0": 19137,
+   "x1": 22255,
+   "z1": 19198,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21690,
+   "z0": 19392,
+   "x1": 22510,
+   "z1": 19453,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21435,
+   "z0": 19647,
+   "x1": 22765,
+   "z1": 19708,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21690,
+   "z0": 19905,
+   "x1": 22510,
+   "z1": 20215,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21435,
+   "z0": 20922,
+   "x1": 22255,
+   "z1": 20983,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21435,
+   "z0": 21180,
+   "x1": 22510,
+   "z1": 21490,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21180,
+   "z0": 21687,
+   "x1": 22510,
+   "z1": 21748,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21945,
+   "z0": 21942,
+   "x1": 22255,
+   "z1": 22003,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23217,
+   "z0": 19140,
+   "x1": 23278,
+   "z1": 24295,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 29337,
+   "z0": 19140,
+   "x1": 29398,
+   "z1": 24295,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23220,
+   "z0": 24492,
+   "x1": 29395,
+   "z1": 24553,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 29847,
+   "z0": 18885,
+   "x1": 29908,
+   "z1": 24805,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Boulders": 120,
+  "Head house inside": 46,
+  "Hut inside": 32,
+  "Head house wall e": 23,
+  "Head house wall n.002": 22,
+  "Crate by the head house": 22,
+  "Hut wall w": 19,
+  "Head house wall n": 15,
+  "Drum by the head house": 14,
+  "Instrument screen": 13,
+  "Hut wall s": 10,
+  "Hut wall e.001": 9,
+  "Hut wall n.001": 8,
+  "Gas bottle": 8,
+  "Hut wall s.002": 8,
+  "Head house door": 8,
+  "Hut door": 7,
+  "Sign board 2": 7,
+  "Head house wall w.001": 7,
+  "Hut wall e.003": 6,
+  "hoop.001": 6,
+  "Head house wall w.003": 6,
+  "Head house wall s": 6,
+  "Hut wall n": 5,
+  "Hut wall e": 5,
+  "Screen door, open": 5,
+  "Crow on the deer": 5,
+  "Pole stay": 4,
+  "Hut wall n.003": 4,
+  "Lift sign": 4,
+  "Head house wall w": 3,
+  "Pole stay.001": 2,
+  "Anemometer pole": 2,
+  "Signpost": 2,
+  "Screen leg": 1,
+  "Screen leg.002": 1,
+  "Crow at the deer wing.001": 1,
+  "Crow at the deer wing": 1,
+  "Crow on the deer wing.001": 1,
+  "Crow on the deer wing": 1,
+  "Crow by the deer wing": 1
  },
  "bounds": {
   "x0": 1700,

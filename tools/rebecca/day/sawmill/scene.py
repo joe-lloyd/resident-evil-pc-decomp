@@ -98,6 +98,10 @@ def ground(x, y):
     """Outside the mill: mud along the walk, the race sunk a metre, the pond
     deep beyond its bank, rising gently into the spruce."""
     n = noise.noise(Vector((x * 0.3, y * 0.3, 4.0)))
+    # Under the mill: down out of sight below its floor. The bank rose up
+    # through the boards inside, and the floor probe walled the mill off.
+    if X0 - 0.3 < x < X1 + 0.3 and Y0 - 0.3 < y < Y1 + 0.3:
+        return -0.1
     d = race_d(x, y)
     if d < RACE_HALF + 0.08:
         return -1.0

@@ -21,8 +21,12 @@ export interface Door {
   readonly arrive: { x: number; z: number; angle: number };
   /** Fires as she walks into it, rather than on the action button. */
   readonly touch: boolean;
-  /** A locked door: the key item it takes and its FG_LOCK flag, raised once it is open. */
-  readonly lock?: { item: number; flag: number };
+  /**
+   * A locked door: the key item it takes and its FG_LOCK flag, raised once it
+   * is open. `use`: the item does not turn by itself as she tries the door
+   * (bolt cutters, a crowbar); she uses it from her case there.
+   */
+  readonly lock?: { item: number; flag: number; use?: boolean };
 }
 
 export interface Pickup {
@@ -67,6 +71,7 @@ function readRoom(slug: Slug): { doors: Door[]; pickups: Pickup[]; boxes: Box[] 
   const doors: Door[] = [];
   const pickups: Pickup[] = [];
   const boxes: Box[] = [];
+  const uses: Zone[] = [];
   const text = readFileSync(path.join(dayDir, slug, 'room.c'), 'utf8');
   // Init procedure only: main's doors are rewrites of the same ones.
   for (const line of text.split('\n')) {
@@ -101,8 +106,15 @@ function readRoom(slug: Slug): { doors: Door[]; pickups: Pickup[]; boxes: Box[] 
       const n = aot.map(Number);
       boxes.push({ room: slug, zone: { x: n[1]!, z: n[2]!, w: n[3]!, d: n[4]! } });
     }
+    if (aot?.[5] === 'SCE_USEITEM') {
+      const n = aot.map(Number);
+      uses.push({ x: n[1]!, z: n[2]!, w: n[3]!, d: n[4]! });
+    }
   }
-  return { doors, pickups, boxes };
+  // A lock with an item-use zone over its door is one she uses the item on.
+  const same = (a: Zone, b: Zone) => a.x === b.x && a.z === b.z && a.w === b.w && a.d === b.d;
+  const marked = doors.map((d) => (d.lock && uses.some((u) => same(u, d.zone)) ? { ...d, lock: { ...d.lock, use: true } } : d));
+  return { doors: marked, pickups, boxes };
 }
 
 export interface World {

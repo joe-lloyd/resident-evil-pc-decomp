@@ -130,11 +130,245 @@
    "x1": 23862,
    "z1": 25494,
    "name": "Stump 2"
+  },
+  {
+   "shape": "box",
+   "x0": 28065,
+   "z0": 9365,
+   "x1": 28375,
+   "z1": 9675,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 11402,
+   "x1": 7720,
+   "z1": 11463,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9450,
+   "z0": 11402,
+   "x1": 9760,
+   "z1": 11463,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 17355,
+   "z0": 11402,
+   "x1": 17665,
+   "z1": 11463,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19650,
+   "z0": 11402,
+   "x1": 19960,
+   "z1": 11463,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6645,
+   "z0": 11657,
+   "x1": 10525,
+   "z1": 11718,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11487,
+   "z0": 11657,
+   "x1": 11548,
+   "z1": 11718,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16590,
+   "z0": 11657,
+   "x1": 20725,
+   "z1": 11718,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 21690,
+   "z0": 11657,
+   "x1": 28375,
+   "z1": 11718,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6642,
+   "z0": 11915,
+   "x1": 6703,
+   "z1": 12480,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6642,
+   "z0": 15230,
+   "x1": 6703,
+   "z1": 16050,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 28317,
+   "z0": 11915,
+   "x1": 28378,
+   "z1": 16050,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6645,
+   "z0": 16247,
+   "x1": 10525,
+   "z1": 16308,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16590,
+   "z0": 16247,
+   "x1": 18430,
+   "z1": 16308,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 18885,
+   "z0": 16247,
+   "x1": 20725,
+   "z1": 16308,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 22710,
+   "z0": 16247,
+   "x1": 23785,
+   "z1": 16308,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 24237,
+   "z0": 16247,
+   "x1": 24298,
+   "z1": 16308,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 24750,
+   "z0": 16247,
+   "x1": 25315,
+   "z1": 16308,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 25770,
+   "z0": 16247,
+   "x1": 26590,
+   "z1": 16308,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27045,
+   "z0": 16247,
+   "x1": 28375,
+   "z1": 16308,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 16505,
+   "x1": 24295,
+   "z1": 16815,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23982,
+   "z0": 17012,
+   "x1": 24043,
+   "z1": 17073,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23730,
+   "z0": 17270,
+   "x1": 24040,
+   "z1": 17580,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23727,
+   "z0": 17777,
+   "x1": 23788,
+   "z1": 17838,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23475,
+   "z0": 18032,
+   "x1": 23785,
+   "z1": 18093,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Bumper": 21,
+  "Front fender": 14,
+  "Driver's door": 13,
+  "Front fender.001": 11,
+  "Dual wheel tread.013": 8,
+  "Dual wheel tread.005": 7,
+  "Dual wheel tyre.015": 7,
+  "Dual wheel tyre.011": 7,
+  "Dual wheel tyre.003": 7,
+  "Floor": 6,
+  "Dual wheel tyre.007": 6,
+  "Dual wheel tyre.009": 5,
+  "Dual wheel tyre.001": 5,
+  "Step": 5,
+  "Step.001": 5,
+  "Camp sign post": 4,
+  "Dual wheel tread.009": 3,
+  "Dual wheel tread.001": 3,
+  "Dual wheel tread.014": 3,
+  "Dual wheel hub.026": 2,
+  "Dual wheel hub.018": 2,
+  "Dual wheel hub.010": 2,
+  "Dual wheel hub.002": 2,
+  "Dual wheel tread.012": 2,
+  "Dual wheel tread.015": 2,
+  "Dual wheel tread.007": 2,
+  "Dual wheel tyre.013": 1,
+  "Binder chain": 1,
+  "Dual wheel tyre.005": 1,
+  "Bunk": 1,
+  "Dual wheel tread.011": 1,
+  "Dual wheel tread.003": 1
  },
  "bounds": {
   "x0": 1700,

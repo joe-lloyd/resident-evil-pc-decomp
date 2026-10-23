@@ -91,6 +91,11 @@ rules:
 3. Check she can be seen everywhere she can walk:
    `node tools/rebecca/day/coverage.ts <slug> /tmp/reb-preview/<slug>`. At
    most 5% lost. Move or add a camera if not.
+   Then check her floor against the pictures, after `day/scripts.ts`:
+   `node tools/rebecca/day/walkable.ts <slug>`. It lists floor a camera
+   draws a wall or a prop through her on, floor with nothing under it,
+   doors she can walk past, arrivals inside a wall, and zones she cannot
+   reach. Fix every arrival and zone it lists.
 4. Render it fully: `node tools/rebecca/day/render.ts <slug>` (a few minutes).
    This writes `day/<slug>/renders/`.
 5. After copying renders back from jellybingus, save them to Forgejo with
@@ -104,10 +109,20 @@ rules:
 - The walkable floor is `kit.Room(bounds=(x0, y0, x1, y1))`. Keep every
   coordinate of the floor between 0.6 and 19 m (game positions are signed
   16-bit at 1700 units a metre).
-- Tag what she can't walk through with `reb.wall(ob)`. Its footprint
-  becomes a box (or a circle with `reb.wall(ob, "circle")`). Tag what can
-  stand between her and a camera with `reb.mask(ob)`: a table edge, a post,
-  a doorframe nearer the lens.
+- She cannot walk where the scene draws something. On export the floor
+  probe (`reb.floor_probe`) walls off every 15 cm cell of the floor that
+  rendered geometry stands on between her knee (35 cm) and her head, and
+  every cell with no floor under it. It ignores grass, ferns, needles and
+  leaves (`reb.mat_cards`), cobwebs, silk and wading water, and it keeps
+  open what a change of state clears (`room.state`). room.json lists the
+  cells each object took under `probe`.
+- Tag with `reb.wall(ob)` what blocks her but is not drawn, such as a
+  hidden footprint. Its footprint becomes a box, or a circle with
+  `reb.wall(ob, "circle")`. Tag what can stand between her and a camera
+  with `reb.mask(ob)`: a table edge, a post, a doorframe nearer the lens.
+- Leave her room to work things: she stands her radius (22 cm) off
+  anything, and needs a gap of 80 cm to pass between two things. A chair
+  in front of a switch shuts the switch off.
 - `room.void(rect)` marks floor inside the bounds that isn't there: a drop,
   deep water.
 - **Doors.** `room.door(to, zone, arrive, face)`:
