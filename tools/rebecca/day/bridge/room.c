@@ -12,10 +12,10 @@
 // Z 6120, well clear of it: a touch door fires when the spot 600 ahead of her
 // is inside, and the walk planner backs up to get round things.
 door_aot_set(0, 8500, 3400, 3400, 680, 0, 15, 48, 4, 0, ROOM_315, 26690, 0, 18530, 1024, UNLOCKED, 1);
-aot_set(1, 5950, 27880, 8500, 1020, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);   // the valley trail sign
-aot_set(2, 8500, 10540, 3400, 1360, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);   // the bridge's near end
-aot_set(3, 3400, 10880, 5100, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);   // the drop, west of it
-aot_set(4, 11900, 10880, 5100, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);  // the drop, east of it
+aot_set(1, 5440, 27370, 9520, 2040, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);   // the valley trail sign
+aot_set(2, 8500, 10030, 3400, 1870, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);   // the bridge's near end
+aot_set(3, 2890, 10880, 5610, 1530, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);   // the drop, west of it
+aot_set(4, 11900, 10880, 5610, 1530, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);  // the drop, east of it
 // Adders in the long grass of the near bank.
 enemy(10 /* Adder */, 1, 255, 1, 1, 0, 0, 1024, 0, 0, 5100, 0, 8500, 0, 0, 0, 0);
 enemy(10 /* Adder */, 1, 255, 1, 1, 0, 0, 3072, 0, 0, 14450, 0, 6800, 1, 0, 0, 0);

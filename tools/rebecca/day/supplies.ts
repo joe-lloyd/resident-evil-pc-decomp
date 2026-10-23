@@ -68,6 +68,10 @@ export function supplyModels(slug: string): { from: string; index: number }[] {
 
 const ZONE = 1200;
 const APART = 1700;
+/** A pickup lies this near a wall at most: she stands her radius (380) off the wall and reaches it. */
+export const WALL_GAP = 450;
+/** And this near a door's zone: the door comes first in the room's table and keeps its own. */
+const DOOR_GAP = 600;
 
 /**
  * Where each supply lies: free floor against a wall or the floor's edge,
@@ -78,7 +82,7 @@ export function spots(floor: Floor, count: number, avoid: readonly Floor['bounds
   const b = floor.bounds;
   const clear = (p: { x: number; z: number }) =>
     avoid.every((r) => Math.max(r.x0 - p.x, p.x - r.x1, r.z0 - p.z, p.z - r.z1) >= ZONE / 2 + 200);
-  const free = freeFloor(floor).filter(clear);
+  const free = freeFloor(floor, WALL_GAP, DOOR_GAP).filter(clear);
   const edge = (p: { x: number; z: number }) =>
     Math.min(p.x - b.x0, b.x1 - p.x, p.z - b.z0, b.z1 - p.z, ...floor.walls.map((w) => Math.hypot(Math.max(w.x0 - p.x, 0, p.x - w.x1), Math.max(w.z0 - p.z, 0, p.z - w.z1))));
   const arrivals = floor.doors.map((d) => d.arrive);

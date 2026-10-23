@@ -4,7 +4,7 @@
 // on the floor in RE1's own folded-map model, each kept once taken by an
 // FG_ITEM flag of its own. scripts.ts writes them into the kit rooms; the
 // cabin's is in its hand-written room.c.
-import { spots } from '../day/supplies.ts';
+import { spots, WALL_GAP } from '../day/supplies.ts';
 import { freeFloor } from '../day/foes.ts';
 import type { Floor } from '../day/foes.ts';
 import type { PickupModel } from '../items/items.ts';
@@ -72,7 +72,8 @@ export function mapLines(slug: string, floor: Floor, avoid: readonly Floor['boun
     return free / all;
   };
   const clear = spots(floor, 1, avoid)[0];
-  const tight = freeFloor(floor).sort((a, b) => own(b, SMALL) - own(a, SMALL))[0];
+  // Up to a door's zone, too: the door comes first in the table and keeps its own.
+  const tight = freeFloor(floor, WALL_GAP, SMALL / 2).sort((a, b) => own(b, SMALL) - own(a, SMALL))[0];
   const [p, size] = clear ? [clear, ZONE] : tight && own(tight, SMALL) >= 0.25 ? [tight, SMALL] : [undefined, 0];
   if (!p) throw new Error(`${slug}: no free floor for the ${m.name}`);
   return [

@@ -1,8 +1,9 @@
 0: \n...
-1: \nThe fuel ledger. Gallons\nin, gallons out, signed\nevery day.\p{0}\nThe last entries are a\nmess. Then they stop.
-2: \nThe dirt's dug out under\nthe wire, the wire bent\nup.\p{0}\nThere's blood on it.\nSomething got in here.
-3: \nA snake's skin, shed.\nAnother by the tank.\p{0}\nAdders. They like the warm\ndrums.
-4: \nThe lean-to. Oil, grease,\nrags.
-5: \nDiesel, dripping from the\nnozzle. The hose reel is\nchained, and padlocked.\p{0}\nThe hand pump still works.\nI need something to carry\nit in.
-6: \nThe diesel tank. The hand\npump drips.
-7: \nI fill the jerrycan at the\nhand pump.\p{0}\nIt's heavy now.
+1: \nThe gate is padlocked from\noutside.
+2: \nThe fuel ledger. Gallons\nin, gallons out, signed\nevery day.\p{0}\nThe last entries are a\nmess. Then they stop.
+3: \nThe dirt's dug out under\nthe wire, the wire bent\nup.\p{0}\nThere's blood on it.\nSomething got in here.
+4: \nA snake's skin, shed.\nAnother by the tank.\p{0}\nAdders. They like the warm\ndrums.
+5: \nThe lean-to. Oil, grease,\nrags.
+6: \nDiesel, dripping from the\nnozzle. The hose reel is\nchained, and padlocked.\p{0}\nThe hand pump still works.\nI need something to carry\nit in.
+7: \nThe diesel tank. The hand\npump drips.
+8: \nI fill the jerrycan at the\nhand pump.\p{0}\nIt's heavy now.

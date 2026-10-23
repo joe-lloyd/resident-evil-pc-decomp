@@ -24,6 +24,7 @@ import { CUES } from '../plan/music.ts';
 import { musicSwitches, musicTable, type StateWrite } from '../music/table.ts';
 import { compileScene, type Compiled } from './cutscene.ts';
 import { CUT_FLAGS, scenesIn } from './cutscenes.ts';
+import { walkableBy, type RoomJson } from './walkable.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
@@ -53,6 +54,32 @@ interface KitJson {
   voids?: Zone[];
   items?: ItemSpot[];
   spots?: { step: string; zone: Zone }[];
+}
+
+/**
+ * Where she arrives in `slug`: `at` as the scene gave it, or, where the
+ * room's walls (with the floor probe's, blender reb.py) hold that spot, the
+ * nearest spot they leave her, clear of the room's doors: a door that put
+ * her inside a wall left her stuck there, or pushed her through it.
+ */
+export function onFloor(slug: string, at: Arrive): Arrive {
+  const file = path.join(here, slug, 'renders', 'room.json');
+  if (!existsSync(file)) return at;
+  const json = JSON.parse(readFileSync(file, 'utf8')) as RoomJson;
+  const can = walkableBy(json);
+  if (can(at.x, at.z)) return at;
+  const zones = (json.doors ?? []).map((d) => d.zone);
+  const clear = (x: number, z: number) => can(x, z) && !zones.some((r) => x > r.x0 - 400 && x < r.x1 + 400 && z > r.z0 - 400 && z < r.z1 + 400);
+  for (let r = 85; r <= 1700; r += 85) {
+    let best: Arrive | undefined;
+    for (let k = 0; k < 32; k++) {
+      const x = Math.round(at.x + r * Math.cos((k / 32) * 2 * Math.PI));
+      const z = Math.round(at.z + r * Math.sin((k / 32) * 2 * Math.PI));
+      if (clear(x, z) && !best) best = { x, z, angle: at.angle };
+    }
+    if (best) return best;
+  }
+  throw new Error(`${slug}: no floor within 1.7 m of the arrival at (${at.x}, ${at.z})`);
 }
 
 /** Where she stands in a hand-written room on arriving from a kit room, by that room's slug. */
@@ -219,6 +246,36 @@ const lockFor = (from: string, to: string) => LOCKS.get(`${from}>${to}`);
 /** The lock flag the plan's step raises by unlocking its way, if it is a key item on a lock. */
 export const lockFlag = (step: string): number | undefined => [...LOCKS.values()].find((l) => l.step === step)?.flag;
 
+/**
+ * The locks she opens by using a tool on them, not with a key: on the side
+ * the lock is on, the way stays shut until she uses the item from her case
+ * there (a key turns as soon as she tries the door, RE1's own way, but bolt
+ * cutters and a crowbar do not work by themselves), and from the far side it
+ * stays shut until she has. What she says before, on doing it, and from the
+ * far side.
+ */
+const USE_LOCKS: Record<string, { look: string; done: string; behind: string }> = {
+  'cut-depot': {
+    look: "The padlock won't give.\nBolt cutters would go through the shackle.",
+    done: 'The cutters bite through the shackle.\nThe padlock drops, and the gate swings free.',
+    behind: 'The gate is padlocked from outside.',
+  },
+  'cut-chain': {
+    look: 'The chain holds the gate shut.\nBolt cutters would go through it.',
+    done: 'I set the jaws on a link and lean on the handles.\nThe chain snaps and slides off the gate.',
+    behind: 'The gate is chained shut from the road side.',
+  },
+  'pry-lodge': {
+    look: "The hasp's only screwed into the wood.\nI could lever it off.",
+    done: 'I get the crowbar under the hasp and heave.\nThe screws tear out of the frame.',
+    behind: "It's padlocked from outside.",
+  },
+};
+const useLock = (from: string, to: string) => {
+  const lock = lockFor(from, to);
+  return lock && USE_LOCKS[lock.step] ? { ...lock, ...USE_LOCKS[lock.step]! } : undefined;
+};
+
 /** The door record's animation and lock bytes for a door from one room to another. */
 function doorAnim(from: string, to: string, walk: boolean): string {
   const pair = [from, to].sort().join('|');
@@ -265,6 +322,50 @@ function readKit(slug: string): KitJson | undefined {
   const json = JSON.parse(readFileSync(file, 'utf8')) as KitJson;
   if (json.entry && !ENTRY_THOUGHT_ALLOWLIST[slug]) throw new Error(`${slug}: entry thought is not allowed; use a check or cutscene`);
   return json.doors ? json : undefined;
+}
+
+/**
+ * How much further than the scene drew it an action zone reaches on every
+ * side (30 cm): the scenes draw a zone round the thing itself, and RE1's
+ * own rooms let her set one off from a natural step or two away. The action
+ * button probes 600 units in front of her (check_action_object), and she
+ * stands her radius off whatever she faces, so a zone drawn tight round a
+ * thing on a table or against a wall only worked from one spot.
+ */
+export const GROW = 510;
+
+/**
+ * Every zone the action button sets off, grown by GROW on each side but never
+ * more than half way to another zone on that side, so where two things lie
+ * close together each still has its own: the doors that open (not the walks
+ * she leaves by on touch, which must not reach for her, and which nothing
+ * grows into), the checks and the spots.
+ */
+export function generous<K extends { doors?: { zone: Zone }[]; checks?: { zone: Zone }[]; spots?: { zone: Zone }[] }>(kit: K, touches: (d: NonNullable<K['doors']>[number]) => boolean): K {
+  const doors = kit.doors ?? [];
+  const zones = [...doors.filter((d) => !touches(d)), ...(kit.checks ?? []), ...(kit.spots ?? [])].map((z) => z.zone);
+  const fixed = doors.filter(touches).map((d) => d.zone);
+  const grow = (z: Zone): Zone => {
+    // How far one side of z may move out: GROW, or half the gap to a zone
+    // on that side of its middle (all of the gap to a touch zone), and not
+    // at all toward a zone it already meets.
+    const reach = (gapTo: (o: Zone) => number, ahead: (o: Zone) => boolean) =>
+      Math.max(0, Math.min(GROW, ...zones.filter((o) => o !== z && ahead(o)).map((o) => Math.floor(gapTo(o) / 2)), ...fixed.filter(ahead).map(gapTo)));
+    const alongZ = (o: Zone) => o.z1 > z.z0 - GROW && o.z0 < z.z1 + GROW;
+    const alongX = (o: Zone) => o.x1 > z.x0 - GROW && o.x0 < z.x1 + GROW;
+    return {
+      x0: Math.max(0, z.x0 - reach((o) => z.x0 - o.x1, (o) => alongZ(o) && o.x0 + o.x1 < z.x0 + z.x1)),
+      x1: z.x1 + reach((o) => o.x0 - z.x1, (o) => alongZ(o) && o.x0 + o.x1 > z.x0 + z.x1),
+      z0: Math.max(0, z.z0 - reach((o) => z.z0 - o.z1, (o) => alongX(o) && o.z0 + o.z1 < z.z0 + z.z1)),
+      z1: z.z1 + reach((o) => o.z0 - z.z1, (o) => alongX(o) && o.z0 + o.z1 > z.z0 + z.z1),
+    };
+  };
+  return {
+    ...kit,
+    doors: kit.doors?.map((d) => (touches(d) ? d : { ...d, zone: grow(d.zone) })),
+    checks: kit.checks?.map((c) => ({ ...c, zone: grow(c.zone) })),
+    spots: kit.spots?.map((sp) => ({ ...sp, zone: grow(sp.zone) })),
+  };
 }
 
 /** Wrap a page's words to LINE characters, and spill past PAGE_LINES onto more pages. */
@@ -369,8 +470,19 @@ function main(): void {
   const killFlags = [...KILL_FLAGS];
   const itemFlags = [...ITEM_FLAGS];
   const keyFlags = [...KEY_ITEM_FLAGS];
-  for (const [slug, kit] of kits) {
+  for (const [slug, drawn] of kits) {
     const spec = bySlug.get(slug)!;
+    // Between two outdoor rooms she walks the dark path and leaves on touch,
+    // unless the scene asks for a door that opens; into or out of a
+    // building a door opens, with the action button.
+    const walks = (d: KitDoor) => {
+      const target = bySlug.get(d.to);
+      return d.walk !== false && !isInside(spec) && !GAME_ROOMS[d.to] && !(target && isInside(target));
+    };
+    // A locked way, or a gate the scene shuts (touch=False), opens with the
+    // action button even between outdoor rooms.
+    const touches = (d: KitDoor) => walks(d) && d.touch !== false && !lockFor(slug, d.to);
+    const kit = generous(drawn, touches);
     const lines: string[] = [
       `// ${slug} (${roomName(spec).slice(5)}), written by day/scripts.ts from day/${slug}/scene.py: edit the scene, not this file.`,
       '// init procedure 0',
@@ -383,26 +495,48 @@ function main(): void {
     const spotOf = (step: string) => kit.spots!.find((sp) => sp.step === step)!.zone;
     /** The door an event opens, to write again the moment it happens. */
     const reopen = new Map<string, string>();
+    /** The tool locks on this side of the room's doors, worked in main. */
+    const toolUses: { flag: number; item: number; door: string; done: number; step: string }[] = [];
     for (const d of kit.doors ?? []) {
       const game = GAME_ROOMS[d.to];
       const target = bySlug.get(d.to) ?? (game && { slug: d.to, stage: game.stage, room: game.room });
-      const back = kits.get(d.to)?.doors?.find((b) => b.to === slug)?.arrive ?? BUILT_ARRIVALS[d.to]?.[slug] ?? game?.arrive;
+      const drawnBack = kits.get(d.to)?.doors?.find((b) => b.to === slug)?.arrive ?? BUILT_ARRIVALS[d.to]?.[slug] ?? game?.arrive;
+      const back = drawnBack && (game ? drawnBack : onFloor(d.to, drawnBack));
       if (!target || !back) {
         lines.push(`// To ${d.to}: not built yet.`);
         continue;
       }
-      // Between two outdoor rooms she walks the dark path and leaves on touch,
-      // unless the scene asks for a door that opens; into or out of a
-      // building a door opens, with the action button.
-      const walk = d.walk !== false && !isInside(spec) && !game && !isInside(target as DayRoom);
+      const walk = walks(d);
       lines.push(`// To ${d.to}.`);
-      // A locked way, or a gate the scene shuts (touch=False), opens with the
-      // action button even between outdoor rooms.
-      const touch = walk && d.touch !== false && !lockFor(slug, d.to);
+      const touch = touches(d);
       const door = `door_aot_set(${id}, ${size(d.zone)}, ${doorAnim(slug, d.to, walk)}, ${roomName(target)}, ${back.x}, 0, ${back.z}, ${back.angle}, ${doorKey(slug, d.to)}, ${touch ? TOUCH : OPEN});`;
       // A way an event opens, here or from another room: what blocks it until the event's flag is set.
       const gate = EVENTS.find((e) => e.opens?.to === d.to && (e.opens.from ?? e.room) === slug && kits.get(e.room)?.spots?.some((sp) => sp.step === e.step));
-      if (gate?.opens) {
+      // A lock she opens with a tool: shut until she uses it here (USE_LOCKS),
+      // and from the far side until she has.
+      const tool = useLock(slug, d.to);
+      const far = useLock(d.to, slug);
+      if (tool) {
+        const item = KEY_ITEMS.find((k) => k.id === tool.item)!;
+        const useId = id + 1;
+        const zone = size(d.zone);
+        const arm = `aot_set(${useId}, ${zone}, SCE_USEITEM, 1, 9, 0, ${tool.item - 27}, 0, 1, 0);   // the ${item.name.toLowerCase()} can be used here`;
+        lines.push(
+          `// Shut until she uses the ${item.name.toLowerCase()} on it: FG_LOCK ${tool.flag} once she has.`,
+          `if (ck(FG_LOCK, ${tool.flag}, 1)) {`,
+          `    aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${say(tool.look)}, 0, 255, 0, 0, 0);`,
+          `    ${arm}`,
+          '} else {',
+          `    ${door}`,
+          '}',
+        );
+        toolUses.push({ flag: tool.flag, item: tool.item, door, done: say(tool.done), step: tool.step });
+        id += 2;
+        continue;
+      }
+      if (far) {
+        lines.push(`// Shut from this side until she opens it from the other (FG_LOCK ${far.flag}).`, `if (ck(FG_LOCK, ${far.flag}, 1)) {`, `    aot_set(${id}, ${size(d.zone)}, SCE_MESSAGE, 129, ${say(far.behind)}, 0, 255, 0, 0, 0);`, '} else {', `    ${door}`, '}');
+      } else if (gate?.opens) {
         const f = EVENT_FLAGS.get(gate.step)!;
         lines.push(`if (ck(FG_COMMON, ${f}, 1)) {`, `    aot_set(${id}, ${size(d.zone)}, SCE_MESSAGE, 129, ${say(gate.opens.blocked)}, 0, 255, 0, 0, 0);`, '} else {', `    ${door}`, '}');
         if (gate.room === slug) reopen.set(gate.step, door);
@@ -425,12 +559,14 @@ function main(): void {
     // the checks in the table, so where its zone meets one it is the map the
     // action button takes; clear of the doors, the checks and the spots as
     // far as the floor allows. Its model is after the supplies' (rooms.ts).
-    const floor: Floor = { bounds: kit.bounds, walls: kit.walls, voids: kit.voids, doors: (kit.doors ?? []).map((d) => ({ zone: d.zone, arrive: d.arrive })) };
+    // Things are placed clear of the zones as the scene drew them, not as
+    // generous() grew them.
+    const floor: Floor = { bounds: kit.bounds, walls: kit.walls, voids: kit.voids, doors: (drawn.doors ?? []).map((d) => ({ zone: d.zone, arrive: d.arrive })) };
     const others = [
-      ...(kit.doors ?? []).map((d) => d.zone),
+      ...(drawn.doors ?? []).map((d) => d.zone),
       ...(kit.saves ? [kit.saves.typewriter, kit.saves.box] : []),
-      ...(kit.checks ?? []).map((c) => c.zone),
-      ...(kit.spots ?? []).map((sp) => sp.zone),
+      ...(drawn.checks ?? []).map((c) => c.zone),
+      ...(drawn.spots ?? []).map((sp) => sp.zone),
       ...(kit.items ?? []).map((it) => ({ x0: it.x - 900, z0: it.z - 900, x1: it.x + 900, z1: it.z + 900 })),
     ];
     const mapLine = mapLines(slug, floor, others, id, supplyModels(slug).length);
@@ -448,6 +584,12 @@ function main(): void {
     const specSlots = supplyModels(slug).length + mapModels(slug).length;
     lines.push(...keyItemLines(kit.items ?? [], keyFlags, id, specSlots));
     id += kit.items?.length ?? 0;
+    // The supplies, before the checks too: generous() grows a check toward
+    // them, and a pickup comes first where they meet, while it lies there.
+    // They keep off the map's floor: a wall to them.
+    const mapWall = mapZone ? [{ ...mapZone, shape: 'box' as const }] : [];
+    lines.push(...supplyLines(slug, { ...floor, walls: [...floor.walls, ...mapWall] }, itemFlags, id));
+    id += SUPPLIES[slug]?.length ?? 0;
     // The room's cutscenes (day/cutscenes.ts). One a check starts takes that
     // check's room action, and writes it itself.
     const scenes = scenesIn(slug);
@@ -479,10 +621,6 @@ function main(): void {
     const calm = scenes.filter((sc) => sc.trigger.on === 'enter' || sc.trigger.on === 'zone').map((sc) => `ck(FG_COMMON, ${CUT_FLAGS.get(sc.id)}, 0)`);
     const foes = foeLines(slug, floor, killFlags);
     lines.push(...(calm.length && foes.length ? [`if (${calm.join(' && ')}) {`, ...foes.map((l) => `    ${l}`), '}'] : foes));
-    // Supplies keep off the map's floor: a wall to them.
-    const mapWall = mapZone ? [{ ...mapZone, shape: 'box' as const }] : [];
-    lines.push(...supplyLines(slug, { ...floor, walls: [...floor.walls, ...mapWall] }, itemFlags, id));
-    id += SUPPLIES[slug]?.length ?? 0;
     // The events (day/events.ts): their zones now, their working in main.
     const main: string[] = [];
     // FG_ROOM bits: an action pressed, or an item used and its line still to
@@ -577,6 +715,31 @@ function main(): void {
         bit++;
       }
     }
+    // A tool used on a lock: as with an event's item (above), her line waits
+    // a second for the status screen to close. The way opens at once. The
+    // item leaves her case once every lock it opens is open.
+    for (const t of toolUses) {
+      const pending = bit++;
+      const others = [...LOCKS.values()].filter((l) => l.item === t.item && l.flag !== t.flag && USE_LOCKS[l.step]);
+      const spent = others.map((l) => `ck(FG_LOCK, ${l.flag}, 0)`).join(' && ');
+      const remove = [`if (item_ck(${t.item})) {`, `    remove_item(${t.item});`, '}'];
+      main.push(
+        `if (ck(FG_LOCK, ${t.flag}, 1)) {`,
+        `    if (ck(FG_ROOM, ${pending}, 1) && testitem(${t.item})) {`,
+        `        set(FG_ROOM, ${pending}, 0);`,
+        '        setw(4, 0, 0);',
+        '    }',
+        `    if (ck(FG_ROOM, ${pending}, 0) && cmpw(0, 4, 1, 0)) {`,
+        `        set(FG_ROOM, ${pending}, 1);`,
+        `        set(FG_LOCK, ${t.flag}, 0);`,
+        ...(spent ? [`        if (${spent}) {`, ...remove.map((l) => `            ${l}`), '        }'] : remove.map((l) => `        ${l}`)),
+        `        ${t.door}`,
+        ...music.step(t.step, slug).map((l) => `        ${l}`),
+        `        message(${t.done}, 255, 0);`,
+        '    }',
+        '}',
+      );
+    }
     const compiled: Compiled[] = scenes.map((sc, n) =>
       compileScene(sc, n, CUT_FLAGS.get(sc.id)!, { say, check: sceneChecks.get(sc.id), itemAction: (step) => keyActions.get(step), freeAction: () => id++, freeBit: () => bit++, arrival: (from) => kit.doors?.find((d) => d.to === from)?.arrive, floor }),
     );
@@ -616,7 +779,8 @@ function main(): void {
     const lines = [begin];
     for (const d of doors) {
       const target = bySlug.get(d.to)!;
-      const arrive = kits.get(d.to)?.doors?.find((b) => b.to === slug)?.arrive;
+      const drawn = kits.get(d.to)?.doors?.find((b) => b.to === slug)?.arrive;
+      const arrive = drawn && onFloor(d.to, drawn);
       if (!arrive) {
         lines.push(`// To ${d.to}: not built yet.`);
         continue;

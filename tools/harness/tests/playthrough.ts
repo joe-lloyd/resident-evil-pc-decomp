@@ -570,6 +570,16 @@ async function work(p: Player, g: Goal, reached: Set<string>): Promise<void> {
     }
     case 'unlock': {
       const d = world.doors.find((x) => x.from === g.from && x.to === g.to)!;
+      // Bolt cutters and a crowbar do not work by themselves: she uses them at the lock.
+      if (d.lock?.use) {
+        for (let i = 0; i < 3 && !done(s, g, reached); i++) {
+          s = await approach(link, d.zone);
+          if (!has(s, d.lock.item)) throw new StuckError(`${g.id} needs item ${d.lock.item}, and she has none`, s);
+          await useItem(link, d.lock.item);
+          await link.frames(90);
+          s = await settle(link);
+        }
+      }
       await p.through(d);
       s = await link.state();
       break;

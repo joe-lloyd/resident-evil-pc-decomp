@@ -1,13 +1,13 @@
 // gallery (51F), written by day/scripts.ts from day/gallery/scene.py: edit the scene, not this file.
 // init procedure 0
 // To junction.
-door_aot_set(0, 1700, 6120, 1020, 4760, 0, 1, 8, 0, 0, ROOM_51E, 10200, 0, 11560, 1024, UNLOCKED, 193);
+door_aot_set(0, 1190, 5610, 2040, 5780, 0, 1, 8, 0, 0, ROOM_51E, 10200, 0, 11560, 1024, UNLOCKED, 193);
 if (ck(FG_ITEM, 167, 0)) {  // operator key (op-key)
-    item_aot_set(1, 11810, 6710, 1200, 1200, 56, 1, 0, 255, 122, 48, 126, 249, 142, 28, 0, 0, 167, 129, 0, 0);
+    item_aot_set(1, 11660, 6560, 1500, 1500, 56, 1, 0, 255, 122, 48, 126, 249, 142, 28, 0, 0, 167, 129, 0, 0);
 }
-aot_set(2, 14790, 7990, 3740, 2550, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
-aot_set(3, 10710, 6630, 3060, 2380, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
-aot_set(4, 17340, 7820, 6460, 1020, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
+aot_set(2, 14280, 7990, 4250, 3060, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
+aot_set(3, 10200, 6120, 4080, 3400, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
+aot_set(4, 17340, 7310, 6970, 1530, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
 if (ck(FG_COMMON, 118, 0) && ck(FG_COMMON, 119, 0)) {
     enemy(17, 0, 221, 1, 2, 0, 0, 1917, 0, 0, 24500, 0, 12600, 0, 0, 0, 0);  // a zombie
 }
