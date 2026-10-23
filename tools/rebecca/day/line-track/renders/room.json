@@ -69,195 +69,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": -4420,
-   "z0": 8500,
-   "x1": 1700,
-   "z1": 8874,
-   "name": "Switch house wall n"
-  },
-  {
-   "shape": "box",
-   "x0": -4420,
-   "z0": 13906,
-   "x1": -2380,
-   "z1": 14280,
-   "name": "Switch house wall s"
-  },
-  {
-   "shape": "box",
-   "x0": -2380,
-   "z0": 13906,
-   "x1": -1020,
-   "z1": 14280,
-   "name": "Switch house wall s.001"
-  },
-  {
-   "shape": "box",
-   "x0": -2380,
-   "z0": 13906,
-   "x1": -1020,
-   "z1": 14280,
-   "name": "Switch house wall s.002"
-  },
-  {
-   "shape": "box",
-   "x0": -1020,
-   "z0": 13906,
-   "x1": 1700,
-   "z1": 14280,
-   "name": "Switch house wall s.003"
-  },
-  {
-   "shape": "box",
-   "x0": -4420,
-   "z0": 8500,
-   "x1": -4046,
-   "z1": 14280,
-   "name": "Switch house wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 1326,
-   "z0": 8500,
-   "x1": 1700,
-   "z1": 10540,
-   "name": "Switch house wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 1326,
-   "z0": 10540,
-   "x1": 1700,
-   "z1": 12070,
-   "name": "Switch house wall e.001"
-  },
-  {
-   "shape": "box",
-   "x0": 1326,
-   "z0": 12070,
-   "x1": 1700,
-   "z1": 14280,
-   "name": "Switch house wall e.002"
-  },
-  {
-   "shape": "box",
-   "x0": -5440,
-   "z0": 680,
-   "x1": 2040,
-   "z1": 884,
-   "name": "Generator hut wall n"
-  },
-  {
-   "shape": "box",
-   "x0": -5440,
-   "z0": 7276,
-   "x1": 2040,
-   "z1": 7480,
-   "name": "Generator hut wall s"
-  },
-  {
-   "shape": "box",
-   "x0": -5440,
-   "z0": 680,
-   "x1": -5236,
-   "z1": 7480,
-   "name": "Generator hut wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 1836,
-   "z0": 680,
-   "x1": 2040,
-   "z1": 7480,
-   "name": "Generator hut wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 8542,
-   "z0": 14832,
-   "x1": 9138,
-   "z1": 15427,
-   "name": "Pylon leg footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 12962,
-   "z0": 14832,
-   "x1": 13558,
-   "z1": 15427,
-   "name": "Pylon leg footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 23842,
-   "z0": 14832,
-   "x1": 24438,
-   "z1": 15427,
-   "name": "Pylon leg footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 28262,
-   "z0": 14832,
-   "x1": 28857,
-   "z1": 15427,
-   "name": "Pylon leg footprint.003"
-  },
-  {
-   "shape": "box",
-   "x0": 17425,
-   "z0": 14620,
-   "x1": 20655,
-   "z1": 16320,
-   "name": "Deer footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 0,
-   "z0": 4505,
-   "x1": 34000,
-   "z1": 4845,
-   "name": "North fence"
-  },
-  {
-   "shape": "circle",
-   "x0": 33235,
-   "z0": 10115,
-   "x1": 33405,
-   "z1": 10285,
-   "name": "Gate post"
-  },
-  {
-   "shape": "circle",
-   "x0": 33235,
-   "z0": 13515,
-   "x1": 33405,
-   "z1": 13685,
-   "name": "Gate post.001"
-  },
-  {
-   "shape": "box",
-   "x0": 33150,
-   "z0": 4675,
-   "x1": 33490,
-   "z1": 10625,
-   "name": "East fence north"
-  },
-  {
-   "shape": "box",
-   "x0": 33150,
-   "z0": 13175,
-   "x1": 33490,
-   "z1": 19125,
-   "name": "East fence south"
-  },
-  {
-   "shape": "box",
    "x0": 1800,
    "z0": 5200,
    "x1": 2110,
    "z1": 7550,
-   "name": "Probe"
+   "name": "Probe: Generator hut wall e"
   },
   {
    "shape": "box",
@@ -265,7 +81,7 @@
    "z0": 8515,
    "x1": 1858,
    "z1": 10610,
-   "name": "Probe"
+   "name": "Probe: Switch house wall e"
   },
   {
    "shape": "box",
@@ -273,7 +89,7 @@
    "z0": 11572,
    "x1": 3130,
    "z1": 11633,
-   "name": "Probe"
+   "name": "Probe: Switch door"
   },
   {
    "shape": "box",
@@ -281,7 +97,7 @@
    "z0": 11827,
    "x1": 3130,
    "z1": 11888,
-   "name": "Probe"
+   "name": "Probe: Switch door"
   },
   {
    "shape": "box",
@@ -289,7 +105,7 @@
    "z0": 12082,
    "x1": 2110,
    "z1": 12143,
-   "name": "Probe"
+   "name": "Probe: Switch door"
   },
   {
    "shape": "box",
@@ -297,87 +113,151 @@
    "z0": 12340,
    "x1": 1858,
    "z1": 14180,
-   "name": "Probe"
+   "name": "Probe: Switch house wall e.002"
   },
   {
    "shape": "box",
-   "x0": 20667,
-   "z0": 14377,
-   "x1": 20728,
-   "z1": 14438,
-   "name": "Probe"
+   "x0": 20412,
+   "z0": 14632,
+   "x1": 20473,
+   "z1": 14693,
+   "name": "Probe: Crow in the grass"
   },
   {
    "shape": "box",
-   "x0": 20667,
+   "x0": 17865,
    "z0": 14887,
-   "x1": 20728,
+   "x1": 18430,
    "z1": 14948,
-   "name": "Probe"
+   "name": "Probe: Dead deer"
   },
   {
    "shape": "box",
-   "x0": 9450,
+   "x0": 19392,
+   "z0": 14887,
+   "x1": 19453,
+   "z1": 14948,
+   "name": "Probe: Crow on the deer"
+  },
+  {
+   "shape": "box",
+   "x0": 8685,
+   "z0": 15142,
+   "x1": 8995,
+   "z1": 15203,
+   "name": "Probe: Pylons, Galvanised"
+  },
+  {
+   "shape": "box",
+   "x0": 9705,
    "z0": 15142,
    "x1": 12565,
    "z1": 15203,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
-   "x0": 24750,
+   "x0": 17865,
+   "z0": 15142,
+   "x1": 19450,
+   "z1": 15203,
+   "name": "Probe: Dead deer"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 15142,
+   "x1": 24295,
+   "z1": 15203,
+   "name": "Probe: Pylons, Galvanised"
+  },
+  {
+   "shape": "box",
+   "x0": 25005,
    "z0": 15142,
    "x1": 27865,
    "z1": 15203,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
+  },
+  {
+   "shape": "box",
+   "x0": 8937,
+   "z0": 15397,
+   "x1": 8998,
+   "z1": 15458,
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
    "x0": 10725,
    "z0": 15397,
-   "x1": 11290,
+   "x1": 11545,
    "z1": 15458,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
    "x0": 13020,
-   "z0": 15397,
+   "z0": 15145,
    "x1": 13330,
+   "z1": 15455,
+   "name": "Probe: Pylons, Galvanised"
+  },
+  {
+   "shape": "box",
+   "x0": 17865,
+   "z0": 15397,
+   "x1": 19705,
    "z1": 15458,
-   "name": "Probe"
+   "name": "Probe: Dead deer"
+  },
+  {
+   "shape": "box",
+   "x0": 24237,
+   "z0": 15397,
+   "x1": 24298,
+   "z1": 15458,
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
    "x0": 26025,
    "z0": 15397,
-   "x1": 26590,
+   "x1": 26845,
    "z1": 15458,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
    "x0": 28320,
-   "z0": 15397,
+   "z0": 15145,
    "x1": 28630,
-   "z1": 15458,
-   "name": "Probe"
+   "z1": 15455,
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
-   "x0": 13272,
+   "x0": 18120,
    "z0": 15652,
-   "x1": 13333,
+   "x1": 20215,
    "z1": 15713,
-   "name": "Probe"
+   "name": "Probe: Dead deer"
   },
   {
    "shape": "box",
-   "x0": 28572,
-   "z0": 15652,
-   "x1": 28633,
-   "z1": 15713,
-   "name": "Probe"
+   "x0": 18630,
+   "z0": 15907,
+   "x1": 19960,
+   "z1": 15968,
+   "name": "Probe: Dead deer"
+  },
+  {
+   "shape": "box",
+   "x0": 19392,
+   "z0": 16162,
+   "x1": 19453,
+   "z1": 16223,
+   "name": "Probe: Dead deer ribs"
   },
   {
    "shape": "box",
@@ -385,7 +265,7 @@
    "z0": 15910,
    "x1": 13330,
    "z1": 16985,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
@@ -393,7 +273,7 @@
    "z0": 15910,
    "x1": 28630,
    "z1": 16985,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
@@ -401,7 +281,7 @@
    "z0": 17185,
    "x1": 13078,
    "z1": 17495,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
@@ -409,7 +289,7 @@
    "z0": 17185,
    "x1": 28378,
    "z1": 17495,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
@@ -417,15 +297,15 @@
    "z0": 18627,
    "x1": 3640,
    "z1": 18688,
-   "name": "Probe"
+   "name": "Probe: Terminal pole"
   },
   {
    "shape": "box",
    "x0": 8937,
-   "z0": 15400,
+   "z0": 15910,
    "x1": 8998,
    "z1": 18600,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
@@ -433,15 +313,15 @@
    "z0": 17695,
    "x1": 13330,
    "z1": 18600,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
    "x0": 24237,
-   "z0": 15400,
+   "z0": 15910,
    "x1": 24298,
    "z1": 18600,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
   },
   {
    "shape": "box",
@@ -449,7 +329,7 @@
    "z0": 17695,
    "x1": 28630,
    "z1": 18600,
-   "name": "Probe"
+   "name": "Probe: Pylons, Galvanised"
   }
  ],
  "anim": {
@@ -457,16 +337,20 @@
   "ticks": 3
  },
  "probe": {
-  "Pylons, Galvanised": 110,
+  "Pylons, Galvanised": 114,
+  "Dead deer": 23,
   "Generator hut wall e": 18,
   "Switch door": 10,
   "Switch house wall e": 9,
   "Switch house wall e.002": 7,
+  "Crow on the deer": 6,
+  "Dead deer ribs": 3,
   "Terminal pole": 3,
   "Generator hut wall s": 2,
+  "Crow on the deer wing.001": 2,
   "Switch house wall s.003": 1,
-  "Crow in the grass wing.001": 1,
-  "Crow in the grass wing": 1
+  "Crow in the grass": 1,
+  "Crow on the deer wing": 1
  },
  "bounds": {
   "x0": 1700,

@@ -56,91 +56,27 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 1700,
-   "z0": 1700,
-   "x1": 3315,
-   "z1": 5100,
-   "name": "Bed frame"
-  },
-  {
-   "shape": "box",
-   "x0": 3995,
-   "z0": 1717,
-   "x1": 5695,
-   "z1": 2533,
-   "name": "Drawers"
-  },
-  {
-   "shape": "box",
-   "x0": 6630,
-   "z0": 1717,
-   "x1": 8840,
-   "z1": 2703,
-   "name": "Sink cupboard"
-  },
-  {
-   "shape": "box",
-   "x0": 8118,
-   "z0": 5185,
-   "x1": 9053,
-   "z1": 6205,
-   "name": "Stove"
-  },
-  {
-   "shape": "box",
-   "x0": 8143,
-   "z0": 4522,
-   "x1": 9027,
-   "z1": 5168,
-   "name": "Woodbox"
-  },
-  {
-   "shape": "box",
-   "x0": 4165,
-   "z0": 3697,
-   "x1": 6035,
-   "z1": 4972,
-   "name": "Table"
-  },
-  {
-   "shape": "box",
-   "x0": 2824,
-   "z0": 6139,
-   "x1": 3636,
-   "z1": 6951,
-   "name": "Chair at the window"
-  },
-  {
-   "shape": "box",
-   "x0": 5880,
+   "x0": 1800,
    "z0": 1797,
-   "x1": 6445,
+   "x1": 9080,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Drawers"
   },
   {
    "shape": "box",
-   "x0": 3330,
-   "z0": 1800,
-   "x1": 3895,
-   "z1": 2365,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3330,
-   "z0": 2562,
+   "x0": 1800,
+   "z0": 2055,
    "x1": 5680,
-   "z1": 2623,
-   "name": "Probe"
+   "z1": 2620,
+   "name": "Probe: Drawers"
   },
   {
    "shape": "box",
-   "x0": 8940,
-   "z0": 1800,
+   "x0": 6645,
+   "z0": 2055,
    "x1": 9080,
    "z1": 2620,
-   "name": "Probe"
+   "name": "Probe: Counter top"
   },
   {
    "shape": "box",
@@ -148,7 +84,15 @@
    "z0": 2817,
    "x1": 8740,
    "z1": 2878,
-   "name": "Probe"
+   "name": "Probe: Counter top"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 2817,
+   "x1": 9168,
+   "z1": 2878,
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
@@ -156,15 +100,7 @@
    "z0": 2820,
    "x1": 5680,
    "z1": 3130,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9107,
-   "z0": 2820,
-   "x1": 9168,
-   "z1": 3130,
-   "name": "Probe"
+   "name": "Probe: Drawer pulled out"
   },
   {
    "shape": "box",
@@ -172,79 +108,71 @@
    "z0": 3327,
    "x1": 4915,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Chair at the table"
   },
   {
    "shape": "box",
-   "x0": 3327,
+   "x0": 1800,
    "z0": 2820,
-   "x1": 3388,
+   "x1": 3385,
    "z1": 3640,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4095,
-   "z0": 3582,
-   "x1": 5935,
-   "z1": 3643,
-   "name": "Probe"
+   "name": "Probe: Sheet"
   },
   {
    "shape": "box",
    "x0": 8940,
-   "z0": 3330,
+   "z0": 3075,
    "x1": 9080,
    "z1": 4405,
-   "name": "Probe"
+   "name": "Probe: Side window sill"
   },
   {
    "shape": "box",
-   "x0": 3330,
+   "x0": 8175,
+   "z0": 4602,
+   "x1": 9080,
+   "z1": 4663,
+   "name": "Probe: Ceiling"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
    "z0": 3840,
    "x1": 3640,
    "z1": 4915,
-   "name": "Probe"
+   "name": "Probe: Quilt, thrown back"
   },
   {
    "shape": "box",
-   "x0": 4092,
-   "z0": 3840,
-   "x1": 4153,
+   "x0": 4095,
+   "z0": 3585,
+   "x1": 5935,
    "z1": 4915,
-   "name": "Probe"
+   "name": "Probe: Table"
   },
   {
    "shape": "box",
-   "x0": 6132,
-   "z0": 3840,
-   "x1": 6193,
-   "z1": 4915,
-   "name": "Probe"
+   "x0": 7920,
+   "z0": 4857,
+   "x1": 9080,
+   "z1": 4918,
+   "name": "Probe: Kindling.003"
   },
   {
    "shape": "box",
    "x0": 1800,
    "z0": 5112,
-   "x1": 3640,
+   "x1": 3385,
    "z1": 5173,
-   "name": "Probe"
+   "name": "Probe: Quilt, thrown back"
   },
   {
    "shape": "box",
-   "x0": 7917,
-   "z0": 4860,
-   "x1": 7978,
+   "x0": 8175,
+   "z0": 5115,
+   "x1": 9080,
    "z1": 6190,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9107,
-   "z0": 4605,
-   "x1": 9168,
-   "z1": 6190,
-   "name": "Probe"
+   "name": "Probe: Stove top"
   },
   {
    "shape": "box",
@@ -252,7 +180,15 @@
    "z0": 6390,
    "x1": 9080,
    "z1": 6700,
-   "name": "Probe"
+   "name": "Probe: Waders"
+  },
+  {
+   "shape": "box",
+   "x0": 2820,
+   "z0": 6135,
+   "x1": 3640,
+   "z1": 6955,
+   "name": "Probe: Chair at the window"
   },
   {
    "shape": "box",
@@ -260,7 +196,7 @@
    "z0": 6897,
    "x1": 6445,
    "z1": 6958,
-   "name": "Probe"
+   "name": "Probe: Door bar"
   },
   {
    "shape": "box",
@@ -268,7 +204,7 @@
    "z0": 6897,
    "x1": 9168,
    "z1": 6958,
-   "name": "Probe"
+   "name": "Probe: Wall e.003"
   },
   {
    "shape": "box",
@@ -276,15 +212,15 @@
    "z0": 5370,
    "x1": 1858,
    "z1": 7210,
-   "name": "Probe"
+   "name": "Probe: Wall w"
   },
   {
    "shape": "box",
-   "x0": 2565,
+   "x0": 2310,
    "z0": 7152,
    "x1": 4150,
    "z1": 7213,
-   "name": "Probe"
+   "name": "Probe: Window sill 0"
   },
   {
    "shape": "box",
@@ -292,7 +228,7 @@
    "z0": 7152,
    "x1": 9080,
    "z1": 7213,
-   "name": "Probe"
+   "name": "Probe: Window sill 1"
   },
   {
    "shape": "box",
@@ -300,7 +236,7 @@
    "z0": 7365,
    "x1": 9080,
    "z1": 7425,
-   "name": "Probe"
+   "name": "Probe: Window sill 1"
   }
  ],
  "anim": {
@@ -308,40 +244,65 @@
   "ticks": 3
  },
  "probe": {
-  "Quilt, thrown back": 16,
+  "Quilt, thrown back": 44,
+  "Table": 38,
+  "Sheet": 28,
+  "Counter top": 22,
+  "Drawers": 18,
+  "Stove top": 18,
+  "Chair at the window": 16,
   "Drawer pulled out": 15,
-  "Chair at the table": 13,
-  "Table": 13,
+  "Mattress": 14,
   "Window sill 1": 12,
-  "Wall e.003": 11,
-  "Window sill 0": 9,
+  "Chair at the table": 11,
+  "Window sill 0": 11,
+  "Wall e.003": 10,
   "Bedside stool": 8,
+  "Basin": 8,
   "Wall w": 8,
-  "Bed frame": 7,
+  "Pillow": 7,
+  "Side window sill": 7,
   "Wall e": 6,
-  "Counter top": 6,
+  "Wall e.001": 6,
   "Door bar": 6,
-  "Side window sill": 5,
-  "Wall e.001": 5,
-  "Stove top": 5,
   "Sink cupboard": 4,
+  "Blood on the sheet": 4,
+  "Kindling.003": 4,
   "Wall s.008": 4,
   "Wall n": 3,
+  "Towel 2": 3,
+  "Towel 3": 3,
   "Towel over the edge": 3,
+  "Trophy trout": 3,
+  "Ceiling": 3,
   "Wall s": 3,
   "Key board": 3,
   "Door": 3,
-  "Quilt off the side": 2,
+  "Radio": 2,
+  "Pink on the counter": 2,
+  "Diary left page": 2,
+  "First aid tin": 2,
+  "Kettle": 2,
   "Waders": 2,
-  "Bar bracket": 2,
   "Bolt plate": 2,
   "Wall s.005": 2,
   "Headboard": 1,
+  "Towel 0": 1,
+  "Pump": 1,
+  "Ashtray": 1,
+  "Soap": 1,
+  "Blood on the pillow": 1,
+  "Razor": 1,
   "Drawer front.001": 1,
-  "Iodine": 1,
-  "Kindling.003": 1,
+  "Iodine bottle": 1,
+  "Trout tail": 1,
+  "Diary cover": 1,
+  "Blood on the table": 1,
+  "Diary right page": 1,
+  "Kindling.002": 1,
   "Fishing rod 2": 1,
   "Fishing rod 0": 1,
+  "Bar bracket": 1,
   "Door frame": 1,
   "Door frame.001": 1,
   "Bar bracket.001": 1
@@ -420,21 +381,12 @@
   },
   {
    "zone": {
-    "x0": 3995,
+    "x0": 3400,
     "z0": 1700,
     "x1": 5695,
     "z1": 3230
    },
-   "text": "A girl holding up a fish, grinning. The same photo was in the booth.\nA drawing under it, in crayon: DAD."
-  },
-  {
-   "zone": {
-    "x0": 3400,
-    "z0": 1700,
-    "x1": 3995,
-    "z1": 3230
-   },
-   "text": "The radio's on, hissing. Nothing on any channel."
+   "text": "The radio's on, hissing. Nothing on any channel.\nOver it, a girl holding up a fish, grinning. The same photo was in the booth.\nA drawing under it, in crayon: DAD."
   },
   {
    "zone": {

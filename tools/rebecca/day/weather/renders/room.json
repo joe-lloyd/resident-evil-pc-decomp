@@ -43,51 +43,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 7089,
-   "z0": 2975,
-   "x1": 8109,
-   "z1": 5865,
-   "name": "Radio desk"
-  },
-  {
-   "shape": "box",
-   "x0": 3060,
-   "z0": 1785,
-   "x1": 6290,
-   "z1": 2635,
-   "name": "Instrument bench"
-  },
-  {
-   "shape": "box",
-   "x0": 1717,
-   "z0": 1717,
-   "x1": 2975,
-   "z1": 2601,
-   "name": "Plan chest"
-  },
-  {
-   "shape": "box",
-   "x0": 1708,
-   "z0": 2474,
-   "x1": 3222,
-   "z1": 5857,
-   "name": "Observer's bed"
-  },
-  {
-   "shape": "circle",
-   "x0": 1955,
-   "z0": 5899,
-   "x1": 2635,
-   "z1": 6579,
-   "name": "Paraffin stove"
-  },
-  {
-   "shape": "box",
-   "x0": 6390,
+   "x0": 1800,
    "z0": 1797,
    "x1": 8060,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: North sill"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 2055,
+   "x1": 6445,
+   "z1": 2620,
+   "name": "Probe: Instrument bench"
   },
   {
    "shape": "box",
@@ -95,31 +63,47 @@
    "z0": 2055,
    "x1": 8148,
    "z1": 2620,
-   "name": "Probe"
+   "name": "Probe: Wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 7920,
+   "z0": 2817,
+   "x1": 8060,
+   "z1": 2878,
+   "name": "Probe: East sill"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 2820,
+   "x1": 3130,
+   "z1": 3385,
+   "name": "Probe: Drawer pulled out"
   },
   {
    "shape": "box",
    "x0": 7155,
-   "z0": 2817,
+   "z0": 3075,
    "x1": 8060,
-   "z1": 2878,
-   "name": "Probe"
+   "z1": 3385,
+   "name": "Probe: Radio desk"
   },
   {
    "shape": "box",
-   "x0": 6897,
-   "z0": 3330,
-   "x1": 6958,
-   "z1": 3640,
-   "name": "Probe"
+   "x0": 6900,
+   "z0": 3582,
+   "x1": 8060,
+   "z1": 3643,
+   "name": "Probe: Radio desk"
   },
   {
    "shape": "box",
-   "x0": 6645,
+   "x0": 7155,
    "z0": 3837,
-   "x1": 6955,
+   "x1": 8060,
    "z1": 3898,
-   "name": "Probe"
+   "name": "Probe: Log pages"
   },
   {
    "shape": "box",
@@ -127,15 +111,15 @@
    "z0": 4092,
    "x1": 6448,
    "z1": 4153,
-   "name": "Probe"
+   "name": "Probe: Observer's chair"
   },
   {
    "shape": "box",
-   "x0": 6897,
+   "x0": 6900,
    "z0": 4092,
-   "x1": 6958,
+   "x1": 8060,
    "z1": 4153,
-   "name": "Probe"
+   "name": "Probe: Radio desk"
   },
   {
    "shape": "box",
@@ -143,31 +127,39 @@
    "z0": 4347,
    "x1": 6700,
    "z1": 4408,
-   "name": "Probe"
+   "name": "Probe: Observer's chair"
   },
   {
    "shape": "box",
-   "x0": 3327,
-   "z0": 3840,
-   "x1": 3388,
+   "x0": 7155,
+   "z0": 4347,
+   "x1": 8060,
+   "z1": 4408,
+   "name": "Probe: Radio desk"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 3585,
+   "x1": 3385,
    "z1": 4660,
-   "name": "Probe"
+   "name": "Probe: Observer's bed blanket"
   },
   {
    "shape": "box",
    "x0": 5880,
    "z0": 4602,
-   "x1": 6955,
+   "x1": 8060,
    "z1": 4663,
-   "name": "Probe"
+   "name": "Probe: Observer's chair"
   },
   {
    "shape": "box",
    "x0": 6135,
    "z0": 4857,
-   "x1": 6955,
+   "x1": 6700,
    "z1": 4918,
-   "name": "Probe"
+   "name": "Probe: Observer's chair"
   },
   {
    "shape": "box",
@@ -175,63 +167,39 @@
    "z0": 5112,
    "x1": 6445,
    "z1": 5173,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8087,
-   "z0": 3075,
-   "x1": 8148,
-   "z1": 5680,
-   "name": "Probe"
+   "name": "Probe: Observer's chair"
   },
   {
    "shape": "box",
    "x0": 1800,
-   "z0": 5877,
-   "x1": 2110,
-   "z1": 5938,
-   "name": "Probe"
+   "z0": 4860,
+   "x1": 3130,
+   "z1": 5680,
+   "name": "Probe: Observer's bed blanket"
   },
   {
    "shape": "box",
-   "x0": 2565,
+   "x0": 3072,
    "z0": 5877,
-   "x1": 3130,
+   "x1": 3133,
    "z1": 5938,
-   "name": "Probe"
+   "name": "Probe: Observer's bed"
   },
   {
    "shape": "box",
    "x0": 7155,
-   "z0": 5877,
+   "z0": 4860,
    "x1": 8060,
-   "z1": 5938,
-   "name": "Probe"
+   "z1": 5935,
+   "name": "Probe: Radio desk"
   },
   {
    "shape": "box",
-   "x0": 1797,
-   "z0": 6135,
-   "x1": 1858,
+   "x0": 1800,
+   "z0": 5880,
+   "x1": 2620,
    "z1": 6445,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2562,
-   "z0": 6387,
-   "x1": 2623,
-   "z1": 6448,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3075,
-   "z0": 6135,
-   "x1": 3640,
-   "z1": 6445,
-   "name": "Probe"
+   "name": "Probe: Stove top"
   },
   {
    "shape": "box",
@@ -239,7 +207,7 @@
    "z0": 6135,
    "x1": 8148,
    "z1": 6445,
-   "name": "Probe"
+   "name": "Probe: Wall e.003"
   },
   {
    "shape": "box",
@@ -247,7 +215,7 @@
    "z0": 6642,
    "x1": 4150,
    "z1": 6703,
-   "name": "Probe"
+   "name": "Probe: Wall s"
   },
   {
    "shape": "box",
@@ -255,7 +223,7 @@
    "z0": 6642,
    "x1": 8060,
    "z1": 6703,
-   "name": "Probe"
+   "name": "Probe: Wall s.002"
   }
  ],
  "anim": {
@@ -263,24 +231,42 @@
   "ticks": 3
  },
  "probe": {
-  "Observer's chair": 15,
+  "Instrument bench": 32,
+  "Observer's bed blanket": 32,
+  "Radio desk": 22,
+  "Shelf": 18,
+  "Observer's bed mattress": 17,
+  "Plan chest": 14,
+  "Observer's chair": 14,
+  "Radio set": 12,
+  "Stove top": 10,
+  "North sill": 9,
+  "Drawer pulled out": 9,
   "Wall s.002": 9,
-  "Radio desk": 8,
   "Wall e.001": 8,
-  "Wall s": 8,
   "Wall n.003": 7,
+  "Wall s": 7,
+  "Barograph cover": 6,
+  "Log pages": 6,
   "Wall e.003": 6,
-  "Kit bag": 6,
+  "Charts on the bench": 5,
   "Wall e": 5,
-  "Observer's bed blanket": 4,
+  "Thermograph": 4,
   "Glass on the desk": 3,
-  "Paraffin stove": 3,
-  "Feather 0": 2,
+  "Rolled chart 1": 2,
+  "Rolled chart 2": 2,
+  "East sill": 2,
+  "Dead crow on the desk": 2,
   "Observer's bed": 2,
   "Wall w": 2,
-  "East sill": 1,
-  "Observer's bed mattress": 1,
-  "Stove top": 1,
+  "Rolled chart 3": 1,
+  "Charts in the drawer": 1,
+  "Tea mug": 1,
+  "Station log": 1,
+  "Dead crow on the desk wing": 1,
+  "Dead crow on the desk wing.001": 1,
+  "Lamp shade": 1,
+  "Kettle": 1,
   "Oilskin coat": 1
  },
  "bounds": {

@@ -42,228 +42,188 @@
  ],
  "walls": [
   {
-   "shape": "circle",
-   "x0": 9407,
-   "z0": 1581,
-   "x1": 9633,
-   "z1": 1819,
-   "name": "Gate post"
-  },
-  {
-   "shape": "circle",
-   "x0": 12467,
-   "z0": 1581,
-   "x1": 12693,
-   "z1": 1819,
-   "name": "Gate post.001"
-  },
-  {
-   "shape": "box",
-   "x0": 6630,
-   "z0": 7607,
-   "x1": 12410,
-   "z1": 10072,
-   "name": "Tank footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 12920,
-   "z0": 8500,
-   "x1": 13430,
-   "z1": 9010,
-   "name": "Hand pump"
-  },
-  {
-   "shape": "circle",
-   "x0": 12707,
-   "z0": 6885,
-   "x1": 14152,
-   "z1": 7905,
-   "name": "Reel footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 4826,
-   "z0": 3126,
-   "x1": 6054,
-   "z1": 4354,
-   "name": "Drum 0"
-  },
-  {
-   "shape": "circle",
-   "x0": 5937,
-   "z0": 3302,
-   "x1": 7153,
-   "z1": 4518,
-   "name": "Drum 1"
-  },
-  {
-   "shape": "circle",
-   "x0": 5371,
-   "z0": 4351,
-   "x1": 6529,
-   "z1": 5509,
-   "name": "Drum 2"
-  },
-  {
-   "shape": "circle",
-   "x0": 1972,
-   "z0": 4437,
-   "x1": 3298,
-   "z1": 5763,
-   "name": "Drum 3"
-  },
-  {
-   "shape": "circle",
-   "x0": 1938,
-   "z0": 5508,
-   "x1": 3332,
-   "z1": 6902,
-   "name": "Drum 4"
-  },
-  {
-   "shape": "circle",
-   "x0": 2694,
-   "z0": 6494,
-   "x1": 4446,
-   "z1": 7956,
-   "name": "Drum 5"
-  },
-  {
-   "shape": "circle",
-   "x0": 14023,
-   "z0": 8583,
-   "x1": 15217,
-   "z1": 9777,
-   "name": "Drum 6"
-  },
-  {
-   "shape": "circle",
-   "x0": 12679,
-   "z0": 10129,
-   "x1": 14011,
-   "z1": 11461,
-   "name": "Drum 7"
-  },
-  {
-   "shape": "circle",
-   "x0": 14858,
-   "z0": 10013,
-   "x1": 15912,
-   "z1": 11067,
-   "name": "Drum 8"
-  },
-  {
-   "shape": "circle",
-   "x0": 13702,
-   "z0": 10047,
-   "x1": 14858,
-   "z1": 11203,
-   "name": "Drum 9"
-  },
-  {
-   "shape": "circle",
-   "x0": 1615,
-   "z0": 8415,
-   "x1": 1785,
-   "z1": 8585,
-   "name": "Lean-to post"
-  },
-  {
-   "shape": "circle",
-   "x0": 4335,
-   "z0": 8415,
-   "x1": 4505,
-   "z1": 8585,
-   "name": "Lean-to post.001"
-  },
-  {
-   "shape": "circle",
-   "x0": 1615,
-   "z0": 11475,
-   "x1": 1785,
-   "z1": 11645,
-   "name": "Lean-to post.002"
-  },
-  {
-   "shape": "circle",
-   "x0": 4335,
-   "z0": 11475,
-   "x1": 4505,
-   "z1": 11645,
-   "name": "Lean-to post.003"
-  },
-  {
-   "shape": "box",
-   "x0": 1845,
-   "z0": 10922,
-   "x1": 4275,
-   "z1": 11518,
-   "name": "Oil shelves"
-  },
-  {
    "shape": "box",
    "x0": 1800,
    "z0": 1797,
    "x1": 16220,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Fence wire"
   },
   {
    "shape": "box",
-   "x0": 5622,
+   "x0": 5367,
+   "z0": 3072,
+   "x1": 5428,
+   "z1": 3133,
+   "name": "Probe: hoop.002"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 3327,
+   "x1": 5935,
+   "z1": 3388,
+   "name": "Probe: Drum 0"
+  },
+  {
+   "shape": "box",
+   "x0": 6390,
+   "z0": 3327,
+   "x1": 6700,
+   "z1": 3388,
+   "name": "Probe: hoop.004"
+  },
+  {
+   "shape": "box",
+   "x0": 4860,
+   "z0": 3582,
+   "x1": 6955,
+   "z1": 3643,
+   "name": "Probe: Drum 0"
+  },
+  {
+   "shape": "box",
+   "x0": 4860,
+   "z0": 3837,
+   "x1": 7210,
+   "z1": 3898,
+   "name": "Probe: Drum 0"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 4092,
+   "x1": 6955,
+   "z1": 4153,
+   "name": "Probe: Drum 1"
+  },
+  {
+   "shape": "box",
+   "x0": 5370,
    "z0": 4347,
-   "x1": 5683,
+   "x1": 6955,
    "z1": 4408,
-   "name": "Probe"
+   "name": "Probe: hoop.007"
   },
   {
    "shape": "box",
-   "x0": 5367,
+   "x0": 2310,
    "z0": 4602,
-   "x1": 5428,
+   "x1": 2875,
    "z1": 4663,
-   "name": "Probe"
+   "name": "Probe: Drum 3"
   },
   {
    "shape": "box",
-   "x0": 5367,
-   "z0": 5112,
-   "x1": 5428,
-   "z1": 5173,
-   "name": "Probe"
+   "x0": 5370,
+   "z0": 4605,
+   "x1": 6445,
+   "z1": 5170,
+   "name": "Probe: Drum 2"
   },
   {
    "shape": "box",
-   "x0": 4092,
-   "z0": 6387,
-   "x1": 4153,
-   "z1": 6448,
-   "name": "Probe"
+   "x0": 2055,
+   "z0": 4860,
+   "x1": 3130,
+   "z1": 5425,
+   "name": "Probe: Drum 3"
   },
   {
    "shape": "box",
-   "x0": 13530,
+   "x0": 5625,
+   "z0": 5367,
+   "x1": 6190,
+   "z1": 5428,
+   "name": "Probe: Drum 2 stencil 1"
+  },
+  {
+   "shape": "box",
+   "x0": 2310,
+   "z0": 5622,
+   "x1": 2875,
+   "z1": 5683,
+   "name": "Probe: Drum 4"
+  },
+  {
+   "shape": "box",
+   "x0": 2055,
+   "z0": 5880,
+   "x1": 3130,
+   "z1": 6445,
+   "name": "Probe: Drum 4"
+  },
+  {
+   "shape": "box",
+   "x0": 2310,
    "z0": 6642,
-   "x1": 13840,
+   "x1": 2875,
    "z1": 6703,
-   "name": "Probe"
+   "name": "Probe: Drum 4"
   },
   {
    "shape": "box",
-   "x0": 12762,
-   "z0": 6897,
-   "x1": 12823,
-   "z1": 6958,
-   "name": "Probe"
+   "x0": 3330,
+   "z0": 6642,
+   "x1": 4150,
+   "z1": 6703,
+   "name": "Probe: Drum 5"
   },
   {
    "shape": "box",
-   "x0": 14037,
-   "z0": 6897,
-   "x1": 14098,
-   "z1": 6958,
-   "name": "Probe"
+   "x0": 12765,
+   "z0": 6900,
+   "x1": 14095,
+   "z1": 7210,
+   "name": "Probe: Hose reel"
+  },
+  {
+   "shape": "box",
+   "x0": 2820,
+   "z0": 6900,
+   "x1": 4405,
+   "z1": 7465,
+   "name": "Probe: Drum 5"
+  },
+  {
+   "shape": "box",
+   "x0": 12765,
+   "z0": 7407,
+   "x1": 13840,
+   "z1": 7468,
+   "name": "Probe: Hose reel"
+  },
+  {
+   "shape": "box",
+   "x0": 2820,
+   "z0": 7662,
+   "x1": 3895,
+   "z1": 7723,
+   "name": "Probe: Drum 5"
+  },
+  {
+   "shape": "box",
+   "x0": 6645,
+   "z0": 7662,
+   "x1": 14095,
+   "z1": 7723,
+   "name": "Probe: Tank"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 7917,
+   "x1": 3385,
+   "z1": 7978,
+   "name": "Probe: hoop.015"
+  },
+  {
+   "shape": "box",
+   "x0": 13020,
+   "z0": 7917,
+   "x1": 13840,
+   "z1": 7978,
+   "name": "Probe: Hose reel"
   },
   {
    "shape": "box",
@@ -271,7 +231,7 @@
    "z0": 8172,
    "x1": 13840,
    "z1": 8233,
-   "name": "Probe"
+   "name": "Probe: Crank knob"
   },
   {
    "shape": "box",
@@ -279,23 +239,23 @@
    "z0": 8427,
    "x1": 1858,
    "z1": 8488,
-   "name": "Probe"
+   "name": "Probe: Lean-to post"
   },
   {
    "shape": "box",
-   "x0": 4602,
+   "x0": 4350,
    "z0": 8427,
-   "x1": 4663,
+   "x1": 4660,
    "z1": 8488,
-   "name": "Probe"
+   "name": "Probe: Lean-to post.001"
   },
   {
    "shape": "box",
-   "x0": 12507,
-   "z0": 7665,
-   "x1": 12568,
+   "x0": 6645,
+   "z0": 7920,
+   "x1": 12565,
    "z1": 8485,
-   "name": "Probe"
+   "name": "Probe: Tank"
   },
   {
    "shape": "box",
@@ -303,7 +263,7 @@
    "z0": 8427,
    "x1": 13840,
    "z1": 8488,
-   "name": "Probe"
+   "name": "Probe: Pump crank"
   },
   {
    "shape": "box",
@@ -311,63 +271,55 @@
    "z0": 8682,
    "x1": 4408,
    "z1": 8743,
-   "name": "Probe"
+   "name": "Probe: Lean-to post.001"
   },
   {
    "shape": "box",
-   "x0": 12510,
+   "x0": 14295,
+   "z0": 8682,
+   "x1": 14860,
+   "z1": 8743,
+   "name": "Probe: Drum 6 stencil 0"
+  },
+  {
+   "shape": "box",
+   "x0": 6645,
    "z0": 8685,
-   "x1": 12820,
+   "x1": 13585,
    "z1": 8995,
-   "name": "Probe"
+   "name": "Probe: Tank"
   },
   {
    "shape": "box",
-   "x0": 13527,
-   "z0": 8685,
-   "x1": 13588,
-   "z1": 8995,
-   "name": "Probe"
+   "x0": 14040,
+   "z0": 8940,
+   "x1": 15115,
+   "z1": 9250,
+   "name": "Probe: Drum 6"
   },
   {
    "shape": "box",
-   "x0": 14037,
-   "z0": 9447,
-   "x1": 14098,
-   "z1": 9508,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 15315,
+   "x0": 14295,
    "z0": 9447,
    "x1": 15625,
    "z1": 9508,
-   "name": "Probe"
+   "name": "Probe: Drum on top"
   },
   {
    "shape": "box",
-   "x0": 14292,
-   "z0": 9702,
-   "x1": 14353,
-   "z1": 9763,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 15060,
+   "x0": 14550,
    "z0": 9702,
    "x1": 15625,
    "z1": 9763,
-   "name": "Probe"
+   "name": "Probe: Drum on top"
   },
   {
    "shape": "box",
-   "x0": 12507,
+   "x0": 6645,
    "z0": 9195,
-   "x1": 12568,
+   "x1": 12565,
    "z1": 10015,
-   "name": "Probe"
+   "name": "Probe: Tank"
   },
   {
    "shape": "box",
@@ -375,71 +327,55 @@
    "z0": 9957,
    "x1": 15625,
    "z1": 10018,
-   "name": "Probe"
+   "name": "Probe: Drum on top"
   },
   {
    "shape": "box",
-   "x0": 13782,
+   "x0": 13020,
    "z0": 10212,
-   "x1": 13843,
+   "x1": 15880,
    "z1": 10273,
-   "name": "Probe"
+   "name": "Probe: Drum on top"
   },
   {
    "shape": "box",
-   "x0": 14802,
-   "z0": 10212,
-   "x1": 14863,
-   "z1": 10273,
-   "name": "Probe"
+   "x0": 12765,
+   "z0": 10470,
+   "x1": 15880,
+   "z1": 10780,
+   "name": "Probe: Drum on top"
   },
   {
    "shape": "box",
-   "x0": 15822,
-   "z0": 10212,
-   "x1": 15883,
-   "z1": 10273,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 14805,
+   "x0": 12765,
    "z0": 10977,
-   "x1": 15115,
+   "x1": 15625,
    "z1": 11038,
-   "name": "Probe"
+   "name": "Probe: Drum 7"
   },
   {
    "shape": "box",
-   "x0": 4347,
+   "x0": 1800,
    "z0": 10980,
-   "x1": 4408,
+   "x1": 4405,
    "z1": 11290,
-   "name": "Probe"
+   "name": "Probe: Oil shelves"
   },
   {
    "shape": "box",
-   "x0": 14292,
+   "x0": 13020,
    "z0": 11232,
-   "x1": 14353,
+   "x1": 13585,
    "z1": 11293,
-   "name": "Probe"
+   "name": "Probe: Drum 7"
   },
   {
    "shape": "box",
-   "x0": 1797,
-   "z0": 10980,
-   "x1": 1858,
-   "z1": 11460,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4602,
+   "x0": 1800,
    "z0": 11445,
-   "x1": 4663,
+   "x1": 4660,
    "z1": 11505,
-   "name": "Probe"
+   "name": "Probe: Oil shelves"
   },
   {
    "shape": "box",
@@ -447,7 +383,7 @@
    "z0": 2055,
    "x1": 16308,
    "z1": 11460,
-   "name": "Probe"
+   "name": "Probe: Fence wire.003"
   }
  ],
  "anim": {
@@ -455,39 +391,67 @@
   "ticks": 3
  },
  "probe": {
+  "Tank": 218,
+  "Oil shelves": 30,
   "Fence wire": 28,
+  "Drum 5": 28,
+  "Drum on top": 25,
+  "Hose reel": 24,
   "Fence wire.003": 19,
+  "Drum 3": 18,
+  "Drum 4": 16,
+  "Drum 7": 16,
+  "Drum 0": 14,
+  "Drum 1": 14,
   "Fence wire.001": 13,
   "Fence wire.002": 13,
+  "Drum 2": 12,
+  "Drum 6": 12,
   "Tank end.001": 10,
-  "Drum on top": 10,
+  "Drum 8": 10,
+  "Drum 9": 10,
+  "Hand pump": 9,
+  "hoop.007": 7,
+  "Cradle": 6,
+  "Cradle.001": 6,
   "Fence posts": 5,
-  "Hand pump": 5,
-  "Oil shelves": 5,
+  "hoop.001": 5,
   "Gate leaf.001": 4,
-  "Fence wire over the hole": 4,
+  "hoop.004": 4,
   "Gate leaf": 3,
-  "Hose reel": 3,
+  "Fence wire over the hole": 3,
   "Crank knob": 3,
-  "hoop.028": 3,
-  "hoop.025": 3,
-  "Drum 2": 2,
-  "Lean-to post.001": 2,
+  "Lean-to post.001": 3,
+  "Drum 3 stencil 0": 2,
+  "Drum 2 stencil 1": 2,
+  "Blood on the bent wire": 2,
+  "Drum 4 stencil 0": 2,
+  "hoop.015": 2,
   "Pump crank": 2,
-  "hoop.019": 2,
+  "Drum 6 stencil 0": 2,
+  "hoop.031": 2,
+  "Drum 8 stencil 0": 2,
+  "Lean-to post.003": 2,
   "Gate post": 1,
   "Gate frame.003": 1,
   "Gate brace": 1,
   "Gate frame.004": 1,
   "Gate brace.001": 1,
   "Gate post.001": 1,
-  "hoop.007": 1,
-  "Blood on the bent wire": 1,
-  "Drum 5": 1,
+  "hoop.002": 1,
+  "hoop.012": 1,
+  "hoop.016": 1,
+  "hoop.017": 1,
   "Reel chain": 1,
+  "Hose": 1,
+  "Nozzle hook": 1,
   "Lean-to post": 1,
   "hoop.032": 1,
-  "Lean-to post.003": 1
+  "hoop.023": 1,
+  "Drum 7 stencil 0": 1,
+  "box.005": 1,
+  "box.006": 1,
+  "Drum 7 run": 1
  },
  "bounds": {
   "x0": 1700,

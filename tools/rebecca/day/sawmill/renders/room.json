@@ -108,91 +108,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 7446,
-   "z0": 15776,
-   "x1": 7854,
-   "z1": 16184,
-   "name": "Mill post"
-  },
-  {
-   "shape": "box",
-   "x0": 19346,
-   "z0": 15776,
-   "x1": 19754,
-   "z1": 16184,
-   "name": "Mill post.001"
-  },
-  {
-   "shape": "box",
-   "x0": 2720,
-   "z0": 6545,
-   "x1": 18700,
-   "z1": 9265,
-   "name": "Carriage footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 13515,
-   "z0": 10200,
-   "x1": 15725,
-   "z1": 11390,
-   "name": "Saw frame"
-  },
-  {
-   "shape": "box",
-   "x0": 12920,
-   "z0": 8840,
-   "x1": 16320,
-   "z1": 11560,
-   "name": "Saw footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 13848,
-   "z0": 13260,
-   "x1": 20815,
-   "z1": 14620,
-   "name": "Board stack"
-  },
-  {
-   "shape": "box",
-   "x0": 23120,
-   "z0": 7565,
-   "x1": 23630,
-   "z1": 8075,
-   "name": "Bearing post"
-  },
-  {
-   "shape": "box",
-   "x0": 6460,
-   "z0": 17255,
-   "x1": 12580,
-   "z1": 18785,
-   "name": "Edger table"
-  },
-  {
-   "shape": "box",
-   "x0": 17680,
-   "z0": 19380,
-   "x1": 21760,
-   "z1": 20570,
-   "name": "Filer's bench"
-  },
-  {
-   "shape": "box",
-   "x0": 3230,
-   "z0": 13430,
-   "x1": 6970,
-   "z1": 15130,
-   "name": "Lumber cart"
-  },
-  {
-   "shape": "box",
    "x0": 1800,
    "z0": 4517,
    "x1": 23785,
    "z1": 4578,
-   "name": "Probe"
+   "name": "Probe: Mill wall n.003"
   },
   {
    "shape": "box",
@@ -200,7 +120,7 @@
    "z0": 4772,
    "x1": 2110,
    "z1": 4833,
-   "name": "Probe"
+   "name": "Probe: Wall post.010"
   },
   {
    "shape": "box",
@@ -208,7 +128,7 @@
    "z0": 4772,
    "x1": 7720,
    "z1": 4833,
-   "name": "Probe"
+   "name": "Probe: Wall post.002"
   },
   {
    "shape": "box",
@@ -216,7 +136,7 @@
    "z0": 4772,
    "x1": 13840,
    "z1": 4833,
-   "name": "Probe"
+   "name": "Probe: Wall post.004"
   },
   {
    "shape": "box",
@@ -224,7 +144,7 @@
    "z0": 4772,
    "x1": 19705,
    "z1": 4833,
-   "name": "Probe"
+   "name": "Probe: Wall post.006"
   },
   {
    "shape": "box",
@@ -232,7 +152,7 @@
    "z0": 4772,
    "x1": 23785,
    "z1": 4833,
-   "name": "Probe"
+   "name": "Probe: Mill wall e"
   },
   {
    "shape": "box",
@@ -240,7 +160,7 @@
    "z0": 5027,
    "x1": 22000,
    "z1": 5088,
-   "name": "Probe"
+   "name": "Probe: Peavey 0"
   },
   {
    "shape": "box",
@@ -248,31 +168,79 @@
    "z0": 5282,
    "x1": 21745,
    "z1": 5343,
-   "name": "Probe"
+   "name": "Probe: Peavey 0"
   },
   {
    "shape": "box",
-   "x0": 22962,
-   "z0": 7580,
-   "x1": 23023,
-   "z1": 7890,
-   "name": "Probe"
+   "x0": 6135,
+   "z0": 6557,
+   "x1": 12820,
+   "z1": 6618,
+   "name": "Probe: Carriage"
+  },
+  {
+   "shape": "box",
+   "x0": 2820,
+   "z0": 6812,
+   "x1": 18685,
+   "z1": 6873,
+   "name": "Probe: Carriage rail"
+  },
+  {
+   "shape": "box",
+   "x0": 6135,
+   "z0": 7070,
+   "x1": 13075,
+   "z1": 7380,
+   "name": "Probe: Carriage"
   },
   {
    "shape": "box",
    "x0": 23727,
    "z0": 5030,
    "x1": 23788,
-   "z1": 7890,
-   "name": "Probe"
+   "z1": 7380,
+   "name": "Probe: Mill wall e"
   },
   {
    "shape": "box",
    "x0": 22965,
-   "z0": 8087,
+   "z0": 7580,
    "x1": 23785,
-   "z1": 8148,
-   "name": "Probe"
+   "z1": 8145,
+   "name": "Probe: Bearing post"
+  },
+  {
+   "shape": "box",
+   "x0": 4350,
+   "z0": 7580,
+   "x1": 15625,
+   "z1": 8400,
+   "name": "Probe: Log on the carriage"
+  },
+  {
+   "shape": "box",
+   "x0": 2820,
+   "z0": 8597,
+   "x1": 18685,
+   "z1": 8658,
+   "name": "Probe: Log on the carriage"
+  },
+  {
+   "shape": "box",
+   "x0": 4350,
+   "z0": 8852,
+   "x1": 16900,
+   "z1": 8913,
+   "name": "Probe: Log on the carriage"
+  },
+  {
+   "shape": "box",
+   "x0": 4350,
+   "z0": 9107,
+   "x1": 16390,
+   "z1": 9168,
+   "name": "Probe: Log on the carriage"
   },
   {
    "shape": "box",
@@ -280,7 +248,7 @@
    "z0": 5030,
    "x1": 1858,
    "z1": 9420,
-   "name": "Probe"
+   "name": "Probe: Mill wall w.001"
   },
   {
    "shape": "box",
@@ -288,23 +256,15 @@
    "z0": 8345,
    "x1": 23788,
    "z1": 9420,
-   "name": "Probe"
+   "name": "Probe: Mill wall e.001"
   },
   {
    "shape": "box",
-   "x0": 12762,
+   "x0": 12765,
    "z0": 9365,
-   "x1": 12823,
+   "x1": 16390,
    "z1": 9675,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 16332,
-   "z0": 9365,
-   "x1": 16393,
-   "z1": 9675,
-   "name": "Probe"
+   "name": "Probe: Saw deck"
   },
   {
    "shape": "box",
@@ -312,7 +272,15 @@
    "z0": 9620,
    "x1": 2110,
    "z1": 9930,
-   "name": "Probe"
+   "name": "Probe: Wall post.012"
+  },
+  {
+   "shape": "box",
+   "x0": 14295,
+   "z0": 9872,
+   "x1": 14860,
+   "z1": 9933,
+   "name": "Probe: Mandrel"
   },
   {
    "shape": "box",
@@ -320,7 +288,7 @@
    "z0": 9620,
    "x1": 21490,
    "z1": 9930,
-   "name": "Probe"
+   "name": "Probe: Thrown belt.001"
   },
   {
    "shape": "box",
@@ -328,7 +296,7 @@
    "z0": 10127,
    "x1": 1858,
    "z1": 10188,
-   "name": "Probe"
+   "name": "Probe: Wall post.012"
   },
   {
    "shape": "box",
@@ -336,7 +304,7 @@
    "z0": 10127,
    "x1": 12313,
    "z1": 10188,
-   "name": "Probe"
+   "name": "Probe: Setworks lever"
   },
   {
    "shape": "box",
@@ -344,7 +312,7 @@
    "z0": 9620,
    "x1": 23785,
    "z1": 10185,
-   "name": "Probe"
+   "name": "Probe: Mill wall e.001"
   },
   {
    "shape": "box",
@@ -352,7 +320,39 @@
    "z0": 10382,
    "x1": 12565,
    "z1": 10443,
-   "name": "Probe"
+   "name": "Probe: Setworks lever"
+  },
+  {
+   "shape": "box",
+   "x0": 13530,
+   "z0": 10130,
+   "x1": 16135,
+   "z1": 10695,
+   "name": "Probe: Saw frame"
+  },
+  {
+   "shape": "box",
+   "x0": 13530,
+   "z0": 10892,
+   "x1": 15880,
+   "z1": 10953,
+   "name": "Probe: Saw frame"
+  },
+  {
+   "shape": "box",
+   "x0": 13020,
+   "z0": 11147,
+   "x1": 16135,
+   "z1": 11208,
+   "name": "Probe: Saw frame"
+  },
+  {
+   "shape": "box",
+   "x0": 13020,
+   "z0": 11402,
+   "x1": 15625,
+   "z1": 11463,
+   "name": "Probe: Saw pulley"
   },
   {
    "shape": "box",
@@ -360,7 +360,7 @@
    "z0": 11402,
    "x1": 17410,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Warning sign"
   },
   {
    "shape": "box",
@@ -368,7 +368,7 @@
    "z0": 11657,
    "x1": 15115,
    "z1": 11718,
-   "name": "Probe"
+   "name": "Probe: Saw pulley"
   },
   {
    "shape": "box",
@@ -376,39 +376,39 @@
    "z0": 13187,
    "x1": 20725,
    "z1": 13248,
-   "name": "Probe"
+   "name": "Probe: Board stack"
   },
   {
    "shape": "box",
-   "x0": 13782,
+   "x0": 13785,
    "z0": 13445,
-   "x1": 13843,
+   "x1": 20725,
    "z1": 14520,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7152,
-   "z0": 13700,
-   "x1": 7213,
-   "z1": 14775,
-   "name": "Probe"
+   "name": "Probe: Board stack"
   },
   {
    "shape": "box",
    "x0": 14040,
    "z0": 14717,
-   "x1": 20725,
+   "x1": 20470,
    "z1": 14778,
-   "name": "Probe"
+   "name": "Probe: Board stack"
   },
   {
    "shape": "box",
-   "x0": 3072,
-   "z0": 13700,
-   "x1": 3133,
+   "x0": 3075,
+   "z0": 13445,
+   "x1": 6955,
    "z1": 15030,
-   "name": "Probe"
+   "name": "Probe: Lumber cart"
+  },
+  {
+   "shape": "box",
+   "x0": 3330,
+   "z0": 15227,
+   "x1": 6955,
+   "z1": 15288,
+   "name": "Probe: Lumber cart"
   },
   {
    "shape": "box",
@@ -416,7 +416,7 @@
    "z0": 15230,
    "x1": 1858,
    "z1": 15540,
-   "name": "Probe"
+   "name": "Probe: Mill wall w.005"
   },
   {
    "shape": "box",
@@ -424,7 +424,7 @@
    "z0": 10385,
    "x1": 23788,
    "z1": 15540,
-   "name": "Probe"
+   "name": "Probe: Mill wall e.003"
   },
   {
    "shape": "box",
@@ -432,15 +432,7 @@
    "z0": 15737,
    "x1": 7975,
    "z1": 15798,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19395,
-   "z0": 15737,
-   "x1": 19705,
-   "z1": 15798,
-   "name": "Probe"
+   "name": "Probe: Mill post"
   },
   {
    "shape": "box",
@@ -448,7 +440,7 @@
    "z0": 15740,
    "x1": 2110,
    "z1": 16050,
-   "name": "Probe"
+   "name": "Probe: Wall post.014"
   },
   {
    "shape": "box",
@@ -456,7 +448,7 @@
    "z0": 15992,
    "x1": 7468,
    "z1": 16053,
-   "name": "Probe"
+   "name": "Probe: Mill post"
   },
   {
    "shape": "box",
@@ -464,7 +456,7 @@
    "z0": 15992,
    "x1": 7978,
    "z1": 16053,
-   "name": "Probe"
+   "name": "Probe: Mill post"
   },
   {
    "shape": "box",
@@ -472,15 +464,15 @@
    "z0": 16247,
    "x1": 7975,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Mill post"
   },
   {
    "shape": "box",
    "x0": 19395,
-   "z0": 16247,
+   "z0": 15740,
    "x1": 19705,
-   "z1": 16308,
-   "name": "Probe"
+   "z1": 16305,
+   "name": "Probe: Mill post.001"
   },
   {
    "shape": "box",
@@ -488,31 +480,23 @@
    "z0": 15740,
    "x1": 23785,
    "z1": 16305,
-   "name": "Probe"
+   "name": "Probe: Wall post.015"
   },
   {
    "shape": "box",
-   "x0": 6387,
+   "x0": 6390,
    "z0": 17267,
-   "x1": 6448,
+   "x1": 12565,
    "z1": 17328,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4092,
-   "z0": 18032,
-   "x1": 4153,
-   "z1": 18093,
-   "name": "Probe"
+   "name": "Probe: Edger table"
   },
   {
    "shape": "box",
    "x0": 6135,
    "z0": 17525,
-   "x1": 6445,
-   "z1": 18090,
-   "name": "Probe"
+   "x1": 12565,
+   "z1": 17835,
+   "name": "Probe: Edger table"
   },
   {
    "shape": "box",
@@ -520,7 +504,7 @@
    "z0": 18287,
    "x1": 4405,
    "z1": 18348,
-   "name": "Probe"
+   "name": "Probe: Oil drum 0"
   },
   {
    "shape": "box",
@@ -528,15 +512,7 @@
    "z0": 18035,
    "x1": 32203,
    "z1": 18345,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6387,
-   "z0": 18290,
-   "x1": 6448,
-   "z1": 18600,
-   "name": "Probe"
+   "name": "Probe: Where he leant on the rail"
   },
   {
    "shape": "box",
@@ -544,23 +520,15 @@
    "z0": 18545,
    "x1": 4660,
    "z1": 18855,
-   "name": "Probe"
+   "name": "Probe: Oil drum 0"
   },
   {
    "shape": "box",
    "x0": 6390,
-   "z0": 18797,
+   "z0": 18035,
    "x1": 12565,
-   "z1": 18858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 13530,
-   "z0": 18545,
-   "x1": 14350,
    "z1": 18855,
-   "name": "Probe"
+   "name": "Probe: Edger table"
   },
   {
    "shape": "box",
@@ -568,39 +536,15 @@
    "z0": 19052,
    "x1": 4405,
    "z1": 19113,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 13275,
-   "z0": 19052,
-   "x1": 14605,
-   "z1": 19113,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4092,
-   "z0": 19307,
-   "x1": 4153,
-   "z1": 19368,
-   "name": "Probe"
+   "name": "Probe: Oil drum 0"
   },
   {
    "shape": "box",
    "x0": 13530,
-   "z0": 19307,
+   "z0": 18545,
    "x1": 14350,
-   "z1": 19368,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 17610,
-   "z0": 19307,
-   "x1": 21745,
-   "z1": 19368,
-   "name": "Probe"
+   "z1": 19365,
+   "name": "Probe: Oil drum 1"
   },
   {
    "shape": "box",
@@ -608,7 +552,7 @@
    "z0": 19562,
    "x1": 14095,
    "z1": 19623,
-   "name": "Probe"
+   "name": "Probe: Oil drum 1"
   },
   {
    "shape": "box",
@@ -616,7 +560,7 @@
    "z0": 16250,
    "x1": 1858,
    "z1": 20130,
-   "name": "Probe"
+   "name": "Probe: Mill wall w.006"
   },
   {
    "shape": "box",
@@ -624,7 +568,7 @@
    "z0": 18035,
    "x1": 23788,
    "z1": 20130,
-   "name": "Probe"
+   "name": "Probe: Mill wall e.005"
   },
   {
    "shape": "box",
@@ -632,7 +576,7 @@
    "z0": 20327,
    "x1": 2110,
    "z1": 20388,
-   "name": "Probe"
+   "name": "Probe: Wall post.016"
   },
   {
    "shape": "box",
@@ -640,7 +584,7 @@
    "z0": 20327,
    "x1": 7720,
    "z1": 20388,
-   "name": "Probe"
+   "name": "Probe: Wall post.003"
   },
   {
    "shape": "box",
@@ -648,15 +592,15 @@
    "z0": 20327,
    "x1": 13840,
    "z1": 20388,
-   "name": "Probe"
+   "name": "Probe: Wall post.005"
   },
   {
    "shape": "box",
-   "x0": 17607,
-   "z0": 19565,
-   "x1": 17668,
+   "x0": 17610,
+   "z0": 19310,
+   "x1": 21745,
    "z1": 20385,
-   "name": "Probe"
+   "name": "Probe: Filer's bench"
   },
   {
    "shape": "box",
@@ -664,7 +608,7 @@
    "z0": 20327,
    "x1": 23785,
    "z1": 20388,
-   "name": "Probe"
+   "name": "Probe: Mill wall e.005"
   },
   {
    "shape": "box",
@@ -672,7 +616,7 @@
    "z0": 20582,
    "x1": 23785,
    "z1": 20643,
-   "name": "Probe"
+   "name": "Probe: Mill wall s.003"
   }
  ],
  "anim": {
@@ -710,74 +654,92 @@
   }
  ],
  "probe": {
-  "Board stack": 51,
-  "Edger table": 30,
-  "Filer's bench": 24,
-  "Mill wall e.003": 22,
+  "Log on the carriage": 265,
+  "Board stack": 186,
+  "Edger table": 144,
+  "Carriage": 121,
+  "Filer's bench": 80,
+  "Saw frame": 49,
+  "Lumber cart": 47,
+  "Saw deck": 43,
+  "Carriage rail": 35,
+  "Board on the cart.001": 30,
+  "Mill wall e.003": 21,
+  "Oil drum 0": 18,
+  "Oil drum 1": 18,
+  "Board on the cart": 17,
+  "Board on the cart.002": 17,
   "Mill wall n.003": 16,
   "Mill wall n.006": 16,
   "Mill wall e": 16,
+  "Board on the cart.003": 16,
   "Mill wall s.003": 16,
-  "Oil drum 0": 14,
-  "Oil drum 1": 14,
+  "Carriage rail.001": 14,
+  "Edged board.002": 14,
   "Mill wall s.006": 14,
-  "Mill wall s": 12,
+  "Slab": 12,
   "Mill wall n": 11,
   "Mill wall w.001": 11,
   "Mill wall w.006": 11,
-  "Mill wall e.005": 11,
-  "Mill wall s.001": 10,
+  "Mill wall s": 11,
+  "Saw pulley": 10,
+  "Edged board.001": 10,
+  "Mill wall e.005": 10,
   "Mill wall s.004": 10,
   "Mill wall n.001": 9,
   "Mill wall n.004": 9,
+  "Bearing post": 9,
+  "Mill wall e.001": 9,
+  "Edged board": 9,
+  "Mill wall s.001": 9,
   "Mill wall n.007": 8,
   "Mill wall n.009": 8,
-  "Mill wall e.001": 8,
-  "Blood fan on the boards": 8,
+  "Mandrel": 8,
   "Mill post": 8,
+  "Thrown belt.001": 7,
+  "Blood fan on the boards": 7,
+  "Tally sheets": 7,
   "Mill wall s.007": 7,
   "Mill wall s.009": 7,
-  "Thrown belt.001": 6,
-  "hoop.004": 6,
-  "hoop.007": 6,
-  "Bearing post": 5,
-  "Wall post.012": 5,
-  "Saw pulley": 5,
+  "Head block": 6,
+  "Head block.001": 6,
+  "Head block.002": 6,
+  "Mill post.001": 6,
+  "Mill wall w.003": 5,
   "Wall post.014": 5,
   "Wall post.002": 4,
   "Wall post.004": 4,
   "Wall post.006": 4,
   "Peavey 0": 4,
   "Peavey 1": 4,
-  "Mill wall w.003": 4,
-  "Saw deck": 4,
-  "Wall post.013": 4,
+  "Log end.001": 4,
+  "Log end": 4,
+  "Wall post.012": 4,
+  "Thrown belt.005": 4,
+  "Sawyer's stool": 4,
   "Warning sign": 4,
-  "Board on the cart.001": 4,
   "Mill wall w.005": 4,
-  "Mill post.001": 4,
-  "Edged board": 4,
+  "Wall post.015": 4,
+  "Wall post.003": 4,
   "Wall post.010": 3,
   "Mill wall w": 3,
+  "Wall post.013": 3,
   "Setworks lever": 3,
-  "Board on the cart.003": 3,
-  "Wall post.015": 3,
   "Wall post.016": 3,
-  "Wall post.003": 3,
   "Wall post.005": 3,
   "Wall post.011": 2,
   "Run down the boards": 2,
-  "Board on the cart": 2,
-  "Board on the cart.002": 2,
   "Where he leant on the rail": 2,
   "Mill wall w.008": 2,
+  "Vice": 2,
   "Wall post.017": 2,
   "Wall post.007": 2,
   "Wall post": 1,
-  "Thrown belt.002": 1,
   "Thrown belt": 1,
+  "Arm in the sawdust": 1,
   "Sign post": 1,
-  "Tally sheets": 1
+  "Back door frame.001": 1,
+  "Wall post.001": 1
  },
  "bounds": {
   "x0": 1700,

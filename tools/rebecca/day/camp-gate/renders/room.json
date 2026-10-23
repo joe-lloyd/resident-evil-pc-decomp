@@ -43,267 +43,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 0,
-   "z0": 2550,
-   "x1": 14280,
-   "z1": 3230,
-   "name": "Fence west footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 20060,
-   "z0": 2550,
-   "x1": 31280,
-   "z1": 3230,
-   "name": "Fence east footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 13940,
-   "z0": 2550,
-   "x1": 14620,
-   "z1": 3230,
-   "name": "Gate post footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 19720,
-   "z0": 2550,
-   "x1": 20400,
-   "z1": 3230,
-   "name": "Gate post footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 14620,
-   "z0": 3230,
-   "x1": 15640,
-   "z1": 5610,
-   "name": "West leaf footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 18445,
-   "z0": 3230,
-   "x1": 19635,
-   "z1": 5440,
-   "name": "East leaf footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 1870,
-   "z0": 3230,
-   "x1": 9690,
-   "z1": 7310,
-   "name": "Cold deck footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 11050,
-   "z0": 3570,
-   "x1": 15470,
-   "z1": 6630,
-   "name": "Barricade footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 16541,
-   "z0": 7667,
-   "x1": 17731,
-   "z1": 8857,
-   "name": "Strewn log footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 17765,
-   "z0": 8585,
-   "x1": 18955,
-   "z1": 9775,
-   "name": "Strewn log footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 18989,
-   "z0": 9503,
-   "x1": 20179,
-   "z1": 10693,
-   "name": "Strewn log footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 6514,
-   "z0": 10243,
-   "x1": 7704,
-   "z1": 11433,
-   "name": "Strewn log footprint.003"
-  },
-  {
-   "shape": "box",
-   "x0": 7905,
-   "z0": 10880,
-   "x1": 9095,
-   "z1": 12070,
-   "name": "Strewn log footprint.004"
-  },
-  {
-   "shape": "box",
-   "x0": 9296,
-   "z0": 11517,
-   "x1": 10486,
-   "z1": 12707,
-   "name": "Strewn log footprint.005"
-  },
-  {
-   "shape": "box",
-   "x0": 14393,
-   "z0": 13549,
-   "x1": 15583,
-   "z1": 14739,
-   "name": "Strewn log footprint.006"
-  },
-  {
-   "shape": "box",
-   "x0": 15895,
-   "z0": 13260,
-   "x1": 17085,
-   "z1": 14450,
-   "name": "Strewn log footprint.007"
-  },
-  {
-   "shape": "box",
-   "x0": 17397,
-   "z0": 12971,
-   "x1": 18587,
-   "z1": 14161,
-   "name": "Strewn log footprint.008"
-  },
-  {
-   "shape": "box",
-   "x0": 26876,
-   "z0": 14102,
-   "x1": 28066,
-   "z1": 15292,
-   "name": "Strewn log footprint.009"
-  },
-  {
-   "shape": "box",
-   "x0": 27710,
-   "z0": 15385,
-   "x1": 28900,
-   "z1": 16575,
-   "name": "Strewn log footprint.010"
-  },
-  {
-   "shape": "box",
-   "x0": 28544,
-   "z0": 16668,
-   "x1": 29734,
-   "z1": 17858,
-   "name": "Strewn log footprint.011"
-  },
-  {
-   "shape": "box",
-   "x0": 3720,
-   "z0": 7835,
-   "x1": 4910,
-   "z1": 9025,
-   "name": "Strewn log footprint.012"
-  },
-  {
-   "shape": "box",
-   "x0": 5185,
-   "z0": 7395,
-   "x1": 6375,
-   "z1": 8585,
-   "name": "Strewn log footprint.013"
-  },
-  {
-   "shape": "box",
-   "x0": 6650,
-   "z0": 6955,
-   "x1": 7840,
-   "z1": 8145,
-   "name": "Strewn log footprint.014"
-  },
-  {
-   "shape": "box",
-   "x0": 20400,
-   "z0": 3230,
-   "x1": 30940,
-   "z1": 6970,
-   "name": "Shoved logs footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 20410,
-   "z0": 6439,
-   "x1": 28550,
-   "z1": 12601,
-   "name": "Pickup footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 2754,
-   "z0": 11934,
-   "x1": 4046,
-   "z1": 13226,
-   "name": "Stump 0 footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 29104,
-   "z0": 4454,
-   "x1": 30396,
-   "z1": 5746,
-   "name": "Stump 1 footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 22406,
-   "z0": 19006,
-   "x1": 23834,
-   "z1": 20434,
-   "name": "Stump 2 footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 28645,
-   "z0": 11305,
-   "x1": 29835,
-   "z1": 12495,
-   "name": "Stump 3 footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 8840,
-   "z0": 19720,
-   "x1": 10200,
-   "z1": 21080,
-   "name": "Stump 4 footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 24310,
-   "z0": 15810,
-   "x1": 30090,
-   "z1": 20230,
-   "name": "Slash footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 21794,
-   "z0": 15674,
-   "x1": 23086,
-   "z1": 16966,
-   "name": "Drum by the slash"
-  },
-  {
-   "shape": "box",
-   "x0": 20145,
-   "z0": 16915,
-   "x1": 21675,
-   "z1": 18445,
-   "name": "Tipped drum footprint"
+   "x0": 1800,
+   "z0": 3497,
+   "x1": 8995,
+   "z1": 3558,
+   "name": "Probe: Cold deck log 0"
   },
   {
    "shape": "box",
@@ -311,79 +55,311 @@
    "z0": 3497,
    "x1": 11548,
    "z1": 3558,
-   "name": "Probe"
+   "name": "Probe: Spike"
   },
   {
    "shape": "box",
-   "x0": 12255,
+   "x0": 12507,
    "z0": 3497,
-   "x1": 12565,
+   "x1": 12568,
    "z1": 3558,
-   "name": "Probe"
+   "name": "Probe: Spike.001"
   },
   {
    "shape": "box",
-   "x0": 13275,
+   "x0": 13272,
    "z0": 3497,
-   "x1": 13585,
+   "x1": 13333,
    "z1": 3558,
-   "name": "Probe"
+   "name": "Probe: Spike.002"
   },
   {
    "shape": "box",
-   "x0": 14040,
+   "x0": 14037,
    "z0": 3497,
-   "x1": 14605,
+   "x1": 14098,
    "z1": 3558,
-   "name": "Probe"
+   "name": "Probe: Spike.003"
   },
   {
    "shape": "box",
-   "x0": 19647,
+   "x0": 14550,
    "z0": 3497,
-   "x1": 19708,
+   "x1": 15370,
    "z1": 3558,
-   "name": "Probe"
+   "name": "Probe: West gate leaf"
   },
   {
    "shape": "box",
-   "x0": 1797,
-   "z0": 3500,
-   "x1": 1858,
-   "z1": 4320,
-   "name": "Probe"
+   "x0": 19395,
+   "z0": 3497,
+   "x1": 19705,
+   "z1": 3558,
+   "name": "Probe: East gate leaf"
   },
   {
    "shape": "box",
-   "x0": 19647,
-   "z0": 4010,
-   "x1": 19708,
-   "z1": 4320,
-   "name": "Probe"
+   "x0": 21180,
+   "z0": 3497,
+   "x1": 21490,
+   "z1": 3558,
+   "name": "Probe: Shoved log 0"
   },
   {
    "shape": "box",
-   "x0": 9705,
+   "x0": 28065,
+   "z0": 3497,
+   "x1": 29480,
+   "z1": 3558,
+   "name": "Probe: Shoved log 1"
+  },
+  {
+   "shape": "box",
+   "x0": 19140,
+   "z0": 3752,
+   "x1": 19450,
+   "z1": 3813,
+   "name": "Probe: East gate leaf"
+  },
+  {
+   "shape": "box",
+   "x0": 21180,
+   "z0": 3752,
+   "x1": 23785,
+   "z1": 3813,
+   "name": "Probe: Shoved log 0"
+  },
+  {
+   "shape": "box",
+   "x0": 26025,
+   "z0": 3752,
+   "x1": 29480,
+   "z1": 3813,
+   "name": "Probe: Shoved log 1"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 3755,
+   "x1": 9505,
+   "z1": 4065,
+   "name": "Probe: Cold deck log 5"
+  },
+  {
+   "shape": "box",
+   "x0": 19140,
+   "z0": 4007,
+   "x1": 19705,
+   "z1": 4068,
+   "name": "Probe: East gate leaf"
+  },
+  {
+   "shape": "box",
+   "x0": 21180,
+   "z0": 4007,
+   "x1": 29480,
+   "z1": 4068,
+   "name": "Probe: Shoved log 0"
+  },
+  {
+   "shape": "box",
+   "x0": 18885,
+   "z0": 4262,
+   "x1": 19705,
+   "z1": 4323,
+   "name": "Probe: Claws on the gate 2"
+  },
+  {
+   "shape": "box",
+   "x0": 21180,
+   "z0": 4262,
+   "x1": 29140,
+   "z1": 4323,
+   "name": "Probe: Shoved log 0"
+  },
+  {
+   "shape": "box",
+   "x0": 11235,
+   "z0": 3755,
+   "x1": 15370,
+   "z1": 4575,
+   "name": "Probe: Barricade log 2"
+  },
+  {
+   "shape": "box",
+   "x0": 18885,
+   "z0": 4517,
+   "x1": 19195,
+   "z1": 4578,
+   "name": "Probe: East gate leaf"
+  },
+  {
+   "shape": "box",
+   "x0": 21180,
+   "z0": 4517,
+   "x1": 27865,
+   "z1": 4578,
+   "name": "Probe: Shoved log 0"
+  },
+  {
+   "shape": "box",
+   "x0": 29507,
+   "z0": 4517,
+   "x1": 29568,
+   "z1": 4578,
+   "name": "Probe: Stump 1"
+  },
+  {
+   "shape": "box",
+   "x0": 2055,
    "z0": 4265,
    "x1": 10015,
    "z1": 4830,
-   "name": "Probe"
+   "name": "Probe: Cold deck log 9"
   },
   {
    "shape": "box",
-   "x0": 18372,
+   "x0": 11235,
+   "z0": 4772,
+   "x1": 15625,
+   "z1": 4833,
+   "name": "Probe: Barricade log 2"
+  },
+  {
+   "shape": "box",
+   "x0": 18630,
+   "z0": 4772,
+   "x1": 18940,
+   "z1": 4833,
+   "name": "Probe: East gate leaf"
+  },
+  {
+   "shape": "box",
+   "x0": 19392,
+   "z0": 4772,
+   "x1": 19453,
+   "z1": 4833,
+   "name": "Probe: Claws on the gate 1"
+  },
+  {
+   "shape": "box",
+   "x0": 22452,
+   "z0": 4772,
+   "x1": 22513,
+   "z1": 4833,
+   "name": "Probe: Shoved log 0"
+  },
+  {
+   "shape": "box",
+   "x0": 22962,
+   "z0": 4772,
+   "x1": 23023,
+   "z1": 4833,
+   "name": "Probe: Shoved log 0"
+  },
+  {
+   "shape": "box",
+   "x0": 23472,
+   "z0": 4772,
+   "x1": 23533,
+   "z1": 4833,
+   "name": "Probe: Shoved log 0"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 4772,
+   "x1": 28630,
+   "z1": 4833,
+   "name": "Probe: Shoved log 3"
+  },
+  {
+   "shape": "box",
+   "x0": 11490,
+   "z0": 5027,
+   "x1": 15625,
+   "z1": 5088,
+   "name": "Probe: Barricade log 1"
+  },
+  {
+   "shape": "box",
+   "x0": 18375,
+   "z0": 5027,
+   "x1": 19195,
+   "z1": 5088,
+   "name": "Probe: East gate leaf"
+  },
+  {
+   "shape": "box",
+   "x0": 21945,
+   "z0": 5027,
+   "x1": 23530,
+   "z1": 5088,
+   "name": "Probe: Shoved log 2"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
+   "z0": 5027,
+   "x1": 28885,
+   "z1": 5088,
+   "name": "Probe: Shoved log 3"
+  },
+  {
+   "shape": "box",
+   "x0": 2055,
    "z0": 5030,
-   "x1": 18433,
+   "x1": 9250,
    "z1": 5340,
-   "name": "Probe"
+   "name": "Probe: Cold deck log 10"
   },
   {
    "shape": "box",
-   "x0": 9702,
+   "x0": 11490,
+   "z0": 5282,
+   "x1": 15370,
+   "z1": 5343,
+   "name": "Probe: Barricade log 1"
+  },
+  {
+   "shape": "box",
+   "x0": 18375,
+   "z0": 5282,
+   "x1": 18685,
+   "z1": 5343,
+   "name": "Probe: East gate leaf"
+  },
+  {
+   "shape": "box",
+   "x0": 21945,
+   "z0": 5282,
+   "x1": 25315,
+   "z1": 5343,
+   "name": "Probe: Shoved log 2"
+  },
+  {
+   "shape": "box",
+   "x0": 25770,
+   "z0": 5282,
+   "x1": 28630,
+   "z1": 5343,
+   "name": "Probe: Tin torn off the fence"
+  },
+  {
+   "shape": "box",
+   "x0": 11490,
    "z0": 5537,
-   "x1": 9763,
+   "x1": 13075,
    "z1": 5598,
-   "name": "Probe"
+   "name": "Probe: Barricade log 3"
+  },
+  {
+   "shape": "box",
+   "x0": 13527,
+   "z0": 5537,
+   "x1": 13588,
+   "z1": 5598,
+   "name": "Probe: Barricade log 1"
   },
   {
    "shape": "box",
@@ -391,175 +367,423 @@
    "z0": 5537,
    "x1": 18685,
    "z1": 5598,
-   "name": "Probe"
+   "name": "Probe: East gate leaf"
   },
   {
    "shape": "box",
-   "x0": 15567,
-   "z0": 5795,
-   "x1": 15628,
-   "z1": 6105,
-   "name": "Probe"
+   "x0": 29340,
+   "z0": 4775,
+   "x1": 29480,
+   "z1": 5595,
+   "name": "Probe: Stump 1"
   },
   {
    "shape": "box",
-   "x0": 9705,
-   "z0": 5795,
+   "x0": 2310,
+   "z0": 5540,
+   "x1": 9760,
+   "z1": 5850,
+   "name": "Probe: Cold deck log 7"
+  },
+  {
+   "shape": "box",
+   "x0": 11745,
+   "z0": 5792,
+   "x1": 14350,
+   "z1": 5853,
+   "name": "Probe: Barricade log 3"
+  },
+  {
+   "shape": "box",
+   "x0": 21945,
+   "z0": 5540,
+   "x1": 28885,
+   "z1": 5850,
+   "name": "Probe: Shoved log 2"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 6047,
    "x1": 10015,
-   "z1": 6360,
-   "name": "Probe"
+   "z1": 6108,
+   "name": "Probe: Cold deck log 7"
   },
   {
    "shape": "box",
-   "x0": 1797,
-   "z0": 6050,
-   "x1": 1858,
+   "x0": 11745,
+   "z0": 6047,
+   "x1": 14605,
+   "z1": 6108,
+   "name": "Probe: Barricade log 3"
+  },
+  {
+   "shape": "box",
+   "x0": 15315,
+   "z0": 5540,
+   "x1": 15625,
+   "z1": 6105,
+   "name": "Probe: West gate leaf"
+  },
+  {
+   "shape": "box",
+   "x0": 20670,
+   "z0": 6047,
+   "x1": 21235,
+   "z1": 6108,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 24240,
+   "z0": 6047,
+   "x1": 28885,
+   "z1": 6108,
+   "name": "Probe: Shoved log 2"
+  },
+  {
+   "shape": "box",
+   "x0": 11745,
+   "z0": 6302,
+   "x1": 14350,
+   "z1": 6363,
+   "name": "Probe: Barricade log 3"
+  },
+  {
+   "shape": "box",
+   "x0": 20670,
+   "z0": 6302,
+   "x1": 21745,
+   "z1": 6363,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 26532,
+   "z0": 6302,
+   "x1": 26593,
+   "z1": 6363,
+   "name": "Probe: Shoved log 2"
+  },
+  {
+   "shape": "box",
+   "x0": 27045,
+   "z0": 6302,
+   "x1": 28885,
+   "z1": 6363,
+   "name": "Probe: Tin torn off the fence"
+  },
+  {
+   "shape": "box",
+   "x0": 11235,
+   "z0": 6557,
+   "x1": 11545,
+   "z1": 6618,
+   "name": "Probe: Sandbag 2"
+  },
+  {
+   "shape": "box",
+   "x0": 13527,
+   "z0": 6557,
+   "x1": 13588,
+   "z1": 6618,
+   "name": "Probe: Barricade log 3"
+  },
+  {
+   "shape": "box",
+   "x0": 14292,
+   "z0": 6557,
+   "x1": 14353,
+   "z1": 6618,
+   "name": "Probe: Barricade log 3"
+  },
+  {
+   "shape": "box",
+   "x0": 20415,
+   "z0": 6557,
+   "x1": 22255,
+   "z1": 6618,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 6305,
+   "x1": 9505,
    "z1": 6870,
-   "name": "Probe"
+   "name": "Probe: Cold deck log 8"
   },
   {
    "shape": "box",
-   "x0": 20157,
-   "z0": 7070,
-   "x1": 20218,
-   "z1": 7380,
-   "name": "Probe"
+   "x0": 20415,
+   "z0": 6812,
+   "x1": 23020,
+   "z1": 6873,
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
-   "x0": 16335,
-   "z0": 7577,
-   "x1": 16900,
-   "z1": 7638,
-   "name": "Probe"
+   "x0": 26790,
+   "z0": 6560,
+   "x1": 28885,
+   "z1": 6870,
+   "name": "Probe: Tin torn off the fence"
   },
   {
    "shape": "box",
-   "x0": 16332,
-   "z0": 7832,
-   "x1": 16393,
-   "z1": 7893,
-   "name": "Probe"
+   "x0": 2055,
+   "z0": 7067,
+   "x1": 9505,
+   "z1": 7128,
+   "name": "Probe: Cold deck log 4"
   },
   {
    "shape": "box",
-   "x0": 17865,
-   "z0": 8087,
-   "x1": 18175,
-   "z1": 8148,
-   "name": "Probe"
+   "x0": 20160,
+   "z0": 7067,
+   "x1": 23275,
+   "z1": 7128,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 26790,
+   "z0": 7067,
+   "x1": 28375,
+   "z1": 7128,
+   "name": "Probe: Tin torn off the fence"
+  },
+  {
+   "shape": "box",
+   "x0": 20160,
+   "z0": 7322,
+   "x1": 23785,
+   "z1": 7383,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 27045,
+   "z0": 7322,
+   "x1": 28375,
+   "z1": 7383,
+   "name": "Probe: Tin torn off the fence"
   },
   {
    "shape": "box",
    "x0": 19905,
-   "z0": 7580,
-   "x1": 20215,
-   "z1": 8145,
-   "name": "Probe"
+   "z0": 7577,
+   "x1": 24295,
+   "z1": 7638,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 27045,
+   "z0": 7577,
+   "x1": 27865,
+   "z1": 7638,
+   "name": "Probe: Tin torn off the fence"
+  },
+  {
+   "shape": "box",
+   "x0": 19905,
+   "z0": 7832,
+   "x1": 25060,
+   "z1": 7893,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 27045,
+   "z0": 7832,
+   "x1": 27355,
+   "z1": 7893,
+   "name": "Probe: Tin torn off the fence"
+  },
+  {
+   "shape": "box",
+   "x0": 19905,
+   "z0": 8087,
+   "x1": 25315,
+   "z1": 8148,
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
    "x0": 19650,
-   "z0": 8345,
-   "x1": 20215,
-   "z1": 8655,
-   "name": "Probe"
+   "z0": 8342,
+   "x1": 25825,
+   "z1": 8403,
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
-   "x0": 17607,
-   "z0": 8852,
-   "x1": 17668,
-   "z1": 8913,
-   "name": "Probe"
+   "x0": 19650,
+   "z0": 8597,
+   "x1": 26590,
+   "z1": 8658,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 27045,
+   "z0": 8597,
+   "x1": 27355,
+   "z1": 8658,
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
    "x0": 19395,
    "z0": 8852,
-   "x1": 20215,
+   "x1": 27100,
    "z1": 8913,
-   "name": "Probe"
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
    "x0": 19650,
    "z0": 9107,
-   "x1": 20215,
+   "x1": 27610,
    "z1": 9168,
-   "name": "Probe"
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
-   "x0": 28572,
+   "x0": 20415,
+   "z0": 9362,
+   "x1": 28120,
+   "z1": 9423,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 20925,
    "z0": 9617,
-   "x1": 28633,
+   "x1": 28630,
    "z1": 9678,
-   "name": "Probe"
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
-   "x0": 28575,
+   "x0": 21180,
    "z0": 9872,
    "x1": 29140,
    "z1": 9933,
-   "name": "Probe"
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
-   "x0": 28575,
-   "z0": 10130,
+   "x0": 21945,
+   "z0": 10127,
    "x1": 29480,
-   "z1": 10440,
-   "name": "Probe"
+   "z1": 10188,
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
-   "x0": 6387,
+   "x0": 22455,
+   "z0": 10382,
+   "x1": 29480,
+   "z1": 10443,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 7407,
+   "z0": 10637,
+   "x1": 7468,
+   "z1": 10698,
+   "name": "Probe: Strewn log 1"
+  },
+  {
+   "shape": "box",
+   "x0": 20412,
    "z0": 10385,
-   "x1": 6448,
+   "x1": 20473,
    "z1": 10695,
-   "name": "Probe"
+   "name": "Probe: Strewn log 0"
   },
   {
    "shape": "box",
-   "x0": 28575,
-   "z0": 10640,
+   "x0": 22965,
+   "z0": 10637,
    "x1": 29395,
-   "z1": 10950,
-   "name": "Probe"
+   "z1": 10698,
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
-   "x0": 28575,
+   "x0": 23475,
+   "z0": 10892,
+   "x1": 29395,
+   "z1": 10953,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 23985,
    "z0": 11147,
    "x1": 29140,
    "z1": 11208,
-   "name": "Probe"
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
-   "x0": 28575,
+   "x0": 24495,
    "z0": 11402,
+   "x1": 29140,
+   "z1": 11463,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 25005,
+   "z0": 11657,
    "x1": 28885,
-   "z1": 11463,
-   "name": "Probe"
+   "z1": 11718,
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
-   "x0": 29507,
-   "z0": 11402,
-   "x1": 29568,
-   "z1": 11463,
-   "name": "Probe"
+   "x0": 25515,
+   "z0": 11912,
+   "x1": 28885,
+   "z1": 11973,
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
-   "x0": 28572,
-   "z0": 11660,
-   "x1": 28633,
-   "z1": 12480,
-   "name": "Probe"
+   "x0": 25005,
+   "z0": 12167,
+   "x1": 25570,
+   "z1": 12228,
+   "name": "Probe: Pickup door"
+  },
+  {
+   "shape": "box",
+   "x0": 26025,
+   "z0": 12167,
+   "x1": 28630,
+   "z1": 12228,
+   "name": "Probe: Pickup"
+  },
+  {
+   "shape": "box",
+   "x0": 24750,
+   "z0": 12422,
+   "x1": 25315,
+   "z1": 12483,
+   "name": "Probe: Pickup door"
+  },
+  {
+   "shape": "box",
+   "x0": 26535,
+   "z0": 12422,
+   "x1": 28630,
+   "z1": 12483,
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
@@ -567,7 +791,7 @@
    "z0": 12677,
    "x1": 24805,
    "z1": 12738,
-   "name": "Probe"
+   "name": "Probe: Pickup door inside"
   },
   {
    "shape": "box",
@@ -575,7 +799,7 @@
    "z0": 12677,
    "x1": 28630,
    "z1": 12738,
-   "name": "Probe"
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
@@ -583,7 +807,7 @@
    "z0": 12932,
    "x1": 24550,
    "z1": 12993,
-   "name": "Probe"
+   "name": "Probe: Pickup door"
   },
   {
    "shape": "box",
@@ -591,7 +815,7 @@
    "z0": 12932,
    "x1": 28375,
    "z1": 12993,
-   "name": "Probe"
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
@@ -599,7 +823,7 @@
    "z0": 13187,
    "x1": 24295,
    "z1": 13248,
-   "name": "Probe"
+   "name": "Probe: Pickup door"
   },
   {
    "shape": "box",
@@ -607,31 +831,79 @@
    "z0": 13187,
    "x1": 28123,
    "z1": 13248,
-   "name": "Probe"
+   "name": "Probe: Pickup"
   },
   {
    "shape": "box",
-   "x0": 15570,
-   "z0": 13952,
-   "x1": 15880,
-   "z1": 14013,
-   "name": "Probe"
+   "x0": 22200,
+   "z0": 15737,
+   "x1": 22765,
+   "z1": 15798,
+   "name": "Probe: Drum by the slash"
   },
   {
    "shape": "box",
-   "x0": 14292,
-   "z0": 14210,
-   "x1": 14353,
-   "z1": 14520,
-   "name": "Probe"
+   "x0": 21945,
+   "z0": 15995,
+   "x1": 23020,
+   "z1": 16560,
+   "name": "Probe: Drum by the slash"
   },
   {
    "shape": "box",
-   "x0": 21687,
-   "z0": 17780,
-   "x1": 21748,
-   "z1": 18090,
-   "name": "Probe"
+   "x0": 22200,
+   "z0": 16757,
+   "x1": 22765,
+   "z1": 16818,
+   "name": "Probe: Drum by the slash"
+  },
+  {
+   "shape": "box",
+   "x0": 20415,
+   "z0": 17012,
+   "x1": 20980,
+   "z1": 17073,
+   "name": "Probe: Drum on its side"
+  },
+  {
+   "shape": "box",
+   "x0": 20160,
+   "z0": 17267,
+   "x1": 21235,
+   "z1": 17328,
+   "name": "Probe: Drum on its side"
+  },
+  {
+   "shape": "box",
+   "x0": 20160,
+   "z0": 17522,
+   "x1": 21490,
+   "z1": 17583,
+   "name": "Probe: Drum on its side"
+  },
+  {
+   "shape": "box",
+   "x0": 20160,
+   "z0": 17777,
+   "x1": 21745,
+   "z1": 17838,
+   "name": "Probe: Drum on its side"
+  },
+  {
+   "shape": "box",
+   "x0": 20415,
+   "z0": 18032,
+   "x1": 21745,
+   "z1": 18093,
+   "name": "Probe: Drum on its side"
+  },
+  {
+   "shape": "box",
+   "x0": 20925,
+   "z0": 18287,
+   "x1": 21490,
+   "z1": 18348,
+   "name": "Probe: Drum on its side"
   }
  ],
  "anim": {
@@ -639,26 +911,50 @@
   "ticks": 3
  },
  "probe": {
-  "Pickup": 63,
-  "Strewn log 0": 7,
-  "Pickup door": 7,
-  "East gate leaf": 6,
-  "Cold deck log 9": 6,
-  "Sheet torn half off": 4,
-  "Barricade log 0": 4,
-  "Cold deck log 3": 4,
-  "Cold deck log 8": 4,
-  "Strewn log 2": 4,
-  "Cold deck log 7": 3,
-  "Spike.001": 2,
-  "Claws on the gate 2": 2,
-  "West gate leaf": 2,
-  "Strewn log 1": 2,
-  "Drum on its side": 2,
+  "Pickup": 524,
+  "Cold deck log 8": 83,
+  "Tin torn off the fence": 80,
+  "Cold deck log 10": 77,
+  "Cold deck log 9": 75,
+  "Shoved log 2": 70,
+  "Shoved log 0": 64,
+  "Cold deck log 5": 58,
+  "Cold deck log 7": 58,
+  "Shoved log 3": 57,
+  "Shoved log 1": 53,
+  "Barricade log 2": 44,
+  "Barricade log 3": 41,
+  "Cold deck log 4": 39,
+  "Barricade log 1": 38,
+  "Barricade log 0": 30,
+  "Drum on its side": 27,
+  "Cold deck log 0": 26,
+  "Cold deck log 6": 23,
+  "East gate leaf": 20,
+  "Drum by the slash": 18,
+  "West gate leaf": 17,
+  "Cold deck log 3": 14,
+  "Stump 1": 9,
+  "Pickup door": 9,
+  "Sheet torn half off": 7,
+  "Pickup door inside": 6,
+  "Sandbag in the bed 1": 5,
+  "Sandbag in the bed 2": 5,
+  "Sandbag in the bed 0": 4,
+  "Claws on the gate 2": 3,
+  "Drum by the slash stencil 0": 3,
+  "Spike.002": 2,
+  "Spike.004": 2,
+  "Claws on the gate 1": 2,
+  "Sandbag 2": 2,
+  "Strewn log 0": 2,
+  "hoop.003": 2,
   "Spike": 1,
-  "Spike.002": 1,
-  "Stump 3": 1,
-  "Pickup door inside": 1
+  "Spike.001": 1,
+  "Spike.003": 1,
+  "Cold deck log 1": 1,
+  "Strewn log 1": 1,
+  "hoop.004": 1
  },
  "bounds": {
   "x0": 1700,

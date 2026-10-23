@@ -55,268 +55,12 @@
  ],
  "walls": [
   {
-   "shape": "circle",
-   "x0": 8883,
-   "z0": 19623,
-   "x1": 13002,
-   "z1": 22885,
-   "name": "Outcrop"
-  },
-  {
-   "shape": "circle",
-   "x0": 19330,
-   "z0": 4887,
-   "x1": 22424,
-   "z1": 7562,
-   "name": "Outcrop.001"
-  },
-  {
-   "shape": "circle",
-   "x0": 28058,
-   "z0": 8468,
-   "x1": 31646,
-   "z1": 11500,
-   "name": "Outcrop.002"
-  },
-  {
-   "shape": "circle",
-   "x0": 2732,
-   "z0": 15657,
-   "x1": 5568,
-   "z1": 17718,
-   "name": "Outcrop.003"
-  },
-  {
-   "shape": "circle",
-   "x0": 12213,
-   "z0": 13654,
-   "x1": 13713,
-   "z1": 14999,
-   "name": "Cairn 0"
-  },
-  {
-   "shape": "circle",
-   "x0": 18293,
-   "z0": 7877,
-   "x1": 19884,
-   "z1": 9129,
-   "name": "Cairn 1"
-  },
-  {
-   "shape": "circle",
-   "x0": 20509,
-   "z0": 15714,
-   "x1": 22132,
-   "z1": 16965,
-   "name": "Cairn 2"
-  },
-  {
-   "shape": "circle",
-   "x0": 17104,
-   "z0": 2941,
-   "x1": 18789,
-   "z1": 4195,
-   "name": "Cairn 3"
-  },
-  {
-   "shape": "box",
-   "x0": 2686,
-   "z0": 4046,
-   "x1": 4080,
-   "z1": 4250,
-   "name": "Hut wall n"
-  },
-  {
-   "shape": "box",
-   "x0": 4080,
-   "z0": 4046,
-   "x1": 6120,
-   "z1": 4250,
-   "name": "Hut wall n.001"
-  },
-  {
-   "shape": "box",
-   "x0": 4080,
-   "z0": 4046,
-   "x1": 6120,
-   "z1": 4250,
-   "name": "Hut wall n.002"
-  },
-  {
-   "shape": "box",
-   "x0": 6120,
-   "z0": 4046,
-   "x1": 9554,
-   "z1": 4250,
-   "name": "Hut wall n.003"
-  },
-  {
-   "shape": "box",
-   "x0": 2686,
-   "z0": 9350,
-   "x1": 5440,
-   "z1": 9554,
-   "name": "Hut wall s"
-  },
-  {
-   "shape": "box",
-   "x0": 5440,
-   "z0": 9350,
-   "x1": 6970,
-   "z1": 9554,
-   "name": "Hut wall s.001"
-  },
-  {
-   "shape": "box",
-   "x0": 6970,
-   "z0": 9350,
-   "x1": 9554,
-   "z1": 9554,
-   "name": "Hut wall s.002"
-  },
-  {
-   "shape": "box",
-   "x0": 2686,
-   "z0": 4046,
-   "x1": 2890,
-   "z1": 9554,
-   "name": "Hut wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 9350,
-   "z0": 4046,
-   "x1": 9554,
-   "z1": 5610,
-   "name": "Hut wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 9350,
-   "z0": 5610,
-   "x1": 9554,
-   "z1": 7820,
-   "name": "Hut wall e.001"
-  },
-  {
-   "shape": "box",
-   "x0": 9350,
-   "z0": 5610,
-   "x1": 9554,
-   "z1": 7820,
-   "name": "Hut wall e.002"
-  },
-  {
-   "shape": "box",
-   "x0": 9350,
-   "z0": 7820,
-   "x1": 9554,
-   "z1": 9554,
-   "name": "Hut wall e.003"
-  },
-  {
-   "shape": "box",
-   "x0": 3145,
-   "z0": 4505,
-   "x1": 9095,
-   "z1": 9095,
-   "name": "Hut inside"
-  },
-  {
-   "shape": "box",
-   "x0": 12368,
-   "z0": 6715,
-   "x1": 13472,
-   "z1": 7565,
-   "name": "Instrument screen"
-  },
-  {
-   "shape": "box",
-   "x0": 22916,
-   "z0": 18666,
-   "x1": 25330,
-   "z1": 18870,
-   "name": "Head house wall n"
-  },
-  {
-   "shape": "box",
-   "x0": 25330,
-   "z0": 18666,
-   "x1": 27030,
-   "z1": 18870,
-   "name": "Head house wall n.001"
-  },
-  {
-   "shape": "box",
-   "x0": 27030,
-   "z0": 18666,
-   "x1": 29784,
-   "z1": 18870,
-   "name": "Head house wall n.002"
-  },
-  {
-   "shape": "box",
-   "x0": 22916,
-   "z0": 24650,
-   "x1": 29784,
-   "z1": 24854,
-   "name": "Head house wall s"
-  },
-  {
-   "shape": "box",
-   "x0": 22916,
-   "z0": 18666,
-   "x1": 23120,
-   "z1": 20910,
-   "name": "Head house wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 22916,
-   "z0": 20910,
-   "x1": 23120,
-   "z1": 22610,
-   "name": "Head house wall w.001"
-  },
-  {
-   "shape": "box",
-   "x0": 22916,
-   "z0": 20910,
-   "x1": 23120,
-   "z1": 22610,
-   "name": "Head house wall w.002"
-  },
-  {
-   "shape": "box",
-   "x0": 22916,
-   "z0": 22610,
-   "x1": 23120,
-   "z1": 24854,
-   "name": "Head house wall w.003"
-  },
-  {
-   "shape": "box",
-   "x0": 29580,
-   "z0": 18666,
-   "x1": 29784,
-   "z1": 24854,
-   "name": "Head house wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 23375,
-   "z0": 19125,
-   "x1": 29325,
-   "z1": 24395,
-   "name": "Head house inside"
-  },
-  {
    "shape": "box",
    "x0": 9705,
    "z0": 1797,
    "x1": 10015,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Pole stay.001"
   },
   {
    "shape": "box",
@@ -324,7 +68,23 @@
    "z0": 1797,
    "x1": 12568,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Pole stay"
+  },
+  {
+   "shape": "box",
+   "x0": 21690,
+   "z0": 1797,
+   "x1": 27355,
+   "z1": 1858,
+   "name": "Probe: Boulders"
+  },
+  {
+   "shape": "box",
+   "x0": 9957,
+   "z0": 2052,
+   "x1": 10018,
+   "z1": 2113,
+   "name": "Probe: Pole stay.001"
   },
   {
    "shape": "box",
@@ -332,15 +92,15 @@
    "z0": 2052,
    "x1": 12313,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Pole stay"
   },
   {
    "shape": "box",
    "x0": 21690,
-   "z0": 1800,
-   "x1": 27355,
-   "z1": 2110,
-   "name": "Probe"
+   "z0": 2052,
+   "x1": 27100,
+   "z1": 2113,
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
@@ -348,15 +108,15 @@
    "z0": 2307,
    "x1": 12058,
    "z1": 2368,
-   "name": "Probe"
+   "name": "Probe: Pole stay"
   },
   {
    "shape": "box",
-   "x0": 21690,
+   "x0": 21945,
    "z0": 2307,
    "x1": 27100,
    "z1": 2368,
-   "name": "Probe"
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
@@ -364,23 +124,31 @@
    "z0": 2562,
    "x1": 11803,
    "z1": 2623,
-   "name": "Probe"
+   "name": "Probe: Pole stay"
   },
   {
    "shape": "box",
    "x0": 21945,
    "z0": 2562,
-   "x1": 27100,
+   "x1": 26845,
    "z1": 2623,
-   "name": "Probe"
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
-   "x0": 22200,
+   "x0": 22455,
    "z0": 2817,
    "x1": 26845,
    "z1": 2878,
-   "name": "Probe"
+   "name": "Probe: Boulders"
+  },
+  {
+   "shape": "box",
+   "x0": 17610,
+   "z0": 3072,
+   "x1": 18430,
+   "z1": 3133,
+   "name": "Probe: Cairn 3"
   },
   {
    "shape": "box",
@@ -388,7 +156,7 @@
    "z0": 3072,
    "x1": 25570,
    "z1": 3133,
-   "name": "Probe"
+   "name": "Probe: Boulders"
   },
   {
    "shape": "box",
@@ -396,47 +164,95 @@
    "z0": 3327,
    "x1": 11035,
    "z1": 3388,
-   "name": "Probe"
+   "name": "Probe: Anemometer pole"
   },
   {
    "shape": "box",
-   "x0": 3075,
-   "z0": 4347,
-   "x1": 9250,
-   "z1": 4408,
-   "name": "Probe"
+   "x0": 17355,
+   "z0": 3330,
+   "x1": 18685,
+   "z1": 3895,
+   "name": "Probe: Cairn 3"
+  },
+  {
+   "shape": "box",
+   "x0": 17610,
+   "z0": 4092,
+   "x1": 18430,
+   "z1": 4153,
+   "name": "Probe: Cairn 3"
+  },
+  {
+   "shape": "box",
+   "x0": 20925,
+   "z0": 5112,
+   "x1": 21235,
+   "z1": 5173,
+   "name": "Probe: Outcrop.001"
+  },
+  {
+   "shape": "box",
+   "x0": 19905,
+   "z0": 5367,
+   "x1": 22000,
+   "z1": 5428,
+   "name": "Probe: Outcrop.001"
+  },
+  {
+   "shape": "box",
+   "x0": 19650,
+   "z0": 5625,
+   "x1": 22000,
+   "z1": 6190,
+   "name": "Probe: Outcrop.001"
+  },
+  {
+   "shape": "box",
+   "x0": 19395,
+   "z0": 6387,
+   "x1": 21745,
+   "z1": 6448,
+   "name": "Probe: Outcrop.001"
+  },
+  {
+   "shape": "box",
+   "x0": 19650,
+   "z0": 6642,
+   "x1": 21745,
+   "z1": 6703,
+   "name": "Probe: Outcrop.001"
+  },
+  {
+   "shape": "box",
+   "x0": 19905,
+   "z0": 6897,
+   "x1": 21745,
+   "z1": 6958,
+   "name": "Probe: Outcrop.001"
+  },
+  {
+   "shape": "box",
+   "x0": 21180,
+   "z0": 7152,
+   "x1": 21745,
+   "z1": 7213,
+   "name": "Probe: Outcrop.001"
   },
   {
    "shape": "box",
    "x0": 12255,
-   "z0": 6642,
+   "z0": 6645,
    "x1": 13585,
-   "z1": 6703,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 12252,
-   "z0": 6900,
-   "x1": 12313,
    "z1": 7465,
-   "name": "Probe"
+   "name": "Probe: Instrument screen"
   },
   {
    "shape": "box",
-   "x0": 13527,
-   "z0": 6900,
-   "x1": 13588,
-   "z1": 7465,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2562,
+   "x0": 2565,
    "z0": 4095,
-   "x1": 2623,
+   "x1": 9505,
    "z1": 7720,
-   "name": "Probe"
+   "name": "Probe: Hut inside"
   },
   {
    "shape": "box",
@@ -444,7 +260,7 @@
    "z0": 7662,
    "x1": 13330,
    "z1": 7723,
-   "name": "Probe"
+   "name": "Probe: Instrument screen"
   },
   {
    "shape": "box",
@@ -452,7 +268,15 @@
    "z0": 7917,
    "x1": 13078,
    "z1": 7978,
-   "name": "Probe"
+   "name": "Probe: Screen door, open"
+  },
+  {
+   "shape": "box",
+   "x0": 18630,
+   "z0": 7917,
+   "x1": 19450,
+   "z1": 7978,
+   "name": "Probe: Cairn 1"
   },
   {
    "shape": "box",
@@ -460,15 +284,15 @@
    "z0": 8172,
    "x1": 13330,
    "z1": 8233,
-   "name": "Probe"
+   "name": "Probe: Screen door, open"
   },
   {
    "shape": "box",
    "x0": 2055,
    "z0": 7920,
-   "x1": 2620,
+   "x1": 9505,
    "z1": 8485,
-   "name": "Probe"
+   "name": "Probe: Hut roof"
   },
   {
    "shape": "box",
@@ -476,39 +300,47 @@
    "z0": 8427,
    "x1": 13333,
    "z1": 8488,
-   "name": "Probe"
+   "name": "Probe: Screen door, open"
   },
   {
    "shape": "box",
-   "x0": 3072,
-   "z0": 4605,
-   "x1": 3133,
-   "z1": 8995,
-   "name": "Probe"
+   "x0": 18375,
+   "z0": 8175,
+   "x1": 19705,
+   "z1": 8740,
+   "name": "Probe: Cairn 1"
   },
   {
    "shape": "box",
-   "x0": 9192,
-   "z0": 4605,
-   "x1": 9253,
-   "z1": 8995,
-   "name": "Probe"
+   "x0": 18630,
+   "z0": 8937,
+   "x1": 19705,
+   "z1": 8998,
+   "name": "Probe: Cairn 1"
   },
   {
    "shape": "box",
-   "x0": 3075,
+   "x0": 29085,
+   "z0": 8937,
+   "x1": 30160,
+   "z1": 8998,
+   "name": "Probe: Outcrop.002"
+  },
+  {
+   "shape": "box",
+   "x0": 28575,
    "z0": 9192,
-   "x1": 9250,
+   "x1": 30670,
    "z1": 9253,
-   "name": "Probe"
+   "name": "Probe: Outcrop.002"
   },
   {
    "shape": "box",
-   "x0": 2562,
+   "x0": 2565,
    "z0": 8685,
-   "x1": 2623,
+   "x1": 9505,
    "z1": 9505,
-   "name": "Probe"
+   "name": "Probe: Hut inside"
   },
   {
    "shape": "box",
@@ -516,7 +348,7 @@
    "z0": 9702,
    "x1": 4918,
    "z1": 9763,
-   "name": "Probe"
+   "name": "Probe: Hut door"
   },
   {
    "shape": "box",
@@ -524,7 +356,15 @@
    "z0": 9957,
    "x1": 4915,
    "z1": 10018,
-   "name": "Probe"
+   "name": "Probe: Hut door"
+  },
+  {
+   "shape": "box",
+   "x0": 28320,
+   "z0": 9450,
+   "x1": 31180,
+   "z1": 10270,
+   "name": "Probe: Outcrop.002"
   },
   {
    "shape": "box",
@@ -532,7 +372,7 @@
    "z0": 10215,
    "x1": 4663,
    "z1": 10525,
-   "name": "Probe"
+   "name": "Probe: Hut door"
   },
   {
    "shape": "box",
@@ -540,7 +380,39 @@
    "z0": 10722,
    "x1": 4660,
    "z1": 10783,
-   "name": "Probe"
+   "name": "Probe: Hut door"
+  },
+  {
+   "shape": "box",
+   "x0": 28575,
+   "z0": 10470,
+   "x1": 31180,
+   "z1": 10780,
+   "name": "Probe: Outcrop.002"
+  },
+  {
+   "shape": "box",
+   "x0": 28830,
+   "z0": 10977,
+   "x1": 31180,
+   "z1": 11038,
+   "name": "Probe: Outcrop.002"
+  },
+  {
+   "shape": "box",
+   "x0": 29085,
+   "z0": 11232,
+   "x1": 30925,
+   "z1": 11293,
+   "name": "Probe: Outcrop.002"
+  },
+  {
+   "shape": "box",
+   "x0": 29340,
+   "z0": 11487,
+   "x1": 29650,
+   "z1": 11548,
+   "name": "Probe: Outcrop.002"
   },
   {
    "shape": "box",
@@ -548,23 +420,7 @@
    "z0": 11742,
    "x1": 16393,
    "z1": 11803,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19392,
-   "z0": 11742,
-   "x1": 19453,
-   "z1": 11803,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19902,
-   "z0": 11742,
-   "x1": 19963,
-   "z1": 11803,
-   "name": "Probe"
+   "name": "Probe: Signpost"
   },
   {
    "shape": "box",
@@ -572,15 +428,15 @@
    "z0": 11997,
    "x1": 17155,
    "z1": 12058,
-   "name": "Probe"
+   "name": "Probe: Sign board 2"
   },
   {
    "shape": "box",
-   "x0": 19392,
+   "x0": 19140,
    "z0": 12762,
-   "x1": 19453,
+   "x1": 19450,
    "z1": 12823,
-   "name": "Probe"
+   "name": "Probe: Crow on the deer"
   },
   {
    "shape": "box",
@@ -588,15 +444,135 @@
    "z0": 13020,
    "x1": 19705,
    "z1": 13330,
-   "name": "Probe"
+   "name": "Probe: Crow on the deer"
   },
   {
    "shape": "box",
-   "x0": 21432,
+   "x0": 12510,
    "z0": 13782,
-   "x1": 21493,
+   "x1": 13330,
    "z1": 13843,
-   "name": "Probe"
+   "name": "Probe: Cairn 0"
+  },
+  {
+   "shape": "box",
+   "x0": 12255,
+   "z0": 14040,
+   "x1": 13585,
+   "z1": 14350,
+   "name": "Probe: Cairn 0"
+  },
+  {
+   "shape": "box",
+   "x0": 12255,
+   "z0": 14547,
+   "x1": 13330,
+   "z1": 14608,
+   "name": "Probe: Cairn 0"
+  },
+  {
+   "shape": "box",
+   "x0": 12510,
+   "z0": 14802,
+   "x1": 13075,
+   "z1": 14863,
+   "name": "Probe: Cairn 0"
+  },
+  {
+   "shape": "box",
+   "x0": 3330,
+   "z0": 15822,
+   "x1": 4660,
+   "z1": 15883,
+   "name": "Probe: Outcrop.003"
+  },
+  {
+   "shape": "box",
+   "x0": 20925,
+   "z0": 15822,
+   "x1": 21745,
+   "z1": 15883,
+   "name": "Probe: Cairn 2"
+  },
+  {
+   "shape": "box",
+   "x0": 3585,
+   "z0": 16077,
+   "x1": 4915,
+   "z1": 16138,
+   "name": "Probe: Outcrop.003"
+  },
+  {
+   "shape": "box",
+   "x0": 20925,
+   "z0": 16077,
+   "x1": 22000,
+   "z1": 16138,
+   "name": "Probe: Cairn 2"
+  },
+  {
+   "shape": "box",
+   "x0": 3330,
+   "z0": 16332,
+   "x1": 4915,
+   "z1": 16393,
+   "name": "Probe: Outcrop.003"
+  },
+  {
+   "shape": "box",
+   "x0": 20670,
+   "z0": 16332,
+   "x1": 22000,
+   "z1": 16393,
+   "name": "Probe: Cairn 2"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 16587,
+   "x1": 5170,
+   "z1": 16648,
+   "name": "Probe: Outcrop.003"
+  },
+  {
+   "shape": "box",
+   "x0": 20925,
+   "z0": 16587,
+   "x1": 22000,
+   "z1": 16648,
+   "name": "Probe: Cairn 2"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 16842,
+   "x1": 4915,
+   "z1": 16903,
+   "name": "Probe: Outcrop.003"
+  },
+  {
+   "shape": "box",
+   "x0": 20925,
+   "z0": 16842,
+   "x1": 21745,
+   "z1": 16903,
+   "name": "Probe: Cairn 2"
+  },
+  {
+   "shape": "box",
+   "x0": 3330,
+   "z0": 17097,
+   "x1": 4915,
+   "z1": 17158,
+   "name": "Probe: Outcrop.003"
+  },
+  {
+   "shape": "box",
+   "x0": 3585,
+   "z0": 17352,
+   "x1": 4405,
+   "z1": 17413,
+   "name": "Probe: Outcrop.003"
   },
   {
    "shape": "box",
@@ -604,7 +580,7 @@
    "z0": 17352,
    "x1": 27100,
    "z1": 17413,
-   "name": "Probe"
+   "name": "Probe: Head house door"
   },
   {
    "shape": "box",
@@ -612,7 +588,7 @@
    "z0": 17607,
    "x1": 27103,
    "z1": 17668,
-   "name": "Probe"
+   "name": "Probe: Head house door"
   },
   {
    "shape": "box",
@@ -620,7 +596,7 @@
    "z0": 17862,
    "x1": 27355,
    "z1": 17923,
-   "name": "Probe"
+   "name": "Probe: Head house door"
   },
   {
    "shape": "box",
@@ -628,7 +604,7 @@
    "z0": 18117,
    "x1": 27358,
    "z1": 18178,
-   "name": "Probe"
+   "name": "Probe: Head house door"
   },
   {
    "shape": "box",
@@ -636,39 +612,23 @@
    "z0": 18372,
    "x1": 27610,
    "z1": 18433,
-   "name": "Probe"
+   "name": "Probe: Head house door"
   },
   {
    "shape": "box",
    "x0": 22965,
-   "z0": 18627,
+   "z0": 18630,
    "x1": 25315,
-   "z1": 18688,
-   "name": "Probe"
+   "z1": 18940,
+   "name": "Probe: Head house wall n"
   },
   {
    "shape": "box",
    "x0": 27045,
-   "z0": 18627,
+   "z0": 18630,
    "x1": 29905,
-   "z1": 18688,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23220,
-   "z0": 18882,
-   "x1": 25315,
-   "z1": 18943,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 27045,
-   "z0": 18882,
-   "x1": 29395,
-   "z1": 18943,
-   "name": "Probe"
+   "z1": 18940,
+   "name": "Probe: Head house wall n.002"
   },
   {
    "shape": "box",
@@ -676,31 +636,55 @@
    "z0": 19137,
    "x1": 22255,
    "z1": 19198,
-   "name": "Probe"
+   "name": "Probe: Drum by the head house"
+  },
+  {
+   "shape": "box",
+   "x0": 22965,
+   "z0": 19137,
+   "x1": 29905,
+   "z1": 19198,
+   "name": "Probe: Head house inside"
+  },
+  {
+   "shape": "box",
+   "x0": 9960,
+   "z0": 19902,
+   "x1": 10525,
+   "z1": 19963,
+   "name": "Probe: Outcrop"
+  },
+  {
+   "shape": "box",
+   "x0": 9705,
+   "z0": 20157,
+   "x1": 12055,
+   "z1": 20218,
+   "name": "Probe: Outcrop"
   },
   {
    "shape": "box",
    "x0": 21690,
-   "z0": 19392,
-   "x1": 22510,
-   "z1": 19453,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21435,
-   "z0": 19647,
-   "x1": 22765,
-   "z1": 19708,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21690,
-   "z0": 19905,
+   "z0": 19395,
    "x1": 22510,
    "z1": 20215,
-   "name": "Probe"
+   "name": "Probe: Drum by the head house"
+  },
+  {
+   "shape": "box",
+   "x0": 9450,
+   "z0": 20415,
+   "x1": 12055,
+   "z1": 20725,
+   "name": "Probe: Outcrop"
+  },
+  {
+   "shape": "box",
+   "x0": 9195,
+   "z0": 20922,
+   "x1": 12310,
+   "z1": 20983,
+   "name": "Probe: Outcrop"
   },
   {
    "shape": "box",
@@ -708,23 +692,63 @@
    "z0": 20922,
    "x1": 22255,
    "z1": 20983,
-   "name": "Probe"
+   "name": "Probe: Crate by the head house"
+  },
+  {
+   "shape": "box",
+   "x0": 9195,
+   "z0": 21177,
+   "x1": 12820,
+   "z1": 21238,
+   "name": "Probe: Outcrop"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 21432,
+   "x1": 12820,
+   "z1": 21493,
+   "name": "Probe: Outcrop"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 21687,
+   "x1": 9250,
+   "z1": 21748,
+   "name": "Probe: Boulders"
+  },
+  {
+   "shape": "box",
+   "x0": 9960,
+   "z0": 21687,
+   "x1": 12820,
+   "z1": 21748,
+   "name": "Probe: Outcrop"
   },
   {
    "shape": "box",
    "x0": 21435,
    "z0": 21180,
    "x1": 22510,
-   "z1": 21490,
-   "name": "Probe"
+   "z1": 21745,
+   "name": "Probe: Crate by the head house"
   },
   {
    "shape": "box",
-   "x0": 21180,
-   "z0": 21687,
-   "x1": 22510,
-   "z1": 21748,
-   "name": "Probe"
+   "x0": 9192,
+   "z0": 21942,
+   "x1": 9253,
+   "z1": 22003,
+   "name": "Probe: Boulders"
+  },
+  {
+   "shape": "box",
+   "x0": 10215,
+   "z0": 21942,
+   "x1": 12565,
+   "z1": 22003,
+   "name": "Probe: Outcrop"
   },
   {
    "shape": "box",
@@ -732,39 +756,63 @@
    "z0": 21942,
    "x1": 22255,
    "z1": 22003,
-   "name": "Probe"
+   "name": "Probe: Crate by the head house"
   },
   {
    "shape": "box",
-   "x0": 23217,
-   "z0": 19140,
-   "x1": 23278,
-   "z1": 24295,
-   "name": "Probe"
+   "x0": 10215,
+   "z0": 22197,
+   "x1": 12310,
+   "z1": 22258,
+   "name": "Probe: Outcrop"
   },
   {
    "shape": "box",
-   "x0": 29337,
-   "z0": 19140,
-   "x1": 29398,
-   "z1": 24295,
-   "name": "Probe"
+   "x0": 10470,
+   "z0": 22452,
+   "x1": 11800,
+   "z1": 22513,
+   "name": "Probe: Outcrop"
   },
   {
    "shape": "box",
-   "x0": 23220,
-   "z0": 24492,
-   "x1": 29395,
-   "z1": 24553,
-   "name": "Probe"
+   "x0": 29340,
+   "z0": 19395,
+   "x1": 29905,
+   "z1": 22510,
+   "name": "Probe: Head house wall e"
   },
   {
    "shape": "box",
-   "x0": 29847,
-   "z0": 18885,
-   "x1": 29908,
+   "x0": 29085,
+   "z0": 22710,
+   "x1": 29905,
+   "z1": 23275,
+   "name": "Probe: Head house wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 22965,
+   "z0": 19395,
+   "x1": 23530,
+   "z1": 24040,
+   "name": "Probe: Head house inside"
+  },
+  {
+   "shape": "box",
+   "x0": 29340,
+   "z0": 23475,
+   "x1": 29905,
+   "z1": 24040,
+   "name": "Probe: Head house wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 22965,
+   "z0": 24240,
+   "x1": 29905,
    "z1": 24805,
-   "name": "Probe"
+   "name": "Probe: Head house inside"
   }
  ],
  "anim": {
@@ -772,47 +820,59 @@
   "ticks": 3
  },
  "probe": {
-  "Boulders": 120,
-  "Head house inside": 46,
-  "Hut inside": 32,
-  "Head house wall e": 23,
+  "Hut inside": 379,
+  "Boulders": 124,
+  "Outcrop": 114,
+  "Head house inside": 111,
+  "Outcrop.002": 104,
+  "Outcrop.001": 71,
+  "Hut roof": 66,
+  "Outcrop.003": 47,
+  "Head house wall e": 47,
+  "Hut wall w": 41,
+  "Head house wall s": 32,
+  "Cairn 1": 27,
+  "Cairn 3": 24,
+  "Cairn 2": 24,
+  "Instrument screen": 22,
   "Head house wall n.002": 22,
-  "Crate by the head house": 22,
-  "Hut wall w": 19,
-  "Head house wall n": 15,
-  "Drum by the head house": 14,
-  "Instrument screen": 13,
-  "Hut wall s": 10,
-  "Hut wall e.001": 9,
-  "Hut wall n.001": 8,
+  "Cairn 0": 21,
+  "Crate by the head house": 21,
+  "Hut wall s": 19,
+  "Hut wall s.002": 19,
+  "Hut wall e.001": 18,
+  "Drum by the head house": 18,
+  "Hut wall n.003": 17,
+  "Hut wall n.001": 16,
+  "Head house wall n": 16,
+  "Head house wall w.003": 15,
+  "Head house wall w.001": 14,
+  "Hut wall e.003": 12,
+  "Hut wall e": 10,
+  "Hut wall n": 9,
+  "Head house wall w": 9,
   "Gas bottle": 8,
-  "Hut wall s.002": 8,
+  "Hut door": 8,
   "Head house door": 8,
-  "Hut door": 7,
   "Sign board 2": 7,
-  "Head house wall w.001": 7,
-  "Hut wall e.003": 6,
-  "hoop.001": 6,
-  "Head house wall w.003": 6,
-  "Head house wall s": 6,
-  "Hut wall n": 5,
-  "Hut wall e": 5,
   "Screen door, open": 5,
+  "Hut wall s.001": 5,
   "Crow on the deer": 5,
   "Pole stay": 4,
-  "Hut wall n.003": 4,
   "Lift sign": 4,
-  "Head house wall w": 3,
-  "Pole stay.001": 2,
+  "Pole stay.001": 3,
+  "Louvre": 3,
   "Anemometer pole": 2,
+  "Radio dial seen through the window": 2,
   "Signpost": 2,
+  "Crow on the deer wing.001": 2,
+  "Crow on a cairn": 2,
+  "Crow on the cairn north wing.001": 1,
+  "Crow on the cairn north wing": 1,
   "Screen leg": 1,
   "Screen leg.002": 1,
-  "Crow at the deer wing.001": 1,
-  "Crow at the deer wing": 1,
-  "Crow on the deer wing.001": 1,
   "Crow on the deer wing": 1,
-  "Crow by the deer wing": 1
+  "Crow on a cairn wing.001": 1
  },
  "bounds": {
   "x0": 1700,

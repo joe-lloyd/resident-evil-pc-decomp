@@ -68,348 +68,420 @@
  ],
  "walls": [
   {
-   "shape": "circle",
-   "x0": 10136,
-   "z0": 21526,
-   "x1": 12304,
-   "z1": 23694,
-   "name": "Old spruce footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 18232,
-   "z0": 4633,
-   "x1": 20527,
-   "z1": 6928,
-   "name": "Old spruce footprint.001"
-  },
-  {
-   "shape": "circle",
-   "x0": 23800,
-   "z0": 2890,
-   "x1": 25840,
-   "z1": 4930,
-   "name": "Old spruce footprint.002"
-  },
-  {
-   "shape": "circle",
-   "x0": 18976,
-   "z0": 20336,
-   "x1": 21144,
-   "z1": 22504,
-   "name": "Old spruce footprint.003"
-  },
-  {
-   "shape": "circle",
-   "x0": 7607,
-   "z0": 1658,
-   "x1": 9393,
-   "z1": 3443,
-   "name": "Old spruce footprint.004"
-  },
-  {
-   "shape": "circle",
-   "x0": 28454,
-   "z0": 20124,
-   "x1": 30366,
-   "z1": 22036,
-   "name": "Old spruce footprint.005"
+   "shape": "box",
+   "x0": 23900,
+   "z0": 3500,
+   "x1": 25740,
+   "z1": 4320,
+   "name": "Probe: Old spruce trunks"
   },
   {
    "shape": "box",
-   "x0": 16091,
-   "z0": 16882,
-   "x1": 18283,
-   "z1": 18614,
-   "name": "Blowdown 0 footprint"
+   "x0": 24155,
+   "z0": 4517,
+   "x1": 25485,
+   "z1": 4578,
+   "name": "Probe: Old spruce trunks"
   },
   {
    "shape": "box",
-   "x0": 18165,
-   "z0": 16338,
-   "x1": 20357,
-   "z1": 18070,
-   "name": "Blowdown 0 footprint.001"
+   "x0": 18800,
+   "z0": 4772,
+   "x1": 19875,
+   "z1": 4833,
+   "name": "Probe: Old spruce trunks"
   },
   {
    "shape": "box",
-   "x0": 20239,
-   "z0": 15794,
-   "x1": 22431,
-   "z1": 17526,
-   "name": "Blowdown 0 footprint.002"
+   "x0": 24410,
+   "z0": 4772,
+   "x1": 25230,
+   "z1": 4833,
+   "name": "Probe: Old spruce trunks"
   },
   {
    "shape": "box",
-   "x0": 22313,
-   "z0": 15250,
-   "x1": 24505,
-   "z1": 16982,
-   "name": "Blowdown 0 footprint.003"
-  },
-  {
-   "shape": "box",
-   "x0": 24387,
-   "z0": 14706,
-   "x1": 26579,
-   "z1": 16438,
-   "name": "Blowdown 0 footprint.004"
-  },
-  {
-   "shape": "circle",
-   "x0": 14500,
-   "z0": 17308,
-   "x1": 16112,
-   "z1": 18974,
-   "name": "Snapped stump 0"
-  },
-  {
-   "shape": "box",
-   "x0": 5107,
-   "z0": 6570,
-   "x1": 7247,
-   "z1": 7936,
-   "name": "Blowdown 1 footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 7260,
-   "z0": 6117,
-   "x1": 9400,
-   "z1": 7483,
-   "name": "Blowdown 1 footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 9413,
-   "z0": 5664,
-   "x1": 11553,
-   "z1": 7030,
-   "name": "Blowdown 1 footprint.002"
-  },
-  {
-   "shape": "circle",
-   "x0": 3656,
-   "z0": 6993,
-   "x1": 4943,
-   "z1": 8264,
-   "name": "Snapped stump 1"
-  },
-  {
-   "shape": "box",
-   "x0": 22950,
-   "z0": 21709,
-   "x1": 25330,
-   "z1": 23851,
-   "name": "Rock footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 6630,
-   "z0": 3655,
-   "x1": 8330,
-   "z1": 5185,
-   "name": "Rock footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 29155,
-   "z0": 10191,
-   "x1": 30685,
-   "z1": 11569,
-   "name": "Rock footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 17765,
-   "z0": 12384,
-   "x1": 18955,
-   "z1": 13455,
-   "name": "Rock footprint.003"
-  },
-  {
-   "shape": "circle",
-   "x0": 25473,
-   "z0": 21075,
-   "x1": 26887,
-   "z1": 22474,
-   "name": "Stump 0"
-  },
-  {
-   "shape": "circle",
-   "x0": 22514,
-   "z0": 13013,
-   "x1": 23726,
-   "z1": 14212,
-   "name": "Stump 1"
-  },
-  {
-   "shape": "circle",
-   "x0": 28567,
-   "z0": 11248,
-   "x1": 29913,
-   "z1": 12580,
-   "name": "Stump 2"
-  },
-  {
-   "shape": "box",
-   "x0": 20327,
+   "x0": 18545,
    "z0": 5027,
-   "x1": 20388,
+   "x1": 19110,
    "z1": 5088,
-   "name": "Probe"
+   "name": "Probe: Old spruce trunks"
   },
   {
    "shape": "box",
-   "x0": 18287,
+   "x0": 19565,
+   "z0": 5027,
+   "x1": 20130,
+   "z1": 5088,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 18542,
+   "z0": 5282,
+   "x1": 18603,
+   "z1": 5343,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 19310,
+   "z0": 5282,
+   "x1": 19620,
+   "z1": 5343,
+   "name": "Probe: Tree roots"
+  },
+  {
+   "shape": "box",
+   "x0": 20075,
+   "z0": 5282,
+   "x1": 20385,
+   "z1": 5343,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 18290,
+   "z0": 5540,
+   "x1": 20385,
+   "z1": 5850,
+   "name": "Probe: Tree roots"
+  },
+  {
+   "shape": "box",
+   "x0": 10895,
+   "z0": 6047,
+   "x1": 11205,
+   "z1": 6108,
+   "name": "Probe: Torn jacket"
+  },
+  {
+   "shape": "box",
+   "x0": 18290,
+   "z0": 6047,
+   "x1": 18600,
+   "z1": 6108,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 19055,
+   "z0": 6047,
+   "x1": 20385,
+   "z1": 6108,
+   "name": "Probe: Tree roots"
+  },
+  {
+   "shape": "box",
+   "x0": 10895,
    "z0": 6302,
-   "x1": 18348,
+   "x1": 11460,
    "z1": 6363,
-   "name": "Probe"
+   "name": "Probe: Torn jacket"
   },
   {
    "shape": "box",
-   "x0": 19817,
+   "x0": 18290,
+   "z0": 6302,
+   "x1": 19365,
+   "z1": 6363,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 19820,
+   "z0": 6302,
+   "x1": 20385,
+   "z1": 6363,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 11150,
+   "z0": 6557,
+   "x1": 11460,
+   "z1": 6618,
+   "name": "Probe: Torn jacket"
+  },
+  {
+   "shape": "box",
+   "x0": 18545,
+   "z0": 6557,
+   "x1": 20130,
+   "z1": 6618,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 7832,
    "z0": 6812,
-   "x1": 19878,
+   "x1": 7893,
    "z1": 6873,
-   "name": "Probe"
+   "name": "Probe: Blowdown 1"
   },
   {
    "shape": "box",
-   "x0": 5027,
+   "x0": 8345,
+   "z0": 6812,
+   "x1": 8655,
+   "z1": 6873,
+   "name": "Probe: Blowdown 1"
+  },
+  {
+   "shape": "box",
+   "x0": 19055,
+   "z0": 6812,
+   "x1": 19875,
+   "z1": 6873,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 4010,
+   "z0": 7067,
+   "x1": 4575,
+   "z1": 7128,
+   "name": "Probe: Snapped stump 1"
+  },
+  {
+   "shape": "box",
+   "x0": 5537,
+   "z0": 7067,
+   "x1": 5598,
+   "z1": 7128,
+   "name": "Probe: Blowdown 1"
+  },
+  {
+   "shape": "box",
+   "x0": 6302,
+   "z0": 7067,
+   "x1": 6363,
+   "z1": 7128,
+   "name": "Probe: Blowdown 1"
+  },
+  {
+   "shape": "box",
+   "x0": 6815,
+   "z0": 7067,
+   "x1": 7890,
+   "z1": 7128,
+   "name": "Probe: Blowdown 1"
+  },
+  {
+   "shape": "box",
+   "x0": 5285,
+   "z0": 7322,
+   "x1": 6615,
+   "z1": 7383,
+   "name": "Probe: Blowdown 1"
+  },
+  {
+   "shape": "box",
+   "x0": 5282,
+   "z0": 7577,
+   "x1": 5343,
+   "z1": 7638,
+   "name": "Probe: Blowdown 1"
+  },
+  {
+   "shape": "box",
+   "x0": 5795,
+   "z0": 7577,
+   "x1": 6105,
+   "z1": 7638,
+   "name": "Probe: Blowdown 1"
+  },
+  {
+   "shape": "box",
+   "x0": 3755,
    "z0": 7325,
-   "x1": 5088,
-   "z1": 7635,
-   "name": "Probe"
+   "x1": 4830,
+   "z1": 7890,
+   "name": "Probe: Snapped stump 1"
   },
   {
    "shape": "box",
-   "x0": 7325,
-   "z0": 7832,
-   "x1": 7635,
-   "z1": 7893,
-   "name": "Probe"
+   "x0": 4010,
+   "z0": 8087,
+   "x1": 4575,
+   "z1": 8148,
+   "name": "Probe: Snapped stump 1"
   },
   {
    "shape": "box",
-   "x0": 28997,
+   "x0": 7577,
+   "z0": 8087,
+   "x1": 7638,
+   "z1": 8148,
+   "name": "Probe: Blowdown 1"
+  },
+  {
+   "shape": "box",
+   "x0": 29000,
    "z0": 11147,
-   "x1": 29058,
+   "x1": 29310,
    "z1": 11208,
-   "name": "Probe"
+   "name": "Probe: Stump 2"
   },
   {
    "shape": "box",
-   "x0": 28487,
+   "x0": 28745,
+   "z0": 11402,
+   "x1": 29820,
+   "z1": 11463,
+   "name": "Probe: Stump 2"
+  },
+  {
+   "shape": "box",
+   "x0": 28490,
    "z0": 11660,
-   "x1": 28548,
-   "z1": 12225,
-   "name": "Probe"
+   "x1": 29820,
+   "z1": 11970,
+   "name": "Probe: Stump 2"
   },
   {
    "shape": "box",
-   "x0": 28742,
+   "x0": 28745,
+   "z0": 12167,
+   "x1": 29820,
+   "z1": 12228,
+   "name": "Probe: Stump top 2"
+  },
+  {
+   "shape": "box",
+   "x0": 28745,
    "z0": 12422,
-   "x1": 28803,
+   "x1": 29565,
    "z1": 12483,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29762,
-   "z0": 12422,
-   "x1": 29823,
-   "z1": 12483,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29252,
-   "z0": 12677,
-   "x1": 29313,
-   "z1": 12738,
-   "name": "Probe"
+   "name": "Probe: Stump top 2"
   },
   {
    "shape": "box",
    "x0": 22880,
    "z0": 12932,
-   "x1": 23445,
+   "x1": 23190,
    "z1": 12993,
-   "name": "Probe"
+   "name": "Probe: Stump 1"
   },
   {
    "shape": "box",
-   "x0": 22622,
-   "z0": 13187,
-   "x1": 22683,
-   "z1": 13248,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23642,
-   "z0": 13187,
-   "x1": 23703,
-   "z1": 13248,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 22367,
-   "z0": 13442,
-   "x1": 22428,
-   "z1": 13503,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23642,
-   "z0": 13952,
-   "x1": 23703,
-   "z1": 14013,
-   "name": "Probe"
+   "x0": 22625,
+   "z0": 13190,
+   "x1": 23700,
+   "z1": 14010,
+   "name": "Probe: Stump top 1"
   },
   {
    "shape": "box",
    "x0": 22880,
    "z0": 14207,
-   "x1": 23445,
+   "x1": 23190,
    "z1": 14268,
-   "name": "Probe"
+   "name": "Probe: Stump top 1"
+  },
+  {
+   "shape": "box",
+   "x0": 25175,
+   "z0": 15227,
+   "x1": 26250,
+   "z1": 15288,
+   "name": "Probe: Blowdown 0"
+  },
+  {
+   "shape": "box",
+   "x0": 24155,
+   "z0": 15482,
+   "x1": 26505,
+   "z1": 15543,
+   "name": "Probe: Blowdown 0"
+  },
+  {
+   "shape": "box",
+   "x0": 23135,
+   "z0": 15737,
+   "x1": 26250,
+   "z1": 15798,
+   "name": "Probe: Blowdown 0"
+  },
+  {
+   "shape": "box",
+   "x0": 21860,
+   "z0": 15992,
+   "x1": 25485,
+   "z1": 16053,
+   "name": "Probe: Blowdown 0"
+  },
+  {
+   "shape": "box",
+   "x0": 20840,
+   "z0": 16247,
+   "x1": 24975,
+   "z1": 16308,
+   "name": "Probe: Blowdown 0"
+  },
+  {
+   "shape": "box",
+   "x0": 18797,
+   "z0": 16502,
+   "x1": 18858,
+   "z1": 16563,
+   "name": "Probe: Blowdown 0"
   },
   {
    "shape": "box",
    "x0": 19820,
-   "z0": 16247,
-   "x1": 20130,
-   "z1": 16308,
-   "name": "Probe"
+   "z0": 16502,
+   "x1": 23445,
+   "z1": 16563,
+   "name": "Probe: Blowdown 0"
   },
   {
    "shape": "box",
-   "x0": 17525,
+   "x0": 18290,
    "z0": 16757,
-   "x1": 18090,
+   "x1": 23190,
    "z1": 16818,
-   "name": "Probe"
+   "name": "Probe: Blowdown 0"
   },
   {
    "shape": "box",
-   "x0": 22622,
+   "x0": 17270,
+   "z0": 17012,
+   "x1": 22170,
+   "z1": 17073,
+   "name": "Probe: Blowdown 0"
+  },
+  {
+   "shape": "box",
+   "x0": 16250,
    "z0": 17267,
-   "x1": 22683,
+   "x1": 20130,
    "z1": 17328,
-   "name": "Probe"
+   "name": "Probe: Blowdown 0"
   },
   {
    "shape": "box",
-   "x0": 22625,
+   "x0": 14975,
    "z0": 17522,
-   "x1": 22935,
+   "x1": 15795,
    "z1": 17583,
-   "name": "Probe"
+   "name": "Probe: Snapped stump 0"
+  },
+  {
+   "shape": "box",
+   "x0": 16250,
+   "z0": 17522,
+   "x1": 19875,
+   "z1": 17583,
+   "name": "Probe: Blowdown 0"
+  },
+  {
+   "shape": "box",
+   "x0": 14720,
+   "z0": 17777,
+   "x1": 19110,
+   "z1": 17838,
+   "name": "Probe: Blowdown 0"
   },
   {
    "shape": "box",
@@ -417,95 +489,351 @@
    "z0": 17777,
    "x1": 22938,
    "z1": 17838,
-   "name": "Probe"
+   "name": "Probe: Blowdown 0"
   },
   {
    "shape": "box",
-   "x0": 15992,
+   "x0": 14720,
+   "z0": 18032,
+   "x1": 18090,
+   "z1": 18093,
+   "name": "Probe: Blowdown 0"
+  },
+  {
+   "shape": "box",
+   "x0": 14720,
+   "z0": 18287,
+   "x1": 17070,
+   "z1": 18348,
+   "name": "Probe: Snapped stump 0"
+  },
+  {
+   "shape": "box",
+   "x0": 14720,
    "z0": 18542,
-   "x1": 16053,
+   "x1": 16050,
    "z1": 18603,
-   "name": "Probe"
+   "name": "Probe: Snapped stump 0"
   },
   {
    "shape": "box",
-   "x0": 15737,
+   "x0": 14975,
    "z0": 18797,
-   "x1": 15798,
+   "x1": 15795,
    "z1": 18858,
-   "name": "Probe"
+   "name": "Probe: Snapped stump 0"
   },
   {
    "shape": "box",
-   "x0": 29507,
-   "z0": 20072,
-   "x1": 29568,
-   "z1": 20133,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 20327,
+   "x0": 19820,
    "z0": 20327,
-   "x1": 20388,
+   "x1": 20130,
    "z1": 20388,
-   "name": "Probe"
+   "name": "Probe: Old spruce trunks"
   },
   {
    "shape": "box",
-   "x0": 25682,
+   "x0": 29000,
+   "z0": 20327,
+   "x1": 29820,
+   "z1": 20388,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 19310,
+   "z0": 20582,
+   "x1": 20640,
+   "z1": 20643,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 28745,
+   "z0": 20582,
+   "x1": 30075,
+   "z1": 20643,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 19310,
+   "z0": 20837,
+   "x1": 19875,
+   "z1": 20898,
+   "name": "Probe: Tree roots"
+  },
+  {
+   "shape": "box",
+   "x0": 20330,
+   "z0": 20837,
+   "x1": 20895,
+   "z1": 20898,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 19055,
    "z0": 21092,
-   "x1": 25743,
+   "x1": 20895,
    "z1": 21153,
-   "name": "Probe"
+   "name": "Probe: Old spruce trunks"
   },
   {
    "shape": "box",
-   "x0": 26447,
+   "x0": 25940,
    "z0": 21092,
-   "x1": 26508,
+   "x1": 26505,
    "z1": 21153,
-   "name": "Probe"
+   "name": "Probe: Stump 0"
   },
   {
    "shape": "box",
-   "x0": 18797,
+   "x0": 28490,
+   "z0": 20840,
+   "x1": 30330,
+   "z1": 21150,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 25685,
    "z0": 21347,
-   "x1": 18858,
+   "x1": 26760,
    "z1": 21408,
-   "name": "Probe"
+   "name": "Probe: Stump 0"
   },
   {
    "shape": "box",
-   "x0": 26957,
-   "z0": 21605,
-   "x1": 27018,
-   "z1": 21915,
-   "name": "Probe"
+   "x0": 28490,
+   "z0": 21347,
+   "x1": 29565,
+   "z1": 21408,
+   "name": "Probe: Old spruce trunks"
   },
   {
    "shape": "box",
-   "x0": 25427,
+   "x0": 30020,
+   "z0": 21347,
+   "x1": 30330,
+   "z1": 21408,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 10895,
+   "z0": 21602,
+   "x1": 11715,
+   "z1": 21663,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 19052,
    "z0": 21350,
-   "x1": 25488,
-   "z1": 22170,
-   "name": "Probe"
+   "x1": 19113,
+   "z1": 21660,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 19565,
+   "z0": 21350,
+   "x1": 21150,
+   "z1": 21660,
+   "name": "Probe: Tree roots"
+  },
+  {
+   "shape": "box",
+   "x0": 28745,
+   "z0": 21602,
+   "x1": 30075,
+   "z1": 21663,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 10385,
+   "z0": 21857,
+   "x1": 11970,
+   "z1": 21918,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 19055,
+   "z0": 21857,
+   "x1": 20895,
+   "z1": 21918,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 24152,
+   "z0": 21857,
+   "x1": 24213,
+   "z1": 21918,
+   "name": "Probe: Rocks"
   },
   {
    "shape": "box",
    "x0": 25430,
-   "z0": 22367,
-   "x1": 25740,
-   "z1": 22428,
-   "name": "Probe"
+   "z0": 21605,
+   "x1": 26760,
+   "z1": 21915,
+   "name": "Probe: Stump top 0"
   },
   {
    "shape": "box",
-   "x0": 25427,
-   "z0": 22625,
-   "x1": 25488,
-   "z1": 22935,
-   "name": "Probe"
+   "x0": 29000,
+   "z0": 21857,
+   "x1": 29820,
+   "z1": 21918,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 10385,
+   "z0": 22112,
+   "x1": 10695,
+   "z1": 22173,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 11150,
+   "z0": 22112,
+   "x1": 12225,
+   "z1": 22173,
+   "name": "Probe: Tree roots"
+  },
+  {
+   "shape": "box",
+   "x0": 19310,
+   "z0": 22112,
+   "x1": 20895,
+   "z1": 22173,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 23645,
+   "z0": 22112,
+   "x1": 24720,
+   "z1": 22173,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 25685,
+   "z0": 22112,
+   "x1": 26760,
+   "z1": 22173,
+   "name": "Probe: Stump top 0"
+  },
+  {
+   "shape": "box",
+   "x0": 19565,
+   "z0": 22367,
+   "x1": 20385,
+   "z1": 22428,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 23390,
+   "z0": 22367,
+   "x1": 25230,
+   "z1": 22428,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 25685,
+   "z0": 22367,
+   "x1": 26505,
+   "z1": 22428,
+   "name": "Probe: Stump 0"
+  },
+  {
+   "shape": "box",
+   "x0": 10130,
+   "z0": 22370,
+   "x1": 12225,
+   "z1": 22680,
+   "name": "Probe: Tree roots"
+  },
+  {
+   "shape": "box",
+   "x0": 23135,
+   "z0": 22622,
+   "x1": 25230,
+   "z1": 22683,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 11915,
+   "z0": 22877,
+   "x1": 12225,
+   "z1": 22938,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 23390,
+   "z0": 22877,
+   "x1": 25230,
+   "z1": 22938,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 10385,
+   "z0": 22880,
+   "x1": 11460,
+   "z1": 23190,
+   "name": "Probe: Tree roots"
+  },
+  {
+   "shape": "box",
+   "x0": 11912,
+   "z0": 23132,
+   "x1": 11973,
+   "z1": 23193,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 23390,
+   "z0": 23132,
+   "x1": 24975,
+   "z1": 23193,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 10640,
+   "z0": 23387,
+   "x1": 11970,
+   "z1": 23448,
+   "name": "Probe: Old spruce trunks"
+  },
+  {
+   "shape": "box",
+   "x0": 24155,
+   "z0": 23387,
+   "x1": 24975,
+   "z1": 23448,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 11150,
+   "z0": 23642,
+   "x1": 11460,
+   "z1": 23703,
+   "name": "Probe: Old spruce trunks"
   }
  ],
  "anim": {
@@ -513,14 +841,23 @@
   "ticks": 3
  },
  "probe": {
-  "Stump 1": 10,
-  "Blowdown 0": 9,
-  "Stump 0": 9,
-  "Stump 2": 7,
-  "Old spruce trunks": 6,
-  "Blowdown 1": 4,
-  "Rocks": 3,
-  "Snapped stump 0": 2
+  "Old spruce trunks": 174,
+  "Blowdown 0": 172,
+  "Tree roots": 84,
+  "Rocks": 43,
+  "Snapped stump 0": 32,
+  "Blowdown 1": 20,
+  "Snapped stump 1": 19,
+  "Stump top 0": 16,
+  "Stump 2": 14,
+  "Stump top 2": 14,
+  "Stump 0": 13,
+  "Stump 1": 12,
+  "Stump top 1": 12,
+  "Torn jacket": 7,
+  "Tree roots.002": 1,
+  "Survey ribbon": 1,
+  "Blaze": 1
  },
  "bounds": {
   "x0": 3400,

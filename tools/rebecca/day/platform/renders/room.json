@@ -82,163 +82,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 18870,
-   "z0": 4250,
-   "x1": 24310,
-   "z1": 4454,
-   "name": "Booth wall n"
-  },
-  {
-   "shape": "box",
-   "x0": 18870,
-   "z0": 8466,
-   "x1": 21590,
-   "z1": 8670,
-   "name": "Booth wall s"
-  },
-  {
-   "shape": "box",
-   "x0": 21590,
-   "z0": 8466,
-   "x1": 23120,
-   "z1": 8670,
-   "name": "Booth wall s.001"
-  },
-  {
-   "shape": "box",
-   "x0": 23120,
-   "z0": 8466,
-   "x1": 24310,
-   "z1": 8670,
-   "name": "Booth wall s.002"
-  },
-  {
-   "shape": "box",
-   "x0": 18870,
-   "z0": 4250,
-   "x1": 19074,
-   "z1": 5015,
-   "name": "Booth wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 18870,
-   "z0": 5015,
-   "x1": 19074,
-   "z1": 8075,
-   "name": "Booth wall w.001"
-  },
-  {
-   "shape": "box",
-   "x0": 18870,
-   "z0": 5015,
-   "x1": 19074,
-   "z1": 8075,
-   "name": "Booth wall w.002"
-  },
-  {
-   "shape": "box",
-   "x0": 18870,
-   "z0": 8075,
-   "x1": 19074,
-   "z1": 8670,
-   "name": "Booth wall w.003"
-  },
-  {
-   "shape": "box",
-   "x0": 24106,
-   "z0": 4250,
-   "x1": 24310,
-   "z1": 8670,
-   "name": "Booth wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 1717,
-   "z0": 15147,
-   "x1": 2023,
-   "z1": 15453,
-   "name": "Wheel house post"
-  },
-  {
-   "shape": "box",
-   "x0": 1717,
-   "z0": 21267,
-   "x1": 2023,
-   "z1": 21573,
-   "name": "Wheel house post.001"
-  },
-  {
-   "shape": "box",
-   "x0": 7667,
-   "z0": 15147,
-   "x1": 7973,
-   "z1": 15453,
-   "name": "Wheel house post.002"
-  },
-  {
-   "shape": "box",
-   "x0": 7667,
-   "z0": 21267,
-   "x1": 7973,
-   "z1": 21573,
-   "name": "Wheel house post.003"
-  },
-  {
-   "shape": "box",
-   "x0": 3485,
-   "z0": 18360,
-   "x1": 6205,
-   "z1": 20400,
-   "name": "Gearbox"
-  },
-  {
-   "shape": "box",
-   "x0": 1785,
-   "z0": 19125,
-   "x1": 3655,
-   "z1": 20315,
-   "name": "Drive motor"
-  },
-  {
-   "shape": "box",
-   "x0": 9520,
-   "z0": 18700,
-   "x1": 13940,
-   "z1": 21420,
-   "name": "Car footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 765,
-   "z0": 10115,
-   "x1": 935,
-   "z1": 10285,
-   "name": "Gate post"
-  },
-  {
-   "shape": "box",
-   "x0": 765,
-   "z0": 13515,
-   "x1": 935,
-   "z1": 13685,
-   "name": "Gate post.001"
-  },
-  {
-   "shape": "box",
-   "x0": 15810,
-   "z0": 5058,
-   "x1": 18870,
-   "z1": 5822,
-   "name": "Bench"
-  },
-  {
-   "shape": "box",
    "x0": 12085,
    "z0": 4007,
    "x1": 12395,
    "z1": 4068,
-   "name": "Probe"
+   "name": "Probe: Sign post"
   },
   {
    "shape": "box",
@@ -246,7 +94,7 @@
    "z0": 4007,
    "x1": 17240,
    "z1": 4068,
-   "name": "Probe"
+   "name": "Probe: Sign post.001"
   },
   {
    "shape": "box",
@@ -254,103 +102,71 @@
    "z0": 4262,
    "x1": 16988,
    "z1": 4323,
-   "name": "Probe"
+   "name": "Probe: Sign post.001"
   },
   {
    "shape": "box",
-   "x0": 24322,
-   "z0": 4262,
-   "x1": 24383,
-   "z1": 4323,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 18712,
+   "x0": 18715,
    "z0": 4265,
-   "x1": 18773,
-   "z1": 4830,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19225,
-   "z0": 4520,
    "x1": 24380,
    "z1": 4830,
-   "name": "Probe"
+   "name": "Probe: Booth wall n"
   },
   {
    "shape": "box",
-   "x0": 15655,
+   "x0": 18715,
    "z0": 5027,
-   "x1": 18770,
+   "x1": 19280,
    "z1": 5088,
-   "name": "Probe"
+   "name": "Probe: Booth wall w.001"
   },
   {
    "shape": "box",
-   "x0": 15652,
+   "x0": 15910,
    "z0": 5285,
-   "x1": 15713,
+   "x1": 19280,
    "z1": 5595,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 15655,
-   "z0": 5792,
-   "x1": 18770,
-   "z1": 5853,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 14635,
-   "z0": 6557,
-   "x1": 14945,
-   "z1": 6618,
-   "name": "Probe"
+   "name": "Probe: Bench"
   },
   {
    "shape": "box",
    "x0": 14635,
    "z0": 6812,
-   "x1": 15200,
+   "x1": 14945,
    "z1": 6873,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 14635,
-   "z0": 7067,
-   "x1": 15455,
-   "z1": 7128,
-   "name": "Probe"
+   "name": "Probe: Bin"
   },
   {
    "shape": "box",
    "x0": 14890,
-   "z0": 7322,
-   "x1": 15710,
-   "z1": 7383,
-   "name": "Probe"
+   "z0": 7067,
+   "x1": 15200,
+   "z1": 7128,
+   "name": "Probe: Bin"
   },
   {
    "shape": "box",
    "x0": 15145,
-   "z0": 7577,
-   "x1": 15710,
-   "z1": 7638,
-   "name": "Probe"
+   "z0": 7322,
+   "x1": 15455,
+   "z1": 7383,
+   "name": "Probe: Bin"
   },
   {
    "shape": "box",
-   "x0": 19222,
-   "z0": 5030,
-   "x1": 19283,
+   "x0": 15397,
+   "z0": 7577,
+   "x1": 15458,
+   "z1": 7638,
+   "name": "Probe: Bin"
+  },
+  {
+   "shape": "box",
+   "x0": 18715,
+   "z0": 5795,
+   "x1": 19280,
    "z1": 7890,
-   "name": "Probe"
+   "name": "Probe: Booth wall w.001"
   },
   {
    "shape": "box",
@@ -358,31 +174,23 @@
    "z0": 5030,
    "x1": 24380,
    "z1": 7890,
-   "name": "Probe"
+   "name": "Probe: Booth wall e"
   },
   {
    "shape": "box",
-   "x0": 19225,
+   "x0": 18715,
    "z0": 8090,
    "x1": 24380,
    "z1": 8400,
-   "name": "Probe"
+   "name": "Probe: Booth inside"
   },
   {
    "shape": "box",
-   "x0": 18712,
-   "z0": 6050,
-   "x1": 18773,
-   "z1": 8655,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 24325,
+   "x0": 18715,
    "z0": 8597,
    "x1": 24635,
    "z1": 8658,
-   "name": "Probe"
+   "name": "Probe: Booth wall s"
   },
   {
    "shape": "box",
@@ -390,7 +198,7 @@
    "z0": 8852,
    "x1": 24635,
    "z1": 8913,
-   "name": "Probe"
+   "name": "Probe: Booth door"
   },
   {
    "shape": "box",
@@ -398,7 +206,7 @@
    "z0": 9617,
    "x1": 1685,
    "z1": 9678,
-   "name": "Probe"
+   "name": "Probe: Line gate"
   },
   {
    "shape": "box",
@@ -406,7 +214,7 @@
    "z0": 9872,
    "x1": 1688,
    "z1": 9933,
-   "name": "Probe"
+   "name": "Probe: Line gate"
   },
   {
    "shape": "box",
@@ -414,7 +222,7 @@
    "z0": 10127,
    "x1": 1940,
    "z1": 10188,
-   "name": "Probe"
+   "name": "Probe: Line gate"
   },
   {
    "shape": "box",
@@ -422,7 +230,7 @@
    "z0": 10382,
    "x1": 1943,
    "z1": 10443,
-   "name": "Probe"
+   "name": "Probe: Line gate"
   },
   {
    "shape": "box",
@@ -430,7 +238,7 @@
    "z0": 10637,
    "x1": 2195,
    "z1": 10698,
-   "name": "Probe"
+   "name": "Probe: Line gate"
   },
   {
    "shape": "box",
@@ -438,15 +246,15 @@
    "z0": 10892,
    "x1": 2198,
    "z1": 10953,
-   "name": "Probe"
+   "name": "Probe: Line gate"
   },
   {
    "shape": "box",
-   "x0": 10810,
+   "x0": 10045,
    "z0": 10892,
    "x1": 12395,
    "z1": 10953,
-   "name": "Probe"
+   "name": "Probe: Service board"
   },
   {
    "shape": "box",
@@ -454,31 +262,23 @@
    "z0": 11147,
    "x1": 2450,
    "z1": 11208,
-   "name": "Probe"
+   "name": "Probe: Line gate"
   },
   {
    "shape": "box",
-   "x0": 9535,
-   "z0": 10895,
-   "x1": 10100,
-   "z1": 11205,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 11065,
+   "x0": 10045,
    "z0": 11147,
-   "x1": 12395,
+   "x1": 10865,
    "z1": 11208,
-   "name": "Probe"
+   "name": "Probe: Queue head chain"
   },
   {
    "shape": "box",
-   "x0": 13360,
-   "z0": 10895,
-   "x1": 13925,
-   "z1": 11205,
-   "name": "Probe"
+   "x0": 11827,
+   "z0": 11147,
+   "x1": 11888,
+   "z1": 11208,
+   "name": "Probe: Queue head chain.001"
   },
   {
    "shape": "box",
@@ -486,39 +286,31 @@
    "z0": 11402,
    "x1": 2453,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Line gate"
   },
   {
    "shape": "box",
-   "x0": 16420,
-   "z0": 12167,
-   "x1": 16730,
-   "z1": 12228,
-   "name": "Probe"
+   "x0": 26617,
+   "z0": 13697,
+   "x1": 26678,
+   "z1": 13758,
+   "name": "Probe: Rail.002"
   },
   {
    "shape": "box",
-   "x0": 16165,
-   "z0": 12422,
-   "x1": 16730,
-   "z1": 12483,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1627,
+   "x0": 1630,
    "z0": 15227,
-   "x1": 1688,
+   "x1": 1940,
    "z1": 15288,
-   "name": "Probe"
+   "name": "Probe: Wheel house post"
   },
   {
    "shape": "box",
-   "x0": 8002,
+   "x0": 7750,
    "z0": 15227,
-   "x1": 8063,
+   "x1": 8060,
    "z1": 15288,
-   "name": "Probe"
+   "name": "Probe: Wheel house post.002"
   },
   {
    "shape": "box",
@@ -526,15 +318,7 @@
    "z0": 15482,
    "x1": 1943,
    "z1": 15543,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2647,
-   "z0": 15482,
-   "x1": 2708,
-   "z1": 15543,
-   "name": "Probe"
+   "name": "Probe: Wheel house post"
   },
   {
    "shape": "box",
@@ -542,55 +326,23 @@
    "z0": 15482,
    "x1": 7808,
    "z1": 15543,
-   "name": "Probe"
+   "name": "Probe: Wheel house post.002"
   },
   {
    "shape": "box",
    "x0": 2395,
    "z0": 15737,
-   "x1": 3470,
-   "z1": 15798,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3922,
-   "z0": 15737,
-   "x1": 3983,
-   "z1": 15798,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4435,
-   "z0": 15737,
-   "x1": 4745,
-   "z1": 15798,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2140,
-   "z0": 15992,
-   "x1": 3725,
-   "z1": 16053,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4432,
-   "z0": 15992,
-   "x1": 4493,
-   "z1": 16053,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2140,
-   "z0": 16247,
    "x1": 3215,
-   "z1": 16308,
-   "name": "Probe"
+   "z1": 15798,
+   "name": "Probe: Grease drum"
+  },
+  {
+   "shape": "box",
+   "x0": 2140,
+   "z0": 15995,
+   "x1": 3215,
+   "z1": 16305,
+   "name": "Probe: Grease drum"
   },
   {
    "shape": "box",
@@ -598,7 +350,7 @@
    "z0": 16502,
    "x1": 3215,
    "z1": 16563,
-   "name": "Probe"
+   "name": "Probe: Grease drum"
   },
   {
    "shape": "box",
@@ -606,7 +358,7 @@
    "z0": 16757,
    "x1": 2708,
    "z1": 16818,
-   "name": "Probe"
+   "name": "Probe: Motor cable"
   },
   {
    "shape": "box",
@@ -614,7 +366,7 @@
    "z0": 16505,
    "x1": 27185,
    "z1": 16815,
-   "name": "Probe"
+   "name": "Probe: Trail sign"
   },
   {
    "shape": "box",
@@ -622,7 +374,7 @@
    "z0": 17012,
    "x1": 3215,
    "z1": 17073,
-   "name": "Probe"
+   "name": "Probe: Drum on its side"
   },
   {
    "shape": "box",
@@ -630,7 +382,7 @@
    "z0": 17270,
    "x1": 3725,
    "z1": 17580,
-   "name": "Probe"
+   "name": "Probe: Drum on its side"
   },
   {
    "shape": "box",
@@ -638,23 +390,23 @@
    "z0": 17777,
    "x1": 3470,
    "z1": 17838,
-   "name": "Probe"
+   "name": "Probe: Drum on its side"
   },
   {
    "shape": "box",
    "x0": 9532,
-   "z0": 11405,
+   "z0": 10895,
    "x1": 9593,
    "z1": 17835,
-   "name": "Probe"
+   "name": "Probe: Queue chain.002"
   },
   {
    "shape": "box",
    "x0": 13867,
-   "z0": 11405,
+   "z0": 10895,
    "x1": 13928,
    "z1": 17835,
-   "name": "Probe"
+   "name": "Probe: Queue post.005"
   },
   {
    "shape": "box",
@@ -662,7 +414,7 @@
    "z0": 18032,
    "x1": 3470,
    "z1": 18093,
-   "name": "Probe"
+   "name": "Probe: Drum on its side"
   },
   {
    "shape": "box",
@@ -670,7 +422,7 @@
    "z0": 18287,
    "x1": 6275,
    "z1": 18348,
-   "name": "Probe"
+   "name": "Probe: Gearbox"
   },
   {
    "shape": "box",
@@ -678,15 +430,15 @@
    "z0": 18287,
    "x1": 12905,
    "z1": 18348,
-   "name": "Probe"
+   "name": "Probe: Car door, forced"
   },
   {
    "shape": "box",
    "x0": 2650,
    "z0": 18542,
-   "x1": 3470,
+   "x1": 6275,
    "z1": 18603,
-   "name": "Probe"
+   "name": "Probe: Gearbox"
   },
   {
    "shape": "box",
@@ -694,71 +446,55 @@
    "z0": 18542,
    "x1": 13925,
    "z1": 18603,
-   "name": "Probe"
+   "name": "Probe: Car door, forced"
   },
   {
    "shape": "box",
    "x0": 2395,
    "z0": 18797,
-   "x1": 3470,
+   "x1": 2960,
    "z1": 18858,
-   "name": "Probe"
+   "name": "Probe: Motor terminal box"
   },
   {
    "shape": "box",
-   "x0": 1885,
+   "x0": 3415,
+   "z0": 18797,
+   "x1": 6275,
+   "z1": 18858,
+   "name": "Probe: Gearbox"
+  },
+  {
+   "shape": "box",
+   "x0": 1630,
    "z0": 19052,
-   "x1": 3470,
+   "x1": 6275,
    "z1": 19113,
-   "name": "Probe"
+   "name": "Probe: Gearbox"
   },
   {
    "shape": "box",
-   "x0": 6217,
-   "z0": 18545,
-   "x1": 6278,
-   "z1": 19110,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6220,
+   "x0": 1630,
    "z0": 19307,
    "x1": 6530,
    "z1": 19368,
-   "name": "Probe"
+   "name": "Probe: Drive motor"
   },
   {
    "shape": "box",
-   "x0": 6217,
+   "x0": 1630,
    "z0": 19565,
-   "x1": 6278,
+   "x1": 6275,
    "z1": 19875,
-   "name": "Probe"
+   "name": "Probe: Gearbox"
   },
   {
    "shape": "box",
-   "x0": 1627,
-   "z0": 19310,
-   "x1": 1688,
-   "z1": 20130,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1885,
-   "z0": 20327,
-   "x1": 3470,
-   "z1": 20388,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6220,
+   "x0": 1630,
    "z0": 20075,
    "x1": 7805,
    "z1": 20385,
-   "name": "Probe"
+   "name": "Probe: Gearbox"
   },
   {
    "shape": "box",
@@ -766,7 +502,7 @@
    "z0": 20585,
    "x1": 2705,
    "z1": 21150,
-   "name": "Probe"
+   "name": "Probe: Control cabinet"
   },
   {
    "shape": "box",
@@ -774,39 +510,39 @@
    "z0": 20585,
    "x1": 7805,
    "z1": 21150,
-   "name": "Probe"
+   "name": "Probe: Cable drum"
   },
   {
    "shape": "box",
-   "x0": 9277,
+   "x0": 9280,
    "z0": 18800,
-   "x1": 9338,
+   "x1": 14180,
    "z1": 21150,
-   "name": "Probe"
+   "name": "Probe: Car window sill"
   },
   {
    "shape": "box",
-   "x0": 14122,
-   "z0": 18800,
-   "x1": 14183,
-   "z1": 21150,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1627,
+   "x0": 1630,
    "z0": 21347,
-   "x1": 1688,
+   "x1": 1940,
    "z1": 21408,
-   "name": "Probe"
+   "name": "Probe: Wheel house post.001"
   },
   {
    "shape": "box",
-   "x0": 8002,
+   "x0": 7750,
    "z0": 21347,
-   "x1": 8063,
+   "x1": 8060,
    "z1": 21408,
-   "name": "Probe"
+   "name": "Probe: Wheel house post.003"
+  },
+  {
+   "shape": "box",
+   "x0": 9535,
+   "z0": 21347,
+   "x1": 13925,
+   "z1": 21408,
+   "name": "Probe: Car window sill"
   },
   {
    "shape": "box",
@@ -814,7 +550,7 @@
    "z0": 21602,
    "x1": 1943,
    "z1": 21663,
-   "name": "Probe"
+   "name": "Probe: Wheel house post.001"
   },
   {
    "shape": "box",
@@ -822,7 +558,15 @@
    "z0": 21602,
    "x1": 7808,
    "z1": 21663,
-   "name": "Probe"
+   "name": "Probe: Wheel house post.003"
+  },
+  {
+   "shape": "box",
+   "x0": 9790,
+   "z0": 21602,
+   "x1": 13670,
+   "z1": 21663,
+   "name": "Probe: Car body"
   },
   {
    "shape": "box",
@@ -830,7 +574,7 @@
    "z0": 22027,
    "x1": 26678,
    "z1": 22088,
-   "name": "Probe"
+   "name": "Probe: Rail.003"
   },
   {
    "shape": "box",
@@ -838,7 +582,7 @@
    "z0": 22027,
    "x1": 32200,
    "z1": 22088,
-   "name": "Probe"
+   "name": "Probe: no floor"
   }
  ],
  "anim": {
@@ -859,42 +603,50 @@
   }
  ],
  "probe": {
+  "Car window sill": 182,
+  "Gearbox": 69,
   "Booth inside": 67,
-  "Booth wall e": 33,
+  "Booth wall n": 40,
+  "Car body": 39,
+  "Booth wall e": 35,
   "Cable drum": 30,
-  "Bench": 28,
-  "Car body": 23,
-  "Booth wall n": 21,
-  "Gearbox": 21,
-  "Drum on its side": 20,
+  "Drive motor": 25,
+  "Booth wall w.001": 24,
+  "Bench": 22,
+  "Booth wall s": 21,
   "no floor": 20,
-  "Bin": 16,
+  "Grease drum": 17,
+  "Drum on its side": 17,
+  "Sheared cog": 16,
+  "Car windows": 16,
   "Control cabinet": 14,
-  "Grease drum": 13,
   "Line gate": 12,
-  "Booth wall s": 10,
+  "Gearbox inspection rim": 11,
   "Motor cable": 10,
   "Car door, forced": 9,
-  "Booth wall w.001": 8,
+  "Booth wall s.002": 8,
   "Booth door": 8,
+  "Bin": 7,
   "Queue head chain": 7,
-  "Queue head chain.001": 7,
+  "Booth wall w": 5,
+  "Booth wall w.003": 5,
+  "Booth wall s.001": 5,
   "Service board": 5,
-  "Backpack": 5,
-  "hoop.001": 5,
   "Car doorway": 5,
-  "Drive motor": 5,
-  "Booth wall s.002": 4,
+  "Motor fin.001": 5,
+  "Motor fin.008": 5,
+  "Motor fin.004": 5,
   "Trail sign": 4,
   "Motor terminal box": 4,
   "Sign post.001": 3,
-  "Booth wall w.003": 3,
-  "Grease can": 3,
-  "Grease can.002": 3,
+  "Wheel house post": 3,
+  "Wheel house post.002": 3,
+  "Wheel frame leg.001": 3,
+  "Wheel house post.001": 3,
+  "Wheel house post.003": 3,
   "Sign post": 2,
-  "Booth wall w": 2,
   "Queue post": 2,
-  "Board words 2": 2,
+  "Board words": 2,
   "Queue post.003": 2,
   "Queue chain.002": 2,
   "Queue chain.018": 2,
@@ -904,47 +656,46 @@
   "Queue chain.021": 2,
   "Queue chain.006": 2,
   "Queue chain.022": 2,
-  "Queue chain.009": 2,
-  "Queue chain.025": 2,
-  "Wheel house post": 2,
-  "Wheel house post.002": 2,
+  "Queue chain.010": 2,
+  "Queue chain.026": 2,
   "Queue chain.011": 2,
   "Queue chain.027": 2,
   "Queue chain.013": 2,
   "Queue chain.029": 2,
-  "Queue chain.014": 2,
-  "Queue chain.030": 2,
   "Queue post.002": 2,
   "Queue post.005": 2,
+  "hoop.004": 2,
   "hoop.003": 2,
   "Car rubbing rail": 2,
   "Motor fin": 2,
-  "Motor fin.007": 2,
-  "Motor fin.008": 2,
-  "Wheel frame leg.001": 2,
-  "Wheel house post.001": 2,
-  "Wheel house post.003": 2,
+  "Wheel frame leg": 2,
+  "Queue head chain.001": 1,
   "Queue chain": 1,
   "Queue chain.016": 1,
   "Queue chain.001": 1,
   "Queue chain.017": 1,
   "Queue chain.004": 1,
   "Queue chain.020": 1,
+  "Rail.002": 1,
   "Queue chain.007": 1,
   "Queue chain.023": 1,
   "Queue post.001": 1,
   "Queue post.004": 1,
   "Queue chain.008": 1,
   "Queue chain.024": 1,
-  "Queue chain.010": 1,
-  "Queue chain.026": 1,
-  "Grease can.001": 1,
+  "Queue chain.009": 1,
+  "Queue chain.025": 1,
   "Queue chain.012": 1,
   "Queue chain.028": 1,
-  "hoop.004": 1,
+  "Queue chain.014": 1,
+  "Queue chain.030": 1,
+  "Queue chain.015": 1,
+  "Queue chain.031": 1,
+  "hoop.005": 1,
   "Car number": 1,
-  "Motor fin.001": 1,
-  "Motor fin.004": 1,
+  "Cog tooth.005": 1,
+  "Cog tooth": 1,
+  "Cog tooth.001": 1,
   "Motor fin.005": 1,
   "Rail.003": 1
  },

@@ -11,7 +11,7 @@ aot_set(4, 11560, 5440, 2550, 1870, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
 aot_set(5, 7990, 14790, 4250, 3740, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
 aot_set(6, 15470, 5185, 1700, 1700, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 if (ck(FG_COMMON, 117, 0)) {
-    enemy(2, 1, 190, 1, 2, 0, 0, 2648, 0, 0, 24160, 0, 6140, 0, 0, 0, 0);  // a cerberus
+    enemy(2, 1, 190, 1, 2, 0, 0, 2686, 0, 0, 24500, 0, 4100, 0, 0, 0, 0);  // a cerberus
 }
 // cut-den (day/cutscenes.ts): its people, and what starts it. FG_COMMON 117 once it has run.
 if (ck(FG_COMMON, 117, 1)) {

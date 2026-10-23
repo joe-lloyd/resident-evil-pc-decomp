@@ -30,27 +30,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 4930,
-   "z0": 5780,
-   "x1": 6290,
-   "z1": 6800,
-   "name": "Isolator footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 6800,
-   "z0": 5908,
-   "x1": 7650,
-   "z1": 6503,
-   "name": "Tool bag footprint"
-  },
-  {
-   "shape": "box",
    "x0": 1800,
    "z0": 1797,
    "x1": 3130,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Wall n"
   },
   {
    "shape": "box",
@@ -58,7 +42,7 @@
    "z0": 1797,
    "x1": 7720,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Wall n.002"
   },
   {
    "shape": "box",
@@ -66,7 +50,7 @@
    "z0": 2055,
    "x1": 7723,
    "z1": 3640,
-   "name": "Probe"
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
@@ -74,7 +58,7 @@
    "z0": 2055,
    "x1": 2110,
    "z1": 3895,
-   "name": "Probe"
+   "name": "Probe: Board frame.001"
   },
   {
    "shape": "box",
@@ -82,15 +66,31 @@
    "z0": 4095,
    "x1": 2365,
    "z1": 4405,
-   "name": "Probe"
+   "name": "Probe: Sparks 1"
   },
   {
    "shape": "box",
    "x0": 5880,
    "z0": 5370,
    "x1": 6190,
-   "z1": 5680,
-   "name": "Probe"
+   "z1": 5935,
+   "name": "Probe: Lever grip"
+  },
+  {
+   "shape": "box",
+   "x0": 7662,
+   "z0": 5370,
+   "x1": 7723,
+   "z1": 5935,
+   "name": "Probe: Wall e.002"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 6132,
+   "x1": 6190,
+   "z1": 6193,
+   "name": "Probe: Isolator box"
   },
   {
    "shape": "box",
@@ -98,39 +98,31 @@
    "z0": 4605,
    "x1": 2110,
    "z1": 6445,
-   "name": "Probe"
+   "name": "Probe: Board frame.001"
   },
   {
    "shape": "box",
-   "x0": 4857,
+   "x0": 4860,
    "z0": 6387,
-   "x1": 4918,
+   "x1": 6190,
    "z1": 6448,
-   "name": "Probe"
+   "name": "Probe: Isolator box"
   },
   {
    "shape": "box",
-   "x0": 7662,
-   "z0": 5370,
-   "x1": 7723,
+   "x0": 6900,
+   "z0": 6135,
+   "x1": 7720,
    "z1": 6445,
-   "name": "Probe"
+   "name": "Probe: Tool bag"
   },
   {
    "shape": "box",
    "x0": 1800,
    "z0": 6642,
-   "x1": 4915,
-   "z1": 6703,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6390,
-   "z0": 6642,
    "x1": 7720,
    "z1": 6703,
-   "name": "Probe"
+   "name": "Probe: Wall s.003"
   }
  ],
  "anim": {
@@ -147,10 +139,12 @@
  "probe": {
   "Board frame.001": 18,
   "Wall n.002": 13,
-  "Wall s.003": 9,
+  "Isolator box": 12,
+  "Wall s.003": 10,
   "Wall e": 8,
   "Wall n": 6,
   "Wall e.002": 6,
+  "Tool bag": 6,
   "Wall s.001": 5,
   "Breaker 0": 4,
   "Lever grip": 4,
@@ -160,9 +154,11 @@
   "Breaker 3": 3,
   "Contactor": 2,
   "Sparks 1": 2,
+  "Padlock": 2,
+  "Hasp": 2,
   "Contact": 1,
   "Contact.002": 1,
-  "Isolator box": 1
+  "Lever": 1
  },
  "bounds": {
   "x0": 1700,

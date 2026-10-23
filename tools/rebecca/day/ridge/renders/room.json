@@ -31,131 +31,275 @@
  "walls": [
   {
    "shape": "box",
-   "x0": -6000,
-   "z0": -4090,
-   "x1": 20000,
-   "z1": 2509,
-   "name": "Rock face"
-  },
-  {
-   "shape": "circle",
-   "x0": 2299,
-   "z0": 6866,
-   "x1": 5538,
-   "z1": 9580,
-   "name": "Boulder west"
-  },
-  {
-   "shape": "circle",
-   "x0": 8200,
-   "z0": 7288,
-   "x1": 10973,
-   "z1": 9777,
-   "name": "Boulder east"
-  },
-  {
-   "shape": "circle",
-   "x0": 7332,
-   "z0": 3015,
-   "x1": 9764,
-   "z1": 5085,
-   "name": "Boulder north"
-  },
-  {
-   "shape": "box",
-   "x0": -875,
-   "z0": 1000,
-   "x1": 4262,
-   "z1": 5042,
-   "name": "West rock shoulder 0"
-  },
-  {
-   "shape": "box",
-   "x0": -1202,
-   "z0": 2683,
-   "x1": 4068,
-   "z1": 7181,
-   "name": "West rock shoulder 1"
-  },
-  {
-   "shape": "box",
-   "x0": -996,
-   "z0": 4607,
-   "x1": 4312,
-   "z1": 8901,
-   "name": "West rock shoulder 2"
-  },
-  {
-   "shape": "box",
-   "x0": 1771,
-   "z0": 756,
-   "x1": 6008,
-   "z1": 4310,
-   "name": "West path rockfall"
-  },
-  {
-   "shape": "box",
    "x0": 6805,
-   "z0": 3097,
-   "x1": 7625,
-   "z1": 3158,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9355,
    "z0": 3097,
    "x1": 10900,
    "z1": 3158,
-   "name": "Probe"
+   "name": "Probe: Fallen rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 4000,
+   "z0": 3100,
+   "x1": 5840,
+   "z1": 3410,
+   "name": "Probe: West path rockfall"
   },
   {
    "shape": "box",
    "x0": 7060,
    "z0": 3352,
-   "x1": 7370,
+   "x1": 10900,
    "z1": 3413,
-   "name": "Probe"
+   "name": "Probe: Fallen rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 4000,
+   "z0": 3607,
+   "x1": 5585,
+   "z1": 3668,
+   "name": "Probe: West path rockfall"
+  },
+  {
+   "shape": "box",
+   "x0": 7570,
+   "z0": 3607,
+   "x1": 10900,
+   "z1": 3668,
+   "name": "Probe: Fallen rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 4000,
+   "z0": 3862,
+   "x1": 5075,
+   "z1": 3923,
+   "name": "Probe: West path rockfall"
+  },
+  {
+   "shape": "box",
+   "x0": 7315,
+   "z0": 3862,
+   "x1": 10685,
+   "z1": 3923,
+   "name": "Probe: Fallen rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 4000,
+   "z0": 4117,
+   "x1": 4820,
+   "z1": 4178,
+   "name": "Probe: West path rockfall"
+  },
+  {
+   "shape": "box",
+   "x0": 7570,
+   "z0": 4117,
+   "x1": 10175,
+   "z1": 4178,
+   "name": "Probe: Boulder north"
+  },
+  {
+   "shape": "box",
+   "x0": 7570,
+   "z0": 4372,
+   "x1": 9920,
+   "z1": 4433,
+   "name": "Probe: Boulder north"
+  },
+  {
+   "shape": "box",
+   "x0": 3997,
+   "z0": 4375,
+   "x1": 4058,
+   "z1": 4685,
+   "name": "Probe: West rock shoulder 1"
+  },
+  {
+   "shape": "box",
+   "x0": 7570,
+   "z0": 4627,
+   "x1": 9410,
+   "z1": 4688,
+   "name": "Probe: Boulder north"
+  },
+  {
+   "shape": "box",
+   "x0": 4000,
+   "z0": 4882,
+   "x1": 4310,
+   "z1": 4943,
+   "name": "Probe: West rock shoulder 1"
+  },
+  {
+   "shape": "box",
+   "x0": 7825,
+   "z0": 4882,
+   "x1": 9410,
+   "z1": 4943,
+   "name": "Probe: Boulder north"
+  },
+  {
+   "shape": "box",
+   "x0": 4252,
+   "z0": 5137,
+   "x1": 4313,
+   "z1": 5198,
+   "name": "Probe: Stones"
+  },
+  {
+   "shape": "box",
+   "x0": 3997,
+   "z0": 5392,
+   "x1": 4058,
+   "z1": 5453,
+   "name": "Probe: Stones"
+  },
+  {
+   "shape": "box",
+   "x0": 3997,
+   "z0": 5905,
+   "x1": 4058,
+   "z1": 6725,
+   "name": "Probe: West rock shoulder 2"
+  },
+  {
+   "shape": "box",
+   "x0": 4000,
+   "z0": 6922,
+   "x1": 4565,
+   "z1": 6983,
+   "name": "Probe: West rock shoulder 2"
+  },
+  {
+   "shape": "box",
+   "x0": 4000,
+   "z0": 7177,
+   "x1": 5075,
+   "z1": 7238,
+   "name": "Probe: Boulder west"
+  },
+  {
+   "shape": "box",
+   "x0": 9100,
+   "z0": 7432,
+   "x1": 9920,
+   "z1": 7493,
+   "name": "Probe: Boulder east"
+  },
+  {
+   "shape": "box",
+   "x0": 8845,
+   "z0": 7687,
+   "x1": 10175,
+   "z1": 7748,
+   "name": "Probe: Boulder east"
+  },
+  {
+   "shape": "box",
+   "x0": 10627,
+   "z0": 7687,
+   "x1": 10688,
+   "z1": 7748,
+   "name": "Probe: Stones"
+  },
+  {
+   "shape": "box",
+   "x0": 8590,
+   "z0": 7945,
+   "x1": 10685,
+   "z1": 8255,
+   "name": "Probe: Boulder east"
+  },
+  {
+   "shape": "box",
+   "x0": 8335,
+   "z0": 8452,
+   "x1": 10685,
+   "z1": 8513,
+   "name": "Probe: Boulder east"
+  },
+  {
+   "shape": "box",
+   "x0": 4000,
+   "z0": 7435,
+   "x1": 5330,
+   "z1": 8765,
+   "name": "Probe: Boulder west"
+  },
+  {
+   "shape": "box",
+   "x0": 8335,
+   "z0": 8707,
+   "x1": 10900,
+   "z1": 8768,
+   "name": "Probe: Boulder east"
+  },
+  {
+   "shape": "box",
+   "x0": 4000,
+   "z0": 8962,
+   "x1": 5075,
+   "z1": 9023,
+   "name": "Probe: Boulder west"
+  },
+  {
+   "shape": "box",
+   "x0": 8335,
+   "z0": 8962,
+   "x1": 10685,
+   "z1": 9023,
+   "name": "Probe: Boulder east"
+  },
+  {
+   "shape": "box",
+   "x0": 4000,
+   "z0": 9217,
+   "x1": 4820,
+   "z1": 9278,
+   "name": "Probe: Boulder west"
+  },
+  {
+   "shape": "box",
+   "x0": 8590,
+   "z0": 9217,
+   "x1": 10685,
+   "z1": 9278,
+   "name": "Probe: Boulder east"
+  },
+  {
+   "shape": "box",
+   "x0": 4000,
+   "z0": 9472,
+   "x1": 4310,
+   "z1": 9533,
+   "name": "Probe: Boulder west"
+  },
+  {
+   "shape": "box",
+   "x0": 8590,
+   "z0": 9472,
+   "x1": 10430,
+   "z1": 9533,
+   "name": "Probe: Boulder east"
+  },
+  {
+   "shape": "box",
+   "x0": 9097,
+   "z0": 9727,
+   "x1": 9158,
+   "z1": 9788,
+   "name": "Probe: Stones"
   },
   {
    "shape": "box",
    "x0": 9610,
-   "z0": 3352,
-   "x1": 10900,
-   "z1": 3413,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9865,
-   "z0": 3607,
-   "x1": 10900,
-   "z1": 3668,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9865,
-   "z0": 3862,
-   "x1": 10685,
-   "z1": 3923,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9865,
-   "z0": 4117,
+   "z0": 9727,
    "x1": 10175,
-   "z1": 4178,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9862,
-   "z0": 4372,
-   "x1": 9923,
-   "z1": 4433,
-   "name": "Probe"
+   "z1": 9788,
+   "name": "Probe: Boulder east"
   },
   {
    "shape": "box",
@@ -163,7 +307,7 @@
    "z0": 9912,
    "x1": 10900,
    "z1": 9973,
-   "name": "Probe"
+   "name": "Probe: no floor"
   }
  ],
  "anim": {
@@ -171,8 +315,16 @@
   "ticks": 3
  },
  "probe": {
-  "Fallen rocks": 31,
-  "no floor": 28
+  "Boulder east": 77,
+  "Fallen rocks": 64,
+  "Boulder west": 51,
+  "Boulder north": 33,
+  "West path rockfall": 28,
+  "no floor": 28,
+  "Stones": 8,
+  "West rock shoulder 2": 6,
+  "West rock shoulder 0": 4,
+  "West rock shoulder 1": 4
  },
  "bounds": {
   "x0": 3900,

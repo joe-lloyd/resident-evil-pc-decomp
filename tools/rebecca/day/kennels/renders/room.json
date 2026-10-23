@@ -69,395 +69,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": -20400,
-   "z0": 1700,
-   "x1": 14960,
-   "z1": 2720,
-   "name": "Estate wall"
-  },
-  {
-   "shape": "box",
-   "x0": 19040,
-   "z0": 1700,
-   "x1": 54400,
-   "z1": 2720,
-   "name": "Estate wall.001"
-  },
-  {
-   "shape": "box",
-   "x0": 14280,
-   "z0": 1657,
-   "x1": 15640,
-   "z1": 3103,
-   "name": "Gate pier"
-  },
-  {
-   "shape": "box",
-   "x0": 18360,
-   "z0": 1657,
-   "x1": 19720,
-   "z1": 3103,
-   "name": "Gate pier.001"
-  },
-  {
-   "shape": "box",
-   "x0": 15640,
-   "z0": 2210,
-   "x1": 18360,
-   "z1": 2550,
-   "name": "Gate footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 3400,
-   "z0": 5941,
-   "x1": 11050,
-   "z1": 5959,
-   "name": "Run divider"
-  },
-  {
-   "shape": "box",
-   "x0": 3400,
-   "z0": 10021,
-   "x1": 11050,
-   "z1": 10039,
-   "name": "Run divider.001"
-  },
-  {
-   "shape": "box",
-   "x0": 3400,
-   "z0": 14102,
-   "x1": 11050,
-   "z1": 14119,
-   "name": "Run divider.002"
-  },
-  {
-   "shape": "box",
-   "x0": 3400,
-   "z0": 18181,
-   "x1": 11050,
-   "z1": 18198,
-   "name": "Run divider.003"
-  },
-  {
-   "shape": "box",
-   "x0": 3400,
-   "z0": 22262,
-   "x1": 11050,
-   "z1": 22279,
-   "name": "Run divider.004"
-  },
-  {
-   "shape": "box",
-   "x0": 3391,
-   "z0": 5950,
-   "x1": 3409,
-   "z1": 22270,
-   "name": "Run back"
-  },
-  {
-   "shape": "box",
-   "x0": 3341,
-   "z0": 5890,
-   "x1": 3460,
-   "z1": 6010,
-   "name": "Run post"
-  },
-  {
-   "shape": "box",
-   "x0": 10991,
-   "z0": 5890,
-   "x1": 11109,
-   "z1": 6010,
-   "name": "Run post.001"
-  },
-  {
-   "shape": "box",
-   "x0": 3341,
-   "z0": 9971,
-   "x1": 3460,
-   "z1": 10089,
-   "name": "Run post.002"
-  },
-  {
-   "shape": "box",
-   "x0": 10991,
-   "z0": 9971,
-   "x1": 11109,
-   "z1": 10089,
-   "name": "Run post.003"
-  },
-  {
-   "shape": "box",
-   "x0": 3341,
-   "z0": 14051,
-   "x1": 3460,
-   "z1": 14170,
-   "name": "Run post.004"
-  },
-  {
-   "shape": "box",
-   "x0": 10991,
-   "z0": 14051,
-   "x1": 11109,
-   "z1": 14170,
-   "name": "Run post.005"
-  },
-  {
-   "shape": "box",
-   "x0": 3341,
-   "z0": 18130,
-   "x1": 3460,
-   "z1": 18249,
-   "name": "Run post.006"
-  },
-  {
-   "shape": "box",
-   "x0": 10991,
-   "z0": 18130,
-   "x1": 11109,
-   "z1": 18249,
-   "name": "Run post.007"
-  },
-  {
-   "shape": "box",
-   "x0": 3341,
-   "z0": 22211,
-   "x1": 3460,
-   "z1": 22330,
-   "name": "Run post.008"
-  },
-  {
-   "shape": "box",
-   "x0": 10991,
-   "z0": 22211,
-   "x1": 11109,
-   "z1": 22330,
-   "name": "Run post.009"
-  },
-  {
-   "shape": "box",
-   "x0": 11041,
-   "z0": 5950,
-   "x1": 11059,
-   "z1": 7140,
-   "name": "Run front"
-  },
-  {
-   "shape": "box",
-   "x0": 11041,
-   "z0": 8840,
-   "x1": 11059,
-   "z1": 10030,
-   "name": "Run front.001"
-  },
-  {
-   "shape": "box",
-   "x0": 3655,
-   "z0": 7055,
-   "x1": 5355,
-   "z1": 8925,
-   "name": "Doghouse"
-  },
-  {
-   "shape": "box",
-   "x0": 11041,
-   "z0": 10030,
-   "x1": 11059,
-   "z1": 11220,
-   "name": "Run front.002"
-  },
-  {
-   "shape": "box",
-   "x0": 11041,
-   "z0": 12920,
-   "x1": 11059,
-   "z1": 14110,
-   "name": "Run front.003"
-  },
-  {
-   "shape": "box",
-   "x0": 3655,
-   "z0": 11135,
-   "x1": 5355,
-   "z1": 13005,
-   "name": "Doghouse.001"
-  },
-  {
-   "shape": "box",
-   "x0": 11041,
-   "z0": 14110,
-   "x1": 11059,
-   "z1": 15300,
-   "name": "Run front.004"
-  },
-  {
-   "shape": "box",
-   "x0": 11041,
-   "z0": 17000,
-   "x1": 11059,
-   "z1": 18190,
-   "name": "Run front.005"
-  },
-  {
-   "shape": "box",
-   "x0": 3655,
-   "z0": 15215,
-   "x1": 5355,
-   "z1": 17085,
-   "name": "Doghouse.002"
-  },
-  {
-   "shape": "box",
-   "x0": 11041,
-   "z0": 18190,
-   "x1": 11059,
-   "z1": 19380,
-   "name": "Run front.006"
-  },
-  {
-   "shape": "box",
-   "x0": 11041,
-   "z0": 21080,
-   "x1": 11059,
-   "z1": 22270,
-   "name": "Run front.007"
-  },
-  {
-   "shape": "box",
-   "x0": 3655,
-   "z0": 19295,
-   "x1": 5355,
-   "z1": 21165,
-   "name": "Doghouse.003"
-  },
-  {
-   "shape": "box",
-   "x0": 21998,
-   "z0": 6698,
-   "x1": 27982,
-   "z1": 6902,
-   "name": "Hut wall n"
-  },
-  {
-   "shape": "box",
-   "x0": 21998,
-   "z0": 12478,
-   "x1": 27982,
-   "z1": 12682,
-   "name": "Hut wall s"
-  },
-  {
-   "shape": "box",
-   "x0": 21998,
-   "z0": 6698,
-   "x1": 22202,
-   "z1": 8840,
-   "name": "Hut wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 21998,
-   "z0": 8840,
-   "x1": 22202,
-   "z1": 10370,
-   "name": "Hut wall w.001"
-  },
-  {
-   "shape": "box",
-   "x0": 21998,
-   "z0": 10370,
-   "x1": 22202,
-   "z1": 11050,
-   "name": "Hut wall w.002"
-  },
-  {
-   "shape": "box",
-   "x0": 21998,
-   "z0": 11050,
-   "x1": 22202,
-   "z1": 12070,
-   "name": "Hut wall w.003"
-  },
-  {
-   "shape": "box",
-   "x0": 21998,
-   "z0": 11050,
-   "x1": 22202,
-   "z1": 12070,
-   "name": "Hut wall w.004"
-  },
-  {
-   "shape": "box",
-   "x0": 21998,
-   "z0": 12070,
-   "x1": 22202,
-   "z1": 12682,
-   "name": "Hut wall w.005"
-  },
-  {
-   "shape": "box",
-   "x0": 27778,
-   "z0": 6698,
-   "x1": 27982,
-   "z1": 12682,
-   "name": "Hut wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 21998,
-   "z0": 6698,
-   "x1": 27982,
-   "z1": 12682,
-   "name": "Floor"
-  },
-  {
-   "shape": "box",
-   "x0": 21998,
-   "z0": 6698,
-   "x1": 27982,
-   "z1": 12682,
-   "name": "Ceiling"
-  },
-  {
-   "shape": "box",
-   "x0": 22525,
-   "z0": 10200,
-   "x1": 23715,
-   "z1": 12240,
-   "name": "Hut desk"
-  },
-  {
-   "shape": "box",
-   "x0": 15130,
-   "z0": 12750,
-   "x1": 15470,
-   "z1": 13090,
-   "name": "Lamp post footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 19380,
-   "z0": 18190,
-   "x1": 22100,
-   "z1": 19210,
-   "name": "Water trough"
-  },
-  {
-   "shape": "box",
    "x0": 3500,
    "z0": 5795,
    "x1": 11205,
    "z1": 6105,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3497,
-   "z0": 6305,
-   "x1": 3558,
-   "z1": 6615,
-   "name": "Probe"
+   "name": "Probe: Run divider"
   },
   {
    "shape": "box",
@@ -465,15 +81,15 @@
    "z0": 6557,
    "x1": 28035,
    "z1": 6618,
-   "name": "Probe"
+   "name": "Probe: Hut wall n"
   },
   {
    "shape": "box",
-   "x0": 3500,
-   "z0": 6812,
-   "x1": 5340,
-   "z1": 6873,
-   "name": "Probe"
+   "x0": 3497,
+   "z0": 6305,
+   "x1": 3558,
+   "z1": 6870,
+   "name": "Probe: Run back"
   },
   {
    "shape": "box",
@@ -481,7 +97,7 @@
    "z0": 6305,
    "x1": 11205,
    "z1": 7125,
-   "name": "Probe"
+   "name": "Probe: Run front"
   },
   {
    "shape": "box",
@@ -489,7 +105,7 @@
    "z0": 7322,
    "x1": 10443,
    "z1": 7383,
-   "name": "Probe"
+   "name": "Probe: Run gate 0"
   },
   {
    "shape": "box",
@@ -497,7 +113,7 @@
    "z0": 7580,
    "x1": 10698,
    "z1": 7890,
-   "name": "Probe"
+   "name": "Probe: Run gate 0"
   },
   {
    "shape": "box",
@@ -505,7 +121,7 @@
    "z0": 8087,
    "x1": 10950,
    "z1": 8148,
-   "name": "Probe"
+   "name": "Probe: Run gate 0"
   },
   {
    "shape": "box",
@@ -513,47 +129,31 @@
    "z0": 8345,
    "x1": 10953,
    "z1": 8655,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3497,
-   "z0": 7070,
-   "x1": 3558,
-   "z1": 8910,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5537,
-   "z0": 7070,
-   "x1": 5598,
-   "z1": 8910,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21857,
-   "z0": 6815,
-   "x1": 21918,
-   "z1": 8910,
-   "name": "Probe"
+   "name": "Probe: Run gate 0"
   },
   {
    "shape": "box",
    "x0": 3500,
-   "z0": 9107,
-   "x1": 5340,
-   "z1": 9168,
-   "name": "Probe"
+   "z0": 7070,
+   "x1": 5595,
+   "z1": 8910,
+   "name": "Probe: Doghouse roof"
+  },
+  {
+   "shape": "box",
+   "x0": 21860,
+   "z0": 6815,
+   "x1": 28035,
+   "z1": 8910,
+   "name": "Probe: Ceiling"
   },
   {
    "shape": "box",
    "x0": 3497,
-   "z0": 9365,
+   "z0": 9110,
    "x1": 3558,
    "z1": 9675,
-   "name": "Probe"
+   "name": "Probe: Run back"
   },
   {
    "shape": "box",
@@ -561,7 +161,7 @@
    "z0": 8855,
    "x1": 11205,
    "z1": 9675,
-   "name": "Probe"
+   "name": "Probe: Run front.001"
   },
   {
    "shape": "box",
@@ -569,23 +169,23 @@
    "z0": 9875,
    "x1": 11205,
    "z1": 10185,
-   "name": "Probe"
+   "name": "Probe: Run divider.001"
+  },
+  {
+   "shape": "box",
+   "x0": 22115,
+   "z0": 9110,
+   "x1": 28035,
+   "z1": 10185,
+   "name": "Probe: Ceiling"
   },
   {
    "shape": "box",
    "x0": 3497,
    "z0": 10385,
    "x1": 3558,
-   "z1": 10695,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3500,
-   "z0": 10892,
-   "x1": 5340,
-   "z1": 10953,
-   "name": "Probe"
+   "z1": 10950,
+   "name": "Probe: Run back"
   },
   {
    "shape": "box",
@@ -593,23 +193,7 @@
    "z0": 10385,
    "x1": 11205,
    "z1": 11205,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21857,
-   "z0": 10385,
-   "x1": 21918,
-   "z1": 12480,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 27977,
-   "z0": 6815,
-   "x1": 28038,
-   "z1": 12480,
-   "name": "Probe"
+   "name": "Probe: Run front.002"
   },
   {
    "shape": "box",
@@ -617,55 +201,39 @@
    "z0": 12677,
    "x1": 15288,
    "z1": 12738,
-   "name": "Probe"
+   "name": "Probe: Lamp post"
   },
   {
    "shape": "box",
    "x0": 21860,
-   "z0": 12677,
+   "z0": 10385,
    "x1": 28035,
-   "z1": 12738,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3497,
-   "z0": 11150,
-   "x1": 3558,
-   "z1": 12990,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5537,
-   "z0": 11150,
-   "x1": 5598,
-   "z1": 12990,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 15482,
-   "z0": 12932,
-   "x1": 15543,
-   "z1": 12993,
-   "name": "Probe"
+   "z1": 12735,
+   "name": "Probe: Ceiling"
   },
   {
    "shape": "box",
    "x0": 3500,
-   "z0": 13187,
-   "x1": 5340,
-   "z1": 13248,
-   "name": "Probe"
+   "z0": 11150,
+   "x1": 5595,
+   "z1": 12990,
+   "name": "Probe: Doghouse roof.003"
+  },
+  {
+   "shape": "box",
+   "x0": 15230,
+   "z0": 12932,
+   "x1": 15540,
+   "z1": 12993,
+   "name": "Probe: Lamp post"
   },
   {
    "shape": "box",
    "x0": 3497,
-   "z0": 13445,
+   "z0": 13190,
    "x1": 3558,
    "z1": 13755,
-   "name": "Probe"
+   "name": "Probe: Run back"
   },
   {
    "shape": "box",
@@ -673,7 +241,7 @@
    "z0": 12935,
    "x1": 11205,
    "z1": 13755,
-   "name": "Probe"
+   "name": "Probe: Run front.003"
   },
   {
    "shape": "box",
@@ -681,23 +249,15 @@
    "z0": 13955,
    "x1": 11205,
    "z1": 14265,
-   "name": "Probe"
+   "name": "Probe: Run divider.002"
   },
   {
    "shape": "box",
    "x0": 3497,
    "z0": 14465,
    "x1": 3558,
-   "z1": 14775,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3500,
-   "z0": 14972,
-   "x1": 5340,
-   "z1": 15033,
-   "name": "Probe"
+   "z1": 15030,
+   "name": "Probe: Run back"
   },
   {
    "shape": "box",
@@ -705,7 +265,7 @@
    "z0": 14465,
    "x1": 11205,
    "z1": 15030,
-   "name": "Probe"
+   "name": "Probe: Run front.004"
   },
   {
    "shape": "box",
@@ -713,7 +273,7 @@
    "z0": 14972,
    "x1": 12735,
    "z1": 15033,
-   "name": "Probe"
+   "name": "Probe: Run gate 2"
   },
   {
    "shape": "box",
@@ -721,7 +281,7 @@
    "z0": 15227,
    "x1": 12735,
    "z1": 15288,
-   "name": "Probe"
+   "name": "Probe: Run gate 2"
   },
   {
    "shape": "box",
@@ -729,7 +289,7 @@
    "z0": 15482,
    "x1": 12225,
    "z1": 15543,
-   "name": "Probe"
+   "name": "Probe: Run gate 2"
   },
   {
    "shape": "box",
@@ -737,7 +297,7 @@
    "z0": 15737,
    "x1": 11205,
    "z1": 15798,
-   "name": "Probe"
+   "name": "Probe: Run gate 2"
   },
   {
    "shape": "box",
@@ -745,47 +305,23 @@
    "z0": 15992,
    "x1": 11208,
    "z1": 16053,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8342,
-   "z0": 16250,
-   "x1": 8403,
-   "z1": 16560,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3497,
-   "z0": 15230,
-   "x1": 3558,
-   "z1": 17070,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5537,
-   "z0": 15230,
-   "x1": 5598,
-   "z1": 17070,
-   "name": "Probe"
+   "name": "Probe: Blood on the wire 3"
   },
   {
    "shape": "box",
    "x0": 3500,
-   "z0": 17267,
-   "x1": 5340,
-   "z1": 17328,
-   "name": "Probe"
+   "z0": 15230,
+   "x1": 5595,
+   "z1": 17070,
+   "name": "Probe: Doghouse roof.005"
   },
   {
    "shape": "box",
    "x0": 3497,
-   "z0": 17525,
+   "z0": 17270,
    "x1": 3558,
    "z1": 17835,
-   "name": "Probe"
+   "name": "Probe: Run back"
   },
   {
    "shape": "box",
@@ -793,23 +329,7 @@
    "z0": 17015,
    "x1": 11205,
    "z1": 17835,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 22112,
-   "z0": 17777,
-   "x1": 22173,
-   "z1": 17838,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19310,
-   "z0": 18032,
-   "x1": 22170,
-   "z1": 18093,
-   "name": "Probe"
+   "name": "Probe: Run front.005"
   },
   {
    "shape": "box",
@@ -817,39 +337,23 @@
    "z0": 18035,
    "x1": 11205,
    "z1": 18345,
-   "name": "Probe"
+   "name": "Probe: Run divider.003"
   },
   {
    "shape": "box",
    "x0": 3497,
    "z0": 18545,
    "x1": 3558,
-   "z1": 18855,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3500,
-   "z0": 19052,
-   "x1": 5340,
-   "z1": 19113,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19307,
-   "z0": 18290,
-   "x1": 19368,
    "z1": 19110,
-   "name": "Probe"
+   "name": "Probe: Run back"
   },
   {
    "shape": "box",
-   "x0": 22112,
+   "x0": 19310,
    "z0": 18290,
-   "x1": 22173,
+   "x1": 22170,
    "z1": 19110,
-   "name": "Probe"
+   "name": "Probe: Water trough"
   },
   {
    "shape": "box",
@@ -857,15 +361,7 @@
    "z0": 18545,
    "x1": 11205,
    "z1": 19365,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19310,
-   "z0": 19307,
-   "x1": 22170,
-   "z1": 19368,
-   "name": "Probe"
+   "name": "Probe: Run front.006"
   },
   {
    "shape": "box",
@@ -873,7 +369,7 @@
    "z0": 19562,
    "x1": 11973,
    "z1": 19623,
-   "name": "Probe"
+   "name": "Probe: Run gate 3"
   },
   {
    "shape": "box",
@@ -881,7 +377,7 @@
    "z0": 19820,
    "x1": 11718,
    "z1": 20130,
-   "name": "Probe"
+   "name": "Probe: Run gate 3"
   },
   {
    "shape": "box",
@@ -889,7 +385,7 @@
    "z0": 20327,
    "x1": 11463,
    "z1": 20388,
-   "name": "Probe"
+   "name": "Probe: Run gate 3"
   },
   {
    "shape": "box",
@@ -897,7 +393,7 @@
    "z0": 20582,
    "x1": 11460,
    "z1": 20643,
-   "name": "Probe"
+   "name": "Probe: Run gate 3"
   },
   {
    "shape": "box",
@@ -905,39 +401,23 @@
    "z0": 20837,
    "x1": 11208,
    "z1": 20898,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3497,
-   "z0": 19310,
-   "x1": 3558,
-   "z1": 21150,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5537,
-   "z0": 19310,
-   "x1": 5598,
-   "z1": 21150,
-   "name": "Probe"
+   "name": "Probe: Run gate 3"
   },
   {
    "shape": "box",
    "x0": 3500,
-   "z0": 21347,
-   "x1": 5340,
-   "z1": 21408,
-   "name": "Probe"
+   "z0": 19310,
+   "x1": 5595,
+   "z1": 21150,
+   "name": "Probe: Doghouse roof.006"
   },
   {
    "shape": "box",
    "x0": 3497,
-   "z0": 21605,
+   "z0": 21350,
    "x1": 3558,
    "z1": 21915,
-   "name": "Probe"
+   "name": "Probe: Run back"
   },
   {
    "shape": "box",
@@ -945,7 +425,7 @@
    "z0": 21095,
    "x1": 11205,
    "z1": 21915,
-   "name": "Probe"
+   "name": "Probe: Run front.007"
   },
   {
    "shape": "box",
@@ -953,7 +433,7 @@
    "z0": 22115,
    "x1": 11205,
    "z1": 22425,
-   "name": "Probe"
+   "name": "Probe: Run divider.004"
   }
  ],
  "anim": {
@@ -961,51 +441,59 @@
   "ticks": 3
  },
  "probe": {
+  "Ceiling": 303,
+  "Run divider.003": 60,
   "Run divider": 58,
   "Run divider.002": 58,
-  "Run divider.003": 58,
   "Run divider.004": 58,
   "Run divider.001": 57,
-  "Water trough": 30,
+  "Hut roof": 53,
+  "Water trough": 48,
+  "Hut wall e": 47,
+  "Hut wall n": 45,
+  "Hut wall s": 44,
+  "Hut desk": 38,
+  "Doghouse roof": 36,
+  "Doghouse roof.001": 36,
+  "Doghouse roof.002": 36,
+  "Doghouse roof.003": 36,
+  "Doghouse roof.004": 36,
+  "Doghouse roof.005": 36,
+  "Doghouse roof.006": 36,
+  "Doghouse roof.007": 36,
   "Run back": 27,
-  "Hut wall n": 23,
-  "Hut wall e": 23,
-  "Hut wall s": 23,
-  "Doghouse roof": 15,
-  "Doghouse roof.001": 15,
-  "Doghouse roof.002": 15,
-  "Doghouse roof.003": 15,
-  "Doghouse roof.004": 15,
+  "Hut wall w": 17,
+  "Feed sack 1": 16,
   "Run gate 2": 15,
-  "Doghouse roof.005": 15,
-  "Doghouse roof.006": 15,
-  "Doghouse roof.007": 15,
-  "Hut wall w": 10,
+  "Feed sack 0": 12,
+  "Feed sack 2": 12,
   "Run front": 8,
   "Run gate 0": 8,
   "Run front.001": 8,
   "Run front.002": 8,
   "Run front.003": 8,
-  "Run front.005": 8,
-  "Run front.006": 8,
   "Run gate 3": 8,
   "Run front.007": 8,
-  "Run front.004": 6,
+  "Run front.004": 7,
+  "Run front.005": 7,
+  "Run front.006": 7,
+  "Hut door": 6,
+  "Hut wall w.002": 6,
+  "Logbook": 6,
+  "Hut wall w.005": 5,
   "Hut wall w.003": 4,
-  "Hut wall w.005": 4,
-  "Hut wall w.002": 3,
-  "Hose": 3,
+  "Hut wall w.004": 4,
+  "Lamp post": 3,
   "Gate post": 2,
   "Gate post.002": 2,
-  "Lamp post": 2,
   "Gate post.003": 2,
-  "Blood on the wire 2": 2,
   "Gate post.004": 2,
-  "Handler": 2,
   "Gate post.005": 2,
   "Gate post.006": 2,
   "Run post.001": 1,
   "Gate post.001": 1,
+  "Desk lamp": 1,
+  "Blood on the wire 2": 1,
   "Blood on the wire 4": 1,
   "Blood on the wire 3": 1,
   "Gate post.007": 1,

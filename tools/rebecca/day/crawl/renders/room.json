@@ -43,107 +43,43 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 1360,
-   "z0": 10200,
-   "x1": 13940,
-   "z1": 10540,
-   "name": "Sleeper wall"
-  },
-  {
-   "shape": "box",
-   "x0": 13600,
-   "z0": 1360,
-   "x1": 13940,
-   "z1": 10540,
-   "name": "Sleeper wall.001"
-  },
-  {
-   "shape": "box",
-   "x0": 1360,
-   "z0": 7140,
-   "x1": 10880,
-   "z1": 7480,
-   "name": "Sleeper wall.002"
-  },
-  {
-   "shape": "box",
-   "x0": 10540,
-   "z0": 1360,
-   "x1": 10880,
-   "z1": 7480,
-   "name": "Sleeper wall.003"
-  },
-  {
-   "shape": "box",
-   "x0": 10540,
-   "z0": 1360,
-   "x1": 13940,
-   "z1": 1700,
-   "name": "Sleeper wall.004"
-  },
-  {
-   "shape": "box",
-   "x0": 1360,
-   "z0": 1360,
-   "x1": 10880,
-   "z1": 7480,
-   "name": "Clay inside the L"
-  },
-  {
-   "shape": "box",
-   "x0": 1360,
-   "z0": 7480,
-   "x1": 1700,
-   "z1": 8500,
-   "name": "West end"
-  },
-  {
-   "shape": "box",
-   "x0": 1360,
-   "z0": 9860,
-   "x1": 1700,
-   "z1": 10200,
-   "name": "West end.001"
-  },
-  {
-   "shape": "box",
-   "x0": 11560,
-   "z0": 3315,
-   "x1": 12920,
-   "z1": 4335,
-   "name": "Ladder footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 10980,
+   "x0": 10470,
    "z0": 1797,
    "x1": 13500,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Sleeper wall.004"
   },
   {
    "shape": "box",
-   "x0": 10980,
+   "x0": 11745,
+   "z0": 3330,
+   "x1": 12820,
+   "z1": 4150,
+   "name": "Probe: Ladder rung.001"
+  },
+  {
+   "shape": "box",
+   "x0": 10470,
    "z0": 2055,
-   "x1": 11290,
-   "z1": 7465,
-   "name": "Probe"
+   "x1": 11035,
+   "z1": 6955,
+   "name": "Probe: Sleeper wall.003"
   },
   {
    "shape": "box",
    "x0": 1800,
-   "z0": 7665,
-   "x1": 11290,
-   "z1": 7975,
-   "name": "Probe"
+   "z0": 7155,
+   "x1": 11035,
+   "z1": 7465,
+   "name": "Probe: Sleeper wall.002"
   },
   {
    "shape": "box",
    "x0": 1797,
-   "z0": 8175,
+   "z0": 7665,
    "x1": 1858,
    "z1": 9760,
-   "name": "Probe"
+   "name": "Probe: Over the hole"
   },
   {
    "shape": "box",
@@ -151,15 +87,15 @@
    "z0": 2055,
    "x1": 13500,
    "z1": 9760,
-   "name": "Probe"
+   "name": "Probe: Lead pipe, up"
   },
   {
    "shape": "box",
    "x0": 1800,
-   "z0": 9957,
+   "z0": 9960,
    "x1": 13500,
-   "z1": 10018,
-   "name": "Probe"
+   "z1": 10100,
+   "name": "Probe: Sleeper wall"
   }
  ],
  "anim": {
@@ -167,18 +103,20 @@
   "ticks": 3
  },
  "probe": {
-  "Iron main": 69,
+  "Sleeper wall.002": 70,
+  "Sleeper wall.003": 66,
+  "Sleeper wall": 47,
   "Lead pipe": 46,
-  "Iron main, north": 45,
   "Sleeper wall.001": 33,
   "Lead pipe, up": 31,
-  "Sleeper wall.004": 9,
+  "Sleeper wall.004": 10,
+  "Ladder rung.001": 6,
   "Over the hole": 5,
-  "Main collar": 2,
-  "Main collar.002": 2,
-  "Main collar.001": 2,
-  "West end": 2,
-  "Sleeper wall.003": 1
+  "Ladder stile": 4,
+  "Ladder stile.001": 4,
+  "West end": 4,
+  "Ladder rung.004": 3,
+  "Ladder rung.003": 3
  },
  "bounds": {
   "x0": 1700,

@@ -43,347 +43,27 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 23800,
-   "z0": 14263,
-   "x1": 25840,
-   "z1": 15997,
-   "name": "Rock footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 21675,
-   "z0": 15160,
-   "x1": 23205,
-   "z1": 16460,
-   "name": "Rock footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 25330,
-   "z0": 12342,
-   "x1": 26690,
-   "z1": 13498,
-   "name": "Rock footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 9350,
-   "z0": 18657,
-   "x1": 11050,
-   "z1": 20102,
-   "name": "Rock footprint.003"
-  },
-  {
-   "shape": "box",
-   "x0": 17935,
-   "z0": 3430,
-   "x1": 19465,
-   "z1": 4730,
-   "name": "Rock footprint.004"
-  },
-  {
-   "shape": "box",
-   "x0": 29920,
-   "z0": 18853,
-   "x1": 31960,
-   "z1": 20587,
-   "name": "Rock footprint.005"
-  },
-  {
-   "shape": "box",
-   "x0": 7820,
-   "z0": 3570,
-   "x1": 9180,
-   "z1": 4930,
-   "name": "Leg footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 7820,
-   "z0": 17170,
-   "x1": 9180,
-   "z1": 18530,
-   "name": "Leg footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 21420,
-   "z0": 3570,
-   "x1": 22780,
-   "z1": 4930,
-   "name": "Leg footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 21420,
-   "z0": 17170,
-   "x1": 22780,
-   "z1": 18530,
-   "name": "Leg footprint.003"
-  },
-  {
-   "shape": "box",
-   "x0": 10710,
-   "z0": 11135,
-   "x1": 13090,
-   "z1": 12835,
-   "name": "Cage footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 13090,
-   "z0": 11220,
-   "x1": 16320,
-   "z1": 12750,
-   "name": "Stair footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 31450,
-   "z0": 6290,
-   "x1": 31790,
-   "z1": 8670,
-   "name": "Sign footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 21250,
-   "z0": 13430,
-   "x1": 23970,
-   "z1": 15470,
-   "name": "Body footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 25840,
-   "z0": 15300,
-   "x1": 28560,
-   "z1": 16660,
-   "name": "Bicycle footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 2380,
-   "z0": 17680,
-   "x1": 4420,
-   "z1": 17765,
-   "name": "Privy wall n"
-  },
-  {
-   "shape": "box",
-   "x0": 2380,
-   "z0": 19635,
-   "x1": 4420,
-   "z1": 19720,
-   "name": "Privy wall s"
-  },
-  {
-   "shape": "box",
-   "x0": 2380,
-   "z0": 17680,
-   "x1": 2465,
-   "z1": 19720,
-   "name": "Privy wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 4335,
-   "z0": 17680,
-   "x1": 4420,
-   "z1": 18105,
-   "name": "Privy wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 4335,
-   "z0": 18105,
-   "x1": 4420,
-   "z1": 19295,
-   "name": "Privy wall e.001"
-  },
-  {
-   "shape": "box",
-   "x0": 4335,
-   "z0": 19295,
-   "x1": 4420,
-   "z1": 19720,
-   "name": "Privy wall e.002"
-  },
-  {
-   "shape": "box",
-   "x0": 18870,
-   "z0": 18530,
-   "x1": 19890,
-   "z1": 19550,
-   "name": "Barrel footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 4979,
-   "z0": 13418,
-   "x1": 7104,
-   "z1": 15652,
-   "name": "Woodpile"
-  },
-  {
-   "shape": "box",
-   "x0": 7920,
-   "z0": 3497,
-   "x1": 9250,
-   "z1": 3558,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10977,
-   "z0": 3497,
-   "x1": 11038,
-   "z1": 3558,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21435,
-   "z0": 3497,
-   "x1": 22765,
-   "z1": 3558,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
    "x0": 25005,
    "z0": 3755,
    "x1": 26590,
    "z1": 4065,
-   "name": "Probe"
+   "name": "Probe: Danger board"
   },
   {
    "shape": "box",
-   "x0": 3075,
-   "z0": 4262,
-   "x1": 3640,
-   "z1": 4323,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2820,
-   "z0": 4517,
-   "x1": 3895,
-   "z1": 4578,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2820,
-   "z0": 4772,
-   "x1": 4150,
-   "z1": 4833,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9192,
+   "x0": 7920,
    "z0": 3755,
-   "x1": 9253,
+   "x1": 8995,
    "z1": 4830,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 2565,
-   "z0": 5027,
-   "x1": 3385,
-   "z1": 5088,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2310,
-   "z0": 5282,
-   "x1": 3385,
-   "z1": 5343,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2310,
-   "z0": 5537,
-   "x1": 3640,
-   "z1": 5598,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 20412,
-   "z0": 5537,
-   "x1": 20473,
-   "z1": 5598,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2565,
-   "z0": 5792,
-   "x1": 3640,
-   "z1": 5853,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 12507,
-   "z0": 5792,
-   "x1": 12568,
-   "z1": 5853,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2817,
-   "z0": 6047,
-   "x1": 2878,
-   "z1": 6108,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21432,
-   "z0": 6047,
-   "x1": 21493,
-   "z1": 6108,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 31632,
-   "z0": 6047,
-   "x1": 31693,
-   "z1": 6108,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21942,
-   "z0": 6305,
-   "x1": 22003,
-   "z1": 6615,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 27042,
-   "z0": 6557,
-   "x1": 27103,
-   "z1": 6618,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 14550,
-   "z0": 6812,
-   "x1": 14860,
-   "z1": 6873,
-   "name": "Probe"
+   "x0": 21435,
+   "z0": 3755,
+   "x1": 22765,
+   "z1": 4830,
+   "name": "Probe: Footing.002"
   },
   {
    "shape": "box",
@@ -391,7 +71,7 @@
    "z0": 7322,
    "x1": 22510,
    "z1": 7383,
-   "name": "Probe"
+   "name": "Probe: Hoist bucket"
   },
   {
    "shape": "box",
@@ -399,63 +79,31 @@
    "z0": 7580,
    "x1": 22510,
    "z1": 7890,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 18372,
-   "z0": 8852,
-   "x1": 18433,
-   "z1": 8913,
-   "name": "Probe"
+   "name": "Probe: Hoist bucket"
   },
   {
    "shape": "box",
    "x0": 31632,
-   "z0": 8852,
+   "z0": 6050,
    "x1": 31693,
-   "z1": 8913,
-   "name": "Probe"
+   "z1": 8910,
+   "name": "Probe: Lookout sign"
   },
   {
    "shape": "box",
-   "x0": 10467,
-   "z0": 11147,
-   "x1": 10528,
-   "z1": 11208,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 13275,
+   "x0": 10470,
    "z0": 11147,
    "x1": 15880,
    "z1": 11208,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
    "x0": 9705,
    "z0": 11402,
-   "x1": 10525,
+   "x1": 16135,
    "z1": 11463,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 25512,
-   "z0": 11402,
-   "x1": 25573,
-   "z1": 11463,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4092,
-   "z0": 11657,
-   "x1": 4153,
-   "z1": 11718,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -463,55 +111,31 @@
    "z0": 11657,
    "x1": 9760,
    "z1": 11718,
-   "name": "Probe"
+   "name": "Probe: Cage door"
   },
   {
    "shape": "box",
-   "x0": 27042,
+   "x0": 10470,
    "z0": 11657,
-   "x1": 27103,
+   "x1": 16135,
    "z1": 11718,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 3837,
-   "z0": 11912,
-   "x1": 3898,
-   "z1": 11973,
-   "name": "Probe"
+   "x0": 10725,
+   "z0": 11915,
+   "x1": 16135,
+   "z1": 12480,
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 10467,
-   "z0": 11660,
-   "x1": 10528,
-   "z1": 11970,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8682,
+   "x0": 10470,
    "z0": 12677,
-   "x1": 8743,
+   "x1": 16135,
    "z1": 12738,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10467,
-   "z0": 12677,
-   "x1": 10528,
-   "z1": 12738,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3327,
-   "z0": 12932,
-   "x1": 3388,
-   "z1": 12993,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -519,127 +143,183 @@
    "z0": 12932,
    "x1": 13075,
    "z1": 12993,
-   "name": "Probe"
+   "name": "Probe: Cage side.001"
+  },
+  {
+   "shape": "box",
+   "x0": 21435,
+   "z0": 13442,
+   "x1": 21745,
+   "z1": 13503,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 22710,
+   "z0": 13445,
+   "x1": 23020,
+   "z1": 13755,
+   "name": "Probe: Walt"
+  },
+  {
+   "shape": "box",
+   "x0": 23475,
+   "z0": 13952,
+   "x1": 23785,
+   "z1": 14013,
+   "name": "Probe: Walt"
+  },
+  {
+   "shape": "box",
+   "x0": 22455,
+   "z0": 13955,
+   "x1": 22765,
+   "z1": 14265,
+   "name": "Probe: Walt"
+  },
+  {
+   "shape": "box",
+   "x0": 23220,
+   "z0": 14207,
+   "x1": 23785,
+   "z1": 14268,
+   "name": "Probe: Walt"
+  },
+  {
+   "shape": "box",
+   "x0": 21945,
+   "z0": 14462,
+   "x1": 22510,
+   "z1": 14523,
+   "name": "Probe: Walt"
+  },
+  {
+   "shape": "box",
+   "x0": 22965,
+   "z0": 14462,
+   "x1": 23530,
+   "z1": 14523,
+   "name": "Probe: Walt"
+  },
+  {
+   "shape": "box",
+   "x0": 21690,
+   "z0": 14717,
+   "x1": 23275,
+   "z1": 14778,
+   "name": "Probe: Walt"
+  },
+  {
+   "shape": "box",
+   "x0": 21435,
+   "z0": 14972,
+   "x1": 23020,
+   "z1": 15033,
+   "name": "Probe: Walt"
+  },
+  {
+   "shape": "box",
+   "x0": 21435,
+   "z0": 15227,
+   "x1": 22765,
+   "z1": 15288,
+   "name": "Probe: Walt"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 13445,
+   "x1": 6955,
+   "z1": 15540,
+   "name": "Probe: Woodpile"
+  },
+  {
+   "shape": "box",
+   "x0": 26022,
+   "z0": 15482,
+   "x1": 26083,
+   "z1": 15543,
+   "name": "Probe: Rocks"
+  },
+  {
+   "shape": "box",
+   "x0": 27807,
+   "z0": 15482,
+   "x1": 27868,
+   "z1": 15543,
+   "name": "Probe: Bicycle front wheel"
+  },
+  {
+   "shape": "box",
+   "x0": 28317,
+   "z0": 15482,
+   "x1": 28378,
+   "z1": 15543,
+   "name": "Probe: Bicycle"
+  },
+  {
+   "shape": "box",
+   "x0": 26787,
+   "z0": 15737,
+   "x1": 26848,
+   "z1": 15798,
+   "name": "Probe: Walt's cap"
+  },
+  {
+   "shape": "box",
+   "x0": 26790,
+   "z0": 15992,
+   "x1": 27100,
+   "z1": 16053,
+   "name": "Probe: Walt's cap"
   },
   {
    "shape": "box",
    "x0": 27042,
-   "z0": 13187,
-   "x1": 27103,
-   "z1": 13248,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29847,
-   "z0": 13187,
-   "x1": 29908,
-   "z1": 13248,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7152,
-   "z0": 13952,
-   "x1": 7213,
-   "z1": 14013,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 28572,
-   "z0": 14717,
-   "x1": 28633,
-   "z1": 14778,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29592,
    "z0": 16247,
-   "x1": 29653,
+   "x1": 27103,
    "z1": 16308,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23472,
-   "z0": 16502,
-   "x1": 23533,
-   "z1": 16563,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 16842,
-   "z0": 16757,
-   "x1": 16903,
-   "z1": 16818,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 29847,
-   "z0": 16757,
-   "x1": 29908,
-   "z1": 16818,
-   "name": "Probe"
+   "name": "Probe: Walt's cap"
   },
   {
    "shape": "box",
    "x0": 2310,
-   "z0": 17522,
+   "z0": 17525,
    "x1": 4405,
-   "z1": 17583,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2055,
-   "z0": 17777,
-   "x1": 4150,
-   "z1": 17838,
-   "name": "Probe"
+   "z1": 17835,
+   "name": "Probe: Privy wall n"
   },
   {
    "shape": "box",
    "x0": 2310,
    "z0": 18032,
-   "x1": 4150,
+   "x1": 4660,
    "z1": 18093,
-   "name": "Probe"
+   "name": "Probe: Privy dark"
   },
   {
    "shape": "box",
-   "x0": 4602,
-   "z0": 18032,
-   "x1": 4663,
-   "z1": 18093,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19137,
-   "z0": 18032,
-   "x1": 19198,
-   "z1": 18093,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4605,
+   "x0": 4095,
    "z0": 18287,
    "x1": 4915,
    "z1": 18348,
-   "name": "Probe"
+   "name": "Probe: Privy door"
   },
   {
    "shape": "box",
-   "x0": 9192,
+   "x0": 7920,
    "z0": 17270,
-   "x1": 9253,
+   "x1": 8995,
    "z1": 18345,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
+  },
+  {
+   "shape": "box",
+   "x0": 21435,
+   "z0": 17270,
+   "x1": 22765,
+   "z1": 18345,
+   "name": "Probe: Footing.003"
   },
   {
    "shape": "box",
@@ -647,23 +327,15 @@
    "z0": 18542,
    "x1": 5170,
    "z1": 18603,
-   "name": "Probe"
+   "name": "Probe: Privy door"
   },
   {
    "shape": "box",
-   "x0": 7920,
+   "x0": 19140,
    "z0": 18542,
-   "x1": 9250,
+   "x1": 19705,
    "z1": 18603,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21435,
-   "z0": 18542,
-   "x1": 22765,
-   "z1": 18603,
-   "name": "Probe"
+   "name": "Probe: Water barrel"
   },
   {
    "shape": "box",
@@ -671,7 +343,7 @@
    "z0": 18797,
    "x1": 5425,
    "z1": 18858,
-   "name": "Probe"
+   "name": "Probe: Privy door"
   },
   {
    "shape": "box",
@@ -679,63 +351,47 @@
    "z0": 18290,
    "x1": 2620,
    "z1": 19110,
-   "name": "Probe"
+   "name": "Probe: Privy dark"
   },
   {
    "shape": "box",
-   "x0": 4092,
-   "z0": 18290,
-   "x1": 4153,
+   "x0": 4095,
+   "z0": 18545,
+   "x1": 4405,
    "z1": 19110,
-   "name": "Probe"
+   "name": "Probe: Privy dark"
   },
   {
    "shape": "box",
-   "x0": 19902,
+   "x0": 18885,
    "z0": 18800,
-   "x1": 19963,
-   "z1": 19365,
-   "name": "Probe"
+   "x1": 19960,
+   "z1": 19110,
+   "name": "Probe: Water barrel"
   },
   {
    "shape": "box",
-   "x0": 2310,
-   "z0": 19310,
-   "x1": 4150,
-   "z1": 19620,
-   "name": "Probe"
+   "x0": 18885,
+   "z0": 19307,
+   "x1": 19705,
+   "z1": 19368,
+   "name": "Probe: Water barrel"
   },
   {
    "shape": "box",
    "x0": 19140,
    "z0": 19562,
-   "x1": 19705,
+   "x1": 19450,
    "z1": 19623,
-   "name": "Probe"
+   "name": "Probe: Water barrel"
   },
   {
    "shape": "box",
    "x0": 2310,
-   "z0": 19817,
-   "x1": 4660,
-   "z1": 19878,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 26022,
-   "z0": 20072,
-   "x1": 26083,
-   "z1": 20133,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 15312,
-   "z0": 20285,
-   "x1": 15373,
-   "z1": 20345,
-   "name": "Probe"
+   "z0": 19310,
+   "x1": 4405,
+   "z1": 19875,
+   "name": "Probe: Privy wall s"
   }
  ],
  "anim": {
@@ -743,34 +399,49 @@
   "ticks": 3
  },
  "probe": {
-  "Rocks": 39,
-  "Dust": 26,
+  "Lookout tower, Tower timber": 131,
+  "Woodpile": 72,
+  "Cage top": 41,
+  "Walt": 38,
   "Privy dark": 22,
+  "Water barrel": 19,
+  "Footing.002": 15,
+  "Cage side.001": 15,
+  "Footing.003": 15,
+  "Privy wall n": 14,
   "Privy wall s": 14,
-  "Privy wall n": 13,
-  "Footing": 11,
-  "Lookout tower, Tower timber": 11,
-  "Footing.001": 11,
+  "Lookout sign": 12,
+  "Footing": 10,
   "Danger board": 10,
+  "Footing.001": 10,
+  "Privy wall w": 10,
   "Hoist bucket": 8,
   "Cage door": 8,
-  "Cage side.001": 8,
-  "Privy wall w": 8,
+  "Cage side": 7,
   "Privy door": 7,
-  "Footing.002": 6,
-  "Footing.003": 6,
-  "hoop.001": 6,
+  "Leg foot.002": 5,
+  "Cage side.002": 5,
+  "Leg foot.003": 5,
+  "Cage sign": 4,
+  "Rocks": 4,
+  "Walt's cap": 4,
+  "Privy roof": 4,
+  "Privy wall e": 3,
+  "Privy wall e.002": 3,
   "Danger board post": 2,
   "Danger board post.001": 2,
-  "Lookout sign": 2,
-  "Cage sign words 2": 2,
+  "Leg foot": 2,
+  "Leg foot.001": 2,
+  "Anchor strap": 1,
+  "Cage post": 1,
+  "Cage sign words 2": 1,
   "Cage padlock": 1,
+  "Cage door frame.001": 1,
   "Cage post.001": 1,
   "Cage post.003": 1,
-  "Woodpile": 1,
+  "Bicycle front wheel": 1,
   "Bicycle": 1,
-  "Privy wall e": 1,
-  "Privy wall e.002": 1
+  "Anchor strap.001": 1
  },
  "bounds": {
   "x0": 1700,

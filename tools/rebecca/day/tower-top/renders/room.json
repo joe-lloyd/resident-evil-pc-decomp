@@ -56,107 +56,11 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 6290,
-   "z0": 6188,
-   "x1": 14110,
-   "z1": 6392,
-   "name": "Cab wall footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 6188,
-   "z0": 6290,
-   "x1": 6392,
-   "z1": 14110,
-   "name": "Cab wall footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 14008,
-   "z0": 6290,
-   "x1": 14212,
-   "z1": 14110,
-   "name": "Cab wall footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 6290,
-   "z0": 14008,
-   "x1": 10710,
-   "z1": 14212,
-   "name": "Cab wall footprint.003"
-  },
-  {
-   "shape": "box",
-   "x0": 12070,
-   "z0": 14008,
-   "x1": 14110,
-   "z1": 14212,
-   "name": "Cab wall footprint.004"
-  },
-  {
-   "shape": "box",
-   "x0": 5780,
-   "z0": 5780,
-   "x1": 6460,
-   "z1": 6460,
-   "name": "Leg footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 5780,
-   "z0": 13940,
-   "x1": 6460,
-   "z1": 14620,
-   "name": "Leg footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 13940,
-   "z0": 5780,
-   "x1": 14620,
-   "z1": 6460,
-   "name": "Leg footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 13940,
-   "z0": 13940,
-   "x1": 14620,
-   "z1": 14620,
-   "name": "Leg footprint.003"
-  },
-  {
-   "shape": "box",
-   "x0": 10753,
-   "z0": 10753,
-   "x1": 12368,
-   "z1": 12368,
-   "name": "Finder footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 10030,
-   "z0": 6332,
-   "x1": 13770,
-   "z1": 7268,
-   "name": "Desk"
-  },
-  {
-   "shape": "box",
-   "x0": 12878,
-   "z0": 7480,
-   "x1": 13983,
-   "z1": 10710,
-   "name": "Cot footprint"
-  },
-  {
-   "shape": "box",
    "x0": 4690,
    "z0": 4687,
    "x1": 15710,
    "z1": 4748,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -164,31 +68,55 @@
    "z0": 4942,
    "x1": 8318,
    "z1": 5003,
-   "name": "Probe"
+   "name": "Probe: Crow on the rail"
   },
   {
    "shape": "box",
-   "x0": 6475,
+   "x0": 5965,
+   "z0": 5962,
+   "x1": 6275,
+   "z1": 6023,
+   "name": "Probe: Cab roof"
+  },
+  {
+   "shape": "box",
+   "x0": 14125,
+   "z0": 5962,
+   "x1": 14435,
+   "z1": 6023,
+   "name": "Probe: Cab roof"
+  },
+  {
+   "shape": "box",
+   "x0": 5965,
+   "z0": 6217,
+   "x1": 14435,
+   "z1": 6278,
+   "name": "Probe: Lookout tower, Tower timber"
+  },
+  {
+   "shape": "box",
+   "x0": 6220,
    "z0": 6472,
-   "x1": 9845,
+   "x1": 14180,
    "z1": 6533,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 9787,
+   "x0": 9790,
    "z0": 6727,
-   "x1": 9848,
+   "x1": 14180,
    "z1": 6788,
-   "name": "Probe"
+   "name": "Probe: Desk"
   },
   {
    "shape": "box",
-   "x0": 13867,
-   "z0": 6475,
-   "x1": 13928,
+   "x0": 10045,
+   "z0": 6985,
+   "x1": 14180,
    "z1": 7295,
-   "name": "Probe"
+   "name": "Probe: Desk"
   },
   {
    "shape": "box",
@@ -196,7 +124,7 @@
    "z0": 8515,
    "x1": 11123,
    "z1": 9845,
-   "name": "Probe"
+   "name": "Probe: Hatch rail"
   },
   {
    "shape": "box",
@@ -204,95 +132,103 @@
    "z0": 10042,
    "x1": 11120,
    "z1": 10103,
-   "name": "Probe"
+   "name": "Probe: Hatch rail.001"
   },
   {
    "shape": "box",
-   "x0": 6472,
+   "x0": 6220,
    "z0": 6730,
-   "x1": 6533,
+   "x1": 6530,
    "z1": 10610,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 12847,
+   "x0": 13105,
    "z0": 7495,
-   "x1": 12908,
+   "x1": 14180,
    "z1": 10610,
-   "name": "Probe"
+   "name": "Probe: Ceiling boards"
   },
   {
    "shape": "box",
-   "x0": 12850,
-   "z0": 10807,
-   "x1": 13925,
-   "z1": 10868,
-   "name": "Probe"
+   "x0": 10810,
+   "z0": 10810,
+   "x1": 12395,
+   "z1": 12395,
+   "name": "Probe: Finder ring"
   },
   {
    "shape": "box",
-   "x0": 6475,
+   "x0": 6220,
    "z0": 10810,
    "x1": 6785,
    "z1": 12905,
-   "name": "Probe"
+   "name": "Probe: Shelf"
   },
   {
    "shape": "box",
-   "x0": 6475,
+   "x0": 6220,
    "z0": 13102,
    "x1": 7040,
    "z1": 13163,
-   "name": "Probe"
+   "name": "Probe: Lightning stool"
   },
   {
    "shape": "box",
-   "x0": 6475,
+   "x0": 6220,
    "z0": 13360,
    "x1": 7295,
    "z1": 13670,
-   "name": "Probe"
+   "name": "Probe: Lightning stool"
   },
   {
    "shape": "box",
-   "x0": 13867,
-   "z0": 11065,
-   "x1": 13928,
+   "x0": 13870,
+   "z0": 10810,
+   "x1": 14180,
    "z1": 13670,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 6475,
+   "x0": 6220,
    "z0": 13867,
    "x1": 10610,
    "z1": 13928,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
    "x0": 12085,
    "z0": 13867,
-   "x1": 13925,
+   "x1": 14180,
    "z1": 13928,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 10807,
+   "x0": 5965,
    "z0": 14122,
-   "x1": 10868,
+   "x1": 10865,
    "z1": 14183,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 11827,
+   "x0": 11830,
    "z0": 14122,
-   "x1": 11888,
+   "x1": 14435,
    "z1": 14183,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
+  },
+  {
+   "shape": "box",
+   "x0": 5965,
+   "z0": 14377,
+   "x1": 6275,
+   "z1": 14438,
+   "name": "Probe: Cab roof"
   },
   {
    "shape": "box",
@@ -300,7 +236,15 @@
    "z0": 14377,
    "x1": 13415,
    "z1": 14438,
-   "name": "Probe"
+   "name": "Probe: Cab door"
+  },
+  {
+   "shape": "box",
+   "x0": 14125,
+   "z0": 14377,
+   "x1": 14435,
+   "z1": 14438,
+   "name": "Probe: Cab roof"
   },
   {
    "shape": "box",
@@ -308,7 +252,7 @@
    "z0": 4945,
    "x1": 4748,
    "z1": 15455,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -316,7 +260,7 @@
    "z0": 4945,
    "x1": 15713,
    "z1": 15455,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -324,7 +268,7 @@
    "z0": 15652,
    "x1": 15710,
    "z1": 15713,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   }
  ],
  "anim": {
@@ -332,18 +276,29 @@
   "ticks": 3
  },
  "probe": {
-  "Lookout tower, Tower timber": 248,
-  "Cot": 17,
+  "Lookout tower, Tower timber": 378,
+  "Ceiling boards": 45,
+  "Desk": 44,
+  "Finder ring": 22,
+  "Finder table": 20,
   "Shelf": 16,
+  "Cab roof": 12,
   "Hatch rail.001": 10,
   "Lightning stool": 7,
+  "Radio set": 6,
   "Hatch rail": 6,
+  "Logbook": 4,
+  "Lantern": 2,
+  "Lifting page": 2,
+  "Binoculars": 2,
+  "Door glass": 2,
   "Cab door": 2,
   "Crow on the rail": 1,
-  "Lantern": 1,
-  "Hatch rail post": 1,
-  "Blood on the canvas": 1,
+  "Handset cord": 1,
+  "Scratches 2": 1,
+  "Hatch rail post.001": 1,
   "Tin 0": 1,
+  "Sight.001": 1,
   "Tin 2": 1,
   "Tin 3": 1,
   "Tin 5": 1,

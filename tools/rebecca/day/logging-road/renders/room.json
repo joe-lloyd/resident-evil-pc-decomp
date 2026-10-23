@@ -69,75 +69,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 6715,
-   "z0": 11815,
-   "x1": 28305,
-   "z1": 16065,
-   "name": "Truck footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 9150,
-   "z0": 5070,
-   "x1": 11250,
-   "z1": 7170,
-   "name": "Spruce footprint"
-  },
-  {
-   "shape": "circle",
-   "x0": 18391,
-   "z0": 4111,
-   "x1": 20369,
-   "z1": 6089,
-   "name": "Spruce footprint.001"
-  },
-  {
-   "shape": "circle",
-   "x0": 13561,
-   "z0": 21551,
-   "x1": 15679,
-   "z1": 23669,
-   "name": "Spruce footprint.002"
-  },
-  {
-   "shape": "circle",
-   "x0": 25780,
-   "z0": 20680,
-   "x1": 27940,
-   "z1": 22840,
-   "name": "Spruce footprint.003"
-  },
-  {
-   "shape": "circle",
-   "x0": 18377,
-   "z0": 22077,
-   "x1": 19704,
-   "z1": 23384,
-   "name": "Stump 0"
-  },
-  {
-   "shape": "circle",
-   "x0": 1113,
-   "z0": 22812,
-   "x1": 2254,
-   "z1": 23954,
-   "name": "Stump 1"
-  },
-  {
-   "shape": "circle",
-   "x0": 22297,
-   "z0": 23940,
-   "x1": 23862,
-   "z1": 25494,
-   "name": "Stump 2"
+   "x0": 28065,
+   "z0": 9362,
+   "x1": 28375,
+   "z1": 9423,
+   "name": "Probe: Camp sign post"
   },
   {
    "shape": "box",
-   "x0": 28065,
-   "z0": 9365,
-   "x1": 28375,
-   "z1": 9675,
-   "name": "Probe"
+   "x0": 27045,
+   "z0": 9617,
+   "x1": 29395,
+   "z1": 9678,
+   "name": "Probe: Camp sign"
   },
   {
    "shape": "box",
@@ -145,7 +89,7 @@
    "z0": 11402,
    "x1": 7720,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Dual wheel hub.026"
   },
   {
    "shape": "box",
@@ -153,7 +97,7 @@
    "z0": 11402,
    "x1": 9760,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Dual wheel hub.018"
   },
   {
    "shape": "box",
@@ -161,7 +105,7 @@
    "z0": 11402,
    "x1": 17665,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Dual wheel hub.010"
   },
   {
    "shape": "box",
@@ -169,7 +113,7 @@
    "z0": 11402,
    "x1": 19960,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Dual wheel hub.002"
   },
   {
    "shape": "box",
@@ -177,7 +121,7 @@
    "z0": 11657,
    "x1": 10525,
    "z1": 11718,
-   "name": "Probe"
+   "name": "Probe: Dual wheel tread.013"
   },
   {
    "shape": "box",
@@ -185,55 +129,71 @@
    "z0": 11657,
    "x1": 11548,
    "z1": 11718,
-   "name": "Probe"
+   "name": "Probe: Binder chain"
   },
   {
    "shape": "box",
    "x0": 16590,
    "z0": 11657,
-   "x1": 20725,
-   "z1": 11718,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21690,
-   "z0": 11657,
    "x1": 28375,
    "z1": 11718,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6642,
-   "z0": 11915,
-   "x1": 6703,
-   "z1": 12480,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6642,
-   "z0": 15230,
-   "x1": 6703,
-   "z1": 16050,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 28317,
-   "z0": 11915,
-   "x1": 28378,
-   "z1": 16050,
-   "name": "Probe"
+   "name": "Probe: Front fender"
   },
   {
    "shape": "box",
    "x0": 6645,
-   "z0": 16247,
+   "z0": 11915,
+   "x1": 28375,
+   "z1": 12480,
+   "name": "Probe: Log"
+  },
+  {
+   "shape": "box",
+   "x0": 6900,
+   "z0": 12680,
+   "x1": 28375,
+   "z1": 14010,
+   "name": "Probe: Log.001"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 14210,
+   "x1": 28375,
+   "z1": 15030,
+   "name": "Probe: Log.002"
+  },
+  {
+   "shape": "box",
+   "x0": 6645,
+   "z0": 15230,
+   "x1": 28375,
+   "z1": 15795,
+   "name": "Probe: Log.003"
+  },
+  {
+   "shape": "box",
+   "x0": 11487,
+   "z0": 15992,
+   "x1": 11548,
+   "z1": 16053,
+   "name": "Probe: Binder chain.004"
+  },
+  {
+   "shape": "box",
+   "x0": 16590,
+   "z0": 15992,
+   "x1": 28375,
+   "z1": 16053,
+   "name": "Probe: Front fender.001"
+  },
+  {
+   "shape": "box",
+   "x0": 6645,
+   "z0": 15995,
    "x1": 10525,
-   "z1": 16308,
-   "name": "Probe"
+   "z1": 16305,
+   "name": "Probe: Dual wheel tyre.015"
   },
   {
    "shape": "box",
@@ -241,7 +201,7 @@
    "z0": 16247,
    "x1": 18430,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Dual wheel tyre.007"
   },
   {
    "shape": "box",
@@ -249,15 +209,15 @@
    "z0": 16247,
    "x1": 20725,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Dual wheel tyre.003"
   },
   {
    "shape": "box",
    "x0": 22710,
    "z0": 16247,
-   "x1": 23785,
+   "x1": 23530,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Step.001"
   },
   {
    "shape": "box",
@@ -265,31 +225,39 @@
    "z0": 16247,
    "x1": 24298,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Driver's door"
   },
   {
    "shape": "box",
-   "x0": 24750,
+   "x0": 24747,
    "z0": 16247,
-   "x1": 25315,
+   "x1": 24808,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Front fender.001"
   },
   {
    "shape": "box",
-   "x0": 25770,
+   "x0": 25260,
    "z0": 16247,
-   "x1": 26590,
+   "x1": 25570,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Front fender.001"
   },
   {
    "shape": "box",
-   "x0": 27045,
+   "x0": 26790,
+   "z0": 16247,
+   "x1": 27100,
+   "z1": 16308,
+   "name": "Probe: Front fender.001"
+  },
+  {
+   "shape": "box",
+   "x0": 27555,
    "z0": 16247,
    "x1": 28375,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Bumper"
   },
   {
    "shape": "box",
@@ -297,7 +265,7 @@
    "z0": 16505,
    "x1": 24295,
    "z1": 16815,
-   "name": "Probe"
+   "name": "Probe: Driver's door"
   },
   {
    "shape": "box",
@@ -305,7 +273,7 @@
    "z0": 17012,
    "x1": 24043,
    "z1": 17073,
-   "name": "Probe"
+   "name": "Probe: Driver's door"
   },
   {
    "shape": "box",
@@ -313,7 +281,7 @@
    "z0": 17270,
    "x1": 24040,
    "z1": 17580,
-   "name": "Probe"
+   "name": "Probe: Driver's door"
   },
   {
    "shape": "box",
@@ -321,7 +289,7 @@
    "z0": 17777,
    "x1": 23788,
    "z1": 17838,
-   "name": "Probe"
+   "name": "Probe: Driver's door"
   },
   {
    "shape": "box",
@@ -329,7 +297,7 @@
    "z0": 18032,
    "x1": 23785,
    "z1": 18093,
-   "name": "Probe"
+   "name": "Probe: Driver's door"
   }
  ],
  "anim": {
@@ -337,37 +305,69 @@
   "ticks": 3
  },
  "probe": {
-  "Bumper": 21,
-  "Front fender": 14,
+  "Log.003": 212,
+  "Log.002": 203,
+  "Log": 200,
+  "Log.001": 190,
+  "Floor": 139,
+  "Engine": 74,
+  "Front fender": 60,
+  "Front fender.001": 56,
+  "Bench seat": 42,
+  "Bumper": 38,
+  "Hood": 29,
+  "Fuel tank": 28,
+  "Truck frame": 25,
+  "Fuel tank.001": 20,
+  "Rack bar": 15,
+  "Dual wheel tread.013": 14,
+  "Dual wheel tread.005": 14,
+  "Seat back": 14,
+  "Dual wheel tyre.015": 14,
+  "Dual wheel tyre.011": 13,
   "Driver's door": 13,
-  "Front fender.001": 11,
-  "Dual wheel tread.013": 8,
-  "Dual wheel tread.005": 7,
-  "Dual wheel tyre.015": 7,
-  "Dual wheel tyre.011": 7,
-  "Dual wheel tyre.003": 7,
-  "Floor": 6,
-  "Dual wheel tyre.007": 6,
-  "Dual wheel tyre.009": 5,
-  "Dual wheel tyre.001": 5,
+  "Dual wheel tyre.007": 12,
+  "Dual wheel tyre.003": 12,
+  "Dual wheel tyre.009": 9,
+  "Dual wheel tyre.001": 9,
+  "Cab wall e.001": 9,
+  "Cab wall s.001": 9,
+  "Camp sign": 8,
+  "Dual wheel tread.009": 6,
+  "Bunk": 5,
   "Step": 5,
-  "Step.001": 5,
   "Camp sign post": 4,
-  "Dual wheel tread.009": 3,
-  "Dual wheel tread.001": 3,
+  "Dual wheel tread.001": 4,
+  "Trailer frame": 4,
+  "Dual wheel tread.007": 4,
+  "Step.001": 4,
+  "Cab wall n.001": 3,
+  "Dual wheel tyre.012": 3,
+  "Bunk.001": 3,
   "Dual wheel tread.014": 3,
+  "Dual wheel tyre.014": 3,
   "Dual wheel hub.026": 2,
   "Dual wheel hub.018": 2,
   "Dual wheel hub.010": 2,
   "Dual wheel hub.002": 2,
+  "Dual wheel tyre.013": 2,
+  "Binder chain": 2,
+  "Dual wheel tyre.005": 2,
+  "Cab wall n": 2,
   "Dual wheel tread.012": 2,
+  "Headlamp bucket": 2,
+  "Headlamp bucket.001": 2,
   "Dual wheel tread.015": 2,
-  "Dual wheel tread.007": 2,
-  "Dual wheel tyre.013": 1,
-  "Binder chain": 1,
-  "Dual wheel tyre.005": 1,
-  "Bunk": 1,
-  "Dual wheel tread.011": 1,
+  "Dual wheel tread.011": 2,
+  "Cab wall n.003": 1,
+  "Bunk stake.002": 1,
+  "Bunk stake": 1,
+  "Cab wall e": 1,
+  "Cab wall w": 1,
+  "Grille": 1,
+  "Blinker lens": 1,
+  "Binder chain.004": 1,
+  "Cab wall w.003": 1,
   "Dual wheel tread.003": 1
  },
  "bounds": {

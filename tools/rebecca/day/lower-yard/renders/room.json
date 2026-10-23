@@ -82,155 +82,35 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 32470,
-   "z0": 1700,
-   "x1": 43350,
-   "z1": 17850,
-   "name": "Station"
-  },
-  {
-   "shape": "box",
-   "x0": 31025,
-   "z0": 13600,
-   "x1": 32385,
-   "z1": 15130,
-   "name": "Drinks machine"
-  },
-  {
-   "shape": "box",
-   "x0": 15027,
-   "z0": 17577,
-   "x1": 23393,
-   "z1": 23053,
-   "name": "Sedan footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 25670,
-   "z0": 14110,
-   "x1": 28390,
-   "z1": 14212,
-   "name": "Booth wall n"
-  },
-  {
-   "shape": "box",
-   "x0": 25670,
-   "z0": 16388,
-   "x1": 28390,
-   "z1": 16490,
-   "name": "Booth wall s"
-  },
-  {
-   "shape": "box",
-   "x0": 25670,
-   "z0": 14110,
-   "x1": 25772,
-   "z1": 14535,
-   "name": "Booth wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 25670,
-   "z0": 14535,
-   "x1": 25772,
-   "z1": 16065,
-   "name": "Booth wall w.001"
-  },
-  {
-   "shape": "box",
-   "x0": 25670,
-   "z0": 14535,
-   "x1": 25772,
-   "z1": 16065,
-   "name": "Booth wall w.002"
-  },
-  {
-   "shape": "box",
-   "x0": 25670,
-   "z0": 16065,
-   "x1": 25772,
-   "z1": 16490,
-   "name": "Booth wall w.003"
-  },
-  {
-   "shape": "box",
-   "x0": 28288,
-   "z0": 14110,
-   "x1": 28390,
-   "z1": 16490,
-   "name": "Booth wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 25882,
-   "z0": 14323,
-   "x1": 28177,
-   "z1": 16277,
-   "name": "Booth inside"
-  },
-  {
-   "shape": "box",
-   "x0": 22371,
-   "z0": 9940,
-   "x1": 24889,
-   "z1": 11820,
-   "name": "Handcart bed"
-  },
-  {
-   "shape": "circle",
-   "x0": 25585,
-   "z0": 3995,
-   "x1": 25755,
-   "z1": 4165,
-   "name": "Flagpole"
-  },
-  {
-   "shape": "circle",
-   "x0": 20451,
-   "z0": 9061,
-   "x1": 20689,
-   "z1": 9299,
-   "name": "Lamp post"
-  },
-  {
-   "shape": "circle",
-   "x0": 11645,
-   "z0": 12495,
-   "x1": 11815,
-   "z1": 12665,
-   "name": "Trail sign post"
-  },
-  {
-   "shape": "box",
    "x0": 25682,
    "z0": 3837,
    "x1": 25743,
    "z1": 3898,
-   "name": "Probe"
+   "name": "Probe: Flagpole"
   },
   {
    "shape": "box",
-   "x0": 25427,
+   "x0": 25430,
    "z0": 4092,
-   "x1": 25488,
+   "x1": 25740,
    "z1": 4153,
-   "name": "Probe"
+   "name": "Probe: Flagpole"
   },
   {
    "shape": "box",
    "x0": 32227,
    "z0": 1800,
    "x1": 32288,
-   "z1": 5935,
-   "name": "Probe"
+   "z1": 6190,
+   "name": "Probe: Station"
   },
   {
    "shape": "box",
    "x0": 32060,
-   "z0": 6135,
+   "z0": 6390,
    "x1": 32200,
    "z1": 7720,
-   "name": "Probe"
+   "name": "Probe: Window sill 0"
   },
   {
    "shape": "box",
@@ -238,7 +118,7 @@
    "z0": 7920,
    "x1": 32200,
    "z1": 8230,
-   "name": "Probe"
+   "name": "Probe: Door leaf, ajar"
   },
   {
    "shape": "box",
@@ -246,7 +126,7 @@
    "z0": 8427,
    "x1": 31863,
    "z1": 8488,
-   "name": "Probe"
+   "name": "Probe: Door leaf, ajar"
   },
   {
    "shape": "box",
@@ -254,7 +134,7 @@
    "z0": 8937,
    "x1": 20643,
    "z1": 8998,
-   "name": "Probe"
+   "name": "Probe: Lamp post"
   },
   {
    "shape": "box",
@@ -262,15 +142,15 @@
    "z0": 8685,
    "x1": 31860,
    "z1": 8995,
-   "name": "Probe"
+   "name": "Probe: Door leaf, ajar"
   },
   {
    "shape": "box",
-   "x0": 20327,
+   "x0": 20330,
    "z0": 9192,
-   "x1": 20388,
+   "x1": 20640,
    "z1": 9253,
-   "name": "Probe"
+   "name": "Probe: Lamp post"
   },
   {
    "shape": "box",
@@ -278,7 +158,23 @@
    "z0": 9195,
    "x1": 31608,
    "z1": 9505,
-   "name": "Probe"
+   "name": "Probe: Door leaf, ajar"
+  },
+  {
+   "shape": "box",
+   "x0": 22625,
+   "z0": 9957,
+   "x1": 23190,
+   "z1": 10018,
+   "name": "Probe: Handcart bed"
+  },
+  {
+   "shape": "box",
+   "x0": 23645,
+   "z0": 9957,
+   "x1": 23955,
+   "z1": 10018,
+   "name": "Probe: Handcart wheel"
   },
   {
    "shape": "box",
@@ -286,15 +182,23 @@
    "z0": 10212,
    "x1": 22170,
    "z1": 10273,
-   "name": "Probe"
+   "name": "Probe: Handcart handle"
   },
   {
    "shape": "box",
-   "x0": 22112,
+   "x0": 22625,
+   "z0": 10212,
+   "x1": 24720,
+   "z1": 10273,
+   "name": "Probe: Handcart bed"
+  },
+  {
+   "shape": "box",
+   "x0": 22115,
    "z0": 10467,
-   "x1": 22173,
+   "x1": 24975,
    "z1": 10528,
-   "name": "Probe"
+   "name": "Probe: Handcart bed"
   },
   {
    "shape": "box",
@@ -302,23 +206,39 @@
    "z0": 8430,
    "x1": 32288,
    "z1": 10525,
-   "name": "Probe"
+   "name": "Probe: Station door"
   },
   {
    "shape": "box",
-   "x0": 24917,
-   "z0": 10470,
-   "x1": 24978,
-   "z1": 10780,
-   "name": "Probe"
+   "x0": 22370,
+   "z0": 10722,
+   "x1": 24975,
+   "z1": 10783,
+   "name": "Probe: Handcart bed"
   },
   {
    "shape": "box",
-   "x0": 24917,
-   "z0": 11490,
-   "x1": 24978,
-   "z1": 11800,
-   "name": "Probe"
+   "x0": 22370,
+   "z0": 10980,
+   "x1": 24720,
+   "z1": 11290,
+   "name": "Probe: Handcart bed"
+  },
+  {
+   "shape": "box",
+   "x0": 23135,
+   "z0": 11487,
+   "x1": 24975,
+   "z1": 11548,
+   "name": "Probe: Handcart bed"
+  },
+  {
+   "shape": "box",
+   "x0": 23900,
+   "z0": 11742,
+   "x1": 24975,
+   "z1": 11803,
+   "name": "Probe: Handcart bed"
   },
   {
    "shape": "box",
@@ -326,7 +246,7 @@
    "z0": 11745,
    "x1": 11718,
    "z1": 12055,
-   "name": "Probe"
+   "name": "Probe: Trail sign"
   },
   {
    "shape": "box",
@@ -334,7 +254,7 @@
    "z0": 10725,
    "x1": 32200,
    "z1": 12055,
-   "name": "Probe"
+   "name": "Probe: Window sill 1"
   },
   {
    "shape": "box",
@@ -342,15 +262,15 @@
    "z0": 12252,
    "x1": 11715,
    "z1": 12313,
-   "name": "Probe"
+   "name": "Probe: North fence"
   },
   {
    "shape": "box",
-   "x0": 11912,
+   "x0": 11660,
    "z0": 12507,
-   "x1": 11973,
+   "x1": 11970,
    "z1": 12568,
-   "name": "Probe"
+   "name": "Probe: Trail sign post"
   },
   {
    "shape": "box",
@@ -358,7 +278,7 @@
    "z0": 12765,
    "x1": 11718,
    "z1": 13330,
-   "name": "Probe"
+   "name": "Probe: Trail sign"
   },
   {
    "shape": "box",
@@ -366,15 +286,7 @@
    "z0": 12255,
    "x1": 32288,
    "z1": 13330,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 31040,
-   "z0": 13527,
-   "x1": 32200,
-   "z1": 13588,
-   "name": "Probe"
+   "name": "Probe: Station"
   },
   {
    "shape": "box",
@@ -382,39 +294,39 @@
    "z0": 14037,
    "x1": 28545,
    "z1": 14098,
-   "name": "Probe"
+   "name": "Probe: Booth wall n"
   },
   {
    "shape": "box",
-   "x0": 25940,
+   "x0": 25430,
    "z0": 14292,
    "x1": 28545,
    "z1": 14353,
-   "name": "Probe"
+   "name": "Probe: Booth inside"
   },
   {
    "shape": "box",
-   "x0": 25427,
-   "z0": 14550,
-   "x1": 25488,
-   "z1": 16135,
-   "name": "Probe"
+   "x0": 31040,
+   "z0": 13530,
+   "x1": 32200,
+   "z1": 15115,
+   "name": "Probe: Drinks machine"
   },
   {
    "shape": "box",
-   "x0": 28235,
+   "x0": 25175,
    "z0": 14550,
    "x1": 28545,
    "z1": 16135,
-   "name": "Probe"
+   "name": "Probe: Booth roof"
   },
   {
    "shape": "box",
-   "x0": 25940,
+   "x0": 25685,
    "z0": 16332,
    "x1": 28545,
    "z1": 16393,
-   "name": "Probe"
+   "name": "Probe: Booth wall s"
   },
   {
    "shape": "box",
@@ -422,7 +334,7 @@
    "z0": 16587,
    "x1": 28290,
    "z1": 16648,
-   "name": "Probe"
+   "name": "Probe: Booth wall s"
   },
   {
    "shape": "box",
@@ -430,7 +342,7 @@
    "z0": 17352,
    "x1": 5598,
    "z1": 17413,
-   "name": "Probe"
+   "name": "Probe: South fence"
   },
   {
    "shape": "box",
@@ -438,7 +350,23 @@
    "z0": 17355,
    "x1": 11460,
    "z1": 17665,
-   "name": "Probe"
+   "name": "Probe: South fence"
+  },
+  {
+   "shape": "box",
+   "x0": 15740,
+   "z0": 17607,
+   "x1": 16560,
+   "z1": 17668,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 15740,
+   "z0": 17862,
+   "x1": 17580,
+   "z1": 17923,
+   "name": "Probe: Sedan"
   },
   {
    "shape": "box",
@@ -446,23 +374,175 @@
    "z0": 15315,
    "x1": 32288,
    "z1": 17920,
-   "name": "Probe"
+   "name": "Probe: Station"
   },
   {
    "shape": "box",
-   "x0": 14972,
-   "z0": 19650,
-   "x1": 15033,
-   "z1": 20470,
-   "name": "Probe"
+   "x0": 15740,
+   "z0": 18117,
+   "x1": 18090,
+   "z1": 18178,
+   "name": "Probe: Sedan"
   },
   {
    "shape": "box",
-   "x0": 23387,
+   "x0": 15485,
+   "z0": 18372,
+   "x1": 18600,
+   "z1": 18433,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 15485,
+   "z0": 18627,
+   "x1": 19365,
+   "z1": 18688,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 15230,
+   "z0": 18882,
+   "x1": 20130,
+   "z1": 18943,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 15230,
+   "z0": 19137,
+   "x1": 20895,
+   "z1": 19198,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 15230,
+   "z0": 19392,
+   "x1": 21405,
+   "z1": 19453,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 14975,
+   "z0": 19647,
+   "x1": 22170,
+   "z1": 19708,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 14975,
+   "z0": 19902,
+   "x1": 22935,
+   "z1": 19963,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 14975,
    "z0": 20160,
-   "x1": 23448,
-   "z1": 20980,
-   "name": "Probe"
+   "x1": 23445,
+   "z1": 20470,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 15740,
+   "z0": 20667,
+   "x1": 23445,
+   "z1": 20728,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 16250,
+   "z0": 20922,
+   "x1": 23445,
+   "z1": 20983,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 17780,
+   "z0": 21177,
+   "x1": 23190,
+   "z1": 21238,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 18290,
+   "z0": 21432,
+   "x1": 23190,
+   "z1": 21493,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 19055,
+   "z0": 21687,
+   "x1": 23190,
+   "z1": 21748,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 19565,
+   "z0": 21945,
+   "x1": 22935,
+   "z1": 22255,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 19310,
+   "z0": 22452,
+   "x1": 19620,
+   "z1": 22513,
+   "name": "Probe: Driver's door"
+  },
+  {
+   "shape": "box",
+   "x0": 20585,
+   "z0": 22452,
+   "x1": 22680,
+   "z1": 22513,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 19055,
+   "z0": 22707,
+   "x1": 19365,
+   "z1": 22768,
+   "name": "Probe: Driver's door"
+  },
+  {
+   "shape": "box",
+   "x0": 20840,
+   "z0": 22707,
+   "x1": 22680,
+   "z1": 22768,
+   "name": "Probe: Sedan"
+  },
+  {
+   "shape": "box",
+   "x0": 18800,
+   "z0": 22962,
+   "x1": 19110,
+   "z1": 23023,
+   "name": "Probe: Driver's door"
+  },
+  {
+   "shape": "box",
+   "x0": 21860,
+   "z0": 22962,
+   "x1": 22680,
+   "z1": 23023,
+   "name": "Probe: Sedan"
   },
   {
    "shape": "box",
@@ -470,15 +550,7 @@
    "z0": 23217,
    "x1": 18855,
    "z1": 23278,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 1202,
-   "z0": 25427,
-   "x1": 1263,
-   "z1": 25488,
-   "name": "Probe"
+   "name": "Probe: Driver's door"
   }
  ],
  "anim": {
@@ -486,32 +558,48 @@
   "ticks": 3
  },
  "probe": {
+  "Sedan": 347,
+  "Sedan inside": 57,
+  "Booth roof": 56,
+  "Handcart bed": 42,
+  "Drinks machine": 42,
   "Station": 34,
+  "Booth counter": 20,
   "Booth wall s": 20,
   "Booth wall e": 19,
-  "Window sill 0": 14,
+  "Booth inside": 16,
+  "Window sill 0": 13,
   "Window sill 1": 12,
   "Door leaf, ajar": 11,
-  "Booth wall n": 11,
-  "Booth inside": 9,
-  "Sedan": 8,
+  "Booth wall n": 10,
+  "Driver's door": 10,
+  "Sack 2": 8,
   "Station door": 6,
-  "Drinks machine": 6,
+  "Handcart wheel": 6,
+  "Handcart handle": 5,
   "Trail sign": 5,
-  "Booth counter": 5,
   "South fence": 5,
-  "Handcart handle": 4,
-  "Flagpole": 2,
+  "Sack 0": 4,
+  "Sack 1": 4,
+  "Handcart wheel.001": 4,
+  "Flagpole": 3,
+  "Lamp post": 3,
+  "Trail sign post": 3,
   "Door frame": 2,
-  "Lamp post": 2,
   "Door frame.001": 2,
-  "Handcart bed": 2,
-  "Handcart wheel.001": 2,
   "North fence": 2,
-  "Trail sign post": 2,
+  "Booth wall w": 2,
   "Smear on the counter": 2,
-  "Driver's door": 2,
-  "Ground": 1
+  "Sedan wheel tread": 2,
+  "Booth wall w.003": 1,
+  "Sedan wheel hub.006": 1,
+  "Sedan wheel tread.003": 1,
+  "Sedan wheel rim lip.005": 1,
+  "Sedan wheel tyre.002": 1,
+  "Sedan wheel tread.002": 1,
+  "Headlight.001": 1,
+  "Sedan wheel hub.001": 1,
+  "Sedan wheel tyre": 1
  },
  "bounds": {
   "x0": 1105,

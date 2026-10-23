@@ -30,75 +30,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 2720,
-   "z0": 1700,
-   "x1": 7225,
-   "z1": 2312,
-   "name": "North rack footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 7208,
-   "z0": 2380,
-   "x1": 7820,
-   "z1": 6800,
-   "name": "East rack footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 2720,
-   "z0": 6188,
-   "x1": 7225,
-   "z1": 6800,
-   "name": "South rack footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 6290,
-   "z0": 5015,
-   "x1": 6800,
-   "z1": 5525,
-   "name": "Lectern footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 3384,
-   "z0": 5330,
-   "x1": 4436,
-   "z1": 6060,
-   "name": "Wine crate 0"
-  },
-  {
-   "shape": "box",
-   "x0": 4474,
-   "z0": 5357,
-   "x1": 5556,
-   "z1": 6135,
-   "name": "Wine crate 1"
-  },
-  {
-   "shape": "box",
-   "x0": 3865,
-   "z0": 5300,
-   "x1": 4975,
-   "z1": 6124,
-   "name": "Wine crate 2"
-  },
-  {
-   "shape": "box",
-   "x0": 1700,
-   "z0": 1658,
-   "x1": 2720,
-   "z1": 2423,
-   "name": "Empty crates footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 7410,
+   "x0": 1800,
    "z0": 1797,
    "x1": 7720,
    "z1": 1858,
-   "name": "Probe"
+   "name": "Probe: Rack frames"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 2052,
+   "x1": 7210,
+   "z1": 2113,
+   "name": "Probe: Rack frames"
   },
   {
    "shape": "box",
@@ -106,15 +50,15 @@
    "z0": 2052,
    "x1": 7723,
    "z1": 2113,
-   "name": "Probe"
+   "name": "Probe: Wall e"
   },
   {
    "shape": "box",
-   "x0": 2820,
+   "x0": 1800,
    "z0": 2307,
    "x1": 7720,
    "z1": 2368,
-   "name": "Probe"
+   "name": "Probe: Rack frames"
   },
   {
    "shape": "box",
@@ -122,63 +66,39 @@
    "z0": 2565,
    "x1": 1858,
    "z1": 3640,
-   "name": "Probe"
+   "name": "Probe: Wall w"
   },
   {
    "shape": "box",
-   "x0": 7152,
+   "x0": 7155,
    "z0": 2565,
-   "x1": 7213,
+   "x1": 7720,
    "z1": 4660,
-   "name": "Probe"
+   "name": "Probe: Rack frames"
   },
   {
    "shape": "box",
    "x0": 6135,
-   "z0": 4857,
-   "x1": 7210,
-   "z1": 4918,
-   "name": "Probe"
+   "z0": 4860,
+   "x1": 7720,
+   "z1": 5680,
+   "name": "Probe: Lectern top"
   },
   {
    "shape": "box",
-   "x0": 6132,
-   "z0": 5115,
-   "x1": 6193,
-   "z1": 5425,
-   "name": "Probe"
+   "x0": 3585,
+   "z0": 5370,
+   "x1": 5425,
+   "z1": 5935,
+   "name": "Probe: Wine crate 2"
   },
   {
    "shape": "box",
-   "x0": 6900,
-   "z0": 5115,
-   "x1": 7210,
-   "z1": 5425,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 6135,
-   "z0": 5622,
-   "x1": 7210,
-   "z1": 5683,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 7152,
+   "x0": 7155,
    "z0": 5877,
-   "x1": 7213,
+   "x1": 7720,
    "z1": 5938,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 2565,
-   "z0": 6132,
-   "x1": 7210,
-   "z1": 6193,
-   "name": "Probe"
+   "name": "Probe: Rack frames"
   },
   {
    "shape": "box",
@@ -186,23 +106,23 @@
    "z0": 5115,
    "x1": 1858,
    "z1": 6445,
-   "name": "Probe"
+   "name": "Probe: Wall w.001"
   },
   {
    "shape": "box",
-   "x0": 2562,
-   "z0": 6387,
-   "x1": 2623,
-   "z1": 6448,
-   "name": "Probe"
+   "x0": 2565,
+   "z0": 6135,
+   "x1": 7720,
+   "z1": 6445,
+   "name": "Probe: Rack frames"
   },
   {
    "shape": "box",
    "x0": 1800,
    "z0": 6642,
-   "x1": 2620,
+   "x1": 7720,
    "z1": 6703,
-   "name": "Probe"
+   "name": "Probe: Rack frames"
   }
  ],
  "anim": {
@@ -210,18 +130,23 @@
   "ticks": 3
  },
  "probe": {
-  "Rack frames": 52,
+  "Rack frames": 154,
+  "Wine crate 2": 16,
   "Lectern top": 12,
+  "Empty crate 2": 11,
+  "Vault": 7,
   "Wall w.001": 5,
+  "Wall s": 5,
   "Wall w": 4,
-  "Wall s": 3,
+  "Cellar book": 4,
+  "Candle bottle": 3,
   "Wall n": 2,
-  "Wall e": 1,
+  "Wall e": 2,
+  "Empty crate 1": 1,
   "Bloody slide 1": 1,
   "Bloody slide 2": 1,
   "Arch brick.012": 1,
-  "Arch brick.002": 1,
-  "Wine crate 2": 1
+  "Arch brick.002": 1
  },
  "bounds": {
   "x0": 1700,

@@ -56,83 +56,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 340,
-   "z0": 1700,
-   "x1": 1700,
-   "z1": 22100,
-   "name": "Mill footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 4420,
-   "z0": 7395,
-   "x1": 5100,
-   "z1": 8245,
-   "name": "Bearing pier"
-  },
-  {
-   "shape": "circle",
-   "x0": 9639,
-   "z0": 3264,
-   "x1": 10081,
-   "z1": 3706,
-   "name": "Sluice post"
-  },
-  {
-   "shape": "circle",
-   "x0": 9639,
-   "z0": 4794,
-   "x1": 10081,
-   "z1": 5236,
-   "name": "Sluice post.001"
-  },
-  {
-   "shape": "box",
-   "x0": 10693,
-   "z0": 5100,
-   "x1": 10897,
-   "z1": 15980,
-   "name": "Dam rail footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 5610,
-   "z0": 3400,
-   "x1": 5780,
-   "z1": 5100,
-   "name": "Bridge rail footprint W"
-  },
-  {
-   "shape": "box",
-   "x0": 7820,
-   "z0": 3400,
-   "x1": 7990,
-   "z1": 5100,
-   "name": "Bridge rail footprint E"
-  },
-  {
-   "shape": "box",
-   "x0": 14440,
-   "z0": 20492,
-   "x1": 20240,
-   "z1": 24048,
-   "name": "Boat footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 1700,
-   "z0": 18615,
-   "x1": 3060,
-   "z1": 21505,
-   "name": "Woodpile footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 10215,
+   "x0": 9705,
    "z0": 3497,
    "x1": 10780,
    "z1": 3558,
-   "name": "Probe"
+   "name": "Probe: no floor"
+  },
+  {
+   "shape": "box",
+   "x0": 9705,
+   "z0": 3752,
+   "x1": 10015,
+   "z1": 3813,
+   "name": "Probe: Sluice post"
   },
   {
    "shape": "box",
@@ -140,23 +76,31 @@
    "z0": 3500,
    "x1": 4150,
    "z1": 4065,
-   "name": "Probe"
+   "name": "Probe: Water wheel"
+  },
+  {
+   "shape": "box",
+   "x0": 9705,
+   "z0": 4262,
+   "x1": 10015,
+   "z1": 4323,
+   "name": "Probe: Gate rack"
   },
   {
    "shape": "box",
    "x0": 3585,
    "z0": 4265,
    "x1": 4150,
-   "z1": 4830,
-   "name": "Probe"
+   "z1": 4575,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
-   "x0": 9705,
+   "x0": 10470,
    "z0": 3755,
    "x1": 10780,
    "z1": 4830,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -164,7 +108,7 @@
    "z0": 3500,
    "x1": 5938,
    "z1": 5085,
-   "name": "Probe"
+   "name": "Probe: Bridge rail"
   },
   {
    "shape": "box",
@@ -172,23 +116,7 @@
    "z0": 3500,
    "x1": 7723,
    "z1": 5085,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 9195,
-   "z0": 5027,
-   "x1": 9505,
-   "z1": 5088,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 10215,
-   "z0": 5027,
-   "x1": 10780,
-   "z1": 5088,
-   "name": "Probe"
+   "name": "Probe: Bridge rail.001"
   },
   {
    "shape": "box",
@@ -196,7 +124,7 @@
    "z0": 5282,
    "x1": 5935,
    "z1": 5343,
-   "name": "Probe"
+   "name": "Probe: Bridge post.001"
   },
   {
    "shape": "box",
@@ -204,103 +132,71 @@
    "z0": 5282,
    "x1": 7975,
    "z1": 5343,
-   "name": "Probe"
+   "name": "Probe: Bridge post.003"
   },
   {
    "shape": "box",
    "x0": 3585,
-   "z0": 5030,
+   "z0": 4775,
    "x1": 3895,
    "z1": 5595,
-   "name": "Probe"
+   "name": "Probe: Water wheel"
   },
   {
    "shape": "box",
    "x0": 9705,
-   "z0": 5285,
+   "z0": 4775,
    "x1": 10015,
    "z1": 5595,
-   "name": "Probe"
+   "name": "Probe: Sluice post.001"
   },
   {
    "shape": "box",
    "x0": 3582,
    "z0": 5795,
    "x1": 3643,
-   "z1": 6870,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4095,
-   "z0": 7322,
-   "x1": 5170,
-   "z1": 7383,
-   "name": "Probe"
+   "z1": 6360,
+   "name": "Probe: Water wheel"
   },
   {
    "shape": "box",
    "x0": 3585,
    "z0": 7580,
-   "x1": 4405,
+   "x1": 3895,
    "z1": 7890,
-   "name": "Probe"
+   "name": "Probe: Water wheel"
   },
   {
    "shape": "box",
-   "x0": 3840,
-   "z0": 8087,
-   "x1": 4405,
-   "z1": 8148,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 5112,
-   "z0": 7580,
-   "x1": 5173,
-   "z1": 8145,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 3840,
-   "z0": 8342,
+   "x0": 4350,
+   "z0": 7325,
    "x1": 5170,
-   "z1": 8403,
-   "name": "Probe"
+   "z1": 8400,
+   "name": "Probe: Bearing pier"
   },
   {
    "shape": "box",
-   "x0": 3840,
-   "z0": 8597,
-   "x1": 4150,
-   "z1": 8658,
-   "name": "Probe"
+   "x0": 3837,
+   "z0": 8090,
+   "x1": 3898,
+   "z1": 8655,
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
    "x0": 3582,
-   "z0": 8855,
+   "z0": 9365,
    "x1": 3643,
    "z1": 9675,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4092,
-   "z0": 8855,
-   "x1": 4153,
-   "z1": 9675,
-   "name": "Probe"
+   "name": "Probe: Water wheel"
   },
   {
    "shape": "box",
    "x0": 3585,
    "z0": 9875,
-   "x1": 4150,
+   "x1": 3895,
    "z1": 10950,
-   "name": "Probe"
+   "name": "Probe: Water wheel"
   },
   {
    "shape": "box",
@@ -308,7 +204,7 @@
    "z0": 11402,
    "x1": 2110,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Mill wall"
   },
   {
    "shape": "box",
@@ -316,7 +212,7 @@
    "z0": 11150,
    "x1": 3643,
    "z1": 11460,
-   "name": "Probe"
+   "name": "Probe: Water wheel"
   },
   {
    "shape": "box",
@@ -324,7 +220,15 @@
    "z0": 11660,
    "x1": 3640,
    "z1": 11970,
-   "name": "Probe"
+   "name": "Probe: Water wheel"
+  },
+  {
+   "shape": "box",
+   "x0": 10722,
+   "z0": 5540,
+   "x1": 10783,
+   "z1": 12225,
+   "name": "Probe: Dam rail"
   },
   {
    "shape": "box",
@@ -332,7 +236,7 @@
    "z0": 12170,
    "x1": 2110,
    "z1": 12480,
-   "name": "Probe"
+   "name": "Probe: Mill wall"
   },
   {
    "shape": "box",
@@ -340,15 +244,15 @@
    "z0": 12170,
    "x1": 3643,
    "z1": 12480,
-   "name": "Probe"
+   "name": "Probe: Water wheel"
   },
   {
    "shape": "box",
-   "x0": 10467,
+   "x0": 10470,
    "z0": 12425,
-   "x1": 10528,
+   "x1": 10780,
    "z1": 12735,
-   "name": "Probe"
+   "name": "Probe: Crow on the dam rail"
   },
   {
    "shape": "box",
@@ -356,7 +260,7 @@
    "z0": 3500,
    "x1": 28038,
    "z1": 15030,
-   "name": "Probe"
+   "name": "Probe: no floor"
   },
   {
    "shape": "box",
@@ -364,7 +268,15 @@
    "z0": 12680,
    "x1": 1858,
    "z1": 15795,
-   "name": "Probe"
+   "name": "Probe: Mill wall"
+  },
+  {
+   "shape": "box",
+   "x0": 10722,
+   "z0": 12935,
+   "x1": 10783,
+   "z1": 15795,
+   "name": "Probe: Dam rail"
   },
   {
    "shape": "box",
@@ -372,7 +284,7 @@
    "z0": 15992,
    "x1": 2365,
    "z1": 16053,
-   "name": "Probe"
+   "name": "Probe: Back door"
   },
   {
    "shape": "box",
@@ -380,7 +292,7 @@
    "z0": 16247,
    "x1": 2875,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Back door"
   },
   {
    "shape": "box",
@@ -388,7 +300,7 @@
    "z0": 16247,
    "x1": 10783,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Dam post.004"
   },
   {
    "shape": "box",
@@ -396,7 +308,7 @@
    "z0": 16247,
    "x1": 12313,
    "z1": 16308,
-   "name": "Probe"
+   "name": "Probe: Cattails"
   },
   {
    "shape": "box",
@@ -404,7 +316,7 @@
    "z0": 16502,
    "x1": 3130,
    "z1": 16563,
-   "name": "Probe"
+   "name": "Probe: Back door"
   },
   {
    "shape": "box",
@@ -412,7 +324,7 @@
    "z0": 16502,
    "x1": 11035,
    "z1": 16563,
-   "name": "Probe"
+   "name": "Probe: Dam post.004"
   },
   {
    "shape": "box",
@@ -420,7 +332,7 @@
    "z0": 16250,
    "x1": 22768,
    "z1": 16560,
-   "name": "Probe"
+   "name": "Probe: Cattails"
   },
   {
    "shape": "box",
@@ -428,31 +340,7 @@
    "z0": 16502,
    "x1": 27358,
    "z1": 16563,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 12507,
-   "z0": 17522,
-   "x1": 12568,
-   "z1": 17583,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 13017,
-   "z0": 17270,
-   "x1": 13078,
-   "z1": 17580,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 12762,
-   "z0": 17777,
-   "x1": 12823,
-   "z1": 17838,
-   "name": "Probe"
+   "name": "Probe: Cattails"
   },
   {
    "shape": "box",
@@ -460,15 +348,95 @@
    "z0": 16505,
    "x1": 1858,
    "z1": 18345,
-   "name": "Probe"
+   "name": "Probe: Back doorway"
+  },
+  {
+   "shape": "box",
+   "x0": 15570,
+   "z0": 21092,
+   "x1": 16390,
+   "z1": 21153,
+   "name": "Probe: Rowboat"
   },
   {
    "shape": "box",
    "x0": 1800,
-   "z0": 18542,
+   "z0": 18545,
    "x1": 2875,
-   "z1": 18603,
-   "name": "Probe"
+   "z1": 21405,
+   "name": "Probe: Firewood.007"
+  },
+  {
+   "shape": "box",
+   "x0": 14805,
+   "z0": 21347,
+   "x1": 17665,
+   "z1": 21408,
+   "name": "Probe: Rowboat"
+  },
+  {
+   "shape": "box",
+   "x0": 14805,
+   "z0": 21602,
+   "x1": 18175,
+   "z1": 21663,
+   "name": "Probe: Rowboat"
+  },
+  {
+   "shape": "box",
+   "x0": 15060,
+   "z0": 21857,
+   "x1": 18685,
+   "z1": 21918,
+   "name": "Probe: Rowboat"
+  },
+  {
+   "shape": "box",
+   "x0": 15315,
+   "z0": 22112,
+   "x1": 19195,
+   "z1": 22173,
+   "name": "Probe: Rowboat"
+  },
+  {
+   "shape": "box",
+   "x0": 15570,
+   "z0": 22367,
+   "x1": 19450,
+   "z1": 22428,
+   "name": "Probe: Rowboat"
+  },
+  {
+   "shape": "box",
+   "x0": 15825,
+   "z0": 22622,
+   "x1": 19705,
+   "z1": 22683,
+   "name": "Probe: Rowboat"
+  },
+  {
+   "shape": "box",
+   "x0": 16335,
+   "z0": 22877,
+   "x1": 19705,
+   "z1": 22938,
+   "name": "Probe: Rowboat"
+  },
+  {
+   "shape": "box",
+   "x0": 17100,
+   "z0": 23132,
+   "x1": 19705,
+   "z1": 23193,
+   "name": "Probe: Rowboat"
+  },
+  {
+   "shape": "box",
+   "x0": 18120,
+   "z0": 23387,
+   "x1": 19195,
+   "z1": 23448,
+   "name": "Probe: Rowboat"
   }
  ],
  "anim": {
@@ -493,28 +461,34 @@
   }
  ],
  "probe": {
-  "no floor": 103,
-  "Water wheel": 74,
+  "Rowboat": 123,
+  "no floor": 73,
+  "Water wheel": 70,
+  "Dam rail": 37,
+  "Firewood.006": 22,
+  "Firewood.007": 22,
+  "Bearing pier": 20,
   "Mill wall": 20,
-  "Bearing pier": 14,
+  "Firewood.002": 13,
   "Back door": 9,
   "Bridge rail": 7,
   "Bridge rail.001": 7,
+  "Sluice post.001": 6,
   "Back doorway": 6,
-  "Sluice post.001": 4,
+  "Sluice post": 4,
   "Cattails": 4,
   "Mill wall north": 3,
   "Dam post.004": 3,
-  "Sluice post": 2,
   "Gate rack": 2,
   "Bridge post.001": 2,
   "Bridge post.003": 2,
   "Sluice sign": 2,
   "Crow on the dam rail": 2,
-  "Crow on the bank wing": 2,
-  "Crow on the bank wing.001": 2,
-  "Firewood.002": 2,
   "Firewood.003": 2,
+  "Dam post": 1,
+  "Dam post.001": 1,
+  "Crow on the dam rail wing.001": 1,
+  "Dam post.003": 1,
   "Back door frame": 1,
   "Back door frame.001": 1
  },

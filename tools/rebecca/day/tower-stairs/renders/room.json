@@ -43,67 +43,19 @@
  "walls": [
   {
    "shape": "box",
-   "x0": 3584,
-   "z0": 3584,
-   "x1": 4349,
-   "z1": 4349,
-   "name": "Leg footprint"
+   "x0": 3727,
+   "z0": 3724,
+   "x1": 13273,
+   "z1": 3785,
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 3584,
-   "z0": 12651,
-   "x1": 4349,
-   "z1": 13416,
-   "name": "Leg footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 12651,
-   "z0": 3584,
-   "x1": 13416,
-   "z1": 4349,
-   "name": "Leg footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 12651,
-   "z0": 12651,
-   "x1": 13416,
-   "z1": 13416,
-   "name": "Leg footprint.003"
-  },
-  {
-   "shape": "box",
-   "x0": 5950,
-   "z0": 6715,
-   "x1": 10540,
-   "z1": 8415,
-   "name": "Last flight footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 4930,
-   "z0": 4420,
-   "x1": 5610,
-   "z1": 5100,
-   "name": "Water can footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 4492,
-   "z0": 3727,
-   "x1": 12452,
-   "z1": 4037,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4489,
-   "z0": 4234,
-   "x1": 4550,
-   "z1": 4295,
-   "name": "Probe"
+   "x0": 5002,
+   "z0": 3979,
+   "x1": 11942,
+   "z1": 4040,
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -111,71 +63,87 @@
    "z0": 4234,
    "x1": 11687,
    "z1": 4295,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 12394,
-   "z0": 4234,
-   "x1": 12455,
-   "z1": 4295,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 13317,
-   "z0": 3727,
-   "x1": 13373,
-   "z1": 4292,
-   "name": "Probe"
+   "name": "Probe: Tower masks, Tower timber"
   },
   {
    "shape": "box",
    "x0": 3727,
-   "z0": 4489,
+   "z0": 3982,
    "x1": 4547,
-   "z1": 4550,
-   "name": "Probe"
+   "z1": 4547,
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
    "x0": 12397,
-   "z0": 4489,
+   "z0": 3982,
    "x1": 13273,
-   "z1": 4550,
-   "name": "Probe"
+   "z1": 4547,
+   "name": "Probe: Lookout tower, Tower timber"
+  },
+  {
+   "shape": "box",
+   "x0": 3724,
+   "z0": 4744,
+   "x1": 3785,
+   "z1": 4805,
+   "name": "Probe: Lookout tower, Tower timber"
+  },
+  {
+   "shape": "box",
+   "x0": 13162,
+   "z0": 4744,
+   "x1": 13273,
+   "z1": 4805,
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
    "x0": 3727,
-   "z0": 4747,
+   "z0": 4999,
    "x1": 4037,
+   "z1": 5060,
+   "name": "Probe: Lookout tower, Tower timber"
+  },
+  {
+   "shape": "box",
+   "x0": 5002,
+   "z0": 4492,
+   "x1": 5567,
    "z1": 5057,
-   "name": "Probe"
+   "name": "Probe: Water can"
   },
   {
    "shape": "box",
    "x0": 12907,
-   "z0": 4747,
+   "z0": 5002,
    "x1": 13273,
    "z1": 6077,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 10612,
+   "x0": 6532,
    "z0": 6784,
    "x1": 11177,
    "z1": 6845,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 10612,
+   "x0": 6787,
+   "z0": 7042,
+   "x1": 10412,
+   "z1": 8117,
+   "name": "Probe: Lookout tower, Tower timber"
+  },
+  {
+   "shape": "box",
+   "x0": 6532,
    "z0": 8314,
    "x1": 11177,
    "z1": 8375,
-   "name": "Probe"
+   "name": "Probe: Tower masks, Tower timber"
   },
   {
    "shape": "box",
@@ -183,7 +151,7 @@
    "z0": 8569,
    "x1": 11177,
    "z1": 8630,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -191,7 +159,7 @@
    "z0": 8824,
    "x1": 7610,
    "z1": 8885,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -199,7 +167,7 @@
    "z0": 10099,
    "x1": 7610,
    "z1": 10160,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -207,7 +175,7 @@
    "z0": 10099,
    "x1": 11180,
    "z1": 10160,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -215,7 +183,7 @@
    "z0": 10354,
    "x1": 10922,
    "z1": 10415,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -223,7 +191,7 @@
    "z0": 6277,
    "x1": 13273,
    "z1": 10667,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -231,47 +199,39 @@
    "z0": 5257,
    "x1": 4292,
    "z1": 11687,
-   "name": "Probe"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
    "x0": 3727,
-   "z0": 11887,
+   "z0": 11884,
    "x1": 4037,
-   "z1": 12197,
-   "name": "Probe"
+   "z1": 11945,
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
    "x0": 12907,
    "z0": 10867,
    "x1": 13273,
-   "z1": 12197,
-   "name": "Probe"
+   "z1": 11942,
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 3727,
-   "z0": 12394,
-   "x1": 4547,
-   "z1": 12455,
-   "name": "Probe"
+   "x0": 3724,
+   "z0": 12139,
+   "x1": 3785,
+   "z1": 12200,
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
-   "x0": 12652,
-   "z0": 12394,
+   "x0": 13162,
+   "z0": 12139,
    "x1": 13273,
-   "z1": 12455,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4489,
-   "z0": 12649,
-   "x1": 4550,
-   "z1": 12710,
-   "name": "Probe"
+   "z1": 12200,
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -279,39 +239,39 @@
    "z0": 12649,
    "x1": 10667,
    "z1": 12710,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 12394,
-   "z0": 12649,
-   "x1": 12455,
-   "z1": 12710,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 4492,
-   "z0": 12907,
-   "x1": 12452,
-   "z1": 13217,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 13317,
-   "z0": 12652,
-   "x1": 13373,
-   "z1": 13217,
-   "name": "Probe"
+   "name": "Probe: Tower masks, Tower timber"
   },
   {
    "shape": "box",
    "x0": 3727,
-   "z0": 13317,
+   "z0": 12397,
+   "x1": 4547,
+   "z1": 12962,
+   "name": "Probe: Lookout tower, Tower timber"
+  },
+  {
+   "shape": "box",
+   "x0": 5002,
+   "z0": 12904,
+   "x1": 11942,
+   "z1": 12965,
+   "name": "Probe: Lookout tower, Tower timber"
+  },
+  {
+   "shape": "box",
+   "x0": 12397,
+   "z0": 12397,
    "x1": 13273,
-   "z1": 13373,
-   "name": "Probe"
+   "z1": 12962,
+   "name": "Probe: Lookout tower, Tower timber"
+  },
+  {
+   "shape": "box",
+   "x0": 3727,
+   "z0": 13162,
+   "x1": 13273,
+   "z1": 13273,
+   "name": "Probe: Lookout tower, Tower timber"
   }
  ],
  "anim": {
@@ -319,11 +279,12 @@
   "ticks": 3
  },
  "probe": {
-  "Lookout tower, Tower timber": 360,
-  "Tower masks, Tower timber": 99,
+  "Lookout tower, Tower timber": 418,
+  "Tower masks, Tower timber": 176,
+  "Water can": 9,
   "Chain across the gap": 5,
+  "Hoist davit": 3,
   "Crow on the rail 2": 2,
-  "Hoist davit": 2,
   "Crow on the rail 0": 1,
   "Crow on the rail 2 wing": 1
  },

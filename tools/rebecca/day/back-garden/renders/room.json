@@ -82,403 +82,363 @@
  "walls": [
   {
    "shape": "box",
-   "x0": -22100,
-   "z0": 23800,
-   "x1": 52700,
-   "z1": 44200,
-   "name": "House"
-  },
-  {
-   "shape": "box",
-   "x0": 9860,
-   "z0": 22610,
-   "x1": 13260,
-   "z1": 23800,
-   "name": "Back step"
-  },
-  {
-   "shape": "box",
-   "x0": 20145,
-   "z0": 21420,
-   "x1": 23375,
-   "z1": 23800,
-   "name": "Bulkhead curb"
-  },
-  {
-   "shape": "box",
-   "x0": 2210,
-   "z0": 3400,
-   "x1": 5270,
-   "z1": 23460,
-   "name": "West hedge"
-  },
-  {
-   "shape": "box",
-   "x0": -10200,
-   "z0": 340,
-   "x1": 15300,
-   "z1": 3060,
-   "name": "North yews west"
-  },
-  {
-   "shape": "box",
-   "x0": 18700,
-   "z0": 340,
-   "x1": 34000,
-   "z1": 3060,
-   "name": "North yews east"
-  },
-  {
-   "shape": "box",
-   "x0": 29240,
-   "z0": 12240,
-   "x1": 32300,
-   "z1": 23460,
-   "name": "East hedge"
-  },
-  {
-   "shape": "box",
-   "x0": 8500,
-   "z0": 6120,
-   "x1": 13940,
-   "z1": 11220,
-   "name": "Bed footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 20060,
-   "z0": 6120,
-   "x1": 22780,
-   "z1": 11220,
-   "name": "Bed footprint.001"
-  },
-  {
-   "shape": "box",
-   "x0": 8500,
-   "z0": 15980,
-   "x1": 13940,
-   "z1": 18700,
-   "name": "Bed footprint.002"
-  },
-  {
-   "shape": "box",
-   "x0": 20060,
-   "z0": 15980,
-   "x1": 25500,
-   "z1": 18700,
-   "name": "Bed footprint.003"
-  },
-  {
-   "shape": "circle",
-   "x0": 14450,
-   "z0": 11050,
-   "x1": 19550,
-   "z1": 16150,
-   "name": "Basin"
-  },
-  {
-   "shape": "box",
-   "x0": 25738,
-   "z0": 5848,
-   "x1": 31042,
-   "z1": 6052,
-   "name": "Shed wall n"
-  },
-  {
-   "shape": "box",
-   "x0": 25738,
-   "z0": 10948,
-   "x1": 31042,
-   "z1": 11152,
-   "name": "Shed wall s"
-  },
-  {
-   "shape": "box",
-   "x0": 25738,
-   "z0": 5848,
-   "x1": 25942,
-   "z1": 7820,
-   "name": "Shed wall w"
-  },
-  {
-   "shape": "box",
-   "x0": 25738,
-   "z0": 7820,
-   "x1": 25942,
-   "z1": 9180,
-   "name": "Shed wall w.001"
-  },
-  {
-   "shape": "box",
-   "x0": 25738,
-   "z0": 9180,
-   "x1": 25942,
-   "z1": 9860,
-   "name": "Shed wall w.002"
-  },
-  {
-   "shape": "box",
-   "x0": 25738,
-   "z0": 9860,
-   "x1": 25942,
-   "z1": 10540,
-   "name": "Shed wall w.003"
-  },
-  {
-   "shape": "box",
-   "x0": 25738,
-   "z0": 9860,
-   "x1": 25942,
-   "z1": 10540,
-   "name": "Shed wall w.004"
-  },
-  {
-   "shape": "box",
-   "x0": 25738,
-   "z0": 10540,
-   "x1": 25942,
-   "z1": 11152,
-   "name": "Shed wall w.005"
-  },
-  {
-   "shape": "box",
-   "x0": 30838,
-   "z0": 5848,
-   "x1": 31042,
-   "z1": 11152,
-   "name": "Shed wall e"
-  },
-  {
-   "shape": "box",
-   "x0": 24778,
-   "z0": 10072,
-   "x1": 25712,
-   "z1": 11007,
-   "name": "Water butt"
-  },
-  {
-   "shape": "box",
-   "x0": 20910,
-   "z0": 12070,
-   "x1": 22610,
-   "z1": 13770,
-   "name": "Barrow footprint"
-  },
-  {
-   "shape": "box",
-   "x0": 9860,
-   "z0": 4208,
-   "x1": 12580,
-   "z1": 4972,
-   "name": "Bench seat"
-  },
-  {
-   "shape": "box",
-   "x0": 22695,
-   "z0": 4165,
-   "x1": 23545,
-   "z1": 5015,
-   "name": "Urn plinth"
-  },
-  {
-   "shape": "box",
    "x0": 22625,
    "z0": 4007,
    "x1": 23445,
    "z1": 4068,
-   "name": "Probe"
+   "name": "Probe: Urn plinth"
   },
   {
    "shape": "box",
-   "x0": 12677,
+   "x0": 22625,
    "z0": 4265,
-   "x1": 12738,
+   "x1": 23700,
    "z1": 4830,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 22622,
-   "z0": 4265,
-   "x1": 22683,
-   "z1": 4830,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23642,
-   "z0": 4265,
-   "x1": 23703,
-   "z1": 4830,
-   "name": "Probe"
+   "name": "Probe: Urn plinth"
   },
   {
    "shape": "box",
    "x0": 9875,
-   "z0": 5027,
+   "z0": 4265,
    "x1": 12480,
+   "z1": 5085,
+   "name": "Probe: Bench seat"
+  },
+  {
+   "shape": "box",
+   "x0": 22370,
+   "z0": 5027,
+   "x1": 23700,
    "z1": 5088,
-   "name": "Probe"
+   "name": "Probe: Urn plinth"
   },
   {
    "shape": "box",
    "x0": 22115,
-   "z0": 5027,
-   "x1": 23700,
-   "z1": 5088,
-   "name": "Probe"
+   "z0": 5282,
+   "x1": 22680,
+   "z1": 5343,
+   "name": "Probe: Urn, fallen"
   },
   {
    "shape": "box",
    "x0": 21860,
-   "z0": 5282,
-   "x1": 22680,
-   "z1": 5343,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 21605,
    "z0": 5537,
-   "x1": 22680,
+   "x1": 22425,
    "z1": 5598,
-   "name": "Probe"
+   "name": "Probe: Urn, fallen"
   },
   {
    "shape": "box",
    "x0": 21860,
    "z0": 5792,
-   "x1": 22425,
+   "x1": 22170,
    "z1": 5853,
-   "name": "Probe"
+   "name": "Probe: Urn, fallen"
   },
   {
    "shape": "box",
    "x0": 8600,
    "z0": 6047,
-   "x1": 14010,
+   "x1": 13755,
    "z1": 6108,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 20075,
-   "z0": 6047,
-   "x1": 22680,
-   "z1": 6108,
-   "name": "Probe"
+   "name": "Probe: Box edging"
   },
   {
    "shape": "box",
    "x0": 25685,
    "z0": 5795,
    "x1": 28800,
-   "z1": 6105,
-   "name": "Probe"
+   "z1": 6360,
+   "name": "Probe: Shed wall n"
   },
   {
    "shape": "box",
-   "x0": 25175,
-   "z0": 6302,
-   "x1": 28800,
-   "z1": 6363,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 25175,
-   "z0": 6560,
-   "x1": 26250,
+   "x0": 8600,
+   "z0": 6305,
+   "x1": 14010,
    "z1": 6870,
-   "name": "Probe"
+   "name": "Probe: Box edging"
+  },
+  {
+   "shape": "box",
+   "x0": 20075,
+   "z0": 6050,
+   "x1": 22680,
+   "z1": 6870,
+   "name": "Probe: Box edging.004"
+  },
+  {
+   "shape": "box",
+   "x0": 20075,
+   "z0": 7067,
+   "x1": 20640,
+   "z1": 7128,
+   "name": "Probe: Box edging.006"
+  },
+  {
+   "shape": "box",
+   "x0": 21095,
+   "z0": 7067,
+   "x1": 22680,
+   "z1": 7128,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 20075,
+   "z0": 7325,
+   "x1": 22680,
+   "z1": 7635,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 10130,
+   "z0": 7832,
+   "x1": 10695,
+   "z1": 7893,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 20075,
+   "z0": 7832,
+   "x1": 21660,
+   "z1": 7893,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 10130,
+   "z0": 8090,
+   "x1": 10950,
+   "z1": 8400,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 22115,
+   "z0": 7835,
+   "x1": 22680,
+   "z1": 8400,
+   "name": "Probe: Box edging.007"
+  },
+  {
+   "shape": "box",
+   "x0": 11912,
+   "z0": 8597,
+   "x1": 11973,
+   "z1": 8658,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 20075,
+   "z0": 8090,
+   "x1": 20640,
+   "z1": 8655,
+   "name": "Probe: Box edging.006"
+  },
+  {
+   "shape": "box",
+   "x0": 21605,
+   "z0": 8597,
+   "x1": 22680,
+   "z1": 8658,
+   "name": "Probe: Box edging.007"
+  },
+  {
+   "shape": "box",
+   "x0": 10385,
+   "z0": 8600,
+   "x1": 11205,
+   "z1": 8910,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 11660,
+   "z0": 8852,
+   "x1": 12480,
+   "z1": 8913,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 13190,
+   "z0": 7070,
+   "x1": 14010,
+   "z1": 8910,
+   "name": "Probe: Box edging.003"
+  },
+  {
+   "shape": "box",
+   "x0": 11660,
+   "z0": 9107,
+   "x1": 14010,
+   "z1": 9168,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 11150,
+   "z0": 9362,
+   "x1": 14010,
+   "z1": 9423,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 20075,
+   "z0": 8855,
+   "x1": 22680,
+   "z1": 9675,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 11150,
+   "z0": 9620,
+   "x1": 11715,
+   "z1": 9930,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 12425,
+   "z0": 9620,
+   "x1": 14010,
+   "z1": 9930,
+   "name": "Probe: Box edging.003"
+  },
+  {
+   "shape": "box",
+   "x0": 21350,
+   "z0": 9872,
+   "x1": 22680,
+   "z1": 9933,
+   "name": "Probe: Box edging.007"
   },
   {
    "shape": "box",
    "x0": 25685,
+   "z0": 6560,
+   "x1": 26250,
+   "z1": 9930,
+   "name": "Probe: Shed inside"
+  },
+  {
+   "shape": "box",
+   "x0": 12170,
+   "z0": 10127,
+   "x1": 14010,
+   "z1": 10188,
+   "name": "Probe: Box edging.003"
+  },
+  {
+   "shape": "box",
+   "x0": 21350,
+   "z0": 10127,
+   "x1": 21660,
+   "z1": 10188,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 8600,
    "z0": 7070,
+   "x1": 9165,
+   "z1": 10440,
+   "name": "Probe: Box edging.002"
+  },
+  {
+   "shape": "box",
+   "x0": 12425,
+   "z0": 10382,
+   "x1": 14010,
+   "z1": 10443,
+   "name": "Probe: Box edging.003"
+  },
+  {
+   "shape": "box",
+   "x0": 20075,
+   "z0": 9875,
+   "x1": 20640,
+   "z1": 10440,
+   "name": "Probe: Box edging.006"
+  },
+  {
+   "shape": "box",
+   "x0": 22115,
+   "z0": 10130,
+   "x1": 22680,
+   "z1": 10440,
+   "name": "Probe: Box edging.007"
+  },
+  {
+   "shape": "box",
+   "x0": 24665,
+   "z0": 10130,
    "x1": 26250,
    "z1": 10440,
-   "name": "Probe"
+   "name": "Probe: Water butt"
   },
   {
    "shape": "box",
-   "x0": 8342,
-   "z0": 6305,
-   "x1": 8403,
-   "z1": 10950,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 16505,
+   "x0": 16250,
    "z0": 10892,
    "x1": 17580,
    "z1": 10953,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
-   "x0": 22877,
-   "z0": 6305,
-   "x1": 22938,
+   "x0": 24665,
+   "z0": 10640,
+   "x1": 28800,
    "z1": 10950,
-   "name": "Probe"
+   "name": "Probe: Shed inside"
   },
   {
    "shape": "box",
-   "x0": 24662,
-   "z0": 10130,
-   "x1": 24723,
-   "z1": 10950,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 13952,
-   "z0": 6305,
-   "x1": 14013,
+   "x0": 8600,
+   "z0": 10640,
+   "x1": 14010,
    "z1": 11205,
-   "name": "Probe"
+   "name": "Probe: Box edging.001"
   },
   {
    "shape": "box",
    "x0": 15740,
    "z0": 11147,
-   "x1": 16050,
+   "x1": 18345,
    "z1": 11208,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
-   "x0": 17780,
-   "z0": 11147,
-   "x1": 18345,
-   "z1": 11208,
-   "name": "Probe"
+   "x0": 20075,
+   "z0": 10640,
+   "x1": 22680,
+   "z1": 11205,
+   "name": "Probe: Box edging.005"
   },
   {
    "shape": "box",
    "x0": 25685,
-   "z0": 10640,
+   "z0": 11147,
    "x1": 28800,
-   "z1": 11205,
-   "name": "Probe"
+   "z1": 11208,
+   "name": "Probe: Shed wall s"
   },
   {
    "shape": "box",
-   "x0": 15482,
+   "x0": 15485,
    "z0": 11402,
-   "x1": 15543,
+   "x1": 18600,
    "z1": 11463,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 18542,
-   "z0": 11402,
-   "x1": 18603,
-   "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
@@ -486,23 +446,15 @@
    "z0": 11402,
    "x1": 22938,
    "z1": 11463,
-   "name": "Probe"
+   "name": "Probe: Barrow"
   },
   {
    "shape": "box",
    "x0": 14975,
    "z0": 11657,
-   "x1": 15285,
+   "x1": 18855,
    "z1": 11718,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 18797,
-   "z0": 11657,
-   "x1": 18858,
-   "z1": 11718,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
@@ -510,215 +462,455 @@
    "z0": 11657,
    "x1": 22935,
    "z1": 11718,
-   "name": "Probe"
+   "name": "Probe: Barrow"
   },
   {
    "shape": "box",
-   "x0": 14972,
+   "x0": 14975,
    "z0": 11912,
-   "x1": 15033,
+   "x1": 19110,
    "z1": 11973,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
-   "x0": 19052,
+   "x0": 22370,
    "z0": 11912,
-   "x1": 19113,
+   "x1": 22680,
    "z1": 11973,
-   "name": "Probe"
+   "name": "Probe: Barrow"
   },
   {
    "shape": "box",
-   "x0": 22622,
-   "z0": 11912,
-   "x1": 22683,
-   "z1": 11973,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 14717,
+   "x0": 14720,
    "z0": 12167,
-   "x1": 14778,
+   "x1": 19365,
    "z1": 12228,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
-   "x0": 19307,
-   "z0": 12170,
-   "x1": 19368,
-   "z1": 12480,
-   "name": "Probe"
+   "x0": 21605,
+   "z0": 12167,
+   "x1": 21915,
+   "z1": 12228,
+   "name": "Probe: Barrow"
   },
   {
    "shape": "box",
-   "x0": 14462,
+   "x0": 22367,
+   "z0": 12167,
+   "x1": 22428,
+   "z1": 12228,
+   "name": "Probe: Barrow"
+  },
+  {
+   "shape": "box",
+   "x0": 14465,
+   "z0": 12422,
+   "x1": 19365,
+   "z1": 12483,
+   "name": "Probe: Basin lip"
+  },
+  {
+   "shape": "box",
+   "x0": 21860,
    "z0": 12425,
-   "x1": 14523,
-   "z1": 12990,
-   "name": "Probe"
+   "x1": 22425,
+   "z1": 12735,
+   "name": "Probe: Barrow"
   },
   {
    "shape": "box",
-   "x0": 19562,
+   "x0": 21605,
+   "z0": 12932,
+   "x1": 22425,
+   "z1": 12993,
+   "name": "Probe: Barrow"
+  },
+  {
+   "shape": "box",
+   "x0": 14465,
    "z0": 12680,
-   "x1": 19623,
+   "x1": 19620,
+   "z1": 13245,
+   "name": "Probe: Basin lip"
+  },
+  {
+   "shape": "box",
+   "x0": 21095,
+   "z0": 13187,
+   "x1": 22170,
+   "z1": 13248,
+   "name": "Probe: Barrow"
+  },
+  {
+   "shape": "box",
+   "x0": 21095,
+   "z0": 13442,
+   "x1": 21915,
+   "z1": 13503,
+   "name": "Probe: Barrow"
+  },
+  {
+   "shape": "box",
+   "x0": 14210,
+   "z0": 13445,
+   "x1": 19620,
+   "z1": 13755,
+   "name": "Probe: Basin lip"
+  },
+  {
+   "shape": "box",
+   "x0": 21095,
+   "z0": 13697,
+   "x1": 21660,
+   "z1": 13758,
+   "name": "Probe: Barrow"
+  },
+  {
+   "shape": "box",
+   "x0": 14465,
+   "z0": 13955,
+   "x1": 19620,
    "z1": 14520,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
-   "x0": 14462,
-   "z0": 14210,
-   "x1": 14523,
-   "z1": 14775,
-   "name": "Probe"
+   "x0": 14465,
+   "z0": 14717,
+   "x1": 19365,
+   "z1": 14778,
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
-   "x0": 14717,
+   "x0": 14720,
    "z0": 14972,
-   "x1": 14778,
+   "x1": 19365,
    "z1": 15033,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
-   "x0": 19307,
-   "z0": 14720,
-   "x1": 19368,
-   "z1": 15030,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 14972,
+   "x0": 14975,
    "z0": 15227,
-   "x1": 15033,
+   "x1": 19110,
    "z1": 15288,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 19052,
-   "z0": 15227,
-   "x1": 19113,
-   "z1": 15288,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
    "x0": 14975,
    "z0": 15482,
-   "x1": 15285,
+   "x1": 18855,
    "z1": 15543,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
-   "x0": 18797,
-   "z0": 15482,
-   "x1": 18858,
-   "z1": 15543,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 15482,
+   "x0": 15485,
    "z0": 15737,
-   "x1": 15543,
+   "x1": 18600,
    "z1": 15798,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 18542,
-   "z0": 15737,
-   "x1": 18603,
-   "z1": 15798,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
    "x0": 15740,
    "z0": 15992,
-   "x1": 16050,
-   "z1": 16053,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 17780,
-   "z0": 15992,
    "x1": 18345,
    "z1": 16053,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
-   "x0": 16505,
+   "x0": 16250,
    "z0": 16247,
    "x1": 17580,
    "z1": 16308,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 8342,
-   "z0": 16250,
-   "x1": 8403,
-   "z1": 18600,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 13952,
-   "z0": 15995,
-   "x1": 14013,
-   "z1": 18600,
-   "name": "Probe"
+   "name": "Probe: Basin lip"
   },
   {
    "shape": "box",
    "x0": 8600,
-   "z0": 18797,
-   "x1": 13755,
-   "z1": 18858,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 20330,
-   "z0": 18797,
-   "x1": 25230,
-   "z1": 18858,
-   "name": "Probe"
+   "z0": 15995,
+   "x1": 14010,
+   "z1": 16560,
+   "name": "Probe: Box edging.008"
   },
   {
    "shape": "box",
    "x0": 20075,
-   "z0": 21347,
+   "z0": 15995,
+   "x1": 25485,
+   "z1": 16560,
+   "name": "Probe: Box edging.012"
+  },
+  {
+   "shape": "box",
+   "x0": 8600,
+   "z0": 16757,
+   "x1": 9165,
+   "z1": 16818,
+   "name": "Probe: Box edging.010"
+  },
+  {
+   "shape": "box",
+   "x0": 9617,
+   "z0": 16757,
+   "x1": 9678,
+   "z1": 16818,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 11660,
+   "z0": 16757,
+   "x1": 11970,
+   "z1": 16818,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 13190,
+   "z0": 16757,
+   "x1": 14010,
+   "z1": 16818,
+   "name": "Probe: Box edging.011"
+  },
+  {
+   "shape": "box",
+   "x0": 22625,
+   "z0": 16757,
    "x1": 23445,
-   "z1": 21408,
-   "name": "Probe"
+   "z1": 16818,
+   "name": "Probe: Rose heads, dead"
   },
   {
    "shape": "box",
-   "x0": 5282,
+   "x0": 24920,
+   "z0": 16757,
+   "x1": 25485,
+   "z1": 16818,
+   "name": "Probe: Box edging.015"
+  },
+  {
+   "shape": "box",
+   "x0": 21095,
+   "z0": 17012,
+   "x1": 21660,
+   "z1": 17073,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 22625,
+   "z0": 17012,
+   "x1": 25485,
+   "z1": 17073,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 8600,
+   "z0": 17015,
+   "x1": 14010,
+   "z1": 17325,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 21095,
+   "z0": 17267,
+   "x1": 25485,
+   "z1": 17328,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 9620,
+   "z0": 17522,
+   "x1": 12735,
+   "z1": 17583,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 21095,
+   "z0": 17522,
+   "x1": 22680,
+   "z1": 17583,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 23135,
+   "z0": 17522,
+   "x1": 25485,
+   "z1": 17583,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 8600,
+   "z0": 17525,
+   "x1": 9165,
+   "z1": 17835,
+   "name": "Probe: Box edging.010"
+  },
+  {
+   "shape": "box",
+   "x0": 10127,
+   "z0": 17777,
+   "x1": 10188,
+   "z1": 17838,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 11405,
+   "z0": 17777,
+   "x1": 11715,
+   "z1": 17838,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 13190,
+   "z0": 17525,
+   "x1": 14010,
+   "z1": 17835,
+   "name": "Probe: Box edging.011"
+  },
+  {
+   "shape": "box",
+   "x0": 20075,
+   "z0": 16760,
+   "x1": 20640,
+   "z1": 17835,
+   "name": "Probe: Box edging.014"
+  },
+  {
+   "shape": "box",
+   "x0": 21350,
+   "z0": 17777,
+   "x1": 22680,
+   "z1": 17838,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 23645,
+   "z0": 17777,
+   "x1": 23955,
+   "z1": 17838,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 24407,
+   "z0": 17777,
+   "x1": 24468,
+   "z1": 17838,
+   "name": "Probe: Rose heads, dead"
+  },
+  {
+   "shape": "box",
+   "x0": 24920,
+   "z0": 17777,
+   "x1": 25485,
+   "z1": 17838,
+   "name": "Probe: Box edging.015"
+  },
+  {
+   "shape": "box",
+   "x0": 8600,
+   "z0": 18035,
+   "x1": 14010,
+   "z1": 18600,
+   "name": "Probe: Box edging.009"
+  },
+  {
+   "shape": "box",
+   "x0": 20075,
+   "z0": 18035,
+   "x1": 25485,
+   "z1": 18600,
+   "name": "Probe: Box edging.013"
+  },
+  {
+   "shape": "box",
+   "x0": 21095,
+   "z0": 21602,
+   "x1": 21405,
+   "z1": 21663,
+   "name": "Probe: Clawed bulkhead"
+  },
+  {
+   "shape": "box",
+   "x0": 20075,
+   "z0": 21605,
+   "x1": 20385,
+   "z1": 21915,
+   "name": "Probe: Bulkhead cheek"
+  },
+  {
+   "shape": "box",
+   "x0": 21092,
+   "z0": 21857,
+   "x1": 21153,
+   "z1": 21918,
+   "name": "Probe: Clawed bulkhead"
+  },
+  {
+   "shape": "box",
+   "x0": 21605,
+   "z0": 21857,
+   "x1": 21915,
+   "z1": 21918,
+   "name": "Probe: Cellar padlock"
+  },
+  {
+   "shape": "box",
+   "x0": 23135,
+   "z0": 21605,
+   "x1": 23445,
+   "z1": 21915,
+   "name": "Probe: Bulkhead cheek.001"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
    "z0": 3500,
-   "x1": 5343,
+   "x1": 5340,
    "z1": 23190,
-   "name": "Probe"
+   "name": "Probe: West hedge"
   },
   {
    "shape": "box",
-   "x0": 5285,
+   "x0": 3500,
    "z0": 23345,
    "x1": 6615,
    "z1": 23405,
-   "name": "Probe"
+   "name": "Probe: Sill.003"
+  },
+  {
+   "shape": "box",
+   "x0": 10130,
+   "z0": 23345,
+   "x1": 10440,
+   "z1": 23405,
+   "name": "Probe: Door pilaster"
+  },
+  {
+   "shape": "box",
+   "x0": 12680,
+   "z0": 23345,
+   "x1": 12990,
+   "z1": 23405,
+   "name": "Probe: Door pilaster.001"
   },
   {
    "shape": "box",
@@ -726,7 +918,7 @@
    "z0": 23345,
    "x1": 17580,
    "z1": 23405,
-   "name": "Probe"
+   "name": "Probe: Sill.006"
   },
   {
    "shape": "box",
@@ -734,23 +926,15 @@
    "z0": 23345,
    "x1": 19113,
    "z1": 23405,
-   "name": "Probe"
+   "name": "Probe: Drainpipe.001"
   },
   {
    "shape": "box",
-   "x0": 20072,
-   "z0": 21605,
-   "x1": 20133,
+   "x0": 20075,
+   "z0": 22115,
+   "x1": 23445,
    "z1": 23360,
-   "name": "Probe"
-  },
-  {
-   "shape": "box",
-   "x0": 23387,
-   "z0": 21605,
-   "x1": 23448,
-   "z1": 23360,
-   "name": "Probe"
+   "name": "Probe: Bulkhead door 1"
   },
   {
    "shape": "box",
@@ -758,7 +942,7 @@
    "z0": 23345,
    "x1": 27525,
    "z1": 23405,
-   "name": "Probe"
+   "name": "Probe: Sill.009"
   }
  ],
  "anim": {
@@ -766,40 +950,55 @@
   "ticks": 3
  },
  "probe": {
-  "West hedge": 78,
-  "Basin lip": 53,
+  "West hedge": 625,
+  "Basin lip": 299,
+  "Rose heads, dead": 208,
+  "Box edging": 71,
+  "Box edging.003": 71,
+  "Box edging.012": 59,
+  "Box edging.013": 59,
+  "Box edging.001": 58,
+  "Upper bowl": 58,
+  "Box edging.008": 58,
+  "Box edging.009": 58,
+  "Box edging.006": 53,
+  "Box edging.007": 53,
+  "Box edging.002": 51,
+  "Bench seat": 44,
   "Shed inside": 38,
+  "Barrow": 30,
+  "Box edging.011": 30,
+  "Box edging.005": 28,
+  "Bulkhead door 1": 25,
+  "Urn plinth": 24,
+  "Box edging.004": 24,
+  "Bulkhead door 0": 24,
   "Shed wall n": 23,
   "Shed wall s": 23,
-  "Box edging.009": 21,
-  "Box edging": 20,
-  "Box edging.007": 20,
-  "Box edging.013": 20,
-  "Box edging.002": 19,
-  "Box edging.003": 19,
+  "Box edging.015": 23,
+  "Box edging.010": 21,
+  "Box edging.014": 21,
+  "Water butt": 20,
   "Shed wall w": 17,
-  "Urn plinth": 15,
-  "Bench seat": 14,
-  "Urn, fallen": 14,
-  "Box edging.011": 11,
+  "Scum in the basin": 17,
+  "Bulkhead cheek": 16,
+  "Bulkhead cheek.001": 16,
   "Sill.006": 11,
   "Sill.009": 11,
-  "Box edging.010": 10,
-  "Bulkhead cheek": 10,
-  "Bulkhead curb": 10,
-  "Bulkhead cheek.001": 10,
-  "Box edging.004": 8,
+  "Sill.003": 10,
+  "Urn, fallen": 9,
   "Shed door": 8,
-  "Water butt": 8,
-  "Stacked pot 3": 6,
   "Shed wall w.002": 6,
-  "Sill.003": 6,
+  "Strap.001": 5,
+  "Strap.003": 5,
   "Shed wall w.003": 4,
-  "Barrow": 4,
   "Shed wall w.005": 3,
-  "Box edging.001": 3,
-  "Box edging.006": 2,
-  "Scum in the basin": 1,
+  "Clawed bulkhead": 3,
+  "Apron on the hedge": 2,
+  "Cellar padlock": 2,
+  "Door pilaster": 2,
+  "Door pilaster.001": 2,
+  "Bloody hand on the door": 1,
   "Drainpipe.001": 1
  },
  "bounds": {
