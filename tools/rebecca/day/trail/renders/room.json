@@ -37,6 +37,7 @@
    "name": "Marker post"
   }
  ],
+ "probe": {},
  "bounds": {
   "x0": 2000,
   "z0": 0,

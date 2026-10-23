@@ -231,6 +231,614 @@
    "x1": 18870,
    "z1": 5822,
    "name": "Bench"
+  },
+  {
+   "shape": "box",
+   "x0": 12085,
+   "z0": 4007,
+   "x1": 12395,
+   "z1": 4068,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16930,
+   "z0": 4007,
+   "x1": 17240,
+   "z1": 4068,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16927,
+   "z0": 4262,
+   "x1": 16988,
+   "z1": 4323,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 24322,
+   "z0": 4262,
+   "x1": 24383,
+   "z1": 4323,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 18712,
+   "z0": 4265,
+   "x1": 18773,
+   "z1": 4830,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19225,
+   "z0": 4520,
+   "x1": 24380,
+   "z1": 4830,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15655,
+   "z0": 5027,
+   "x1": 18770,
+   "z1": 5088,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15652,
+   "z0": 5285,
+   "x1": 15713,
+   "z1": 5595,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15655,
+   "z0": 5792,
+   "x1": 18770,
+   "z1": 5853,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 14635,
+   "z0": 6557,
+   "x1": 14945,
+   "z1": 6618,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 14635,
+   "z0": 6812,
+   "x1": 15200,
+   "z1": 6873,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 14635,
+   "z0": 7067,
+   "x1": 15455,
+   "z1": 7128,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 14890,
+   "z0": 7322,
+   "x1": 15710,
+   "z1": 7383,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 15145,
+   "z0": 7577,
+   "x1": 15710,
+   "z1": 7638,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19222,
+   "z0": 5030,
+   "x1": 19283,
+   "z1": 7890,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23815,
+   "z0": 5030,
+   "x1": 24380,
+   "z1": 7890,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 19225,
+   "z0": 8090,
+   "x1": 24380,
+   "z1": 8400,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 18712,
+   "z0": 6050,
+   "x1": 18773,
+   "z1": 8655,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 24325,
+   "z0": 8597,
+   "x1": 24635,
+   "z1": 8658,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 23050,
+   "z0": 8852,
+   "x1": 24635,
+   "z1": 8913,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1375,
+   "z0": 9617,
+   "x1": 1685,
+   "z1": 9678,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1627,
+   "z0": 9872,
+   "x1": 1688,
+   "z1": 9933,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1630,
+   "z0": 10127,
+   "x1": 1940,
+   "z1": 10188,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1882,
+   "z0": 10382,
+   "x1": 1943,
+   "z1": 10443,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1885,
+   "z0": 10637,
+   "x1": 2195,
+   "z1": 10698,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2137,
+   "z0": 10892,
+   "x1": 2198,
+   "z1": 10953,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10810,
+   "z0": 10892,
+   "x1": 12395,
+   "z1": 10953,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2140,
+   "z0": 11147,
+   "x1": 2450,
+   "z1": 11208,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9535,
+   "z0": 10895,
+   "x1": 10100,
+   "z1": 11205,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11065,
+   "z0": 11147,
+   "x1": 12395,
+   "z1": 11208,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13360,
+   "z0": 10895,
+   "x1": 13925,
+   "z1": 11205,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2392,
+   "z0": 11402,
+   "x1": 2453,
+   "z1": 11463,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16420,
+   "z0": 12167,
+   "x1": 16730,
+   "z1": 12228,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 16165,
+   "z0": 12422,
+   "x1": 16730,
+   "z1": 12483,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1627,
+   "z0": 15227,
+   "x1": 1688,
+   "z1": 15288,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8002,
+   "z0": 15227,
+   "x1": 8063,
+   "z1": 15288,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1882,
+   "z0": 15482,
+   "x1": 1943,
+   "z1": 15543,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2647,
+   "z0": 15482,
+   "x1": 2708,
+   "z1": 15543,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7747,
+   "z0": 15482,
+   "x1": 7808,
+   "z1": 15543,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2395,
+   "z0": 15737,
+   "x1": 3470,
+   "z1": 15798,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3922,
+   "z0": 15737,
+   "x1": 3983,
+   "z1": 15798,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4435,
+   "z0": 15737,
+   "x1": 4745,
+   "z1": 15798,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2140,
+   "z0": 15992,
+   "x1": 3725,
+   "z1": 16053,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4432,
+   "z0": 15992,
+   "x1": 4493,
+   "z1": 16053,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2140,
+   "z0": 16247,
+   "x1": 3215,
+   "z1": 16308,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2395,
+   "z0": 16502,
+   "x1": 3215,
+   "z1": 16563,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2647,
+   "z0": 16757,
+   "x1": 2708,
+   "z1": 16818,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 26875,
+   "z0": 16505,
+   "x1": 27185,
+   "z1": 16815,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2650,
+   "z0": 17012,
+   "x1": 3215,
+   "z1": 17073,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2650,
+   "z0": 17270,
+   "x1": 3725,
+   "z1": 17580,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2650,
+   "z0": 17777,
+   "x1": 3470,
+   "z1": 17838,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9532,
+   "z0": 11405,
+   "x1": 9593,
+   "z1": 17835,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13867,
+   "z0": 11405,
+   "x1": 13928,
+   "z1": 17835,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2395,
+   "z0": 18032,
+   "x1": 3470,
+   "z1": 18093,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2395,
+   "z0": 18287,
+   "x1": 6275,
+   "z1": 18348,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 12595,
+   "z0": 18287,
+   "x1": 12905,
+   "z1": 18348,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2650,
+   "z0": 18542,
+   "x1": 3470,
+   "z1": 18603,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9535,
+   "z0": 18542,
+   "x1": 13925,
+   "z1": 18603,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2395,
+   "z0": 18797,
+   "x1": 3470,
+   "z1": 18858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1885,
+   "z0": 19052,
+   "x1": 3470,
+   "z1": 19113,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6217,
+   "z0": 18545,
+   "x1": 6278,
+   "z1": 19110,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6220,
+   "z0": 19307,
+   "x1": 6530,
+   "z1": 19368,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6217,
+   "z0": 19565,
+   "x1": 6278,
+   "z1": 19875,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1627,
+   "z0": 19310,
+   "x1": 1688,
+   "z1": 20130,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1885,
+   "z0": 20327,
+   "x1": 3470,
+   "z1": 20388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6220,
+   "z0": 20075,
+   "x1": 7805,
+   "z1": 20385,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1885,
+   "z0": 20585,
+   "x1": 2705,
+   "z1": 21150,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6475,
+   "z0": 20585,
+   "x1": 7805,
+   "z1": 21150,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9277,
+   "z0": 18800,
+   "x1": 9338,
+   "z1": 21150,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 14122,
+   "z0": 18800,
+   "x1": 14183,
+   "z1": 21150,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1627,
+   "z0": 21347,
+   "x1": 1688,
+   "z1": 21408,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8002,
+   "z0": 21347,
+   "x1": 8063,
+   "z1": 21408,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1882,
+   "z0": 21602,
+   "x1": 1943,
+   "z1": 21663,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7747,
+   "z0": 21602,
+   "x1": 7808,
+   "z1": 21663,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 26617,
+   "z0": 22027,
+   "x1": 26678,
+   "z1": 22088,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 27385,
+   "z0": 22027,
+   "x1": 32200,
+   "z1": 22088,
+   "name": "Probe"
   }
  ],
  "anim": {
@@ -250,6 +858,96 @@
    "loop": true
   }
  ],
+ "probe": {
+  "Booth inside": 67,
+  "Booth wall e": 33,
+  "Cable drum": 30,
+  "Bench": 28,
+  "Car body": 23,
+  "Booth wall n": 21,
+  "Gearbox": 21,
+  "Drum on its side": 20,
+  "no floor": 20,
+  "Bin": 16,
+  "Control cabinet": 14,
+  "Grease drum": 13,
+  "Line gate": 12,
+  "Booth wall s": 10,
+  "Motor cable": 10,
+  "Car door, forced": 9,
+  "Booth wall w.001": 8,
+  "Booth door": 8,
+  "Queue head chain": 7,
+  "Queue head chain.001": 7,
+  "Service board": 5,
+  "Backpack": 5,
+  "hoop.001": 5,
+  "Car doorway": 5,
+  "Drive motor": 5,
+  "Booth wall s.002": 4,
+  "Trail sign": 4,
+  "Motor terminal box": 4,
+  "Sign post.001": 3,
+  "Booth wall w.003": 3,
+  "Grease can": 3,
+  "Grease can.002": 3,
+  "Sign post": 2,
+  "Booth wall w": 2,
+  "Queue post": 2,
+  "Board words 2": 2,
+  "Queue post.003": 2,
+  "Queue chain.002": 2,
+  "Queue chain.018": 2,
+  "Queue chain.003": 2,
+  "Queue chain.019": 2,
+  "Queue chain.005": 2,
+  "Queue chain.021": 2,
+  "Queue chain.006": 2,
+  "Queue chain.022": 2,
+  "Queue chain.009": 2,
+  "Queue chain.025": 2,
+  "Wheel house post": 2,
+  "Wheel house post.002": 2,
+  "Queue chain.011": 2,
+  "Queue chain.027": 2,
+  "Queue chain.013": 2,
+  "Queue chain.029": 2,
+  "Queue chain.014": 2,
+  "Queue chain.030": 2,
+  "Queue post.002": 2,
+  "Queue post.005": 2,
+  "hoop.003": 2,
+  "Car rubbing rail": 2,
+  "Motor fin": 2,
+  "Motor fin.007": 2,
+  "Motor fin.008": 2,
+  "Wheel frame leg.001": 2,
+  "Wheel house post.001": 2,
+  "Wheel house post.003": 2,
+  "Queue chain": 1,
+  "Queue chain.016": 1,
+  "Queue chain.001": 1,
+  "Queue chain.017": 1,
+  "Queue chain.004": 1,
+  "Queue chain.020": 1,
+  "Queue chain.007": 1,
+  "Queue chain.023": 1,
+  "Queue post.001": 1,
+  "Queue post.004": 1,
+  "Queue chain.008": 1,
+  "Queue chain.024": 1,
+  "Queue chain.010": 1,
+  "Queue chain.026": 1,
+  "Grease can.001": 1,
+  "Queue chain.012": 1,
+  "Queue chain.028": 1,
+  "hoop.004": 1,
+  "Car number": 1,
+  "Motor fin.001": 1,
+  "Motor fin.004": 1,
+  "Motor fin.005": 1,
+  "Rail.003": 1
+ },
  "bounds": {
   "x0": 1020,
   "z0": 3400,

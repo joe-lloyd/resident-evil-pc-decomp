@@ -72,6 +72,134 @@
    "x1": 9010,
    "z1": 5610,
    "name": "Cot footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 1797,
+   "x1": 4405,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5880,
+   "z0": 1797,
+   "x1": 9080,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2310,
+   "z0": 2052,
+   "x1": 3640,
+   "z1": 2113,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7920,
+   "z0": 2052,
+   "x1": 9080,
+   "z1": 2113,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2562,
+   "z0": 2310,
+   "x1": 2623,
+   "z1": 2875,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7662,
+   "z0": 2310,
+   "x1": 7723,
+   "z1": 5425,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 2310,
+   "x1": 9168,
+   "z1": 5425,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7665,
+   "z0": 5622,
+   "x1": 9080,
+   "z1": 5683,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 5877,
+   "x1": 9168,
+   "z1": 5938,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5880,
+   "z0": 6897,
+   "x1": 6190,
+   "z1": 6958,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 6135,
+   "x1": 9080,
+   "z1": 6955,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 2055,
+   "x1": 1858,
+   "z1": 7975,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3837,
+   "z0": 7665,
+   "x1": 3898,
+   "z1": 7975,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6387,
+   "z0": 7155,
+   "x1": 6448,
+   "z1": 7975,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 7155,
+   "x1": 9168,
+   "z1": 7975,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 8087,
+   "x1": 9080,
+   "z1": 8148,
+   "name": "Probe"
   }
  ],
  "anim": {
@@ -85,6 +213,27 @@
    "bit": -1
   }
  ],
+ "probe": {
+  "Wall e": 24,
+  "Wall s": 19,
+  "Day tank": 12,
+  "Wall w": 11,
+  "Wall n.002": 11,
+  "Cot frame": 10,
+  "Cot canvas": 8,
+  "Wall w.003": 8,
+  "Blanket thrown back": 7,
+  "Wall w.001": 6,
+  "Bench": 6,
+  "Wall s.002": 6,
+  "Back door": 5,
+  "Wall n": 4,
+  "Hanging coat": 4,
+  "Fuel line": 3,
+  "Oily rag": 2,
+  "Rag on the door": 1,
+  "North door": 1
+ },
  "bounds": {
   "x0": 1700,
   "z0": 1700,

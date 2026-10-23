@@ -80,11 +80,208 @@
    "x1": 2635,
    "z1": 6579,
    "name": "Paraffin stove"
+  },
+  {
+   "shape": "box",
+   "x0": 6390,
+   "z0": 1797,
+   "x1": 8060,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8087,
+   "z0": 2055,
+   "x1": 8148,
+   "z1": 2620,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 2817,
+   "x1": 8060,
+   "z1": 2878,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6897,
+   "z0": 3330,
+   "x1": 6958,
+   "z1": 3640,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6645,
+   "z0": 3837,
+   "x1": 6955,
+   "z1": 3898,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6387,
+   "z0": 4092,
+   "x1": 6448,
+   "z1": 4153,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6897,
+   "z0": 4092,
+   "x1": 6958,
+   "z1": 4153,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6135,
+   "z0": 4347,
+   "x1": 6700,
+   "z1": 4408,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3327,
+   "z0": 3840,
+   "x1": 3388,
+   "z1": 4660,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5880,
+   "z0": 4602,
+   "x1": 6955,
+   "z1": 4663,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6135,
+   "z0": 4857,
+   "x1": 6955,
+   "z1": 4918,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6135,
+   "z0": 5112,
+   "x1": 6445,
+   "z1": 5173,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8087,
+   "z0": 3075,
+   "x1": 8148,
+   "z1": 5680,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5877,
+   "x1": 2110,
+   "z1": 5938,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2565,
+   "z0": 5877,
+   "x1": 3130,
+   "z1": 5938,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 5877,
+   "x1": 8060,
+   "z1": 5938,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 6135,
+   "x1": 1858,
+   "z1": 6445,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2562,
+   "z0": 6387,
+   "x1": 2623,
+   "z1": 6448,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 6135,
+   "x1": 3640,
+   "z1": 6445,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8087,
+   "z0": 6135,
+   "x1": 8148,
+   "z1": 6445,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 6642,
+   "x1": 4150,
+   "z1": 6703,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5880,
+   "z0": 6642,
+   "x1": 8060,
+   "z1": 6703,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Observer's chair": 15,
+  "Wall s.002": 9,
+  "Radio desk": 8,
+  "Wall e.001": 8,
+  "Wall s": 8,
+  "Wall n.003": 7,
+  "Wall e.003": 6,
+  "Kit bag": 6,
+  "Wall e": 5,
+  "Observer's bed blanket": 4,
+  "Glass on the desk": 3,
+  "Paraffin stove": 3,
+  "Feather 0": 2,
+  "Observer's bed": 2,
+  "Wall w": 2,
+  "East sill": 1,
+  "Observer's bed mattress": 1,
+  "Stove top": 1,
+  "Oilskin coat": 1
  },
  "bounds": {
   "x0": 1700,

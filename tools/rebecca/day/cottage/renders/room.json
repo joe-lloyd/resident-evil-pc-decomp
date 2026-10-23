@@ -109,11 +109,242 @@
    "x1": 3636,
    "z1": 6951,
    "name": "Chair at the window"
+  },
+  {
+   "shape": "box",
+   "x0": 5880,
+   "z0": 1797,
+   "x1": 6445,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3330,
+   "z0": 1800,
+   "x1": 3895,
+   "z1": 2365,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3330,
+   "z0": 2562,
+   "x1": 5680,
+   "z1": 2623,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 1800,
+   "x1": 9080,
+   "z1": 2620,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6645,
+   "z0": 2817,
+   "x1": 8740,
+   "z1": 2878,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4095,
+   "z0": 2820,
+   "x1": 5680,
+   "z1": 3130,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 2820,
+   "x1": 9168,
+   "z1": 3130,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4095,
+   "z0": 3327,
+   "x1": 4915,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3327,
+   "z0": 2820,
+   "x1": 3388,
+   "z1": 3640,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4095,
+   "z0": 3582,
+   "x1": 5935,
+   "z1": 3643,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 3330,
+   "x1": 9080,
+   "z1": 4405,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3330,
+   "z0": 3840,
+   "x1": 3640,
+   "z1": 4915,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4092,
+   "z0": 3840,
+   "x1": 4153,
+   "z1": 4915,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6132,
+   "z0": 3840,
+   "x1": 6193,
+   "z1": 4915,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5112,
+   "x1": 3640,
+   "z1": 5173,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7917,
+   "z0": 4860,
+   "x1": 7978,
+   "z1": 6190,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 4605,
+   "x1": 9168,
+   "z1": 6190,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 6390,
+   "x1": 9080,
+   "z1": 6700,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6135,
+   "z0": 6897,
+   "x1": 6445,
+   "z1": 6958,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 6897,
+   "x1": 9168,
+   "z1": 6958,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 5370,
+   "x1": 1858,
+   "z1": 7210,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2565,
+   "z0": 7152,
+   "x1": 4150,
+   "z1": 7213,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6135,
+   "z0": 7152,
+   "x1": 9080,
+   "z1": 7213,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 7365,
+   "x1": 9080,
+   "z1": 7425,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Quilt, thrown back": 16,
+  "Drawer pulled out": 15,
+  "Chair at the table": 13,
+  "Table": 13,
+  "Window sill 1": 12,
+  "Wall e.003": 11,
+  "Window sill 0": 9,
+  "Bedside stool": 8,
+  "Wall w": 8,
+  "Bed frame": 7,
+  "Wall e": 6,
+  "Counter top": 6,
+  "Door bar": 6,
+  "Side window sill": 5,
+  "Wall e.001": 5,
+  "Stove top": 5,
+  "Sink cupboard": 4,
+  "Wall s.008": 4,
+  "Wall n": 3,
+  "Towel over the edge": 3,
+  "Wall s": 3,
+  "Key board": 3,
+  "Door": 3,
+  "Quilt off the side": 2,
+  "Waders": 2,
+  "Bar bracket": 2,
+  "Bolt plate": 2,
+  "Wall s.005": 2,
+  "Headboard": 1,
+  "Drawer front.001": 1,
+  "Iodine": 1,
+  "Kindling.003": 1,
+  "Fishing rod 2": 1,
+  "Fishing rod 0": 1,
+  "Door frame": 1,
+  "Door frame.001": 1,
+  "Bar bracket.001": 1
  },
  "bounds": {
   "x0": 1700,

@@ -125,6 +125,8 @@ def mat_cards(name, dark, light):
     into bright and dark specks across it, the way RE1's photographed
     foliage is a mass of lit tips and black gaps rather than flat shapes."""
     m, nodes, links, bsdf = nodes_material(name)
+    # She walks through grass, ferns and leaves: the floor probe ignores them.
+    m["re_soft"] = True
     bsdf.inputs["Roughness"].default_value = 0.55
     geo = nodes.new("ShaderNodeNewGeometry")
     col = ramp(nodes, links, geo.outputs["Random Per Island"], [(0.0, dark), (1.0, light)])
@@ -798,6 +800,211 @@ def _holdout_material():
     return m
 
 
+# ---------------------------------------------------------------------------
+# The floor probe
+# ---------------------------------------------------------------------------
+
+# A floor cell, in game units (15 cm): her collision is boxes this fine.
+PROBE_CELL = 255
+# The engine keeps her centre 380 units off a wall, and her body is about
+# 260 across from its centre: each box is drawn this much inside what it
+# covers (never thinner than PROBE_THIN), so she can come right up to a wall
+# as far as her body allows, and pass where her body fits.
+PROBE_INSET = 100
+PROBE_THIN = 60
+# What is in her way: anything between her knee and the top of her head.
+PROBE_LOW = 0.35
+PROBE_HIGH = 1.6
+# Thinner than this (a fly, a cigarette end) is never in her way.
+PROBE_SPECK = 0.05
+# Each cell is tested with spheres up its middle, this far round (about the
+# cell's half-width), at these heights: a wall, a post or a chair's leg
+# anywhere in the cell meets one.
+PROBE_REACH = 0.08
+PROBE_HEIGHTS = (0.45, 0.6, 0.75, 0.9, 1.05, 1.2, 1.35, 1.5)
+
+
+# Materials she walks through by name: cobwebs, the spiders' silk strands, and
+# water she wades in (deep water is a void the scene marks).
+SOFT_NAMES = ("Web", "Silk", "Water")
+
+
+def _soft(m):
+    """She walks through it: grass, ferns, needles, leaves (mat_cards),
+    cobwebs, silk and water, or a volume with no surface (mist, smoke)."""
+    if m is None:
+        return False
+    if m.get("re_soft") or m.name.startswith(SOFT_NAMES):
+        return True
+    if m.use_nodes and m.node_tree:
+        out = next((n for n in m.node_tree.nodes if n.type == "OUTPUT_MATERIAL" and n.is_active_output), None)
+        if out is not None and not out.inputs["Surface"].is_linked:
+            return True
+    return False
+
+
+def _probe_tree(area):
+    """Every solid, rendered triangle over `area` (x0, y0, x1, y1 metres) up
+    to her head, as one BVH tree."""
+    import numpy as np
+    from mathutils.bvhtree import BVHTree
+    x0, y0, x1, y1 = area
+    dg = bpy.context.evaluated_depsgraph_get()
+    verts, tris, owners = [], [], []
+    for ob in bpy.context.scene.objects:
+        if ob.hide_render or ob.type not in {"MESH", "CURVE", "FONT", "SURFACE", "META"}:
+            continue
+        if max(ob.dimensions) < PROBE_SPECK:
+            continue
+        box = [ob.matrix_world @ Vector(c) for c in ob.bound_box]
+        if (max(p.x for p in box) < x0 or min(p.x for p in box) > x1 or max(p.y for p in box) < y0 or min(p.y for p in box) > y1
+                or min(p.z for p in box) > PROBE_HIGH + 0.05):
+            continue
+        ev = ob.evaluated_get(dg)
+        try:
+            me = ev.to_mesh()
+        except RuntimeError:
+            continue
+        if me is None:
+            continue
+        me.calc_loop_triangles()
+        n = len(me.loop_triangles)
+        if n:
+            co = np.empty(len(me.vertices) * 3, dtype=np.float64)
+            me.vertices.foreach_get("co", co)
+            co = co.reshape(-1, 3)
+            mw = np.array(ob.matrix_world, dtype=np.float64)
+            co = co @ mw[:3, :3].T + mw[:3, 3]
+            tv = np.empty(n * 3, dtype=np.int64)
+            me.loop_triangles.foreach_get("vertices", tv)
+            tv = tv.reshape(-1, 3)
+            mi = np.empty(n, dtype=np.int64)
+            me.loop_triangles.foreach_get("material_index", mi)
+            slots = [s.material for s in ob.material_slots]
+            soft = np.array([_soft(m) for m in slots] or [False], dtype=bool)
+            keep = ~soft[np.clip(mi, 0, len(soft) - 1)]
+            p = co[tv]
+            lo, hi = p.min(axis=1), p.max(axis=1)
+            keep &= (hi[:, 0] >= x0) & (lo[:, 0] <= x1) & (hi[:, 1] >= y0) & (lo[:, 1] <= y1) & (lo[:, 2] <= PROBE_HIGH + 0.05) & (hi[:, 2] >= -1.0)
+            tv = tv[keep]
+            if len(tv):
+                used, inverse = np.unique(tv, return_inverse=True)
+                base = len(verts)
+                verts.extend(map(tuple, co[used]))
+                tris.extend(map(tuple, (inverse.reshape(-1, 3) + base)))
+                owners.extend([ob.name] * len(tv))
+        ev.to_mesh_clear()
+    return (BVHTree.FromPolygons(verts, tris, all_triangles=True), owners) if tris else (None, owners)
+
+
+def _probe_cells(bounds):
+    """Each floor cell inside `bounds` (game units): blocked where something
+    solid stands between her knee and her head, or where there is no floor
+    under her (a drop, or nothing). A bytearray, rows by Z, and its columns."""
+    cols = max(1, math.ceil((bounds["x1"] - bounds["x0"]) / PROBE_CELL))
+    rows = max(1, math.ceil((bounds["z1"] - bounds["z0"]) / PROBE_CELL))
+    m = lambda v: v / UNITS
+    tree, owners = _probe_tree((m(bounds["x0"]) - 0.2, m(bounds["z0"]) - 0.2, m(bounds["x1"]) + 0.2, m(bounds["z1"]) + 0.2))
+    cells = bytearray(cols * rows)
+    # What blocks each cell: the object's name, or "no floor".
+    why = {}
+    if tree is None:
+        return cells, cols, rows, why
+    down = Vector((0, 0, -1))
+    for j in range(rows):
+        cy = m(bounds["z0"] + (j + 0.5) * PROBE_CELL)
+        for i in range(cols):
+            cx = m(bounds["x0"] + (i + 0.5) * PROBE_CELL)
+            # Something with its top between knee and head, then anything in
+            # the cell from her knee to her head (a wall's face, a post, a
+            # rail), then the floor under her.
+            hit = tree.ray_cast(Vector((cx, cy, PROBE_HIGH)), down, PROBE_HIGH - PROBE_LOW)
+            for z in PROBE_HEIGHTS:
+                if hit[0] is not None:
+                    break
+                hit = tree.find_nearest(Vector((cx, cy, z)), PROBE_REACH)
+            k = j * cols + i
+            if hit[0] is not None:
+                cells[k] = 1
+                why[k] = owners[hit[2]]
+            elif tree.ray_cast(Vector((cx, cy, PROBE_LOW)), down, PROBE_LOW + 0.6)[0] is None:
+                cells[k] = 1
+                why[k] = "no floor"
+    return cells, cols, rows, why
+
+
+def _inset(box):
+    """The box drawn PROBE_INSET inside each side, down to PROBE_THIN across."""
+    for a, b in (("x0", "x1"), ("z0", "z1")):
+        lo, hi = box[a], box[b]
+        cut = min(PROBE_INSET, max(0, (hi - lo - PROBE_THIN) // 2))
+        box[a], box[b] = lo + cut, hi - cut
+    return box
+
+
+def floor_probe(bounds, walls, voids=(), states=()):
+    """The floor the scene's geometry takes away from her, as walls: every
+    cell of the floor something solid stands on, or with no floor under it,
+    in every state the scene can be in (a fallen tree a state drags off is
+    left to the room's script), less what its tagged walls and voids already
+    hold. Boxes merged from the cells, named "Probe", and the number of
+    cells each object (or "no floor") takes."""
+    cells, cols, rows, why = _probe_cells(bounds)
+    for st in states:
+        st["set"](True)
+        bpy.context.view_layer.update()
+        other, _, _, _ = _probe_cells(bounds)
+        st["set"](False)
+        bpy.context.view_layer.update()
+        cells = bytearray(a & b for a, b in zip(cells, other))
+    x0, z0 = bounds["x0"], bounds["z0"]
+
+    def held(i, j):
+        x = x0 + (i + 0.5) * PROBE_CELL
+        z = z0 + (j + 0.5) * PROBE_CELL
+        for w in [*walls, *voids]:
+            if w.get("shape") == "circle":
+                r = (w["x1"] - w["x0"]) / 2
+                if math.hypot(x - (w["x0"] + w["x1"]) / 2, z - (w["z0"] + w["z1"]) / 2) < r:
+                    return True
+            elif w["x0"] <= x < w["x1"] and w["z0"] <= z < w["z1"]:
+                return True
+        return False
+
+    for j in range(rows):
+        for i in range(cols):
+            if cells[j * cols + i] and held(i, j):
+                cells[j * cols + i] = 0
+    # What the probe walled off, cells by what stands there, for a reader of room.json.
+    blocks = {}
+    for k, c in enumerate(cells):
+        if c:
+            blocks[why.get(k, "?")] = blocks.get(why.get(k, "?"), 0) + 1
+    # Runs along each row, stacked down while the same run carries on.
+    out, open_ = [], {}
+    for j in range(rows + 1):
+        runs = []
+        if j < rows:
+            i = 0
+            while i < cols:
+                if cells[j * cols + i]:
+                    k = i
+                    while k < cols and cells[j * cols + k]:
+                        k += 1
+                    runs.append((i, k))
+                    i = k
+                else:
+                    i += 1
+        still = {}
+        for run in runs:
+            still[run] = open_.pop(run, j)
+        for (i0, i1), j0 in open_.items():
+            out.append(_inset({"shape": "box", "x0": x0 + i0 * PROBE_CELL, "z0": z0 + j0 * PROBE_CELL,
+                               "x1": min(bounds["x1"], x0 + i1 * PROBE_CELL), "z1": min(bounds["z1"], z0 + j * PROBE_CELL), "name": "Probe"}))
+        open_ = still
+    return out, dict(sorted(blocks.items(), key=lambda kv: -kv[1]))
+
+
 def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
     """Render every camera's background and foreground depth, and write room.json.
 
@@ -848,6 +1055,13 @@ def export(cameras, out_dir, samples=512, extra=None, anim=None, states=()):
         if shape and ob.type == "MESH":
             x0, z0, x1, z1 = _game_footprint(ob)
             walls.append({"shape": shape, "x0": x0, "z0": z0, "x1": x1, "z1": z1, "name": ob.name})
+    # The floor her collision gives her is what the pictures draw: what the
+    # scene's geometry stands on is walled off too (floor_probe).
+    bounds = (extra or {}).get("bounds")
+    if bounds and not os.environ.get("RE1_NO_PROBE"):
+        probed, meta["probe"] = floor_probe(bounds, walls, (extra or {}).get("voids") or [], states)
+        walls += probed
+        print(f"[reb] floor probe: {len(probed)} boxes", flush=True)
     with open(os.path.join(out_dir, "room.json"), "w") as f:
         json.dump({"cameras": cameras, "walls": walls, **meta, **(extra or {})}, f, indent=1)
     # RE1_RECORDS=1: the room's records alone (doors, checks, items), no

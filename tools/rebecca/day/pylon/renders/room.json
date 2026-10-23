@@ -48,11 +48,74 @@
    "x1": 15064,
    "z1": 7989,
    "name": "Toolbox"
+  },
+  {
+   "shape": "box",
+   "x0": 6560,
+   "z0": 6897,
+   "x1": 18600,
+   "z1": 6958,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3497,
+   "z0": 6900,
+   "x1": 3558,
+   "z1": 8485,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 18542,
+   "z0": 7155,
+   "x1": 18603,
+   "z1": 8485,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3500,
+   "z0": 8682,
+   "x1": 10185,
+   "z1": 8743,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 13700,
+   "z0": 8682,
+   "x1": 18600,
+   "z1": 8743,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11150,
+   "z0": 10722,
+   "x1": 12735,
+   "z1": 10783,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11150,
+   "z0": 11742,
+   "x1": 12735,
+   "z1": 11803,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Platform rails": 108,
+  "Ladder hatch, open": 7,
+  "Ladder hoop": 5,
+  "Ladder hoop rail": 1,
+  "Ladder hoop rail.001": 1
  },
  "bounds": {
   "x0": 3400,

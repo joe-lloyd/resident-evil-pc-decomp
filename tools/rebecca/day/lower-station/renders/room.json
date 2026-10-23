@@ -56,11 +56,190 @@
    "x1": 9350,
    "z1": 8245,
    "name": "Keeper's desk"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 1797,
+   "x1": 9420,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3330,
+   "z0": 2052,
+   "x1": 4405,
+   "z1": 2113,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3582,
+   "z0": 2307,
+   "x1": 3643,
+   "z1": 2368,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9405,
+   "z0": 2055,
+   "x1": 9465,
+   "z1": 2620,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6897,
+   "z0": 2565,
+   "x1": 6958,
+   "z1": 3385,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3837,
+   "z0": 3582,
+   "x1": 3898,
+   "z1": 3643,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4347,
+   "z0": 3582,
+   "x1": 4408,
+   "z1": 3643,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4860,
+   "z0": 3582,
+   "x1": 5170,
+   "z1": 3643,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 2055,
+   "x1": 1858,
+   "z1": 4405,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9405,
+   "z0": 4605,
+   "x1": 9465,
+   "z1": 5425,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 5877,
+   "x1": 7975,
+   "z1": 5938,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 6132,
+   "x1": 8230,
+   "z1": 6193,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7155,
+   "z0": 6387,
+   "x1": 7975,
+   "z1": 6448,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9195,
+   "z0": 5625,
+   "x1": 9420,
+   "z1": 6445,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 6642,
+   "x1": 7975,
+   "z1": 6703,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 6135,
+   "x1": 1858,
+   "z1": 8230,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6642,
+   "z0": 6900,
+   "x1": 6703,
+   "z1": 8230,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9405,
+   "z0": 6645,
+   "x1": 9465,
+   "z1": 8230,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 8385,
+   "x1": 9420,
+   "z1": 8445,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Lower wall paint.001": 27,
+  "Lower wall paint": 27,
+  "Keeper's chair": 15,
+  "Wall e.002": 14,
+  "First aid cabinet": 6,
+  "Sill.001": 6,
+  "Keeper's desk": 6,
+  "Sill": 4,
+  "Counter": 4,
+  "Keeper's coat": 4,
+  "Certificate frame": 4,
+  "Wall e": 3,
+  "First aid cabinet door": 3,
+  "Smear over the sill": 3,
+  "Blood on the counter": 2,
+  "Wall w": 1,
+  "Doorway frame": 1,
+  "Run down the front 0": 1,
+  "Run down the front 1": 1,
+  "Wall w.003": 1,
+  "Door frame": 1,
+  "Doorway frame.001": 1,
+  "Door frame.001": 1,
+  "Wall w.005": 1,
+  "Wall w.008": 1
  },
  "bounds": {
   "x0": 1700,

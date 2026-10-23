@@ -91,11 +91,137 @@
    "x1": 2720,
    "z1": 2423,
    "name": "Empty crates footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 1797,
+   "x1": 7720,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7662,
+   "z0": 2052,
+   "x1": 7723,
+   "z1": 2113,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2820,
+   "z0": 2307,
+   "x1": 7720,
+   "z1": 2368,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 2565,
+   "x1": 1858,
+   "z1": 3640,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7152,
+   "z0": 2565,
+   "x1": 7213,
+   "z1": 4660,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6135,
+   "z0": 4857,
+   "x1": 7210,
+   "z1": 4918,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6132,
+   "z0": 5115,
+   "x1": 6193,
+   "z1": 5425,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6900,
+   "z0": 5115,
+   "x1": 7210,
+   "z1": 5425,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6135,
+   "z0": 5622,
+   "x1": 7210,
+   "z1": 5683,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7152,
+   "z0": 5877,
+   "x1": 7213,
+   "z1": 5938,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2565,
+   "z0": 6132,
+   "x1": 7210,
+   "z1": 6193,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 5115,
+   "x1": 1858,
+   "z1": 6445,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 2562,
+   "z0": 6387,
+   "x1": 2623,
+   "z1": 6448,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 6642,
+   "x1": 2620,
+   "z1": 6703,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Rack frames": 52,
+  "Lectern top": 12,
+  "Wall w.001": 5,
+  "Wall w": 4,
+  "Wall s": 3,
+  "Wall n": 2,
+  "Wall e": 1,
+  "Bloody slide 1": 1,
+  "Bloody slide 2": 1,
+  "Arch brick.012": 1,
+  "Arch brick.002": 1,
+  "Wine crate 2": 1
  },
  "bounds": {
   "x0": 1700,

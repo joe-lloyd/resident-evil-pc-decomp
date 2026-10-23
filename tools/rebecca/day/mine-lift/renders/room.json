@@ -27,7 +27,80 @@
    "fov": 200
   }
  ],
- "walls": [],
+ "walls": [
+  {
+   "shape": "box",
+   "x0": 4815,
+   "z0": 1800,
+   "x1": 4875,
+   "z1": 2110,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4605,
+   "z0": 2310,
+   "x1": 4830,
+   "z1": 2620,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4815,
+   "z0": 2817,
+   "x1": 4875,
+   "z1": 2878,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4605,
+   "z0": 3072,
+   "x1": 4830,
+   "z1": 3133,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 2820,
+   "x1": 1858,
+   "z1": 3385,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4350,
+   "z0": 3327,
+   "x1": 4830,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4605,
+   "z0": 3582,
+   "x1": 4830,
+   "z1": 3643,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4815,
+   "z0": 3840,
+   "x1": 4875,
+   "z1": 4150,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 4262,
+   "x1": 4830,
+   "z1": 4323,
+   "name": "Probe"
+  }
+ ],
  "anim": {
   "frames": 16,
   "ticks": 3
@@ -43,6 +116,14 @@
    }
   }
  ],
+ "probe": {
+  "South gate": 13,
+  "Cage sides": 8,
+  "Control box": 5,
+  "Capacity words": 3,
+  "Bell handle": 2,
+  "Control lever": 1
+ },
  "bounds": {
   "x0": 1700,
   "z0": 1700,

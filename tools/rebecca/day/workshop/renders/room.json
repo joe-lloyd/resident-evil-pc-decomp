@@ -136,11 +136,348 @@
    "x1": 5100,
    "z1": 11093,
    "name": "Mattress footprint"
+  },
+  {
+   "shape": "box",
+   "x0": 4350,
+   "z0": 1797,
+   "x1": 6190,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7152,
+   "z0": 1797,
+   "x1": 7213,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9705,
+   "z0": 1797,
+   "x1": 11460,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5877,
+   "z0": 2055,
+   "x1": 5938,
+   "z1": 2365,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9705,
+   "z0": 2055,
+   "x1": 10015,
+   "z1": 2620,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5877,
+   "z0": 2817,
+   "x1": 5938,
+   "z1": 2878,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 2817,
+   "x1": 9505,
+   "z1": 2878,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9957,
+   "z0": 2817,
+   "x1": 10018,
+   "z1": 2878,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11445,
+   "z0": 2055,
+   "x1": 11505,
+   "z1": 2875,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6132,
+   "z0": 3072,
+   "x1": 6193,
+   "z1": 3133,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7152,
+   "z0": 3072,
+   "x1": 7213,
+   "z1": 3133,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6390,
+   "z0": 3327,
+   "x1": 6955,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3837,
+   "z0": 3582,
+   "x1": 3898,
+   "z1": 3643,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10215,
+   "z0": 3075,
+   "x1": 11460,
+   "z1": 3640,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10722,
+   "z0": 3837,
+   "x1": 10783,
+   "z1": 3898,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11445,
+   "z0": 3837,
+   "x1": 11505,
+   "z1": 3898,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10470,
+   "z0": 4092,
+   "x1": 11460,
+   "z1": 4153,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10470,
+   "z0": 4347,
+   "x1": 10780,
+   "z1": 4408,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11445,
+   "z0": 4347,
+   "x1": 11505,
+   "z1": 4408,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3075,
+   "z0": 4095,
+   "x1": 3385,
+   "z1": 4660,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 10725,
+   "z0": 4602,
+   "x1": 11460,
+   "z1": 4663,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4350,
+   "z0": 5877,
+   "x1": 5425,
+   "z1": 5938,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11445,
+   "z0": 4860,
+   "x1": 11505,
+   "z1": 6190,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11235,
+   "z0": 6387,
+   "x1": 11460,
+   "z1": 6448,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9447,
+   "z0": 6390,
+   "x1": 9508,
+   "z1": 6700,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7920,
+   "z0": 7410,
+   "x1": 8230,
+   "z1": 7720,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 11445,
+   "z0": 6645,
+   "x1": 11505,
+   "z1": 8485,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8685,
+   "z0": 8682,
+   "x1": 11460,
+   "z1": 8743,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8175,
+   "z0": 8937,
+   "x1": 11460,
+   "z1": 8998,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7407,
+   "z0": 9957,
+   "x1": 7468,
+   "z1": 10018,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8172,
+   "z0": 9195,
+   "x1": 8233,
+   "z1": 10015,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6897,
+   "z0": 10212,
+   "x1": 6958,
+   "z1": 10273,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7920,
+   "z0": 10215,
+   "x1": 8230,
+   "z1": 10525,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7917,
+   "z0": 10722,
+   "x1": 7978,
+   "z1": 10783,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 9195,
+   "x1": 1858,
+   "z1": 11035,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 10977,
+   "x1": 6955,
+   "z1": 11038,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7920,
+   "z0": 10977,
+   "x1": 8230,
+   "z1": 11038,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 11147,
+   "x1": 11460,
+   "z1": 11208,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Wall s": 37,
+  "Log on the crate 0": 24,
+  "Wall e": 22,
+  "Studs and rafters": 17,
+  "Drawer, open": 15,
+  "Parts bench": 11,
+  "Wall w.003": 7,
+  "Door, shut": 6,
+  "Vice": 6,
+  "Wall n.005": 5,
+  "Spare wheel 1": 5,
+  "Bottle chain": 5,
+  "Engine block": 5,
+  "hoop.001": 5,
+  "Tool chest": 4,
+  "Gas hose": 4,
+  "Engine stand, empty": 4,
+  "Oxygen hose": 3,
+  "Log on the crate 3": 3,
+  "Log on the crate 2": 3,
+  "Spare wheel 2": 2,
+  "Gas bottle 1": 2,
+  "Loose hook": 2,
+  "Door frame.001": 1,
+  "Bar bracket.001": 1,
+  "Wall n.002": 1,
+  "Files in a roll": 1,
+  "Spare wheel 3": 1,
+  "Heavy bench, shoved aside": 1,
+  "Bottle band 1": 1,
+  "Log on the crate 4": 1
  },
  "bounds": {
   "x0": 1700,

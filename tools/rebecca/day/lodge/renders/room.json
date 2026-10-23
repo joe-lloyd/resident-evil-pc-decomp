@@ -109,11 +109,327 @@
    "x1": 8585,
    "z1": 2558,
    "name": "Washstand"
+  },
+  {
+   "shape": "box",
+   "x0": 4605,
+   "z0": 1797,
+   "x1": 5425,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6900,
+   "z0": 1797,
+   "x1": 7465,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8685,
+   "z0": 1797,
+   "x1": 9080,
+   "z1": 1858,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4602,
+   "z0": 2052,
+   "x1": 4663,
+   "z1": 2113,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 6897,
+   "z0": 2055,
+   "x1": 6958,
+   "z1": 2365,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7407,
+   "z0": 2055,
+   "x1": 7468,
+   "z1": 2365,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8682,
+   "z0": 2055,
+   "x1": 8743,
+   "z1": 2365,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5625,
+   "z0": 2562,
+   "x1": 6700,
+   "z1": 2623,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7410,
+   "z0": 2562,
+   "x1": 8740,
+   "z1": 2623,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 2055,
+   "x1": 9168,
+   "z1": 2620,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 7407,
+   "z0": 2817,
+   "x1": 7468,
+   "z1": 2878,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 2817,
+   "x1": 9080,
+   "z1": 2878,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3330,
+   "z0": 3327,
+   "x1": 5425,
+   "z1": 3388,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5625,
+   "z0": 3582,
+   "x1": 6445,
+   "z1": 3643,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5625,
+   "z0": 3840,
+   "x1": 6190,
+   "z1": 4150,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 3075,
+   "x1": 9168,
+   "z1": 4150,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5880,
+   "z0": 4347,
+   "x1": 6190,
+   "z1": 4408,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3327,
+   "z0": 3585,
+   "x1": 3388,
+   "z1": 4660,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 4350,
+   "x1": 9080,
+   "z1": 4660,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1797,
+   "z0": 1800,
+   "x1": 1858,
+   "z1": 4915,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4350,
+   "z0": 4857,
+   "x1": 4660,
+   "z1": 4918,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5115,
+   "z0": 4857,
+   "x1": 5425,
+   "z1": 4918,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8682,
+   "z0": 4857,
+   "x1": 8743,
+   "z1": 4918,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 4857,
+   "x1": 9168,
+   "z1": 4918,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3837,
+   "z0": 4860,
+   "x1": 3898,
+   "z1": 5170,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8685,
+   "z0": 5112,
+   "x1": 9080,
+   "z1": 5173,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5115,
+   "x1": 2110,
+   "z1": 5425,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 4347,
+   "z0": 5115,
+   "x1": 4408,
+   "z1": 5425,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5622,
+   "x1": 3130,
+   "z1": 5683,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 5370,
+   "x1": 9080,
+   "z1": 5680,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5625,
+   "z0": 5877,
+   "x1": 6955,
+   "z1": 5938,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 9107,
+   "z0": 5877,
+   "x1": 9168,
+   "z1": 5938,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 5370,
+   "z0": 6132,
+   "x1": 9080,
+   "z1": 6193,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 3072,
+   "z0": 5880,
+   "x1": 3133,
+   "z1": 7720,
+   "name": "Probe"
+  },
+  {
+   "shape": "box",
+   "x0": 8940,
+   "z0": 6390,
+   "x1": 9080,
+   "z1": 7720,
+   "name": "Probe"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
+ },
+ "probe": {
+  "Sheet, kicked down": 17,
+  "Table": 16,
+  "Wall e.002": 13,
+  "Chair": 12,
+  "Mantel": 9,
+  "Washstand": 7,
+  "Bed frame": 7,
+  "Ledge.001": 6,
+  "Chair, tipped": 6,
+  "Wall n.003": 5,
+  "Typing table": 5,
+  "Sill": 4,
+  "Wall e": 4,
+  "Towel": 4,
+  "Hose": 4,
+  "Chimney breast": 4,
+  "Mattress": 3,
+  "Seed order": 2,
+  "Damp": 2,
+  "Spade head": 2,
+  "Door frame": 2,
+  "Fork head": 2,
+  "Rake head": 2,
+  "Door frame.001": 2,
+  "Hoe head": 2,
+  "Boot": 2,
+  "Potting bench": 1,
+  "Wall w": 1,
+  "Pot 3": 1,
+  "Rake handle": 1,
+  "Hook": 1,
+  "Key tag": 1,
+  "Hook.003": 1,
+  "Mantel thing 2": 1
  },
  "bounds": {
   "x0": 1700,
