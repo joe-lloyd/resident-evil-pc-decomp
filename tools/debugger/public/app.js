@@ -9,6 +9,7 @@ let items = {};
 let state;
 let map; // the current room's RoomMap from /room, or null while it loads
 let mapKey = '';
+let area = -1; // the floor area she was last seen in (rdt.ts floor())
 let prevBanks = [];
 const trail = [];
 
@@ -142,17 +143,41 @@ async function loadMap(s) {
   if (mapKey !== key) return;
   $('map-error').textContent = r.ok ? '' : body.error;
   map = r.ok ? body : null;
+  area = -1;
+  if (map) {
+    map.floor.byRow = new Map();
+    for (const run of map.floor.runs) {
+      if (!map.floor.byRow.has(run[1])) map.floor.byRow.set(run[1], []);
+      map.floor.byRow.get(run[1]).push(run);
+    }
+  }
   draw();
 }
 
+/** The floor area under (x, z), or -1 on a wall or off the grid. */
+function areaAt(f, x, z) {
+  const row = Math.floor((z - f.z0) / f.cell);
+  const col = Math.floor((x - f.x0) / f.cell);
+  const run = f.byRow.get(row)?.find((r) => col >= r[2] && col <= r[3]);
+  return run ? run[0] : -1;
+}
+
+/** Frame the floor area she is in; with none known yet, the whole room. */
 function bounds(m) {
   let x0 = Infinity, z0 = Infinity, x1 = -Infinity, z1 = -Infinity;
   const add = (x, z) => {
     x0 = Math.min(x0, x); x1 = Math.max(x1, x);
     z0 = Math.min(z0, z); z1 = Math.max(z1, z);
   };
-  for (const sh of m.shapes) { add(sh.xMin, sh.zMin); add(sh.xMax, sh.zMax); }
-  for (const zn of m.zones) for (const [x, z] of zn.quad) add(x, z);
+  const a = m.floor.areas[area];
+  if (a) {
+    const margin = 1200;
+    add(a.x0 - margin, a.z0 - margin);
+    add(a.x1 + margin, a.z1 + margin);
+  } else {
+    for (const sh of m.shapes) { add(sh.xMin, sh.zMin); add(sh.xMax, sh.zMax); }
+    for (const zn of m.zones) for (const [x, z] of zn.quad) add(x, z);
+  }
   if (state) add(u16(state.player.x), u16(state.player.z));
   return { x0, z0, x1, z1 };
 }
@@ -169,6 +194,8 @@ function draw() {
   ctx.clearRect(0, 0, w, h);
   if (!map || !state) return;
 
+  const here = areaAt(map.floor, u16(state.player.x), u16(state.player.z));
+  if (here >= 0) area = here;
   const b = bounds(map);
   const pad = 24;
   const scale = Math.min((w - 2 * pad) / (b.x1 - b.x0 || 1), (h - 2 * pad) / (b.z1 - b.z0 || 1));
@@ -176,6 +203,14 @@ function draw() {
   const oy = (h - (b.z1 - b.z0) * scale) / 2;
   const X = (x) => ox + (x - b.x0) * scale;
   const Y = (z) => h - oy - (z - b.z0) * scale;
+
+  // Floor: where her centre can stand; the area she is in brighter.
+  const f = map.floor;
+  for (const [id, row, c0, c1] of f.runs) {
+    ctx.fillStyle = id === area ? '#1d2a33' : '#141a20';
+    const x = f.x0 + c0 * f.cell, z = f.z0 + row * f.cell;
+    ctx.fillRect(X(x), Y(z + f.cell), (c1 - c0 + 1) * f.cell * scale + 0.5, f.cell * scale + 0.5);
+  }
 
   // Collision.
   ctx.fillStyle = '#3a4350';

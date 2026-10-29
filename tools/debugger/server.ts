@@ -166,6 +166,8 @@ export async function start(o: Options): Promise<{ url: string; close: () => voi
       link = undefined;
       script?.destroy();
       note('error', `game connection closed at frame ${latest?.frame ?? '?'}`);
+      // The next game is a new run: comparing its first state with this one's last logs a jump that never happened.
+      latest = undefined;
     }
   }
 

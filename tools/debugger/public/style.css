@@ -27,6 +27,7 @@ main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 380px; 
 #map-legend { display: flex; gap: 16px; align-items: center; padding: 6px 12px; height: 30px; }
 #map-error { position: absolute; top: 10px; left: 12px; }
 .sw { display: inline-block; width: 12px; height: 8px; margin-right: 5px; vertical-align: middle; }
+.sw.floor { background: #1d2a33; }
 .sw.wall { background: #3a4350; }
 .sw.zone { border: 1px solid var(--accent); }
 .sw.cam { background: var(--warn); }
