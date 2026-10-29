@@ -5,8 +5,8 @@
 // For each border of each room named, read from the deployed overlay's room
 // file: stand her well inside one camera's area, walk her at the other until
 // the camera cuts, then sway a few steps back and forth there with tank
-// controls, the way a player hesitates in a doorway. Every cut during the
-// sway is a flicker.
+// controls, the way a player hesitates in a doorway (SWAY frames of walking
+// each way, default 3). Two or more cuts during the sway is a flicker.
 //
 //   OVERLAY=<REB build folder, as deployed> node tools/harness/tests/camera-borders.ts [slug ...]
 //
@@ -41,19 +41,36 @@ function triggers(rdt: Buffer): Trigger[] {
   return out;
 }
 
-/** A point of the quad she can stand on, nearest `toward`; undefined if the floor misses it. */
-function standIn(q: Quad, shapes: Shape[], toward: readonly [number, number]): [number, number] | undefined {
+/** A point of the quad she can stand on, nearest `toward` (a point or a quad); undefined if the floor misses it. */
+function standIn(q: Quad, shapes: Shape[], toward: readonly [number, number] | Quad): [number, number] | undefined {
+  const far = (x: number, z: number) => (toward.length === 4 ? away(toward as Quad, x, z) : Math.hypot(x - (toward as readonly [number, number])[0], z - (toward as readonly [number, number])[1]));
   const xs = q.map((p) => p[0]);
   const zs = q.map((p) => p[1]);
   let best: [number, number] | undefined;
   for (let x = Math.min(...xs); x <= Math.max(...xs); x += 250) {
     for (let z = Math.min(...zs); z <= Math.max(...zs); z += 250) {
       if (!inQuad(q, x, z) || blocked(shapes, x, z, 500)) continue;
-      if (!best || Math.hypot(x - toward[0], z - toward[1]) < Math.hypot(best[0] - toward[0], best[1] - toward[1])) best = [x, z];
+      if (!best || far(x, z) < far(best[0], best[1])) best = [x, z];
     }
   }
   return best;
 }
+
+/** How far (x, z) is from the quad: 0 inside. */
+function away(q: Quad, x: number, z: number): number {
+  if (inQuad(q, x, z)) return 0;
+  let best = Infinity;
+  for (let i = 0; i < 4; i++) {
+    const [ax, az] = q[i]!;
+    const [bx, bz] = q[(i + 1) % 4]!;
+    const len = (bx - ax) ** 2 + (bz - az) ** 2 || 1;
+    const t = Math.max(0, Math.min(1, ((x - ax) * (bx - ax) + (z - az) * (bz - az)) / len));
+    best = Math.min(best, Math.hypot(x - ax - t * (bx - ax), z - az - t * (bz - az)));
+  }
+  return best;
+}
+/** The nearest two quads come, corner to edge. */
+const between = (a: Quad, b: Quad) => Math.min(...a.map(([x, z]) => away(b, x, z)), ...b.map(([x, z]) => away(a, x, z)));
 
 const middle = (q: Quad) => [(q[0][0] + q[1][0] + q[2][0] + q[3][0]) / 4, (q[0][1] + q[1][1] + q[2][1] + q[3][1]) / 4] as const;
 /** Game angle facing from a to b: she walks along (cos a, -sin a), a in 4096ths of a turn. */
@@ -71,7 +88,9 @@ async function cutsDuring(link: GameLink, act: () => Promise<void>): Promise<num
   await act();
   await link.frames(10);
   const seen = link.history.filter((s) => s.frame >= first);
-  return seen.filter((s, i) => i > 0 && s.camera !== seen[i - 1]!.camera).length;
+  const cuts = seen.filter((s, i) => i > 0 && s.camera !== seen[i - 1]!.camera);
+  if (process.env.SHOW_CUTS) for (const s of cuts) console.log(`    f${s.frame} cam ${s.camera} at (${s.player.x}, ${s.player.z}) msf ${s.msf.toString(16)} ${s.cut}`);
+  return cuts.length;
 }
 
 const overlay = process.env.OVERLAY;
@@ -90,9 +109,9 @@ try {
     await link.room(spec.stage, spec.room);
     // Its arrival scripts first: a first visit can move her and open messages.
     await settle(link);
-    // A border: two cameras whose triggers into each other come within NEAR.
-    const NEAR = 4000;
-    const dist = (a: Quad, b: Quad) => Math.hypot(middle(a)[0] - middle(b)[0], middle(a)[1] - middle(b)[1]);
+    // A border: two cameras whose triggers into each other come within NEAR of each other.
+    const NEAR = 1500;
+    const dist = between;
     const borders: { a: number; b: number; into: Trigger }[] = [];
     for (const into of all) {
       if (into.from > into.to || borders.some((x) => x.a === into.from && x.b === into.to)) continue;
@@ -105,10 +124,9 @@ try {
       const live = (await link.state()).camera;
       const toA = all.filter((t) => t.to === a && t.from === live).sort((x, y) => dist(x.quad, into.quad) - dist(y.quad, into.quad))[0];
       const here = live === a ? all.filter((t) => t.from === b && t.to === a) : toA ? [toA] : [];
-      const target = middle(into.quad);
-      const from = here.map((t) => standIn(t.quad, shapes, target)).find(Boolean);
+      const from = here.map((t) => standIn(t.quad, shapes, into.quad)).find(Boolean);
       const [ax, az] = from ?? [NaN, NaN];
-      const [bx, bz] = (Number.isFinite(ax) && standIn(into.quad, shapes, [ax, az])) || target;
+      const [bx, bz] = (Number.isFinite(ax) && standIn(into.quad, shapes, [ax, az])) || middle(into.quad);
       if (!Number.isFinite(ax)) {
         lines.push(`  ${a}>${b}: no floor to stand on in camera ${live}'s trigger into ${a}: skipped`);
         continue;
@@ -136,16 +154,21 @@ try {
         lines.push(`  ${a}>${b}: walked 4 s from (${Math.round(ax)}, ${Math.round(az)}) and stopped at (${s.player.x}, ${s.player.z}) without a cut: skipped`);
         continue;
       }
-      // Sway: a few steps back, a few forward, six times.
+      // Sway: a step back, a step forward, six times; SWAY frames each (default 3).
+      const sway = Number(process.env.SWAY ?? 3);
+      let reach = 0;
       const cuts = await cutsDuring(link, async () => {
         for (let k = 0; k < 6; k++) {
-          await hold(link, Key.down, 8);
-          await hold(link, Key.up, 8);
+          const before = await link.state();
+          await hold(link, Key.down, sway);
+          const back = await link.state();
+          reach = Math.max(reach, Math.hypot(back.player.x - before.player.x, back.player.z - before.player.z));
+          await hold(link, Key.up, sway);
         }
       });
       if (cuts > 1) flickers++;
       const at = await link.state();
-      lines.push(`  ${a}>${b}: ${cuts} cut${cuts === 1 ? '' : 's'} while swaying at (${at.player.x}, ${at.player.z})${cuts > 1 ? '  FLICKER' : ''}`);
+      lines.push(`  ${a}>${b}: ${cuts} cut${cuts === 1 ? '' : 's'} while swaying ${Math.round(reach)} units at (${at.player.x}, ${at.player.z})${cuts > 1 ? '  FLICKER' : ''}`);
     }
     console.log(`${spec.slug}: ${all.length} triggers, ${borders.length} borders`);
     for (const l of lines) console.log(l);
