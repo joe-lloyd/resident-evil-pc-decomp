@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="dark">
+  <title>RE1 debugger</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <span id="link" class="dot" title="game connection"></span>
+    <strong id="room">no game</strong>
+    <span id="screen" class="tag"></span>
+    <span id="camera"></span>
+    <span id="frame" class="muted"></span>
+    <span class="spacer"></span>
+    <label><input type="checkbox" id="god"> god</label>
+    <label><input type="checkbox" id="keyboard" checked> keyboard</label>
+  </header>
+  <main>
+    <section id="map-panel">
+      <canvas id="map"></canvas>
+      <div id="map-legend" class="muted">
+        <span><i class="sw wall"></i>collision</span>
+        <span><i class="sw zone"></i>switch zones of this camera</span>
+        <span><i class="sw cam"></i>cameras</span>
+        <span><i class="sw trail"></i>trail</span>
+        <button id="clear-trail">clear trail</button>
+      </div>
+      <div id="map-error" class="error"></div>
+    </section>
+    <aside>
+      <section>
+        <h2>Player</h2>
+        <div class="hp"><div id="hp-bar"></div><span id="hp-text"></span></div>
+        <dl id="player"></dl>
+      </section>
+      <section>
+        <h2>Enemies</h2>
+        <table id="enemies"><thead><tr><th>#</th><th>type</th><th>status</th><th>hp</th><th>x</th><th>z</th></tr></thead><tbody></tbody></table>
+      </section>
+      <section>
+        <h2>Inventory</h2>
+        <ol id="items"></ol>
+        <details><summary>Item box</summary><ol id="box"></ol></details>
+      </section>
+      <section>
+        <h2>Music</h2>
+        <ul id="bgm"></ul>
+      </section>
+      <section>
+        <details><summary>Flag banks</summary><div id="banks"></div></details>
+      </section>
+    </aside>
+    <section id="log-panel">
+      <h2>Log <label class="muted"><input type="checkbox" id="problems-only"> problems only</label></h2>
+      <ol id="log"></ol>
+      <form id="cmd"><input id="cmd-line" placeholder="protocol line, e.g. room 0 6 or give 68 1 (docs/TEST_MODE.md)" autocomplete="off"></form>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

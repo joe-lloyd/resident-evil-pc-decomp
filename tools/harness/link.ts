@@ -31,11 +31,17 @@ export class GameLink {
   readonly history: GameState[] = [];
   /** Lines from the game that did not parse; a test can fail on them. */
   readonly badLines: string[] = [];
+  /** Called with every reply as it arrives, for tools that watch the stream (tools/debugger). */
+  readonly listeners = new Set<(r: Reply) => void>();
+  /** Settles when the game closes the connection or exits. */
+  readonly closed: Promise<void>;
 
   private constructor(socket: net.Socket) {
     this.socket = socket;
     socket.setEncoding('utf8');
     socket.on('data', (chunk: string) => this.onData(chunk));
+    socket.on('error', () => undefined);
+    this.closed = new Promise((resolve) => socket.once('close', () => resolve()));
   }
 
   /** Connect, retrying until the game has opened its port. */
@@ -87,6 +93,7 @@ export class GameLink {
         this.history.push(reply.state);
         if (this.history.length > 20_000) this.history.splice(0, 10_000);
       }
+      for (const listen of this.listeners) listen(reply);
       this.waiters = this.waiters.filter((w) => {
         if (!w.test(reply)) return true;
         w.resolve(reply);
