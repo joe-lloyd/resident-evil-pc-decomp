@@ -19,8 +19,9 @@ export default {
 			entrypoint: "src/bun/index.ts",
 			define: { RE1_DEBUGGER_DIR: JSON.stringify(debuggerDir) },
 		},
-		mac: { bundleCEF: false },
-		linux: { bundleCEF: false },
-		win: { bundleCEF: false },
+		// icon.png and icon.iconset come from make_icon.py.
+		mac: { bundleCEF: false, icons: "icon.iconset" },
+		linux: { bundleCEF: false, icon: "icon.png" },
+		win: { bundleCEF: false, icon: "icon.png" },
 	},
 } satisfies ElectrobunConfig;

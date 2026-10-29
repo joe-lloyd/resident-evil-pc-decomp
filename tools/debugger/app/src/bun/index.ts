@@ -11,6 +11,8 @@ new BrowserWindow({
 	title: "RE1 debugger",
 	url: dashboard.url,
 	frame: { width: 1400, height: 900, x: 80, y: 60 },
+	// Open behind whatever has focus: it is watched, not typed into.
+	activate: false,
 });
 
 process.on("exit", () => dashboard.close());

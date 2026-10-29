@@ -7,6 +7,7 @@
 // HTTP_PORT   the dashboard's port (default 7900)
 // RE1_DATA    folders with Stage1..Stage7 room files, overlay first, split by
 //             the platform's path separator (default /tmp/re1-pc)
+// RE1_EXE     a local residentevil.exe to start, like --exe (the Electrobun app takes no arguments)
 // RE1_ARGS    extra game arguments for --launch / --exe, e.g. "--boot rebecca"
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -53,8 +54,9 @@ const STATIC: Record<string, string> = {
   '/': 'index.html',
   '/app.js': 'app.js',
   '/style.css': 'style.css',
+  '/icon.png': '../app/icon.png',
 };
-const TYPES: Record<string, string> = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css' };
+const TYPES: Record<string, string> = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.png': 'image/png' };
 
 export async function start(o: Options): Promise<{ url: string; close: () => void }> {
   const clients = new Set<http.ServerResponse>();
@@ -202,12 +204,13 @@ export async function start(o: Options): Promise<{ url: string; close: () => voi
 
 export function optionsFromEnv(argv: string[], root: string): Options {
   const exeAt = argv.indexOf('--exe');
+  const exe = exeAt >= 0 ? argv[exeAt + 1] : process.env.RE1_EXE;
   return {
     gamePort: Number(process.env.PORT ?? 7811),
     httpPort: Number(process.env.HTTP_PORT ?? 7900),
     dataDirs: (process.env.RE1_DATA ?? '/tmp/re1-pc').split(path.delimiter),
     root,
-    start: argv.includes('--launch') ? { kind: 'lab' } : exeAt >= 0 ? { kind: 'exe', exe: argv[exeAt + 1] } : undefined,
+    start: argv.includes('--launch') ? { kind: 'lab' } : exe ? { kind: 'exe', exe } : undefined,
     gameArgs: process.env.RE1_ARGS ?? '',
   };
 }
