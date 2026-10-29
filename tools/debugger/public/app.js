@@ -80,7 +80,9 @@ function renderPanels(s) {
   dl.replaceChildren();
   row(dl, 'position', `${u16(p.x)}, ${p.y}, ${u16(p.z)}`);
   row(dl, 'angle', `${((p.angle % 4096) + 4096) % 4096}`);
-  row(dl, 'weapon', p.weapon ? itemName(p.weapon) : 'none');
+  // g_EquippedItemId is the bag slot, counted from one, not an item id.
+  const held = s.items[p.weapon - 1];
+  row(dl, 'weapon', p.weapon ? `slot ${p.weapon}: ${held ? itemName(held.id) : '?'}` : 'none');
   row(dl, 'character', `id ${p.id}, model ${s.charModel}`);
   row(dl, 'collision flags', `0x${hex(p.cf)}`);
   row(dl, 'msf', `0x${hex(s.msf)} / 0x${hex(s.msf2)}`);
