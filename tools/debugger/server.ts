@@ -16,8 +16,8 @@ import { readFileSync } from 'node:fs';
 import http from 'node:http';
 import net from 'node:net';
 import path from 'node:path';
-import { GameLink } from '../harness/link.ts';
-import { roomLabel, screen, type GameState } from '../harness/state.ts';
+import { GameLink, Key } from '../harness/link.ts';
+import { Bank, flag, messageOnScreen, roomLabel, screen, type GameState } from '../harness/state.ts';
 import { loadRoomMap } from './rdt.ts';
 
 export interface Options {
@@ -47,6 +47,56 @@ function itemNames(root: string): Record<number, string> {
     names[parseInt(m[2], 16)] ??= m[1].toLowerCase().replace(/_/g, ' ');
   }
   return names;
+}
+
+const KEY_NAMES = new Map<number, string>(Object.entries(Key).map(([name, vk]) => [vk, name]));
+const BANK_NAMES = new Map<number, string>(Object.entries(Bank).map(([name, i]) => [i, name]));
+/** The message and main-state banks change every few frames; a log of them would drown the rest. */
+const QUIET_BANKS = new Set<number>([Bank.mainState, Bank.message]);
+
+/** A script's command with its key codes named: `tap 67 3` reads `tap action 3`. */
+function describeCommand(line: string): string {
+  const [cmd, vk, ...rest] = line.split(/\s+/);
+  const name = /^(tap|down|up)$/.test(cmd) ? KEY_NAMES.get(Number(vk)) : undefined;
+  return name ? [cmd, name, ...rest].join(' ') : line;
+}
+
+/** The flags that differ between two states, as "bank:index on|off". */
+function flagChanges(a: GameState, b: GameState): string[] {
+  const out: string[] = [];
+  b.banks.forEach((bytes, bank) => {
+    if (QUIET_BANKS.has(bank) || !a.banks[bank]) return;
+    for (let i = 0; i < bytes.length * 8; i++) {
+      const on = flag(b, bank, i);
+      if (on !== flag(a, bank, i)) out.push(`${BANK_NAMES.get(bank) ?? bank}:${i} ${on ? 'on' : 'off'}`);
+    }
+  });
+  return out;
+}
+
+/** What a tester wants to see between two states: rooms, cuts, damage, messages, items, flags. */
+export function changes(a: GameState, b: GameState, names: Record<number, string>): { level: Level; text: string }[] {
+  const out: { level: Level; text: string }[] = [];
+  const note = (level: Level, text: string) => out.push({ level, text });
+  const sameRoom = a.stage === b.stage && a.room === b.room;
+  if (!sameRoom) note('info', `room ${roomLabel(a)} -> ${roomLabel(b)}`);
+  else if (a.camera !== b.camera) note('info', `camera ${a.camera} -> ${b.camera}`);
+  if (screen(a) !== screen(b)) note('info', `screen ${screen(a)} -> ${screen(b)}`);
+  if (messageOnScreen(b) && (!messageOnScreen(a) || a.messageId !== b.messageId)) note('info', `message ${b.messageId}`);
+  // A boot or room load rewrites her health outside gameplay; only a drop in play is a hit.
+  if (sameRoom && a.play && b.play && b.player.hp < a.player.hp) note('warn', `player hit: hp ${a.player.hp} -> ${b.player.hp}`);
+  const had = new Set(a.items.map((it) => it.id));
+  const has = new Set(b.items.map((it) => it.id));
+  for (const id of has) if (id && !had.has(id)) note('info', `bag: got ${names[id] ?? id}`);
+  for (const id of had) if (id && !has.has(id)) note('info', `bag: lost ${names[id] ?? id}`);
+  for (const change of flagChanges(a, b)) note('info', `flag ${change}`);
+  if (!sameRoom) return out;
+  b.enemies.forEach((e, i) => {
+    const was = a.enemies[i];
+    if (!was || was.type !== e.type || was.hp <= 0) return;
+    if (e.hp < was.hp) note('info', `enemy ${i} (type ${e.type.toString(16)}) hp ${was.hp} -> ${e.hp}${e.hp <= 0 ? ', down' : ''}`);
+  });
+  return out;
 }
 
 /** The parsed state as plain JSON: the flag banks go out as hex. */
@@ -83,27 +133,13 @@ export async function start(o: Options): Promise<{ url: string; close: () => voi
     send('log', entry);
   }
 
-  /** Log what a tester wants to see in the stream: rooms, cuts, damage, deaths. */
-  function compare(a: GameState, b: GameState): void {
-    if (a.stage !== b.stage || a.room !== b.room) note('info', `room ${roomLabel(a)} -> ${roomLabel(b)}`);
-    else if (a.camera !== b.camera) note('info', `camera ${a.camera} -> ${b.camera}`);
-    if (screen(a) !== screen(b)) note('info', `screen ${screen(a)} -> ${screen(b)}`);
-    if (b.player.hp < a.player.hp) note('warn', `player hit: hp ${a.player.hp} -> ${b.player.hp}`);
-    if (a.stage !== b.stage || a.room !== b.room) return;
-    b.enemies.forEach((e, i) => {
-      const was = a.enemies[i];
-      if (!was || was.type !== e.type || was.hp <= 0) return;
-      if (e.hp < was.hp) note('info', `enemy ${i} (type ${e.type.toString(16)}) hp ${was.hp} -> ${e.hp}${e.hp <= 0 ? ', down' : ''}`);
-    });
-  }
-
   function attach(l: GameLink): void {
     link = l;
     l.lines.add((line) => script?.write(`${line}\n`));
     let bad = 0;
     l.listeners.add((r) => {
       if (r.t === 'state') {
-        if (latest) compare(latest, r.state);
+        if (latest) for (const c of changes(latest, r.state, names)) note(c.level, c.text);
         latest = r.state;
         send('state', wire(r.state));
       } else if (r.t === 'ack' && !r.ok) {
@@ -138,7 +174,7 @@ export async function start(o: Options): Promise<{ url: string; close: () => voi
     res.setHeader('Access-Control-Allow-Origin', '*');
     if (url.pathname === '/events') {
       res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', Connection: 'keep-alive' });
-      res.write(`event: hello\ndata: ${JSON.stringify({ items: names, log, connected: !!link, state: latest && wire(latest) })}\n\n`);
+      res.write(`event: hello\ndata: ${JSON.stringify({ items: names, log, connected: !!link, keyboard: !o.relayPort, state: latest && wire(latest) })}\n\n`);
       clients.add(res);
       req.on('close', () => clients.delete(res));
       return;
@@ -199,7 +235,7 @@ export async function start(o: Options): Promise<{ url: string; close: () => voi
         if (!line || !link) continue;
         link.raw(line);
         // Its polling would bury the log; the rest is what it did.
-        if (!/^(ping|state)\b/.test(line)) note('info', `script> ${line}`);
+        if (!/^(ping|state)\b/.test(line)) note('info', `script> ${describeCommand(line)}`);
       }
     });
     socket.on('error', () => undefined);

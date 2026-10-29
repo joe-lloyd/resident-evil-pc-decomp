@@ -295,6 +295,7 @@ events.addEventListener('hello', (ev) => {
   $('log').replaceChildren();
   hello.log.forEach(addLog);
   setLink(hello.connected);
+  $('keyboard').checked = hello.keyboard;
   if (hello.state) onState(hello.state);
 });
 events.addEventListener('state', (ev) => onState(JSON.parse(ev.data)));
