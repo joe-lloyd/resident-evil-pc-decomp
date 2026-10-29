@@ -40,6 +40,35 @@ Then open <http://127.0.0.1:7900/>.
 | `HTTP_PORT` | `7900` | the dashboard's port |
 | `RE1_DATA` | `/tmp/re1-pc` | folders with `Stage1..Stage7` room files for the map, overlay first, split by the path separator |
 | `RE1_ARGS` | | extra game arguments for `--launch` and `--exe` |
+| `RELAY_PORT` | | pass the game through on this port, so a test script can drive it while the page watches |
+
+## Watch a test script
+
+The game takes one test-mode client. With `RELAY_PORT` set, the server
+forwards the game's lines to whoever connects there and their commands to the
+game, and the page shows the run. Point `lab.ts` at it with `RE1_LAB_RELAY`:
+
+```
+# on the game machine, in the app's environment: PORT=7811 RELAY_PORT=7812
+RE1_LAB_GAME_DIR='D:\Games\RE1-files' PORT=7811 RE1_LAB_RELAY=7812 \
+  OVERLAY=<REB build folder> node tools/harness/tests/playthrough.ts
+```
+
+`open()` still starts the game on `PORT`; only the link goes through the
+relay. The dashboard does not send `keyboard 1` in this mode.
+
+## What the page shows
+
+The map frames the floor area the player stands in: the free floor is split
+into areas the collision closes off (`rdt.ts` `floor()`), which matters in
+the Rebecca rooms, whose boundary boxes reach far past the room. Switch zones
+of the live camera take the colour of the camera they cut to.
+
+The log has rooms, cameras, screens, hits in play, enemy damage, each message
+id as it comes up, items gained and lost, and every script flag that flips,
+by bank name and index. The message and main-state banks flip every few
+frames and are left out. `changes()` in `server.ts` builds it;
+`node --test tools/debugger/server.test.ts` covers it.
 
 The command box sends any test-mode protocol line, for example `room 0 6`,
 `give 68 1` or `pos 15000 10000`. A rejected command shows in the log in red.
