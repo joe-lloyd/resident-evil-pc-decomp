@@ -58,11 +58,15 @@ PORT=7811 hutch run start
 The environment variables above apply. Only one client can hold the game's
 test port, so do not run the browser server and the app against the same game.
 
-Status: the shell builds and its server starts, but it has not opened a
-window yet. On macOS 13 every Electrobun 2.0.5 window crashes in
+It runs on Windows 11: on 29 Oct 2026 the app on jellybingus started the
+game itself (`RE1_EXE`), connected and drew the dashboard. The window opens
+without taking focus. On macOS 13 every Electrobun 2.0.5 window crashes in
 `+[WKWebsiteDataStore dataStoreForIdentifier:]`, a macOS 14 API. Its own
-hello-world template crashes the same way, with or without `bundleCEF`. It
-has not been tried on Windows, the machine the game runs on.
+hello-world template crashes the same way, with or without `bundleCEF`.
+
+To record the windows while they sit behind others, use FFmpeg's
+`gfxcapture` source (Windows Graphics Capture). `gdigrab` records whatever
+is on top of the window instead.
 
 ## Not in the MVP
 
