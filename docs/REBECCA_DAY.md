@@ -242,6 +242,15 @@ Built so far, beyond the list above:
   each half metre of floor goes to the camera that shows her whole, unhidden
   and nearest the middle of the screen. `coverage.ts` prints the map and the
   share of floor where she is lost.
+- **Camera switch zones drawn the way RE1 draws them**
+  (`tools/rebecca/day/camera-zones.ts`): a few convex quads per camera with
+  straight borders, fitted to the floor the cameras show her on, and a
+  400-unit gap between the trigger into a camera and the trigger back out,
+  so a step back and forth at a border does not flip the camera.
+  `node tools/rebecca/day/camera-zones.ts` prints each room's quads and where
+  she is shown badly; `sway.ts` counts flickers on a built overlay with the
+  engine's own test, and `tools/harness/tests/camera-borders.ts` sways her at
+  the borders in the game.
 - **Rendering on the Blender machine** (`tools/rebecca/day/render.ts`, with
   `--preview` for a quick look).
 - **Rebecca on the character select.** New Game deals three police cards when
