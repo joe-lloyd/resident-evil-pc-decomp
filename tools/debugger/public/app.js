@@ -182,6 +182,11 @@ function bounds(m) {
   return { x0, z0, x1, z1 };
 }
 
+/** A colour per camera, so a zone and the camera it cuts to match. */
+function camColour(i, alpha) {
+  return `hsla(${(i * 67 + 200) % 360}, 70%, 65%, ${alpha})`;
+}
+
 function draw() {
   const dpr = window.devicePixelRatio || 1;
   const w = canvas.clientWidth;
@@ -224,41 +229,44 @@ function draw() {
     }
   }
 
-  // Switch zones: the current camera's bright and labelled, the rest faint.
+  // Switch zones of the live camera, tinted by the camera they cut to. The
+  // new rooms split one way out into many strips, so each target camera is
+  // labelled once, in its largest zone.
   ctx.font = '11px ui-monospace, monospace';
+  const biggest = new Map();
   for (const zn of map.zones) {
-    const live = zn.from === state.camera;
+    if (zn.from !== state.camera) continue;
     ctx.beginPath();
     zn.quad.forEach(([x, z], i) => (i ? ctx.lineTo(X(x), Y(z)) : ctx.moveTo(X(x), Y(z))));
     ctx.closePath();
-    ctx.strokeStyle = live ? '#6fb3ff' : 'rgba(111,179,255,0.12)';
-    ctx.lineWidth = live ? 1.5 : 1;
-    if (live) {
-      ctx.fillStyle = 'rgba(111,179,255,0.08)';
-      ctx.fill();
-    }
+    ctx.fillStyle = camColour(zn.to, 0.14);
+    ctx.fill();
+    ctx.strokeStyle = camColour(zn.to, 0.45);
+    ctx.lineWidth = 1;
     ctx.stroke();
-    if (live) {
-      const cx = zn.quad.reduce((a, [x]) => a + x, 0) / 4;
-      const cz = zn.quad.reduce((a, [, z]) => a + z, 0) / 4;
-      ctx.fillStyle = '#6fb3ff';
-      ctx.fillText(`-> cam ${zn.to}`, X(cx) - 22, Y(cz) + 4);
-    }
+    const xs = zn.quad.map(([x]) => x), zs = zn.quad.map(([, z]) => z);
+    const size = (Math.max(...xs) - Math.min(...xs)) * (Math.max(...zs) - Math.min(...zs));
+    if (!(biggest.get(zn.to)?.size >= size)) biggest.set(zn.to, { size, x: xs.reduce((a, v) => a + v) / 4, z: zs.reduce((a, v) => a + v) / 4 });
+  }
+  for (const [to, { x, z }] of biggest) {
+    ctx.fillStyle = camColour(to, 1);
+    ctx.fillText(`cam ${to}`, X(x) - 16, Y(z) + 4);
   }
 
-  // Cameras: eye and a line towards the target; the live one in yellow.
+  // Cameras: eye and a line towards the target, in the colour of the zones
+  // that cut to them; the live one in yellow.
   map.cameras.forEach((c, i) => {
     const live = i === state.camera;
     const ex = X(u16(c.x)), ey = Y(u16(c.z));
     const len = Math.hypot(c.targetX - c.x, c.targetZ - c.z) || 1;
     const reach = Math.min(len, 2500) / len;
-    ctx.strokeStyle = live ? '#e7b84b' : 'rgba(231,184,75,0.25)';
+    ctx.strokeStyle = live ? '#e7b84b' : camColour(i, 0.5);
     ctx.lineWidth = live ? 2 : 1;
     ctx.beginPath();
     ctx.moveTo(ex, ey);
     ctx.lineTo(X(u16(c.x) + (c.targetX - c.x) * reach), Y(u16(c.z) + (c.targetZ - c.z) * reach));
     ctx.stroke();
-    ctx.fillStyle = live ? '#e7b84b' : 'rgba(231,184,75,0.4)';
+    ctx.fillStyle = live ? '#e7b84b' : camColour(i, 0.9);
     ctx.beginPath();
     ctx.arc(ex, ey, live ? 5 : 3, 0, Math.PI * 2);
     ctx.fill();
@@ -272,8 +280,9 @@ function draw() {
   trail.forEach(([x, z], i) => (i ? ctx.lineTo(X(x), Y(z)) : ctx.moveTo(X(x), Y(z))));
   ctx.stroke();
 
-  // Enemies.
+  // Enemies. Slots a room is not using sit at (-30000, -30000) with hp -1 (seen in 100 and 21A).
   for (const e of state.enemies) {
+    if (e.x === -30000 && e.z === -30000) continue;
     const down = e.hp <= 0;
     ctx.fillStyle = down ? '#5b3a3a' : '#ef6461';
     ctx.beginPath();
