@@ -9,9 +9,12 @@
 //             the platform's path separator (default /tmp/re1-pc)
 // RE1_EXE     a local residentevil.exe to start, like --exe (the Electrobun app takes no arguments)
 // RE1_ARGS    extra game arguments for --launch / --exe, e.g. "--boot rebecca"
+// RELAY_PORT  pass the game's port through on this one, so a test script can
+//             drive the game while the page watches (lab.ts RE1_LAB_RELAY)
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import http from 'node:http';
+import net from 'node:net';
 import path from 'node:path';
 import { GameLink } from '../harness/link.ts';
 import { roomLabel, screen, type GameState } from '../harness/state.ts';
@@ -25,6 +28,7 @@ export interface Options {
   root: string;
   start?: { kind: 'lab' } | { kind: 'exe'; exe: string };
   gameArgs: string;
+  relayPort?: number;
 }
 
 type Level = 'info' | 'warn' | 'error';
@@ -64,6 +68,8 @@ export async function start(o: Options): Promise<{ url: string; close: () => voi
   const names = itemNames(o.root);
   let link: GameLink | undefined;
   let latest: GameState | undefined;
+  /** The script on the relay port, if one is connected. Like the game, the newest client wins. */
+  let script: net.Socket | undefined;
 
   function send(event: string, data: unknown): void {
     const chunk = `event: ${event}\ndata: ${JSON.stringify(data)}\n\n`;
@@ -93,6 +99,7 @@ export async function start(o: Options): Promise<{ url: string; close: () => voi
 
   function attach(l: GameLink): void {
     link = l;
+    l.lines.add((line) => script?.write(`${line}\n`));
     let bad = 0;
     l.listeners.add((r) => {
       if (r.t === 'state') {
@@ -115,11 +122,13 @@ export async function start(o: Options): Promise<{ url: string; close: () => voi
       note('info', `connected to the game on port ${o.gamePort}`);
       send('link', { connected: true });
       // Test mode ignores the real keyboard; the dashboard is for playing along.
-      l.keyboard(true).catch((err) => note('warn', `keyboard 1 failed: ${String(err)}`));
+      // A relay is for a script, which plays alone.
+      if (!o.relayPort) l.keyboard(true).catch((err) => note('warn', `keyboard 1 failed: ${String(err)}`));
       latest = await l.state().catch(() => latest);
       if (latest) send('state', wire(latest));
       await l.closed;
       link = undefined;
+      script?.destroy();
       note('error', `game connection closed at frame ${latest?.frame ?? '?'}`);
     }
   }
@@ -173,6 +182,35 @@ export async function start(o: Options): Promise<{ url: string; close: () => voi
 
   await new Promise<void>((resolve) => server.listen(o.httpPort, '127.0.0.1', resolve));
 
+  const relay = net.createServer((socket) => {
+    // No game yet: close, and the script's GameLink.connect tries again.
+    if (!link) return socket.destroy();
+    script?.destroy();
+    script = socket;
+    note('info', `script connected on relay port ${o.relayPort}`);
+    socket.setEncoding('utf8');
+    let buffer = '';
+    socket.on('data', (chunk: string) => {
+      buffer += chunk;
+      let nl: number;
+      while ((nl = buffer.indexOf('\n')) >= 0) {
+        const line = buffer.slice(0, nl).trim();
+        buffer = buffer.slice(nl + 1);
+        if (!line || !link) continue;
+        link.raw(line);
+        // Its polling would bury the log; the rest is what it did.
+        if (!/^(ping|state)\b/.test(line)) note('info', `script> ${line}`);
+      }
+    });
+    socket.on('error', () => undefined);
+    socket.on('close', () => {
+      if (script !== socket) return;
+      script = undefined;
+      note('info', 'script disconnected');
+    });
+  });
+  if (o.relayPort) relay.listen(o.relayPort, '127.0.0.1');
+
   let stopGame = () => {};
   if (o.start?.kind === 'lab') {
     const lab = await import('../harness/lab.ts');
@@ -196,6 +234,8 @@ export async function start(o: Options): Promise<{ url: string; close: () => voi
     close: () => {
       for (const c of clients) c.end();
       server.close();
+      relay.close();
+      script?.destroy();
       link?.close();
       stopGame();
     },
@@ -212,5 +252,6 @@ export function optionsFromEnv(argv: string[], root: string): Options {
     root,
     start: argv.includes('--launch') ? { kind: 'lab' } : exe ? { kind: 'exe', exe } : undefined,
     gameArgs: process.env.RE1_ARGS ?? '',
+    relayPort: process.env.RELAY_PORT ? Number(process.env.RELAY_PORT) : undefined,
   };
 }

@@ -33,6 +33,8 @@ export class GameLink {
   readonly badLines: string[] = [];
   /** Called with every reply as it arrives, for tools that watch the stream (tools/debugger). */
   readonly listeners = new Set<(r: Reply) => void>();
+  /** Called with every line from the game as sent, parsed or not: the debugger's relay. */
+  readonly lines = new Set<(line: string) => void>();
   /** Settles when the game closes the connection or exits. */
   readonly closed: Promise<void>;
 
@@ -55,7 +57,12 @@ export class GameLink {
           s.once('error', reject);
         });
         const link = new GameLink(socket);
-        await link.ping();
+        // An SSH tunnel or relay accepts before anything is behind it, then closes.
+        const gone = link.closed.then(() => {
+          throw new Error('closed before the game answered');
+        });
+        gone.catch(() => undefined); // it also rejects when a working link closes later
+        await Promise.race([link.ping(), gone]);
         return link;
       } catch (err) {
         socket?.destroy();
@@ -81,6 +88,7 @@ export class GameLink {
       const line = this.buffer.slice(0, nl);
       this.buffer = this.buffer.slice(nl + 1);
       if (!line) continue;
+      for (const listen of this.lines) listen(line);
       let reply: Reply;
       try {
         reply = parseReply(line);
