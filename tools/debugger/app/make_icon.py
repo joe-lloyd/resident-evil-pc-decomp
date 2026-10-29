@@ -2,8 +2,8 @@
 
     python3 tools/debugger/app/make_icon.py
 
-Writes icon.png (1024 px, the Windows and Linux icon) and icon.iconset/ (macOS)
-next to this script. Needs Pillow. Everything is drawn at 4x and scaled down,
+Writes icon.png (1024 px, Linux and the page's favicon), icon.ico (16 to 256 px,
+Windows) and icon.iconset/ (macOS) next to this script. Needs Pillow. Everything is drawn at 4x and scaled down,
 which is the antialiasing.
 """
 import math
@@ -99,6 +99,7 @@ def draw_icon() -> Image.Image:
 def main() -> None:
     icon = draw_icon()
     icon.save(HERE / "icon.png")
+    icon.save(HERE / "icon.ico", sizes=[(n, n) for n in (16, 24, 32, 48, 64, 128, 256)])
     iconset = HERE / "icon.iconset"
     iconset.mkdir(exist_ok=True)
     for size in (16, 32, 128, 256, 512):
