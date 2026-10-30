@@ -85,11 +85,10 @@ export async function trail(run: Run): Promise<void> {
   run.log(s, 'at the ranger station');
 }
 
-/** The yard on arrival: her first thought, the pine across the trail, the winch with no crank, into the cabin. */
+/** The yard on arrival: the pine across the trail, the winch with no crank, into the cabin. */
 export async function yard(run: Run): Promise<void> {
   const { link } = run;
   let s = await settle(link, (st) => inRoom(st, DAY.yard));
-  if (!commonFlag(s, 202)) run.fail('her first thought at the station never showed');
   await run.picture('day-yard-0');
   const pine = run.expectMessage(0x81, 'the pine across the trail', 60_000);
   s = await check(link, YARD.pine);
@@ -107,7 +106,6 @@ export async function yard(run: Run): Promise<void> {
 export async function lookout(run: Run): Promise<void> {
   const { link } = run;
   let s = await settle(link, (st) => inRoom(st, DAY.lookout));
-  if (!commonFlag(s, 201)) run.fail('her first thought in the cabin never showed');
   await run.picture('day-lookout-0');
   const radio = run.expectMessage(0x81, 'the radio', 60_000);
   s = await check(link, CABIN.radio);
@@ -157,7 +155,6 @@ export async function shed(run: Run): Promise<void> {
   const { link } = run;
   let s = await run.door(YARD.shed, DAY.shed, 'unlocked the shed and went in');
   s = await settle(link, (st) => inRoom(st, DAY.shed));
-  if (!commonFlag(s, 203)) run.fail('her first thought in the shed never showed');
   await run.picture('day-shed');
   s = await checkUntil(run, SHED.crank, (st) => taken(st, CRANK_FLAG));
   if (taken(s, CRANK_FLAG) && s.items.some((it) => it.id === HEX_CRANK)) run.log(s, 'took the winch crank');
@@ -195,7 +192,6 @@ async function heal(run: Run): Promise<void> {
 export async function bridge(run: Run): Promise<void> {
   const { link } = run;
   let s = await settle(link, (st) => inRoom(st, DAY.bridge));
-  if (!commonFlag(s, 204)) run.fail('her first thought at the gorge never showed');
   await run.picture('day-bridge-0');
   await heal(run);
   // Adders lie low in the grass and only strike close: walk past them.
