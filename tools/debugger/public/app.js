@@ -255,16 +255,37 @@ function draw() {
 
   // Cameras: eye and a line towards the target, in the colour of the zones
   // that cut to them; the live one in yellow.
+  const offLabels = [];
   map.cameras.forEach((c, i) => {
     const live = i === state.camera;
-    const ex = X(u16(c.x)), ey = Y(u16(c.z));
+    // Camera records are signed 32-bit, the floor unsigned 16-bit: take the
+    // copy of the eye nearest the map, so one behind z 0 sits just behind it.
+    const near = (v, mid) => [v - 65536, v, v + 65536].reduce((a, k) => (Math.abs(k - mid) < Math.abs(a - mid) ? k : a));
+    let ex = X(near(c.x, (b.x0 + b.x1) / 2)), ey = Y(near(c.z, (b.z0 + b.z1) / 2));
+    // A camera off the framed floor: pin it to the edge, on the line from the
+    // middle of the map, with how far out it really is.
+    const edge = pad / 2;
+    if (ex < edge || ex > w - edge || ey < edge || ey > h - edge) {
+      const cx = w / 2, cy = h / 2;
+      const k = Math.min(Math.abs((ex > cx ? w - edge - cx : cx - edge) / (ex - cx || 1)), Math.abs((ey > cy ? h - edge - cy : cy - edge) / (ey - cy || 1)));
+      const far = Math.hypot(ex - (cx + (ex - cx) * k), ey - (cy + (ey - cy) * k)) / scale;
+      ex = cx + (ex - cx) * k;
+      ey = cy + (ey - cy) * k;
+      // Cameras pinned near each other stack their labels instead of overprinting.
+      let ly = ey + (ey > cy ? -18 : 18);
+      const lx = ex + (ex > cx ? -96 : 6);
+      while (offLabels.some(([x, y]) => Math.abs(x - lx) < 90 && Math.abs(y - ly) < 14)) ly += ey > cy ? -14 : 14;
+      offLabels.push([lx, ly]);
+      ctx.fillStyle = live ? '#e7b84b' : camColour(i, 0.9);
+      ctx.fillText(`cam ${i}: ${(far / 1000).toFixed(1)}k off`, lx, ly);
+    }
     const len = Math.hypot(c.targetX - c.x, c.targetZ - c.z) || 1;
     const reach = Math.min(len, 2500) / len;
     ctx.strokeStyle = live ? '#e7b84b' : camColour(i, 0.5);
     ctx.lineWidth = live ? 2 : 1;
     ctx.beginPath();
     ctx.moveTo(ex, ey);
-    ctx.lineTo(X(u16(c.x) + (c.targetX - c.x) * reach), Y(u16(c.z) + (c.targetZ - c.z) * reach));
+    ctx.lineTo(ex + (c.targetX - c.x) * reach * scale, ey - (c.targetZ - c.z) * reach * scale);
     ctx.stroke();
     ctx.fillStyle = live ? '#e7b84b' : camColour(i, 0.9);
     ctx.beginPath();

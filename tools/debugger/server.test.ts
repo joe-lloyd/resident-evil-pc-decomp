@@ -45,3 +45,9 @@ test('a message coming up is logged with its id', () => {
 test('a bank written whole, as a new game does, is one line', () => {
   assert.deepEqual(texts(state(), state({ banks: banks(7, 'ffffffff') })), ['info flags: 31 changed at once']);
 });
+
+test('enemy damage is logged in play, not when a room load writes their health', () => {
+  const hurt = { enemies: [[0, 1, 2000, 0, 4000, 30]] };
+  assert.deepEqual(texts(state(), state(hurt)), ['info enemy 0 (type 0) hp 120 -> 30']);
+  assert.deepEqual(texts(state({ play: 0 }), state(hurt)), ['info screen other -> gameplay']);
+});

@@ -93,7 +93,8 @@ export function changes(a: GameState, b: GameState, names: Record<number, string
   const flags = flagChanges(a, b);
   if (flags.length > 16) note('info', `flags: ${flags.length} changed at once`);
   else for (const change of flags) note('info', `flag ${change}`);
-  if (!sameRoom) return out;
+  // A room load writes every enemy's health; only a drop in play is damage.
+  if (!sameRoom || !a.play || !b.play) return out;
   b.enemies.forEach((e, i) => {
     const was = a.enemies[i];
     if (!was || was.type !== e.type || was.hp <= 0) return;
