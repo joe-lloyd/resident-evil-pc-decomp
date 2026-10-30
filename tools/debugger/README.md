@@ -73,6 +73,20 @@ frames and are left out. `changes()` in `server.ts` builds it;
 The command box sends any test-mode protocol line, for example `room 0 6`,
 `give 68 1` or `pos 15000 10000`. A rejected command shows in the log in red.
 
+## From a terminal
+
+`cli.ts` reads the same stream, for a terminal or an agent watching a run:
+
+```
+node tools/debugger/cli.ts watch            # the log, as it comes
+node tools/debugger/cli.ts watch --states   # plus where she is, once a second
+node tools/debugger/cli.ts state            # the latest state, one line (--json for all of it)
+node tools/debugger/cli.ts send room 0 6    # what the command box sends
+```
+
+It talks to `http://127.0.0.1:7900`; set `DASHBOARD` for another address,
+for example a port tunnelled from the game machine.
+
 ## Run it as a desktop app
 
 `app/` is an Electrobun 2 shell. It runs the same server in its Bun main
