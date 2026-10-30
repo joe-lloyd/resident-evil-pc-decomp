@@ -89,7 +89,10 @@ export function changes(a: GameState, b: GameState, names: Record<number, string
   const has = new Set(b.items.map((it) => it.id));
   for (const id of has) if (id && !had.has(id)) note('info', `bag: got ${names[id] ?? id}`);
   for (const id of had) if (id && !has.has(id)) note('info', `bag: lost ${names[id] ?? id}`);
-  for (const change of flagChanges(a, b)) note('info', `flag ${change}`);
+  // A new game or a load writes whole banks: one line, not hundreds.
+  const flags = flagChanges(a, b);
+  if (flags.length > 16) note('info', `flags: ${flags.length} changed at once`);
+  else for (const change of flags) note('info', `flag ${change}`);
   if (!sameRoom) return out;
   b.enemies.forEach((e, i) => {
     const was = a.enemies[i];
@@ -160,8 +163,7 @@ export async function start(o: Options): Promise<{ url: string; close: () => voi
       // Test mode ignores the real keyboard; the dashboard is for playing along.
       // A relay is for a script, which plays alone.
       if (!o.relayPort) l.keyboard(true).catch((err) => note('warn', `keyboard 1 failed: ${String(err)}`));
-      latest = await l.state().catch(() => latest);
-      if (latest) send('state', wire(latest));
+      // The game sends a new client a state line straight away (TestMode_Tick), and the listener takes it.
       await l.closed;
       link = undefined;
       script?.destroy();

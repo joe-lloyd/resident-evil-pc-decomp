@@ -41,3 +41,7 @@ test('script flags are logged by bank name and index, except the noisy message b
 test('a message coming up is logged with its id', () => {
   assert.deepEqual(texts(state(), state({ msg: { ...line.msg, choice: 0x80, id: 131 } })), ['info screen gameplay -> message', 'info message 131']);
 });
+
+test('a bank written whole, as a new game does, is one line', () => {
+  assert.deepEqual(texts(state(), state({ banks: banks(7, 'ffffffff') })), ['info flags: 31 changed at once']);
+});
