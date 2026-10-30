@@ -6,6 +6,7 @@
 // RE1_LAB_GAME_DIR  folder with residentevil.exe, config.ini and USA\ (default: D:\Games\RE1-decomp)
 // RE1_LAB_USER      Windows user that owns the desktop session (default: joell)
 // RE1_LAB_REPO_DIR  clone of this fork on that machine, with a `fork` remote (default: C:\Users\joell\Tools\re1-decomp)
+// RE1_LAB_RELAY     connect through the debug dashboard's relay on this port instead (tools/debugger, RELAY_PORT)
 import { spawn, execFileSync, type ChildProcess } from 'node:child_process';
 import { mkdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -185,9 +186,10 @@ export interface Session {
 export async function open(port: number, extraArgs = ''): Promise<Session> {
   stop(port);
   launch(port, extraArgs);
-  const ssh = tunnel(port);
+  const linkPort = Number(process.env.RE1_LAB_RELAY ?? port);
+  const ssh = tunnel(linkPort);
   try {
-    const link = await GameLink.connect(port, '127.0.0.1', 180_000);
+    const link = await GameLink.connect(linkPort, '127.0.0.1', 180_000);
     return {
       link,
       port,
