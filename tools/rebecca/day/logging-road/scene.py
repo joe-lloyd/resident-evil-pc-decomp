@@ -9,7 +9,8 @@ coughed up blood by the front wheel. Then he walked on toward the camp,
 dragging one foot: his prints go east in the mud. The battery is dying:
 the left blinker still flashes and the wipers twitch now and then on the
 dry glass. Back up the road someone from the camp nailed a NO ENTRY
-notice to a spruce to turn people away.
+board to a spruce to turn people away, and the camp's typed quarantine
+notice under it. Someone has torn the bottom half of the notice off.
 A player should work out that whatever was in the camp got out of it, and
 that the camp is east.
 
@@ -19,8 +20,8 @@ the trailer's tail and the log ends at x 4.0, the front bumper at x 16.6,
 y 7.0-9.4; the driver's door is on the south side at x 13.0-14.3, open.
 She gets round it on either verge. The road goes on west to the woods
 (the west edge, y 6.4-10) and east to the camp gate (the east edge,
-y 6.2-11). The notice is nailed to a spruce at x 6.0, y 3.6, just off the north verge,
-facing down the road to the west.
+y 6.2-11). The board and the notice are nailed to a spruce at x 6.0, y 3.6, just off the
+north verge, facing down the road to the west. The notice is her quarantine file.
 
 Moving: the blinker, the wipers twitching, flies on the seat and on the
 blood by the wheel. The grass stands still. Past the verges the forest
@@ -342,7 +343,7 @@ def build():
     nx, ny = NOTICE_TREE
     # Nailed to the trunk square to anyone coming up the road from the woods,
     # in the middle of the trunk as camera 4 sees it. The trunk leans and is
-    # not round, so find its middle and its bark at the notice's height.
+    # not round, so find its middle and its bark at each nailed thing's height.
     nz = 1.65
     toward = Vector((2.6 - nx, 5.0 - ny, 0)).normalized()   # camera 4's eye
     # The trunk's rings are the levels with a vertex all the way round;
@@ -352,15 +353,20 @@ def build():
         if math.hypot(v.co.x - nx, v.co.y - ny) < 1.5:
             levels.setdefault(round(v.co.z, 4), []).append(v.co.copy())
     rings = {z: ps for z, ps in levels.items() if len(ps) >= 12}
-    z0, z1 = max(z for z in rings if z <= nz), min(z for z in rings if z > nz)
-    lo, hi = rings[z0], rings[z1]
-    t = (nz - z0) / (z1 - z0)
-    mid = sum(lo, Vector()) / len(lo) * (1 - t) + sum(hi, Vector()) / len(hi) * t
-    reach = max((p - sum(lo, Vector()) / len(lo)).dot(toward) for p in lo) * (1 - t) + max((p - sum(hi, Vector()) / len(hi)).dot(toward) for p in hi) * t
-    at = Vector((mid.x, mid.y, nz)) + toward * (reach + 0.02)
+
+    def on_bark(z):
+        """The bark facing camera 4 at height z."""
+        z0, z1 = max(k for k in rings if k <= z), min(k for k in rings if k > z)
+        lo, hi = rings[z0], rings[z1]
+        t = (z - z0) / (z1 - z0)
+        c0, c1 = sum(lo, Vector()) / len(lo), sum(hi, Vector()) / len(hi)
+        mid = c0 * (1 - t) + c1 * t
+        reach = max((p - c0).dot(toward) for p in lo) * (1 - t) + max((p - c1).dot(toward) for p in hi) * t
+        return Vector((mid.x, mid.y, z)) + toward * reach
+    at = on_bark(nz) + toward * 0.02
     yaw = math.atan2(toward.y, toward.x)
     face = (math.pi / 2, 0, math.atan2(toward.x, -toward.y))
-    # A board off a crate, painted and nailed up: no paper to flap about.
+    # A board off a crate, painted and nailed up.
     board = kit.boards("Notice board", (0.2, 0.17, 0.13), width=0.2, seam=0.03, grime=0.7)
     reb.prim("cube", "Notice", board, tuple(at), (0.035, 0.52, 0.4), rot=(0, 0, yaw), bevel=0.006)
     front = at + toward * 0.02
@@ -370,6 +376,17 @@ def build():
     for dy in (-0.22, 0.22):
         for dz in (0.16, -0.16):
             reb.prim("cyl", "Nail", mat("iron"), tuple(front + across * dy + Vector((0, 0, dz))), (0.014, 0.014, 0.03), rot=(0, math.pi / 2, yaw), segments=6)
+    # Under it, the camp's typed notice, its bottom half torn off and lying
+    # in the grass: what is left is the file she takes.
+    notice_m = reb.mat_surface("Notice paper", [(0.0, (0.45, 0.43, 0.36)), (1.0, (0.6, 0.58, 0.5))], scale=12, bump=0.05)
+    paper = on_bark(1.24) + toward * 0.008
+    reb.prim("cube", "Quarantine notice", notice_m, tuple(paper), (0.006, 0.34, 0.24), rot=(0, 0, yaw))
+    sheet = paper + toward * 0.005
+    kit.fit_text(kit.text("Quarantine head", "QUARANTINE", mat("red paint"), tuple(sheet + Vector((0, 0, 0.06))), size=0.06, rot=face), 0.3, 0.06)
+    kit.fit_text(kit.text("Quarantine words", "SICKNESS IN CAMP 4", mat("black"), tuple(sheet + Vector((0, 0, -0.02))), size=0.035, rot=face), 0.3, 0.035)
+    for dy in (-0.14, 0.14):
+        reb.prim("cyl", "Nail", mat("iron"), tuple(sheet + across * dy + Vector((0, 0, 0.1))), (0.01, 0.01, 0.025), rot=(0, math.pi / 2, yaw), segments=6)
+    kit.papers("Torn notice in the grass", (nx - 0.9, ny + 1.3, height(nx - 0.9, ny + 1.3)), spread=0.4, count=2, seed=9, m=notice_m)
 
     # ---- On the south verge, seen past the log ends: the crew's cold deck,
     # a few logs left for the next load, the stumps they came off, the slash.
@@ -442,7 +459,7 @@ def build():
     # ---- What the game needs.
     room.door("woods", (X0, 6.4, X0 + 0.6, 10.0), arrive=(2.6, TY), face=(1, 0))
     room.door("camp-gate", (X1 - 0.6, 6.2, X1, 11.0), arrive=(17.3, 10.6), face=(-1, 0))
-    room.check((nx - 1.3, Y0, nx + 0.3, Y0 + 0.8), "NO ENTRY. TURN BACK.\nPainted on a board and nailed up in a hurry.")
+    room.check((nx - 1.3, Y0, nx + 0.3, Y0 + 0.8), "QUARANTINE. SICKNESS IN CAMP 4.\nNailed under the NO ENTRY board. The bottom half's torn off.")
     room.check((DOOR[0] - 0.3, TY + HW, DOOR[1] + 0.4, TY + HW + 1.0), "The driver's door is wide open. Blood on the seat, and down the step.\nScratches on the inside of the door.")
     room.check((lx - 0.6, ly - 0.5, lx + 1.0, ly + 0.8), "His lunch, in the mud. He never got to eat it.")
     room.check((14.7, TY + 1.4, 15.8, TY + 2.3), "Blood in the mud by the wheel. He was coughing it up.")
