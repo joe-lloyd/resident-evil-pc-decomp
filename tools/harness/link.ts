@@ -31,11 +31,19 @@ export class GameLink {
   readonly history: GameState[] = [];
   /** Lines from the game that did not parse; a test can fail on them. */
   readonly badLines: string[] = [];
+  /** Called with every reply as it arrives, for tools that watch the stream (tools/debugger). */
+  readonly listeners = new Set<(r: Reply) => void>();
+  /** Called with every line from the game as sent, parsed or not: the debugger's relay. */
+  readonly lines = new Set<(line: string) => void>();
+  /** Settles when the game closes the connection or exits. */
+  readonly closed: Promise<void>;
 
   private constructor(socket: net.Socket) {
     this.socket = socket;
     socket.setEncoding('utf8');
     socket.on('data', (chunk: string) => this.onData(chunk));
+    socket.on('error', () => undefined);
+    this.closed = new Promise((resolve) => socket.once('close', () => resolve()));
   }
 
   /** Connect, retrying until the game has opened its port. */
@@ -49,7 +57,12 @@ export class GameLink {
           s.once('error', reject);
         });
         const link = new GameLink(socket);
-        await link.ping();
+        // An SSH tunnel or relay accepts before anything is behind it, then closes.
+        const gone = link.closed.then(() => {
+          throw new Error('closed before the game answered');
+        });
+        gone.catch(() => undefined); // it also rejects when a working link closes later
+        await Promise.race([link.ping(), gone]);
         return link;
       } catch (err) {
         socket?.destroy();
@@ -75,6 +88,7 @@ export class GameLink {
       const line = this.buffer.slice(0, nl);
       this.buffer = this.buffer.slice(nl + 1);
       if (!line) continue;
+      for (const listen of this.lines) listen(line);
       let reply: Reply;
       try {
         reply = parseReply(line);
@@ -87,6 +101,7 @@ export class GameLink {
         this.history.push(reply.state);
         if (this.history.length > 20_000) this.history.splice(0, 10_000);
       }
+      for (const listen of this.listeners) listen(reply);
       this.waiters = this.waiters.filter((w) => {
         if (!w.test(reply)) return true;
         w.resolve(reply);

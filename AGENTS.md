@@ -127,6 +127,11 @@ of guessed. Run them from the repo root.
 - `rdt_event_editor.html` — RDT event editor; `node tools/test_rdt_editor.js` runs its headless tests (add `--quick` for assertions only).
 - `save_editor.html` — PC save-file editor.
 
+**Debug dashboard** — `tools/debugger/` streams a running test-mode game's
+state to a web page: room map with collision, cameras and switch zones, the
+player, enemies, inventory, flags and a change log. `node tools/debugger/run.ts`;
+`app/` is an Electrobun shell around it. See `tools/debugger/README.md`.
+
 **Linux** — `package_linux.sh` and `elf_needed.py`; both are described in the Linux port section above.
 
 **Asset migration** — `tools/asset_migrator/` is a standalone Qt 6 GUI for the

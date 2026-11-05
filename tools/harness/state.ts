@@ -98,6 +98,7 @@ export interface GameState {
 
 export type Reply =
   | { t: 'state'; state: GameState }
+  /** `frame` is -1 when the ack has none: docs/TEST_MODE.md does not promise it, and god, slot, boxslot and unequip leave it out. */
   | { t: 'ack'; cmd: string; ok: boolean; frame: number }
   | { t: 'pong'; token: string; frame: number };
 
@@ -236,7 +237,7 @@ export function parseReply(line: string): Reply {
     case 'state':
       return { t, state: parseGameState(o) };
     case 'ack':
-      return { t, cmd: str(o, 'cmd'), ok: num(o, 'ok') === 1, frame: num(o, 'frame') };
+      return { t, cmd: str(o, 'cmd'), ok: num(o, 'ok') === 1, frame: o.frame === undefined ? -1 : num(o, 'frame') };
     case 'pong':
       return { t, token: str(o, 'token'), frame: num(o, 'frame') };
     default:
