@@ -700,9 +700,11 @@ try {
   const snapshot = (name: string, st: GameState) => save(path.join(snaps, `${name}.json`), { ...take(st, reached), ...(built ? { built } : {}) });
   for (;;) {
     s = await settle(session.link);
-    const left = pool.filter((g) => !done(s, g, reached) && (failed.get(g.id) ?? 0) < 2);
-    // The way up into the mansion is one way: she sleeps there once nothing else is left.
-    const ready = left.filter((g) => g.needs.every((n) => reached.has(n) || done(s, GOALS.find((x) => x.id === n)!, reached)) && (g.id !== 'sleep' || left.length === 1));
+    const undone = pool.filter((g) => !done(s, g, reached));
+    const left = undone.filter((g) => (failed.get(g.id) ?? 0) < 2);
+    // The way up into the mansion is one way: she sleeps there only once every
+    // other job is done, counting the ones she has given up on for now.
+    const ready = left.filter((g) => g.needs.every((n) => reached.has(n) || done(s, GOALS.find((x) => x.id === n)!, reached)) && (g.id !== 'sleep' || undone.length === 1));
     if (!ready.length && failed.size && secondWinds-- > 0) {
       run.log(s, `trying again: ${[...failed.keys()].join(', ')}`);
       failed.clear();
@@ -710,7 +712,7 @@ try {
     }
     if (!left.length) break;
     if (!ready.length) {
-      run.fail(`stuck: nothing left she can do; still to do ${left.map((g) => g.id).join(', ')}`);
+      run.fail(`stuck: nothing left she can do; still to do ${undone.map((g) => g.id).join(', ')}`);
       break;
     }
     const g = await next(player, s, ready);
