@@ -13,7 +13,8 @@ import { fileURLToPath } from 'node:url';
 import { readPng, writePng } from '../../harness/image.ts';
 import { buildMasks } from '../masks.ts';
 import { occluders, standableIn } from '../occluders.ts';
-import { autoFloors, readDepth, type Rect } from './floors.ts';
+import { readDepth } from './floors.ts';
+import { roomZones } from './camera-zones.ts';
 import { dayRooms } from './rooms.ts';
 import { look } from './look.ts';
 
@@ -31,7 +32,7 @@ for (const spec of dayRooms.filter((r) => !only.length || only.includes(r.slug))
     const f = path.join(renders, `cam${i}.depth.png`);
     return existsSync(f) ? readDepth(f) : undefined;
   });
-  const floors = spec.cameraFloor === 'auto' ? autoFloors({ ...json, walls: [...json.walls, ...(json.voids ?? [])] }, depths) : spec.cameraFloor;
+  const zones = roomZones({ ...json, walls: [...json.walls, ...(json.voids ?? [])] }, depths, spec.cameraFloor === 'auto' ? undefined : spec.cameraFloor);
   const standable = standableIn(json);
   const shots: Shot[] = [];
   let missing = false;
@@ -42,7 +43,7 @@ for (const spec of dayRooms.filter((r) => !only.length || only.includes(r.slug))
       return;
     }
     const background = look(readPng(path.join(renders, `cam${i}.png`)));
-    const found = occluders(c, readDepth(zall), ([] as Rect[]).concat(floors[i] ?? []), standable);
+    const found = occluders(c, readDepth(zall), [json.bounds], (x, z) => standable(x, z) && zones.holds(i, x, z));
     const tagged = depths[i] as Float32Array | undefined;
     const depth = found.map((d, k) => Math.min(d, tagged ? tagged[k]! : Infinity));
     let fit: string;

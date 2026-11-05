@@ -22,7 +22,8 @@ import { EVENT_FLAGS, itemModelSlots } from './events.ts';
 import { lockFlag } from './scripts.ts';
 import { animFileName, buildAnim, type AnimLayer } from '../bganim.ts';
 import { buildMasks, maskPakName } from '../masks.ts';
-import { autoFloors, readDepth } from './floors.ts';
+import { readDepth } from './floors.ts';
+import { roomZones, type Quad } from './camera-zones.ts';
 import { occluders, standableIn } from '../occluders.ts';
 import { makePak } from '../pak.ts';
 import { composeRoom, model, scaleModel, SLOT, type PointLight, type Vec3 } from '../rdt.ts';
@@ -53,8 +54,8 @@ interface DayRoomBase {
   readonly donor: string;
   /**
    * The part of the floor each camera shows, one or more rectangles that do
-   * not overlap another camera's; walking into one cuts to it. 'auto' works
-   * them out from the scene (floors.ts).
+   * not overlap another camera's: where several cameras would do, camera-zones.ts
+   * gives these the floor. 'auto' lets the scene decide (floors.ts).
    */
   readonly cameraFloor: readonly (Rect | readonly Rect[])[] | 'auto';
   /**
@@ -170,16 +171,18 @@ class Writer {
 const clamp16 = (v: number) => Math.min(0xffff, Math.max(0, v));
 const clampRect = (r: Rect): Rect => ({ x0: clamp16(r.x0), z0: clamp16(r.z0), x1: clamp16(r.x1), z1: clamp16(r.z1) });
 
-/** Switch-zone record: camTo, camFrom, then corners (low X, low Z), (low X, high Z), (high X, high Z), (high X, low Z). */
-function zoneRecord(w: Writer, camTo: number, camFrom: number, r: Rect): void {
-  const c = clampRect(r);
-  w.u16(camTo).u16(camFrom).u16(c.x0).u16(c.z0).u16(c.x0).u16(c.z1).u16(c.x1).u16(c.z1).u16(c.x1).u16(c.z0);
+/** Switch-zone record: camTo, camFrom, then the four corners, clockwise seen from above with Z up (camera-zones.ts). */
+function zoneRecord(w: Writer, camTo: number, camFrom: number, q: Quad): void {
+  w.u16(camTo).u16(camFrom);
+  for (const [x, z] of q) w.u16(clamp16(x)).u16(clamp16(z));
 }
+
+const rectQuad = (r: Rect): Quad => [[r.x0, r.z0], [r.x0, r.z1], [r.x1, r.z1], [r.x1, r.z0]];
 
 /**
  * One group per camera: a header whose quad is the floor that camera shows
- * (the engine culls entities outside it), then a trigger into every other
- * camera's floor. The table ends with camFrom 0xFFFF.
+ * (the engine culls entities outside it), then the trigger quads of every
+ * other camera (camera-zones.ts). The table ends with camFrom 0xFFFF.
  */
 /** The flag that shows a scene's change of state: its own, or the puzzle's (events.ts) or the lock's (scripts.ts) its name is the step of. */
 function stateFlag(slug: string, st: NonNullable<RoomJson['states']>[number]): NonNullable<AnimLayer['when']> {
@@ -191,14 +194,14 @@ function stateFlag(slug: string, st: NonNullable<RoomJson['states']>[number]): N
   throw new Error(`${slug}: state ${st.name} is no puzzle step of events.ts and no lock of scripts.ts`);
 }
 
-function switchZones(floors: readonly (Rect | readonly Rect[])[], bounds: Rect): Uint8Array {
+function switchZones(zones: readonly (readonly Quad[])[], bounds: Rect): Uint8Array {
   const w = new Writer();
   const margin = 1500;
-  const seen: Rect = { x0: bounds.x0 - margin, z0: bounds.z0 - margin, x1: bounds.x1 + margin, z1: bounds.z1 + margin };
-  floors.forEach((_, from) => {
+  const seen = rectQuad({ x0: bounds.x0 - margin, z0: bounds.z0 - margin, x1: bounds.x1 + margin, z1: bounds.z1 + margin });
+  zones.forEach((_, from) => {
     zoneRecord(w, from, from, seen);
-    floors.forEach((floor, to) => {
-      if (to !== from) for (const r of [floor].flat()) zoneRecord(w, to, from, r);
+    zones.forEach((quads, to) => {
+      if (to !== from) for (const q of quads) zoneRecord(w, to, from, q);
     });
   });
   w.u16(0xffff).u16(0xffff);
@@ -322,7 +325,8 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
     const file = path.join(renders, `cam${i}.depth.png`);
     return existsSync(file) ? readDepth(file) : undefined;
   });
-  const floors = spec.cameraFloor === 'auto' ? autoFloors({ ...json, walls: [...json.walls, ...(json.voids ?? [])] }, depths) : spec.cameraFloor;
+  const scene = { ...json, walls: [...json.walls, ...(json.voids ?? [])] };
+  const zones = roomZones(scene, depths, spec.cameraFloor === 'auto' ? undefined : spec.cameraFloor);
   const standable = standableIn(json);
   const cameras = json.cameras.map((c, i) => {
     const background = look(readPng(path.join(renders, `cam${i}.png`)));
@@ -330,8 +334,8 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
     // front of where she can stand on this camera's floor (occluders.ts).
     const zall = path.join(renders, `cam${i}.zall.png`);
     const tagged = depths[i];
-    const camFloor = ([] as Rect[]).concat(floors[i] ?? []);
-    const found = existsSync(zall) ? occluders(c, readDepth(zall), camFloor, standable) : undefined;
+    // Where this camera can be on screen with her: its triggers and the gap round them.
+    const found = existsSync(zall) ? occluders(c, readDepth(zall), [json.bounds], (x, z) => standable(x, z) && zones.holds(i, x, z)) : undefined;
     const depth = found && tagged ? found.map((d, k) => Math.min(d, tagged[k]!)) : (found ?? tagged);
     const masks = depth ? buildMasks(background, depth) : undefined;
     const pak = `RC${stem.slice(4, 7)}${i}.pak`;
@@ -390,7 +394,7 @@ export function buildDayRoom(spec: DayRoom, baseDir: string, outDir: string, rae
     objectModels: json.saves ? [scaleModel(model(baseRoom(ITEM_BOX_LID.from), 'object', ITEM_BOX_LID.index), json.saves.lid.scale ?? 1)] : undefined,
     ...('hour' in spec ? lightingFor(spec.hour, spec.inside, json.bounds) : { ambient: spec.ambient, lights: spec.lights }),
     sections: {
-      [SLOT.switchZones]: switchZones(floors, json.bounds),
+      [SLOT.switchZones]: switchZones(zones.zones, json.bounds),
       [SLOT.collision]: collision(json),
       [SLOT.walkZones]: walkZones(json.bounds),
       [SLOT.footsteps]: footstepZones(underfoot),
