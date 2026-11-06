@@ -119,7 +119,8 @@ export const day: Plan = {
     place(3, 'lodge', "The gardener's lodge", 4, [12.2, 11.2], ['The back gate key, his diary', 'A lamp left burning', '', 'He scratched himself raw'], {}),
     place(3, 'estate-wall', 'The estate wall', 5, [10, 12.6], ['The back gate into the Spencer estate', 'Ivy in the wind', 'Crows', 'The mansion over the wall'], {}),
     place(3, 'kennels', 'The kennels', 5, [10, 14], ['Empty runs, broken chains', 'A gate banging', 'Cerberus, a pack', 'The dogs on the mountain came from here'], {}),
-    place(3, 'back-garden', 'The back garden', 6, [10, 15.4], ['Hedges, the cellar doors', 'Fountain water, moths at a lamp', 'A zombie', ''], {}),
+    place(3, 'back-garden', 'The back garden', 6, [10, 15.4], ['Hedges, the cellar doors, a coal chute\'s grate beside them', 'Fountain water, moths at a lamp', 'A zombie', '']
+, {}),
     place(3, 'garden-shed', 'The garden shed', 2, [12.2, 15.4], ['The cellar key on a board', 'A cobweb trembling', '', ''], {}),
 
     // Act 4: the mansion.
@@ -279,7 +280,14 @@ export const day: Plan = {
     step(3, 'map-estate', 'lodge', 'find', ['pry-lodge'], 'The estate grounds plan: the wall, the kennels, the garden, the cellar', { optional: true }),
     step(3, 'open-gate', 'estate-wall', 'do', ['gate-key'], 'Open the back gate into the estate'),
     step(3, 'cellar-key', 'garden-shed', 'find', ['open-gate'], 'Take the cellar key'),
-    step(3, 'bulkhead', 'back-garden', 'milestone', ['cellar-key'], 'Unlock the cellar doors'),
+    {
+      ...step(3, 'bulkhead', 'back-garden', 'milestone', ['cellar-key'], 'Unlock the cellar doors'),
+      otherWays: [{
+        needs: ['open-gate', 'crowbar', 'map-estate'],
+        label: "Prise up the coal chute's grate beside the cellar doors with Kevin's crowbar, where the grounds plan marks the chute down to the cellar. The iron rings across the garden",
+        stirs: [{ at: 'back-garden', enemies: 'The Cerberus pack from the kennels, at the sound' }],
+      }],
+    },
 
     // Act 4.
     step(4, 'push-rack', 'cellar', 'do', ['bulkhead'], 'Push the rack aside: a crawl passage'),
