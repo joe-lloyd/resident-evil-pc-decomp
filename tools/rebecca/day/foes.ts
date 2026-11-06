@@ -30,8 +30,19 @@ export const FOE_KINDS = {
 } as const;
 export type Kind = keyof typeof FOE_KINDS;
 
+/**
+ * When a group is there: from the step that brings it (a plan step's
+ * `stirs`) and until the step that takes it away (the kennels' pack, once
+ * penned). Without either it is there from the start.
+ */
+export interface When {
+  readonly after?: string;
+  readonly until?: string;
+}
+export type FoeGroup = readonly [Kind, number] | readonly [Kind, number, When];
+
 /** What each kit room holds, from the plan. */
-export const FOES: Record<string, readonly (readonly [Kind, number])[]> = {
+export const FOES: Record<string, readonly FoeGroup[]> = {
   platform: [['crow', 2]],
   woods: [['cerberus', 2]],
   den: [['cerberus', 1]],
@@ -117,10 +128,15 @@ export function place(floor: Floor, count: number): { x: number; z: number }[] {
 export const facing = (from: { x: number; z: number }, to: { x: number; z: number }) =>
   ((Math.round((Math.atan2(-(to.z - from.z), to.x - from.x) / (2 * Math.PI)) * 4096) % 4096) + 4096) % 4096;
 
-/** The room's enemy() lines; `flags` supplies kill flags and is consumed. Slots count up from `slot`. */
-export function foeLines(slug: string, floor: Floor, flags: number[], slot = 0): string[] {
+/**
+ * The room's enemy() lines; `flags` supplies kill flags and is consumed.
+ * Slots count up from `slot`. A group with a `When` stands inside the test
+ * `test` writes for it.
+ */
+export function foeLines(slug: string, floor: Floor, flags: number[], slot = 0, test?: (w: When) => string, foes = FOES): string[] {
   const lines: string[] = [];
-  for (const [kind, count] of FOES[slug] ?? []) {
+  for (const [kind, count, when] of foes[slug] ?? []) {
+    const group: string[] = [];
     const k = FOE_KINDS[kind];
     const spots = place(floor, count);
     if (spots.length < count) throw new Error(`${slug}: room for ${spots.length} of ${count} ${kind}s`);
@@ -129,8 +145,12 @@ export function foeLines(slug: string, floor: Floor, flags: number[], slot = 0):
       if (flag === undefined) throw new Error(`${slug}: no kill flag left`);
       const near = floor.doors.map((d) => d.arrive).sort((a, c) => Math.hypot(a.x - p.x, a.z - p.z) - Math.hypot(c.x - p.x, c.z - p.z))[0];
       const angle = near ? facing(p, near) : 0;
-      lines.push(`enemy(${k.id}, ${k.behavior}, ${flag}, 1, ${k.sca}, 0, 0, ${angle}, 0, 0, ${p.x}, 0, ${p.z}, ${slot++}, 0, 0, 0);  // a ${kind}`);
+      group.push(`enemy(${k.id}, ${k.behavior}, ${flag}, 1, ${k.sca}, 0, 0, ${angle}, 0, 0, ${p.x}, 0, ${p.z}, ${slot++}, 0, 0, 0);  // a ${kind}`);
     }
+    if (when && (when.after || when.until)) {
+      if (!test) throw new Error(`${slug}: enemies that come or go with a step need a flag test`);
+      lines.push(`if (${test(when)}) {`, ...group.map((l) => `    ${l}`), '}');
+    } else lines.push(...group);
   }
   return lines;
 }

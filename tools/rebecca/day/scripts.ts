@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 import { dayRooms } from './rooms.ts';
 import type { DayRoom } from './room.ts';
 import { BOOKS, DOCUMENTS, ITEM_FLAG_BASE } from '../files/documents.ts';
-import { foeLines, KILL_FLAGS, type Floor } from './foes.ts';
+import { foeLines, KILL_FLAGS, type Floor, type When } from './foes.ts';
 import { ITEM_FLAGS, SUPPLIES, supplyLines, supplyModels } from './supplies.ts';
 import { mapIn, mapLines, mapModels } from '../maps/pickups.ts';
 import { KEY_ITEM_FLAGS, KEY_ITEMS, keyItemLines, keyItemModels, sameModel, type ItemSpot } from '../items/items.ts';
@@ -243,6 +243,20 @@ const LOCKS = new Map(
   }),
 );
 const lockFor = (from: string, to: string) => LOCKS.get(`${from}>${to}`);
+/**
+ * The script test for a plan step being done, from the flag it raises: an
+ * event's FG_COMMON flag or a lock's g_LocksFlags bit. ck(.., 0) is set.
+ */
+function stepTest(step: string, done: boolean): string {
+  const event = EVENT_FLAGS.get(step);
+  if (event !== undefined) return `ck(FG_COMMON, ${event}, ${done ? 0 : 1})`;
+  const lock = lockFlag(step);
+  if (lock !== undefined) return `ck(FG_LOCK, ${lock}, ${done ? 0 : 1})`;
+  throw new Error(`${step} raises no flag the room scripts can test`);
+}
+/** The test for a group of enemies a step brings (`after`) or takes away (`until`). */
+const foeWhen = (w: When) => [w.after && stepTest(w.after, true), w.until && stepTest(w.until, false)].filter(Boolean).join(' && ');
+
 /** The lock flag the plan's step raises by unlocking its way, if it is a key item on a lock. */
 export const lockFlag = (step: string): number | undefined => [...LOCKS.values()].find((l) => l.step === step)?.flag;
 
@@ -619,7 +633,7 @@ function main(): void {
     // A scene she walks into or that greets her has nobody to fight in it:
     // the room's enemies come once it has run.
     const calm = scenes.filter((sc) => sc.trigger.on === 'enter' || sc.trigger.on === 'zone').map((sc) => `ck(FG_COMMON, ${CUT_FLAGS.get(sc.id)}, 0)`);
-    const foes = foeLines(slug, floor, killFlags);
+    const foes = foeLines(slug, floor, killFlags, 0, foeWhen);
     lines.push(...(calm.length && foes.length ? [`if (${calm.join(' && ')}) {`, ...foes.map((l) => `    ${l}`), '}'] : foes));
     // The events (day/events.ts): their zones now, their working in main.
     const main: string[] = [];
