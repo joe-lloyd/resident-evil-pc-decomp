@@ -60,7 +60,8 @@ export const day: Plan = {
     // Act 1: built, but for the gondola station.
     place(1, 'ridge', 'The ridge', 2, [10, 0], ['Where the game opens', 'Grass in the dawn wind', '', 'Billy has gone; Rebecca looks across the wooded hills toward the mansion'], built('ridge')),
     place(1, 'trail', 'The mountain trail', 2, [10, 1.4], ['Down through the spruces', 'Ferns in the wind', 'Crows', 'Alone for the first time'], built('trail')),
-    place(1, 'yard', 'The station yard', 4, [10, 2.8], ['The hub: the pine, the ranger\'s truck and its winch, its toolbox padlocked with his name on the lid, the rifle rack behind its seat empty', 'Chimney smoke, hazard lights', 'A Cerberus, once she has the shed key', 'Someone was here this morning'], built('yard')),
+    place(1, 'yard', 'The station yard', 4, [10, 2.8], ['The hub: the pine, the ranger\'s truck and its winch, its toolbox lettered U.S. FOREST SERVICE - STATION 3 and padlocked, his rifle in the grass, its magazine empty', 
+'Chimney smoke, hazard lights', 'A Cerberus, once she has the shed key', 'Someone was here this morning'], built('yard')),
     place(1, 'cabin', 'The cabin', 2, [12.2, 2.2], ['The logbook, the radio, the shed key', 'The lamp flame, a fly', '', 'He left in a hurry, mid-breakfast'], built('lookout')),
     place(1, 'shed', 'The tool shed', 2, [12.2, 3.4], ['The winch crank, an empty jerrycan, chainsaw fuses too small for anything bigger', 'Dust in the light', '', 'He tried to mend the chainsaw first'], built('shed')),
     place(1, 'bridge', 'The gorge footbridge', 3, [10, 4.2], ['The old footbridge over the gorge', 'The river far below', 'Adders', 'The trail goes on down'], built('bridge')),
