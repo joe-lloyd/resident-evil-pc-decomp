@@ -9,8 +9,10 @@
 8: \nA fire axe, buried in the\ndoor. Someone was holding\nit shut from inside.
 9: \nHe sat down against the\nlogs with a shotgun and\nfired until it was empty.\p{0}\nShells everywhere.
 10: \nThe cookhouse woodpile.\nSplit and stacked, enough\nfor weeks.
-11: \nThe cookhouse bell. The\nrope's been cut short.
-12: \nThe skidder. Its blade is\ndown in the mud, the\nchokers still on the logs.\p{0}\nThe key's gone.
-13: \nLaundry on the line.\nNobody's coming for it.
-14: \nDiesel, leaking from a\ndrum into the mud.
-15: \nThe fuel depot. The gate's\nchained shut, a padlock on\nit.
+11: \nThe skidder. Its blade is\ndown in the mud, the\nchokers still on the logs.\p{0}\nThe key's gone.
+12: \nLaundry on the line.\nNobody's coming for it.
+13: \nDiesel, leaking from a\ndrum into the mud.
+14: \nThe fuel depot. The gate's\nchained shut, a padlock on\nit.
+15: \nThe cookhouse bell.
+16: \nThe cookhouse bell. Still\nswinging.
+17: \nI haul on the rope. The\nbell clangs out over the\ncamp.\p{0}\nSomewhere, things start\nshuffling toward the mess\nhall.

@@ -1,9 +1,12 @@
 0: \n...
 1: \nThe gate is padlocked from\noutside.
-2: \nThe fuel ledger. Gallons\nin, gallons out, signed\nevery day.\p{0}\nThe last entries are a\nmess. Then they stop.
-3: \nThe dirt's dug out under\nthe wire, the wire bent\nup.\p{0}\nThere's blood on it.\nSomething got in here.
+2: \nThe gate is chained.
+3: \nThe fuel ledger. Gallons\nin, gallons out, signed\nevery day.\p{0}\nThe last entries are a\nmess. Then they stop.
 4: \nA snake's skin, shed.\nAnother by the tank.\p{0}\nAdders. They like the warm\ndrums.
 5: \nThe lean-to. Oil, grease,\nrags.
 6: \nDiesel, dripping from the\nnozzle. The hose reel is\nchained, and padlocked.\p{0}\nThe hand pump still works.\nI need something to carry\nit in.
 7: \nThe diesel tank. The hand\npump drips.
 8: \nI fill the jerrycan at the\nhand pump.\p{0}\nIt's heavy now.
+9: \nA gate onto the skid road,\nchained shut from this\nside.
+10: \nThe skid road, down\nthrough the trees.
+11: \nI lift the chain off its\nhook. The gate swings open\nonto the skid road.

@@ -32,11 +32,10 @@ aot_set(11, 12410, 11390, 5780, 5440, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
 aot_set(12, 17170, 2890, 1530, 2040, SCE_MESSAGE, 129, 136, 0, 255, 0, 0, 0);
 aot_set(13, 22610, 9010, 4760, 3740, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
 aot_set(14, 3230, 17085, 2720, 6205, SCE_MESSAGE, 129, 138, 0, 255, 0, 0, 0);
-aot_set(15, 3910, 11050, 3060, 3060, SCE_MESSAGE, 129, 139, 0, 255, 0, 0, 0);
-aot_set(16, 17170, 19550, 2380, 4930, SCE_MESSAGE, 129, 140, 0, 255, 0, 0, 0);
-aot_set(17, 9010, 3910, 8160, 3400, SCE_MESSAGE, 129, 141, 0, 255, 0, 0, 0);
-aot_set(18, 26860, 19210, 4250, 3910, SCE_MESSAGE, 129, 142, 0, 255, 0, 0, 0);
-aot_set(19, 3230, 23290, 5440, 1530, SCE_MESSAGE, 129, 143, 0, 255, 0, 0, 0);
+aot_set(15, 17170, 19550, 2380, 4930, SCE_MESSAGE, 129, 139, 0, 255, 0, 0, 0);
+aot_set(16, 9010, 3910, 8160, 3400, SCE_MESSAGE, 129, 140, 0, 255, 0, 0, 0);
+aot_set(17, 26860, 19210, 4250, 3910, SCE_MESSAGE, 129, 141, 0, 255, 0, 0, 0);
+aot_set(18, 3230, 23290, 5440, 1530, SCE_MESSAGE, 129, 142, 0, 255, 0, 0, 0);
 if (ck(FG_COMMON, 143, 1)) {
     enemy(17, 0, 192, 1, 2, 0, 0, 1299, 0, 0, 30280, 0, 30620, 0, 0, 0, 0);  // a zombie
     enemy(17, 0, 193, 1, 2, 0, 0, 1986, 0, 0, 16340, 0, 17020, 1, 0, 0, 0);  // a zombie
@@ -46,16 +45,34 @@ if (ck(FG_COMMON, 158, 0)) {
     enemy(17, 0, 195, 1, 2, 0, 0, 1889, 0, 0, 12600, 0, 9880, 3, 0, 0, 0);  // a zombie
     enemy(17, 0, 196, 1, 2, 0, 0, 2653, 0, 0, 9200, 0, 2400, 4, 0, 0, 0);  // a zombie
 }
+// ring-bell (day/events.ts), FG_COMMON 143 once it has happened.
+if (ck(FG_COMMON, 143, 1)) {
+    aot_set(19, 4165, 12240, 2550, 2380, SCE_USEITEM, 129, 4, 0, 12, 0, 1, 0);   // the action button here raises FG_ROOM 12
+} else {
+    aot_set(20, 4165, 12240, 2550, 2380, SCE_MESSAGE, 129, 144, 0, 255, 0, 0, 0);
+}
 return;
 
 // main procedure 0
+if (ck(FG_COMMON, 143, 1) && ck(FG_ROOM, 12, 0)) {
+    set(FG_ROOM, 12, 1);
+    set(FG_COMMON, 143, 0);
+    eml_state(0, 0, 3, 0, 0);
+    set(FG_ENEMY, 192, 0);
+    eml_state(0, 1, 3, 0, 0);
+    set(FG_ENEMY, 193, 0);
+    eml_state(0, 2, 3, 0, 0);
+    set(FG_ENEMY, 194, 0);
+    aot_set(20, 4165, 12240, 2550, 2380, SCE_MESSAGE, 129, 144, 0, 255, 0, 0, 0);
+    message(145, 255, 0);
+}
 if (ck(FG_LOCK, 41, 1)) {
-    if (ck(FG_ROOM, 12, 1) && testitem(28)) {
-        set(FG_ROOM, 12, 0);
+    if (ck(FG_ROOM, 13, 1) && testitem(28)) {
+        set(FG_ROOM, 13, 0);
         setw(4, 0, 0);
     }
-    if (ck(FG_ROOM, 12, 0) && cmpw(0, 4, 1, 0)) {
-        set(FG_ROOM, 12, 1);
+    if (ck(FG_ROOM, 13, 0) && cmpw(0, 4, 1, 0)) {
+        set(FG_ROOM, 13, 1);
         set(FG_LOCK, 41, 0);
         if (ck(FG_LOCK, 42, 0) && ck(FG_LOCK, 43, 0)) {
             if (item_ck(28)) {
@@ -67,12 +84,12 @@ if (ck(FG_LOCK, 41, 1)) {
     }
 }
 if (ck(FG_LOCK, 42, 1)) {
-    if (ck(FG_ROOM, 13, 1) && testitem(59)) {
-        set(FG_ROOM, 13, 0);
+    if (ck(FG_ROOM, 14, 1) && testitem(59)) {
+        set(FG_ROOM, 14, 0);
         setw(4, 0, 0);
     }
-    if (ck(FG_ROOM, 13, 0) && cmpw(0, 4, 1, 0)) {
-        set(FG_ROOM, 13, 1);
+    if (ck(FG_ROOM, 14, 0) && cmpw(0, 4, 1, 0)) {
+        set(FG_ROOM, 14, 1);
         set(FG_LOCK, 42, 0);
         if (item_ck(59)) {
             remove_item(59);
@@ -82,12 +99,12 @@ if (ck(FG_LOCK, 42, 1)) {
     }
 }
 if (ck(FG_LOCK, 42, 1)) {
-    if (ck(FG_ROOM, 14, 1) && testitem(28)) {
-        set(FG_ROOM, 14, 0);
+    if (ck(FG_ROOM, 15, 1) && testitem(28)) {
+        set(FG_ROOM, 15, 0);
         setw(4, 0, 0);
     }
-    if (ck(FG_ROOM, 14, 0) && cmpw(0, 4, 1, 0)) {
-        set(FG_ROOM, 14, 1);
+    if (ck(FG_ROOM, 15, 0) && cmpw(0, 4, 1, 0)) {
+        set(FG_ROOM, 15, 1);
         set(FG_LOCK, 42, 0);
         set(FG_COMMON, 158, 0);
         if (ck(FG_LOCK, 41, 0) && ck(FG_LOCK, 43, 0)) {

@@ -1,8 +1,11 @@
 0: \n...
 1: \nIt's padlocked from the\nyard.
-2: \nA crate. ARKLAY SKYWAY -\nSPARE. DRIVE COG NO 2.\p{0}\nThe gondola's spare cog.\nIt's under a pile of logs.\p{0}\nI can't move those. Not by\nhand.
+2: \nA crate. ARKLAY SKYWAY -\nSPARE. DRIVE COG NO 2.\p{0}\nThe gondola's spare cog,\nunder a pile of logs.\p{0}\nThey're too heavy to shift\nby hand. And the hoist\nabove it is dead.
 3: \nSomeone slept here.\nBandages, black with\p{0}\nblood. A tally scratched\nin the tin: six days.\p{0}\nA note: \oBit on the hand\nTues. Can't stay. Don't\ncome looking. Gus."
 4: \nA power cable, cut off\nshort. It's still live.\nI'm not touching that.
 5: \nA vice, a bench, his\ntools. The lamp's still\non.
 6: \nAn engine, hanging on the\nhoist chains. Nobody's\ncoming back to finish it.
 7: \nHe barred the door from\ninside. The bar's been\nbroken.\p{0}\nFrom this side.
+8: \nThe hoist's control. I\npress UP. Nothing.\p{0}\nIts cable runs to the MILL\nLINE box, and the mill\nisn't running.
+9: \nThe hoist, the logs\nhanging from it.
+10: \nThe hoist whines and lifts\nthe logs off the crate.\p{0}\nThe lid comes away with\nthem.
