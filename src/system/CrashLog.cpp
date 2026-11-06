@@ -195,6 +195,7 @@ void crashlog_install(void)
 static HANDLE s_mainThread;
 static volatile LONG s_beat;
 static BYTE s_stack[64 * 1024];
+static const ULONG kSymTagFunction = 5;   // SymTagEnum (cvconst.h), not in DbgHelp.h
 
 static void report_hang(HANDLE proc, SYMBOL_INFO* sym, int seconds)
 {
@@ -220,13 +221,15 @@ static void report_hang(HANDLE proc, SYMBOL_INFO* sym, int seconds)
 
     // Tasks run on their own stacks and are entered with a jump, so there is
     // no frame chain to walk. Every word on the stack that points into the exe
-    // is a likely return address: the callers, innermost first.
+    // and inside a function is a likely return address: the callers,
+    // innermost first.
     fprintf(f, "  exe addresses on the stack:\n");
     const DWORD64 exe = (DWORD64)(uintptr_t)GetModuleHandleA(NULL);
     unsigned shown = 0;
     for (DWORD at = 0; at + 4 <= len && shown < 32; at += 4) {
         DWORD v = *(const DWORD*)(s_stack + at);
-        if (SymGetModuleBase64(proc, v) != exe) continue;
+        DWORD64 disp = 0;
+        if (SymGetModuleBase64(proc, v) != exe || !SymFromAddr(proc, v, &disp, sym) || sym->Tag != kSymTagFunction) continue;
         write_frame(f, proc, sym, shown++, v);
     }
     fclose(f);
