@@ -2,15 +2,16 @@
 // workbench beside the chainsaw he gave up on.
 //
 // Game units are metres * 1700 (scene.py). FG_ITEM 243: the crank is still on the bench (bit set = still there);
-// 244 and 245 the jerrycan and the fuses. Her key items' names are
+// 244 the jerrycan; 245 was the gondola's fuses, now in the switch house. Her key items' names are
 // items/items.ts.
 // init procedure 0
 // Out to the yard: outside the shed door, facing east (+X, angle 0).
 door_aot_set(0, 5100, 2720, 1530, 1530, 1, 0, 7, 1, 0, ROOM_315, 10880, 0, 13090, 0, UNLOCKED, 129);
 // On the bench: the Hex Crank, model at (2346, -1581, 3825).
 if (ck(FG_ITEM, 243, 0)) {
-    // Two uses (the slot's count): the winch and the pond's sluice each spend one.
-    item_aot_set(1, 2805, 3103, 1105, 1402, 30 /* Hex Crank */, 2, 0, 255, 42, 9, 211, 249, 241, 14, 0, 0, 243, 129, 0, 0);
+    // Three uses (the slot's count): the winch, the pond's sluice and the
+    // mine's rockfall (its second way, the quarry crane's cable) each spend one.
+    item_aot_set(1, 2805, 3103, 1105, 1402, 30 /* Hex Crank */, 3, 0, 255, 42, 9, 211, 249, 241, 14, 0, 0, 243, 129, 0, 0);
 }
 aot_set(2, 2295, 1955, 1445, 1147, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);   // the chainsaw in pieces
 aot_set(3, 3740, 1190, 2040, 1360, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);   // the pegboard
@@ -23,11 +24,9 @@ if (ck(FG_ITEM, 244, 0)) {
 } else {
     aot_set(4, 4420, 4335, 1530, 510, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);   // the fuel cans
 }
-// On the bench by the nail can: the ranger's spare fuses (FUSES, item 39),
-// model slot 2 at (2414, -1564, 4335). FG_ITEM 245: still there.
-if (ck(FG_ITEM, 245, 0)) {
-    item_aot_set(6, 2295, 4505, 1615, 1360, 39, 1, 2, 255, 110, 9, 228, 249, 239, 16, 0, 0, 245, 129, 0, 0);
-}
+// On the bench by the nail can: the chainsaw's fuses, too small for the
+// gondola's board. The gondola's own are in the switch house now.
+aot_set(6, 2295, 4505, 1615, 1360, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);   // the chainsaw fuses
 return;
 
 // main procedure 0

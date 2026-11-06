@@ -42,8 +42,9 @@ aot_set(10, 27030, 9860, 2890, 2550, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);   
 // case; testitem would test the item last used, which is none on entering.
 if (ck(FG_ITEM, 246, 0)) {
     if (item_ck(57)) {
-        // Two uses: the depot's padlock and the road gate's chain each spend one.
-        item_aot_set(13, 10540, 14790, 3485, 2210, 28, 2, 0, 255, 116, 54, 8, 248, 184, 71, 0, 0, 246, 129, 0, 0);
+        // Three uses: the depot's padlock, the road gate's chain and the workshop's
+        // padlock (its second way) each spend one.
+        item_aot_set(13, 10540, 14790, 3485, 2210, 28, 3, 0, 255, 116, 54, 8, 248, 184, 71, 0, 0, 246, 129, 0, 0);
     } else {
         aot_set(13, 10540, 14790, 3485, 2210, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);   // the toolbox, locked
     }
