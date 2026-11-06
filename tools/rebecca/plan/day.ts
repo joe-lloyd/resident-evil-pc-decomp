@@ -242,7 +242,7 @@ export const day: Plan = {
     step(2, 'cut-depot', 'camp-yard', 'do', ['cutters'], "Cut the depot's padlock"),
     step(2, 'jerrycan', 'shed', 'find', ['unlock-shed'], 'Take the empty jerrycan'),
     step(2, 'fuel', 'depot', 'find', ['cut-depot', 'jerrycan'], 'Fill the jerrycan with diesel'),
-    step(2, 'flume-ride', 'flume', 'shortcut', ['mill-race'], 'Ride the flume down to the gorge', { optional: true }),
+    step(2, 'flume-ride', 'flume', 'shortcut', ['mill-race', 'cog'], 'The drive cog is too heavy to carry back over the mountain: she loads it on the log boat and rides the flume down with it to the gorge footbridge'),
 
     // Act 2, west.
     step(2, 'cut-chain', 'road', 'do', ['cutters'], 'Cut the chain on the road gate'),
@@ -275,7 +275,8 @@ export const day: Plan = {
     // Act 2: the gondola.
     step(2, 'fuses', 'switch', 'find', ['switch-key'], "Take a line fuse from the box by the breakers"),
 
-    step(2, 'gondola-runs', 'platform', 'milestone', ['act1-end', 'line-on', 'cog', 'op-key', 'fuses'], 'Fit the cog and the fuse, turn the key: the gondola runs'),
+    step(2, 'gondola-runs', 'platform', 'milestone', ['act1-end', 'line-on', 'flume-ride', 'op-key', 'fuses'], 'Fit the cog and the fuse, turn the key: the gondola runs'),
+
 
     // Act 3.
     step(3, 'ride', 'car', 'do', ['gondola-runs'], 'Ride down; the car stops at a pylon'),
