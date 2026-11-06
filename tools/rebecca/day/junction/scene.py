@@ -4,14 +4,22 @@ What it tells: this is the heart of the old workings. The adit comes in
 from the west. In the north wall the lift's cage waits at the bottom of
 its shaft, its cable going up into the dark to the head house on the
 summit. Along the east wall the pump house machinery that once kept the
-lower levels dry stands silent, its knife switch thrown off, its suction
-pipe running down into the flooded way: a decline in the south that goes
-straight down under black water, the old gallery somewhere beneath. The
-water is still coming up. The web spinners breed here: the roof is hung
-with their egg sacs, some split, and the corners are choked with web. A
-dog that came down after something is wrapped against the pump. Hal's
-drops of blood run from the adit to the water's edge and into it: he went
-down the flooded way to hide.
+lower levels dry stands silent, its knife switch thrown off and the power
+lamp on its switch panel dark: the station's generator is not running. Its
+suction pipe runs down into the flooded way: a decline in the south that
+goes straight down under black water, the old gallery somewhere beneath.
+The pipe's intake hung on a float, to keep it up out of the silt; the
+float is split open and sunk, its arm bent down, and the intake lies
+choked on the bottom. The water is still coming up. The web spinners breed
+here: the roof is hung with their egg sacs, some split, and the corners
+are choked with web. A dog that came down after something is wrapped
+against the pump. Hal's drops of blood run from the adit to the water's
+edge and into it: he went down the flooded way to hide. He is out there
+now, across the water toward the gallery: slumped on an ore cart that
+stands on a heap of fallen rock above the flood, his lantern burning low
+beside him, the gondola's key glinting on its chain at his neck. He is too
+far out to reach. An empty ore cart was shoved off the rails into the
+south-west corner long ago.
 
 Metres: the floor is x 1.0-13.0, y 1.0-10.0, the rock roof about 4 m up.
 The adit comes in through the west wall at y 4.6-7.0. The lift cage is in
@@ -19,9 +27,16 @@ the north wall at x 6.0-8.4, its gate facing south. The pump machinery is
 along the east wall, x 10.4-13.0, y 2.0-7.6. The flooded way goes down
 through the south wall at x 4.2-7.8: the floor slopes from y 7.6 and the
 water's edge is at y 8.3; beyond it the floor is gone under the water.
+The float lies sunk at x 7.9, y 9.4, on its arm from the pipe. The power
+lamp is on the switch panel at y 8.1, 1.5 up. Hal's cart stands in the
+flooded way at x 6.0, y 12.4, four metres past the water's edge, off the
+floor. The pushed-aside cart is at x 2.15, y 8.55.
+
+Once the generator runs ("generator-on"), the power lamp is lit red.
 
 Moving: the water in the sump rippling and lapping higher; the lamps on
-the cable flickering; a split egg sac turning on its thread.
+the cable flickering; a split egg sac turning on its thread; Hal's
+lantern guttering.
 """
 import math
 import os
@@ -33,6 +48,7 @@ import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
 from mathutils import Vector, noise  # noqa: E402
+import bpy  # noqa: E402
 
 X0, X1, Y0, Y1, H = 1.0, 13.0, 1.0, 10.0, 4.0
 ADIT = (4.6, 7.0, 2.9)          # y0, y1 in the west wall, height
@@ -40,6 +56,8 @@ CAGE = (6.0, 8.4, Y0 - 1.7, Y0 + 0.05)   # x0, x1, y0, y1 of the cage, set into 
 DECLINE = (4.2, 7.8)            # x0, x1 of the flooded way in the south wall
 EDGE = 8.3                      # where the water starts
 WATER_Z = -0.32
+FLOAT = (7.9, 9.4)              # the pump intake's float, split and sunk
+HAL_CART = (6.0, 12.4, -0.5)    # Hal's cart out in the flooded way: x, y, the height of its wheels
 
 
 def rock_face(name, m, origin, u, v, nu, nv, out, depth=0.25, seed=0):
@@ -119,6 +137,30 @@ def rails(name, path, sleepers_m, rail_m, gauge=0.6):
             reb.box(rv, rf, ((a + b) / 2 + o + Vector((0, 0, 0.11))).to_tuple(), (d.length + 0.02, 0.05, 0.07), math.atan2(d.y, d.x))
     reb.mesh_object(f"{name} sleepers", sv, sf, sleepers_m, smooth=False)
     return reb.mesh_object(f"{name} rails", rv, rf, rail_m, smooth=False)
+
+
+def ore_cart(name, m, at, yaw, roll=0.0, load=True):
+    """A side-tipping ore cart on four wheels (as the mine entrance builds them), standing at `at`."""
+    parts = [
+        reb.prim("cube", "tub", m, (0, 0, 0.62), (1.1, 0.8, 0.6), bevel=0.04),
+        reb.prim("cube", "chassis", mat("iron"), (0, 0, 0.27), (1.2, 0.6, 0.1)),
+    ]
+    if load:
+        parts.append(reb.prim("cube", "load", mat("rock"), (0, 0, 0.9), (0.98, 0.68, 0.08)))
+    for dx in (-0.38, 0.38):
+        for dy in (-0.3, 0.3):
+            parts.append(reb.prim("cyl", "wheel", mat("iron"), (dx, dy, 0.17), (0.34, 0.34, 0.05), rot=(math.pi / 2, 0, 0), segments=12))
+    for dx in (-0.62, 0.62):
+        parts.append(reb.prim("cube", "buffer", mat("iron"), (dx, 0, 0.3), (0.06, 0.3, 0.12)))
+    for p in parts:
+        bpy.ops.object.select_all(action="DESELECT")
+        p.select_set(True)
+        bpy.context.view_layer.objects.active = p
+        bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    ob = kit.join(name, parts)
+    ob.rotation_euler = (roll, 0, yaw)
+    ob.location = at
+    return ob
 
 
 def build():
@@ -288,6 +330,33 @@ def build():
         reb.prim("sphere", "Pipe elbow", rust, p, (0.32, 0.32, 0.32), segments=12)
     for (x, y) in ((10.3, 6.85), (9.5, 7.25), (8.6, 7.7)):
         reb.wall(reb.prim("cube", "Pipe footprint", None, (x, y, 0.5), (0.7, 0.4, 1.0))).hide_render = True
+    # The intake on the pipe's end, and the float that held it up off the
+    # bottom: its arm bent down from a clamp on the pipe, the float split open
+    # and sunk to its shoulders, so the intake lies choked in the silt.
+    reb.prim("cyl", "Intake strainer", rust, (7.0, 9.2, -0.98), (0.36, 0.36, 0.22), segments=14)
+    reb.prim("cube", "Float arm clamp", iron, (7.33, 8.78, -0.44), (0.2, 0.2, 0.16), rot=(0, 0, 0.9))
+    fx, fy = FLOAT
+    float_m = kit.dirtied(mat("red paint"), 0.65, scale=6)
+    kit.rod("Float arm", rust, (7.38, 8.8, -0.4), (7.62, 9.08, -0.3), 0.03, 6)
+    kit.rod("Float arm, bent down", rust, (7.62, 9.08, -0.3), (fx - 0.12, fy - 0.08, -0.36), 0.03, 6)
+    reb.prim("sphere", "Split float", float_m, (fx, fy, -0.44), (0.56, 0.56, 0.48), rot=(0.35, 0.2, 0.6), segments=16)
+    reb.prim("cube", "Float split", mat("black"), (fx + 0.03, fy - 0.03, -0.28), (0.11, 0.52, 0.26), rot=(0.35, 0.2, 0.6))
+    reb.prim("cube", "Float seam", rust, (fx, fy, -0.44), (0.58, 0.035, 0.035), rot=(0.35, 0.2, 0.6))
+    scum = kit.splat("Scum round the float", reb.mat_plain("Float scum", (0.12, 0.1, 0.05), 0.4), (fx, fy, WATER_Z + 0.012), 0.36, seed=61, stretch=(1.3, 0.9), lumps=0.5)
+    scum.parent = pool
+    scum.matrix_parent_inverse = pool.matrix_world.inverted()
+    # The power lamp on the switch panel: dark until the station's generator runs.
+    lens_off = reb.mat_plain("Power lamp, dark", (0.09, 0.012, 0.01), 0.25)
+    lens_on = reb.mat_emit("Power lamp, lit", (1.0, 0.12, 0.05), 40)
+    reb.prim("cyl", "Power lamp bezel", iron, (X1 - 0.155, 8.1, 1.52), (0.17, 0.17, 0.05), rot=(0, math.pi / 2, 0), segments=14)
+    lens = reb.prim("sphere", "Power lamp lens", lens_off, (X1 - 0.18, 8.1, 1.52), (0.12, 0.12, 0.12), segments=12)
+    power_glow = reb.point("Power lamp light", (X1 - 0.32, 8.1, 1.52), 4, (1.0, 0.15, 0.06), 0.03)
+    power_glow.hide_render = True
+
+    def power(on):
+        lens.data.materials[0] = lens_on if on else lens_off
+        power_glow.hide_render = not on
+    room.state("generator-on", power)
     kit.rod("Discharge pipe", rust, (11.9, 5.4, 1.4), (12.6, 6.4, 2.0), 0.11, 10)
     kit.rod("Discharge pipe", rust, (12.6, 6.4, 2.0), (12.65, 6.4, H + 0.6), 0.11, 10)
     reb.prim("cyl", "Gate valve wheel", mat("red paint"), (12.6, 6.4, 2.6), (0.5, 0.5, 0.05), rot=(0, math.pi / 2, 0), segments=16)
@@ -357,6 +426,41 @@ def build():
     for k in range(5):
         reb.prim("cyl", "Timber prop", timber, (4.95, 1.3 + (k % 3) * 0.28, 0.13 + (k // 3) * 0.25), (0.25, 0.25, 1.8), rot=(0, math.pi / 2, 0.03 * k), segments=8)
     reb.wall(reb.prim("cube", "Timber footprint", None, (4.95, 1.6, 0.5), (1.8, 1.0, 1.0))).hide_render = True
+    hrng = random.Random(397)  # its own stream, so the room built above stays as it was
+    ore_cart("Ore cart pushed aside", rust, (2.15, 8.55, 0.0), 0.25)
+    reb.wall(reb.prim("cube", "Pushed cart footprint", None, (2.15, 8.55, 0.5), (1.35, 0.95, 1.0), rot=(0, 0, 0.25))).hide_render = True
+    kit.splat("Rust under the cart", reb.mat_plain("Rust stain", (0.09, 0.04, 0.02), 0.8), (2.2, 8.6, 0.003), 0.5, seed=63, stretch=(1.4, 0.9), lumps=0.5)
+
+    # ---- Hal, out across the flooded way toward the gallery: slumped on an ore
+    # cart that stands on a heap of fallen rock above the water, his lantern
+    # beside him, the key on its chain at his neck. Off the floor, out of reach.
+    hx, hy, hz = HAL_CART
+    heap_v, heap_f = [], []
+    for (x, y, z, r) in ((hx, hy, -1.45, 0.95), (hx - 0.7, hy + 0.5, -1.3, 0.8), (hx + 0.7, hy - 0.4, -1.4, 0.7), (hx + 0.1, hy + 0.85, -1.2, 0.7), (hx - 0.4, hy - 0.8, -1.35, 0.7)):
+        reb.boulder(hrng, (x, y, z), r, heap_v, heap_f)
+    for (x, y, r) in ((hx - 0.7, hy - 0.2, 0.26), (hx + 0.7, hy + 0.5, 0.3), (hx - 0.4, hy - 1.0, 0.3), (hx + 0.5, hy - 0.9, 0.22), (hx - 0.6, hy + 0.9, 0.28), (hx + 0.55, hy + 1.0, 0.2)):
+        reb.boulder(hrng, (x, y, WATER_Z - 0.12), r, heap_v, heap_f)
+    reb.mesh_object("Fallen rock under Hal's cart", heap_v, heap_f, kit.dirtied(mat("wet rock"), 0.5), smooth=False)
+    ore_cart("Hal's cart", rust, (hx, hy, hz), math.pi / 2 + 0.08, roll=0.04, load=False)
+    top = hz + 0.92
+    hal = kit.body("Hal", (hx + 0.02, hy + 0.5, top), heading=-math.pi / 2 + 0.08, pose="slumped", top=mat("flannel"), legs=reb.mat_plain("Work trousers", (0.08, 0.08, 0.06), 0.9), seed=12)
+    reb.cloth("Blanket on Hal's cart", reb.mat_plain("Grey blanket", (0.14, 0.14, 0.13), 0.95), (hx + 0.05, hy + 0.3, top + 0.01), (0.9, 0.7), rot=(0, 0, 0.2), cuts=10, lumps=0.04, seed=7)
+    hal_lamp, hal_light, hal_flame = kit.lantern("Hal's lantern", (hx - 0.28, hy - 0.25, top), energy=7)
+    # The key on its chain, hanging on his chest: brass, catching the lantern.
+    neck = Vector((hx + 0.02, hy + 0.5, top))
+    chest = neck + Vector((0.0, -0.25, 0.5))
+    # A touch of glow so the glint survives at 320 x 240, four metres out in the dark.
+    brass = reb.mat_emit("Key brass glint", (1.0, 0.78, 0.35), 3)
+    links = []
+    for side in (-1, 1):
+        a = neck + Vector((side * 0.08, -0.14, 0.78))
+        for k in range(5):
+            t = k / 4
+            links.append(reb.prim("sphere", "Chain link", mat("steel"), a.lerp(chest + Vector((0, 0, 0.1)), t), (0.03, 0.015, 0.03), segments=6))
+    kit.join("Key chain", links)
+    reb.prim("cube", "Gondola key", brass, chest, (0.05, 0.015, 0.13), rot=(0.2, 0, 0.1))
+    reb.prim("cyl", "Gondola key bow", brass, chest + Vector((0, 0, 0.08)), (0.07, 0.07, 0.015), rot=(math.pi / 2 - 0.2, 0, 0.1), segments=10)
+    kit.splat("Blood down the cart", mat("old blood"), (hx + 0.1, hy - 0.56, hz + 0.75), 0.07, rot=(math.pi / 2, 0, 0), seed=65, lumps=0.5)
 
     # ---- Light: lamps on a cable across from the adit, one over the pump; the cage lamp.
     lamps = []
@@ -381,6 +485,7 @@ def build():
     anim.flicker(cage_light, cage_glow, depth=0.15, dropouts=1)
     anim.custom(lambda k: setattr(sac_pivot, "rotation_euler", (math.radians(3) * math.sin(anim.phase(k)), 0, 0.6 * math.sin(anim.phase(k)))))
     anim.drip((9.0, 5.8, H - 0.4), fall=H - 0.4, size=0.015, m=reb.mat_plain("Slime drop", (0.2, 0.2, 0.1), 0.1))
+    anim.flicker(hal_light, hal_flame, depth=0.3, dropouts=0)
 
     # ---- What the game needs.
     room.void((d0 - 0.5, EDGE, d1 + 0.5, Y1))
@@ -390,7 +495,7 @@ def build():
     room.check((c1 + 0.1, Y0, c1 + 1.1, Y0 + 0.8), "The lift cage. LIFT TO SURFACE. The cable goes up into the dark.")
     # The pump's switch is behind it and its pipes, out of her reach: she works it from the pump's west face.
     room.spot("drain", (10.0, 5.2, 10.8, 6.6))  # day/events.ts says what she sees and does here
-    room.check((d0, EDGE - 1.2, d1, EDGE - 0.6), "The way down goes under the water. It's black.\nHis blood goes right to the edge. He went in.")
+    room.check((d0, EDGE - 1.2, d1, EDGE - 0.6), "The way down goes under the water. His blood goes right to the edge.\nSomeone's out there, slumped on a cart. Hal?\nIt's too far, and too deep, to wade.")
     room.check((9.9, 3.6, 10.4, 5.2), "A dog, one of the big ones, wrapped up in web.\nSomething down here eats them.")
     room.check((5.4, 5.6, 7.4, 6.8), "Egg sacs, all over the roof. That one's split open.")
     room.export(anim)
