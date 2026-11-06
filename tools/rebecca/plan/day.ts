@@ -81,7 +81,8 @@ export const day: Plan = {
     place(2, 'sawmill', 'The sawmill', 6, [3.4, 0], ['The saw, the line shaft out to the workshop, and chalked on the wall the millwright\'s drawing: pond, sluice, wheel, shaft, the workshop hoist', 'The water wheel, once running', 'Zombies', '']
 , {}),
     place(2, 'pond', 'The mill pond', 4, [5.6, 0], ['The sluice to the mill race', 'Water, reeds, a floating hat', 'A zombie in the water', ''], {}),
-    place(2, 'flume', 'The log flume', 3, [7.8, 0], ['The flume\'s top: a log boat', 'Running water', '', 'A ride down to the gorge'], {}),
+    place(2, 'flume', 'The log flume', 3, [7.8, 0], ['The flume\'s top: a log boat, the end of the skid rail from the camp', 'Running water', '', 'A ride down to the gorge']
+, {}),
 
     // Act 2, west: the forestry road, the generator and the lookout tower.
     place(2, 'road', 'The forestry road', 5, [7.8, 4.2], ['A chained gate across the road', 'A torn notice on the gate', 'Crows', 'The way the rangers drive up'], {}),
@@ -248,7 +249,7 @@ export const day: Plan = {
     step(2, 'fuel', 'depot', 'find', ['cut-depot', 'jerrycan'], 'Fill the jerrycan with diesel'),
     step(2, 'skid-road', 'depot', 'shortcut', ['cut-depot'], "Drop the chain on the skid road behind the depot: the loggers' track down to the lookout tower's foot", { optional: true }),
 
-    step(2, 'flume-ride', 'flume', 'shortcut', ['mill-race', 'cog'], 'The drive cog is too heavy to carry back over the mountain: she loads it on the log boat and rides the flume down with it to the gorge footbridge'),
+    step(2, 'flume-ride', 'flume', 'shortcut', ['mill-race', 'cog'], "The drive cog is too heavy to carry: she rolls it on a log trolley along the camp's skid rail to the flume head, loads it on the log boat and rides the flume down with it to the gorge footbridge"),
 
     // Act 2, west.
     step(2, 'cut-chain', 'road', 'do', ['cutters'], 'Cut the chain on the road gate'),
