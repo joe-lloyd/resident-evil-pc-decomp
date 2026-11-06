@@ -88,7 +88,7 @@ export const day: Plan = {
     place(2, 'generator', 'The generator hut', 3, [5.6, 5.6], ['The generator, dry', 'A fan once it runs; the lights come on', '', 'Power for the station, the mine and the gondola'], {}),
     place(2, 'tower-foot', 'The lookout tower, foot', 3, [3.4, 4.2], ['The tower door, locked', 'The tower creaking in the wind', '', ''], {}),
     place(2, 'tower-stairs', 'The lookout tower, stairs', 3, [1.2, 4.2], ['Stairs, a broken flight', 'Wind through the boards', 'Crows', ''], {}),
-    place(2, 'tower-top', 'The lookout tower, top', 4, [-1, 4.2], ['The switch house key; the valley seen from above', 'Smoke from the valley, cloud', 'Crows', "Smoke where Bravo came down; the mansion's roof"], {}),
+    place(2, 'tower-top', 'The lookout tower, top', 4, [-1, 4.2], ['The lineman\'s post: his line log, the switch house key on his hook; the valley seen from above', 'Smoke from the valley, cloud', 'Crows', "The lineman watched the gondola line from up here; smoke where Bravo came down; the mansion's roof"], {}),
     place(2, 'switch', 'The switch house', 2, [5.6, 7], ['The breakers for the gondola line, a box of line fuses', 'Sparking contacts', '', 'The line crew kept the gondola\'s spares by the breakers'], {}),
     place(2, 'line-track', 'The power line track', 5, [7.8, 7], ['The track under the line to the gondola, a gate at its end', 'The cable humming', 'Adders', ''], {}),
 
@@ -233,7 +233,8 @@ export const day: Plan = {
     step(2, 'map-forestry', 'road', 'find', ['dog'], 'The Forest Service road map on the gate board: the road, the lookout, the line, the quarry', { optional: true }),
     step(2, 'generator-on', 'generator', 'do', ['cut-chain', 'fuel'], 'Fuel the generator: the station lights come on'),
     step(2, 'tower-door', 'tower-foot', 'do', ['cut-chain', 'truck-keys'], "Unlock the tower with the ranger's keys"),
-    step(2, 'switch-key', 'tower-top', 'find', ['tower-door'], "The switch house key; Bravo's smoke, the mansion's roof"),
+    step(2, 'switch-key', 'tower-top', 'find', ['tower-door'], "The switch house key on the lineman's hook; Bravo's smoke, the mansion's roof"),
+
     step(2, 'partner-radio', 'tower-top', 'learn', ['tower-door'], "The partner on the lookout's radio: the dogs came from the estate's kennels", { optional: true }),
     step(2, 'line-on', 'switch', 'do', ['switch-key', 'generator-on'], 'Close the breakers: power down the line'),
     step(2, 'line-gate', 'line-track', 'shortcut', ['line-on'], 'Open the line gate to the gondola station', { optional: true }),
