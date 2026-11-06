@@ -219,7 +219,8 @@ export const day: Plan = {
 
     // Act 2, north.
     step(2, 'meet-partner', 'woods', 'learn', ['dog'], "The ranger's partner, tracking the same drag marks; they go on together"),
-    step(2, 'truck-keys', 'den', 'find', ['meet-partner'], "The ranger in the hollow; his partner gives her his keys"),
+    step(2, 'truck-keys', 'den', 'find', ['meet-partner'], "The ranger in the hollow; his partner takes his keys from his jacket and gives them to her"),
+
     step(2, 'cutters', 'yard', 'find', ['truck-keys'], "Open the ranger's toolbox on his truck with his keys: bolt cutters"),
     step(2, 'calendar', 'bunkhouse', 'learn', ['dog'], 'The bunkhouse calendar: the paydays ringed in red, one ringed twice'),
     step(2, 'map-camp', 'camp-gate', 'find', ['dog'], "Camp 4's site plan, on the gate's notice board", { optional: true }),
