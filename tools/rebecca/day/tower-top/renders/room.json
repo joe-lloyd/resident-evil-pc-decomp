@@ -172,7 +172,7 @@
    "z0": 13102,
    "x1": 7040,
    "z1": 13163,
-   "name": "Probe: Lightning stool"
+   "name": "Probe: Lookout tower, Tower timber"
   },
   {
    "shape": "box",
@@ -296,7 +296,7 @@
   "Crow on the rail": 1,
   "Handset cord": 1,
   "Scratches 2": 1,
-  "Hatch rail post.001": 1,
+  "Hatch rail post": 1,
   "Tin 0": 1,
   "Sight.001": 1,
   "Tin 2": 1,
@@ -359,7 +359,16 @@
   },
   {
    "zone": {
-    "x0": 10540,
+    "x0": 9350,
+    "z0": 6290,
+    "x1": 10795,
+    "z1": 7820
+   },
+   "text": "The lineman's wiring sketch. The feed comes in at the top station,\nand each section of the line takes its power from the one before it."
+  },
+  {
+   "zone": {
+    "x0": 10795,
     "z0": 6290,
     "x1": 12240,
     "z1": 7820
@@ -416,9 +425,9 @@
  "items": [
   {
    "step": "switch-key",
-   "x": 11050,
-   "y": -1462,
-   "z": 6800
+   "x": 12580,
+   "y": -2414,
+   "z": 13957
   }
  ],
  "spots": [],
