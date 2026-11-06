@@ -58,9 +58,17 @@
    "shape": "box",
    "x0": 1800,
    "z0": 1797,
-   "x1": 12310,
+   "x1": 5680,
    "z1": 1858,
    "name": "Probe: Wall n"
+  },
+  {
+   "shape": "box",
+   "x0": 7665,
+   "z0": 1797,
+   "x1": 12310,
+   "z1": 1858,
+   "name": "Probe: Wall n.002"
   },
   {
    "shape": "box",
@@ -68,7 +76,7 @@
    "z0": 1797,
    "x1": 15200,
    "z1": 1858,
-   "name": "Probe: Wall n.001"
+   "name": "Probe: Coal chute"
   },
   {
    "shape": "box",
@@ -184,6 +192,30 @@
   },
   {
    "shape": "box",
+   "x0": 4860,
+   "z0": 4095,
+   "x1": 5680,
+   "z1": 4405,
+   "name": "Probe: Block top"
+  },
+  {
+   "shape": "box",
+   "x0": 4860,
+   "z0": 4602,
+   "x1": 5935,
+   "z1": 4663,
+   "name": "Probe: Block top"
+  },
+  {
+   "shape": "box",
+   "x0": 4860,
+   "z0": 4857,
+   "x1": 5680,
+   "z1": 4918,
+   "name": "Probe: Chopping block"
+  },
+  {
+   "shape": "box",
    "x0": 1797,
    "z0": 2055,
    "x1": 1858,
@@ -252,7 +284,7 @@
    "z0": 8685,
    "x1": 11800,
    "z1": 8995,
-   "name": "Probe: Barrel 2"
+   "name": "Probe: Barrel 3"
   },
   {
    "shape": "box",
@@ -268,7 +300,7 @@
    "z0": 9195,
    "x1": 11800,
    "z1": 9760,
-   "name": "Probe: Barrel 2"
+   "name": "Probe: Barrel 3"
   },
   {
    "shape": "box",
@@ -284,7 +316,7 @@
    "z0": 9957,
    "x1": 2110,
    "z1": 10018,
-   "name": "Probe: Crawl lintel"
+   "name": "Probe: Rack"
   },
   {
    "shape": "box",
@@ -292,7 +324,7 @@
    "z0": 9957,
    "x1": 12310,
    "z1": 10018,
-   "name": "Probe: Barrel 2"
+   "name": "Probe: Barrel 3"
   },
   {
    "shape": "box",
@@ -325,11 +357,10 @@
  "probe": {
   "Rack": 67,
   "Dust sheet": 59,
-  "Wall s": 51,
+  "Wall s": 49,
   "Barrel 2": 42,
   "Barrel 3": 42,
   "Barrel stacked": 38,
-  "Wall n": 34,
   "Coal heap": 26,
   "Barrel 0": 21,
   "Barrel 1": 21,
@@ -337,21 +368,26 @@
   "Ale cask, standing": 16,
   "Wall w": 15,
   "Vault": 14,
+  "Wall n": 13,
+  "Wall n.002": 13,
   "Potato sack 2": 12,
+  "Block top": 10,
   "Potato sack 0": 9,
   "Potato sack 1": 9,
   "Vault rib.001": 8,
   "Wall e": 7,
   "Rib pier.004": 6,
   "Coal chute": 6,
-  "Rib pier": 4,
+  "Rib pier": 5,
+  "Rib pier.003": 5,
   "Shovel blade": 4,
-  "Wall n.001": 3,
+  "Chopping block": 4,
+  "Wall n.003": 3,
   "Chair under the sheet": 3,
   "Niche.001": 3,
-  "Rib pier.003": 3,
   "Rib pier.002": 2,
   "Arch brick.012": 2,
+  "Cleaver handle": 2,
   "Arch brick": 2,
   "Crock.005": 2,
   "Barrel stacked cradle": 2,
@@ -359,6 +395,7 @@
   "Barrel stacked cradle.001": 2,
   "Rib pier.005": 2,
   "Rib pier.001": 2,
+  "Wrapped joint": 1,
   "Preserve jar.015": 1,
   "Preserve jar.016": 1,
   "Preserve jar.017": 1,
@@ -383,14 +420,30 @@
   {
    "to": "back-garden",
    "zone": {
-    "x0": 11220,
+    "x0": 12495,
     "z0": 1700,
     "x1": 13600,
+    "z1": 3230
+   },
+   "arrive": {
+    "x": 13345,
+    "z": 3995,
+    "angle": 2824
+   },
+   "walk": false,
+   "touch": false
+  },
+  {
+   "to": "kennels",
+   "zone": {
+    "x0": 5780,
+    "z0": 1700,
+    "x1": 7480,
     "z1": 2720
    },
    "arrive": {
-    "x": 12410,
-    "z": 3230,
+    "x": 7820,
+    "z": 3400,
     "angle": 3072
    },
    "walk": false,
@@ -465,6 +518,15 @@
     "z1": 3740
    },
    "text": "Coal, under the chute."
+  },
+  {
+   "zone": {
+    "x0": 11220,
+    "z0": 1700,
+    "x1": 12495,
+    "z1": 2720
+   },
+   "text": "The doors up there are barred, the bar nailed into its brackets.\nSomeone down here wanted the garden kept out."
   },
   {
    "zone": {
