@@ -38,6 +38,19 @@
     8840
    ],
    "fov": 200
+  },
+  {
+   "from": [
+    12580,
+    -5270,
+    5780
+   ],
+   "to": [
+    19210,
+    1020,
+    13600
+   ],
+   "fov": 200
   }
  ],
  "walls": [
@@ -143,7 +156,7 @@
    "z0": 5622,
    "x1": 2875,
    "z1": 5683,
-   "name": "Probe: Drum 4"
+   "name": "Probe: Drum 3 stencil 0"
   },
   {
    "shape": "box",
@@ -215,7 +228,7 @@
    "z0": 7917,
    "x1": 3385,
    "z1": 7978,
-   "name": "Probe: hoop.015"
+   "name": "Probe: Drum 5"
   },
   {
    "shape": "box",
@@ -267,19 +280,19 @@
   },
   {
    "shape": "box",
+   "x0": 16247,
+   "z0": 2055,
+   "x1": 16308,
+   "z1": 8485,
+   "name": "Probe: Fence wire.002"
+  },
+  {
+   "shape": "box",
    "x0": 4347,
    "z0": 8682,
    "x1": 4408,
    "z1": 8743,
    "name": "Probe: Lean-to post.001"
-  },
-  {
-   "shape": "box",
-   "x0": 14295,
-   "z0": 8682,
-   "x1": 14860,
-   "z1": 8743,
-   "name": "Probe: Drum 6 stencil 0"
   },
   {
    "shape": "box",
@@ -291,67 +304,11 @@
   },
   {
    "shape": "box",
-   "x0": 14040,
-   "z0": 8940,
-   "x1": 15115,
-   "z1": 9250,
-   "name": "Probe: Drum 6"
-  },
-  {
-   "shape": "box",
-   "x0": 14295,
-   "z0": 9447,
-   "x1": 15625,
-   "z1": 9508,
-   "name": "Probe: Drum on top"
-  },
-  {
-   "shape": "box",
-   "x0": 14550,
-   "z0": 9702,
-   "x1": 15625,
-   "z1": 9763,
-   "name": "Probe: Drum on top"
-  },
-  {
-   "shape": "box",
    "x0": 6645,
    "z0": 9195,
    "x1": 12565,
    "z1": 10015,
    "name": "Probe: Tank"
-  },
-  {
-   "shape": "box",
-   "x0": 14295,
-   "z0": 9957,
-   "x1": 15625,
-   "z1": 10018,
-   "name": "Probe: Drum on top"
-  },
-  {
-   "shape": "box",
-   "x0": 13020,
-   "z0": 10212,
-   "x1": 15880,
-   "z1": 10273,
-   "name": "Probe: Drum on top"
-  },
-  {
-   "shape": "box",
-   "x0": 12765,
-   "z0": 10470,
-   "x1": 15880,
-   "z1": 10780,
-   "name": "Probe: Drum on top"
-  },
-  {
-   "shape": "box",
-   "x0": 12765,
-   "z0": 10977,
-   "x1": 15625,
-   "z1": 11038,
-   "name": "Probe: Drum 7"
   },
   {
    "shape": "box",
@@ -363,14 +320,6 @@
   },
   {
    "shape": "box",
-   "x0": 13020,
-   "z0": 11232,
-   "x1": 13585,
-   "z1": 11293,
-   "name": "Probe: Drum 7"
-  },
-  {
-   "shape": "box",
    "x0": 1800,
    "z0": 11445,
    "x1": 4660,
@@ -379,8 +328,16 @@
   },
   {
    "shape": "box",
+   "x0": 8685,
+   "z0": 10725,
+   "x1": 12565,
+   "z1": 11460,
+   "name": "Probe: Drum on top"
+  },
+  {
+   "shape": "box",
    "x0": 16247,
-   "z0": 2055,
+   "z0": 10725,
    "x1": 16308,
    "z1": 11460,
    "name": "Probe: Fence wire.003"
@@ -390,47 +347,49 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "skid-road",
+   "bank": 1,
+   "bit": -1
+  }
+ ],
  "probe": {
   "Tank": 218,
   "Oil shelves": 30,
   "Fence wire": 28,
   "Drum 5": 28,
-  "Drum on top": 25,
+  "Fence wire.002": 25,
   "Hose reel": 24,
-  "Fence wire.003": 19,
+  "Drum on top": 23,
   "Drum 3": 18,
   "Drum 4": 16,
-  "Drum 7": 16,
+  "Drum 6": 16,
+  "Drum 7": 15,
   "Drum 0": 14,
   "Drum 1": 14,
   "Fence wire.001": 13,
-  "Fence wire.002": 13,
   "Drum 2": 12,
-  "Drum 6": 12,
   "Tank end.001": 10,
-  "Drum 8": 10,
-  "Drum 9": 10,
   "Hand pump": 9,
   "hoop.007": 7,
   "Cradle": 6,
   "Cradle.001": 6,
-  "Fence posts": 5,
   "hoop.001": 5,
+  "Drum 8": 5,
+  "Fence posts": 4,
   "Gate leaf.001": 4,
   "hoop.004": 4,
+  "Drum 9": 4,
   "Gate leaf": 3,
-  "Fence wire over the hole": 3,
   "Crank knob": 3,
   "Lean-to post.001": 3,
+  "Fence wire.003": 3,
   "Drum 3 stencil 0": 2,
   "Drum 2 stencil 1": 2,
-  "Blood on the bent wire": 2,
   "Drum 4 stencil 0": 2,
   "hoop.015": 2,
   "Pump crank": 2,
-  "Drum 6 stencil 0": 2,
-  "hoop.031": 2,
-  "Drum 8 stencil 0": 2,
   "Lean-to post.003": 2,
   "Gate post": 1,
   "Gate frame.003": 1,
@@ -446,12 +405,11 @@
   "Hose": 1,
   "Nozzle hook": 1,
   "Lean-to post": 1,
-  "hoop.032": 1,
-  "hoop.023": 1,
-  "Drum 7 stencil 0": 1,
+  "Skid gate post": 1,
+  "Skid gate post.001": 1,
   "box.005": 1,
   "box.006": 1,
-  "Drum 7 run": 1
+  "hoop.023": 1
  },
  "bounds": {
   "x0": 1700,
@@ -478,6 +436,22 @@
    },
    "walk": true,
    "touch": false
+  },
+  {
+   "to": "tower-foot",
+   "zone": {
+    "x0": 15385,
+    "z0": 8925,
+    "x1": 16320,
+    "z1": 10795
+   },
+   "arrive": {
+    "x": 13940,
+    "z": 9690,
+    "angle": 2048
+   },
+   "walk": true,
+   "touch": true
   }
  ],
  "checks": [
@@ -489,15 +463,6 @@
     "z1": 7565
    },
    "text": "The fuel ledger. Gallons in, gallons out, signed every day.\nThe last entries are a mess. Then they stop."
-  },
-  {
-   "zone": {
-    "x0": 14620,
-    "z0": 4420,
-    "x1": 16320,
-    "z1": 7140
-   },
-   "text": "The dirt's dug out under the wire, the wire bent up.\nThere's blood on it. Something got in here."
   },
   {
    "zone": {
@@ -529,12 +494,22 @@
     "x1": 14620,
     "z1": 7480
    }
+  },
+  {
+   "step": "skid-road",
+   "zone": {
+    "x0": 15045,
+    "z0": 7735,
+    "x1": 16320,
+    "z1": 8925
+   }
   }
  ],
  "entry": null,
  "notes": [
   "from the north-east corner by the gate: the tank, the nozzle dripping, the lean-to",
   "from the south-east drums: the shut gate out to the yard, the mess hall beyond",
-  "from the north-west drums: the pump and the padlocked reel, the drums in the corner"
+  "from the north-west drums: the pump and the padlocked reel, the drums in the corner",
+  "from over the pump, out through the skid road gate: its chain, the chute going down into the trees"
  ]
 }
