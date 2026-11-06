@@ -16,7 +16,12 @@ if (ck(FG_COMMON, 131, 1)) {
     aot_set(9, 3485, 3230, 1530, 1190, SCE_USEITEM, 1, 9, 0, 5, 0, 1, 0);   // the diesel can be used here
     aot_set(10, 3485, 3230, 1530, 1190, SCE_MESSAGE, 129, 136, 0, 255, 0, 0, 0);
 } else {
-    aot_set(10, 3485, 3230, 1530, 1190, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
+    if (ck(FG_ITEM, 229, 1)) {
+        aot_set(10, 3485, 3230, 1530, 1190, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
+    }
+}
+if (ck(FG_COMMON, 131, 0) && ck(FG_ITEM, 229, 0)) {  // jerrycan, left here
+    item_aot_set(10, 3485, 3230, 1530, 1190, 31, 1, 0, 255, 154, 16, 0, 0, 241, 14, 0, 0, 229, 129, 0, 0);
 }
 return;
 
@@ -32,7 +37,6 @@ if (ck(FG_COMMON, 131, 1)) {
             remove_item(32);
         }
         set(FG_COMMON, 131, 0);
-        aot_set(10, 3485, 3230, 1530, 1190, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
         tbl37_set(2, 21, 24);   // yard
         tbl37_set(2, 26, 56);   // woods
         tbl37_set(2, 23, 24);   // bridge
@@ -40,5 +44,9 @@ if (ck(FG_COMMON, 131, 1)) {
         tbl37_set(2, 22, 56);   // shed
         message(138, 255, 0);
     }
+}
+if (ck(FG_COMMON, 131, 0) && ck(FG_ITEM, 229, 0) && ck(FG_ROOM, 13, 1)) {
+    set(FG_ROOM, 13, 0);
+    item_aot_set(10, 3485, 3230, 1530, 1190, 31, 1, 0, 255, 154, 16, 0, 0, 241, 14, 0, 0, 229, 129, 0, 0);
 }
 return;

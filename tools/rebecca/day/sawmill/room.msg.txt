@@ -8,6 +8,3 @@
 7: \nSomebody's in the race.\nFace down, going round and\nround in the eddy.\p{0}\nThe tailer. He worked the\nboards off the saw.
 8: \nThe water wheel. The race\nturns it, when the pond's\nsluice is open.
 9: \nThe sawyer's blood, all\nalong the planks.\p{0}\nHe was going for the pond.
-10: \nThe log crane, on its\ntrack. 5 TON.\p{0}\nIt runs off the mill, and\nthe mill isn't running.
-11: \nThe crane, its hook\nswinging.
-12: \nThe crane groans and\nswings the stack of logs\noff the crate.

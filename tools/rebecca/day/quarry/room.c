@@ -14,7 +14,7 @@ aot_set(7, 12410, 8330, 11220, 3060, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 aot_set(8, 22950, 6630, 6460, 1700, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
 aot_set(9, 29410, 7310, 2890, 2210, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
 aot_set(10, 21590, 22950, 11220, 2210, SCE_MESSAGE, 129, 136, 0, 255, 0, 0, 0);
-enemy(2, 1, 217, 1, 2, 0, 0, 3702, 0, 0, 15320, 0, 2740, 0, 0, 0, 0);  // a cerberus
+enemy(2, 1, 224, 1, 2, 0, 0, 3702, 0, 0, 15320, 0, 2740, 0, 0, 0, 0);  // a cerberus
 // Out of the mine after the gallery scare: its rooms play their own music again, not chase.
 if (ck(FG_COMMON, 118, 0) && ck(FG_COMMON, 135, 0)) {
     tbl37_set(4, 27, 8);   // mine-entrance

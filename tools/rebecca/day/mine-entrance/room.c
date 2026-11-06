@@ -17,6 +17,7 @@ aot_set(7, 2125, 9690, 2210, 1530, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
 // blast (day/events.ts), FG_COMMON 134 once it has happened.
 if (ck(FG_COMMON, 134, 1)) {
     aot_set(8, 21845, 4250, 3655, 4080, SCE_USEITEM, 1, 9, 0, 15, 0, 1, 0);   // the dynamite can be used here
+    aot_set(10, 21845, 4250, 3655, 4080, SCE_USEITEM, 1, 9, 0, 3, 0, 1, 0);   // and the winch crank
     aot_set(9, 21845, 4250, 3655, 4080, SCE_MESSAGE, 129, 136, 0, 255, 0, 0, 0);
 } else {
     aot_set(9, 21845, 4250, 3655, 4080, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
@@ -38,6 +39,25 @@ if (ck(FG_COMMON, 134, 1)) {
         door_aot_set(1, 20145, 3740, 1785, 1870, 0, 1, 8, 0, 0, ROOM_51C, 8500, 0, 29920, 1024, UNLOCKED, 193);
         aot_set(9, 21845, 4250, 3655, 4080, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
         message(138, 255, 0);
+    }
+}
+if (ck(FG_COMMON, 134, 1)) {
+    if (ck(FG_ROOM, 13, 1) && testitem(30)) {
+        set(FG_ROOM, 13, 0);
+        setw(4, 0, 0);
+    }
+    if (ck(FG_ROOM, 13, 0) && cmpw(0, 4, 1, 0)) {
+        sys_multi(7);
+        set(FG_ROOM, 13, 1);
+        if (ck(FG_COMMON, 137, 0)) {
+            if (item_ck(30)) {
+                remove_item(30);
+            }
+        }
+        set(FG_COMMON, 134, 0);
+        door_aot_set(1, 20145, 3740, 1785, 1870, 0, 1, 8, 0, 0, ROOM_51C, 8500, 0, 29920, 1024, UNLOCKED, 193);
+        aot_set(9, 21845, 4250, 3655, 4080, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
+        message(139, 255, 0);
     }
 }
 return;

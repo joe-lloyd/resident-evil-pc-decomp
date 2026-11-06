@@ -9,7 +9,7 @@ aot_set(2, 14280, 7990, 4250, 3060, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
 aot_set(3, 10200, 6120, 4080, 3400, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(4, 17340, 7310, 6970, 1530, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
 if (ck(FG_COMMON, 118, 0) && ck(FG_COMMON, 119, 0)) {
-    enemy(17, 0, 221, 1, 2, 0, 0, 1917, 0, 0, 24500, 0, 12600, 0, 0, 0, 0);  // a zombie
+    enemy(17, 0, 230, 1, 2, 0, 0, 1917, 0, 0, 24500, 0, 12600, 0, 0, 0, 0);  // a zombie
 }
 // cut-mine-collapse (day/cutscenes.ts): its people, and what starts it. FG_COMMON 118 once it has run.
 // cut-hal (day/cutscenes.ts): its people, and what starts it. FG_COMMON 119 once it has run.

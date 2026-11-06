@@ -1,7 +1,9 @@
 0: \n...
-1: \nThe back door's been\nboarded over. From out\nhere.\p{0}\nKEEP OUT.
-2: \nOne of the maids.\nSomething dragged her into\nthe hedge.\p{0}\nShe came from the cellar\ndoors. She was running.
-3: \nA shoe. Hers, I think.
-4: \nThe fountain's still\nrunning. There's no one\nleft to turn it off.
-5: \nThe gardener's barrow,\ntipped over. Seedlings,\nspilled.\p{0}\nHe never finished.
-6: \nThe lamp's lit. The moths\nfound it.
+1: \nAn iron grate over the\ncoal chute, rusted into\nits frame.\p{0}\nA crowbar would lift it.
+2: \nI get the crowbar under\nthe grate and heave.\p{0}\nIt comes up with a shriek\nof iron. The chute drops\ninto the dark.
+3: \nThe back door's been\nboarded over. From out\nhere.\p{0}\nKEEP OUT.
+4: \nOne of the maids.\nSomething dragged her into\nthe hedge.\p{0}\nShe came from the cellar\ndoors. She was running.
+5: \nA shoe. Hers, I think.
+6: \nThe fountain's still\nrunning. There's no one\nleft to turn it off.
+7: \nThe gardener's barrow,\ntipped over. Seedlings,\nspilled.\p{0}\nHe never finished.
+8: \nThe lamp's lit. The moths\nfound it.
