@@ -263,10 +263,11 @@ export const day: Plan = {
     },
     step(2, 'tower-door', 'tower-foot', 'do', ['cut-chain', 'truck-keys'], "Unlock the tower with the ranger's keys"),
     step(2, 'switch-key', 'tower-top', 'find', ['tower-door'], "The switch house key on the lineman's hook; Bravo's smoke, the mansion's roof"),
-    step(2, 'line-log', 'tower-top', 'learn', ['tower-door'], "The lineman's log: power the line a pylon at a time from the top station outward, or the breakers trip"),
+    step(2, 'line-log', 'tower-top', 'learn', ['tower-door'], "The lineman's wiring sketch: the feed comes in at the top station, and each pylon's section takes its power from the one before it"),
 
     step(2, 'partner-radio', 'tower-top', 'learn', ['tower-door'], "The partner on the lookout's radio: the dogs came from the estate's kennels", { optional: true }),
-    step(2, 'line-on', 'switch', 'do', ['switch-key', 'generator-on', 'line-log', 'map-forestry'], "Close the five breakers, each labelled with its pylon's number, from the top station outward: the highest number first, since the pylons are numbered from the valley up. A wrong one trips the whole bank with a spark, and she starts again"),
+    step(2, 'line-on', 'switch', 'do', ['switch-key', 'generator-on', 'line-log', 'map-forestry'], "Close the five breakers, each labelled with its pylon's number, in the order the power flows: from the feed at the top station outward, which is the highest number first, since the pylons are numbered from the valley up. A wrong one trips the whole bank with a spark, and she starts again"),
+
 
 
     step(2, 'line-gate', 'line-track', 'shortcut', ['line-on'], 'Open the line gate to the gondola station', { optional: true }),
