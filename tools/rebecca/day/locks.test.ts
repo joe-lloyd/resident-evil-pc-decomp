@@ -76,3 +76,10 @@ test('action zones grow by GROW, on each side only half way to the next zone the
   assert.deepEqual(out.doors!.map((d) => d.zone), [z(0, 0, 1000, 600), z(4490, 0, 6510, 1110)]);
   assert.deepEqual(out.checks!.map((c) => c.zone), [z(1490, 2490, 2750, 4110), z(2750, 2490, 4010, 4110), z(8490, 8490, 10110, 10110)]);
 });
+
+test("the foreman's safe gives its key only once she has taken the calendar", async () => {
+  // A room-item flag is set while the thing lies there; taking it clears it.
+  const { BOOKS, ITEM_FLAG_BASE } = await import('../files/documents.ts');
+  const calendar = ITEM_FLAG_BASE + BOOKS.indexOf('calendar');
+  assert.match(script('office'), new RegExp(`if \\(ck\\(FG_ITEM, ${calendar}, 1\\) && ck\\(FG_ITEM, \\d+, 0\\)\\) \\{  // workshop key \\(safe\\)`));
+});

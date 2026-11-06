@@ -696,7 +696,8 @@ function main(): void {
       specSlots,
       (step) => {
         const g = KEY_ITEM_GATES[step];
-        return g?.event ? stepTest(g.event, true) : g?.file ? `ck(FG_ITEM, ${ITEM_FLAG_BASE + BOOKS.indexOf(g.file as (typeof BOOKS)[number])}, 0)` : undefined;
+        // A room-item flag is set while the thing lies there and clears as she takes it: taken is 1.
+        return g?.event ? stepTest(g.event, true) : g?.file ? `ck(FG_ITEM, ${ITEM_FLAG_BASE + BOOKS.indexOf(g.file as (typeof BOOKS)[number])}, 1)` : undefined;
       },
       (step) => Math.max(1, toolUseCount(keyItem(step).id)),
     );
