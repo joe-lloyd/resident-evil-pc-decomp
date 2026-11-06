@@ -716,9 +716,15 @@ try {
     }
   }
   const snapshot = (name: string, st: GameState) => save(path.join(snaps, `${name}.json`), { ...take(st, reached), ...(built ? { built } : {}) });
+  // A job no longer needed: every job that needs it is done, another way
+  // (the dog meat, once the pack is shot instead of penned).
+  const moot = (st: GameState, g: Goal) => {
+    const users = GOALS.filter((x) => x.needs.includes(g.id));
+    return users.length > 0 && users.every((u) => done(st, u, reached));
+  };
   for (;;) {
     s = await settle(session.link);
-    const undone = pool.filter((g) => !done(s, g, reached));
+    const undone = pool.filter((g) => !done(s, g, reached) && !moot(s, g));
     const left = undone.filter((g) => (failed.get(g.id) ?? 0) < 2);
     // The way up into the mansion is one way: she sleeps there only once every
     // other job is done, counting the ones she has given up on for now.
@@ -754,7 +760,10 @@ try {
       await run.picture(`play-${g.id}-stuck-${failed.get(g.id)}`);
     }
   }
-  const missing = pool.filter((g) => !reached.has(g.id));
+  // Done by her, done in the game another way (a second way the plan
+  // allows), or no longer needed.
+  s = await settle(session.link);
+  const missing = pool.filter((g) => !reached.has(g.id) && !done(s, g, reached) && !moot(s, g));
   for (const g of missing) run.fail(`${runName} left ${g.id} undone`);
   if (!missing.length && quarter) {
     snapshot(`q${quarter}-end`, await settle(session.link));
