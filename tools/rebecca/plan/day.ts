@@ -146,7 +146,7 @@ export const day: Plan = {
     link('camp-yard', 'mess', 'door'),
     link('camp-yard', 'office', 'door', 'office-key'),
     link('camp-yard', 'depot', 'door', 'cut-depot'),
-    link('camp-yard', 'workshop', 'door', 'safe'),
+    link('camp-yard', 'workshop', 'door', 'workshop-door'),
     link('camp-yard', 'sawmill', 'walk'),
     link('sawmill', 'pond', 'walk'),
     link('pond', 'flume', 'walk'),
@@ -218,11 +218,20 @@ export const day: Plan = {
     step(2, 'partner-camp', 'camp-gate', 'learn', ['truck-keys'], 'The partner at the barricade: she takes the camp, Rebecca the road', { optional: true }),
     step(2, 'office-key', 'mess', 'find', ['dog'], 'Take the office key from the dead cook'),
     step(2, 'letters', 'office', 'learn', ['office-key'], "The foreman's letters: Umbrella's money came on the payday the men were paid twice, and he set the safe to that date"),
-    step(2, 'safe', 'office', 'find', ['office-key', 'calendar', 'letters'], "Open the foreman's safe with the date: the workshop key"),
+    step(2, 'safe', 'office', 'find', ['office-key', 'calendar', 'letters'], "Open the foreman's safe with the date: the workshop key and a box of handgun rounds"),
+    {
+      ...step(2, 'workshop-door', 'camp-yard', 'do', ['safe'], 'Unlock the workshop with the key from the safe'),
+      otherWays: [{
+        needs: ['cutters'],
+        label: "Cut the workshop's padlock with the bolt cutters instead. The clatter carries across the camp",
+        stirs: [{ at: 'camp-yard', enemies: 'Zombie loggers out of the bunkhouse and the mess hall, drawn by the noise' }],
+      }],
+    },
 
     step(2, 'mill-race', 'pond', 'do', ['crank', 'dog'], 'Open the sluice with the winch crank: the mill runs'),
     step(2, 'crane', 'sawmill', 'do', ['mill-race'], 'Run the log crane: the stack lifts off the crate'),
-    step(2, 'cog', 'workshop', 'find', ['crane', 'safe'], 'Take the spare drive cog'),
+    step(2, 'cog', 'workshop', 'find', ['crane', 'workshop-door'], 'Take the spare drive cog'),
+
     step(2, 'cut-depot', 'camp-yard', 'do', ['cutters'], "Cut the depot's padlock"),
     step(2, 'jerrycan', 'shed', 'find', ['unlock-shed'], 'Take the empty jerrycan'),
     step(2, 'fuel', 'depot', 'find', ['cut-depot', 'jerrycan'], 'Fill the jerrycan with diesel'),
