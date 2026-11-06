@@ -62,9 +62,29 @@ export interface Step {
   readonly at: string;
   readonly kind: StepKind;
   readonly needs: readonly string[];
+  /** Other ways to do it, each a set of needs of its own: forcing a lock instead of finding its key. */
+  readonly otherWays?: readonly OtherWay[];
+  /** Enemies it sets loose, so the way back is not the way she came. */
+  readonly stirs?: readonly Stir[];
   readonly built: Built;
   /** Nothing later needs it: a reward, a clue or a shortcut. */
   readonly optional?: true;
+}
+
+export interface OtherWay {
+  readonly needs: readonly string[];
+  /** What she does instead, and what it costs her. */
+  readonly label: string;
+}
+
+export interface Stir {
+  readonly at: string;
+  readonly enemies: string;
+}
+
+/** Every set of needs that does a step: its own first, then its other ways. */
+export function ways(s: Step): readonly (readonly string[])[] {
+  return [s.needs, ...(s.otherWays ?? []).map((w) => w.needs)];
 }
 
 export interface Plan {
@@ -116,7 +136,8 @@ export function check(plan: Plan): Report {
   for (const s of plan.steps) {
     if (!acts.has(s.act)) errors.push(`${s.id} is in act ${s.act}, which is not an act`);
     if (!places.has(s.at)) errors.push(`${s.id} is at ${s.at}, which is not a place`);
-    for (const n of s.needs) if (!steps.has(n)) errors.push(`${s.id} needs ${n}, which is not a step`);
+    for (const n of ways(s).flat()) if (!steps.has(n)) errors.push(`${s.id} needs ${n}, which is not a step`);
+    for (const st of s.stirs ?? []) if (!places.has(st.at)) errors.push(`${s.id} stirs enemies at ${st.at}, which is not a place`);
   }
   for (const l of plan.links) {
     for (const end of [l.from, l.to]) if (!places.has(end)) errors.push(`a link goes to ${end}, which is not a place`);
@@ -136,7 +157,7 @@ export function check(plan: Plan): Report {
       return new Set();
     }
     const all = new Set<string>();
-    for (const n of steps.get(id)!.needs) {
+    for (const n of ways(steps.get(id)!).flat()) {
       all.add(n);
       for (const m of visit(n, [...path, id])) all.add(m);
     }
@@ -147,9 +168,10 @@ export function check(plan: Plan): Report {
   if (errors.length) return { errors, warnings, order: [], open: [] };
 
   // A step's needs have to be what gets her to its place, so the chart shows
-  // every lock between her and it.
+  // every lock between her and it. Each way of doing it has to on its own.
+  const behindWay = (way: readonly string[]) => new Set(way.flatMap((n) => [n, ...behind.get(n)!]));
   for (const s of plan.steps) {
-    if (!reachable(plan, behind.get(s.id)!).has(s.at)) {
+    if (ways(s).some((way) => !reachable(plan, behindWay(way)).has(s.at))) {
       errors.push(`${s.id} is at ${s.at}, but what it needs doesn't get her there`);
     }
   }
@@ -160,7 +182,7 @@ export function check(plan: Plan): Report {
   const open: number[] = [];
   for (;;) {
     const here = reachable(plan, done);
-    const next = plan.steps.filter((s) => !done.has(s.id) && here.has(s.at) && s.needs.every((n) => done.has(n)));
+    const next = plan.steps.filter((s) => !done.has(s.id) && here.has(s.at) && ways(s).some((way) => way.every((n) => done.has(n))));
     if (!next.length) break;
     open.push(next.length);
     order.push(next[0]!.id);
@@ -168,7 +190,7 @@ export function check(plan: Plan): Report {
   }
   for (const s of plan.steps) if (!done.has(s.id)) errors.push(`${s.id} can never be done`);
 
-  const needed = new Set(plan.steps.flatMap((s) => s.needs).concat(plan.links.flatMap((l) => (l.opens ? [l.opens] : []))));
+  const needed = new Set(plan.steps.flatMap((s) => ways(s).flat()).concat(plan.links.flatMap((l) => (l.opens ? [l.opens] : []))));
   for (const s of plan.steps) {
     if (s.kind !== 'goal' && !s.optional && !needed.has(s.id)) warnings.push(`nothing needs ${s.id}: mark it optional or use it`);
   }
