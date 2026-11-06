@@ -102,7 +102,8 @@ export const day: Plan = {
     place(2, 'mine-entrance', 'The mine entrance', 3, [18.8, 5.6], ['A rockfall across the adit, timbers jammed in it; the quarry crane\'s cable hangs within reach', 'Dust settling', '', 'Someone brought it down on purpose'], {}),
     place(2, 'tunnel', 'The mine tunnel', 5, [18.8, 4.2], ['Rails, timbers, lamps on a cable', 'Lamps swinging', 'Web Spinners', ''], {}),
     place(2, 'mine-office', 'The mine office', 2, [21, 4.2], ['The mine map: the pump and the lift', 'A dripping roof', '', ''], {}),
-    place(2, 'junction', 'The mine junction', 5, [18.8, 2.8], ['The pump house, its intake sunk in the silt on a broken float, the lift, a flooded way down', 'Water rising in the sump', 'Web Spinners', ''], {}),
+    place(2, 'junction', 'The mine junction', 5, [18.8, 2.8], ['The pump house, its intake sunk in the silt on a broken float, the lift, a flooded way down; across the water, Hal on an ore cart with his key on its chain, out of reach', 'Water rising in the sump', 'Web Spinners', '']
+, {}),
     place(2, 'gallery', 'The flooded gallery', 4, [16.6, 2.8], ['The operator on an ore cart above the water, his key on its chain', 'Water draining away', 'A zombie', 'He hid down here and was bitten anyway']
 , {}),
     place(2, 'mine-lift', 'The mine lift', 2, [18.8, 1.4], ['The cage up to the summit', 'The cable turning', '', ''], {}),
