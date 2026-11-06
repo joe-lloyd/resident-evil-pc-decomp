@@ -252,7 +252,10 @@ export const day: Plan = {
     // Act 2, west.
     step(2, 'cut-chain', 'road', 'do', ['cutters'], 'Cut the chain on the road gate'),
     step(2, 'map-forestry', 'road', 'find', ['dog'], "The Forest Service road map on the gate board: the road, the lookout, the quarry, and the gondola line's pylons, numbered from the valley up"),
-    step(2, 'generator-on', 'generator', 'do', ['cut-chain', 'fuel'], 'Fuel the generator: the station lights come on'),
+    {
+      ...step(2, 'generator-on', 'generator', 'do', ['cut-chain', 'fuel'], 'Fuel the generator: the station lights come on'),
+      stirs: [{ at: 'washout', enemies: "Cerberus, drawn down the gully by the generator's noise" }],
+    },
     step(2, 'tower-door', 'tower-foot', 'do', ['cut-chain', 'truck-keys'], "Unlock the tower with the ranger's keys"),
     step(2, 'switch-key', 'tower-top', 'find', ['tower-door'], "The switch house key on the lineman's hook; Bravo's smoke, the mansion's roof"),
     step(2, 'line-log', 'tower-top', 'learn', ['tower-door'], "The lineman's log: power the line a pylon at a time from the top station outward, or the breakers trip"),
