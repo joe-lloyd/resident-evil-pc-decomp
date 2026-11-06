@@ -54,8 +54,15 @@ export const KEY_ITEMS: readonly KeyItem[] = [
   { step: 'dog-meat', id: 0x24, name: 'DOG MEAT', description: 'The gardener\'s dog meat,\nin a stained sack.' , model: { own: 'dog-meat' } },
 ];
 
-/** Room-item flags (FG_ITEM) for the key items she picks up in the kit rooms: 160-179. */
-export const KEY_ITEM_FLAGS = Array.from({ length: 20 }, (_, i) => 160 + i);
+/**
+ * Room-item flags (FG_ITEM) for the key items she picks up in the kit rooms:
+ * 160-179, less 172. A new game sets every room-item flag (the item is
+ * there) but two, RE1's own for mansion items it starts as taken
+ * (GameStart.cpp, roomItemsFlagsInit): 1 and 172. An item on 172 would
+ * be gone before she got there.
+ */
+export const NEW_GAME_TAKEN = [1, 172] as const;
+export const KEY_ITEM_FLAGS = Array.from({ length: 20 }, (_, i) => 160 + i).filter((f) => !NEW_GAME_TAKEN.includes(f as 1 | 172));
 
 /** Where a kit room's scene says a key item lies (kit.Room.item): game units, y up negative. */
 export interface ItemSpot {
