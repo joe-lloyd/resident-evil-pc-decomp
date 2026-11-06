@@ -275,7 +275,8 @@ export const day: Plan = {
     step(2, 'line-log', 'tower-top', 'learn', ['tower-door'], "The lineman's wiring sketch: the feed comes in at the top station, and each pylon's section takes its power from the one before it"),
 
     step(2, 'partner-radio', 'tower-top', 'learn', ['tower-door'], "The partner on the lookout's radio: the dogs came from the estate's kennels", { optional: true }),
-    step(2, 'line-on', 'switch', 'do', ['switch-key', 'generator-on', 'line-log', 'map-forestry'], "Close the five breakers, each labelled with its pylon's number, in the order the power flows: from the feed at the top station outward, which is the highest number first, since the pylons are numbered from the valley up. A wrong one trips the whole bank with a spark, and she starts again"),
+    step(2, 'line-on', 'switch', 'do', ['switch-key', 'generator-on', 'line-log', 'map-forestry'], "Close the five breakers, each labelled with its pylon's number, in the order the power flows: from the feed at the top station outward, which is the highest number first, since the pylons are numbered from the valley up. A wrong one trips the whole bank and the spark shocks her for a little damage, so she starts again a little hurt"),
+
 
 
 
