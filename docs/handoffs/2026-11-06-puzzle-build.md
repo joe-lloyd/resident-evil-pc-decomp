@@ -83,3 +83,36 @@ About 75 cameras in 17 rooms, and a few more at the new exits.
    before the full render: the camp, the west, the mine, the estate.
 3. The items (5) and the safe (6).
 4. The playthrough (7), then a full run of the day.
+
+## Where it stands (2026-11-06, evening)
+
+Done on `reb-puzzle-climb`: the generator and engine features (1 to 4),
+the items (5), the safe's gate on the calendar (6), the playthrough's jobs
+(7), and all 17 rooms, rebuilt by four scene agents and checked against
+their contact sheets (`~/reb-puzzle-lab/sheets/` on old-mac). Every room
+script of the day assembles; the overlay builds.
+
+Decided on the way:
+- The workshop's old hoist hangs north of the crate, so the scene has a
+  spur rail with its own electric hoist over the logs.
+- The ranger's rifle stays in the grass: its line says the magazine is
+  empty, which tells the story.
+- The cog is an item in her case; the flume ride with it is optional.
+- New cameras: kennels 6 (the hoist), gallery 5 (the adit), depot 4 (the
+  skid road gate).
+
+Open, for the owner's eye or a later pass:
+- **Tower top:** the switch house key is painted on its nail, so it stays
+  there after she takes it. It always was; the pickup now sits on it.
+- **Gallery:** Hal floats face down in the water while the junction
+  shows him alive on his ore cart across it, and the plan has him
+  alive until the cutscene.
+- **Kennels:** the hoist is small and dark at night; the cellar's cold
+  light is subtle.
+- **Safe:** no combination dial; it opens once she has the calendar.
+- **Coverage:** camp yard loses 6.1% of its floor to the cameras, over the
+  5% rule, as it did before this work.
+- **Saves:** item and lock flags moved; old saves and playthrough
+  snapshots from before this branch do not carry over.
+- **retro-archive-explorer #8** (the compiler's length for subcommand 11)
+  must be merged before a fresh clone of it can build this branch.
