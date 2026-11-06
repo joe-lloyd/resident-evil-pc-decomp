@@ -62,7 +62,7 @@ export const day: Plan = {
     place(1, 'trail', 'The mountain trail', 2, [10, 1.4], ['Down through the spruces', 'Ferns in the wind', 'Crows', 'Alone for the first time'], built('trail')),
     place(1, 'yard', 'The station yard', 4, [10, 2.8], ['The hub: the pine, the truck and its winch, his rifle', 'Chimney smoke, hazard lights', 'A Cerberus, once she has the shed key', 'Someone was here this morning'], built('yard')),
     place(1, 'cabin', 'The cabin', 2, [12.2, 2.2], ['The logbook, the radio, the shed key', 'The lamp flame, a fly', '', 'He left in a hurry, mid-breakfast'], built('lookout')),
-    place(1, 'shed', 'The tool shed', 2, [12.2, 3.4], ['The winch crank, an empty jerrycan, spare fuses', 'Dust in the light', '', 'He tried to mend the chainsaw first'], built('shed')),
+    place(1, 'shed', 'The tool shed', 2, [12.2, 3.4], ['The winch crank, an empty jerrycan, chainsaw fuses too small for anything bigger', 'Dust in the light', '', 'He tried to mend the chainsaw first'], built('shed')),
     place(1, 'bridge', 'The gorge footbridge', 3, [10, 4.2], ['The old footbridge over the gorge', 'The river far below', 'Adders', 'The trail goes on down'], built('bridge')),
     place(1, 'platform', 'The gondola station', 6, [10, 5.6], ['The upper station: the car hanging at the platform, the drive wheel', 'The cable creaking, a loose tarpaulin', 'Crows', 'The way down the mountain, if it ran'], {}),
     place(1, 'booth', "The operator's booth", 2, [12.2, 5.6], ['The control desk, the fuse box, the duty board', 'A wall calendar lifting in the draught', '', 'The operator, Hal, left his post in a hurry too'], {}),
@@ -89,7 +89,7 @@ export const day: Plan = {
     place(2, 'tower-foot', 'The lookout tower, foot', 3, [3.4, 4.2], ['The tower door, locked', 'The tower creaking in the wind', '', ''], {}),
     place(2, 'tower-stairs', 'The lookout tower, stairs', 3, [1.2, 4.2], ['Stairs, a broken flight', 'Wind through the boards', 'Crows', ''], {}),
     place(2, 'tower-top', 'The lookout tower, top', 4, [-1, 4.2], ['The switch house key; the valley seen from above', 'Smoke from the valley, cloud', 'Crows', "Smoke where Bravo came down; the mansion's roof"], {}),
-    place(2, 'switch', 'The switch house', 2, [5.6, 7], ['The breakers for the gondola line', 'Sparking contacts', '', ''], {}),
+    place(2, 'switch', 'The switch house', 2, [5.6, 7], ['The breakers for the gondola line, a box of line fuses', 'Sparking contacts', '', 'The line crew kept the gondola\'s spares by the breakers'], {}),
     place(2, 'line-track', 'The power line track', 5, [7.8, 7], ['The track under the line to the gondola, a gate at its end', 'The cable humming', 'Adders', ''], {}),
 
     // Act 2, east: the operator's cottage, the quarry and the mine; the summit above.
@@ -252,7 +252,8 @@ export const day: Plan = {
     step(2, 'supplies', 'mast', 'find', ['lift-up'], 'Ammunition and a first aid spray', { optional: true }),
 
     // Act 2: the gondola.
-    step(2, 'fuses', 'shed', 'find', ['unlock-shed'], "Take the ranger's spare fuses"),
+    step(2, 'fuses', 'switch', 'find', ['switch-key'], "Take a line fuse from the box by the breakers"),
+
     step(2, 'gondola-runs', 'platform', 'milestone', ['act1-end', 'line-on', 'cog', 'op-key', 'fuses'], 'Fit the cog and the fuse, turn the key: the gondola runs'),
 
     // Act 3.
