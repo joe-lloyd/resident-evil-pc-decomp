@@ -217,6 +217,11 @@ BOOL plat_single_instance_check(void);
 // Windows implements these in system/CrashLog.cpp; see crash.cpp here.
 void crashlog_install(void);
 void crashlog_mark(const char* step);
+// Hang reports (test mode): the main loop beats the heartbeat once a pass, and
+// a stall of 5 s writes the main thread's stack to crash.log. Call
+// crashlog_watch_hangs from the main thread. Windows only; no-ops on Linux.
+void crashlog_heartbeat(void);
+void crashlog_watch_hangs(void);
 
 // Port addition: feedback text entry. ASCII text plus Backspace, Tab, Enter,
 // Escape. Events stay in the platform queue and never enter gameplay polling.
