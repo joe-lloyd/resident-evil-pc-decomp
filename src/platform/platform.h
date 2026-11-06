@@ -47,8 +47,13 @@ BOOL plat_test_link_open(int port);
 // Non-blocking: accepts a waiting client and calls on_line once per complete
 // received line, without the line ending.
 void plat_test_link_poll(void (*on_line)(const char* line));
-// Send text to the connected client; dropped when none is connected.
+// Send text to the connected client; dropped when none is connected. What the
+// socket cannot take now is queued and sent on later frames, so a client that
+// is slow to read does not lose the link.
 void plat_test_link_send(const char* text);
+// Bytes still queued for the client: test mode skips a state line while there
+// are any, since the next one supersedes it.
+int  plat_test_link_pending(void);
 // Changes whenever a new client connects, so test mode can reset per client.
 int  plat_test_link_client_id(void);
 

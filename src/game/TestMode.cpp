@@ -458,6 +458,10 @@ void TestMode_Tick(int gameFrame)
     const char* json = GameState_Json();
     if (gameFrame && !editing) s_gameplayFrame = 0;
     if (!json) return;
+    // A client still reading earlier lines gets this state later: the next
+    // one supersedes it, and queueing every frame's would only grow the
+    // backlog. Acks and other replies always queue (reply()).
+    if (plat_test_link_pending() > 0) return;
     if (s_forceState || strcmp(s_body, s_lastBody) != 0) {
         plat_test_link_send(json);
         plat_test_link_send("\n");

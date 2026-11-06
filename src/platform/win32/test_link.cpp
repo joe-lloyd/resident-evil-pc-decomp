@@ -1,8 +1,11 @@
 // test_link.cpp - Windows side of the test link (port addition, test tooling).
 //
 // A single localhost TCP client. The game polls once per frame, so everything
-// here is non-blocking; a send that cannot finish within kSendTimeoutMs drops
-// the client rather than freezing the game.
+// here is non-blocking. What the socket cannot take now waits in s_out and
+// goes on later frames: a client that is slow to read (a harness busy
+// planning a route, behind an ssh tunnel) used to have a send stall past two
+// seconds, and the game dropped it, which looked like the game hanging. The
+// client is dropped only when s_out fills or nothing moves for kStuckMs.
 #include "../platform.h"
 
 #include <winsock2.h>
@@ -10,19 +13,25 @@
 
 #pragma comment(lib, "ws2_32.lib")
 
-static const DWORD kSendTimeoutMs = 2000;
+static const DWORD kStuckMs = 30000;
 
 static SOCKET s_listen = INVALID_SOCKET;
 static SOCKET s_client = INVALID_SOCKET;
 static int    s_clientId = 0;     // bumped for every accepted client
 static char   s_inbuf[4096];
 static int    s_inlen = 0;
+static char   s_out[256 * 1024];
+static int    s_outLen = 0;
+static DWORD  s_outSince = 0;     // when s_out last emptied or moved
+
+static void flush_out(void);
 
 static void drop_client(void)
 {
     if (s_client != INVALID_SOCKET) closesocket(s_client);
     s_client = INVALID_SOCKET;
     s_inlen = 0;
+    s_outLen = 0;
 }
 
 BOOL plat_test_link_open(int port)
@@ -77,6 +86,7 @@ static void deliver_lines(void (*on_line)(const char* line))
 void plat_test_link_poll(void (*on_line)(const char* line))
 {
     if (s_listen == INVALID_SOCKET) return;
+    flush_out();
 
     // The newest connection wins, so a harness that reconnects is never stuck
     // behind a stale client the game still thinks is alive.
@@ -109,21 +119,38 @@ void plat_test_link_poll(void (*on_line)(const char* line))
     }
 }
 
+// Send what the socket takes of s_out now; drop the client on an error, or
+// when nothing has gone for kStuckMs.
+static void flush_out(void)
+{
+    while (s_client != INVALID_SOCKET && s_outLen > 0) {
+        int sent = send(s_client, s_out, s_outLen, 0);
+        if (sent > 0) {
+            memmove(s_out, s_out + sent, (size_t)(s_outLen - sent));
+            s_outLen -= sent;
+            s_outSince = GetTickCount();
+            continue;
+        }
+        if (WSAGetLastError() != WSAEWOULDBLOCK || GetTickCount() - s_outSince > kStuckMs) drop_client();
+        return;
+    }
+}
+
 void plat_test_link_send(const char* text)
 {
     if (s_client == INVALID_SOCKET) return;
     int len = (int)strlen(text);
-    DWORD started = GetTickCount();
-    while (len > 0) {
-        int sent = send(s_client, text, len, 0);
-        if (sent > 0) {
-            text += sent;
-            len -= sent;
-        } else if (WSAGetLastError() == WSAEWOULDBLOCK && GetTickCount() - started < kSendTimeoutMs) {
-            Sleep(1);
-        } else {
-            drop_client();
-            return;
-        }
+    if (s_outLen == 0) s_outSince = GetTickCount();
+    if (s_outLen + len > (int)sizeof(s_out)) {
+        drop_client();
+        return;
     }
+    memcpy(s_out + s_outLen, text, (size_t)len);
+    s_outLen += len;
+    flush_out();
+}
+
+int plat_test_link_pending(void)
+{
+    return s_client == INVALID_SOCKET ? 0 : s_outLen;
 }
