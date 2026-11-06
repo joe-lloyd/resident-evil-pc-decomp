@@ -1,10 +1,11 @@
 0: \n...
 1: \nThe fire finder. Its\nsights are still set on a\nbearing: 047.\p{0}\nNorth-east, down in the\nvalley. Where the smoke\nis.
-2: \nThe radio set's dead. The\nhandset hangs on its cord.
-3: \nA board of keys by the\ndoor. One tag says SWITCH\nHOUSE.
-4: \nHis cot. Blood on the\ncanvas, and scratch marks\nin the wall.\p{0}\nHe tore at himself.
-5: \nThe top rail's broken.\nBlood on the post.\p{0}\nThis is where he went\nover.
-6: \nSmoke, rising out of the\ntrees in the valley.\nSomething came down there.\p{0}\nBravo's helicopter. And\nfar off, a big house among\nthe trees.
-7: \nFrom up here I can see the\nwhole valley.
-8: \nSmoke in the trees. That's\nwhere we came down.
-9: \nPast it, a roof. A big old\nhouse in the forest.
+2: \nThe lineman's wiring\nsketch. The feed comes in\nat the top station,\p{0}\nand each section of the\nline takes its power from\nthe one before it.
+3: \nThe radio set's dead. The\nhandset hangs on its cord.
+4: \nA board of keys by the\ndoor. One tag says SWITCH\nHOUSE.
+5: \nHis cot. Blood on the\ncanvas, and scratch marks\nin the wall.\p{0}\nHe tore at himself.
+6: \nThe top rail's broken.\nBlood on the post.\p{0}\nThis is where he went\nover.
+7: \nSmoke, rising out of the\ntrees in the valley.\nSomething came down there.\p{0}\nBravo's helicopter. And\nfar off, a big house among\nthe trees.
+8: \nFrom up here I can see the\nwhole valley.
+9: \nSmoke in the trees. That's\nwhere we came down.
+10: \nPast it, a roof. A big old\nhouse in the forest.
