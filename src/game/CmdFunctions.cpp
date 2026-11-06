@@ -1782,6 +1782,7 @@ int cmd_skip_4bytes(void)
 // 6 clear unk_8c, 7 reset to idle, 8 write/or/xor healthStatusFlags, 9 xor joint
 // flags, 10 set/clear unk_e0 bit 0x40. The sampled scripts use only 10, 8 and 0
 // - subcommand 1, the only damage-adjacent one, never turned up.
+// Port addition: 11 hurts her (Rebecca's day, below).
 // ============================================================================
 int cmd_player_prop_set(void)
 {
@@ -1865,6 +1866,18 @@ int cmd_player_prop_set(void)
         }
         g_ScdOpcodes += 4;
         return 1;
+    case 11: {
+        // Port addition (Rebecca's day): a trap that hurts with no enemy
+        // behind it, such as the switch house's breakers shocking her when
+        // she throws one out of order. RE1's scripts have no command that
+        // deals damage. It takes the operand's worth of health but never
+        // the last point, so a trap can hurt her and not kill her. No
+        // shipped RDT uses subcommand 11.
+        const short hurt = (short)*params;
+        g_playerEntity.health = g_playerEntity.health > hurt ? (short)(g_playerEntity.health - hurt) : 1;
+        g_ScdOpcodes += 4;
+        return 1;
+    }
     default:
         return 1;
     }
