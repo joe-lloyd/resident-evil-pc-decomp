@@ -365,7 +365,10 @@ def build():
     # The adit: she kicks the boards out from the gallery side, then goes up it
     # to the east path (underground to outside: the action button opens it).
     # The floor ends at the mouth, so she comes back in just out of it.
-    room.spot("adit", (X1 - 0.6, a0 + 0.1, X1, a1 - 0.1))  # day/events.ts says what she sees and does here
+    # The spot is the strip in front of the boards and the door the mouth
+    # itself: one zone for both, and the door's line until the boards are
+    # out would take the action button, so she could never kick them.
+    room.spot("adit", (X1 - 1.2, a0 + 0.1, X1 - 0.6, a1 - 0.1))  # day/events.ts says what she sees and does here
     room.door("east-path", (X1 - 0.6, a0 + 0.1, X1, a1 - 0.1), arrive=(13.5, 7.1), face=(-1, 0), walk=False)
     room.check((hx - 1.3, hy - 0.5, hx + 0.9, hy + 1.0), "Hal. Face down in the water. Something bit him: his arm's\nbandaged, black under it.\nThere's a key on a chain round his neck.")
     room.check((cx - 0.9, cy - 0.7, cx + 0.9, cy + 0.7), "He hid up on this cart, out of the water. Blanket, lantern.\nThere's blood where he slid off.")
