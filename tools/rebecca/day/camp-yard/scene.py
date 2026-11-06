@@ -9,9 +9,13 @@ One man sat down against the log deck with a shotgun and fired until it was
 empty. Everything else stopped where it was: a log half cut on the
 sawhorses with the chainsaw left on it, the cookhouse woodpile and its
 garbage, the laundry still on the line, the skidder with its chokers on
-three logs, smoke from the mess chimney where the range is still warm. A
-player should work out that the camp sealed itself in, and that the
-sickness came from inside the fence.
+three logs, smoke from the mess chimney where the range is still warm.
+Someone padlocked the workshop from outside after Gus left it: an old
+padlock through the hasp, rusted half through, the rust run down the tin
+under it. The cookhouse bell's rope hangs to hand height: the men came to
+it for every meal. A player should work out that the camp sealed itself
+in, that the sickness came from inside the fence, and that the workshop's
+lock would not stand up to bolt cutters.
 
 Metres: the yard floor is x 1.0-18.4, y 1.0-18.6.
 - North: the bunkhouse, x 6.0-17.0, y -3.4-1.6, brown boards, windows in
@@ -32,7 +36,8 @@ Metres: the yard floor is x 1.0-18.4, y 1.0-18.6.
   15.4-16.6 (inside: x 1-6.8, y 1-6.6, door at x 2.2-3.4).
 - East: the sawmill, west wall at x 18.5 from y 2.6 to 12.2, its big doors
   shut at y 6.0-9.0.
-- In the yard: the fire pit at (9.0, 8.3), the bell post at (3.2, 7.3), the
+- In the yard: the fire pit at (9.0, 8.3), the bell post at (3.2, 7.3), its
+  bell on an arm north of it with the rope down to (3.2, 7.85), the
   log deck at x 12.6-17.4, y 2.4-4.6, the skidder at x 5.6-10.4, y 11.8-14.2,
   the laundry line from (5.6, 2.6) to (9.8, 3.4), the sawhorses at (11.8,
   15.4), the cookhouse woodpile along the mess wall at y 10.4-13.2.
@@ -439,6 +444,22 @@ def build():
     kit.shut_door("Workshop door", WORK, "n", WORK_DOOR[0], WORK_DOOR[1], 2.3, tin_wall, thick=T, handle_m=mat("rust"))
     reb.prim("cube", "Workshop sign", mat("yellow paint"), (16.0, WORK[2] - T - 0.03, 2.65), (1.8, 0.03, 0.3))
     kit.text("Workshop sign words", "NO SMOKING", mat("black"), (16.0, WORK[2] - T - 0.05, 2.65), size=0.13)
+    # Padlocked from outside: a hasp across the door's edge onto a staple on
+    # the frame, an old padlock through it, rusted half through, its rust
+    # run down the tin. Big enough to read from across the yard.
+    wy = WORK[2] - T
+    lock_rust = reb.mat_surface("Lock rust", [(0.0, (0.1, 0.04, 0.015)), (0.45, (0.3, 0.12, 0.035)), (0.75, (0.48, 0.2, 0.06)), (1.0, (0.2, 0.08, 0.02))], scale=30, rough=0.85, bump=0.8)
+    reb.prim("cube", "Shop door hasp", lock_rust, (WORK_DOOR[0] + 0.07, wy - 0.045, 1.32), (0.42, 0.014, 0.07))
+    kit.rod("Hasp hinge pin", mat("rust"), (WORK_DOOR[0] + 0.27, wy - 0.05, 1.28), (WORK_DOOR[0] + 0.27, wy - 0.05, 1.36), 0.012, 6)
+    kit.tube("Hasp staple", mat("rust"), [(WORK_DOOR[0] - 0.12, wy - 0.035, 1.28), (WORK_DOOR[0] - 0.12, wy - 0.075, 1.29), (WORK_DOOR[0] - 0.12, wy - 0.075, 1.35), (WORK_DOOR[0] - 0.12, wy - 0.035, 1.36)], 0.009, 6)
+    lx, ly = WORK_DOOR[0] - 0.12, wy - 0.085
+    reb.prim("cube", "Shop padlock", lock_rust, (lx, ly - 0.01, 1.15), (0.15, 0.06, 0.16), bevel=0.015)
+    reb.prim("cyl", "Padlock keyhole", mat("black"), (lx, ly - 0.042, 1.12), (0.025, 0.025, 0.004), rot=(math.pi / 2, 0, 0), segments=8)
+    # The shackle: one leg sound, the other eaten thin by the rust.
+    kit.tube("Padlock shackle", mat("rust"), [(lx - 0.035, ly, 1.22), (lx - 0.035, ly, 1.3), (lx, ly + 0.005, 1.345), (lx + 0.035, ly, 1.3)], 0.011, 6)
+    kit.rod("Padlock shackle, rusted thin", lock_rust, (lx + 0.035, ly, 1.3), (lx + 0.035, ly, 1.225), 0.006, 6)
+    kit.splat("Rust run under the padlock", lock_rust, (lx + 0.02, wy - 0.012, 0.8), 0.09, rot=(math.pi / 2, 0, 0), seed=12, stretch=(0.5, 3.2), lumps=0.5)
+    kit.splat("Rust run under the hasp", lock_rust, (WORK_DOOR[0] + 0.15, wy + 0.021, 1.05), 0.05, rot=(math.pi / 2, 0, 0), seed=13, stretch=(0.4, 3.0), lumps=0.5)
     kit.barricade("Boards torn off the shop door", mat("planks"), (WORK_DOOR[0] - 0.3, WORK[2] - 0.45), (WORK_DOOR[0] + 0.8, WORK[2] - 0.9), 0.02, 0.06, count=3, seed=8)
     kit.text("Scrawl on the shop", "DONT LET THEM IN", mat("red paint"), (WORK[0] - T - 0.01, 14.6, 1.6), size=0.14, rot=(math.pi / 2, 0, -math.pi / 2))
 
@@ -577,8 +598,11 @@ def build():
     pivot = reb.prim("sphere", "Bell pivot", mat("iron"), (3.2, 7.85, 2.7), (0.05, 0.05, 0.05))
     bell = reb.prim("cone", "Bell", reb.mat_metal("Bell bronze", (0.45, 0.3, 0.12), 0.4), (0, 0, -0.2), (0.42, 0.42, 0.38), top=0.45, segments=16)
     clapper = reb.prim("sphere", "Clapper", mat("iron"), (0, 0, -0.4), (0.06, 0.06, 0.06))
-    rope = kit.rod("Bell rope", mat("canvas"), (0, 0, -0.4), (0, 0, -1.2), 0.012, 5)
-    for p in (bell, clapper, rope):
+    # The rope hangs to her hand, a knot at its end, worn dark where they grabbed it.
+    rope = kit.rod("Bell rope", mat("canvas"), (0, 0, -0.4), (0, 0, -1.72), 0.014, 6)
+    knot = reb.prim("sphere", "Bell rope knot", reb.mat_plain("Grimy rope", (0.12, 0.1, 0.07), 0.9), (0, 0, -1.72), (0.05, 0.05, 0.07), segments=8)
+    tail = kit.rod("Bell rope tail", reb.mat_plain("Grimy rope", (0.12, 0.1, 0.07), 0.9), (0, 0, -1.72), (0.01, 0, -1.84), 0.012, 5)
+    for p in (bell, clapper, rope, knot, tail):
         p.parent = pivot
 
     # ---- The laundry on the line, the bunkhouse's: shirts, long johns, a towel, socks.
@@ -766,7 +790,8 @@ def build():
     room.check((10.4, 1.7, 11.0, 2.6), "A fire axe, buried in the door. Someone was holding it shut from inside.")
     room.check((13.6, 5.6, 15.8, 7.2), "He sat down against the logs with a shotgun and fired until it was empty.\nShells everywhere.")
     room.check((2.2, 10.2, 3.2, 13.4), "The cookhouse woodpile. Split and stacked, enough for weeks.")
-    room.check((2.6, 6.8, 3.8, 8.0), "The cookhouse bell. The rope's been cut short.")
+    # Under the bell's rope (day/events.ts says what she sees and does here).
+    room.spot("ring-bell", (2.75, 7.5, 3.65, 8.3))
     room.check((10.4, 11.8, 11.2, 14.2), "The skidder. Its blade is down in the mud, the chokers still on the logs.\nThe key's gone.")
     room.check((5.6, 2.6, 9.8, 4.0), "Laundry on the line. Nobody's coming for it.")
     room.check((15.8, 11.6, 18.0, 13.6), "Diesel, leaking from a drum into the mud.")
