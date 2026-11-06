@@ -84,6 +84,8 @@ export function keyItemModels(spots: readonly ItemSpot[]): PickupModel[] {
 const word = (n: number) => `${n & 0xff}, ${(n >> 8) & 0xff}`;
 /** A key item's zone, square on it: her reach (600 ahead) lands in it from a step away, on a table she stands her radius off, and it leaves the room's checks beside it theirs. */
 const ZONE = 1500;
+/** How far past the nearest floor she can stand on an item's zone reaches. */
+const REACH = 400;
 
 /**
  * A room's key item pickups: each where its scene put it, kept once taken by
@@ -104,6 +106,7 @@ export function keyItemLines(
   first: number,
   gate: (step: string) => string | undefined = () => undefined,
   count: (step: string) => number = () => 1,
+  reach: (x: number, z: number) => { x: number; z: number } = (x, z) => ({ x, z }),
 ): { lines: string[]; pickups: Map<string, string> } {
   const models = keyItemModels(spots);
   const pickups = new Map<string, string>();
@@ -112,7 +115,13 @@ export function keyItemLines(
     const flag = flags.shift();
     if (flag === undefined) throw new Error(`${s.step}: no item flag left`);
     const slot = first + models.findIndex((m) => sameModel(m, k.model));
-    const zone = `${s.x - ZONE / 2}, ${s.z - ZONE / 2}, ${ZONE}, ${ZONE}`;
+    // The zone round the item, grown to take in the nearest floor she can
+    // stand on (`reach`): an item inside a crate or at the back of a shelf
+    // lies past where she can walk.
+    const near = reach(s.x, s.z);
+    const [x0, z0] = [Math.min(s.x - ZONE / 2, near.x - REACH), Math.min(s.z - ZONE / 2, near.z - REACH)];
+    const [x1, z1] = [Math.max(s.x + ZONE / 2, near.x + REACH), Math.max(s.z + ZONE / 2, near.z + REACH)];
+    const zone = `${x0}, ${z0}, ${x1 - x0}, ${z1 - z0}`;
     const pick = `item_aot_set(${id++}, ${zone}, ${k.id}, ${count(s.step)}, ${slot}, 255, ${word(s.x)}, ${word(s.y & 0xffff)}, ${word(s.z)}, 0, 0, ${flag}, 129, 0, 0);`;
     pickups.set(s.step, `if (ck(FG_ITEM, ${flag}, 0)) {\n    ${pick}\n}`);
     const g = gate(s.step);

@@ -700,6 +700,7 @@ function main(): void {
         return g?.event ? stepTest(g.event, true) : g?.file ? `ck(FG_ITEM, ${ITEM_FLAG_BASE + BOOKS.indexOf(g.file as (typeof BOOKS)[number])}, 1)` : undefined;
       },
       (step) => Math.max(1, toolUseCount(keyItem(step).id)),
+      (x, z) => onFloor(slug, { x, z, angle: 0 }),
     );
     lines.push(...keyItems.lines);
     id += kit.items?.length ?? 0;

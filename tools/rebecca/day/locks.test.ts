@@ -83,3 +83,27 @@ test("the foreman's safe gives its key only once she has taken the calendar", as
   const calendar = ITEM_FLAG_BASE + BOOKS.indexOf('calendar');
   assert.match(script('office'), new RegExp(`if \\(ck\\(FG_ITEM, ${calendar}, 1\\) && ck\\(FG_ITEM, \\d+, 0\\)\\) \\{  // workshop key \\(safe\\)`));
 });
+
+test('every key item lying in a kit room can be reached: its zone takes in floor she stands on', async () => {
+  // An item inside a crate or at the back of a shelf lies past her floor;
+  // its zone grows out to the nearest floor (scripts.ts, items.ts).
+  const { readdirSync, existsSync } = await import('node:fs');
+  const { walkableBy } = await import('./walkable.ts');
+  const { KEY_ITEMS } = await import('../items/items.ts');
+  const ids = new Set(KEY_ITEMS.map((k) => k.id));
+  const bad: string[] = [];
+  for (const slug of readdirSync(new URL('./', import.meta.url))) {
+    const json = new URL(`./${slug}/renders/room.json`, import.meta.url);
+    const c = new URL(`./${slug}/room.c`, import.meta.url);
+    if (!existsSync(json) || !existsSync(c)) continue;
+    const can = walkableBy(JSON.parse(readFileSync(json, 'utf8')));
+    for (const m of readFileSync(c, 'utf8').matchAll(/item_aot_set\(\d+, (\d+), (\d+), (\d+), (\d+), (\d+),/g)) {
+      const [x, z, w, d, item] = m.slice(1).map(Number) as [number, number, number, number, number];
+      if (!ids.has(item)) continue;
+      let ok = false;
+      for (let px = x; px <= x + w && !ok; px += 100) for (let pz = z; pz <= z + d && !ok; pz += 100) ok = can(px, pz);
+      if (!ok) bad.push(`${slug}: item ${item} at (${x}, ${z})`);
+    }
+  }
+  assert.deepEqual(bad, []);
+});
