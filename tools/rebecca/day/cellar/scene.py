@@ -1,27 +1,43 @@
 """The Spencer mansion's cellar, at night.
 
 What it tells: a long brick vault under the house, stone flags, barrels
-on their cradles, coal heaped under its chute. Someone has been down here
+on their cradles, coal heaped under its chute from the back garden. In
+the north wall's west end is the cold store's corner, where the dogs'
+meat was cut: the meat hoist's iron cage has come down its shaft into a
+recess in the brick, its gate shut, its floor black with old blood; a
+rail of hooks hangs from the vault over a chopping block with the cleaver
+left in it, a pail and sawdust round it, the butcher's apron on a nail.
+The light there is cold: a pale chill falls down the shaft through the
+cage's roof bars. Someone has been down here
 lighting candles: they stand on a barrel head and in the wall niches, and
 they're still burning. In the middle of the floor lies one of the
 footmen, on his back, opened up; one of the household has been feeding on
 him. His silver tray and the broken glasses he was carrying are scattered
 round him, his blood is spread across the flags in wide smears, and the
 feeder's footprints go from him, red, toward the wine store's arch and
-fade. The garden stairs come down from the bulkhead in the north wall, the
-moon falling down them. Against the west wall stands a heavy oak rack of
+fade. The garden stairs come down from the bulkhead in the north wall, but
+its doors are shut over them and barred from this side, the bar nailed
+into its brackets: only a sliver of moon gets down the steps through the
+crack. Against the west wall stands a heavy oak rack of
 preserves, across a low crawl passage that runs off under the house: the
 scuffs on the flags show the rack has been moved before. Pushed, it slides
 north and the passage shows.
 
 Metres: the floor is x 1.0-9.0, y 1.0-6.0, the walls 2.0 high to a
 segmental brick vault, 3.0 at its crown. The garden stairs rise north out
-of the north wall at x 6.6-8.0. The wine store's arch is in the east wall
-at y 2.0-3.2. The crawl passage is in the west wall at y 5.0-5.8, a metre
-high, behind the rack (x 1.0-1.6, y 3.5-5.8; pushed, y 2.6-4.9).
+of the north wall at x 6.6-8.0, to the barred bulkhead. The coal heap is
+in the north-east corner, x 8.0-9.0, y 1.0-2.0, under the chute: the way
+up to the back garden is from the heap's west foot, and she lands at its
+toe coming down. The hoist's recess is in the north wall at x 3.3-4.5,
+the cage in it (x 3.4-4.4, y 0.1-0.9), its gate facing south into the
+cellar: the way up to the kennels. The hook rail runs north-south at
+x 3.1, the chopping block under it at (3.1, 2.65). The wine store's arch
+is in the east wall at y 2.0-3.2. The crawl passage is in the west wall at
+y 5.0-5.8, a metre high, behind the rack (x 1.0-1.6, y 3.5-5.8; pushed,
+y 2.6-4.9).
 
-Moving: the candle flames, flies over the body, dust drifting down the
-moonlight on the stairs.
+Moving: the candle flames, flies over the body and over the chopping
+block, dust drifting down the sliver of moonlight on the stairs.
 """
 import math
 import os
@@ -40,6 +56,8 @@ SPRING, CROWN = 2.0, 3.0
 STAIRS = (6.6, 8.0)
 WINE = (2.0, 3.2)
 CRAWL = (5.0, 5.8)
+HOIST = (3.3, 4.5)            # the hoist's recess in the north wall
+CAGE = (3.4, 4.4, 0.1, 0.9)   # the cage come down into it
 RACK = (1.0, 1.6, 3.5, 5.8)   # across the crawl hole until she pushes it (day/events.ts "push-rack")
 PUSHED = -0.9                 # how far north it slides
 
@@ -132,6 +150,7 @@ def build():
         ("n", STAIRS[0], STAIRS[1], 0.0, SPRING),
         ("e", WINE[0], WINE[1], 0.0, SPRING),
         ("w", CRAWL[0], CRAWL[1], 0.0, 1.0),
+        ("n", HOIST[0], HOIST[1], 0.0, 1.85),
     ], thick=0.4, floor=flags)
     # The vault, a mesh over the whole room; brick ribs across it; lunettes at the ends.
     n_x, n_y = 24, 20
@@ -192,12 +211,20 @@ def build():
         reb.prim("cube", "Step", stone, ((sx0 + sx1) / 2, y, z / 2), (sx1 - sx0, 0.3, z))
     for x in (sx0 - 0.2, sx1 + 0.2):
         reb.prim("cube", "Stair wall", brick, (x, Y0 - 1.8, 1.8), (0.4, 3.6, 3.6))
-    reb.prim("cube", "Bulkhead door, open", reb.mat_plain("Bulkhead iron", (0.04, 0.045, 0.04), 0.6), (sx0 - 0.1, Y0 - 2.9, 3.4), (0.05, 1.2, 1.0), rot=(0, 0.3, 0))
+    # The bulkhead's doors shut over the stairwell, sloping down to the garden, barred from below.
+    bulk_iron = reb.mat_plain("Bulkhead iron", (0.04, 0.045, 0.04), 0.6)
+    slope = math.atan2(0.6, 3.5)
+    for i, (a, b) in enumerate(((sx0, (sx0 + sx1) / 2 - 0.01), ((sx0 + sx1) / 2 + 0.01, sx1))):
+        reb.prim("cube", f"Bulkhead door {i}, shut", bulk_iron, ((a + b) / 2, Y0 - 1.85, 3.3), (b - a, 3.55, 0.05), rot=(slope, 0, 0))
+    for x in (sx0 + 0.05, sx1 - 0.05):
+        reb.prim("cube", "Bar bracket", mat("iron"), (x, Y0 - 2.5, 3.08), (0.06, 0.08, 0.2))
+    reb.prim("cube", "Bar across the doors", mat("dark wood"), ((sx0 + sx1) / 2, Y0 - 2.5, 3.08), (sx1 - sx0 + 0.1, 0.12, 0.12))
     reb.prim("cube", "Stair head", stone, ((sx0 + sx1) / 2, Y0 - 3.4, 2.5), (sx1 - sx0 + 0.8, 0.6, 0.2))
     kit.splat("Bloody hand on the stair wall", mat("blood"), (sx1 - 0.005, Y0 - 1.0, 1.4), 0.07, rot=(0, math.pi / 2, 0), seed=3)
     for k in range(5):
         kit.splat(f"Drop on the step {k}", mat("blood"), ((sx0 + sx1) / 2 + rng.uniform(-0.3, 0.3), Y0 - 0.3 * (k + 0.5), 0.26 * (k + 1)), 0.04, seed=40 + k)
-    moon = reb.spot("Moon down the stairs", ((sx0 + sx1) / 2, Y0 - 4.5, 5.5), ((sx0 + sx1) / 2, Y0 + 1.6, 0.0), 600, (0.55, 0.65, 0.95), 22, 0.4, 0.3)
+    # Only a sliver of moon gets in, through the crack between the shut leaves.
+    moon = reb.spot("Moon down the stairs", ((sx0 + sx1) / 2, Y0 - 1.9, 3.2), ((sx0 + sx1) / 2, Y0 + 1.4, 0.0), 220, (0.55, 0.65, 0.95), 14, 0.5, 0.05)
 
     # ---- The footman, on his back on the flags, opened; his tray and glasses round him.
     bx, by = 4.2, 3.6
@@ -281,6 +308,95 @@ def build():
         reb.prim("cube", f"Potato sack {i}", mat("canvas"), (5.0 + i * 0.55, Y0 + 0.35, 0.25), (0.5, 0.4, 0.5), rot=(0, 0, rng.uniform(-0.2, 0.2)), bevel=0.1)
     reb.wall(reb.prim("cube", "Sacks footprint", None, (5.55, Y0 + 0.35, 0.3), (1.6, 0.5, 0.6))).hide_render = True
 
+    # ---- The cold store's corner: the hoist's shaft behind the north wall,
+    # its cage come down into the recess, hooks, the chopping block, a chill.
+    hrng = random.Random(151)
+    hx0, hx1 = HOIST
+    cx0, cx1, cy0, cy1 = CAGE
+    for x in (hx0 - 0.075, hx1 + 0.075):
+        reb.prim("cube", "Shaft wall", brick, (x, 0.3, 2.25), (0.15, 0.8, 4.5))
+    reb.prim("cube", "Shaft back", brick, ((hx0 + hx1) / 2, -0.075, 2.25), (hx1 - hx0 + 0.3, 0.15, 4.5))
+    reb.prim("cube", "Shaft front, above the wall", brick, ((hx0 + hx1) / 2, 0.58, 3.25), (hx1 - hx0 + 0.3, 0.05, 2.5))
+    reb.prim("cube", "Shaft head", mat("black"), ((hx0 + hx1) / 2, 0.3, 4.55), (hx1 - hx0 + 0.3, 0.8, 0.1))
+    reb.prim("cube", "Shaft pit", mat("black"), ((hx0 + hx1) / 2, 0.45, -0.05), (hx1 - hx0, 1.0, 0.1))
+    reb.prim("cube", "Recess lintel", mat("rust"), ((hx0 + hx1) / 2, Y0 - 0.03, 1.9), (hx1 - hx0 + 0.3, 0.08, 0.1))
+    for x in (hx0 + 0.03, hx1 - 0.03):
+        kit.rod("Cage guide", mat("rust"), (x, 0.5, 0.0), (x, 0.5, 4.5), 0.025, 4)
+    ch = 1.65
+    cage_floor = reb.mat_surface("Cage plate", [(0.0, (0.03, 0.008, 0.005)), (0.5, (0.06, 0.02, 0.012)), (0.8, (0.1, 0.08, 0.07)), (1.0, (0.2, 0.09, 0.04))], scale=8, rough=0.6, bump=0.7)
+    parts = [
+        reb.prim("cube", "Cage floor", cage_floor, ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 0.02), (cx1 - cx0, cy1 - cy0, 0.04)),
+        reb.prim("cube", "Crosshead", mat("iron"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, ch + 0.12), (cx1 - cx0 + 0.1, 0.14, 0.18)),
+    ]
+    for x in (cx0, cx1):
+        for y in (cy0, cy1):
+            parts.append(kit.rod("Cage corner", mat("rust"), (x, y, 0.0), (x, y, ch), 0.028, 6))
+        for k in range(1, 6):
+            y = cy0 + (cy1 - cy0) * k / 6
+            parts.append(kit.rod("Cage bar", mat("rust"), (x, y, 0.03), (x, y, ch), 0.01, 4))
+        for z in (0.05, 0.8, ch - 0.05):
+            parts.append(kit.rod("Cage rail", mat("rust"), (x, cy0, z), (x, cy1, z), 0.02, 6))
+    for k in range(1, 7):
+        x = cx0 + (cx1 - cx0) * k / 7
+        parts.append(kit.rod("Cage bar", mat("rust"), (x, cy0, 0.03), (x, cy0, ch), 0.01, 4))
+    # The roof is open bars, for the chill from up the shaft to fall through.
+    for y in (cy0, cy1):
+        parts.append(kit.rod("Roof frame", mat("iron"), (cx0, y, ch), (cx1, y, ch), 0.025, 6))
+    for k in range(5):
+        x = cx0 + 0.1 + (cx1 - cx0 - 0.2) * k / 4
+        parts.append(kit.rod("Roof bar", mat("rust"), (x, cy0, ch), (x, cy1, ch), 0.012, 4))
+    # The gate across its front, facing into the cellar, shut.
+    gy = cy1 + 0.03
+    for k in range(9):
+        x = cx0 + (cx1 - cx0) * k / 8
+        parts.append(kit.rod("Cage gate bar", mat("iron"), (x, gy, 0.05), (x, gy, ch - 0.06), 0.011, 4))
+    for z in (0.3, 0.9, 1.35):
+        for k in range(8):
+            xa, xb = cx0 + (cx1 - cx0) * k / 8, cx0 + (cx1 - cx0) * (k + 1) / 8
+            parts.append(kit.rod("Cage lattice", mat("iron"), (xa, gy, z - 0.14), (xb, gy, z + 0.14), 0.007, 4))
+            parts.append(kit.rod("Cage lattice", mat("iron"), (xa, gy, z + 0.14), (xb, gy, z - 0.14), 0.007, 4))
+    parts.append(kit.rod("Gate handle", mat("steel"), (cx0 + 0.08, gy + 0.03, 0.9), (cx0 + 0.08, gy + 0.03, 1.1), 0.015, 6))
+    kit.join("Hoist cage", parts)
+    kit.rod("Hoist cable", mat("steel"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, ch + 0.2), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 4.5), 0.012, 4)
+    kit.splat("Blood in the cage", mat("old blood"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 0.042), 0.36, seed=81, stretch=(1.2, 1.0))
+    kit.splat("Seeped out of the cage", mat("old blood"), ((cx0 + cx1) / 2 + 0.1, Y0 + 0.25, 0.0), 0.3, seed=82, stretch=(1.4, 0.8))
+    kit.rod("Cage hook chain", mat("rust"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, ch), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, ch - 0.35), 0.01, 4)
+    kit.rod("Cage hook", mat("steel"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, ch - 0.35), ((cx0 + cx1) / 2 + 0.06, (cy0 + cy1) / 2, ch - 0.5), 0.012, 4)
+    # The hook rail from the vault, north-south, over the chopping block.
+    rx_ = 3.1
+    rail_z = 2.12
+    kit.rod("Hook rail", mat("iron"), (rx_, 1.85, rail_z), (rx_, 3.1, rail_z), 0.025, 6)
+    for y in (1.95, 3.0):
+        kit.rod("Rail hanger", mat("iron"), (rx_, y, rail_z), (rx_, y, vault_z(y)), 0.015, 4)
+    for y in (2.0, 2.4, 2.8):
+        kit.rod("Hook chain", mat("rust"), (rx_, y, rail_z), (rx_, y, rail_z - 0.12), 0.008, 4)
+        kit.rod("Meat hook", mat("steel"), (rx_, y, rail_z - 0.12), (rx_ + 0.05, y, rail_z - 0.24), 0.012, 4)
+        kit.rod("Meat hook tip", mat("steel"), (rx_ + 0.05, y, rail_z - 0.24), (rx_ + 0.02, y, rail_z - 0.3), 0.01, 4)
+    muslin = reb.mat_surface("Stained muslin", [(0.0, (0.25, 0.04, 0.03)), (0.45, (0.4, 0.3, 0.24)), (1.0, (0.5, 0.46, 0.4))], scale=6, bump=0.2)
+    reb.prim("sphere", "Wrapped joint", muslin, (rx_ + 0.03, 2.4, rail_z - 0.46), (0.17, 0.14, 0.42), rot=(0, 0.12, 0), segments=12)
+    kit.splat("Drip under the hooks", mat("old blood"), (rx_ + 0.05, 2.4, 0.0), 0.12, seed=83)
+    # The chopping block, the cleaver left in it, a pail, sawdust; the apron on a nail.
+    bkx, bky = rx_, 2.65
+    end_grain = reb.mat_surface("Block end grain", [(0.0, (0.07, 0.015, 0.01)), (0.4, (0.16, 0.07, 0.04)), (1.0, (0.3, 0.2, 0.12))], scale=9, bump=0.7)
+    reb.wall(reb.prim("cyl", "Chopping block", reb.mat_wood("Block", (0.2, 0.13, 0.08)), (bkx, bky, 0.38), (0.6, 0.6, 0.76), segments=18), "circle")
+    reb.prim("cyl", "Block top", end_grain, (bkx, bky, 0.765), (0.58, 0.58, 0.01), segments=18)
+    reb.prim("cube", "Cleaver blade", mat("steel"), (bkx + 0.05, bky - 0.02, 0.84), (0.22, 0.008, 0.12), rot=(0, 0.15, 0.5))
+    kit.rod("Cleaver handle", reb.mat_wood("Handle", (0.12, 0.07, 0.04)), (bkx + 0.13, bky + 0.03, 0.88), (bkx + 0.3, bky + 0.12, 0.95), 0.018, 6)
+    reb.prim("cone", "Pail", mat("steel"), (bkx - 0.55, bky + 0.15, 0.15), (0.3, 0.3, 0.3), top=1.2, segments=14)
+    reb.prim("cyl", "In the pail", reb.mat_plain("Pail slop", (0.06, 0.008, 0.006), 0.2), (bkx - 0.55, bky + 0.15, 0.27), (0.32, 0.32, 0.01), segments=14)
+    sawdust = reb.mat_plain("Sawdust", (0.36, 0.28, 0.17), 0.95)
+    dv, df = [], []
+    for i in range(9):
+        kit._stain(dv, df, hrng, (bkx + hrng.gauss(0, 0.45), bky + hrng.gauss(0, 0.35), 0.003), hrng.uniform(0.08, 0.18), hrng.uniform(0, 3), 0.4, (1.3, 0.8), i, points=12, drops=False)
+    reb.mesh_object("Sawdust", dv, df, sawdust, smooth=False)
+    kit.splat("Blood on the sawdust", mat("old blood"), (bkx + 0.3, bky - 0.2, 0.005), 0.16, seed=84)
+    reb.prim("cube", "Apron nail", mat("iron"), (hx1 + 0.2, Y0 + 0.02, 1.45), (0.02, 0.04, 0.02))
+    reb.cloth("Butcher's apron", muslin, (hx1 + 0.2, Y0 + 0.03, 1.05), (0.38, 0.75), rot=(math.pi / 2, 0, 0), cuts=8, lumps=0.02, seed=6)
+    # The chill: a pale light down the shaft through the roof bars, a little cold in the corner.
+    reb.spot("Chill down the shaft", ((cx0 + cx1) / 2, 0.4, 3.0), ((cx0 + cx1) / 2, 1.4, 0.0), 650, (0.42, 0.6, 1.0), 70, 0.5, 0.2)
+    reb.point("Chill in the shaft", ((cx0 + cx1) / 2, 0.45, 1.95), 300, (0.4, 0.56, 1.0), 0.2)
+    reb.point("Cold in the corner", ((cx0 + cx1) / 2, Y0 + 0.3, 0.9), 70, (0.38, 0.55, 1.0), 0.3)
+
     # ---- Candles: on a barrel head, in the niches, on the rack.
     candles = []
     for i, at in enumerate(((3.7, Y1 - 0.55 - 0.02, 1.76), (X0 + 0.08, 1.9, 1.3), (X1 - 0.08, 4.6, 1.3), (rx1 - 0.15, ry0 + 0.15, 1.25), (6.0, 2.0, 0.0), (4.8, 5.2, 0.0))):
@@ -302,6 +418,7 @@ def build():
     for light, flame in candles:
         anim.flicker(light, flame, depth=0.3, dropouts=0)
     anim.flies((chest.x, chest.y, 0.25), count=10, radius=0.4)
+    anim.flies((bkx, bky, 0.8), count=6, radius=0.25)
     dust_m = reb.mat_emit("Dust", (0.6, 0.65, 0.8), 1.2)
     motes = []
     for i in range(14):
@@ -315,7 +432,9 @@ def build():
     anim.custom(drift)
 
     # ---- What the game needs.
-    room.door("back-garden", (sx0, Y0, sx1, Y0 + 0.6), arrive=((sx0 + sx1) / 2, 1.9), face=(0, 1))
+    # Up the coal chute: from the heap's west foot; down it, she lands at the heap's toe.
+    room.door("back-garden", (7.35, Y0, 8.0, 1.9), arrive=(7.85, 2.35), face=(-0.4, 1))
+    room.door("kennels", (cx0, Y0, cx1, Y0 + 0.6), arrive=(4.6, 2.0), face=(0, 1))
     room.door("wine", (X1 - 0.6, WINE[0], X1, WINE[1]), arrive=(8.1, ac), face=(-1, 0))
     room.door("crawl", (X0, CRAWL[0], X0 + 1.3, CRAWL[1]), arrive=(2.1, sum(CRAWL) / 2), face=(1, 0))
     room.check((chest.x - 1.0, chest.y - 0.8, chest.x + 0.8, chest.y + 0.8), "One of the footmen. Something's been... eating him.\nIt's not long gone.")
@@ -323,6 +442,7 @@ def build():
     room.check((6.6, 2.2, 8.4, 3.3), "Footprints in his blood. Going that way.")
     room.spot("push-rack", (rx1, ry0, rx1 + 0.6, CRAWL[0]))  # day/events.ts says what she sees and does here
     room.check((7.6, Y0, X1, 2.2), "Coal, under the chute.")
+    room.check((sx0, Y0, 7.35, Y0 + 0.6), "The doors up there are barred, the bar nailed into its brackets.\nSomeone down here wanted the garden kept out.")
     room.check((2.8, Y1 - 1.1, 7.0, Y1), "Barrels. Someone's lit a candle on one of them.")
     room.export(anim, samples=128)
 
