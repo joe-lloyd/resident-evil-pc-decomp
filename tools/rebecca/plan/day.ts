@@ -97,7 +97,7 @@ export const day: Plan = {
     place(2, 'cottage', "The operator's cottage", 4, [14.4, 4.2], ['His diary, the quarry office key on its hook', 'A radio left on', '', 'He went to hide in the mine'], {}),
     place(2, 'quarry', 'The quarry', 6, [16.6, 5.6], ['The quarry floor, the crane, the office', 'Dust blowing off the cut', 'Cerberus', ''], {}),
     place(2, 'quarry-office', 'The quarry office', 2, [16.6, 4.2], ['Dynamite in a locker', 'A clock still ticking', '', ''], {}),
-    place(2, 'mine-entrance', 'The mine entrance', 3, [18.8, 5.6], ['A rockfall across the adit', 'Dust settling', '', 'Someone brought it down on purpose'], {}),
+    place(2, 'mine-entrance', 'The mine entrance', 3, [18.8, 5.6], ['A rockfall across the adit, timbers jammed in it; the quarry crane\'s cable hangs within reach', 'Dust settling', '', 'Someone brought it down on purpose'], {}),
     place(2, 'tunnel', 'The mine tunnel', 5, [18.8, 4.2], ['Rails, timbers, lamps on a cable', 'Lamps swinging', 'Web Spinners', ''], {}),
     place(2, 'mine-office', 'The mine office', 2, [21, 4.2], ['The mine map: the pump and the lift', 'A dripping roof', '', ''], {}),
     place(2, 'junction', 'The mine junction', 5, [18.8, 2.8], ['The pump house, its intake sunk in the silt on a broken float, the lift, a flooded way down', 'Water rising in the sump', 'Web Spinners', ''], {}),
@@ -270,7 +270,15 @@ export const day: Plan = {
     step(2, 'diary', 'cottage', 'learn', ['winch-pine'], "The operator's diary: he went to hide in the mine", { optional: true }),
     step(2, 'quarry-key', 'cottage', 'find', ['winch-pine'], 'Take the quarry office key'),
     step(2, 'dynamite', 'quarry-office', 'find', ['quarry-key'], 'Take the dynamite'),
-    step(2, 'blast', 'mine-entrance', 'do', ['dynamite'], 'Blast the rockfall at the mine mouth'),
+    {
+      ...step(2, 'blast', 'mine-entrance', 'do', ['dynamite'], 'Blast the rockfall at the mine mouth'),
+      otherWays: [{
+        needs: ['winch-pine', 'crank'],
+        label: "Or hook the quarry crane's cable round the jammed timbers and wind them out with the winch crank: slow work out in the open",
+        stirs: [{ at: 'mine-entrance', enemies: 'Cerberus from the quarry, while she winds' }],
+      }],
+    },
+
     step(2, 'mine-map', 'mine-office', 'learn', ['blast'], 'The mine map: the pump and the lift', { optional: true }),
     step(2, 'map-mine', 'mine-office', 'find', ['blast'], 'The mine survey: the levels, the pump and the lift', { optional: true }),
     {
