@@ -257,7 +257,7 @@
    "z0": 16247,
    "x1": 28375,
    "z1": 16308,
-   "name": "Probe: Bumper"
+   "name": "Probe: Front fender.001"
   },
   {
    "shape": "box",
@@ -421,7 +421,7 @@
     "x1": 10710,
     "z1": 8840
    },
-   "text": "NO ENTRY. TURN BACK.\nPainted on a board and nailed up in a hurry."
+   "text": "QUARANTINE. SICKNESS IN CAMP 4.\nNailed under the NO ENTRY board. The bottom half's torn off."
   },
   {
    "zone": {
