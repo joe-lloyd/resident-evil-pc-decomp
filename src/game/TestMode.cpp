@@ -48,6 +48,7 @@ int TestMode_Start(int port)
     s_port = port;
     memset(s_heldUntil, 0, sizeof(s_heldUntil));
     plat_key_inject_exclusive(TRUE);
+    crashlog_watch_hangs();
     return 1;
 }
 
@@ -433,6 +434,7 @@ const char* GameState_Json(void)
 void TestMode_Tick(int gameFrame)
 {
     if (!s_active) return;
+    crashlog_heartbeat();
     const bool editing = Feedback_IsOpen() != 0;
     if (gameFrame && !editing) s_frame++;
     plat_test_link_poll(on_command);

@@ -18,8 +18,20 @@
 #include <cstdlib>
 #include <cstdarg>
 #include <cstdio>
+#include <cstring>
 
 #pragma comment(lib, "dbghelp.lib")
+
+static void write_frame(FILE* f, HANDLE proc, SYMBOL_INFO* sym, unsigned i, DWORD64 addr)
+{
+    DWORD64 disp = 0;
+    if (SymFromAddr(proc, addr, &disp, sym)) {
+        fprintf(f, "  #%02u %s+0x%llx (0x%08llX)\n",
+                i, sym->Name, (unsigned long long)disp, (unsigned long long)addr);
+    } else {
+        fprintf(f, "  #%02u 0x%08llX\n", i, (unsigned long long)addr);
+    }
+}
 
 static void write_stack(FILE* f)
 {
@@ -35,15 +47,7 @@ static void write_stack(FILE* f)
     sym->SizeOfStruct = sizeof(SYMBOL_INFO);
 
     for (USHORT i = 0; i < n; i++) {
-        DWORD64 addr = (DWORD64)frames[i];
-        DWORD64 disp = 0;
-        if (SymFromAddr(proc, addr, &disp, sym)) {
-            fprintf(f, "  #%02u %s+0x%llx (0x%08llX)\n",
-                    (unsigned)i, sym->Name, (unsigned long long)disp,
-                    (unsigned long long)addr);
-        } else {
-            fprintf(f, "  #%02u 0x%08llX\n", (unsigned)i, (unsigned long long)addr);
-        }
+        write_frame(f, proc, sym, i, (DWORD64)frames[i]);
     }
     free(sym);
 }
@@ -175,4 +179,97 @@ void crashlog_install(void)
     signal(SIGABRT, on_sigabrt);
     AddVectoredExceptionHandler(1, on_unhandled);
     SetUnhandledExceptionFilter(on_unhandled);
+}
+
+// ---------------------------------------------------------------------------
+// Hangs. A game stuck in a loop that never gets back to the main loop is not a
+// crash, so nothing above sees it. Test mode beats crashlog_heartbeat() once a
+// pass; a watcher thread that sees no beat for 5 s writes the main thread's
+// stack to crash.log, and again every 5 s while it stays stuck, so a loop shows
+// as the same callers under a moving EIP.
+//
+// The main thread is only suspended long enough to copy its registers and the
+// top of its stack: suspended, it may hold the heap lock, so the symbol lookups
+// run on the copy after it is resumed.
+
+static HANDLE s_mainThread;
+static volatile LONG s_beat;
+static BYTE s_stack[64 * 1024];
+static const ULONG kSymTagFunction = 5;   // SymTagEnum (cvconst.h), not in DbgHelp.h
+
+static void report_hang(HANDLE proc, SYMBOL_INFO* sym, int seconds)
+{
+    CONTEXT ctx = {};
+    ctx.ContextFlags = CONTEXT_CONTROL | CONTEXT_INTEGER;
+    if (SuspendThread(s_mainThread) == (DWORD)-1) return;
+    BOOL ok = GetThreadContext(s_mainThread, &ctx);
+    DWORD len = 0;
+    MEMORY_BASIC_INFORMATION mbi;
+    if (ok && VirtualQuery((LPCVOID)(uintptr_t)ctx.Esp, &mbi, sizeof(mbi))) {
+        DWORD left = (DWORD)((uintptr_t)mbi.BaseAddress + mbi.RegionSize - ctx.Esp);
+        len = left < sizeof(s_stack) ? left : (DWORD)sizeof(s_stack);
+        memcpy(s_stack, (const void*)(uintptr_t)ctx.Esp, len);
+    }
+    ResumeThread(s_mainThread);
+    if (!ok) return;
+
+    FILE* f = open_log();
+    if (!f) return;
+    fprintf(f, "\n==== HANG: no main-loop pass for %d s ====\n", seconds);
+    fprintf(f, "EIP=%08lX ESP=%08lX EBP=%08lX\n", ctx.Eip, ctx.Esp, ctx.Ebp);
+    write_frame(f, proc, sym, 0, ctx.Eip);
+
+    // Tasks run on their own stacks and are entered with a jump, so there is
+    // no frame chain to walk. Every word on the stack that points into the exe
+    // and inside a function is a likely return address: the callers,
+    // innermost first.
+    fprintf(f, "  exe addresses on the stack:\n");
+    const DWORD64 exe = (DWORD64)(uintptr_t)GetModuleHandleA(NULL);
+    unsigned shown = 0;
+    for (DWORD at = 0; at + 4 <= len && shown < 32; at += 4) {
+        DWORD v = *(const DWORD*)(s_stack + at);
+        DWORD64 disp = 0;
+        if (SymGetModuleBase64(proc, v) != exe || !SymFromAddr(proc, v, &disp, sym) || sym->Tag != kSymTagFunction) continue;
+        write_frame(f, proc, sym, shown++, v);
+    }
+    fclose(f);
+}
+
+static DWORD WINAPI watch_hangs(void*)
+{
+    // Its own handle, so its symbol session is not the crash handlers'.
+    HANDLE proc = NULL;
+    DuplicateHandle(GetCurrentProcess(), GetCurrentProcess(), GetCurrentProcess(), &proc, 0, FALSE,
+                    DUPLICATE_SAME_ACCESS);
+    SymSetOptions(SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS);
+    if (!proc || !SymInitialize(proc, NULL, TRUE)) return 0;
+    SYMBOL_INFO* sym = (SYMBOL_INFO*)calloc(1, sizeof(SYMBOL_INFO) + 256);
+    sym->MaxNameLen = 255;
+    sym->SizeOfStruct = sizeof(SYMBOL_INFO);
+
+    LONG seen = s_beat;
+    int stuck = 0;
+    for (;;) {
+        Sleep(1000);
+        const LONG beat = s_beat;
+        if (beat != seen) {
+            seen = beat;
+            stuck = 0;
+            continue;
+        }
+        if (++stuck % 5 == 0) report_hang(proc, sym, stuck);
+    }
+}
+
+void crashlog_heartbeat(void)
+{
+    InterlockedIncrement(&s_beat);
+}
+
+void crashlog_watch_hangs(void)
+{
+    if (s_mainThread) return;
+    s_mainThread = OpenThread(THREAD_SUSPEND_RESUME | THREAD_GET_CONTEXT | THREAD_QUERY_INFORMATION, FALSE,
+                              GetCurrentThreadId());
+    if (s_mainThread) CloseHandle(CreateThread(NULL, 0, watch_hangs, NULL, 0, NULL));
 }

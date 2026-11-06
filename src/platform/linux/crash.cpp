@@ -95,3 +95,6 @@ void crashlog_mark(const char* step)
     (void)ignored;
     close(fd);
 }
+
+void crashlog_heartbeat(void) {}
+void crashlog_watch_hangs(void) {}
