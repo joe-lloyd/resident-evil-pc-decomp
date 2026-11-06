@@ -58,7 +58,7 @@ const FIGHT_BACK = 2500;
 const ITEM = {
   beretta: 0x02,
   rangerKeys: 57, cutters: 28, officeKey: 58, workshopKey: 59, cog: 41, jerrycan: 31, diesel: 32, crank: 30,
-  switchKey: 55, quarryKey: 60, dynamite: 42, operatorKey: 56, fuses: 39, crowbar: 43, gateKey: 52, cellarKey: 53,
+  switchKey: 55, quarryKey: 60, dynamite: 42, operatorKey: 56, fuses: 39, crowbar: 43, gateKey: 52, cellarKey: 53, dogMeat: 36,
 } as const;
 /** FG_ITEM flags from 230 are her files (files/documents.ts). */
 const isFile = (p: Pickup) => p.flag >= 230 && p.flag < 240;
@@ -66,8 +66,8 @@ const isFile = (p: Pickup) => p.flag >= 230 && p.flag < 240;
 type Goal =
   /** Pick up the item `item` (or her file, `file`) lying in `room`. */
   | { id: string; needs: string[]; kind: 'take'; room: Slug; item?: number; file?: true }
-  /** A puzzle of events.ts: at its spot, use `use` or press action. */
-  | { id: string; needs: string[]; kind: 'event'; room: Slug; use?: number }
+  /** A puzzle of events.ts: at its spot, use `use` or press action; a row of switches presses `spots` in that order. */
+  | { id: string; needs: string[]; kind: 'event'; room: Slug; use?: number; spots?: string[] }
   /** Open the locked way from `from` into `to` with the key in her bag. */
   | { id: string; needs: string[]; kind: 'unlock'; from: Slug; to: Slug }
   /** Go into `room` from `from` and sit through its cutscene; with `gets`, it hands her that item. */
@@ -93,8 +93,9 @@ const GOALS: Goal[] = [
   { id: 'safe', needs: ['office-key', 'calendar'], kind: 'take', room: 'office', item: ITEM.workshopKey },
   { id: 'letters', needs: ['office-key'], kind: 'take', room: 'office', file: true },
   { id: 'mill-race', needs: [], kind: 'event', room: 'pond', use: ITEM.crank },
-  { id: 'crane', needs: ['mill-race'], kind: 'event', room: 'sawmill' },
-  { id: 'cog', needs: ['crane', 'safe'], kind: 'take', room: 'workshop', item: ITEM.cog },
+  { id: 'workshop-door', needs: ['safe'], kind: 'unlock', from: 'camp-yard', to: 'workshop' },
+  { id: 'crane', needs: ['mill-race', 'workshop-door'], kind: 'event', room: 'workshop' },
+  { id: 'cog', needs: ['crane'], kind: 'take', room: 'workshop', item: ITEM.cog },
   { id: 'cut-depot', needs: ['cutters'], kind: 'unlock', from: 'camp-yard', to: 'depot' },
   { id: 'jerrycan', needs: [], kind: 'take', room: 'shed', item: ITEM.jerrycan },
   { id: 'fuel', needs: ['cut-depot', 'jerrycan'], kind: 'event', room: 'depot', use: ITEM.jerrycan },
@@ -107,7 +108,9 @@ const GOALS: Goal[] = [
   { id: 'tower-view', needs: ['tower-door'], kind: 'scene', room: 'tower-top', from: 'tower-stairs', cut: 'cut-tower' },
   { id: 'switch-key', needs: ['tower-view'], kind: 'take', room: 'tower-top', item: ITEM.switchKey },
   { id: 'walt-log', needs: ['tower-view'], kind: 'take', room: 'tower-top', file: true },
-  { id: 'line-on', needs: ['switch-key', 'generator-on'], kind: 'event', room: 'switch' },
+  // The breakers, from the top station outward: the wiring sketch and the road map's pylon numbers.
+  { id: 'line-on', needs: ['switch-key', 'generator-on'], kind: 'event', room: 'switch', spots: ['breaker-5', 'breaker-4', 'breaker-3', 'breaker-2', 'breaker-1'] },
+  { id: 'empty-can', needs: ['generator-on'], kind: 'take', room: 'generator', item: ITEM.jerrycan },
   // Act 2, east and the mine.
   { id: 'diary', needs: [], kind: 'take', room: 'cottage', file: true },
   { id: 'quarry-key', needs: [], kind: 'take', room: 'cottage', item: ITEM.quarryKey },
@@ -115,13 +118,13 @@ const GOALS: Goal[] = [
   { id: 'rosters', needs: ['quarry-key'], kind: 'take', room: 'quarry-office', file: true },
   { id: 'blast', needs: ['dynamite'], kind: 'event', room: 'mine-entrance', use: ITEM.dynamite },
   { id: 'mine-map', needs: ['blast'], kind: 'take', room: 'mine-office', file: true },
-  { id: 'drain', needs: ['blast', 'generator-on'], kind: 'event', room: 'junction' },
+  { id: 'drain', needs: ['blast', 'generator-on', 'empty-can'], kind: 'event', room: 'junction', use: ITEM.jerrycan },
   { id: 'mine-collapse', needs: ['drain'], kind: 'scene', room: 'gallery', from: 'junction', cut: 'cut-mine-collapse' },
   { id: 'op-key', needs: ['mine-collapse'], kind: 'scene', room: 'gallery', cut: 'cut-hal', gets: ITEM.operatorKey, zone: { x: 8000, z: 3400, w: 2000, d: 7300 } },
   { id: 'lift-up', needs: ['op-key'], kind: 'event', room: 'mine-lift' },
   { id: 'summit', needs: ['lift-up'], kind: 'visit', room: 'summit-trail', from: 'mine-lift' },
   // Act 2: the gondola.
-  { id: 'fuses', needs: [], kind: 'take', room: 'shed', item: ITEM.fuses },
+  { id: 'fuses', needs: ['switch-key'], kind: 'take', room: 'switch', item: ITEM.fuses },
   { id: 'fit-cog', needs: ['cog', 'hal-phone'], kind: 'event', room: 'platform', use: ITEM.cog },
   { id: 'fit-fuse', needs: ['fuses', 'hal-phone'], kind: 'event', room: 'booth', use: ITEM.fuses },
   { id: 'gondola-runs', needs: ['fit-cog', 'fit-fuse', 'line-on', 'op-key'], kind: 'event', room: 'booth', use: ITEM.operatorKey },
@@ -137,9 +140,12 @@ const GOALS: Goal[] = [
   { id: 'gardener-diary', needs: ['pry-lodge'], kind: 'take', room: 'lodge', file: true },
   { id: 'open-gate', needs: ['gate-key'], kind: 'unlock', from: 'estate-wall', to: 'kennels' },
   { id: 'cellar-key', needs: ['open-gate'], kind: 'take', room: 'garden-shed', item: ITEM.cellarKey },
-  { id: 'bulkhead', needs: ['cellar-key'], kind: 'unlock', from: 'back-garden', to: 'cellar' },
+  { id: 'dog-meat', needs: ['open-gate'], kind: 'take', room: 'garden-shed', item: ITEM.dogMeat },
+  // The quiet way in: pen the pack with the meat, ride the meat hoist down.
+  { id: 'pen-pack', needs: ['dog-meat'], kind: 'event', room: 'kennels', use: ITEM.dogMeat },
+  { id: 'hoist', needs: ['pen-pack', 'cellar-key'], kind: 'unlock', from: 'kennels', to: 'cellar' },
   // Act 4.
-  { id: 'push-rack', needs: ['bulkhead'], kind: 'event', room: 'cellar' },
+  { id: 'push-rack', needs: ['hoist'], kind: 'event', room: 'cellar' },
   { id: 'leave-gear', needs: ['push-rack'], kind: 'scene', room: 'crawl', from: 'cellar', cut: 'cut-leave-gear', zone: { x: 10880, z: 6460, w: 2720, d: 1020 } },
   { id: 'sleep', needs: ['leave-gear'], kind: 'scene', room: 'save', from: 'crawl', cut: 'cut-sleep' },
 ];
@@ -551,6 +557,18 @@ async function work(p: Player, g: Goal, reached: Set<string>): Promise<void> {
       break;
     }
     case 'event': {
+      if (g.spots) {
+        // A row of switches: each pressed once, in the goal's order.
+        for (const name of g.spots) {
+          const z = read(g.room)?.spots?.find((sp) => sp.step === name)?.zone;
+          if (!z) throw new StuckError(`${g.room} has no spot ${name} for ${g.id}`, s);
+          s = await approach(link, zoneOf(z));
+          await link.tap(Key.action, 3);
+          await link.frames(30);
+          s = await settle(link);
+        }
+        break;
+      }
       const spot = read(g.room)?.spots?.find((sp) => sp.step === g.id)?.zone;
       if (!spot) throw new StuckError(`${g.room} has no spot for ${g.id}`, s);
       for (let i = 0; i < 3 && !done(s, g, reached); i++) {
