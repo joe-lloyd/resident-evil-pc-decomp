@@ -64,6 +64,19 @@
     22950
    ],
    "fov": 200
+  },
+  {
+   "from": [
+    18020,
+    -5780,
+    12240
+   ],
+   "to": [
+    16830,
+    -680,
+    22100
+   ],
+   "fov": 200
   }
  ],
  "walls": [
@@ -137,7 +150,7 @@
    "z0": 7070,
    "x1": 5595,
    "z1": 8910,
-   "name": "Probe: Doghouse roof"
+   "name": "Probe: Doghouse roof.001"
   },
   {
    "shape": "box",
@@ -297,7 +310,7 @@
    "z0": 15737,
    "x1": 11205,
    "z1": 15798,
-   "name": "Probe: Run gate 2"
+   "name": "Probe: Blood on the wire 4"
   },
   {
    "shape": "box",
@@ -365,51 +378,35 @@
   },
   {
    "shape": "box",
-   "x0": 11912,
-   "z0": 19562,
-   "x1": 11973,
-   "z1": 19623,
-   "name": "Probe: Run gate 3"
-  },
-  {
-   "shape": "box",
-   "x0": 11657,
-   "z0": 19820,
-   "x1": 11718,
-   "z1": 20130,
-   "name": "Probe: Run gate 3"
-  },
-  {
-   "shape": "box",
-   "x0": 11402,
-   "z0": 20327,
-   "x1": 11463,
-   "z1": 20388,
-   "name": "Probe: Run gate 3"
-  },
-  {
-   "shape": "box",
-   "x0": 11150,
-   "z0": 20582,
-   "x1": 11460,
-   "z1": 20643,
-   "name": "Probe: Run gate 3"
-  },
-  {
-   "shape": "box",
-   "x0": 11147,
-   "z0": 20837,
-   "x1": 11208,
-   "z1": 20898,
-   "name": "Probe: Run gate 3"
-  },
-  {
-   "shape": "box",
    "x0": 3500,
    "z0": 19310,
    "x1": 5595,
    "z1": 21150,
    "name": "Probe: Doghouse roof.006"
+  },
+  {
+   "shape": "box",
+   "x0": 22877,
+   "z0": 21347,
+   "x1": 22938,
+   "z1": 21408,
+   "name": "Probe: Lever knob"
+  },
+  {
+   "shape": "box",
+   "x0": 21860,
+   "z0": 21602,
+   "x1": 22170,
+   "z1": 21663,
+   "name": "Probe: Hoist side wall.001"
+  },
+  {
+   "shape": "box",
+   "x0": 22625,
+   "z0": 21602,
+   "x1": 23190,
+   "z1": 21663,
+   "name": "Probe: Control box"
   },
   {
    "shape": "box",
@@ -429,29 +426,68 @@
   },
   {
    "shape": "box",
+   "x0": 19565,
+   "z0": 21605,
+   "x1": 19875,
+   "z1": 21915,
+   "name": "Probe: Hoist side wall"
+  },
+  {
+   "shape": "box",
+   "x0": 21860,
+   "z0": 21857,
+   "x1": 23190,
+   "z1": 21918,
+   "name": "Probe: Hoist side wall.001"
+  },
+  {
+   "shape": "box",
+   "x0": 19565,
+   "z0": 22112,
+   "x1": 23190,
+   "z1": 22173,
+   "name": "Probe: Hoist cage"
+  },
+  {
+   "shape": "box",
    "x0": 3500,
    "z0": 22115,
    "x1": 11205,
    "z1": 22425,
    "name": "Probe: Run divider.004"
+  },
+  {
+   "shape": "box",
+   "x0": 19565,
+   "z0": 22370,
+   "x1": 22425,
+   "z1": 23700,
+   "name": "Probe: Hoist cage"
   }
  ],
  "anim": {
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "pen-pack",
+   "bank": 1,
+   "bit": -1
+  }
+ ],
  "probe": {
   "Ceiling": 303,
   "Run divider.003": 60,
+  "Run divider.002": 59,
   "Run divider": 58,
-  "Run divider.002": 58,
   "Run divider.004": 58,
   "Run divider.001": 57,
   "Hut roof": 53,
   "Water trough": 48,
-  "Hut wall e": 47,
+  "Hut wall e": 46,
+  "Hut wall s": 46,
   "Hut wall n": 45,
-  "Hut wall s": 44,
   "Hut desk": 38,
   "Doghouse roof": 36,
   "Doghouse roof.001": 36,
@@ -461,7 +497,10 @@
   "Doghouse roof.005": 36,
   "Doghouse roof.006": 36,
   "Doghouse roof.007": 36,
+  "Hoist cage": 32,
   "Run back": 27,
+  "Hoist side wall.001": 25,
+  "Hoist side wall": 18,
   "Hut wall w": 17,
   "Feed sack 1": 16,
   "Run gate 2": 15,
@@ -471,33 +510,43 @@
   "Run gate 0": 8,
   "Run front.001": 8,
   "Run front.002": 8,
-  "Run front.003": 8,
-  "Run gate 3": 8,
   "Run front.007": 8,
+  "Wound cable": 8,
+  "Run front.003": 7,
   "Run front.004": 7,
   "Run front.005": 7,
   "Run front.006": 7,
   "Hut door": 6,
   "Hut wall w.002": 6,
   "Logbook": 6,
-  "Hut wall w.005": 5,
+  "Control box": 5,
+  "Winch beam": 5,
   "Hut wall w.003": 4,
   "Hut wall w.004": 4,
+  "Hut wall w.005": 4,
   "Lamp post": 3,
+  "Control lid lip": 3,
   "Gate post": 2,
   "Gate post.002": 2,
   "Gate post.003": 2,
   "Gate post.004": 2,
   "Gate post.005": 2,
-  "Gate post.006": 2,
+  "Winch gear": 2,
+  "Cage hook": 2,
   "Run post.001": 1,
   "Gate post.001": 1,
   "Desk lamp": 1,
   "Blood on the wire 2": 1,
   "Blood on the wire 4": 1,
   "Blood on the wire 3": 1,
+  "Gate post.006": 1,
+  "Bolt keeper": 1,
   "Gate post.007": 1,
-  "Run post.009": 1
+  "Sound gate": 1,
+  "Lever knob": 1,
+  "Lock arm": 1,
+  "Run post.009": 1,
+  "Hoist back wall": 1
  },
  "bounds": {
   "x0": 3400,
@@ -562,6 +611,22 @@
    },
    "walk": true,
    "touch": true
+  },
+  {
+   "to": "cellar",
+   "zone": {
+    "x0": 19890,
+    "z0": 20910,
+    "x1": 21930,
+    "z1": 22015
+   },
+   "arrive": {
+    "x": 20400,
+    "z": 20315,
+    "angle": 1024
+   },
+   "walk": false,
+   "touch": false
   }
  ],
  "checks": [
@@ -597,7 +662,7 @@
     "x0": 11050,
     "z0": 5950,
     "x1": 12070,
-    "z1": 22270
+    "z1": 18190
    },
    "text": "REX. BRUTUS. SHADOW. KAISER.\nThe dogs on the mountain came from here."
   },
@@ -631,13 +696,33 @@
  ],
  "saves": null,
  "items": [],
- "spots": [],
+ "spots": [
+  {
+   "step": "pen-pack",
+   "zone": {
+    "x0": 11390,
+    "z0": 19210,
+    "x1": 12750,
+    "z1": 20740
+   }
+  },
+  {
+   "step": "hoist",
+   "zone": {
+    "x0": 22270,
+    "z0": 20485,
+    "x1": 23460,
+    "z1": 21335
+   }
+  }
+ ],
  "entry": null,
  "notes": [
   "from inside the back gate: the runs torn open, the paw prints out across the yard",
   "from the south-east: the yard, the hut's door banging, the runs beyond",
   "from over the yews behind the last run: the length of the runs, the gate, the hut",
   "close on the third run: the handler in the straw, the snapped pole",
-  "from inside the gate, east: the yard, the trough, the path south to the yews and the house"
+  "from inside the gate, east: the yard, the trough, the path south to the yews and the house",
+  "from the yard lamp, south: the sound run's gate standing open, the hoist by the yews, the path between"
  ]
 }
