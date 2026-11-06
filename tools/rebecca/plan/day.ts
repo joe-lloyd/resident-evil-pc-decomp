@@ -95,7 +95,7 @@ export const day: Plan = {
     place(2, 'line-track', 'The power line track', 5, [7.8, 7], ['The track under the line to the gondola, a gate at its end', 'The cable humming', 'Adders', ''], {}),
 
     // Act 2, east: the operator's cottage, the quarry and the mine; the summit above.
-    place(2, 'east-path', 'The east path', 4, [14.4, 5.6], ['The path from the gondola station along the slope', 'Grass, a windsock', 'Crows', ''], {}),
+    place(2, 'east-path', 'The east path', 4, [14.4, 5.6], ['The path from the gondola station along the slope, a boarded adit mouth in the bank', 'Grass, a windsock', 'Crows', ''], {}),
     place(2, 'cottage', "The operator's cottage", 4, [14.4, 4.2], ['His diary, the quarry office key on its hook', 'A radio left on', '', 'He went to hide in the mine'], {}),
     place(2, 'quarry', 'The quarry', 6, [16.6, 5.6], ['The quarry floor, the crane, the office', 'Dust blowing off the cut', 'Cerberus', ''], {}),
     place(2, 'quarry-office', 'The quarry office', 2, [16.6, 4.2], ['Dynamite in a locker', 'A clock still ticking', '', ''], {}),
@@ -175,6 +175,7 @@ export const day: Plan = {
     link('tunnel', 'mine-office', 'door'),
     link('tunnel', 'junction', 'walk'),
     link('junction', 'gallery', 'walk', 'drain'),
+    link('gallery', 'east-path', 'walk', 'adit', true),
     link('junction', 'mine-lift', 'walk'),
     link('mine-lift', 'summit-trail', 'lift', 'lift-up'),
     link('summit-trail', 'weather', 'door'),
@@ -290,7 +291,9 @@ export const day: Plan = {
     },
 
     step(2, 'op-key', 'gallery', 'find', ['drain'], "Hal, alive on the ore cart: he gives her the operator's key, then the bite takes him"),
+    step(2, 'adit', 'gallery', 'shortcut', ['drain'], "With the gallery drained, the old drainage adit at its far end walks out to the boarded mouth on the east path, a room from the gondola station", { optional: true }),
     step(2, 'lift-up', 'mine-lift', 'do', ['blast', 'generator-on'], 'Ride the mine lift up to the summit', { optional: true }),
+
     step(2, 'radio', 'weather', 'learn', ['lift-up'], "The weather radio: Alpha's helicopter comes at dusk", { optional: true }),
     step(2, 'supplies', 'mast', 'find', ['lift-up'], 'Ammunition and a first aid spray', { optional: true }),
 
