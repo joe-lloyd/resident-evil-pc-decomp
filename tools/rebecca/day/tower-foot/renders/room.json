@@ -351,7 +351,7 @@
    "z0": 18290,
    "x1": 2620,
    "z1": 19110,
-   "name": "Probe: Privy dark"
+   "name": "Probe: Privy wall w"
   },
   {
    "shape": "box",
@@ -465,6 +465,22 @@
     "x": 29410,
     "z": 11900,
     "angle": 2048
+   },
+   "walk": true,
+   "touch": true
+  },
+  {
+   "to": "depot",
+   "zone": {
+    "x0": 13770,
+    "z0": 3400,
+    "x1": 16830,
+    "z1": 4420
+   },
+   "arrive": {
+    "x": 15300,
+    "z": 6120,
+    "angle": 3072
    },
    "walk": true,
    "touch": true
