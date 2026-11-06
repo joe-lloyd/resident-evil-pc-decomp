@@ -76,7 +76,7 @@ export const day: Plan = {
     place(2, 'bunkhouse', 'The bunkhouse', 4, [1.2, 0], ['Bunks, a calendar with the paydays ringed', 'A flickering bulb', 'A zombie in a bunk', 'The men got sick one by one'], {}),
     place(2, 'office', "The foreman's office", 3, [-1, 0], ['The safe, the payroll', 'A desk fan', '', 'Letters: Umbrella paid for the gondola'], {}),
     place(2, 'mess', 'The mess hall', 4, [-1, 1.4], ['Long tables, the cook dead with the office key', 'Steam from a pot, flies', 'Zombies', 'The last meal'], {}),
-    place(2, 'depot', 'The fuel depot', 3, [-1, 2.8], ['A padlocked pump, diesel drums', 'A dripping nozzle', 'Adders', ''], {}),
+    place(2, 'depot', 'The fuel depot', 3, [-1, 2.8], ['A padlocked pump, diesel drums, a skid road chained off out the back', 'A dripping nozzle', 'Adders', 'The loggers dragged timber down to the forestry road this way'], {}),
     place(2, 'workshop', 'The workshop', 3, [1.2, 2.8], ['The spare drive cog in its crate, logs stacked on it', 'Sparks from a cut cable', '', 'They kept spares for the gondola'], {}),
     place(2, 'sawmill', 'The sawmill', 6, [3.4, 0], ['The saw, the log crane', 'The water wheel, once running', 'Zombies', ''], {}),
     place(2, 'pond', 'The mill pond', 4, [5.6, 0], ['The sluice to the mill race', 'Water, reeds, a floating hat', 'A zombie in the water', ''], {}),
@@ -86,7 +86,7 @@ export const day: Plan = {
     place(2, 'road', 'The forestry road', 5, [7.8, 4.2], ['A chained gate across the road', 'A torn notice on the gate', 'Crows', 'The way the rangers drive up'], {}),
     place(2, 'washout', 'The washout', 4, [5.6, 4.2], ['The road half gone into a gully', 'Water running over the road', 'Adders', ''], {}),
     place(2, 'generator', 'The generator hut', 3, [5.6, 5.6], ['The generator, dry', 'A fan once it runs; the lights come on', '', 'Power for the station, the mine and the gondola'], {}),
-    place(2, 'tower-foot', 'The lookout tower, foot', 3, [3.4, 4.2], ['The tower door, locked', 'The tower creaking in the wind', '', ''], {}),
+    place(2, 'tower-foot', 'The lookout tower, foot', 3, [3.4, 4.2], ['The tower door, locked; the foot of the loggers\' skid road', 'The tower creaking in the wind', '', ''], {}),
     place(2, 'tower-stairs', 'The lookout tower, stairs', 3, [1.2, 4.2], ['Stairs, a broken flight', 'Wind through the boards', 'Crows', ''], {}),
     place(2, 'tower-top', 'The lookout tower, top', 4, [-1, 4.2], ['The lineman\'s post: his line log, the switch house key on his hook; the valley seen from above', 'Smoke from the valley, cloud', 'Crows', "The lineman watched the gondola line from up here; smoke where Bravo came down; the mansion's roof"], {}),
     place(2, 'switch', 'The switch house', 2, [5.6, 7], ['The breakers for the gondola line, a box of line fuses', 'Sparking contacts', '', 'The line crew kept the gondola\'s spares by the breakers'], {}),
@@ -147,6 +147,7 @@ export const day: Plan = {
     link('camp-yard', 'mess', 'door'),
     link('camp-yard', 'office', 'door', 'office-key'),
     link('camp-yard', 'depot', 'door', 'cut-depot'),
+    link('depot', 'tower-foot', 'walk', 'skid-road', true),
     link('camp-yard', 'workshop', 'door', 'workshop-door'),
     link('camp-yard', 'sawmill', 'walk'),
     link('sawmill', 'pond', 'walk'),
@@ -242,6 +243,8 @@ export const day: Plan = {
     step(2, 'cut-depot', 'camp-yard', 'do', ['cutters'], "Cut the depot's padlock"),
     step(2, 'jerrycan', 'shed', 'find', ['unlock-shed'], 'Take the empty jerrycan'),
     step(2, 'fuel', 'depot', 'find', ['cut-depot', 'jerrycan'], 'Fill the jerrycan with diesel'),
+    step(2, 'skid-road', 'depot', 'shortcut', ['cut-depot'], "Drop the chain on the skid road behind the depot: the loggers' track down to the lookout tower's foot", { optional: true }),
+
     step(2, 'flume-ride', 'flume', 'shortcut', ['mill-race', 'cog'], 'The drive cog is too heavy to carry back over the mountain: she loads it on the log boat and rides the flume down with it to the gorge footbridge'),
 
     // Act 2, west.
