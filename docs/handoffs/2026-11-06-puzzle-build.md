@@ -1,0 +1,85 @@
+# Building the puzzle climb into the game
+
+The puzzle climb of 2026-11-06 changed the plan (`tools/rebecca/plan/day.ts`,
+branch `reb-puzzle-climb`), not the rooms. This is the list of what the built
+rooms need so that they play as the plan now says. The climb's account is
+`~/reb-puzzle-lab/summary.md` on old-mac.
+
+The owner's rulings:
+- Tools are reused. The generator already keeps a tool until every lock it
+  opens is open (`scripts.ts`, tool locks); second ways must count too.
+- A wrong breaker shocks her for a little damage.
+- The drive cog is an item she carries. The flume ride with it is optional.
+- Keep the look: the oppressive forest, the overcast sky and the backdrop
+  ranges (`day/SCENES.md`, "The look"). New things are built with `kit.py`
+  the way the room around them is.
+
+## What the engine and the generator need
+
+1. **Enemies that come and go with a step.** `foes.ts` places a fixed set
+   per room. A plan step's `stirs` adds enemies once it is done (the mill,
+   the generator, the pump, the bell, the cutters, the coal chute), and the
+   kennels' pack leaves once penned. Each foe entry gets an optional
+   `after` and `until` step, and `foeLines` wraps it in the flag test.
+2. **A second way through a lock or an event.** A tool lock with two
+   items (the workshop: its key or the bolt cutters), and an event with
+   two uses at one spot (the rockfall: the dynamite or the winch crank).
+   Both set the same flag. The tool keeps counting toward "every lock it
+   opens is open" whichever way is taken.
+3. **The breakers, in order, with a shock.** Five breaker spots in the
+   switch house; FG_ROOM bits track the order; a wrong one resets the bank
+   and hurts her. The engine has no script command that deals damage:
+   add one as a port addition (a `player_prop_set` subcommand, REB mode),
+   written with `scd_bytes`, and teach retro-archive-explorer's
+   disassembler its length (`scd1.ts` `sizeAt`).
+4. **The kennels.** Using the dog meat at the sound run pens the pack:
+   their enemies leave (1) and a flag is set. The hoist down to the cellar
+   needs the cellar key, and the pack penned or every one of its kill
+   flags set.
+5. **Items.** The dog meat is a new key item (icon and model). The line
+   fuse moves from the shed to the switch house. The generator leaves the
+   empty jerrycan for the pump. The safe also holds handgun rounds; the
+   wine store a green herb.
+6. **The safe.** The engine has no combination dial. Until it does, the
+   safe opens once she has read the ringed calendar and the letters, and
+   her line says she works out the date.
+7. **The playthrough** (`tools/harness/tests/playthrough.ts`): its jobs
+   follow the new steps.
+
+## The rooms
+
+Full renders, by room, with what the scene must record for the generator.
+"Records" means `render.ts --records`: the room.json alone, no pictures.
+
+| Room | Cameras | Change | Records for the generator |
+| --- | --- | --- | --- |
+| bunkhouse | 4 | Paydays ringed, the 17th twice; no numbers written at the bottom | the calendar's check |
+| office | records | Letters: Umbrella's money came on the payday the men were paid twice; he set the safe to it | checks; rounds in the safe |
+| camp-yard | 8 | A rusted padlock on the workshop door; the bell rope reachable | spot `ring-bell` |
+| workshop | 3 | A belt from the line shaft's wall pulley to the hoist, slack until the mill runs | spot `crane`; state `crane` |
+| sawmill | 8 | The millwright's chalk drawing: pond, sluice, wheel, shaft, workshop hoist | crane spot and state removed |
+| depot | 3 | The back: a chained skid road out through the fence | spot `skid-road`; door `tower-foot` |
+| tower-foot | 3 | The foot of the skid road | door `depot` |
+| switch | 2 | Five breakers numbered 1 to 5 by pylon; a box of line fuses | spots `breaker-1` to `breaker-5`; item `fuses` |
+| tower-top | 4 | The lineman's wiring sketch; the key on its hook by the door | check; item `switch-key` at the hook |
+| shed | records | No gondola fuses; the chainsaw fuses are too small | check |
+| yard | 4 | The rifle gone, an empty rack; his name on the toolbox | checks |
+| junction | 5 | A float on the pump's intake, broken; a power lamp; Hal on his ore cart across the water | spot `drain` uses the jerrycan |
+| gallery | 4 | Boards across the old adit at the east end | spot `adit`; door `east-path` |
+| east-path | 4 | A boarded adit mouth in the bank | door `gallery` |
+| mine-entrance | 6 | The quarry crane's cable hanging by the jammed timbers | spot `blast`, two uses |
+| kennels | 5 | One run with a sound gate and bolt; the meat hoist | spots `pen-pack`, `hoist`; door `cellar` |
+| garden-shed | 2 | A sack of dog meat by the door | item `dog-meat` |
+| back-garden | 6 | The cellar doors barred from inside; a coal chute grate | the chute's lock; door `cellar` |
+| cellar | 4 | The hoist's cage; the coal chute's foot | doors `kennels`, `back-garden` |
+| wine | records | A green herb in a pot | item |
+
+About 75 cameras in 17 rooms, and a few more at the new exits.
+
+## Order
+
+1. The generator and engine features (1 to 4), with their tests.
+2. The rooms, a spoke at a time, each with its preview sheet looked at
+   before the full render: the camp, the west, the mine, the estate.
+3. The items (5) and the safe (6).
+4. The playthrough (7), then a full run of the day.
