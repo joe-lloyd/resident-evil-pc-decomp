@@ -118,13 +118,13 @@ export const day: Plan = {
     place(3, 'creek', 'The creek', 5, [10, 11.2], ['A ford, the lodge across it', 'Running water', 'Adders', ''], {}),
     place(3, 'lodge', "The gardener's lodge", 4, [12.2, 11.2], ['The back gate key, his diary', 'A lamp left burning', '', 'He scratched himself raw'], {}),
     place(3, 'estate-wall', 'The estate wall', 5, [10, 12.6], ['The back gate into the Spencer estate', 'Ivy in the wind', 'Crows', 'The mansion over the wall'], {}),
-    place(3, 'kennels', 'The kennels', 5, [10, 14], ['Empty runs, broken chains', 'A gate banging', 'Cerberus, a pack', 'The dogs on the mountain came from here'], {}),
-    place(3, 'back-garden', 'The back garden', 6, [10, 15.4], ['Hedges, the cellar doors, a coal chute\'s grate beside them', 'Fountain water, moths at a lamp', 'A zombie', '']
+    place(3, 'kennels', 'The kennels', 5, [10, 14], ['Empty runs, broken chains, one run with a sound gate and bolt; the hoist the dogs\' meat came up on from the house\'s cold store', 'A gate banging', 'Cerberus, a pack', 'The dogs on the mountain came from here'], {}),
+    place(3, 'back-garden', 'The back garden', 6, [10, 15.4], ['Hedges, the cellar doors barred from inside, a coal chute\'s grate beside them', 'Fountain water, moths at a lamp', 'A zombie', '']
 , {}),
-    place(3, 'garden-shed', 'The garden shed', 2, [12.2, 15.4], ['The cellar key on a board', 'A cobweb trembling', '', ''], {}),
+    place(3, 'garden-shed', 'The garden shed', 2, [12.2, 15.4], ['The cellar key on a board; the gardener\'s last sack of dog meat by the door', 'A cobweb trembling', '', 'He fed the pack himself, until it was too big to feed'], {}),
 
     // Act 4: the mansion.
-    place(4, 'cellar', 'The cellar', 4, [10, 16.8], ['A rack across a crawl passage', 'Candle flames', 'A zombie servant', ''], {}),
+    place(4, 'cellar', 'The cellar', 4, [10, 16.8], ['A rack across a crawl passage, the foot of the coal chute, the cold store\'s hoist up to the kennels', 'Candle flames', 'A zombie servant', ''], {}),
     place(4, 'wine', 'The wine store', 2, [12.2, 16.8], ['Racks, a first aid spray', 'Drips', '', ''], {}),
     place(4, 'crawl', 'Under the floor', 3, [10, 18.2], ['The passage under the floorboards, a hatch', 'Light through the boards, footsteps overhead', '', ''], {}),
     place(4, 'save', 'The save room', 6, [10, 19.6], ['Where Chris finds her', 'The typewriter lamp', '', 'She sleeps; Chris walks in'], { existing: 'ROOM1000.RDT' }),
@@ -190,7 +190,8 @@ export const day: Plan = {
     link('estate-wall', 'kennels', 'walk', 'open-gate'),
     link('kennels', 'back-garden', 'walk'),
     link('back-garden', 'garden-shed', 'door'),
-    link('back-garden', 'cellar', 'door', 'bulkhead'),
+    link('back-garden', 'cellar', 'ladder', 'coal-chute'),
+    link('kennels', 'cellar', 'lift', 'hoist'),
 
     link('cellar', 'wine', 'door'),
     link('cellar', 'crawl', 'walk', 'push-rack'),
@@ -296,15 +297,19 @@ export const day: Plan = {
     step(3, 'gardener-diary', 'lodge', 'learn', ['pry-lodge'], "The gardener's diary: the itching", { optional: true }),
     step(3, 'map-estate', 'lodge', 'find', ['pry-lodge'], 'The estate grounds plan: the wall, the kennels, the garden, the cellar', { optional: true }),
     step(3, 'open-gate', 'estate-wall', 'do', ['gate-key'], 'Open the back gate into the estate'),
-    step(3, 'cellar-key', 'garden-shed', 'find', ['open-gate'], 'Take the cellar key'),
+    step(3, 'cellar-key', 'garden-shed', 'find', ['open-gate'], "Take the cellar key from the gardener's board: it locks the house's cold store and the meat hoist up to the kennels"),
+    step(3, 'dog-meat', 'garden-shed', 'find', ['open-gate'], "Take the gardener's sack of dog meat"),
+    step(3, 'pen-pack', 'kennels', 'do', ['dog-meat'], 'Throw the meat into the run with the sound gate: the pack piles in after it, and she bolts the gate on them'),
+    step(3, 'hoist', 'kennels', 'do', ['pen-pack', 'cellar-key'], "With the pack shut in, unlock the meat hoist with the cellar key and ride it down to the house's cold store"),
     {
-      ...step(3, 'bulkhead', 'back-garden', 'milestone', ['cellar-key'], 'Unlock the cellar doors'),
-      otherWays: [{
-        needs: ['open-gate', 'crowbar', 'map-estate'],
-        label: "Prise up the coal chute's grate beside the cellar doors with Kevin's crowbar, where the grounds plan marks the chute down to the cellar. The iron rings across the garden",
-        stirs: [{ at: 'back-garden', enemies: 'The Cerberus pack from the kennels, at the sound' }],
-      }],
+      ...step(3, 'coal-chute', 'back-garden', 'do', ['open-gate', 'crowbar', 'map-estate'], "Prise up the coal chute's grate with Kevin's crowbar, where the grounds plan marks it, and drop into the cellar. The iron rings across the garden"),
+      stirs: [{ at: 'back-garden', enemies: 'The Cerberus pack from the kennels, at the sound, unless she has shut them in' }],
     },
+    {
+      ...step(3, 'bulkhead', 'cellar', 'milestone', ['hoist'], "Into the mansion's cellar: quietly, by the kennels' hoist with the pack shut in"),
+      otherWays: [{ needs: ['coal-chute'], label: 'Or loudly, down the coal chute, with the pack loose behind her' }],
+    },
+
 
     // Act 4.
     step(4, 'push-rack', 'cellar', 'do', ['bulkhead'], 'Push the rack aside: a crawl passage'),
