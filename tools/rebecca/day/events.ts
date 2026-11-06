@@ -178,6 +178,14 @@ export const EVENTS: readonly RoomEvent[] = [
 /** Common flags (FG_COMMON) for the events, in order: 130-158, which no shipped room script and no engine flag uses. */
 export const EVENT_FLAGS = new Map(EVENTS.map((e, i) => [e.step, 130 + i]));
 
+/**
+ * Marks: common flags for how something was done, where the plan's other
+ * way has a cost of its own (the cutters' noise at the workshop brings the
+ * loggers out; its key does not). From the top of the events' range down.
+ */
+export const MARK_FLAGS = new Map([['workshop-cut', 158]]);
+if (EVENTS.length + MARK_FLAGS.size > 29) throw new Error('the events and marks have FG_COMMON 130-158, 29 flags');
+
 export function keyItem(step: string): KeyItem {
   const k = KEY_ITEMS.find((i) => i.step === step);
   if (!k) throw new Error(`no key item for step ${step}`);
@@ -186,8 +194,14 @@ export function keyItem(step: string): KeyItem {
 
 export const eventsIn = (room: string) => EVENTS.filter((e) => e.room === room);
 
-/** Room-item flags (FG_ITEM) for what events leave to pick up: 247 on. */
-export const GIVE_FLAGS = new Map(EVENTS.filter((e) => e.gives).map((e, i) => [e.gives!, 247 + i]));
+/**
+ * Room-item flags (FG_ITEM) for what events leave to pick up: the diesel
+ * 247, as it always had; the rest from 229 down, the top of the supplies'
+ * range, which count up from 180 (supplies.ts). 248 on are the hand-written
+ * rooms'.
+ */
+const GIVE_FLAG_ORDER = [247, ...Array.from({ length: 20 }, (_, i) => 229 - i)];
+export const GIVE_FLAGS = new Map(EVENTS.filter((e) => e.gives).map((e, i) => [e.gives!, GIVE_FLAG_ORDER[i]!]));
 
 /** The models of what a room's events leave to pick up, after its supplies' and key items' (room.ts, scripts.ts). */
 export function giveModels(room: string): PickupModel[] {

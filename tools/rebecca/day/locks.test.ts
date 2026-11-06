@@ -46,10 +46,12 @@ for (const { from, to, room, flag, item } of [
   });
 }
 
-test('the bolt cutters leave her case after the second of their two locks', () => {
-  // Cutting the road gate takes them only if the depot is open, and the other way round.
-  assert.match(script('road'), /set\(FG_LOCK, 43, 0\);\n\s+if \(ck\(FG_LOCK, 41, 0\)\) \{\n\s+if \(item_ck\(28\)\) \{\n\s+remove_item\(28\);/);
-  assert.match(script('camp-yard'), /set\(FG_LOCK, 41, 0\);\n\s+if \(ck\(FG_LOCK, 43, 0\)\) \{\n\s+if \(item_ck\(28\)\) \{\n\s+remove_item\(28\);/);
+test('the bolt cutters leave her case only after the last of their three locks', () => {
+  // The road gate, the depot and the workshop (its second way, FG_LOCK 42):
+  // cutting one takes them only if the other two are open, however they
+  // were opened. The owner's ruling: tools are reused.
+  assert.match(script('road'), /set\(FG_LOCK, 43, 0\);\n\s+if \(ck\(FG_LOCK, 41, 0\) && ck\(FG_LOCK, 42, 0\)\) \{\n\s+if \(item_ck\(28\)\) \{\n\s+remove_item\(28\);/);
+  assert.match(script('camp-yard'), /set\(FG_LOCK, 41, 0\);\n\s+if \(ck\(FG_LOCK, 42, 0\) && ck\(FG_LOCK, 43, 0\)\) \{\n\s+if \(item_ck\(28\)\) \{\n\s+remove_item\(28\);/);
 });
 
 test("a key still turns as she tries the door, as RE1's do", () => {

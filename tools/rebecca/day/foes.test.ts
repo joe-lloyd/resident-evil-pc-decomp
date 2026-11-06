@@ -53,12 +53,17 @@ test('enemies a step brings or takes away stand inside that step\'s test, and st
   assert.match(lines[3]!, /^ {4}enemy\(17, 0, 188, /);
   assert.equal(lines[4], '}');
   assert.deepEqual(flags, []);
+  // The brought ones stand apart from the one already there.
+  const at = (l: string) => l.match(/, (\d+), 0, (\d+), \d+, 0, 0, 0\);/)!.slice(1).map(Number);
+  const [first, second] = [at(lines[0]!), at(lines[2]!)];
+  assert.ok(Math.hypot(first[0]! - second[0]!, first[1]! - second[1]!) >= 2000, `${first} and ${second} apart`);
 });
 
-test('every step that brings or takes away enemies is a step of the plan', async () => {
+test('every step that brings or takes away enemies is a step of the plan, or a mark of how one was done', async () => {
   const { day } = await import('../plan/day.ts');
   const { FOES } = await import('./foes.ts');
-  const steps = new Set(day.steps.map((s) => s.id));
+  const { MARK_FLAGS } = await import('./events.ts');
+  const steps = new Set([...day.steps.map((s) => s.id), ...MARK_FLAGS.keys()]);
   for (const [slug, groups] of Object.entries(FOES)) {
     for (const g of groups) for (const s of [g[2]?.after, g[2]?.until]) if (s) assert.ok(steps.has(s), `${slug}: ${s} is not a plan step`);
   }

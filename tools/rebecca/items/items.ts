@@ -90,18 +90,33 @@ const ZONE = 1500;
  * its own flag (`flags` is consumed), its model in slot `first` onwards.
  * aot ids count up from `id`.
  */
-export function keyItemLines(spots: readonly ItemSpot[], flags: number[], id: number, first: number): string[] {
+/**
+ * The room's key item pickups. `gate`, a script test a pickup waits on (the
+ * cog in its crate until the hoist lifts the logs); `count`, how many uses
+ * the item has, which the engine counts down as she uses it (a tool used at
+ * two locks). `pickups` is each item's item_aot_set line, for an event that
+ * puts it there the moment it happens.
+ */
+export function keyItemLines(
+  spots: readonly ItemSpot[],
+  flags: number[],
+  id: number,
+  first: number,
+  gate: (step: string) => string | undefined = () => undefined,
+  count: (step: string) => number = () => 1,
+): { lines: string[]; pickups: Map<string, string> } {
   const models = keyItemModels(spots);
-  return spots.flatMap((s) => {
+  const pickups = new Map<string, string>();
+  const lines = spots.flatMap((s) => {
     const k = byStep(s.step);
     const flag = flags.shift();
     if (flag === undefined) throw new Error(`${s.step}: no item flag left`);
     const slot = first + models.findIndex((m) => sameModel(m, k.model));
     const zone = `${s.x - ZONE / 2}, ${s.z - ZONE / 2}, ${ZONE}, ${ZONE}`;
-    return [
-      `if (ck(FG_ITEM, ${flag}, 0)) {  // ${k.name.toLowerCase()} (${s.step})`,
-      `    item_aot_set(${id++}, ${zone}, ${k.id}, 1, ${slot}, 255, ${word(s.x)}, ${word(s.y & 0xffff)}, ${word(s.z)}, 0, 0, ${flag}, 129, 0, 0);`,
-      '}',
-    ];
+    const pick = `item_aot_set(${id++}, ${zone}, ${k.id}, ${count(s.step)}, ${slot}, 255, ${word(s.x)}, ${word(s.y & 0xffff)}, ${word(s.z)}, 0, 0, ${flag}, 129, 0, 0);`;
+    pickups.set(s.step, `if (ck(FG_ITEM, ${flag}, 0)) {\n    ${pick}\n}`);
+    const g = gate(s.step);
+    return [`if (${g ? `${g} && ` : ''}ck(FG_ITEM, ${flag}, 0)) {  // ${k.name.toLowerCase()} (${s.step})`, `    ${pick}`, '}'];
   });
+  return { lines, pickups };
 }

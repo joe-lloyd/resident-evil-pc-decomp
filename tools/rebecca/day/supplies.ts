@@ -1,7 +1,8 @@
 // Ammunition, herbs and first aid sprays through her day's kit rooms: RE1's
 // own items with RE1's own pickup models, copied from the rooms of the
-// player's game that hold them. Act 2 has five clips for eighteen larger
-// enemies, with birds and snakes left to avoid. She keeps her gear until
+// player's game that hold them. Act 2 has six clips for twenty-seven larger
+// enemies, some of which only come when a step brings them, with birds and
+// snakes left to avoid. She keeps her gear until
 // the crawl. The cellar has five rounds and the wine store one herb. scripts.ts writes the pickups into the rooms' init scripts and
 // rooms.ts gives each room the models it needs.
 import { freeFloor, type Floor } from './foes.ts';
@@ -25,7 +26,8 @@ const SPREAD: Record<string, readonly Supply[]> = {
   booth: ['greenHerb'],
   bunkhouse: ['clip', 'redHerb'],
   mess: ['greenHerb'],
-  office: ['spray'],
+  // The foreman's safe holds a box of handgun rounds (plan/day.ts).
+  office: ['spray', 'clip'],
   workshop: ['clip'],
   depot: ['greenHerb'],
   sawmill: ['clip'],
