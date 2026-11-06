@@ -229,7 +229,13 @@ export const day: Plan = {
       }],
     },
 
-    step(2, 'mill-race', 'pond', 'do', ['crank', 'dog'], 'Open the sluice with the winch crank: the mill runs'),
+    {
+      ...step(2, 'mill-race', 'pond', 'do', ['crank', 'dog'], 'Open the sluice with the winch crank: the mill runs'),
+      stirs: [
+        { at: 'sawmill', enemies: 'Zombie loggers, drawn to the noise of the running mill' },
+        { at: 'flume', enemies: 'A zombie logger at the flume head' },
+      ],
+    },
     step(2, 'crane', 'sawmill', 'do', ['mill-race'], 'Run the log crane: the stack lifts off the crate'),
     step(2, 'cog', 'workshop', 'find', ['crane', 'workshop-door'], 'Take the spare drive cog'),
 
@@ -256,7 +262,11 @@ export const day: Plan = {
     step(2, 'blast', 'mine-entrance', 'do', ['dynamite'], 'Blast the rockfall at the mine mouth'),
     step(2, 'mine-map', 'mine-office', 'learn', ['blast'], 'The mine map: the pump and the lift', { optional: true }),
     step(2, 'map-mine', 'mine-office', 'find', ['blast'], 'The mine survey: the levels, the pump and the lift', { optional: true }),
-    step(2, 'drain', 'junction', 'do', ['blast', 'generator-on'], 'Run the mine pump: the gallery drains'),
+    {
+      ...step(2, 'drain', 'junction', 'do', ['blast', 'generator-on'], 'Run the mine pump: the gallery drains'),
+      stirs: [{ at: 'tunnel', enemies: 'Web Spinners, flushed up out of the sump as the water falls' }],
+    },
+
     step(2, 'op-key', 'gallery', 'find', ['drain'], "Hal, alive on the ore cart: he gives her the operator's key, then the bite takes him"),
     step(2, 'lift-up', 'mine-lift', 'do', ['blast', 'generator-on'], 'Ride the mine lift up to the summit', { optional: true }),
     step(2, 'radio', 'weather', 'learn', ['lift-up'], "The weather radio: Alpha's helicopter comes at dusk", { optional: true }),
