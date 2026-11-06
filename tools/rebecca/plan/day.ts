@@ -72,7 +72,7 @@ export const day: Plan = {
     place(2, 'den', 'The hollow', 3, [7.8, 1.4], ['The dogs\' den: the ranger, dead, his keys in his jacket', 'Flies over the body', 'Cerberus', 'What became of him'], {}),
     place(2, 'logging-road', 'The logging road', 4, [5.6, 1.4], ['Deep ruts, a stalled truck', 'Its wipers twitching', 'A zombie logger', 'The infection has reached the mountain'], {}),
     place(2, 'camp-gate', 'The camp gate', 3, [3.4, 1.4], ['The gate, a barricade of logs half pulled down', 'A torn notice', '', 'They tried to keep something out'], {}),
-    place(2, 'camp-yard', 'The camp yard', 8, [1.2, 1.4], ['The camp\'s hub: timber stacks, the cookhouse bell', 'Smoke from a dead fire, the bell swinging', 'Zombie loggers', 'Twenty men worked here'], {}),
+    place(2, 'camp-yard', 'The camp yard', 8, [1.2, 1.4], ['The camp\'s hub: timber stacks, the cookhouse bell, the workshop\'s padlock rusted half through', 'Smoke from a dead fire, the bell swinging', 'Zombie loggers', 'Twenty men worked here'], {}),
     place(2, 'bunkhouse', 'The bunkhouse', 4, [1.2, 0], ['Bunks, a calendar with the paydays ringed', 'A flickering bulb', 'A zombie in a bunk', 'The men got sick one by one'], {}),
     place(2, 'office', "The foreman's office", 3, [-1, 0], ['The safe, the payroll', 'A desk fan', '', 'Letters: Umbrella paid for the gondola'], {}),
     place(2, 'mess', 'The mess hall', 4, [-1, 1.4], ['Long tables, the cook dead with the office key', 'Steam from a pot, flies', 'Zombies', 'The last meal'], {}),
