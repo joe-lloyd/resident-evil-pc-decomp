@@ -49,7 +49,9 @@ export const KEY_ITEMS: readonly KeyItem[] = [
   { step: 'fuses', id: 0x27, name: 'FUSES', description: 'Spare fuses for the\ngondola\'s board.' , model: { own: 'fuses' } },
   { step: 'crowbar', id: 0x2b, name: 'CROWBAR', description: 'A crowbar from Bravo\'s\nhelicopter.' , model: { own: 'crowbar' } },
   { step: 'gate-key', id: 0x34, name: 'GATE KEY', description: 'An old iron key to the\nestate\'s back gate.' , model: { from: 'Stage1/ROOM10C0.RDT', index: 0 } },
-  { step: 'cellar-key', id: 0x35, name: 'CELLAR KEY', description: 'A key to the cellar doors.' , model: { from: 'Stage1/ROOM1050.RDT', index: 0 } },
+  { step: 'cellar-key', id: 0x35, name: 'CELLAR KEY', description: 'A key to the cellar\'s cold\nstore, and its meat hoist.' , model: { from: 'Stage1/ROOM1050.RDT', index: 0 } },
+  // The wolf medal: RE1 uses it only in the courtyard fountain's script, which her day never runs.
+  { step: 'dog-meat', id: 0x24, name: 'DOG MEAT', description: 'The gardener\'s dog meat,\nin a stained sack.' , model: { own: 'dog-meat' } },
 ];
 
 /** Room-item flags (FG_ITEM) for the key items she picks up in the kit rooms: 160-179. */
