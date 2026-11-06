@@ -51,6 +51,19 @@
     11900
    ],
    "fov": 200
+  },
+  {
+   "from": [
+    21335,
+    -3910,
+    9775
+   ],
+   "to": [
+    26010,
+    -1530,
+    10880
+   ],
+   "fov": 200
   }
  ],
  "walls": [
@@ -555,6 +568,13 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "adit",
+   "bank": 1,
+   "bit": -1
+  }
+ ],
  "probe": {
   "Blanket on the cart": 69,
   "Cart in the water 1": 58,
@@ -621,6 +641,22 @@
    },
    "walk": false,
    "touch": false
+  },
+  {
+   "to": "east-path",
+   "zone": {
+    "x0": 24480,
+    "z0": 9860,
+    "x1": 25500,
+    "z1": 11900
+   },
+   "arrive": {
+    "x": 22950,
+    "z": 12070,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
   }
  ],
  "checks": [
@@ -661,12 +697,23 @@
    "z": 7310
   }
  ],
- "spots": [],
+ "spots": [
+  {
+   "step": "adit",
+   "zone": {
+    "x0": 24480,
+    "z0": 9860,
+    "x1": 25500,
+    "z1": 11900
+   }
+  }
+ ],
  "entry": null,
  "notes": [
   "from the foot of the decline: the black water, the cart he hid on, Hal floating by the rope",
   "from the far south-east: Hal at the edge of the deep water, the cart, the way back up",
   "close on Hal, face down, the key on its chain at his neck, the rope and the DANGER board",
-  "from over the winze: the cart under its web, the carts in the water, the decline"
+  "from over the winze: the cart under its web, the carts in the water, the decline",
+  "down the drainage adit's line at the east end: the boards across it, the water at its sill; kicked out, the tunnel to daylight"
  ]
 }
