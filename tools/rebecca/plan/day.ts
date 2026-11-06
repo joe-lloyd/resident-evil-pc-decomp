@@ -233,8 +233,16 @@ export const day: Plan = {
         needs: ['cutters'],
         label: "Cut the workshop's padlock with the bolt cutters instead. The clatter carries across the camp",
         stirs: [{ at: 'camp-yard', enemies: 'Zombie loggers out of the bunkhouse and the mess hall, drawn by the noise' }],
+      }, {
+        needs: ['cutters', 'ring-bell'],
+        label: 'Or ring the cookhouse bell first, and cut the padlock while the loggers crowd into the mess hall for a supper that never comes',
       }],
     },
+    {
+      ...step(2, 'ring-bell', 'camp-yard', 'do', ['dog'], "Ring the cookhouse bell: the men's habit outlives them, and the loggers shamble to the mess hall", { optional: true }),
+      stirs: [{ at: 'mess', enemies: 'The zombie loggers, crowded round the tables, between her and the dead cook with the office key' }],
+    },
+
 
     {
       ...step(2, 'mill-race', 'pond', 'do', ['crank', 'dog'], 'Open the sluice with the winch crank: the mill runs'),
