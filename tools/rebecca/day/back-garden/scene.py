@@ -7,10 +7,14 @@ back of the house. The fountain still runs. The house's back wall is dark
 grey stone, three storeys of tall windows, one lit high up. Its back door
 has been boarded over from outside: someone wanted something kept in.
 Beside it, the cellar's sloping bulkhead doors, under a lamp on the wall
-that moths circle. A maid came up out of the cellar and ran: one of her
-shoes is on the path by the bulkhead and her blood runs from there across
-the gravel to the west hedge, where she lies face down, half dragged into
-it, her cap in the gravel. The gardener's barrow lies tipped over by the
+that moths circle. They are shut and bare, no lock on them: they have
+been barred from below. A maid came up out of the cellar and ran, and
+someone barred the doors behind her: one of her shoes is on the path by
+the bulkhead and her blood runs from there across the gravel to the west
+hedge, where she lies face down, half dragged into it, her cap in the
+gravel. Just west of the bulkhead, against the house under the wall
+lamp, the coal chute: an iron grate in a stone kerb, coal dust trodden
+black round it, lumps spilled from the last delivery. The gardener's barrow lies tipped over by the
 potting shed, its soil spilled, the spade where it was dropped.
 
 Metres: the floor is x 2-17, y 2-13.8 at z 0. The house's back wall runs
@@ -19,11 +23,16 @@ yews at the north edge, x 9-11. The fountain stands in the middle at
 (10, 8), radius 1.5, with four box beds round it. The potting shed is in
 the north-east, x 15.2-18.2, y 3.5-6.5, its door in the west wall at
 y 4.6-5.4. The cellar's bulkhead is against the house at x 12.0-13.6,
-y 12.6-14.0; the boarded back door at x 6.2-7.4. A tall hedge closes the
-west side.
+y 12.6-14.0; the boarded back door at x 6.2-7.4. The coal chute's kerb is
+x 10.05-11.05, y 12.95-14.0, the grate inside it; the way down to the
+cellar is the grate. A tall hedge closes the west side.
 
 Moving: the fountain's water dripping and rippling, moths round the wall
 lamp, the lamp's flame, the weeds.
+
+State "coal-chute" (the grate prised up with the crowbar): the grate lying
+aside on the gravel west of the kerb, its scrape marks on the stone, the
+chute's black mouth open.
 """
 import math
 import os
@@ -45,7 +54,23 @@ SHED = (15.2, 18.2, 3.5, 6.5)
 SHED_DOOR = (4.6, 5.4)
 BULKHEAD = (12.0, 13.6, 12.6, 14.0)
 BACK_DOOR = (6.2, 7.4)
+KERB = (10.05, 11.05, 12.95, 14.0)   # the coal chute's stone surround
+GRATE = (10.17, 10.93, 13.07, 13.94)  # the opening the grate covers
 BEDS = ((5.0, 3.6, 8.2, 6.6), (11.8, 3.6, 13.4, 6.6), (5.0, 9.4, 8.2, 11.0), (11.8, 9.4, 15.0, 11.0))
+
+
+def trim(ob, rect):
+    """Take the grass cards off a mesh inside rect (x0, y0, x1, y1): none grows
+    through the coal chute's grate."""
+    import bmesh
+    x0, y0, x1, y1 = rect
+    bm = bmesh.new()
+    bm.from_mesh(ob.data)
+    w = ob.matrix_world
+    gone = [f for f in bm.faces if x0 < (w @ f.calc_center_median()).x < x1 and y0 < (w @ f.calc_center_median()).y < y1]
+    bmesh.ops.delete(bm, geom=gone, context="FACES")
+    bm.to_mesh(ob.data)
+    bm.free()
 
 
 def height(x, y):
@@ -213,7 +238,7 @@ def build():
     reb.prim("cube", "Back step", stone, ((bd[0] + bd[1]) / 2, HOUSE_Y - 0.35, 0.09), (bd[1] - bd[0] + 0.8, 0.7, 0.18))
     kit.barricade("Boards over the door", mat("planks"), (bd[0] - 0.1, HOUSE_Y - 0.1), (bd[1] + 0.1, HOUSE_Y - 0.1), z0=0.4, z1=2.2, count=5, seed=3)
     kit.text("Daubed", "KEEP OUT", mat("white paint"), ((bd[0] + bd[1]) / 2, HOUSE_Y - 0.14, 1.05), size=0.16)
-    # The bulkhead: two sloping iron doors in a stone curb, shut, chained.
+    # The bulkhead: two sloping iron doors in a stone curb, shut, no lock: barred from below.
     cx0, cx1, cy0, cy1 = BULKHEAD
     rise = math.atan2(0.75, cy1 - cy0)
     reb.prim("cube", "Bulkhead curb", stone, ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 0.2), (cx1 - cx0 + 0.3, cy1 - cy0, 0.4))
@@ -223,14 +248,65 @@ def build():
             reb.prim("cube", "Strap", mat("rust"), ((a + b) / 2, cy0 + (cy1 - cy0) * t, 0.6 + (t - 0.5) * 0.75 + 0.03), (b - a - 0.05, 0.06, 0.02), rot=(rise, 0, 0))
     for side in (-1, 1):
         reb.prim("cube", "Bulkhead cheek", stone, ((cx0 + cx1) / 2 + side * ((cx1 - cx0) / 2 + 0.1), (cy0 + cy1) / 2, 0.55), (0.2, cy1 - cy0, 0.4), rot=(rise, 0, 0))
-    reb.prim("cube", "Hasp", mat("iron"), ((cx0 + cx1) / 2, cy0 + 0.35, 0.82), (0.12, 0.05, 0.03), rot=(rise, 0, 0))
-    reb.prim("cube", "Cellar padlock", reb.mat_metal("Brass", (0.45, 0.33, 0.12), 0.45), ((cx0 + cx1) / 2, cy0 + 0.32, 0.76), (0.07, 0.04, 0.09), bevel=0.01)
     kit.scratches("Clawed bulkhead", mat("steel"), ((cx0 + cx1) / 2 - 0.3, cy0 + 0.2, 0.75), (0, -1), count=5, length=0.3, seed=7)
     kit.splat("Bloody hand on the door", mat("blood"), (cx0 + 0.4, cy0 + 0.4, 0.8), 0.07, rot=(rise, 0, 0), seed=5)
     # The lamp on the wall over it, moths round it.
     kit.rod("Lamp bracket", mat("iron"), (11.4, HOUSE_Y, 2.8), (11.4, HOUSE_Y - 0.45, 2.8), 0.02)
     lamp, lamp_light, flame = kit.lantern("Wall lamp", (11.4, HOUSE_Y - 0.45, 2.4), energy=55, hanging=True)
     reb.spot("Wall lamp throw", (11.4, HOUSE_Y - 0.6, 2.7), (11.8, 11.0, 0.0), 160, (1.0, 0.62, 0.3), 100, 0.8, 0.2)
+
+    # ---- The coal chute west of the bulkhead, under the lamp: an iron grate in a stone kerb,
+    # its black mouth under it, coal dust trodden round it.
+    crng = random.Random(131)
+    kx0, kx1, ky0, ky1 = KERB
+    gx0, gx1, gy0, gy1 = GRATE
+    kerb_h = 0.12
+    for at, size in ((((kx0 + kx1) / 2, (ky0 + gy0) / 2), (kx1 - kx0, gy0 - ky0)),
+                     (((kx0 + gx0) / 2, (gy0 + ky1) / 2), (gx0 - kx0, ky1 - gy0)),
+                     (((gx1 + kx1) / 2, (gy0 + ky1) / 2), (kx1 - gx1, ky1 - gy0)),
+                     (((gx0 + gx1) / 2, (gy1 + ky1) / 2), (gx1 - gx0, ky1 - gy1))):
+        reb.prim("cube", "Chute kerb", stone, (at[0], at[1], kerb_h / 2 - 0.02), (size[0], size[1], kerb_h + 0.04), bevel=0.015)
+    reb.prim("cube", "Chute mouth", mat("black"), ((gx0 + gx1) / 2, (gy0 + gy1) / 2, -0.07), (gx1 - gx0 + 0.01, gy1 - gy0 + 0.01, 0.2))
+    grate_parts = []
+    gw, gd = gx1 - gx0 - 0.02, gy1 - gy0 - 0.02
+    for y in (-gd / 2 + 0.02, gd / 2 - 0.02):
+        grate_parts.append(reb.prim("cube", "Grate frame", bulk_m, (0, y, 0), (gw, 0.04, 0.04)))
+    for x in (-gw / 2 + 0.02, gw / 2 - 0.02):
+        grate_parts.append(reb.prim("cube", "Grate frame", bulk_m, (x, 0, 0), (0.04, gd, 0.04)))
+    for k in range(1, 9):
+        x = -gw / 2 + gw * k / 9
+        grate_parts.append(reb.prim("cube", "Grate bar", bulk_m, (x, 0, 0), (0.022, gd - 0.04, 0.035)))
+    grate_parts.append(reb.prim("cube", "Grate rib", bulk_m, (0, 0, -0.005), (gw - 0.04, 0.03, 0.025)))
+    grate_parts.append(reb.prim("cube", "Grate lifting slot", mat("rust"), (0, -gd / 2 + 0.07, 0.019), (0.12, 0.03, 0.004)))
+    grate = kit.join("Chute grate", grate_parts, origin=(0, 0, 0))
+    grate_rest = Vector(((gx0 + gx1) / 2, (gy0 + gy1) / 2, kerb_h - 0.045))
+    grate.location = grate_rest
+    dust = reb.mat_surface("Coal dust", [(0.0, (0.008, 0.008, 0.009)), (0.7, (0.025, 0.024, 0.024)), (1.0, (0.06, 0.058, 0.055))], scale=10, rough=0.8, bump=0.3)
+    for i, (dx, dy, r) in enumerate(((-0.1, -0.85, 0.45), (0.6, -0.55, 0.35), (-0.55, -0.6, 0.3), (0.25, -1.25, 0.3))):
+        cxp, cyp = (kx0 + kx1) / 2 + dx, ky1 + dy - 0.5
+        kit.splat(f"Coal dust {i}", dust, (cxp, cyp, height(cxp, cyp) + 0.009), r, seed=140 + i, stretch=(1.4, 0.8))
+    lv, lf = [], []
+    for _ in range(14):
+        a = crng.uniform(0, 2 * math.pi)
+        d = crng.uniform(0.6, 1.1)
+        p = ((kx0 + kx1) / 2 + math.cos(a) * d, (ky0 + ky1) / 2 + math.sin(a) * d * 0.8)
+        if p[1] > HOUSE_Y - 0.1:
+            continue
+        reb.boulder(crng, (p[0], p[1], height(*p) + 0.02), crng.uniform(0.03, 0.06), lv, lf, squash=0.7)
+    reb.mesh_object("Spilled coal", lv, lf, reb.mat_surface("Coal lumps", [(0.0, (0.008, 0.008, 0.008)), (1.0, (0.05, 0.05, 0.055))], scale=20, rough=0.3, bump=1.0))
+    # Where the crowbar bit the kerb: bright scrapes, only once it has been prised.
+    pried = kit.scratches("Prised kerb", mat("steel"), ((gx0 + gx1) / 2, ky0, kerb_h), (0, -1), count=5, length=0.12, seed=17)
+    pried.hide_render = True
+
+    def prise(done):
+        # The grate prised up and dropped aside on the gravel west of the kerb.
+        if done:
+            grate.location = (kx0 - 0.55, 13.35, height(kx0 - 0.55, 13.35) + 0.03)
+            grate.rotation_euler = (0.06, 0.04, -0.35)
+        else:
+            grate.location, grate.rotation_euler = grate_rest, (0, 0, 0)
+        pried.hide_render = not done
+    room.state("coal-chute", prise)
 
     # ---- The maid: up out of the cellar, her shoe left on the path, dragged into the west hedge.
     reb.prim("cube", "Her shoe", reb.mat_plain("Patent leather", (0.01, 0.01, 0.01), 0.2), (11.6, 12.2, 0.04), (0.22, 0.08, 0.08), rot=(0, 0.2, 2.6), bevel=0.02)
@@ -335,6 +411,7 @@ def build():
     # ---- Beyond: the woods over the yews and hedges.
     kit.forest(rng, lambda x, y: 0.0, lambda x, y: (-4 < x < 21 and y > -1.5) or y > HOUSE_Y, (-24, -26, 40, 26), count=60, spacing=2.6, tall=(12, 20), ferns=0, needles=0)
     grass = kit.meadow(rng, 900, lambda r: (r.uniform(X0, X1), r.uniform(Y0, Y1)), height, mat("blades"))
+    trim(grass, (KERB[0] - 0.05, KERB[2] - 0.05, KERB[1] + 0.05, KERB[3]))
 
     # ---- Light: the moon, the wall lamp by the bulkhead, the lit window high up.
     kit.time_light("night", sun_heading=60, sun_energy=0.4)
@@ -355,7 +432,8 @@ def build():
     # ---- What the game needs.
     room.door("kennels", (NORTH[0], Y0, NORTH[1], Y0 + 0.6), arrive=(10.0, 3.4), face=(0, 1))
     room.door("garden-shed", (sx0 - 0.6, SHED_DOOR[0], sx0, SHED_DOOR[1]), arrive=(14.0, 5.0), face=(-1, 0), walk=False)
-    room.door("cellar", (cx0, cy0 - 0.6, cx1, cy0), arrive=(12.8, 11.5), face=(0, -1), walk=False)
+    room.door("cellar", (KERB[0], KERB[2] - 0.6, KERB[1], KERB[3] - 0.4), arrive=(9.45, 12.55), face=(0, -1), walk=False)
+    room.check((cx0, cy0 - 0.6, cx1, cy0), "The cellar doors won't move.\nThey're barred from the inside.")
     room.check((bd[0], HOUSE_Y - 1.0, bd[1], Y1), "The back door's been boarded over. From out here.\nKEEP OUT.")
     room.check((3.1, 9.4, 5.6, 10.9), "One of the maids. Something dragged her into the hedge.\nShe came from the cellar doors. She was running.")
     room.check((11.2, 11.8, 12.0, 12.6), "A shoe. Hers, I think.")
