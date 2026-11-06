@@ -189,27 +189,12 @@ void crashlog_install(void)
 // as the same callers under a moving EIP.
 //
 // The main thread is only suspended long enough to copy its registers and the
-// top of its stack: suspended, it may hold the heap lock, so the walk and the
-// symbol lookups run on the copy after it is resumed.
+// top of its stack: suspended, it may hold the heap lock, so the symbol lookups
+// run on the copy after it is resumed.
 
 static HANDLE s_mainThread;
 static volatile LONG s_beat;
 static BYTE s_stack[64 * 1024];
-static DWORD s_stackBase;
-static DWORD s_stackLen;
-
-static BOOL CALLBACK read_copy(HANDLE proc, DWORD64 addr, PVOID buf, DWORD size, LPDWORD read)
-{
-    if (addr >= s_stackBase && addr + size <= (DWORD64)s_stackBase + s_stackLen) {
-        memcpy(buf, s_stack + (size_t)(addr - s_stackBase), size);
-        *read = size;
-        return TRUE;
-    }
-    SIZE_T n = 0;
-    BOOL ok = ReadProcessMemory(proc, (LPCVOID)(uintptr_t)addr, buf, size, &n);
-    *read = (DWORD)n;
-    return ok;
-}
 
 static void report_hang(HANDLE proc, SYMBOL_INFO* sym, int seconds)
 {
@@ -217,13 +202,12 @@ static void report_hang(HANDLE proc, SYMBOL_INFO* sym, int seconds)
     ctx.ContextFlags = CONTEXT_CONTROL | CONTEXT_INTEGER;
     if (SuspendThread(s_mainThread) == (DWORD)-1) return;
     BOOL ok = GetThreadContext(s_mainThread, &ctx);
-    s_stackBase = ctx.Esp;
-    s_stackLen = 0;
+    DWORD len = 0;
     MEMORY_BASIC_INFORMATION mbi;
     if (ok && VirtualQuery((LPCVOID)(uintptr_t)ctx.Esp, &mbi, sizeof(mbi))) {
         DWORD left = (DWORD)((uintptr_t)mbi.BaseAddress + mbi.RegionSize - ctx.Esp);
-        s_stackLen = left < sizeof(s_stack) ? left : (DWORD)sizeof(s_stack);
-        memcpy(s_stack, (const void*)(uintptr_t)ctx.Esp, s_stackLen);
+        len = left < sizeof(s_stack) ? left : (DWORD)sizeof(s_stack);
+        memcpy(s_stack, (const void*)(uintptr_t)ctx.Esp, len);
     }
     ResumeThread(s_mainThread);
     if (!ok) return;
@@ -234,28 +218,13 @@ static void report_hang(HANDLE proc, SYMBOL_INFO* sym, int seconds)
     fprintf(f, "EIP=%08lX ESP=%08lX EBP=%08lX\n", ctx.Eip, ctx.Esp, ctx.Ebp);
     write_frame(f, proc, sym, 0, ctx.Eip);
 
-    STACKFRAME64 frame = {};
-    frame.AddrPC.Offset = ctx.Eip;
-    frame.AddrPC.Mode = AddrModeFlat;
-    frame.AddrStack.Offset = ctx.Esp;
-    frame.AddrStack.Mode = AddrModeFlat;
-    frame.AddrFrame.Offset = ctx.Ebp;
-    frame.AddrFrame.Mode = AddrModeFlat;
-    CONTEXT walk = ctx;
-    StackWalk64(IMAGE_FILE_MACHINE_I386, proc, s_mainThread, &frame, &walk, read_copy,
-                SymFunctionTableAccess64, SymGetModuleBase64, NULL);
-    for (unsigned i = 1; i < 32 && StackWalk64(IMAGE_FILE_MACHINE_I386, proc, s_mainThread, &frame, &walk,
-                                               read_copy, SymFunctionTableAccess64, SymGetModuleBase64, NULL); i++) {
-        write_frame(f, proc, sym, i, frame.AddrPC.Offset);
-    }
-
-    // Tasks run on their own stacks and are entered with a jump, so the walk
-    // can stop short. Every word on the stack that points into the exe is a
-    // likely return address: the callers, oldest last.
+    // Tasks run on their own stacks and are entered with a jump, so there is
+    // no frame chain to walk. Every word on the stack that points into the exe
+    // is a likely return address: the callers, innermost first.
     fprintf(f, "  exe addresses on the stack:\n");
     const DWORD64 exe = (DWORD64)(uintptr_t)GetModuleHandleA(NULL);
     unsigned shown = 0;
-    for (DWORD at = 0; at + 4 <= s_stackLen && shown < 32; at += 4) {
+    for (DWORD at = 0; at + 4 <= len && shown < 32; at += 4) {
         DWORD v = *(const DWORD*)(s_stack + at);
         if (SymGetModuleBase64(proc, v) != exe) continue;
         write_frame(f, proc, sym, shown++, v);
