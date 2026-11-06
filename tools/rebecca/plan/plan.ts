@@ -75,6 +75,8 @@ export interface OtherWay {
   readonly needs: readonly string[];
   /** What she does instead, and what it costs her. */
   readonly label: string;
+  /** Enemies this way brings out that the step's own way does not, such as to the noise of forcing a lock. */
+  readonly stirs?: readonly Stir[];
 }
 
 export interface Stir {
@@ -137,7 +139,7 @@ export function check(plan: Plan): Report {
     if (!acts.has(s.act)) errors.push(`${s.id} is in act ${s.act}, which is not an act`);
     if (!places.has(s.at)) errors.push(`${s.id} is at ${s.at}, which is not a place`);
     for (const n of ways(s).flat()) if (!steps.has(n)) errors.push(`${s.id} needs ${n}, which is not a step`);
-    for (const st of s.stirs ?? []) if (!places.has(st.at)) errors.push(`${s.id} stirs enemies at ${st.at}, which is not a place`);
+    for (const st of [...(s.stirs ?? []), ...(s.otherWays ?? []).flatMap((w) => w.stirs ?? [])]) if (!places.has(st.at)) errors.push(`${s.id} stirs enemies at ${st.at}, which is not a place`);
   }
   for (const l of plan.links) {
     for (const end of [l.from, l.to]) if (!places.has(end)) errors.push(`a link goes to ${end}, which is not a place`);

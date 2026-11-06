@@ -82,10 +82,10 @@ test('a step can be done by its other way, and what only that way needs still co
 
 test('an other way that needs a missing step, or stirs enemies nowhere, is an error', () => {
   const r = check(tiny({ steps: [
-    { id: 'key', label: 'key', at: 'a', act: 1, kind: 'find', needs: [], otherWays: [{ needs: ['ghost'], label: 'x' }], stirs: [{ at: 'nowhere', enemies: 'dogs' }], built: 'planned' },
+    { id: 'key', label: 'key', at: 'a', act: 1, kind: 'find', needs: [], otherWays: [{ needs: ['ghost'], label: 'x', stirs: [{ at: 'void', enemies: 'crows' }] }], stirs: [{ at: 'nowhere', enemies: 'dogs' }], built: 'planned' },
     { id: 'end', label: 'end', at: 'b', act: 1, kind: 'goal', needs: ['key'], built: 'planned' },
   ] }));
-  assert.deepEqual(r.errors, ['key needs ghost, which is not a step', 'key stirs enemies at nowhere, which is not a place']);
+  assert.deepEqual(r.errors, ['key needs ghost, which is not a step', 'key stirs enemies at nowhere, which is not a place', 'key stirs enemies at void, which is not a place']);
 });
 
 test('every room is on one map, and each map is a step she can take', () => {
