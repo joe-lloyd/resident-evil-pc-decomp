@@ -118,7 +118,7 @@ export const day: Plan = {
     place(3, 'creek', 'The creek', 5, [10, 11.2], ['A ford, the lodge across it', 'Running water', 'Adders', ''], {}),
     place(3, 'lodge', "The gardener's lodge", 4, [12.2, 11.2], ['The back gate key, his diary', 'A lamp left burning', '', 'He scratched himself raw'], {}),
     place(3, 'estate-wall', 'The estate wall', 5, [10, 12.6], ['The back gate into the Spencer estate', 'Ivy in the wind', 'Crows', 'The mansion over the wall'], {}),
-    place(3, 'kennels', 'The kennels', 5, [10, 14], ['Empty runs, broken chains, one run with a sound gate and bolt; the hoist the dogs\' meat came up on from the house\'s cold store', 'A gate banging', 'Cerberus, a pack', 'The dogs on the mountain came from here'], {}),
+    place(3, 'kennels', 'The kennels', 5, [10, 14], ['Runs behind wire, their gates hanging broken, one run with a sound gate and bolt; the hoist the dogs\' meat came up on from the house\'s cold store', 'A gate banging', 'Cerberus, a pack, pacing in the runs: they have not seen her, and a noise would bring them out', 'The dogs on the mountain came from here'], {}),
     place(3, 'back-garden', 'The back garden', 6, [10, 15.4], ['Hedges, the cellar doors barred from inside, a coal chute\'s grate beside them', 'Fountain water, moths at a lamp', 'A zombie', '']
 , {}),
     place(3, 'garden-shed', 'The garden shed', 2, [12.2, 15.4], ['The cellar key on a board; the gardener\'s last sack of dog meat by the door', 'A cobweb trembling', '', 'He fed the pack himself, until it was too big to feed'], {}),
@@ -313,7 +313,12 @@ export const day: Plan = {
     step(3, 'cellar-key', 'garden-shed', 'find', ['open-gate'], "Take the cellar key from the gardener's board: it locks the house's cold store and the meat hoist up to the kennels"),
     step(3, 'dog-meat', 'garden-shed', 'find', ['open-gate'], "Take the gardener's sack of dog meat"),
     step(3, 'pen-pack', 'kennels', 'do', ['dog-meat'], 'Throw the meat into the run with the sound gate: the pack piles in after it, and she bolts the gate on them'),
-    step(3, 'hoist', 'kennels', 'do', ['pen-pack', 'cellar-key'], "With the pack shut in, unlock the meat hoist with the cellar key and ride it down to the house's cold store"),
+    step(3, 'kill-pack', 'kennels', 'do', ['open-gate'], 'Or shoot the pack down in the yard, at the cost of most of her rounds', { optional: true }),
+    {
+      ...step(3, 'hoist', 'kennels', 'do', ['pen-pack', 'cellar-key'], "With the pack shut in, unlock the meat hoist with the cellar key and ride it down to the house's cold store"),
+      otherWays: [{ needs: ['kill-pack', 'cellar-key'], label: 'Or, with the pack dead, unlock the hoist and ride it down: the meat would have saved her rounds' }],
+    },
+
     {
       ...step(3, 'coal-chute', 'back-garden', 'do', ['open-gate', 'crowbar', 'map-estate'], "Prise up the coal chute's grate with Kevin's crowbar, where the grounds plan marks it, and drop into the cellar. The iron rings across the garden"),
       stirs: [{ at: 'back-garden', enemies: 'The Cerberus pack from the kennels, at the sound, unless she has shut them in' }],
