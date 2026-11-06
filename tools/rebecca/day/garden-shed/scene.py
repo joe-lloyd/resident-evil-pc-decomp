@@ -8,6 +8,10 @@ the board by the door hang the estate's spare keys, each on its labelled
 hook: the cellar key with its red tag is among them, and two hooks are
 empty. Tools hang in a row on the south wall, sacks of bone meal and
 potting soil slump in the corner, a sack has been gnawed open and spilled.
+He fed the kennels' pack himself, until it grew too big to feed: by the
+door, where he left it to carry over, slumps his last sack of dog meat,
+burlap soaked through dark from the bottom, a few scraps dragged out of
+its neck onto the boards, flies on it.
 A rat lies dead on its back by the spilled meal, swollen, its fur coming
 away, beside a trap that never caught it. A cobweb across the window
 trembles in the draught from the door.
@@ -16,8 +20,11 @@ Metres: the floor is x 1.0-3.8, y 1.0-3.8, 2.2 high to the rafters. The
 door is in the west wall at y 2.1-2.9, out to the back garden; a small
 window beside it at y 3.25-3.65. The bench runs along the east wall, the
 key board is on the north wall by the door, the tools on the south wall.
+The dog meat sack stands just south of the door, under the window, at
+(1.32, 3.15).
 
-Moving: the lantern's flame, the cobweb trembling, flies over the rat.
+Moving: the lantern's flame, the cobweb trembling, flies over the rat and
+over the sack.
 """
 import math
 import os
@@ -33,6 +40,7 @@ from mathutils import Vector  # noqa: E402
 X0, X1, Y0, Y1, H = 1.0, 3.8, 1.0, 3.8, 2.2
 DOOR = (2.1, 2.9)
 WINDOW = (3.25, 3.65, 1.1, 1.6)
+MEAT = (1.32, 3.15)     # the dog meat sack, by the door
 
 
 def web(name, corner, size, facing, sag=0.25, rings=4, spokes=7):
@@ -201,6 +209,27 @@ def build():
     reb.prim("cube", "Boot, fallen", mat("rubber"), (X0 + 0.55, 3.5, 0.07), (0.34, 0.13, 0.13), rot=(0, 0, 0.4), bevel=0.03)
     reb.wall(kit.shelves("Shelves", mat("planks"), (2.2, Y0 + 0.17, 0.0), size=(0.6, 0.28, 1.0), rows=3, clutter=0.8, seed=5))
 
+    # ---- By the door, under the window: his last sack of dog meat, soaked
+    # through from the bottom, scraps pulled out of its neck, flies on it.
+    mrng = random.Random(197)
+    mx, my = MEAT
+    burlap = reb.mat_surface("Stained burlap", [(0.0, (0.035, 0.008, 0.005)), (0.45, (0.07, 0.02, 0.012)), (0.6, (0.13, 0.08, 0.045)), (1.0, (0.24, 0.19, 0.11))], scale=5, bump=0.9)
+    sack = kit.join("Dog meat sack", [
+        reb.prim("cube", "body", burlap, (0, 0, 0.19), (0.5, 0.42, 0.38), bevel=0.11),
+        reb.prim("cube", "slump", burlap, (0.06, 0.02, 0.36), (0.34, 0.3, 0.12), rot=(0.1, 0.25, 0.2), bevel=0.05),
+        reb.prim("cone", "neck", burlap, (0.1, 0.02, 0.45), (0.26, 0.24, 0.1), top=0.6, rot=(0, 0.35, 0), segments=10),
+        reb.prim("cyl", "twine", reb.mat_plain("Twine", (0.3, 0.25, 0.14), 0.9), (0.12, 0.02, 0.48), (0.15, 0.14, 0.025), rot=(0, 0.35, 0), segments=10),
+        reb.prim("cone", "mouth", burlap, (0.16, 0.02, 0.53), (0.2, 0.18, 0.08), top=1.3, rot=(0, 0.6, 0), segments=10),
+    ], origin=(0, 0, 0))
+    sack.location, sack.rotation_euler = (mx, my, 0.0), (0.04, -0.06, 0.4)
+    kit.splat("Seeped from the sack", mat("old blood"), (mx + 0.08, my - 0.02, 0.0), 0.3, seed=41, stretch=(1.3, 0.9))
+    raw = reb.mat_surface("Raw meat", [(0.0, (0.1, 0.012, 0.01)), (0.55, (0.2, 0.035, 0.025)), (0.85, (0.33, 0.12, 0.08)), (1.0, (0.45, 0.38, 0.3))], scale=14, rough=0.35, bump=0.6)
+    sv2, sf2 = [], []
+    for at in ((mx + 0.32, my - 0.12), (mx + 0.48, my + 0.05), (mx + 0.62, my - 0.18), (mx + 0.25, my + 0.2)):
+        reb.boulder(mrng, (at[0], at[1], 0.02), mrng.uniform(0.035, 0.06), sv2, sf2, squash=0.45)
+    reb.mesh_object("Meat scraps", sv2, sf2, raw)
+    kit.drag_trail("Dragged from the sack", mat("old blood"), [(mx + 0.2, my - 0.05), (mx + 0.62, my - 0.18)], width=0.08, seed=42)
+
     # ---- Light: the lantern, moonlight through the window.
     kit.time_light("night", sun_heading=250, sun_energy=0.3)
     reb.spot("Moon through the window", (X0 - 2.5, 3.9, 2.4), (2.4, 3.0, 0.0), 60, (0.55, 0.65, 0.9), 30, 0.5, 0.2)
@@ -219,9 +248,12 @@ def build():
         the_web.data.update()
     anim.custom(tremble)
     anim.flies((rx, ry, 0.05), count=6, radius=0.18)
+    anim.flies((mx + 0.1, my, 0.45), count=8, radius=0.25)
 
     # ---- What the game needs.
     room.door("back-garden", (X0, DOOR[0], X0 + 0.5, DOOR[1]), arrive=(1.75, 2.5), face=(1, 0))
+    # The gardener's last sack of dog meat by the door (dog-meat).
+    room.item("dog-meat", (mx, my, 0.5))
     room.check((1.3, Y0, 2.2, Y0 + 0.6), "The estate's spare keys. CELLAR, on a red tag.\nTwo of the hooks are empty.")
     room.check((2.5, Y0, 3.0, Y0 + 0.6), "A calendar. July, crossed off day by day.\nIt stops at the 20th.")
     room.check((X1 - 0.7, 1.4, X1, 2.2), "His lantern's still lit. The tea's stone cold.")
