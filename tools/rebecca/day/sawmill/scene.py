@@ -10,10 +10,12 @@ to stop it; it hangs slack from the big pulley. Then someone wound the
 pond's sluice down, and the water wheel outside stopped, and with it the
 shaft where it comes through the east wall. The rest of the sawyer went out the back door: his
 blood and his one hand on the frame lead east, to the mill pond. The log
-crane waits on its overhead track with its tongs hanging, the lamps hang
-dead, and sawdust lies thick over everything. A player should see the
-crane and work out that it could lift something heavy, if the mill had
-power to spare.
+crane waits idle on its overhead track with its tongs hanging, the lamps
+hang dead, and sawdust lies thick over everything. On the tally board by
+the filer's bench the millwright drew in chalk how the camp gets its power:
+the pond, the sluice, the wheel, a dynamo on the wheel's shaft, and a line
+drawn off to a box he labelled WORKSHOP HOIST. A player should read the
+drawing and work out that opening the sluice powers the workshop's hoist.
 
 Metres: the floor is x 1.0-14.0, y 2.6-12.2, the shed 6 m to the roof.
 The big doors are in the west wall at y 6.0-9.0, open onto the camp yard;
@@ -23,7 +25,8 @@ out to the pond. The carriage runs east-west on rails at y 4.0-5.1 from
 x 1.6 to 11.0, the log on it; the head saw's blade stands at x 8.6, y 5.6.
 The board stack is at x 8.2-12.2, y 7.8-8.6. The wheel's shaft comes in at
 y 4.6, 2.8 m up, its pulley at x 12.8. The crane track runs along y 4.6 at
-5.3 m.
+5.3 m. The chalkboard is on the south wall at x 4.85-7.75, the day's board
+feet at its east end, the millwright's drawing west of them.
 
 The mill race, out the back door: the floor runs on east from the back door
 to the pond gate, x 14.0-19.0, a plank walk 2.2-2.4 m wide (y 9.2-11.6 to
@@ -44,9 +47,6 @@ the light; out back, the race's water, the tailer turning in the eddy.
 State "mill-race" (the sluice wound open at the pond, day/events.ts): the
 water wheel turning, water pouring off its buckets, and the shaft's pulley
 turning, in the room's loop. It happens at the pond, so nothing plays once.
-State "crane" (worked here once the mill runs): the trolley runs east along
-its track as the hoist winds the tongs up, played as it happens; then the
-tongs swing where it stopped, the mill turning as in "mill-race".
 """
 import math
 import os
@@ -69,6 +69,8 @@ RAIL_Y = (4.0, 5.1)
 BLADE = (8.6, 5.6, 1.05)     # the head saw's centre
 SHAFT_Y, SHAFT_Z = 4.6, 2.8
 STACK = (8.2, 12.2, 7.8, 8.6)
+BOARD = (4.85, 7.75)         # the chalkboard on the south wall (x)
+CHALK_ROT = (math.pi / 2, 0, 0)    # facing -y, into the mill: read from inside
 HIGH = (3.8, 4.8)            # the high windows' sill and head
 X_END = 19.0                 # the floor's east end: the plank walk to the pond gate
 WALK_A = (X1, 16.2, 9.2, 11.6)    # the walk's two reaches (x0, x1, y0, y1)
@@ -115,6 +117,70 @@ def ground(x, y):
         h -= min(1.1, (y - south - 0.2) * 1.4) * max(0.0, 1.0 - max(0.0, y - 13.4) / 1.6)
     out = max(0.0, abs(y - 10.0) - 3.5, 13.0 - x)
     return h + min(1.2, 0.06 * out) + 0.25 * n * min(1.0, out / 4.0)
+
+
+def chalk_drawing(chalk):
+    """The millwright's chalk drawing on the board, west of the tally: the
+    pond, the sluice, the race down to the wheel, a dynamo on the wheel's
+    shaft, and a line drawn off to a box he labelled WORKSHOP HOIST. Thick
+    strokes, so the shapes still read from across the mill. u runs west, to her
+    left as she faces the board, v is height."""
+    yf = Y1 - 0.034
+    x_left = 6.6
+    v, f = [], []
+
+    def P(u, z):
+        return Vector((x_left - u, yf, z))
+
+    def stroke(pts, w=0.024, closed=False):
+        pts = [P(*p) for p in pts]
+        if closed:
+            pts.append(pts[0])
+        for a, b in zip(pts, pts[1:]):
+            d = b - a
+            if d.length < 1e-6:
+                continue
+            n = Vector((-d.z, 0, d.x)).normalized() * (w / 2)
+            e = d.normalized() * (w / 4)    # overlap the joints
+            k = len(v)
+            v.extend([tuple(a - e - n), tuple(a - e + n), tuple(b + e + n), tuple(b + e - n)])
+            f.append((k, k + 1, k + 2, k + 3))
+
+    def ellipse(cu, cv, ru, rv, n=20):
+        return [(cu + ru * math.cos(2 * math.pi * k / n), cv + rv * math.sin(2 * math.pi * k / n)) for k in range(n)]
+
+    def rect(cu, cv, wu, hv):
+        return [(cu - wu / 2, cv - hv / 2), (cu + wu / 2, cv - hv / 2), (cu + wu / 2, cv + hv / 2), (cu - wu / 2, cv + hv / 2)]
+    # The pond, with a ripple drawn in it. (From camera 0 the mill post hides
+    # x 5.67-6.01 of the board: only the race and the line cross it.)
+    stroke(ellipse(1.38, 1.95, 0.25, 0.15), closed=True)
+    for dv in (0.03, -0.04):
+        stroke([(1.25 + 0.06 * k, 1.95 + dv + (0.015 if k % 2 else -0.015)) for k in range(5)], w=0.016)
+    # The sluice across the race where it leaves the pond, and the race to the wheel.
+    stroke(rect(0.98, 1.95, 0.05, 0.18), closed=True)
+    stroke([(0.92, 1.99), (0.55, 1.99), (0.44, 2.0)])
+    stroke([(0.92, 1.91), (0.57, 1.91), (0.47, 1.93)])
+    # The wheel, its spokes and buckets.
+    wu, wv, wr = 0.3, 1.8, 0.19
+    stroke(ellipse(wu, wv, wr, wr), closed=True)
+    for k in range(6):
+        a = math.pi * k / 3 + 0.3
+        stroke([(wu, wv), (wu + wr * math.cos(a), wv + wr * math.sin(a))], w=0.016)
+    for k in range(10):
+        a = 2 * math.pi * k / 10
+        stroke([(wu + wr * math.cos(a), wv + wr * math.sin(a)), (wu + (wr + 0.05) * math.cos(a), wv + (wr + 0.05) * math.sin(a))], w=0.016)
+    # The shaft down from the wheel's hub to the dynamo, its coil drawn in it.
+    stroke([(wu, wv), (wu, 1.49)])
+    stroke(rect(wu, 1.42, 0.17, 0.13), closed=True)
+    stroke([(wu - 0.07 + 0.035 * k, 1.42 + (0.035 if k % 2 else -0.035)) for k in range(5)], w=0.014)
+    # The line drawn off it, along the bottom, an arrow into the hoist's box.
+    stroke([(wu + 0.085, 1.42), (1.1, 1.42)])
+    stroke([(1.03, 1.47), (1.11, 1.42), (1.03, 1.37)])
+    stroke(rect(1.38, 1.42, 0.52, 0.16), closed=True)
+    reb.mesh_object("Chalk drawing", v, f, chalk, smooth=False)
+    for words, (u, z), size in (("WORKSHOP HOIST", (1.38, 1.42), 0.042), ("POND", (1.38, 2.16), 0.05), ("SLUICE", (0.98, 1.78), 0.035),
+                                ("WHEEL", (0.3, 2.13), 0.04), ("DYNAMO", (wu, 1.29), 0.035)):
+        kit.text(f"Chalk words {words}", words, chalk, tuple(P(u, z) + Vector((0, -0.001, 0))), size=size, rot=CHALK_ROT)
 
 
 def settle(ob, at, rot):
@@ -584,8 +650,10 @@ def build():
         reb.prim("cyl", f"Spare blade {k}", blade_m, (x, Y1 - 0.04, 2.2), (1.1, 1.1, 0.012), rot=(math.pi / 2, 0, 0), segments=40)
         reb.prim("cube", f"Blade peg {k}", timber, (x, Y1 - 0.05, 2.78), (0.06, 0.08, 0.06))
     kit.papers("Tally sheets", (12.2, Y1 - 0.45, 0.9), spread=0.3, count=4, seed=6)
-    reb.prim("cube", "Tally board", reb.mat_surface("Chalkboard", [(0.0, (0.04, 0.06, 0.05)), (1.0, (0.1, 0.12, 0.1))], scale=6, rough=0.9, bump=0.05), (7.0, Y1 - 0.02, 1.7), (1.2, 0.02, 0.8))
-    kit.text("Tally", "MON 4100\nTUE 3850\nWED 1200", reb.mat_plain("Chalk", (0.62, 0.62, 0.58), 0.95), (7.0, Y1 - 0.035, 1.75), size=0.09, rot=(math.pi / 2, 0, math.pi))
+    reb.prim("cube", "Tally board", reb.mat_surface("Chalkboard", [(0.0, (0.04, 0.06, 0.05)), (1.0, (0.1, 0.12, 0.1))], scale=6, rough=0.9, bump=0.05), ((BOARD[0] + BOARD[1]) / 2, Y1 - 0.02, 1.7), (BOARD[1] - BOARD[0], 0.02, 1.1))
+    chalk = reb.mat_plain("Chalk", (0.62, 0.62, 0.58), 0.95)
+    kit.text("Tally", "MON 4100\nTUE 3850\nWED 1200", chalk, (7.0, Y1 - 0.035, 1.75), size=0.09, rot=CHALK_ROT)
+    chalk_drawing(chalk)
     for k, (x, y) in enumerate(((2.4, 11.0), (8.2, 11.2))):
         kit.drum(f"Oil drum {k}", mat("rust"), (x, y, 0.0))
     cart = kit.table("Lumber cart", mat("rust"), (3.0, 8.4, 0.0), size=(2.2, 1.0, 0.55))
@@ -633,7 +701,7 @@ def build():
     anim.flies((ax, ay, 0.05), count=10, radius=0.4)
     anim.flies((sx0 + 0.8, sy0 - 0.3, 0.6), count=6, radius=0.4)
 
-    # ---- The mill running once the sluice is open (at the pond), and the crane worked.
+    # ---- The mill running once the sluice is open (at the pond).
     wheel_rest, pulley_rest = wheel.rotation_euler.copy(), pulley.rotation_euler.copy()
     foam = reb.mat_surface("Race foam", [(0.0, (0.25, 0.27, 0.27)), (0.6, (0.5, 0.52, 0.52)), (1.0, (0.7, 0.72, 0.72))], scale=10, rough=0.3, bump=0.6)
     spill = [reb.prim("cube", f"Spill off the buckets {k}", foam, (WHEEL_X + (k - 1) * 0.3, SHAFT_Y - 1.6 - 0.1 * k, 0.3), (0.25, 0.04, 1.6), rot=(0.25, 0, 0)) for k in range(3)]
@@ -650,31 +718,6 @@ def build():
     mill(False)
     room.state("mill-race", mill, loop=mill_turns, cameras=[2, 6, 7])
 
-    trolley_rest = [ob.location.copy() for ob in trolley]
-    pivot_rest = tong_pivot.location.copy()
-    chain_rest = chain.location.copy()
-    tongs_rest = [ob.location.copy() for ob in tongs]
-    run_to = 9.4 - tx
-
-    def crane(t):
-        """t 0: parked; the trolley runs east and the hoist winds the tongs up
-        to 1, with the mill running (the crane needs it)."""
-        t = float(t)
-        mill(t > 0)
-        e = t * t * (3 - 2 * t)
-        for ob, loc in zip(trolley, trolley_rest):
-            ob.location = loc + Vector((run_to * e, 0, 0))
-        tong_pivot.location = pivot_rest + Vector((run_to * e, 0, 0))
-        # The chain winds in from the bottom: its top stays at the hook.
-        chain.scale = (1, 1, 1 - 0.55 * e)
-        chain.location = chain_rest * (1 - 0.55 * e)
-        for ob, loc in zip(tongs, tongs_rest):
-            ob.location = loc + Vector((0, 0, 1.6 * 0.55 * e))
-        # Lagging the trolley, the tongs swing back, and forward as it stops.
-        tong_pivot.rotation_euler = (0, -0.25 * math.sin(math.pi * t), 0)
-    crane(0)
-    room.state("crane", crane, motion=(12, 5), cameras=[0, 2, 3, 6, 7], loop=mill_turns)
-
     # ---- What the game needs.
     room.door("camp-yard", (X0, BIG_DOOR[0], X0 + 0.7, BIG_DOOR[1]), arrive=(2.4, 7.5), face=(1, 0))
     room.door("pond", (X_END - 0.6, GATE_Y[0] + 0.1, X_END, GATE_Y[1]), arrive=(17.4, 9.7), face=(-1, 0))
@@ -689,11 +732,9 @@ def build():
     room.check((sx0, sy0 - 0.7, sx1, sy0), "Blood, thrown across the boards in a long fan.\nThe saw was running when it happened.")
     room.check((bx - 1.6, by + 1.0, bx - 0.6, by + 1.6), "The head saw. There's still a log on the carriage, half cut.\nSomeone threw the belt off to stop the blade.")
     room.check((11.6, SHAFT_Y + 0.6, 13.6, SHAFT_Y + 1.6), "The water wheel's shaft. The belt to the saw's been thrown off.\nThe line shaft for the crane is still belted to it.")
-    # South of the hook, where the game shows her through camera 0, which sees
-    # the crane run; by the rails it is the saw's close camera, which doesn't.
-    room.spot("crane", (tx - 0.8, RAIL_Y[1] + 1.0, tx + 0.8, RAIL_Y[1] + 1.6))  # day/events.ts says what she sees and does here
     room.check((X1 - 1.0, BACK_DOOR[0] - 0.5, X1, BACK_DOOR[0]), "A bloody hand on the back door's frame.\nHe went out this way.")
     room.check((6.4, Y1 - 0.6, 7.6, Y1), "Board feet cut: Monday 4100. Tuesday 3850. Wednesday 1200.\nThen nothing.")
+    room.check((BOARD[0], Y1 - 0.6, 6.4, Y1), "Chalk on the board. A drawing: the pond, the sluice, the wheel.\nA dynamo on the wheel's shaft, and a line drawn off to the workshop hoist.")
     room.check((17.0, wb[2], 18.6, wb[2] + 0.6), "Somebody's in the race. Face down, going round and round in the eddy.\nThe tailer. He worked the boards off the saw.")
     room.check((WHEEL_X - 0.4, wa[2], 16.0, wa[2] + 0.6), "The water wheel. The race turns it, when the pond's sluice is open.")
     room.check((17.8, wb[3] - 0.6, X_END - 0.6, wb[3]), "The sawyer's blood, all along the planks.\nHe was going for the pond.")
