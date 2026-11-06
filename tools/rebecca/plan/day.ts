@@ -78,7 +78,8 @@ export const day: Plan = {
     place(2, 'mess', 'The mess hall', 4, [-1, 1.4], ['Long tables, the cook dead with the office key', 'Steam from a pot, flies', 'Zombies', 'The last meal'], {}),
     place(2, 'depot', 'The fuel depot', 3, [-1, 2.8], ['A padlocked pump, diesel drums, a skid road chained off out the back', 'A dripping nozzle', 'Adders', 'The loggers dragged timber down to the forestry road this way'], {}),
     place(2, 'workshop', 'The workshop', 3, [1.2, 2.8], ['The spare drive cog in its crate, logs stacked on it under a chain hoist; the hoist\'s belt hangs slack from the line shaft that comes in from the sawmill', 'Sparks from a cut cable', '', 'They kept spares for the gondola'], {}),
-    place(2, 'sawmill', 'The sawmill', 6, [3.4, 0], ['The saw, the line shaft out to the workshop', 'The water wheel, once running', 'Zombies', ''], {}),
+    place(2, 'sawmill', 'The sawmill', 6, [3.4, 0], ['The saw, the line shaft out to the workshop, and chalked on the wall the millwright\'s drawing: pond, sluice, wheel, shaft, the workshop hoist', 'The water wheel, once running', 'Zombies', '']
+, {}),
     place(2, 'pond', 'The mill pond', 4, [5.6, 0], ['The sluice to the mill race', 'Water, reeds, a floating hat', 'A zombie in the water', ''], {}),
     place(2, 'flume', 'The log flume', 3, [7.8, 0], ['The flume\'s top: a log boat', 'Running water', '', 'A ride down to the gorge'], {}),
 
