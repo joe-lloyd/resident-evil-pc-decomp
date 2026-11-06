@@ -60,7 +60,7 @@ export const day: Plan = {
     // Act 1: built, but for the gondola station.
     place(1, 'ridge', 'The ridge', 2, [10, 0], ['Where the game opens', 'Grass in the dawn wind', '', 'Billy has gone; Rebecca looks across the wooded hills toward the mansion'], built('ridge')),
     place(1, 'trail', 'The mountain trail', 2, [10, 1.4], ['Down through the spruces', 'Ferns in the wind', 'Crows', 'Alone for the first time'], built('trail')),
-    place(1, 'yard', 'The station yard', 4, [10, 2.8], ['The hub: the pine, the truck and its winch, his rifle', 'Chimney smoke, hazard lights', 'A Cerberus, once she has the shed key', 'Someone was here this morning'], built('yard')),
+    place(1, 'yard', 'The station yard', 4, [10, 2.8], ['The hub: the pine, the ranger\'s truck and its winch, its toolbox padlocked with his name on the lid, his rifle', 'Chimney smoke, hazard lights', 'A Cerberus, once she has the shed key', 'Someone was here this morning'], built('yard')),
     place(1, 'cabin', 'The cabin', 2, [12.2, 2.2], ['The logbook, the radio, the shed key', 'The lamp flame, a fly', '', 'He left in a hurry, mid-breakfast'], built('lookout')),
     place(1, 'shed', 'The tool shed', 2, [12.2, 3.4], ['The winch crank, an empty jerrycan, chainsaw fuses too small for anything bigger', 'Dust in the light', '', 'He tried to mend the chainsaw first'], built('shed')),
     place(1, 'bridge', 'The gorge footbridge', 3, [10, 4.2], ['The old footbridge over the gorge', 'The river far below', 'Adders', 'The trail goes on down'], built('bridge')),
@@ -215,7 +215,7 @@ export const day: Plan = {
     // Act 2, north.
     step(2, 'meet-partner', 'woods', 'learn', ['dog'], "The ranger's partner, tracking the same drag marks; they go on together"),
     step(2, 'truck-keys', 'den', 'find', ['meet-partner'], "The ranger in the hollow; his partner gives her his keys"),
-    step(2, 'cutters', 'yard', 'find', ['truck-keys'], "Open the truck's toolbox: bolt cutters"),
+    step(2, 'cutters', 'yard', 'find', ['truck-keys'], "Open the ranger's toolbox on his truck with his keys: bolt cutters"),
     step(2, 'calendar', 'bunkhouse', 'learn', ['dog'], 'The bunkhouse calendar: the paydays ringed in red, one ringed twice'),
     step(2, 'map-camp', 'camp-gate', 'find', ['dog'], "Camp 4's site plan, on the gate's notice board", { optional: true }),
     step(2, 'partner-camp', 'camp-gate', 'learn', ['truck-keys'], 'The partner at the barricade: she takes the camp, Rebecca the road', { optional: true }),
@@ -258,7 +258,8 @@ export const day: Plan = {
     step(2, 'line-log', 'tower-top', 'learn', ['tower-door'], "The lineman's log: power the line a pylon at a time from the top station outward, or the breakers trip"),
 
     step(2, 'partner-radio', 'tower-top', 'learn', ['tower-door'], "The partner on the lookout's radio: the dogs came from the estate's kennels", { optional: true }),
-    step(2, 'line-on', 'switch', 'do', ['switch-key', 'generator-on', 'line-log', 'map-forestry'], "Close the breakers, one per pylon, from the top station outward: the highest pylon number first, since they are numbered from the valley up"),
+    step(2, 'line-on', 'switch', 'do', ['switch-key', 'generator-on', 'line-log', 'map-forestry'], "Close the five breakers, each labelled with its pylon's number, from the top station outward: the highest number first, since the pylons are numbered from the valley up. A wrong one trips the whole bank with a spark, and she starts again"),
+
 
     step(2, 'line-gate', 'line-track', 'shortcut', ['line-on'], 'Open the line gate to the gondola station', { optional: true }),
 
@@ -270,7 +271,7 @@ export const day: Plan = {
     step(2, 'mine-map', 'mine-office', 'learn', ['blast'], 'The mine map: the pump and the lift', { optional: true }),
     step(2, 'map-mine', 'mine-office', 'find', ['blast'], 'The mine survey: the levels, the pump and the lift', { optional: true }),
     {
-      ...step(2, 'drain', 'junction', 'do', ['blast', 'generator-on', 'jerrycan'], "The pump's intake is choked in the silt: she ties the empty jerrycan on as its float, and the pump drains the gallery"),
+      ...step(2, 'drain', 'junction', 'do', ['blast', 'generator-on', 'jerrycan'], "The pump has a dead power lamp, lit once the station has power, and its intake is choked in the silt: she ties the empty jerrycan on as its float, and the pump drains the gallery"),
 
       stirs: [{ at: 'tunnel', enemies: 'Web Spinners, flushed up out of the sump as the water falls' }],
     },
