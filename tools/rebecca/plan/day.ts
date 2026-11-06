@@ -101,7 +101,8 @@ export const day: Plan = {
     place(2, 'tunnel', 'The mine tunnel', 5, [18.8, 4.2], ['Rails, timbers, lamps on a cable', 'Lamps swinging', 'Web Spinners', ''], {}),
     place(2, 'mine-office', 'The mine office', 2, [21, 4.2], ['The mine map: the pump and the lift', 'A dripping roof', '', ''], {}),
     place(2, 'junction', 'The mine junction', 5, [18.8, 2.8], ['The pump house, the lift, a flooded way down', 'Water rising in the sump', 'Web Spinners', ''], {}),
-    place(2, 'gallery', 'The flooded gallery', 4, [16.6, 2.8], ['The operator, drowned, his key on its chain', 'Water draining away', 'A zombie', 'He hid down here and was bitten anyway'], {}),
+    place(2, 'gallery', 'The flooded gallery', 4, [16.6, 2.8], ['The operator on an ore cart above the water, his key on its chain', 'Water draining away', 'A zombie', 'He hid down here and was bitten anyway']
+, {}),
     place(2, 'mine-lift', 'The mine lift', 2, [18.8, 1.4], ['The cage up to the summit', 'The cable turning', '', ''], {}),
     place(2, 'summit-trail', 'The summit trail', 4, [18.8, 0], ['Bare rock above the trees', 'Cloud blowing over', 'Crows', ''], {}),
     place(2, 'weather', 'The weather station', 3, [16.6, 0], ['A radio that still works', 'The anemometer spinning', '', "Alpha team's helicopter is coming at dusk"], {}),
