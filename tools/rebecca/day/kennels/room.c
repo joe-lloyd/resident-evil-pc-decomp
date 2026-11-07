@@ -69,13 +69,18 @@ if (ck(FG_COMMON, 146, 1) && ck(FG_ENEMY, 242, 0) && ck(FG_ENEMY, 243, 0) && ck(
     }
     aot_set(13, 10880, 18700, 2380, 2550, SCE_MESSAGE, 129, 140, 0, 255, 0, 0, 0);
 }
+if (ck(FG_LOCK, 50, 1) && ck(FG_COMMON, 146, 0) && ck(FG_ROOM, 13, 1)) {
+    set(FG_ROOM, 13, 0);
+    aot_set(2, 19380, 20910, 2720, 1615, SCE_MESSAGE, 129, 129, 0, 255, 0, 0, 0);
+    aot_set(3, 19380, 20910, 2720, 1615, SCE_USEITEM, 1, 9, 0, 26, 0, 1, 0);   // the cellar key can be used here
+}
 if (ck(FG_LOCK, 50, 1)) {
-    if (ck(FG_ROOM, 13, 1) && testitem(53)) {
-        set(FG_ROOM, 13, 0);
+    if (ck(FG_ROOM, 14, 1) && testitem(53)) {
+        set(FG_ROOM, 14, 0);
         setw(4, 0, 0);
     }
-    if (ck(FG_ROOM, 13, 0) && cmpw(0, 4, 1, 0)) {
-        set(FG_ROOM, 13, 1);
+    if (ck(FG_ROOM, 14, 0) && cmpw(0, 4, 1, 0)) {
+        set(FG_ROOM, 14, 1);
         set(FG_LOCK, 50, 0);
         if (item_ck(53)) {
             remove_item(53);

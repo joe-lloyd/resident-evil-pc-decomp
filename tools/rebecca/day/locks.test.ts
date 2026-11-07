@@ -74,6 +74,11 @@ test('the bell calls in the loggers the cutters would bring out, and the crank w
   assert.match(script('mine-entrance'), /if \(ck\(FG_COMMON, 157, 0\)\) \{\n\s+enemy\(2, [^\n]+\/\/ a cerberus\n\}/);
 });
 
+test('the hoist takes the cellar key the moment the pack is penned, not only once the kennels load again', () => {
+  // Penned is FG_COMMON 146 set; the hoist is FG_LOCK 50; the cellar key 53 (use bit 26).
+  assert.match(script('kennels'), /\nif \(ck\(FG_LOCK, 50, 1\) && ck\(FG_COMMON, 146, 0\) && ck\(FG_ROOM, \d+, 1\)\) \{\n\s+set\(FG_ROOM, \d+, 0\);\n\s+aot_set\(2, [^\n]+SCE_MESSAGE[^\n]+\n\s+aot_set\(3, [^\n]+SCE_USEITEM, 1, 9, 0, 26, /);
+});
+
 test("a key still turns as she tries the door, as RE1's do", () => {
   assert.match(script('camp-yard'), /\ndoor_aot_set\(\d+, [^;]*ROOM_412[^;]*, 58, 193\);/);
 });

@@ -612,6 +612,8 @@ function main(): void {
     const reopen = new Map<string, string>();
     /** The tool locks on this side of the room's doors, worked in main. */
     const toolUses: { flag: number; item: number; door: string; done: number; step: string; mark?: number }[] = [];
+    /** Tool locks that wait for a step (the hoist, for the pack penned), to arm in main once it happens here. */
+    const waiting: { flag: number; ready: string; lines: string[] }[] = [];
     for (const d of kit.doors ?? []) {
       const game = GAME_ROOMS[d.to];
       const target = bySlug.get(d.to) ?? (game && { slug: d.to, stage: game.stage, room: game.room });
@@ -644,16 +646,18 @@ function main(): void {
           ...(alt ? [`aot_set(${useId + 1}, ${zone}, SCE_USEITEM, 1, 9, 0, ${alt.id - 27}, 0, 1, 0);   // and the ${alt.name.toLowerCase()}`] : []),
         ];
         const ready = tool.when ? stepTest(tool.when.step, true) : undefined;
+        const look = say(tool.look);
         lines.push(
           `// Shut until she uses the ${[item, alt].filter(Boolean).map((k) => k!.name.toLowerCase()).join(' or the ')} on it: FG_LOCK ${tool.flag} once she has.`,
           `if (ck(FG_LOCK, ${tool.flag}, 1)) {`,
           ...(ready
-            ? [`    if (${ready}) {`, `        aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${say(tool.look)}, 0, 255, 0, 0, 0);`, ...arms.map((a) => `        ${a}`), '    } else {', `        aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${say(tool.when!.early)}, 0, 255, 0, 0, 0);`, '    }']
-            : [`    aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${say(tool.look)}, 0, 255, 0, 0, 0);`, ...arms.map((a) => `    ${a}`)]),
+            ? [`    if (${ready}) {`, `        aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${look}, 0, 255, 0, 0, 0);`, ...arms.map((a) => `        ${a}`), '    } else {', `        aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${say(tool.when!.early)}, 0, 255, 0, 0, 0);`, '    }']
+            : [`    aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${look}, 0, 255, 0, 0, 0);`, ...arms.map((a) => `    ${a}`)]),
           '} else {',
           `    ${door}`,
           '}',
         );
+        if (ready) waiting.push({ flag: tool.flag, ready, lines: [`aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${look}, 0, 255, 0, 0, 0);`, ...arms] });
         toolUses.push({ flag: tool.flag, item: tool.item, door, done: say(tool.done), step: tool.step });
         if (alt) toolUses.push({ flag: tool.flag, item: alt.id, door, done: say(tool.orUse!.done), step: tool.step, mark: tool.orUse!.mark ? MARK_FLAGS.get(tool.orUse!.mark) : undefined });
         id += alt ? 3 : 2;
@@ -932,6 +936,18 @@ function main(): void {
         main.push(`if (ck(FG_COMMON, ${f}, 0) && ck(FG_ITEM, ${gf}, 0) && ck(FG_ROOM, ${bit}, 1)) {`, `    set(FG_ROOM, ${bit}, 0);`, `    ${pick}`, '}');
         bit++;
       }
+    }
+    // A lock that waits for a step is armed in init only if the step was done
+    // before she came in; done here (the pack penned at the kennels), it is
+    // armed the moment it happens.
+    for (const w of waiting) {
+      const armed = bit++;
+      main.push(
+        `if (ck(FG_LOCK, ${w.flag}, 1) && ${w.ready} && ck(FG_ROOM, ${armed}, 1)) {`,
+        `    set(FG_ROOM, ${armed}, 0);`,
+        ...w.lines.map((l) => `    ${l}`),
+        '}',
+      );
     }
     // A tool used on a lock: as with an event's item (above), her line waits
     // a second for the status screen to close. The way opens at once. The
