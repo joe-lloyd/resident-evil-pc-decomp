@@ -422,6 +422,13 @@ const char* GameState_Json(void)
         const char* f = sp.room.recent[(sp.room.plays - n + i) % 8];
         put("%s\"%s\"", i ? "," : "", f ? f : "");
     }
+    // The enemies' cries the same way: how many played, the last eight.
+    put("],\"em\":%u,\"cries\":[", sp.em.plays);
+    const unsigned int m = sp.em.plays < 8 ? sp.em.plays : 8;
+    for (unsigned int i = 0; i < m; i++) {
+        const char* f = sp.em.recent[(sp.em.plays - m + i) % 8];
+        put("%s\"%s\"", i ? "," : "", f ? f : "");
+    }
     put("]}");
     // Do not persist or send a truncated JSON document.
     if (s_len >= (int)sizeof(s_body)) return NULL;

@@ -2092,6 +2092,7 @@ struct SoundProbeBank {
 struct SoundProbe {
     SoundProbeBank step;     // PlayEntitySnd: her footsteps
     SoundProbeBank room;     // room sound slots: doors, walks
+    SoundProbeBank em;       // Snd_em: the enemies' cries
     unsigned char  roomSet;  // the room sound set last loaded (a door record's +0x09)
 };
 extern SoundProbe g_soundProbe;

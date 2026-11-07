@@ -1451,6 +1451,7 @@ void Snd_em(unsigned char em_snd_id) // 0x0047fca0
     if (handle != 0) {
         pan_set(handle, (g_snd_pan_right - g_snd_pan_left) * 0x4E);
         SetSndSlot(g_emSndBanks[em_snd_id * 2], 0);
+        sound_probe_note(&g_soundProbe.em, s_emSndFile[em_snd_id]);
     }
 }
 

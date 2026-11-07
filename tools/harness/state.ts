@@ -54,6 +54,9 @@ export interface Sound {
   last: string;
   /** The last eight of them (fewer since launch), oldest first: a frame can play several. */
   recent: string[];
+  /** The enemies' cries played since launch (Snd_em), and the last eight WAVs, oldest first. */
+  em: number;
+  cries: string[];
 }
 
 export interface GameState {
@@ -213,6 +216,8 @@ function parseSound(o: Record<string, unknown>): Sound {
     sfx: num(o, 'sfx'),
     last: str(o, 'last'),
     recent: o.recent === undefined ? [] : strings(o.recent, 'snd.recent'),
+    em: o.em === undefined ? 0 : num(o, 'em'),
+    cries: o.cries === undefined ? [] : strings(o.cries, 'snd.cries'),
   };
 }
 
