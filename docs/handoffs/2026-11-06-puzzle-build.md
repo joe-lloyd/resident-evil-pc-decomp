@@ -162,4 +162,5 @@ a dog arriving mid-wind is untried.
 
 Both rooms were rendered again and their renders pushed to the asset
 store. In game, after cut-hal the gallery shows the one Hal, dead by the
-cart.
+cart. The adit way passes on the new build, through the gallery without
+Hal's footprint (log: `~/reb-puzzle-lab/log/round3/`).
