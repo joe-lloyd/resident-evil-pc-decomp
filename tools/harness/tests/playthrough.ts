@@ -11,7 +11,7 @@
 //
 //   TYPESAFE_API_KEY=$(ssh vault get typesafe-api-key) OVERLAY=<REB build folder> \
 //     RE1_LAB_GAME_DIR='D:\Games\RE1-files' RE1_LAB_REPO_DIR='C:\Users\joell\Tools\re1-files' PORT=7811 \
-//     node tools/harness/tests/playthrough.ts [--quarter <1-4>] [--from <checkpoint.json>]
+//     node tools/harness/tests/playthrough.ts [--quarter <1-4>] [--from <checkpoint.json>] [--way <name>]
 //
 // --quarter plays one quarter of the day (QUARTERS) and stops: four can run
 // side by side, each on its own PORT. The first starts from a new game. A
@@ -21,6 +21,9 @@
 // up from the plan, which the report marks as such. Every run saves a checkpoint to SNAPS
 // (default OUT/snaps) after each job and at its end, so the quarters stitch:
 // each one's start is the one before's end.
+//
+// --way plays one of the plan's other ways (WAYS) from --from, a checkpoint
+// saved just before it, and checks what that way must do.
 //
 // Without TYPESAFE_API_KEY the next goal is the nearest. RECORD=<name>
 // records the window.
@@ -36,7 +39,7 @@ import { load, restore, save, take, type Checkpoint } from '../checkpoint.ts';
 import { existsSync, mkdirSync } from 'node:fs';
 import { loadWorld, route, slugAt, type Door, type Pickup, type Slug, type Zone } from '../world.ts';
 import { CUT_FLAGS } from '../../rebecca/day/cutscenes.ts';
-import { EVENT_FLAGS } from '../../rebecca/day/events.ts';
+import { EVENT_FLAGS, MARK_FLAGS } from '../../rebecca/day/events.ts';
 import { GEAR } from '../../rebecca/day/gear.ts';
 import { read } from './floor.ts';
 import { dayRooms } from '../../rebecca/day/rooms.ts';
@@ -68,8 +71,8 @@ type Goal =
   | { id: string; needs: string[]; kind: 'take'; room: Slug; item?: number; file?: true }
   /** A puzzle of events.ts: at its spot, use `use` or press action; a row of switches presses `spots` in that order. */
   | { id: string; needs: string[]; kind: 'event'; room: Slug; use?: number; spots?: string[] }
-  /** Open the locked way from `from` into `to` with the key in her bag. */
-  | { id: string; needs: string[]; kind: 'unlock'; from: Slug; to: Slug }
+  /** Open the locked way from `from` into `to` with the key in her bag, or with `use`, a second tool the lock takes. */
+  | { id: string; needs: string[]; kind: 'unlock'; from: Slug; to: Slug; use?: number }
   /** Go into `room` from `from` and sit through its cutscene; with `gets`, it hands her that item. */
   | { id: string; needs: string[]; kind: 'scene'; room: Slug; from?: Slug; cut: string; gets?: number; zone?: Zone }
   /** Check the thing in `room` whose words start `text`; with `cut`, that starts a cutscene. */
@@ -157,6 +160,122 @@ function quarterGoals(q: number): Goal[] {
   const at = (id: string | undefined) => (id ? GOALS.findIndex((g) => g.id === id) : GOALS.length);
   return GOALS.slice(at(QUARTERS[q - 1]), at(QUARTERS[q]));
 }
+
+// ---------------------------------------------------------------------------
+// The plan's other ways, each played on its own (--way) from the checkpoint
+// named in its comment, saved by a run of the day just before it
+// ---------------------------------------------------------------------------
+
+const ZOMBIE = 17;
+const DOG = 2;
+interface Press { spot: string; before: number; after: number }
+/** What a way's run saw: the end, her health at each switch, and the live enemies in each room it visited. */
+interface Seen { end: GameState; presses: readonly Press[]; arrivals: ReadonlyMap<string, readonly number[]> }
+interface Way {
+  /** Its jobs: in place of the day's of the same id, or new. */
+  goals: Goal[];
+  /** Enemies she does not shoot, as the way needs them alive. */
+  spare?: number[];
+  /** It hurts her, so god mode is off while she works its switches. */
+  hurt?: true;
+  /** What went wrong, read from what the run saw. */
+  checks: (seen: Seen) => string[];
+}
+const seenThere = (seen: Seen, visit: string, type: number) => seen.arrivals.get(visit)?.filter((t) => t === type).length ?? -1;
+const unless = (ok: boolean, what: string) => (ok ? [] : [what]);
+const lockOf = (from: Slug, to: Slug) => world.doors.find((d) => d.from === from && d.to === to)?.lock?.flag;
+
+const WAYS: Record<string, Way> = {
+  // after-empty-can: a wrong breaker first, then the order the sketch gives.
+  shock: {
+    goals: [{ id: 'line-on', needs: [], kind: 'event', room: 'switch', spots: ['breaker-1', 'breaker-5', 'breaker-4', 'breaker-3', 'breaker-2', 'breaker-1'] }],
+    hurt: true,
+    checks: ({ presses }) => [
+      ...unless(presses[0] !== undefined && presses[0].before - presses[0].after === 12, `a wrong breaker should take 12 health: ${presses[0]?.before} to ${presses[0]?.after}`),
+      ...unless(presses.slice(1).every((p) => p.after === p.before), 'a breaker in the right order hurt her'),
+    ],
+  },
+  // after-cutters: the bell calls the loggers in, then the cutters on the workshop make no difference.
+  bell: {
+    goals: [
+      { id: 'ring-bell', needs: [], kind: 'event', room: 'camp-yard' },
+      { id: 'workshop-door', needs: ['ring-bell'], kind: 'unlock', from: 'camp-yard', to: 'workshop', use: ITEM.cutters },
+      { id: 'bell-mess', needs: ['workshop-door'], kind: 'visit', room: 'mess' },
+      { id: 'bell-yard', needs: ['bell-mess'], kind: 'visit', room: 'camp-yard', from: 'mess' },
+    ],
+    checks: (seen) => [
+      ...unless(seenThere(seen, 'bell-mess', ZOMBIE) >= 2, `the bell should call loggers into the mess hall: ${seenThere(seen, 'bell-mess', ZOMBIE)} there`),
+      ...unless(seenThere(seen, 'bell-yard', ZOMBIE) === 0, `the camp yard should be empty after the bell and the cut: ${seenThere(seen, 'bell-yard', ZOMBIE)} there`),
+    ],
+  },
+  // after-cutters: the cutters on the workshop, no bell: the noise brings two loggers out.
+  cutters: {
+    goals: [
+      { id: 'workshop-door', needs: [], kind: 'unlock', from: 'camp-yard', to: 'workshop', use: ITEM.cutters },
+      { id: 'cut-mess', needs: ['workshop-door'], kind: 'visit', room: 'mess' },
+      { id: 'cut-yard', needs: ['cut-mess'], kind: 'visit', room: 'camp-yard', from: 'mess' },
+    ],
+    checks: (seen) => [
+      ...unless(seenThere(seen, 'cut-yard', ZOMBIE) >= 2, `the cut should bring two loggers into the camp yard: ${seenThere(seen, 'cut-yard', ZOMBIE)} there`),
+      ...unless(seen.end.items.some((i) => i.id === ITEM.cutters && i.qty === 2), `the cutters should stay with two uses: ${JSON.stringify(seen.end.items)}`),
+    ],
+  },
+  // after-diary: the crank winds the rockfall clear, and a dog waits on the way back out.
+  crank: {
+    goals: [
+      { id: 'blast', needs: [], kind: 'event', room: 'mine-entrance', use: ITEM.crank },
+      { id: 'crank-in', needs: ['blast'], kind: 'visit', room: 'tunnel' },
+      { id: 'crank-out', needs: ['crank-in'], kind: 'visit', room: 'mine-entrance', from: 'tunnel' },
+    ],
+    checks: (seen) => [
+      ...unless(flag(seen.end, Bank.common, MARK_FLAGS.get('rockfall-wound')!), 'the crank way should leave its mark'),
+      ...unless(!has(seen.end, ITEM.crank), 'the crank should leave her case after its last use'),
+      ...unless(seenThere(seen, 'crank-out', DOG) >= 1, `a dog should wait at the mine entrance: ${seenThere(seen, 'crank-out', DOG)} there`),
+    ],
+  },
+  // after-cut-depot: down the skid road to the tower foot and back, the road gate still chained.
+  skid: {
+    goals: [
+      { id: 'skid-road', needs: [], kind: 'event', room: 'depot' },
+      { id: 'skid-down', needs: ['skid-road'], kind: 'visit', room: 'tower-foot', from: 'depot' },
+      { id: 'skid-up', needs: ['skid-down'], kind: 'visit', room: 'depot', from: 'tower-foot' },
+    ],
+    checks: ({ end }) => unless(!flag(end, Bank.locks, lockOf('road', 'washout')!), 'the road gate should still be chained'),
+  },
+  // after-drain: out of the drained gallery by the adit to the east path.
+  adit: {
+    goals: [
+      { id: 'adit', needs: [], kind: 'event', room: 'gallery' },
+      { id: 'adit-out', needs: ['adit'], kind: 'visit', room: 'east-path', from: 'gallery' },
+    ],
+    checks: () => [],
+  },
+  // after-open-gate: pen the pack with the dog meat, then down the hoist.
+  meat: {
+    goals: [
+      { id: 'dog-meat', needs: [], kind: 'take', room: 'garden-shed', item: ITEM.dogMeat },
+      { id: 'cellar-key', needs: [], kind: 'take', room: 'garden-shed', item: ITEM.cellarKey },
+      { id: 'meat-kennels', needs: ['dog-meat', 'cellar-key'], kind: 'visit', room: 'kennels' },
+      { id: 'pen-pack', needs: ['meat-kennels'], kind: 'event', room: 'kennels', use: ITEM.dogMeat },
+      { id: 'hoist', needs: ['pen-pack'], kind: 'unlock', from: 'kennels', to: 'cellar' },
+      { id: 'meat-down', needs: ['hoist'], kind: 'visit', room: 'cellar', from: 'kennels' },
+    ],
+    spare: [DOG],
+    checks: (seen) => [
+      ...unless(seenThere(seen, 'meat-kennels', DOG) >= 3, `the pack should be loose in the kennels: ${seenThere(seen, 'meat-kennels', DOG)} dogs`),
+      ...unless(!has(seen.end, ITEM.dogMeat) && !has(seen.end, ITEM.cellarKey), 'the meat and the cellar key should be spent'),
+      ...unless(!has(seen.end, ITEM.crowbar), 'down the hoist, the crowbar should leave her case'),
+    ],
+  },
+  // after-open-gate: the crowbar on the coal chute's grate, and down.
+  chute: {
+    goals: [
+      { id: 'coal-chute', needs: [], kind: 'unlock', from: 'back-garden', to: 'cellar' },
+      { id: 'chute-down', needs: ['coal-chute'], kind: 'visit', room: 'cellar', from: 'back-garden' },
+    ],
+    checks: ({ end }) => unless(!has(end, ITEM.crowbar), 'the crowbar should leave her case'),
+  },
+};
 
 // ---------------------------------------------------------------------------
 // Watching for glitches
@@ -319,7 +438,7 @@ class Player {
     if (at !== door.to) this.run.log(s, `went for ${door.to}, came out in ${at}`);
     else this.run.log(s, `into ${at}`);
     // Fight back only with a weapon in hand.
-    useFightBack(s.player.weapon > 0 ? FIGHT_BACK : 0, [CROW, ADDER]);
+    useFightBack(s.player.weapon > 0 ? FIGHT_BACK : 0, spared);
     await this.scavenge();
     return true;
   }
@@ -558,15 +677,21 @@ async function work(p: Player, g: Goal, reached: Set<string>): Promise<void> {
     }
     case 'event': {
       if (g.spots) {
-        // A row of switches: each pressed once, in the goal's order.
+        // A row of switches: each pressed once, in the goal's order. A way
+        // that hurts her (WAYS) turns god mode off, which would heal it.
+        if (way?.hurt) await link.god(false);
         for (const name of g.spots) {
           const z = read(g.room)?.spots?.find((sp) => sp.step === name)?.zone;
           if (!z) throw new StuckError(`${g.room} has no spot ${name} for ${g.id}`, s);
           s = await approach(link, zoneOf(z));
+          const before = s.player.hp;
           await link.tap(Key.action, 3);
           await link.frames(30);
           s = await settle(link);
+          presses.push({ spot: name, before, after: s.player.hp });
+          run.log(s, `${name}: health ${before} to ${s.player.hp}`);
         }
+        if (way?.hurt) await link.god(true);
         break;
       }
       const spot = read(g.room)?.spots?.find((sp) => sp.step === g.id)?.zone;
@@ -592,8 +717,9 @@ async function work(p: Player, g: Goal, reached: Set<string>): Promise<void> {
       if (d.lock?.use) {
         for (let i = 0; i < 3 && !done(s, g, reached); i++) {
           s = await approach(link, d.zone);
-          if (!has(s, d.lock.item)) throw new StuckError(`${g.id} needs item ${d.lock.item}, and she has none`, s);
-          await useItem(link, d.lock.item);
+          const tool = g.use ?? d.lock.item;
+          if (!has(s, tool)) throw new StuckError(`${g.id} needs item ${tool}, and she has none`, s);
+          await useItem(link, tool);
           await link.frames(90);
           s = await settle(link);
         }
@@ -630,6 +756,7 @@ async function work(p: Player, g: Goal, reached: Set<string>): Promise<void> {
       break;
     }
     case 'visit':
+      arrivals.set(g.id, s.enemies.filter((e) => e.hp > 0).map((e) => e.type));
       reached.add(g.id);
       break;
   }
@@ -669,7 +796,17 @@ const quarter = arg('--quarter') ? Number(arg('--quarter')) : undefined;
 if (quarter !== undefined && !(quarter >= 1 && quarter <= 4)) throw new Error('--quarter is 1 to 4');
 const fromFile = arg('--from');
 
-useFightBack(FIGHT_BACK, [CROW, ADDER]);
+const wayName = arg('--way');
+const way = wayName === undefined ? undefined : WAYS[wayName];
+if (wayName !== undefined && !way) throw new Error(`--way is one of ${Object.keys(WAYS).join(', ')}`);
+if (way && !fromFile) throw new Error('--way needs --from, a checkpoint saved just before it');
+/** What she does not shoot: crows and snakes, and what a way needs alive (the pack it pens). */
+const spared = [CROW, ADDER, ...(way?.spare ?? [])];
+/** The day's jobs, with a way's own in place of the ones they stand for. */
+const goals: Goal[] = way ? [...GOALS.filter((g) => !way.goals.some((w) => w.id === g.id)), ...way.goals] : GOALS;
+const presses: Press[] = [];
+const arrivals = new Map<string, number[]>();
+useFightBack(FIGHT_BACK, spared);
 const session = await open(Number(process.env.PORT ?? 7811), `--mode REB --god --boot rebecca`);
 const record = process.env.RECORD;
 const remoteVideo = record ? `${process.env.RE1_LAB_GAME_DIR ?? 'D:\\Games\\RE1-decomp'}\\${record}.mp4` : undefined;
@@ -684,10 +821,10 @@ const failed = new Map<string, number>();
 /** Fresh starts on the goals she gave up on, once nothing else is left: a door a zombie held may open later. */
 let secondWinds = 3;
 /** The jobs this run plays: a quarter's, or the whole day's. */
-const pool = quarter ? quarterGoals(quarter) : GOALS;
+const pool = way ? way.goals : quarter ? quarterGoals(quarter) : GOALS;
 /** The start was made up from the plan, not saved from a game. */
 let built = false;
-const runName = quarter ? `quarter ${quarter}` : 'the day';
+const runName = way ? `the ${wayName} way` : quarter ? `quarter ${quarter}` : 'the day';
 try {
   let s = await session.link.waitFor((st) => st.play, 'gameplay', 180_000);
   if (!s.god) run.fail('god mode is off: the exe is older than --god');
@@ -719,7 +856,7 @@ try {
   // A job no longer needed: every job that needs it is done, another way
   // (the dog meat, once the pack is shot instead of penned).
   const moot = (st: GameState, g: Goal) => {
-    const users = GOALS.filter((x) => x.needs.includes(g.id));
+    const users = goals.filter((x) => x.needs.includes(g.id));
     return users.length > 0 && users.every((u) => done(st, u, reached));
   };
   for (;;) {
@@ -728,7 +865,7 @@ try {
     const left = undone.filter((g) => (failed.get(g.id) ?? 0) < 2);
     // The way up into the mansion is one way: she sleeps there only once every
     // other job is done, counting the ones she has given up on for now.
-    const ready = left.filter((g) => g.needs.every((n) => reached.has(n) || done(s, GOALS.find((x) => x.id === n)!, reached)) && (g.id !== 'sleep' || undone.length === 1));
+    const ready = left.filter((g) => g.needs.every((n) => reached.has(n) || done(s, goals.find((x) => x.id === n)!, reached)) && (g.id !== 'sleep' || undone.length === 1));
     if (!ready.length && failed.size && secondWinds-- > 0) {
       run.log(s, `trying again: ${[...failed.keys()].join(', ')}`);
       failed.clear();
@@ -765,6 +902,7 @@ try {
   s = await settle(session.link);
   const missing = pool.filter((g) => !reached.has(g.id) && !done(s, g, reached) && !moot(s, g));
   for (const g of missing) run.fail(`${runName} left ${g.id} undone`);
+  if (way) for (const f of way.checks({ end: s, presses, arrivals })) run.fail(`${runName}: ${f}`);
   if (!missing.length && quarter) {
     snapshot(`q${quarter}-end`, await settle(session.link));
     run.log(s, `${runName} done: its end saved for the next quarter${built ? ' (its start was made up from the plan)' : ''}`);
