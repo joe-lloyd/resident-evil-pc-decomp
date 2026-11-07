@@ -422,11 +422,12 @@ const char* GameState_Json(void)
         const char* f = sp.room.recent[(sp.room.plays - n + i) % 8];
         put("%s\"%s\"", i ? "," : "", f ? f : "");
     }
-    // The enemies' cries the same way: how many played, the last eight.
-    put("],\"em\":%u,\"cries\":[", sp.em.plays);
-    const unsigned int m = sp.em.plays < 8 ? sp.em.plays : 8;
+    // The room's other slot sounds the same way (cries, a lock, the box):
+    // how many played, the last eight.
+    put("],\"slot\":%u,\"slots\":[", sp.slot.plays);
+    const unsigned int m = sp.slot.plays < 8 ? sp.slot.plays : 8;
     for (unsigned int i = 0; i < m; i++) {
-        const char* f = sp.em.recent[(sp.em.plays - m + i) % 8];
+        const char* f = sp.slot.recent[(sp.slot.plays - m + i) % 8];
         put("%s\"%s\"", i ? "," : "", f ? f : "");
     }
     put("]}");
