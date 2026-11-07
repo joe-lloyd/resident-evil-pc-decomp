@@ -194,3 +194,38 @@ runs after the harness fix. One of the three full runs lost about thirty
 minutes in the tunnel first: a walk to its doors failed three times at
 about ten minutes a try, then got through. The two traced runs did not
 stall, so the cause is not found.
+
+## Every room sound slot (2026-11-07, night)
+
+RE1 plays 48 sound slots per room, loaded by room id. Her rooms sit in
+free ids, so each slot she did not set played whatever that id's row
+held. Audited against every engine path that plays a slot:
+
+| Slots | Played by | Hers now |
+| --- | --- | --- |
+| 0-19 | enemies, block * 10 + n (Snd_em) | each kind's RE1 cries, read from the room's enemy() lines |
+| 20, 34 | a locked door's rattle, its key turning (door_try_enter) | D_gacha / key_door for wood, DM_gacha / key_mtr for metal |
+| 29-31 | the typewriter's save screen | cancel, type01, type02 |
+| 32, 33 | the item box opening, its list scrolling | item02, item01 |
+| 36-47 | her steps on each floor and her fall (ground.ts) | as before |
+| the rest | Plant 42, pushed objects, desks, drawers, in-room ladders | empty: none are in her rooms |
+
+`sound/script.ts` reads the room's script; the build fills all 48 slots
+of all 57 of her rooms and leaves the rest empty. Before: the estate
+wall's gate key turned to an elevator (Elv2), the save rooms typed and
+opened their boxes in silence, locked doors rattled silently, and the
+trail's crows, the yard's dog and the bridge's adders had no cries.
+Checked in game (`~/reb-puzzle-lab/scripts/probe-slots.ts`, reading the
+state's `sound.slots`): the gate rattles DM_gacha without its key and
+turns key_mtr with it; the booth's box opens with item02. The box's
+scroll click (item01) was not triggered by the probe.
+
+A ladder door's animation plays no slot (tried at the tower: only her
+steps), so slot 35 stays empty. The kennels' meat hoist is now RE1's lift
+both ways and the gallery's adit a dark walk; both had fallen back to the
+mansion's panelled door and its creak.
+
+Open: her puzzle events (the bell, the breakers and their shock, the
+blast, the generator, the crank, the pump, the push) play no sound. RE1
+has candidates for some (power-on, Sw_lever, kickdoor, crank, watergt,
+mv_cp) and none for a bell.
