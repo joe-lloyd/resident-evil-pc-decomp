@@ -116,3 +116,37 @@ Open, for the owner's eye or a later pass:
   snapshots from before this branch do not carry over.
 - **retro-archive-explorer #8** (the compiler's length for subcommand 11)
   must be merged before a fresh clone of it can build this branch.
+
+## The other ways, played (2026-11-07)
+
+`playthrough.ts --way <name> --from <checkpoint>` plays one other way from a
+checkpoint of the full run (`~/reb-puzzle-lab/snaps/`) and checks what it
+must do. `tools/harness/try.ts <checkpoint>` loads one for a person to play.
+
+| Way | Checkpoint | Checks |
+| --- | --- | --- |
+| shock | after-empty-can | a wrong breaker takes 12 health (88 to 76); the right order none |
+| bell | after-cutters | loggers in the mess hall; none in the camp yard after the cut |
+| cutters | after-cutters | two loggers in the camp yard after the cut; the cutters keep two uses |
+| crank | after-diary | the crank's mark; the crank spent; a dog at the mine entrance after |
+| skid | after-cut-depot | down to the tower foot and back, the road gate still chained |
+| adit | after-drain | out of the gallery to the east path |
+| meat | after-open-gate | the pack loose, then penned; the hoist; the meat, key and crowbar spent |
+| chute | after-open-gate | down the coal chute; the crowbar spent |
+
+Found and fixed on the way:
+- Taking live enemies away (the pen, the bell) cleared their status but
+  not `g_enemy_count`, so the next shot read unfilled slots and crashed in
+  `weapon_hit_detect_gun`. In REB mode the count now follows status bit 0
+  (`cmd_enemy_prop_set`).
+- The hoist armed only at room load: penned in the room, it stayed shut.
+- A tool done the other way stayed in her case; the bell did not silence
+  the cutters; the crank way brought no dog.
+
+All eight pass on one build (exe and overlay of 2026-11-07), and so do
+the day's four quarters, run side by side, each from the previous run's
+quarter end. The logs are in `~/reb-puzzle-lab/log/ways-2026-11-07/`.
+
+The crank's dog comes the next time the mine entrance loads, like every
+other enemy a step brings: the engine loads enemy models with the room, so
+a dog arriving mid-wind is untried.
