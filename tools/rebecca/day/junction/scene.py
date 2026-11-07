@@ -11,8 +11,10 @@ goes straight down under black water, the old gallery somewhere beneath.
 The pipe's intake hung on a float, to keep it up out of the silt; the
 float is split open and sunk, its arm bent down, and the intake lies
 choked on the bottom. The water is still coming up. The web spinners breed
-here: the roof is hung with their egg sacs, some split, and the corners
-are choked with web. A dog that came down after something is wrapped
+here: their silk lies over the walls like grey felt, thickest under the
+roof and in the corners, torn into holes lower down, and hangs in heavy
+festoons where the walls meet the roof; the egg sacs swell out of the silk
+under the roof, one split. A dog that came down after something is wrapped
 against the pump. Hal's drops of blood run from the adit to the water's
 edge and into it: he went down the flooded way to hide. He is out there
 now, across the water toward the gallery: slumped on an ore cart that
@@ -76,51 +78,6 @@ def rock_face(name, m, origin, u, v, nu, nv, out, depth=0.25, seed=0):
     return reb.mesh_object(name, verts, faces, m)
 
 
-def web_sheet(name, corner, a, b, size, rng, strands=9):
-    """A thick web across a corner: fans of silk from `corner` along directions a and b, in one mesh."""
-    verts, faces = [], []
-    c = Vector(corner)
-    a, b = Vector(a).normalized(), Vector(b).normalized()
-    side = a.cross(b).normalized() * 0.006
-    for i in range(strands):
-        t = i / (strands - 1)
-        d = (a * (1 - t) + b * t).normalized() * size * rng.uniform(0.75, 1.0)
-        k = len(verts)
-        verts += [tuple(c), tuple(c + d), tuple(c + d + side)]
-        faces.append((k, k + 1, k + 2))
-    for r in (0.3, 0.55, 0.8):
-        for i in range(strands - 1):
-            p = c + (a * (1 - i / (strands - 1)) + b * (i / (strands - 1))).normalized() * size * r
-            q = c + (a * (1 - (i + 1) / (strands - 1)) + b * ((i + 1) / (strands - 1))).normalized() * size * r
-            k = len(verts)
-            verts += [tuple(p), tuple(q), tuple(q + Vector((0, 0, -0.01)))]
-            faces.append((k, k + 1, k + 2))
-    ob = reb.mesh_object(name, verts, faces, mat("web"), smooth=False)
-    # A haze of silk filling the corner, mostly see-through.
-    reb.mesh_object(f"{name} haze", [tuple(c), tuple(c + a * size * 0.75), tuple(c + b * size * 0.75)], [(0, 1, 2)], haze_material(), smooth=False).visible_shadow = False
-    return ob
-
-
-_haze = []
-
-
-def haze_material():
-    """Web silk seen as a film: mostly transparent, pale where it catches the light."""
-    if _haze:
-        return _haze[0]
-    m, nodes, links, bsdf = reb.nodes_material("Web haze")
-    bsdf.inputs["Base Color"].default_value = (0.7, 0.7, 0.68, 1)
-    bsdf.inputs["Roughness"].default_value = 0.8
-    clear = nodes.new("ShaderNodeBsdfTransparent")
-    mix = nodes.new("ShaderNodeMixShader")
-    mix.inputs["Fac"].default_value = 0.22
-    links.new(clear.outputs[0], mix.inputs[1])
-    links.new(bsdf.outputs[0], mix.inputs[2])
-    links.new(mix.outputs[0], nodes["Material Output"].inputs["Surface"])
-    _haze.append(m)
-    return m
-
-
 def rails(name, path, sleepers_m, rail_m, gauge=0.6):
     """Narrow-gauge track along `path` [(x, y)]: rails and sleepers, two meshes."""
     sv, sf, rv, rf = [], [], [], []
@@ -181,23 +138,23 @@ def build():
     iron = mat("iron")
     green = kit.dirtied(mat("green paint"), 0.6)
     silk = reb.mat_plain("Silk", (0.68, 0.68, 0.66), 0.6)
-    sac_m = reb.mat_surface("Egg sac", [(0.0, (0.42, 0.4, 0.33)), (0.7, (0.62, 0.6, 0.52)), (1.0, (0.35, 0.3, 0.18))], scale=18, rough=0.5, bump=0.6)
+    sac_m = reb.mat_surface("Egg sac", [(0.0, (0.2, 0.17, 0.11)), (0.7, (0.38, 0.33, 0.22)), (1.0, (0.16, 0.12, 0.06))], scale=18, rough=0.45, bump=0.6)
     water = mat("water")
 
     # ---- The rock: walls round the floor with the three ways out cut through; the roof; the floor and the decline.
     a0, a1, ah = ADIT
-    rock_face("West rock, north", rock, (X0, Y0 - 0.5, -0.1), (0, a0 - Y0 + 0.5, 0), (0, 0, H + 0.6), 14, 18, (-1, 0, 0), seed=1)
-    rock_face("West rock, south", rock, (X0, a1, -0.1), (0, Y1 - a1 + 0.6, 0), (0, 0, H + 0.6), 14, 18, (-1, 0, 0), seed=2)
-    rock_face("West rock, over the adit", rock, (X0, a0, ah), (0, a1 - a0, 0), (0, 0, H + 0.5 - ah), 10, 6, (-1, 0, 0), seed=3)
-    rock_face("East rock", rock, (X1, Y0 - 0.5, -0.1), (0, Y1 - Y0 + 1.1, 0), (0, 0, H + 0.6), 36, 18, (1, 0, 0), seed=4)
+    west_n = rock_face("West rock, north", rock, (X0, Y0 - 0.5, -0.1), (0, a0 - Y0 + 0.5, 0), (0, 0, H + 0.6), 14, 18, (-1, 0, 0), seed=1)
+    west_s = rock_face("West rock, south", rock, (X0, a1, -0.1), (0, Y1 - a1 + 0.6, 0), (0, 0, H + 0.6), 14, 18, (-1, 0, 0), seed=2)
+    west_a = rock_face("West rock, over the adit", rock, (X0, a0, ah), (0, a1 - a0, 0), (0, 0, H + 0.5 - ah), 10, 6, (-1, 0, 0), seed=3)
+    east = rock_face("East rock", rock, (X1, Y0 - 0.5, -0.1), (0, Y1 - Y0 + 1.1, 0), (0, 0, H + 0.6), 36, 18, (1, 0, 0), seed=4)
     c0, c1 = CAGE[0], CAGE[1]
-    rock_face("North rock, west", rock, (X0 - 0.5, Y0, -0.1), (c0 - X0 + 0.5, 0, 0), (0, 0, H + 0.6), 20, 18, (0, -1, 0), seed=5)
-    rock_face("North rock, east", rock, (c1, Y0, -0.1), (X1 - c1 + 0.5, 0, 0), (0, 0, H + 0.6), 18, 18, (0, -1, 0), seed=6)
+    north_w = rock_face("North rock, west", rock, (X0 - 0.5, Y0, -0.1), (c0 - X0 + 0.5, 0, 0), (0, 0, H + 0.6), 20, 18, (0, -1, 0), seed=5)
+    north_e = rock_face("North rock, east", rock, (c1, Y0, -0.1), (X1 - c1 + 0.5, 0, 0), (0, 0, H + 0.6), 18, 18, (0, -1, 0), seed=6)
     d0, d1 = DECLINE
-    rock_face("South rock, west", rock, (X0 - 0.5, Y1, -2.0), (d0 - X0 + 0.5, 0, 0), (0, 0, H + 2.6), 14, 22, (0, 1, 0), seed=7)
-    rock_face("South rock, east", rock, (d1, Y1, -2.0), (X1 - d1 + 0.5, 0, 0), (0, 0, H + 2.6), 16, 22, (0, 1, 0), seed=8)
-    rock_face("South rock, over the way down", rock, (d0, Y1, 2.3), (d1 - d0, 0, 0), (0, 0, H + 0.3 - 2.3), 12, 6, (0, 1, 0), seed=9)
-    rock_face("Roof", rock, (X0 - 0.5, Y0 - 0.5, H), (X1 - X0 + 1.0, 0, 0), (0, Y1 - Y0 + 1.0, 0), 40, 30, (0, 0, 1), depth=0.4, seed=10)
+    south_w = rock_face("South rock, west", rock, (X0 - 0.5, Y1, -2.0), (d0 - X0 + 0.5, 0, 0), (0, 0, H + 2.6), 14, 22, (0, 1, 0), seed=7)
+    south_e = rock_face("South rock, east", rock, (d1, Y1, -2.0), (X1 - d1 + 0.5, 0, 0), (0, 0, H + 2.6), 16, 22, (0, 1, 0), seed=8)
+    south_d = rock_face("South rock, over the way down", rock, (d0, Y1, 2.3), (d1 - d0, 0, 0), (0, 0, H + 0.3 - 2.3), 12, 6, (0, 1, 0), seed=9)
+    roof = rock_face("Roof", rock, (X0 - 0.5, Y0 - 0.5, H), (X1 - X0 + 1.0, 0, 0), (0, Y1 - Y0 + 1.0, 0), 40, 30, (0, 0, 1), depth=0.4, seed=10)
     # The floor: flat where she walks, sloping down into the water in the south.
     fv, ff = [], []
     nx, ny = 24, 22
@@ -374,35 +331,55 @@ def build():
     dog = reb.prim("sphere", "Wrapped dog", reb.mat_surface("Dog cocoon", [(0.0, (0.4, 0.39, 0.35)), (0.6, (0.58, 0.57, 0.52)), (0.85, (0.2, 0.12, 0.08)), (1.0, (0.3, 0.05, 0.03))], scale=14, bump=0.9), (10.55, 4.4, 0.32), (1.0, 0.5, 0.55), rot=(0, 0.2, 1.3), segments=14)
     reb.wall(dog)
     reb.prim("cone", "Paw out of the silk", reb.mat_plain("Fur", (0.06, 0.05, 0.04), 0.9), (10.4, 3.85, 0.18), (0.08, 0.08, 0.3), rot=(1.2, 0, 0.3), segments=8)
-    for k in range(7):
-        kit.rod("Silk tether", silk, (10.55, 4.4, 0.4), (10.95 + rng.uniform(0, 0.4), 4.4 + rng.uniform(-0.8, 0.8), rng.uniform(0.3, 1.4)), 0.004, 3)
 
-    # ---- The spinners' nursery: egg sacs on the roof, some split; webs choking the corners.
+    # ---- The spinners' nursery: egg sacs in the silk under the roof, one split; the walls matted with web.
     sv, sf = [], []
-    split = None
     for cx, cy, n in ((4.0, 3.2, 9), (9.0, 5.8, 11), (3.4, 7.6, 7), (7.6, 4.2, 6)):
         for k in range(n):
             x, y = cx + rng.gauss(0, 0.45), cy + rng.gauss(0, 0.4)
-            z = H - 0.05 - rng.uniform(0.1, 0.5)
             r = rng.uniform(0.1, 0.2)
-            reb.boulder(rng, (x, y, z), r, sv, sf, squash=1.3)
-            kit.rod("Sac thread", silk, (x, y, z + r * 0.9), (x + rng.uniform(-0.2, 0.2), y + rng.uniform(-0.2, 0.2), H + 0.1), 0.004, 3)
-        web_sheet(f"Nursery web {cx}", (cx, cy, H + 0.05), (1, 0.3, -0.2), (-0.4, 1, -0.25), 1.4, rng, strands=11)
-    reb.mesh_object("Egg sacs", sv, sf, sac_m)
+            reb.boulder(rng, (x, y, H - 0.05 - r * 0.7 - rng.uniform(0.0, 0.15)), r, sv, sf, squash=1.3)
+    sacs = reb.mesh_object("Egg sacs", sv, sf, sac_m)
     split = reb.prim("sphere", "Split sac", sac_m, (0, 0, -0.55), (0.34, 0.3, 0.4), segments=12)
     reb.prim("cube", "Split", mat("black"), (0, -0.15, 0.0), (0.08, 0.04, 0.26)).parent = split
     sac_pivot = reb.prim("sphere", "Split sac thread top", silk, (6.4, 6.2, H - 0.1), (0.02, 0.02, 0.02))
     kit.rod("Split sac thread", silk, (0, 0, 0), (0, 0, -0.38), 0.005, 3).parent = sac_pivot
     split.parent = sac_pivot
     kit.splat("Slime under the split sac", reb.mat_plain("Slime", (0.15, 0.15, 0.08), 0.1), (6.4, 6.2, 0.0), 0.3, seed=21, lumps=0.6)
-    for corner, a, b in (((X0 + 0.1, Y0 + 0.1, H - 0.1), (1, 0, 0), (0, 1, -0.4)), ((X1 - 0.1, Y0 + 0.1, H - 0.1), (-1, 0, 0), (0, 1, -0.5)), ((X0 + 0.1, Y1 - 0.1, H - 0.1), (1, 0, 0), (0, -1, -0.4)), ((X1 - 0.1, Y1 - 0.1, H - 0.1), (-1, 0, 0), (0, -1, -0.5)), ((X0 + 0.1, Y1 - 0.1, 0.0), (1, 0, 0.4), (0, -1, 0.6))):
-        web_sheet("Corner web", corner, a, b, rng.uniform(1.1, 1.6), rng, strands=12)
-    strands = []
-    for _ in range(26):
-        a = Vector((rng.uniform(X0, X1), rng.uniform(Y0, Y1), H - 0.1))
-        b = a + Vector((rng.uniform(-1.5, 1.5), rng.uniform(-1.5, 1.5), -rng.uniform(1.0, 2.5)))
-        strands.append(kit.rod("Strand", silk, a, b, 0.003, 3))
-    kit.join("Strands", strands)
+    # The silk under the roof wraps the sacs: cast up, it meets them first.
+    for k, (cx, cy) in enumerate(((4.0, 3.2), (9.0, 5.8), (3.4, 7.6), (7.6, 4.2))):
+        kit.web_blanket(f"Nest silk {k}", (cx - 1.7, cy - 1.6, H), (3.4, 0, 0), (0, 3.2, 0), (0, 0, 1), [roof, sacs], roof=True, seed=k)
+    # The walls, matted from the roof down, thickest in the corners: a layer
+    # on the rock and a looser one slung over it.
+    for k, (wall, o, u, out, cling, cover) in enumerate((
+            ("west", (X0, Y0, 0.3), (0, Y1 - Y0, 0), (-1, 0, 0), [west_n, west_s, west_a], 0.8),
+            ("east", (X1, Y0, 0.3), (0, Y1 - Y0, 0), (1, 0, 0), [east], 0.65),
+            ("north", (X0, Y0, 0.3), (X1 - X0, 0, 0), (0, -1, 0), [north_w, north_e], 0.75),
+            ("south", (X0, Y1, 0.3), (X1 - X0, 0, 0), (0, 1, 0), [south_w, south_e, south_d], 0.7))):
+        kit.web_blanket(f"Silk on the {wall} wall", o, u, (0, 0, H - 0.2), out, cling, cover=cover, corners=(True, True), seed=11 + k)
+        kit.web_blanket(f"Loose silk on the {wall} wall", o, u, (0, 0, H - 0.2), out, cling, cover=cover * 0.8, corners=(True, True), seed=21 + k, loose=0.12)
+    # Sheets stretched from each wall to the roof.
+    for k, (a, b, into) in enumerate((
+            ((X0 + 0.1, Y0 + 0.3, H), (X0 + 0.1, Y1 - 0.3, H), (1, 0, 0)),
+            ((X1 - 0.1, Y0 + 0.3, H), (X1 - 0.1, Y1 - 0.3, H), (-1, 0, 0)),
+            ((X0 + 0.3, Y0 + 0.1, H), (X1 - 0.3, Y0 + 0.1, H), (0, 1, 0)),
+            ((X0 + 0.3, Y1 - 0.1, H), (X1 - 0.3, Y1 - 0.1, H), (0, -1, 0)))):
+        kit.web_fillet(f"Silk from wall to roof {k}", a, b, into, rng.uniform(0.9, 1.2), rng.uniform(0.9, 1.3), rng)
+    # Festoons where the walls meet the roof, and across the corners.
+    top = H - 0.12
+    for k, (a, b, into) in enumerate((
+            ((X0 + 0.05, Y0 + 1.6, top), (X0 + 0.05, 3.9, top), (1, 0, 0)),
+            ((X0 + 0.05, 7.6, top), (X0 + 0.05, Y1 - 1.5, top), (1, 0, 0)),
+            ((X1 - 0.05, Y0 + 1.5, top), (X1 - 0.05, 4.6, top), (-1, 0, 0)),
+            ((X1 - 0.05, 5.4, top), (X1 - 0.05, Y1 - 1.6, top), (-1, 0, 0)),
+            ((X0 + 1.6, Y0 + 0.05, top), (5.6, Y0 + 0.05, top), (0, 1, 0)),
+            ((9.0, Y0 + 0.05, top), (X1 - 1.5, Y0 + 0.05, top), (0, 1, 0)),
+            ((X0 + 1.5, Y1 - 0.05, top), (d0 - 0.2, Y1 - 0.05, top), (0, -1, 0)),
+            ((d1 + 0.3, Y1 - 0.05, top), (X1 - 1.6, Y1 - 0.05, top), (0, -1, 0)))):
+        kit.web_drape(f"Festoon {k}", a, b, into, rng.uniform(0.45, 0.85), rng, belly=rng.uniform(0.2, 0.4))
+    # The north-east corner filled from the roof to the floor. The other
+    # three hold cameras.
+    kit.web_corner("Corner silk", (X1 - 0.06, Y0 + 0.06, 0.0), (-1, 0, 0), (0, 1, 0), 1.6, H - 0.05, rng)
 
     # ---- The rails in from the adit: one line on to the cage, a branch running down into the water.
     rails("Rails to the cage", [(X0 - 4.5, 5.8), (3.4, 5.8), (5.4, 5.2), (6.7, 3.6), (7.2, 1.7), (7.2, 0.4)], timber, rust)

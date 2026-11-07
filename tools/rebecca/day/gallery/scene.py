@@ -6,8 +6,9 @@ left standing in it to the axles. In the north-east the floor drops away
 into a winze, roped off long ago, DANGER on a board. Hal came down here to
 hide from the things in the woods. He climbed onto an ore cart in the
 middle, out of the water, with a blanket and his lantern, and waited. The
-web spinners found him anyway: the roof over the cart is thick with web
-and a strand still runs down to it, the blanket is bloody, and there is a
+web spinners found him anyway: their silk lies over the arch like grey
+felt and hangs from it in festoons, the roof over the cart is thick with
+it round their sacs, and a strand still runs down to the cart. The blanket is bloody, and there is a
 bloody handprint on the side where he climbed up. He is not in the
 painting: he is an actor on the cart (day/cutscenes.ts, cut-hal), alive
 until he gives her the drive key. The lantern on the cart is still burning
@@ -75,51 +76,6 @@ def rock_face(name, m, origin, u, v, nu, nv, out, depth=0.25, seed=0):
     return reb.mesh_object(name, verts, faces, m)
 
 
-def web_sheet(name, corner, a, b, size, rng, strands=9):
-    """A thick web across a corner: fans of silk from `corner` along directions a and b, in one mesh."""
-    verts, faces = [], []
-    c = Vector(corner)
-    a, b = Vector(a).normalized(), Vector(b).normalized()
-    side = a.cross(b).normalized() * 0.006
-    for i in range(strands):
-        t = i / (strands - 1)
-        d = (a * (1 - t) + b * t).normalized() * size * rng.uniform(0.75, 1.0)
-        k = len(verts)
-        verts += [tuple(c), tuple(c + d), tuple(c + d + side)]
-        faces.append((k, k + 1, k + 2))
-    for r in (0.3, 0.55, 0.8):
-        for i in range(strands - 1):
-            p = c + (a * (1 - i / (strands - 1)) + b * (i / (strands - 1))).normalized() * size * r
-            q = c + (a * (1 - (i + 1) / (strands - 1)) + b * ((i + 1) / (strands - 1))).normalized() * size * r
-            k = len(verts)
-            verts += [tuple(p), tuple(q), tuple(q + Vector((0, 0, -0.01)))]
-            faces.append((k, k + 1, k + 2))
-    ob = reb.mesh_object(name, verts, faces, mat("web"), smooth=False)
-    # A haze of silk filling the corner, mostly see-through.
-    reb.mesh_object(f"{name} haze", [tuple(c), tuple(c + a * size * 0.75), tuple(c + b * size * 0.75)], [(0, 1, 2)], haze_material(), smooth=False).visible_shadow = False
-    return ob
-
-
-_haze = []
-
-
-def haze_material():
-    """Web silk seen as a film: mostly transparent, pale where it catches the light."""
-    if _haze:
-        return _haze[0]
-    m, nodes, links, bsdf = reb.nodes_material("Web haze")
-    bsdf.inputs["Base Color"].default_value = (0.7, 0.7, 0.68, 1)
-    bsdf.inputs["Roughness"].default_value = 0.8
-    clear = nodes.new("ShaderNodeBsdfTransparent")
-    mix = nodes.new("ShaderNodeMixShader")
-    mix.inputs["Fac"].default_value = 0.22
-    links.new(clear.outputs[0], mix.inputs[1])
-    links.new(bsdf.outputs[0], mix.inputs[2])
-    links.new(mix.outputs[0], nodes["Material Output"].inputs["Surface"])
-    _haze.append(m)
-    return m
-
-
 def ore_cart(name, m, at, yaw, roll=0.0, sink=0.0):
     """A side-tipping ore cart on four wheels, standing in the water (sink lowers it into the mud)."""
     parts = [
@@ -158,7 +114,7 @@ def build():
     silk = reb.mat_plain("Silk", (0.68, 0.68, 0.66), 0.6)
 
     # ---- The gallery: a broad arch of rock east-west, its mud floor, the black water over it.
-    kit.tunnel("Gallery", rock, [(-4.0, 5.0), (19.0, 5.0)], width=7.6, height=4.0, rough=0.12, seed=21, floor_m=mat("mud"))
+    arch = kit.tunnel("Gallery", rock, [(-4.0, 5.0), (19.0, 5.0)], width=7.6, height=4.0, rough=0.12, seed=21, floor_m=mat("mud"))
     # Not a mask: from the camera on the rope the water fills more than half the
     # frame, more than a camera's mask texture holds, so her legs show over it.
     reb.prim("cube", "Black water", water, ((X0 + X1) / 2 + 1.0, 5.0, WATER), (X1 - X0 + 6.0, 7.4, 0.01))
@@ -287,23 +243,29 @@ def build():
     over = ore_cart("Cart on its side", rust, (5.6, 7.0), 1.4, roll=math.radians(-90), sink=-0.38)
     reb.wall(reb.prim("cube", "Tipped cart footprint", None, (5.6, 7.0, 0.5), (1.0, 1.3, 1.0))).hide_render = True
 
-    # ---- The webs: thick over the cart, strands down; sheets in the arch; a few sacs.
-    web_sheet("Web over the cart", (cx, cy - 1.0, 3.1), (1, 0.6, -0.35), (-0.9, 0.7, -0.3), 1.9, rng, strands=15)
-    web_sheet("Web over the cart 2", (cx + 0.4, cy + 1.0, 3.0), (0.8, -0.7, -0.4), (-1, -0.4, -0.3), 1.5, rng, strands=12)
-    kit.rod("Strand to the cart", silk, (cx + 0.1, cy, 3.1), (cx + 0.05, cy + 0.1, 1.0), 0.006, 3)
-    strands = []
-    for _ in range(26):
-        a = Vector((rng.uniform(X0, X1), rng.uniform(Y0 + 0.5, Y1 - 0.5), 3.0))
-        b = a + Vector((rng.uniform(-1.2, 1.2), rng.uniform(-1.2, 1.2), -rng.uniform(1.0, 2.5)))
-        strands.append(kit.rod("Strand", silk, a, b, 0.003, 3))
-    kit.join("Strands", strands)
-    for i, x in enumerate((1.8, 6.9, 12.1)):
-        web_sheet(f"Arch web {i}", (x, 1.8, 2.55), (1, 0.3, 0.1), (0.1, 0.5, -1), 1.1, rng)
-        web_sheet(f"Arch web {i} south", (x + 0.1, 8.2, 2.55), (1, -0.3, 0.1), (0.1, -0.5, -1), 1.0, rng)
+    # ---- The webs: silk matted over the arch and the roof, the sacs in it over
+    # the cart, one strand still down to it; festoons hung along the arch.
     sv, sf = [], []
     for _ in range(8):
-        reb.boulder(rng, (cx + rng.uniform(-1.2, 1.2), cy + rng.uniform(-1.0, 1.0), 2.85), rng.uniform(0.09, 0.15), sv, sf, squash=1.3)
-    reb.mesh_object("Egg sacs", sv, sf, reb.mat_surface("Egg sac", [(0.0, (0.42, 0.4, 0.33)), (1.0, (0.62, 0.6, 0.52))], scale=18, rough=0.5, bump=0.6))
+        r = rng.uniform(0.09, 0.15)
+        reb.boulder(rng, (cx + rng.uniform(-1.2, 1.2), cy + rng.uniform(-1.0, 1.0), 3.55 - r), r, sv, sf, squash=1.3)
+    sacs = reb.mesh_object("Egg sacs", sv, sf, reb.mat_surface("Egg sac", [(0.0, (0.2, 0.17, 0.11)), (0.7, (0.38, 0.33, 0.22)), (1.0, (0.16, 0.12, 0.06))], scale=18, rough=0.45, bump=0.6))
+    kit.rod("Strand to the cart", silk, (cx + 0.1, cy, 3.3), (cx + 0.05, cy + 0.1, 1.0), 0.006, 3)
+    for k, (x, y) in enumerate(((cx, cy), (2.6, 5.4), (11.8, 5.0))):
+        kit.web_blanket(f"Silk under the roof {k}", (x - 1.8, y - 1.7, 3.0), (3.6, 0, 0), (0, 3.4, 0), (0, 0, 1), [arch, sacs], roof=True, seed=k)
+    for k, (side, y, out) in enumerate((("north", 3.0, (0, -1, 0)), ("south", 7.0, (0, 1, 0)))):
+        o = (X0 - 1.0, y, WATER)
+        u, v = (END - X0 + 1.0, 0, 0), (0, 0, 3.3 - WATER)
+        kit.web_blanket(f"Silk on the {side} side", o, u, v, out, [arch], cover=0.75, corners=(False, True), seed=31 + k)
+        kit.web_blanket(f"Loose silk on the {side} side", o, u, v, out, [arch], cover=0.6, corners=(False, True), seed=41 + k, loose=0.12)
+    cams = [(1.8, 3.1), (14.8, 6.8), (7.0, 7.0), (12.2, 3.2), (12.55, 5.75)]
+    for k, (y, into) in enumerate(((2.75, (0, 1, 0)), (7.25, (0, -1, 0)))):
+        x = X0 - 0.5 + k * 1.2
+        while x + 2.0 < END:
+            span = rng.uniform(2.0, 2.8)
+            if all(math.hypot(px - (x + span / 2), py - y) > 2.0 for px, py in cams):
+                kit.web_drape(f"Festoon {k} {x:.1f}", (x, y, 3.2), (x + span, y, 3.2), into, rng.uniform(0.45, 0.75), rng, belly=0.3)
+            x += span + rng.uniform(0.3, 1.0)
 
     # ---- Floating rubbish: timber, a hard hat, a lamp cable dangling into the water; the lamps.
     for k in range(5):

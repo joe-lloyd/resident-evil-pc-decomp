@@ -321,7 +321,7 @@
    "z0": 12000,
    "x1": 2110,
    "z1": 12310,
-   "name": "Probe: Adit in"
+   "name": "Probe: Adit set post.001"
   },
   {
    "shape": "box",
@@ -361,7 +361,7 @@
    "z0": 13017,
    "x1": 15370,
    "z1": 13078,
-   "name": "Probe: Suction pipe.002"
+   "name": "Probe: Pipe elbow.001"
   },
   {
    "shape": "box",
@@ -369,7 +369,7 @@
    "z0": 13017,
    "x1": 22000,
    "z1": 13078,
-   "name": "Probe: Gauge"
+   "name": "Probe: Switch panel"
   },
   {
    "shape": "box",
@@ -417,7 +417,7 @@
    "z0": 13782,
    "x1": 22000,
    "z1": 13843,
-   "name": "Probe: Power lamp lens"
+   "name": "Probe: Switch panel"
   },
   {
    "shape": "box",
