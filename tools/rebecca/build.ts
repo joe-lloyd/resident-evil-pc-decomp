@@ -15,12 +15,12 @@ import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { foeSounds } from './day/foes.ts';
 import { buildDayRoom } from './day/room.ts';
 import { buildCardSheet } from './card.ts';
 import { footstepFiles } from './footsteps.ts';
 import { ambienceFiles } from './sound/ambience.ts';
 import { floorSounds, groundStepFiles, roomsFile, type RoomSounds } from './sound/ground.ts';
+import { scriptSounds } from './sound/script.ts';
 import { buildArms } from './arms.ts';
 import { filePages } from './files/pages.ts';
 import { buildWalk, walkFileName } from './walks.ts';
@@ -218,12 +218,18 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
     }
     const built = buildDayRoom(room, baseDir, outDir, raeCli);
     written.push(...built.written);
-    const sounds = floorSounds(room.stage, room.room, built.floors);
-    roomSounds.push({ ...sounds, slots: new Map([...foeSounds(room.slug), ...sounds.slots]) });
+    // Every one of the room's 48 slots: what its script and its floors call
+    // for, and nothing else. Its id's own row is some other room's.
+    const floors = floorSounds(room.stage, room.room, built.floors);
+    const script = scriptSounds(room.slug, readFileSync(path.join(here, 'day', room.slug, 'room.c'), 'utf8'));
+    const slots = new Map(Array.from({ length: 48 }, (_, k): [number, string] => [k, '']));
+    for (const [k, name] of [...script, ...floors.slots]) slots.set(k, name);
+    roomSounds.push({ ...floors, slots });
   }
-  // Her rooms' own sounds over their slots' rows (sound/ground.ts): her steps
-  // on each floor, RE1's own from the player's files or ours, shipped here;
-  // and her enemies' cries, RE1's own for each kind (day/foes.ts).
+  // Her rooms' own sounds over their slots' rows: her steps on each floor,
+  // RE1's own from the player's files or ours, shipped here (sound/ground.ts);
+  // her enemies' cries and her doors', typewriters' and item boxes' sounds,
+  // RE1's own (sound/script.ts).
   writeFileSync(path.join(reb, 'sound', 'rooms.dat'), roomsFile(roomSounds));
   written.push('sound/rooms.dat');
   for (const { name, bytes } of groundStepFiles()) {

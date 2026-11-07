@@ -38,9 +38,8 @@ export type Kind = keyof typeof FOE_KINDS;
  * An enemy plays sound slot n of its block, block * 10 + n (Snd_em), the
  * block being cmd_enemy_set's last byte. Each kind in a room takes the next
  * block, in the order the room lists them. Two at most: the room's things
- * sound from slot 20 (sound/ground.ts).
+ * sound from slot 20 (sound/script.ts).
  */
-const BLOCK = 10;
 const BLOCKS = 2;
 function soundBlocks(slug: string, foes: Record<string, readonly FoeGroup[]>): Map<Kind, number> {
   const kinds = [...new Set((foes[slug] ?? []).map(([kind]) => kind))];
@@ -48,19 +47,6 @@ function soundBlocks(slug: string, foes: Record<string, readonly FoeGroup[]>): M
   return new Map(kinds.map((k, i) => [k, i]));
 }
 
-/**
- * The room's enemies' sound slots: each kind's cries in its block, the
- * block's other slots empty. Without them an enemy cries with whatever the
- * free room id's row of RE1's table holds: a hunter's, or nothing.
- */
-export function foeSounds(slug: string, foes = FOES): Map<number, string> {
-  const slots = new Map<number, string>();
-  for (const [kind, block] of soundBlocks(slug, foes)) {
-    const sounds: readonly string[] = FOE_KINDS[kind].sounds;
-    for (let n = 0; n < BLOCK; n++) slots.set(block * BLOCK + n, sounds[n] ?? '');
-  }
-  return slots;
-}
 
 /**
  * When a group is there: from the step that brings it (a plan step's
