@@ -11,17 +11,16 @@ if (ck(FG_COMMON, 145, 1)) {
 if (ck(FG_ITEM, 168, 0)) {  // operator key (op-key)
     item_aot_set(2, 11660, 6203, 1500, 1857, 56, 1, 0, 255, 122, 48, 126, 249, 142, 28, 0, 0, 168, 129, 0, 0);
 }
-aot_set(3, 14280, 7990, 4250, 3060, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
-aot_set(4, 10200, 6120, 4080, 3400, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
-aot_set(5, 17340, 7310, 6970, 1530, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
+aot_set(3, 10200, 6120, 4080, 3400, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
+aot_set(4, 16830, 7310, 7480, 2040, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
 if (ck(FG_COMMON, 118, 0) && ck(FG_COMMON, 119, 0)) {
     enemy(17, 0, 231, 1, 2, 0, 0, 3584, 0, 0, 14980, 0, 4100, 0, 0, 0, 0);  // a zombie
 }
 // adit (day/events.ts), FG_COMMON 145 once it has happened.
 if (ck(FG_COMMON, 145, 1)) {
-    aot_set(6, 22950, 9350, 1530, 3060, SCE_USEITEM, 129, 4, 0, 12, 0, 1, 0);   // the action button here raises FG_ROOM 12
+    aot_set(5, 22950, 9350, 1530, 3060, SCE_USEITEM, 129, 4, 0, 12, 0, 1, 0);   // the action button here raises FG_ROOM 12
 } else {
-    aot_set(7, 22950, 9350, 1530, 3060, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
+    aot_set(6, 22950, 9350, 1530, 3060, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 }
 // cut-mine-collapse (day/cutscenes.ts): its people, and what starts it. FG_COMMON 118 once it has run.
 // cut-hal (day/cutscenes.ts): its people, and what starts it. FG_COMMON 119 once it has run.
@@ -31,7 +30,7 @@ if (ck(FG_COMMON, 119, 1)) {
     enemy(34, 0, 255, 1, 2, 0, 0, 2048, 0, 0, 12300, 0, 9400, 6, 4, 29, 0);  // Hal
 }
 if (ck(FG_COMMON, 119, 1)) {
-    aot_set(8, 8000, 3400, 2000, 7300, SCE_EVENT, 1, 9, 0, 1, 0, 0, 0);
+    aot_set(7, 8000, 3400, 2000, 7300, SCE_EVENT, 1, 9, 0, 1, 0, 0, 0);
 }
 // The floor is about to give way (day/cutscenes.ts): the mine plays chase until she is out of it.
 if (ck(FG_COMMON, 118, 1)) {
@@ -49,10 +48,10 @@ if (ck(FG_COMMON, 145, 1) && ck(FG_ROOM, 12, 0)) {
     if (ck(FG_COMMON, 135, 0)) {
         set(FG_COMMON, 145, 0);
         door_aot_set(1, 24480, 9350, 1530, 3060, 0, 0, 0, 4, 0, ROOM_517, 6800, 0, 5100, 3072, UNLOCKED, 193);
-        aot_set(7, 22950, 9350, 1530, 3060, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
-        message(135, 255, 0);
+        aot_set(6, 22950, 9350, 1530, 3060, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
+        message(134, 255, 0);
     } else {
-        message(133, 255, 0);
+        message(132, 255, 0);
     }
 }
 if (ck(FG_COMMON, 118, 1) && ck(FG_STATUS, 15, 1)) {
@@ -78,7 +77,7 @@ scd {
 }
 dir_set(0, 0, 0, 0, 4420, 0, 8500);  // her, in from junction
 cutnext(0);
-message(136, 0, 0);  // her
+message(135, 0, 0);  // her
 wait_voice();
 // She walks to (6400, 11200).
 set_entity(ENT_PLAYER, 0);
@@ -91,12 +90,12 @@ do {
 cutnext(1);
 set(FG_STATUS, 62, 0);
 sleep(25);
-message(137, 0, 0);  // her
+message(136, 0, 0);  // her
 wait_voice();
 set(FG_STATUS, 62, 1);
-message(138, 0, 0);  // her
+message(137, 0, 0);  // her
 wait_voice();
-message(139, 0, 0);  // her
+message(138, 0, 0);  // her
 wait_voice();
 set_entity(ENT_PLAYER, 0);
 anim_begin();
@@ -114,7 +113,7 @@ return;
 // cut-hal (day/cutscenes.ts)
 scd {
     set(FG_COMMON, 119, 0);
-    aot_reset(8, SCE_NONE, 129, 0, 0, 0);
+    aot_reset(7, SCE_NONE, 129, 0, 0, 0);
     set(FG_STATUS, 15, 0);
     set(FG_6, 23, 1);
     return;
@@ -125,7 +124,7 @@ anim_begin();
     anim_play(34, 63, 0);
     anim_flags(0, 16);
 anim_end();
-message(140, 0, 0);  // Hal
+message(139, 0, 0);  // Hal
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
@@ -147,7 +146,7 @@ anim_end();
 do {
     yield();
 } while (ck(FG_ROOM, 62, 1));
-message(141, 0, 0);  // her
+message(140, 0, 0);  // her
 wait_voice();
 cutnext(0);
 set_entity(ENT_ENEMY, 6);
@@ -155,21 +154,21 @@ anim_begin();
     anim_play(33, 63, 0);
     anim_flags(0, 16);
 anim_end();
-message(142, 0, 0);  // Hal
+message(141, 0, 0);  // Hal
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
     anim_play(0, 63, 0);
     anim_flags(0, 16);
 anim_end();
-message(143, 0, 0);  // her
+message(142, 0, 0);  // her
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
     anim_play(37, 63, 0);
     anim_flags(0, 16);
 anim_end();
-message(144, 0, 0);  // Hal
+message(143, 0, 0);  // Hal
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
@@ -181,7 +180,7 @@ anim_begin();
     anim_play(35, 63, 0);
     anim_flags(0, 16);
 anim_end();
-message(145, 0, 0);  // Hal
+message(144, 0, 0);  // Hal
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
@@ -201,7 +200,7 @@ anim_begin();
     anim_play(34, 63, 0);
     anim_flags(0, 16);
 anim_end();
-message(146, 0, 0);  // Hal
+message(145, 0, 0);  // Hal
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
@@ -215,7 +214,7 @@ anim_end();
 do {
     yield();
 } while (ck(FG_ROOM, 62, 1));
-message(147, 0, 0);  // her
+message(146, 0, 0);  // her
 wait_voice();
 set_entity(ENT_ENEMY, 6);
 anim_begin();
@@ -225,7 +224,7 @@ do {
     yield();
 } while (ck(FG_ROOM, 62, 1));
 sleep(30);
-message(148, 0, 0);  // her
+message(147, 0, 0);  // her
 wait_voice();
 set_entity(ENT_PLAYER, 0);
 anim_begin();
