@@ -1768,6 +1768,250 @@ def web(name, corner, size=0.35, facing=(-1, 1)):
     return reb.mesh_object(name, verts, faces, mat("web"), smooth=False)
 
 
+# A web spinners' nest is not strands but silk laid on in layers until it
+# is cloth: grey-white sheets matted over the rock, thickest under the roof
+# and in the corners, torn into holes lower down, and heavy festoons hung
+# between the walls and the roof (the Black Tiger's lair in the REmake).
+
+_silk = []
+
+
+def silk_material():
+    """Matted spider silk: dirty grey-white and soft, see-through where it
+    is thin. How thick it lies comes from the mesh's `silk` attribute (0
+    none, 1 solid), broken into clumps and holes and streaked along the
+    threads, which run down (object space z)."""
+    if _silk:
+        return _silk[0]
+    m, nodes, links, bsdf = reb.nodes_material("Silk")
+    m["worn"] = True  # no water stains: it is newer than the rock
+    bsdf.inputs["Roughness"].default_value = 0.95
+    if "Sheen Weight" in bsdf.inputs:
+        bsdf.inputs["Sheen Weight"].default_value = 0.6
+    tc = nodes.new("ShaderNodeTexCoord")
+    attr = nodes.new("ShaderNodeAttribute")
+    attr.attribute_name = "silk"
+
+    info = nodes.new("ShaderNodeObjectInfo")
+    shift = nodes.new("ShaderNodeVectorMath")
+    shift.operation = "MULTIPLY_ADD"
+    shift.inputs[1].default_value = (53.0, 31.0, 17.0)
+    links.new(info.outputs["Random"], shift.inputs[0])
+    links.new(tc.outputs["Object"], shift.inputs[2])
+
+    def tex(scale, detail, stretch=(1.0, 1.0, 1.0), rough=0.6):
+        n = nodes.new("ShaderNodeTexNoise")
+        n.inputs["Scale"].default_value = scale
+        n.inputs["Detail"].default_value = detail
+        n.inputs["Roughness"].default_value = rough
+        m_ = nodes.new("ShaderNodeMapping")
+        m_.inputs["Scale"].default_value = stretch
+        links.new(shift.outputs[0], m_.inputs["Vector"])
+        links.new(m_.outputs["Vector"], n.inputs["Vector"])
+        return n.outputs["Fac"]
+
+    def op(kind, a, b):
+        n = nodes.new("ShaderNodeMath")
+        n.operation = kind
+        for i, x in enumerate((a, b)):
+            if isinstance(x, float):
+                n.inputs[i].default_value = x
+            else:
+                links.new(x, n.inputs[i])
+        return n.outputs[0]
+
+    def ramp(fac, stops):
+        return reb.ramp(nodes, links, fac, stops).outputs["Color"]
+
+    # A membrane: thin where it faces the eye, thick where it turns away
+    # (its folds and edges catch the light), with torn holes running down
+    # it and a few threads standing out, each on how thick the mesh says
+    # it lies.
+    facing = nodes.new("ShaderNodeLayerWeight")
+    facing.inputs["Blend"].default_value = 0.35
+    holes = ramp(tex(1.7, 2.0, (1.0, 1.0, 0.45)), [(0.4, (0.0, 0.0, 0.0)), (0.45, (1.0, 1.0, 1.0))])
+    bands = nodes.new("ShaderNodeTexWave")
+    bands.inputs["Scale"].default_value = 9.0
+    bands.inputs["Distortion"].default_value = 6.0
+    bands.inputs["Detail"].default_value = 3.0
+    links.new(shift.outputs[0], bands.inputs["Vector"])
+    threads = ramp(bands.outputs["Fac"], [(0.9, (0.0, 0.0, 0.0)), (0.97, (1.0, 1.0, 1.0))])
+    sheet = op("MULTIPLY", op("MULTIPLY", attr.outputs["Fac"], holes), op("ADD", op("MULTIPLY", facing.outputs["Facing"], 0.65), 0.3))
+    thick = op("ADD", sheet, op("MULTIPLY", op("MULTIPLY", threads, attr.outputs["Fac"]), 0.5))
+    cover = reb.ramp(nodes, links, thick, [(0.05, (0.0, 0.0, 0.0)), (0.95, (0.9, 0.9, 0.9))])
+    tint = reb.ramp(nodes, links, tex(3.0, 3.0), [(0.3, (0.4, 0.39, 0.36)), (0.7, (0.6, 0.59, 0.55))])
+    links.new(tint.outputs["Color"], bsdf.inputs["Base Color"])
+    clear = nodes.new("ShaderNodeBsdfTransparent")
+    mix = nodes.new("ShaderNodeMixShader")
+    links.new(cover.outputs["Color"], mix.inputs["Fac"])
+    links.new(clear.outputs[0], mix.inputs[1])
+    links.new(bsdf.outputs[0], mix.inputs[2])
+    links.new(mix.outputs[0], nodes["Material Output"].inputs["Surface"])
+    _silk.append(m)
+    return m
+
+
+def _silk_object(name, verts, faces, silk):
+    """A silk mesh with its thickness per point, leaving out faces with none."""
+    keep = [f for f in faces if max(silk[i] for i in f) > 0.02]
+    ob = reb.mesh_object(name, verts, keep, silk_material())
+    attr = ob.data.attributes.new("silk", "FLOAT", "POINT")
+    attr.data.foreach_set("value", silk)
+    ob.visible_shadow = False
+    return ob
+
+
+def _smoothstep(e0, e1, x):
+    t = min(1.0, max(0.0, (x - e0) / (e1 - e0)))
+    return t * t * (3 - 2 * t)
+
+
+def web_blanket(name, origin, u, v, out, cling, cover=0.6, corners=(False, False), roof=False, step=0.12, seed=0, loose=0.0):
+    """Silk matted over the rectangle origin + s*u + t*v of a wall (v up it),
+    `out` pointing from the room into the rock. Each point is cast along
+    `out` onto `cling` (the rock's objects) and lies on whatever it meets
+    first, held off it on the high points: silk bridges the hollows, it
+    does not follow them. Thick over the top `cover` of the wall and in the
+    corners (`corners`, at s=0 and s=1), thin and holed below, and fading at
+    the other ends. With `roof`, a patch under the roof: thick in the middle,
+    fading all round. `loose` lifts it that far off the rock and eases it
+    more, for a second layer slung over the first."""
+    from mathutils.bvhtree import BVHTree
+    o, u, v, out = Vector(origin), Vector(u), Vector(v), Vector(out).normalized()
+    bpy.context.view_layer.update()
+    dg = bpy.context.evaluated_depsgraph_get()
+    trees = []
+    for ob in cling:
+        ev = ob.evaluated_get(dg)
+        me = ev.to_mesh()
+        me.transform(ob.matrix_world)
+        trees.append(BVHTree.FromPolygons([x.co.copy() for x in me.vertices], [tuple(p.vertices) for p in me.polygons]))
+        ev.to_mesh_clear()
+    nu, nv = max(4, round(u.length / step)), max(4, round(v.length / step))
+    back = 1.0
+    depth = []
+    for j in range(nv + 1):
+        for i in range(nu + 1):
+            p = o + u * (i / nu) + v * (j / nv) - out * back
+            hits = [h for h in (t.ray_cast(p, out, back * 3) for t in trees) if h[0] is not None]
+            depth.append(min(h[3] for h in hits) if hits else None)
+    # Rest on the high points: the nearest rock round each point, then eased.
+    w = nu + 1
+    known = [d for d in depth if d is not None]
+    far = max(known) if known else back
+    near = [min((depth[jj * w + ii] if depth[jj * w + ii] is not None else far) for jj in range(max(0, j - 2), min(nv, j + 2) + 1) for ii in range(max(0, i - 2), min(nu, i + 2) + 1)) for j in range(nv + 1) for i in range(nu + 1)]
+    for _ in range(3 + round(loose * 40)):
+        near = [sum(near[jj * w + ii] for jj in range(max(0, j - 1), min(nv, j + 1) + 1) for ii in range(max(0, i - 1), min(nu, i + 1) + 1)) / ((min(nv, j + 1) - max(0, j - 1) + 1) * (min(nu, i + 1) - max(0, i - 1) + 1)) for j in range(nv + 1) for i in range(nu + 1)]
+    verts, silk = [], []
+    ulen, vlen = u.length, v.length
+    for j in range(nv + 1):
+        t = j / nv
+        for i in range(nu + 1):
+            s = i / nu
+            k = j * w + i
+            d = depth[k]
+            lie = min(near[k], d if d is not None else far) - 0.04 - loose
+            if loose:
+                # Slung from the top, it hangs in folds between where it holds.
+                lie -= loose * 0.9 * abs(math.sin(math.pi * s * ulen / 0.7 + seed)) * (1.0 - t)
+            p = o + u * s + v * t - out * back + out * lie
+            verts.append(tuple(p))
+            if roof:
+                mid = min(s * ulen, (1 - s) * ulen, t * vlen, (1 - t) * vlen)
+                body = 0.6 * _smoothstep(0.0, 1.2, mid)
+            else:
+                along = (o + u * s) * 1.3
+                edge = 1.0 - cover + 0.16 * noise.noise(along + Vector((seed, 0.0, 0.0))) - 0.22 * max(0.0, noise.noise(along * 3.0 + Vector((0.0, seed, 0.0))))
+                top = _smoothstep(edge - 0.08, edge + 0.22, t)
+                near_corner = max([max(0.0, 1.0 - s * ulen / 1.6) for c in corners[:1] if c] + [max(0.0, 1.0 - (1 - s) * ulen / 1.6) for c in corners[1:] if c] + [0.0])
+                ends = min(1.0 if corners[0] else _smoothstep(0.0, 0.8, s * ulen), 1.0 if corners[1] else _smoothstep(0.0, 0.8, (1 - s) * ulen))
+                body = max(top, near_corner * _smoothstep(0.05, 0.4, t)) * ends
+            rag = 0.45 * noise.noise(p * 1.1 + Vector((seed * 7.1, 0.0, 0.0)))
+            silk.append(0.0 if d is None else min(1.0, max(0.0, (body + rag * (1.0 - 0.5 * body)) * (1.0 - loose * 2.0))))
+    faces = [(j * w + i, j * w + i + 1, (j + 1) * w + i + 1, (j + 1) * w + i) for j in range(nv) for i in range(nu)]
+    return _silk_object(name, verts, faces, silk)
+
+
+def web_fillet(name, a, b, into, down, reach, rng, sag=0.25, rows=12):
+    """A sheet of silk stretched from a wall to the roof along the line a-b
+    (where they meet): held on the wall `down` metres below the line and on
+    the roof `reach` metres out from the wall toward `into`, sagging `sag`
+    between them, and torn away toward its ends."""
+    a, b, into = Vector(a), Vector(b), Vector(into).normalized()
+    span = (b - a).length
+    cols = max(6, round(span / 0.12))
+    phase = rng.uniform(0, 6.0)
+    verts, silk = [], []
+    for k in range(rows + 1):
+        r = k / rows
+        for i in range(cols + 1):
+            s = i / cols
+            line = a + (b - a) * s
+            wall = line + Vector((0, 0, -down * (0.6 + 0.3 * math.sin(math.pi * s) + 0.35 * noise.noise(line * 0.9 + Vector((0.0, phase, 0.0))))))
+            roof = line + into * reach * (0.7 + 0.3 * math.sin(math.pi * s + phase))
+            pleat = 0.09 * math.sin(s * span * 4.5 + phase) * math.sin(math.pi * r)
+            p = wall.lerp(roof, r) + (into * 0.7 + Vector((0, 0, -1))) * (sag * math.sin(math.pi * r) * (0.6 + 0.4 * math.sin(math.pi * s)) + pleat)
+            verts.append(tuple(p))
+            ends = _smoothstep(0.0, 0.25, s) * _smoothstep(0.0, 0.25, 1.0 - s)
+            silk.append(min(1.0, max(0.0, ends * 1.1 + 0.35 * noise.noise(p * 1.4 + Vector((phase, 0.0, 0.0))))))
+    w = cols + 1
+    faces = [(k * w + i, k * w + i + 1, (k + 1) * w + i + 1, (k + 1) * w + i) for k in range(rows) for i in range(cols)]
+    return _silk_object(name, verts, faces, silk)
+
+
+def web_corner(name, corner, a, b, reach, top, rng, belly=0.35, rows=16):
+    """A sheet of silk filling a corner from `top` down to the floor: held
+    along the two walls (from the corner toward `a` and `b`, `reach` metres
+    out at the top, closer to the corner lower down) and bellying toward the
+    room between them."""
+    c, a, b = Vector(corner), Vector(a).normalized(), Vector(b).normalized()
+    into = (a + b).normalized()
+    phase = rng.uniform(0, 6.0)
+    cols = max(8, round(reach * 1.4 / 0.1))
+    verts, silk = [], []
+    for k in range(rows + 1):
+        r = k / rows
+        z = top * (1.0 - r)
+        out_ = reach * (0.35 + 0.65 * (1.0 - r) ** 0.7)
+        for i in range(cols + 1):
+            s = i / cols
+            ea = c + a * out_ * (1.0 + 0.15 * noise.noise(Vector((z, phase, 0.0))))
+            eb = c + b * out_ * (1.0 + 0.15 * noise.noise(Vector((phase, z, 0.0))))
+            fold = 0.05 * math.sin(s * 9.0 + phase + z * 2.0)
+            p = ea.lerp(eb, s) + into * (belly * out_ / reach * math.sin(math.pi * s) + fold) + Vector((0, 0, z))
+            verts.append(tuple(p))
+            low = _smoothstep(0.0, 0.35, 1.0 - r) * 0.5 + 0.5
+            silk.append(min(1.0, max(0.0, low + 0.3 * noise.noise(p * 1.6 + Vector((phase, 0.0, 0.0))))))
+    w = cols + 1
+    faces = [(k * w + i, k * w + i + 1, (k + 1) * w + i + 1, (k + 1) * w + i) for k in range(rows) for i in range(cols)]
+    return _silk_object(name, verts, faces, silk)
+
+
+def web_drape(name, a, b, into, drop, rng, belly=0.3, rows=10):
+    """A festoon of silk hung from the line a-b (where a wall meets the roof,
+    or across a corner from wall to wall), sagging `drop` metres at the
+    middle and bellying `belly` metres toward `into` (the room), its lower
+    edge torn and folded."""
+    a, b, into = Vector(a), Vector(b), Vector(into).normalized()
+    span = (b - a).length
+    cols = max(6, round(span / 0.1))
+    phase = rng.uniform(0, 6.0)
+    verts, silk = [], []
+    for k in range(rows + 1):
+        r = k / rows
+        for i in range(cols + 1):
+            s = i / cols
+            sag = math.sin(math.pi * s)
+            fold = 0.06 * math.sin(s * span * 5.0 + phase) * r
+            p = a + (b - a) * s + Vector((0, 0, -drop * sag * r)) + into * (belly * sag * math.sin(math.pi * r * 0.8) + fold)
+            verts.append(tuple(p))
+            edge = 1.0 - _smoothstep(0.55, 1.0, r) * (0.6 + 0.4 * noise.noise(p * 2.3))
+            silk.append(min(1.0, max(0.0, edge * (0.85 + 0.3 * noise.noise(p * 1.7)))))
+    w = cols + 1
+    faces = [(k * w + i, k * w + i + 1, (k + 1) * w + i + 1, (k + 1) * w + i) for k in range(rows) for i in range(cols)]
+    return _silk_object(name, verts, faces, silk)
+
+
 # ---------------------------------------------------------------------------
 # Shells: interiors and the forest round a clearing
 # ---------------------------------------------------------------------------
