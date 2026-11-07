@@ -634,6 +634,9 @@ export async function fight(
   let aiming = false;
   let misses = 0;
   let fruitless = 0;
+  // Steps back in a row: one that follows her (a spinner on the wall, in a
+  // narrow tunnel) would keep her backing off and never firing.
+  let backed = 0;
   let blindSince: number | undefined;
   let waitedFrom: { d: number; at: number } | undefined;
   // Aiming low (down held with aim): a zombie crouched over a body, or one
@@ -700,14 +703,16 @@ export async function fight(
       blindSince = undefined;
       // Out of rounds: leave the rest standing and walk on.
       if (rounds(s) === 0) return shots;
-      if (!LEAPERS.includes(target.type) && d < 1800) {
+      if (!LEAPERS.includes(target.type) && d < 1800 && backed < 3) {
         // Close enough to grab her: step back before the next shot.
         await release();
         await faceTowards(link, target.x, target.z).catch(() => undefined);
         await link.tap(Key.down, 10);
         await link.frames(10);
+        backed++;
         continue;
       }
+      backed = 0;
       const wantLow = fruitless >= 2;
       if (!aiming || off > 500 || misses >= 3 || wantLow !== low) {
         await release();
