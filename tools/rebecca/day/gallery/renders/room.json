@@ -85,38 +85,6 @@
   },
   {
    "shape": "box",
-   "x0": 5367,
-   "z0": 5795,
-   "x1": 5428,
-   "z1": 7125,
-   "name": "Probe: Floating plank.003"
-  },
-  {
-   "shape": "box",
-   "x0": 14550,
-   "z0": 6815,
-   "x1": 16645,
-   "z1": 7125,
-   "name": "Probe: Floating plank"
-  },
-  {
-   "shape": "box",
-   "x0": 4860,
-   "z0": 7322,
-   "x1": 5425,
-   "z1": 7383,
-   "name": "Probe: Floating plank.002"
-  },
-  {
-   "shape": "box",
-   "x0": 5115,
-   "z0": 7577,
-   "x1": 5425,
-   "z1": 7638,
-   "name": "Probe: Floating plank.002"
-  },
-  {
-   "shape": "box",
    "x0": 11235,
    "z0": 7070,
    "x1": 13330,
@@ -130,14 +98,6 @@
    "x1": 25488,
    "z1": 7635,
    "name": "Probe: Winze dark"
-  },
-  {
-   "shape": "box",
-   "x0": 5112,
-   "z0": 7832,
-   "x1": 5173,
-   "z1": 7893,
-   "name": "Probe: Floating plank.002"
   },
   {
    "shape": "box",
@@ -165,27 +125,11 @@
   },
   {
    "shape": "box",
-   "x0": 5115,
-   "z0": 8090,
-   "x1": 5425,
-   "z1": 8910,
-   "name": "Probe: Floating plank.002"
-  },
-  {
-   "shape": "box",
    "x0": 13020,
    "z0": 8852,
    "x1": 13330,
    "z1": 8913,
    "name": "Probe: Blanket on the cart"
-  },
-  {
-   "shape": "box",
-   "x0": 5367,
-   "z0": 9107,
-   "x1": 5428,
-   "z1": 9168,
-   "name": "Probe: Floating plank.002"
   },
   {
    "shape": "box",
@@ -197,27 +141,11 @@
   },
   {
    "shape": "box",
-   "x0": 11745,
-   "z0": 9362,
-   "x1": 12055,
-   "z1": 9423,
-   "name": "Probe: Floating plank.001"
-  },
-  {
-   "shape": "box",
    "x0": 23727,
    "z0": 9362,
    "x1": 23788,
    "z1": 9423,
    "name": "Probe: Lamp cable down"
-  },
-  {
-   "shape": "box",
-   "x0": 11745,
-   "z0": 9617,
-   "x1": 12820,
-   "z1": 9678,
-   "name": "Probe: Floating plank.001"
   },
   {
    "shape": "box",
@@ -237,27 +165,11 @@
   },
   {
    "shape": "box",
-   "x0": 12510,
-   "z0": 9872,
-   "x1": 13585,
-   "z1": 9933,
-   "name": "Probe: Floating plank.001"
-  },
-  {
-   "shape": "box",
    "x0": 23985,
    "z0": 9872,
    "x1": 24295,
    "z1": 9933,
    "name": "Probe: Lamp cable down"
-  },
-  {
-   "shape": "box",
-   "x0": 13275,
-   "z0": 10127,
-   "x1": 13585,
-   "z1": 10188,
-   "name": "Probe: Floating plank.001"
   },
   {
    "shape": "box",
@@ -495,11 +407,7 @@
   "Decline floor": 52,
   "Winze dark": 39,
   "Timber sets": 34,
-  "Floating plank": 18,
-  "Floating plank.001": 14,
-  "Floating plank.002": 13,
   "Lamp cable down": 9,
-  "Floating plank.003": 8,
   "Floating hard hat": 6,
   "Blood on the blanket": 4,
   "Rope post.001": 3,

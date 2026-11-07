@@ -268,8 +268,12 @@ def build():
             x += span + rng.uniform(0.3, 1.0)
 
     # ---- Floating rubbish: timber, a hard hat, a lamp cable dangling into the water; the lamps.
+    # Waterlogged, the planks ride low: under the height her stride hides
+    # (reb.PROBE_LOW), so she wades past them. Their own seed keeps what
+    # comes before from moving them.
+    junk = random.Random(271)
     for k in range(5):
-        reb.prim("cube", "Floating plank", timber, (rng.uniform(2.5, 14.0), rng.uniform(2.6, 7.6), WATER), (rng.uniform(0.6, 1.4), 0.14, 0.05), rot=(0, 0, rng.uniform(0, 3)))
+        reb.prim("cube", "Floating plank", timber, (junk.uniform(2.5, 14.0), junk.uniform(2.6, 7.6), WATER - 0.03), (junk.uniform(0.6, 1.4), 0.14, 0.05), rot=(0, 0, junk.uniform(0, 3)))
     reb.prim("sphere", "Floating hard hat", mat("white paint"), (3.2, 6.9, WATER + 0.02), (0.28, 0.25, 0.18), rot=(math.pi, 0.3, 0))
     lamps = []
     for k, (x, y, e) in enumerate(((1.2, 5.0, 55), (9.0, 5.2, 40), (13.4, 4.6, 30))):
