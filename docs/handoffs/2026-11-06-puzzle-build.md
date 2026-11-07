@@ -164,3 +164,33 @@ Both rooms were rendered again and their renders pushed to the asset
 store. In game, after cut-hal the gallery shows the one Hal, dead by the
 cart. The adit way passes on the new build, through the gallery without
 Hal's footprint (log: `~/reb-puzzle-lab/log/round3/`).
+
+## Enemy cries and the webs (2026-11-07, evening)
+
+- **Cries:** an enemy plays the room's sound slots `block * 10 + n`
+  (Snd_em), from RE1's row for its room id. Her rooms set only their
+  footsteps, so each enemy took its free room id's row: the junction's
+  spinners cried as hunters, the back garden's dogs as zombies, and most
+  rooms' enemies made no sound. `day/foes.ts` now gives each kind RE1's own
+  cries and each kind in a room its own block (cmd_enemy_set's last
+  byte), and `rooms.dat` fills them. Checked in game with
+  `~/reb-puzzle-lab/scripts/probe-cries.ts`, which reads the cries the
+  test-mode state now reports (`sound.cries`): before, the junction's
+  spinners played `HU_walkB` and `HU_jump`; after, `kuasi_B` and `kuasi_C`.
+  The washout's adders play `PY_` and its dog `cer_`; the mess hall's
+  zombies `z_`.
+- **Webs:** the junction and the gallery had bright straight strands. The
+  kit's new silk (`kit.web_blanket`, `web_fillet`, `web_drape`,
+  `web_corner`) mats the walls and roof and hangs sheets and festoons,
+  after the Black Tiger's lair in the REmake. A silk sheet in a corner
+  that holds a camera covers its lens, so the junction fills only its
+  north-east corner.
+- **Harness:** a fight stepped her back from any close enemy before each
+  shot, so a spinner following her in the tunnel kept her backing off
+  without firing. Now three steps back, then a shot.
+
+On the new build quarters 1, 2 and 4 pass. Quarter 3 passed in all five
+runs after the harness fix. One of the three full runs lost about thirty
+minutes in the tunnel first: a walk to its doors failed three times at
+about ten minutes a try, then got through. The two traced runs did not
+stall, so the cause is not found.
