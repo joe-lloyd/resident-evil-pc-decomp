@@ -1086,7 +1086,7 @@ Parameter block layout (starts at opcode stream `+0x0C`, so block offset = strea
 | Address | `0x004312f0` |
 | Length | 4/6/8 bytes (see subCmd) |
 | Returns | `1` |
-| Description | Modifies one property of `g_EnemiesList[enemyIdx]`. Sub-commands select the field and the consumed length; an unknown subCmd consumes nothing (interpreter spins, as in the original). |
+| Description | Modifies one property of `g_EnemiesList[enemyIdx]`. Sub-commands select the field and the consumed length; an unknown subCmd consumes nothing (interpreter spins, as in the original). Port addition, REB mode: when subCmd 3 turns status bit 0 off or on, `g_enemy_count` follows it. Every enemy loop walks slots until it has seen that many with bit 0 set, so a live enemy taken away without it leaves `apply_weapon_damage` reading slots it never filled. |
 
 | Offset | Key | Type | Description |
 |---|---|---|---|

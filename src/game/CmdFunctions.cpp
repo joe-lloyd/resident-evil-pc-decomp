@@ -1460,9 +1460,19 @@ int cmd_enemy_prop_set(void)
     case 3: {
         char mode = (char)(param1 >> 8);
         unsigned char flagVal = (unsigned char)param1;
+        const unsigned char was = ent->status_flags;
         if (mode == 0) ent->status_flags = flagVal;
         else if (mode == 1) ent->status_flags |= flagVal;
         else if (mode == 2) ent->status_flags ^= flagVal;
+        // Port addition, REB mode: Rebecca's rooms take live enemies away with
+        // this (the kennels' pack, penned; the loggers, called in by the bell).
+        // Every enemy loop walks slots until it has seen g_enemy_count with
+        // bit 0 set, and the render loop has no bound, so the count follows
+        // bit 0. Else apply_weapon_damage reads slots it never filled.
+        if (g_bRebMode && ((was ^ ent->status_flags) & 1) != 0) {
+            if (ent->status_flags & 1) g_enemy_count++;
+            else if (g_enemy_count > 0) g_enemy_count--;
+        }
         g_ScdOpcodes += 6;
         return 1;
     }
