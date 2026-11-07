@@ -102,11 +102,9 @@ Decided on the way:
   skid road gate).
 
 Open, for the owner's eye or a later pass:
-- **Tower top:** the switch house key is painted on its nail, so it stays
-  there after she takes it. It always was; the pickup now sits on it.
-- **Gallery:** Hal floats face down in the water while the junction
-  shows him alive on his ore cart across it, and the plan has him
-  alive until the cutscene.
+- **Tower top:** the switch house key is small. Camera 0 shows its board
+  by the door as a dark panel through the glass; the key itself is a
+  pixel. The paint is gone (2026-11-07), so only the pickup is the key.
 - **Kennels:** the hoist is small and dark at night; the cellar's cold
   light is subtle.
 - **Safe:** no combination dial; it opens once she has the calendar.
@@ -150,3 +148,18 @@ quarter end. The logs are in `~/reb-puzzle-lab/log/ways-2026-11-07/`.
 The crank's dog comes the next time the mine entrance loads, like every
 other enemy a step brings: the engine loads enemy models with the room, so
 a dog arriving mid-wind is untried.
+
+## Two rooms repainted (2026-11-07)
+
+- **Gallery:** the background painted Hal floating dead by the rope, while
+  cut-hal puts him on the ore cart as an actor, alive until he gives her
+  the key. The room showed two Hals. The painted body, its check and its
+  footprint are gone.
+- **Tower top:** the key and its tag were painted on the nail. The scene
+  now paints the nail alone, as the other key boards do. No camera's
+  render changed: the key was too small to see, so this only keeps the
+  scene honest.
+
+Both rooms were rendered again and their renders pushed to the asset
+store. In game, after cut-hal the gallery shows the one Hal, dead by the
+cart.
