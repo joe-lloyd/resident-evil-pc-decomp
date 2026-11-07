@@ -518,11 +518,10 @@ def build():
     kit.splat("Blood on the canvas", mat("old blood"), P(CW - 0.4, -0.2, 0.435), 0.2, seed=5, stretch=(1.0, 1.4))
     for k in range(3):
         kit.scratches(f"Scratches {k}", mat("old blood"), P(CW - 0.06, -1.2 + k * 0.5, 0.9), (-1, 0), count=4, length=0.35, seed=k)
-    # The switch house key on its nail by the door, its tag.
+    # The nail by the door the switch house key hangs on: the key is its
+    # pickup (switch-key), so it goes when she takes it.
     kx = DOOR[1] + 0.3
     reb.prim("cyl", "Nail", mat("iron"), P(kx, CW - 0.07, 1.55), (0.01, 0.01, 0.06), rot=(math.pi / 2, 0, 0), segments=6)
-    reb.prim("cube", "Key", brass, P(kx, CW - 0.09, 1.47), (0.025, 0.006, 0.09))
-    reb.prim("cube", "Key tag", reb.mat_plain("Tag red", (0.4, 0.05, 0.03), 0.7), P(kx + 0.02, CW - 0.09, 1.38), (0.06, 0.004, 0.09))
     reb.prim("cube", "Wall board under the key", timber, P(kx, CW - 0.055, 1.45), (0.4, 0.01, 0.3))
     kit.text("Key board words", "KEYS", mat("white paint"), P(kx, CW - 0.062, 1.56), size=0.04)
     room.item("switch-key", P(kx, CW - 0.09, 1.42))
