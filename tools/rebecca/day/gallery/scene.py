@@ -1,4 +1,4 @@
-"""The flooded gallery under the junction: where Hal hid, and drowned.
+"""The flooded gallery under the junction: where Hal hid, and dies.
 
 What it tells: the old gallery has been under water for years: black,
 still, knee deep, with the rails running on beneath it and the ore carts
@@ -8,9 +8,10 @@ hide from the things in the woods. He climbed onto an ore cart in the
 middle, out of the water, with a blanket and his lantern, and waited. The
 web spinners found him anyway: the roof over the cart is thick with web
 and a strand still runs down to it, the blanket is bloody, and there is a
-bloody handprint where he slid off the side. He floats face down at the
-edge of the deep water by the rope, the gondola's drive key on a chain at
-his neck. The lantern on the cart is still burning low.
+bloody handprint on the side where he climbed up. He is not in the
+painting: he is an actor on the cart (day/cutscenes.ts, cut-hal), alive
+until he gives her the drive key. The lantern on the cart is still burning
+low.
 
 The gallery ends at a wall of rock in the dark east, and low in it is the
 old drainage adit: a timbered tunnel no higher than a man, its sill just
@@ -25,8 +26,7 @@ Metres: the floor is x 1.0-15.0, y 2.0-8.0, under knee-deep water (its
 surface 0.45 up), in a gallery 7 m wide under a rock arch about 4 high,
 running east-west. The way back up to the junction is the west end, where
 the floor climbs out of the water into the decline. The winze, the deep
-water, is x 10.5-15.0, y 2.0-4.6, behind a rope on posts. Hal floats at x
-10.0, y 5.2. The cart he hid on stands at x 7.2, y 4.6. The east end's
+water, is x 10.5-15.0, y 2.0-4.6, behind a rope on posts. The cart he hid on stands at x 7.2, y 4.6. The east end's
 rock wall stands at x 15.3. The adit's mouth is in it at y 5.7-7.1, its
 sill 0.5 up and its cap 2.3 up, boarded across. The door to the east path
 is in front of the boards, x 14.4-15.0, y 5.8-7.0. Coming in from the east
@@ -36,8 +36,7 @@ runs east-north-east from the mouth, about 15 m, to daylight.
 Once she kicks the boards out ("adit"), they lie broken in the adit's
 mouth, one hanging by a nail, and the far end shows a faint daylight.
 
-Moving: the water rippling; Hal's body rising and settling on it; the
-lantern's flame low; drops from the roof.
+Moving: the water rippling; the lantern's flame low; drops from the roof.
 """
 import math
 import os
@@ -48,14 +47,13 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector, noise  # noqa: E402
+from mathutils import Vector, noise  # noqa: E402
 import bpy  # noqa: E402
 
 X0, X1, Y0, Y1 = 1.0, 15.0, 2.0, 8.0
 WATER = 0.45
 DEEP = (10.5, Y0, X1, 4.6)
 CART = (7.2, 4.6)
-HAL = (10.0, 5.2)
 END = 15.3                      # the rock wall closing the gallery's east end
 ADIT = (5.7, 7.1, 0.5, 2.3)     # the drainage adit's mouth in it: y0, y1, sill, cap
 ADIT_FAR = (29.5, 9.9)          # its far end, the mouth on the east path
@@ -147,9 +145,9 @@ def build():
     reb.clear_scene()
     room = kit.Room(bounds=(X0, Y0, X1, Y1), inside=True)
     room.ground("water")  # knee deep over the mud
-    room.camera((1.8, 3.1, 2.25), (9.5, 5.6, 0.3), 200, "from the foot of the decline: the black water, the cart he hid on, Hal floating by the rope")
-    room.camera((14.8, 6.8, 2.3), (6.0, 3.6, 0.3), 200, "from the far south-east: Hal at the edge of the deep water, the cart, the way back up")
-    room.camera((7.0, 7.0, 2.25), (10.2, 4.6, 0.2), 200, "close on Hal, face down, the key on its chain at his neck, the rope and the DANGER board")
+    room.camera((1.8, 3.1, 2.25), (9.5, 5.6, 0.3), 200, "from the foot of the decline: the black water, the cart he hid on, the rope")
+    room.camera((14.8, 6.8, 2.3), (6.0, 3.6, 0.3), 200, "from the far south-east: the edge of the deep water, the cart, the way back up")
+    room.camera((7.0, 7.0, 2.25), (10.2, 4.6, 0.2), 200, "close on the edge of the deep water, the rope and the DANGER board")
     room.camera((12.2, 3.2, 2.3), (5.0, 7.0, 0.3), 200, "from over the winze: the cart under its web, the carts in the water, the decline")
     room.camera((12.55, 5.75, 2.3), (15.3, 6.4, 0.9), 200, "down the drainage adit's line at the east end: the boards across it, the water at its sill; kicked out, the tunnel to daylight")
 
@@ -161,7 +159,7 @@ def build():
 
     # ---- The gallery: a broad arch of rock east-west, its mud floor, the black water over it.
     kit.tunnel("Gallery", rock, [(-4.0, 5.0), (19.0, 5.0)], width=7.6, height=4.0, rough=0.12, seed=21, floor_m=mat("mud"))
-    # Not a mask: from the camera over Hal the water fills more than half the
+    # Not a mask: from the camera on the rope the water fills more than half the
     # frame, more than a camera's mask texture holds, so her legs show over it.
     reb.prim("cube", "Black water", water, ((X0 + X1) / 2 + 1.0, 5.0, WATER), (X1 - X0 + 6.0, 7.4, 0.01))
     # The way back up: the decline's floor climbing out of the water at the west end.
@@ -279,7 +277,7 @@ def build():
     reb.mask(hid)
     reb.cloth("Blanket on the cart", reb.mat_plain("Grey blanket", (0.14, 0.14, 0.13), 0.95), (cx, cy, 0.95), (1.3, 1.0), rot=(0, 0, 0.1), cuts=12, lumps=0.06, seed=4)
     kit.splat("Blood on the blanket", mat("blood"), (cx + 0.1, cy - 0.05, 1.0), 0.18, seed=5, stretch=(1.2, 0.8))
-    kit.splat("Hand sliding off", mat("blood"), (cx + 0.35, cy + 0.415, 0.75), 0.06, rot=(math.pi / 2, 0, math.pi + 0.1), seed=6, lumps=0.5)
+    kit.splat("Hand climbing up", mat("blood"), (cx + 0.35, cy + 0.415, 0.75), 0.06, rot=(math.pi / 2, 0, math.pi + 0.1), seed=6, lumps=0.5)
     reb.prim("cube", "Smear down the cart", mat("old blood"), (cx + 0.35, cy + 0.414, 0.55), (0.05, 0.004, 0.35), rot=(0, 0, 0.1))
     lamp, lamp_light, lamp_flame = kit.lantern("Hal's lantern", (cx - 0.3, cy + 0.15, 0.95), energy=9)
     reb.prim("cyl", "Thermos lid cup", mat("steel"), (cx + 0.3, cy - 0.2, 0.98), (0.07, 0.07, 0.06), segments=10)
@@ -288,28 +286,6 @@ def build():
         reb.wall(c)
     over = ore_cart("Cart on its side", rust, (5.6, 7.0), 1.4, roll=math.radians(-90), sink=-0.38)
     reb.wall(reb.prim("cube", "Tipped cart footprint", None, (5.6, 7.0, 0.5), (1.0, 1.3, 1.0))).hide_render = True
-
-    # ---- Hal: face down at the edge of the deep water, the key on its chain hanging under him.
-    hx, hy = HAL
-    float_pivot = reb.prim("sphere", "Hal floats", None, (hx, hy, WATER - 0.12), (0.02, 0.02, 0.02))
-    float_pivot.hide_render = True
-    hal = kit.body("Hal", (0, 0, 0), heading=2.75, pose="front", top=mat("flannel"), legs=reb.mat_plain("Work trousers", (0.08, 0.08, 0.06), 0.9), seed=12)
-    hal.parent = float_pivot
-    hal.matrix_parent_inverse = Matrix.Translation(Vector((-0.0, 0, 0)))
-    reb.prim("cube", "Bandaged forearm", reb.mat_surface("Bandage, soaked", [(0.0, (0.45, 0.42, 0.37)), (0.6, (0.25, 0.04, 0.03)), (1.0, (0.12, 0.01, 0.01))], scale=12), Matrix.Rotation(2.75, 4, "Z") @ Vector((1.1, -0.41, 0.07)), (0.24, 0.1, 0.1), rot=(0, 0, 2.75)).parent = float_pivot
-    head = Vector((1.6 * math.cos(2.75), 1.6 * math.sin(2.75), 0.0))
-    chain = []
-    for k in range(9):
-        t = k / 8
-        p = head * 0.85 + Vector((0.05 * math.sin(t * 3), 0.04, -0.12 - 0.35 * t))
-        chain.append(reb.prim("sphere", "Chain link", mat("steel"), p, (0.025, 0.012, 0.03), segments=6))
-    key = reb.prim("cube", "Drive key", reb.mat_metal("Brass", (0.55, 0.4, 0.15), 0.3), head * 0.85 + Vector((0.05, 0.04, -0.52)), (0.03, 0.01, 0.1))
-    for p in chain + [key]:
-        p.parent = float_pivot
-    reb.cloth("His shirt floating", mat("flannel"), (hx + 0.2, hy + 0.1, WATER + 0.01), (0.9, 0.7), rot=(0, 0, 2.75), cuts=10, lumps=0.03, seed=13)
-    hair = reb.prim("sphere", "Hair spread on the water", mat("black"), (hx + head.x, hy + head.y, WATER + 0.005), (0.3, 0.26, 0.01), segments=10)
-    kit.splat("Blood in the water", reb.mat_plain("Blood clouding", (0.06, 0.006, 0.004), 0.05), (hx + 0.3, hy - 0.1, WATER + 0.003), 0.7, seed=14, stretch=(1.3, 0.9), lumps=0.6)
-    reb.wall(reb.prim("cube", "Hal footprint", None, (hx - 0.2, hy + 0.2, 0.5), (1.8, 1.0, 1.0), rot=(0, 0, 0.3))).hide_render = True
 
     # ---- The webs: thick over the cart, strands down; sheets in the arch; a few sacs.
     web_sheet("Web over the cart", (cx, cy - 1.0, 3.1), (1, 0.6, -0.35), (-0.9, 0.7, -0.3), 1.9, rng, strands=15)
@@ -352,8 +328,6 @@ def build():
 
     anim = kit.Anim(16)
     anim.ripple(water, speed=1)
-    anim.custom(lambda k: setattr(float_pivot, "location", (hx, hy, WATER - 0.12 + 0.025 * math.sin(anim.phase(k)))))
-    anim.custom(lambda k: setattr(float_pivot, "rotation_euler", (math.radians(2) * math.sin(anim.phase(k) + 1.0), 0, 0.04 * math.sin(anim.phase(k)))))
     anim.flicker(lamp_light, lamp_flame, depth=0.4, dropouts=1)
     for k, (pivot, light, glow) in enumerate(lamps):
         anim.flicker(light, glow, depth=0.1 if k == 0 else 0.45, dropouts=0 if k == 0 else 2)
@@ -370,8 +344,7 @@ def build():
     # out would take the action button, so she could never kick them.
     room.spot("adit", (X1 - 1.2, a0 + 0.1, X1 - 0.6, a1 - 0.1))  # day/events.ts says what she sees and does here
     room.door("east-path", (X1 - 0.6, a0 + 0.1, X1, a1 - 0.1), arrive=(13.5, 7.1), face=(-1, 0), walk=False)
-    room.check((hx - 1.3, hy - 0.5, hx + 0.9, hy + 1.0), "Hal. Face down in the water. Something bit him: his arm's\nbandaged, black under it.\nThere's a key on a chain round his neck.")
-    room.check((cx - 0.9, cy - 0.7, cx + 0.9, cy + 0.7), "He hid up on this cart, out of the water. Blanket, lantern.\nThere's blood where he slid off.")
+    room.check((cx - 0.9, cy - 0.7, cx + 0.9, cy + 0.7), "He hid up on this cart, out of the water. Blanket, lantern.\nThe blood on it is his.")
     room.check((dx0 - 0.3, dy1, dx0 + 3.5, dy1 + 0.6), "DANGER. WINZE. The floor drops away under the water there.")
     room.export(anim)
 
