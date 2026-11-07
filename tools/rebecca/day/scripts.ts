@@ -188,6 +188,8 @@ const DOOR_STYLE: Record<string, Anim> = {
   'back-garden|cellar': 'plank',
   'cellar|wine': 'panel',
   'cellar|crawl': 'plank',
+  // The old drainage adit: no door, a dark crawl out to the hillside.
+  'east-path|gallery': 'walk',
 };
 /** The walks that go through a gate, by the rooms they join (either way round). */
 const GATES = new Set(['camp-yard|depot', 'road|washout', 'line-track|platform', 'estate-wall|kennels']);
@@ -202,6 +204,9 @@ const CLIMB: Record<string, Anim> = {
   'crawl>save': 'ladderUp',
   'mine-lift>summit-trail': 'liftUp',
   'summit-trail>mine-lift': 'liftDown',
+  // The kennels' meat hoist, its cage down to the cellar and back.
+  'kennels>cellar': 'liftDown',
+  'cellar>kennels': 'liftUp',
 };
 
 /**
