@@ -1,7 +1,7 @@
 // node --test tools/rebecca/day/foes.test.ts
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { facing, foeLines, KILL_FLAGS, place, type Floor } from './foes.ts';
+import { facing, foeLines, foeSounds, KILL_FLAGS, place, type Floor } from './foes.ts';
 
 // A 10 x 6 m floor: a crate in the middle, a door on the west edge where she comes in.
 const floor: Floor = {
@@ -67,4 +67,34 @@ test('every step that brings or takes away enemies is a step of the plan, or a m
   for (const [slug, groups] of Object.entries(FOES)) {
     for (const g of groups) for (const s of [g[2]?.after, g[2]?.until]) if (s) assert.ok(steps.has(s), `${slug}: ${s} is not a plan step`);
   }
+});
+
+test("the junction's spinners cry with RE1's web spinner sounds, not the hunter's its room id's row holds", () => {
+  assert.deepEqual([...foeSounds('junction')], [
+    [0, 'kuasi_A'], [1, 'kuasi_B'], [2, 'kuasi_C'], [3, 'sp_rakk'], [4, 'sp_atck'],
+    [5, 'sp_bomb'], [6, 'sp_fumu'], [7, 'sp_Doku'], [8, 'sp_sanj2'], [9, ''],
+  ]);
+  for (const line of foeLines('junction', floor, [186, 187])) assert.match(line, /^enemy\(3, .*, 0\);  \/\/ a spinner$/);
+});
+
+test('a second kind of enemy in a room cries from the second block of ten', () => {
+  const sounds = foeSounds('washout');
+  assert.equal(sounds.get(0), 'PY_mena');
+  assert.equal(sounds.get(3), '');
+  assert.equal(sounds.get(10), 'cer_foot');
+  assert.equal(sounds.get(19), 'cer_runMX');
+  assert.equal(sounds.size, 20);
+  const when = () => 'done(generator-on)';
+  const lines = foeLines('washout', floor, [186, 187, 188], 0, when);
+  assert.match(lines[0]!, /^enemy\(10, .*, 0\);  \/\/ a adder$/);
+  assert.match(lines[3]!, /^ {4}enemy\(2, .*, 1\);  \/\/ a cerberus$/);
+});
+
+test('a room with a third kind of enemy has no sound for it', () => {
+  const foes = { three: [['zombie', 1], ['crow', 1], ['adder', 1]] } as const;
+  assert.throws(() => foeSounds('three', foes), /3 kinds of enemy/);
+});
+
+test('a room without enemies leaves its enemy slots alone', () => {
+  assert.equal(foeSounds('booth').size, 0);
 });

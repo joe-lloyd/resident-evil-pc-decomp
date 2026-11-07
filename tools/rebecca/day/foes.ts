@@ -20,15 +20,47 @@ export interface Floor {
   readonly doors: readonly { zone: Rect; arrive: { x: number; z: number } }[];
 }
 
-/** Entity id (cmd_enemy_set operand 1), behaviour byte, and collision records, as RE1 places each kind. */
+/**
+ * Entity id (cmd_enemy_set operand 1), behaviour byte, and collision records,
+ * as RE1 places each kind; and its cries, the WAVs RE1's own rooms give that
+ * kind in their sound rows (src/game/SoundTables.cpp), by the slot it plays.
+ */
 export const FOE_KINDS = {
-  zombie: { id: 17, behavior: 0, sca: 2 },
-  cerberus: { id: 2, behavior: 1, sca: 2 },
-  crow: { id: 5, behavior: 0, sca: 2 },
-  adder: { id: 10, behavior: 1, sca: 1 },
-  spinner: { id: 3, behavior: 2, sca: 2 },
+  zombie: { id: 17, behavior: 0, sca: 2, sounds: ['z_taore', 'z_ftL', 'z_ftR', 'z_kamu', 'z_osou', 'z_unaruA', 'z_head', 'z_Hkick', 'z_Ugoron', 'z_unaruB'] },
+  cerberus: { id: 2, behavior: 1, sca: 2, sounds: ['cer_foot', 'cer_taoA', 'cer_unar', 'cer_bite', 'cer_cryA', 'cer_taoB', 'cer_jkMX', 'cer_kamu', 'cer_cryB', 'cer_runMX'] },
+  crow: { id: 5, behavior: 0, sca: 2, sounds: ['RVcar1', 'RVpat', 'RVcar2', 'RVwing1', 'RVwing2', 'RVfryed'] },
+  adder: { id: 10, behavior: 1, sca: 1, sounds: ['PY_mena', 'PY_hit2', 'PY_fall'] },
+  spinner: { id: 3, behavior: 2, sca: 2, sounds: ['kuasi_A', 'kuasi_B', 'kuasi_C', 'sp_rakk', 'sp_atck', 'sp_bomb', 'sp_fumu', 'sp_Doku', 'sp_sanj2'] },
 } as const;
 export type Kind = keyof typeof FOE_KINDS;
+
+/**
+ * An enemy plays sound slot n of its block, block * 10 + n (Snd_em), the
+ * block being cmd_enemy_set's last byte. Each kind in a room takes the next
+ * block, in the order the room lists them. Two at most: the room's things
+ * sound from slot 20 (sound/ground.ts).
+ */
+const BLOCK = 10;
+const BLOCKS = 2;
+function soundBlocks(slug: string, foes: Record<string, readonly FoeGroup[]>): Map<Kind, number> {
+  const kinds = [...new Set((foes[slug] ?? []).map(([kind]) => kind))];
+  if (kinds.length > BLOCKS) throw new Error(`${slug}: ${kinds.length} kinds of enemy (${kinds.join(', ')}); a room has sound for ${BLOCKS}`);
+  return new Map(kinds.map((k, i) => [k, i]));
+}
+
+/**
+ * The room's enemies' sound slots: each kind's cries in its block, the
+ * block's other slots empty. Without them an enemy cries with whatever the
+ * free room id's row of RE1's table holds: a hunter's, or nothing.
+ */
+export function foeSounds(slug: string, foes = FOES): Map<number, string> {
+  const slots = new Map<number, string>();
+  for (const [kind, block] of soundBlocks(slug, foes)) {
+    const sounds: readonly string[] = FOE_KINDS[kind].sounds;
+    for (let n = 0; n < BLOCK; n++) slots.set(block * BLOCK + n, sounds[n] ?? '');
+  }
+  return slots;
+}
 
 /**
  * When a group is there: from the step that brings it (a plan step's
@@ -149,6 +181,7 @@ export function foeLines(slug: string, floor: Floor, flags: number[], slot = 0, 
   // Every group of the room is placed in one spread, so one a step brings
   // never stands where another already does.
   const groups = foes[slug] ?? [];
+  const blocks = soundBlocks(slug, foes);
   const total = groups.reduce((n, [, count]) => n + count, 0);
   const all = place(floor, total);
   if (all.length < total) throw new Error(`${slug}: room for ${all.length} of ${total} enemies`);
@@ -161,7 +194,7 @@ export function foeLines(slug: string, floor: Floor, flags: number[], slot = 0, 
       if (flag === undefined) throw new Error(`${slug}: no kill flag left`);
       const near = floor.doors.map((d) => d.arrive).sort((a, c) => Math.hypot(a.x - p.x, a.z - p.z) - Math.hypot(c.x - p.x, c.z - p.z))[0];
       const angle = near ? facing(p, near) : 0;
-      group.push(`enemy(${k.id}, ${k.behavior}, ${flag}, 1, ${k.sca}, 0, 0, ${angle}, 0, 0, ${p.x}, 0, ${p.z}, ${slot++}, 0, 0, 0);  // a ${kind}`);
+      group.push(`enemy(${k.id}, ${k.behavior}, ${flag}, 1, ${k.sca}, 0, 0, ${angle}, 0, 0, ${p.x}, 0, ${p.z}, ${slot++}, 0, 0, ${blocks.get(kind)});  // a ${kind}`);
     }
     if (when && (when.after || when.until)) {
       if (!test) throw new Error(`${slug}: enemies that come or go with a step need a flag test`);
