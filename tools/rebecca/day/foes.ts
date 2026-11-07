@@ -47,8 +47,9 @@ export const FOES: Record<string, readonly FoeGroup[]> = {
   woods: [['cerberus', 2]],
   den: [['cerberus', 1]],
   'logging-road': [['zombie', 1]],
-  // The bell calls them to the mess hall; the cutters' noise brings two more out.
-  'camp-yard': [['zombie', 3, { until: 'ring-bell' }], ['zombie', 2, { after: 'workshop-cut' }]],
+  // The bell calls them to the mess hall; the cutters' noise brings two more
+  // out, unless the bell has called those in to supper too.
+  'camp-yard': [['zombie', 3, { until: 'ring-bell' }], ['zombie', 2, { after: 'workshop-cut', until: 'ring-bell' }]],
   bunkhouse: [['zombie', 1]],
   mess: [['zombie', 2], ['zombie', 2, { after: 'ring-bell' }]],
   depot: [['adder', 2]],
@@ -64,6 +65,9 @@ export const FOES: Record<string, readonly FoeGroup[]> = {
   'line-track': [['adder', 2]],
   'east-path': [['crow', 2]],
   quarry: [['cerberus', 1]],
+  // Winding the rockfall clear with the crank, out in the open, brings a dog
+  // over from the quarry. The dynamite is over before one can come.
+  'mine-entrance': [['cerberus', 1, { after: 'rockfall-wound' }]],
   // Draining the mine flushes spiders up out of the sump.
   tunnel: [['spinner', 1], ['spinner', 2, { after: 'drain' }]],
   junction: [['spinner', 2]],

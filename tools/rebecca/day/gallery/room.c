@@ -15,7 +15,7 @@ aot_set(3, 14280, 7990, 4250, 3060, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(4, 10200, 6120, 4080, 3400, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
 aot_set(5, 17340, 7310, 6970, 1530, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
 if (ck(FG_COMMON, 118, 0) && ck(FG_COMMON, 119, 0)) {
-    enemy(17, 0, 230, 1, 2, 0, 0, 3584, 0, 0, 14980, 0, 4100, 0, 0, 0, 0);  // a zombie
+    enemy(17, 0, 231, 1, 2, 0, 0, 3584, 0, 0, 14980, 0, 4100, 0, 0, 0, 0);  // a zombie
 }
 // adit (day/events.ts), FG_COMMON 145 once it has happened.
 if (ck(FG_COMMON, 145, 1)) {

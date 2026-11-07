@@ -33,8 +33,8 @@ export interface RoomEvent {
    * boards).
    */
   readonly opens?: { readonly from?: string; readonly to: string; readonly blocked: string; readonly behind?: string };
-  /** A second item that does it at the same spot, with its own line (the winch crank on the rockfall). */
-  readonly orUse?: { readonly use: string; readonly done: string };
+  /** A second item that does it at the same spot, with its own line and the mark (MARK_FLAGS) it leaves (the winch crank on the rockfall). */
+  readonly orUse?: { readonly use: string; readonly done: string; readonly mark?: string };
   /**
    * Worked as a row of switches thrown in order (the breakers): spots
    * `<spot>-1` to `<spot>-<count>`, the right order first to last, and a
@@ -83,6 +83,7 @@ export const EVENTS: readonly RoomEvent[] = [
     step: 'blast', room: 'mine-entrance', use: 'dynamite',
     orUse: {
       use: 'crank',
+      mark: 'rockfall-wound',
       done: "I hook the crane's cable round the jammed timbers and wind.\nSlowly, slowly, they drag out. The rocks come down after them.",
     },
     look: "The roof's been brought down across the mouth. On purpose:\nthere's a blasting wire running out of the rocks.",
@@ -183,7 +184,7 @@ export const EVENT_FLAGS = new Map(EVENTS.map((e, i) => [e.step, 130 + i]));
  * way has a cost of its own (the cutters' noise at the workshop brings the
  * loggers out; its key does not). From the top of the events' range down.
  */
-export const MARK_FLAGS = new Map([['workshop-cut', 158]]);
+export const MARK_FLAGS = new Map([['workshop-cut', 158], ['rockfall-wound', 157]]);
 if (EVENTS.length + MARK_FLAGS.size > 29) throw new Error('the events and marks have FG_COMMON 130-158, 29 flags');
 
 export function keyItem(step: string): KeyItem {

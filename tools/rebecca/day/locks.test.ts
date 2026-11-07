@@ -54,6 +54,26 @@ test('the bolt cutters leave her case only after the last of their three locks',
   assert.match(script('camp-yard'), /set\(FG_LOCK, 41, 0\);\n\s+if \(ck\(FG_LOCK, 42, 0\) && ck\(FG_LOCK, 43, 0\)\) \{\n\s+if \(item_ck\(28\)\) \{\n\s+remove_item\(28\);/);
 });
 
+test('a tool whose last job was done the other way leaves her case with it', () => {
+  // The dynamite blasts the rockfall: the crank (30) goes once the mill race
+  // (FG_COMMON 137) is done, and the crank way drops any dynamite (42).
+  const mine = script('mine-entrance');
+  assert.match(mine, /testitem\(42\)[\s\S]*?remove_item\(42\);\n\s+\}\n\s+if \(ck\(FG_COMMON, 137, 0\)\) \{\n\s+if \(item_ck\(30\)\) \{\n\s+remove_item\(30\);/);
+  assert.match(mine, /testitem\(30\)[\s\S]*?if \(item_ck\(42\)\) \{\n\s+remove_item\(42\);\n\s+\}\n\s+set\(FG_COMMON, 157, 0\);/);
+  // Down the hoist, the coal chute is needless: the crowbar (43) goes once the lodge (FG_LOCK 47) is open.
+  assert.match(script('kennels'), /remove_item\(53\);\n\s+\}\n\s+if \(ck\(FG_LOCK, 47, 0\)\) \{\n\s+if \(item_ck\(43\)\) \{\n\s+remove_item\(43\);/);
+  // Down the chute, the hoist and the pen are: the cellar key (53) and the dog meat (36) go.
+  const chute = script('back-garden');
+  assert.match(chute, /if \(item_ck\(53\)\) \{\n\s+remove_item\(53\);/);
+  assert.match(chute, /if \(item_ck\(36\)\) \{\n\s+remove_item\(36\);/);
+});
+
+test('the bell calls in the loggers the cutters would bring out, and the crank way brings a dog', () => {
+  // Ring-bell is FG_COMMON 143, the cutters' mark 158, the crank's 157.
+  assert.match(script('camp-yard'), /if \(ck\(FG_COMMON, 158, 0\) && ck\(FG_COMMON, 143, 1\)\) \{\n(\s+enemy\(17, [^\n]+\n){2}\}/);
+  assert.match(script('mine-entrance'), /if \(ck\(FG_COMMON, 157, 0\)\) \{\n\s+enemy\(2, [^\n]+\/\/ a cerberus\n\}/);
+});
+
 test("a key still turns as she tries the door, as RE1's do", () => {
   assert.match(script('camp-yard'), /\ndoor_aot_set\(\d+, [^;]*ROOM_412[^;]*, 58, 193\);/);
 });

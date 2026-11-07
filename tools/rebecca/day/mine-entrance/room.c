@@ -14,6 +14,9 @@ aot_set(4, 25500, 3740, 2550, 1870, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
 aot_set(5, 24990, 9010, 4080, 4420, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
 aot_set(6, 4335, 10710, 3485, 2465, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
 aot_set(7, 2125, 9690, 2210, 1530, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
+if (ck(FG_COMMON, 157, 0)) {
+    enemy(2, 1, 225, 1, 2, 0, 0, 1544, 0, 0, 31385, 0, 17870, 0, 0, 0, 0);  // a cerberus
+}
 // blast (day/events.ts), FG_COMMON 134 once it has happened.
 if (ck(FG_COMMON, 134, 1)) {
     aot_set(8, 21845, 4250, 3655, 4080, SCE_USEITEM, 1, 9, 0, 15, 0, 1, 0);   // the dynamite can be used here
@@ -35,6 +38,11 @@ if (ck(FG_COMMON, 134, 1)) {
         if (item_ck(42)) {
             remove_item(42);
         }
+        if (ck(FG_COMMON, 137, 0)) {
+            if (item_ck(30)) {
+                remove_item(30);
+            }
+        }
         set(FG_COMMON, 134, 0);
         door_aot_set(1, 20145, 3740, 1785, 1870, 0, 1, 8, 0, 0, ROOM_51C, 8500, 0, 29920, 1024, UNLOCKED, 193);
         aot_set(9, 21845, 4250, 3655, 4080, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
@@ -54,6 +62,10 @@ if (ck(FG_COMMON, 134, 1)) {
                 remove_item(30);
             }
         }
+        if (item_ck(42)) {
+            remove_item(42);
+        }
+        set(FG_COMMON, 157, 0);
         set(FG_COMMON, 134, 0);
         door_aot_set(1, 20145, 3740, 1785, 1870, 0, 1, 8, 0, 0, ROOM_51C, 8500, 0, 29920, 1024, UNLOCKED, 193);
         aot_set(9, 21845, 4250, 3655, 4080, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);

@@ -31,7 +31,7 @@ aot_set(7, 10739, 3740, 3541, 2380, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
 aot_set(8, 12920, 1700, 2380, 2040, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
 aot_set(9, 10710, 1190, 1785, 1530, SCE_MESSAGE, 129, 136, 0, 255, 0, 0, 0);
 aot_set(10, 4760, 8330, 7140, 2380, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
-enemy(17, 0, 247, 1, 2, 0, 0, 3185, 0, 0, 2740, 0, 4440, 0, 0, 0, 0);  // a zombie
+enemy(17, 0, 248, 1, 2, 0, 0, 3185, 0, 0, 2740, 0, 4440, 0, 0, 0, 0);  // a zombie
 // push-rack (day/events.ts), FG_COMMON 142 once it has happened.
 if (ck(FG_COMMON, 142, 1)) {
     aot_set(11, 2720, 5440, 1530, 3060, SCE_USEITEM, 129, 4, 0, 12, 0, 1, 0);   // the action button here raises FG_ROOM 12

@@ -27,9 +27,9 @@ aot_set(9, 20230, 7820, 2380, 3570, SCE_MESSAGE, 129, 136, 0, 255, 0, 0, 0);
 aot_set(10, 18700, 17510, 4080, 2380, SCE_MESSAGE, 129, 137, 0, 255, 0, 0, 0);
 aot_set(11, 12580, 8840, 4080, 5610, SCE_MESSAGE, 129, 138, 0, 255, 0, 0, 0);
 if (ck(FG_COMMON, 146, 1)) {
-    enemy(2, 1, 241, 1, 2, 0, 0, 4012, 0, 0, 4100, 0, 4100, 0, 0, 0, 0);  // a cerberus
-    enemy(2, 1, 242, 1, 2, 0, 0, 3786, 0, 0, 6480, 0, 16000, 1, 0, 0, 0);  // a cerberus
-    enemy(2, 1, 243, 1, 2, 0, 0, 2148, 0, 0, 27900, 0, 4100, 2, 0, 0, 0);  // a cerberus
+    enemy(2, 1, 242, 1, 2, 0, 0, 4012, 0, 0, 4100, 0, 4100, 0, 0, 0, 0);  // a cerberus
+    enemy(2, 1, 243, 1, 2, 0, 0, 3786, 0, 0, 6480, 0, 16000, 1, 0, 0, 0);  // a cerberus
+    enemy(2, 1, 244, 1, 2, 0, 0, 2148, 0, 0, 27900, 0, 4100, 2, 0, 0, 0);  // a cerberus
 }
 // pen-pack (day/events.ts), FG_COMMON 146 once it has happened.
 if (ck(FG_COMMON, 146, 1)) {
@@ -53,17 +53,20 @@ if (ck(FG_COMMON, 146, 1)) {
         }
         set(FG_COMMON, 146, 0);
         eml_state(0, 0, 3, 0, 0);
-        set(FG_ENEMY, 241, 0);
-        eml_state(0, 1, 3, 0, 0);
         set(FG_ENEMY, 242, 0);
-        eml_state(0, 2, 3, 0, 0);
+        eml_state(0, 1, 3, 0, 0);
         set(FG_ENEMY, 243, 0);
+        eml_state(0, 2, 3, 0, 0);
+        set(FG_ENEMY, 244, 0);
         aot_set(13, 10880, 18700, 2380, 2550, SCE_MESSAGE, 129, 140, 0, 255, 0, 0, 0);
         message(141, 255, 0);
     }
 }
-if (ck(FG_COMMON, 146, 1) && ck(FG_ENEMY, 241, 0) && ck(FG_ENEMY, 242, 0) && ck(FG_ENEMY, 243, 0)) {
+if (ck(FG_COMMON, 146, 1) && ck(FG_ENEMY, 242, 0) && ck(FG_ENEMY, 243, 0) && ck(FG_ENEMY, 244, 0)) {
     set(FG_COMMON, 146, 0);
+    if (item_ck(36)) {
+        remove_item(36);
+    }
     aot_set(13, 10880, 18700, 2380, 2550, SCE_MESSAGE, 129, 140, 0, 255, 0, 0, 0);
 }
 if (ck(FG_LOCK, 50, 1)) {
@@ -76,6 +79,11 @@ if (ck(FG_LOCK, 50, 1)) {
         set(FG_LOCK, 50, 0);
         if (item_ck(53)) {
             remove_item(53);
+        }
+        if (ck(FG_LOCK, 47, 0)) {
+            if (item_ck(43)) {
+                remove_item(43);
+            }
         }
         door_aot_set(2, 19380, 20910, 2720, 1615, 0, 0, 0, 4, 178, ROOM_11D, 7820, 0, 3400, 3072, 53, 193);
         message(131, 255, 0);

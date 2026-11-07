@@ -327,18 +327,35 @@ const useLock = (from: string, to: string) => {
  * A tool leaves her case only once all of them are done, whichever way
  * each was done (the owner's ruling: tools are reused).
  */
-function usesOf(item: number): { key: string; test: string }[] {
-  const out: { key: string; test: string }[] = [];
+function usesOf(item: number): { step: string; test: string }[] {
+  const out: { step: string; test: string }[] = [];
   for (const l of LOCKS.values()) {
-    const alt = USE_LOCKS[l.step]?.orUse;
-    if (l.item === item || (alt && keyItem(alt.item).id === item)) out.push({ key: `lock ${l.flag}`, test: `ck(FG_LOCK, ${l.flag}, 0)` });
+    if (itemsAt(l.step).includes(item)) out.push({ step: l.step, test: `ck(FG_LOCK, ${l.flag}, 0)` });
   }
   for (const e of EVENTS) {
-    const ids = [e.use, e.orUse?.use].filter((u): u is string => !!u).map((u) => keyItem(u).id);
-    if (ids.includes(item)) out.push({ key: `event ${e.step}`, test: `ck(FG_COMMON, ${EVENT_FLAGS.get(e.step)}, 0)` });
+    if (itemsAt(e.step).includes(item)) out.push({ step: e.step, test: `ck(FG_COMMON, ${EVENT_FLAGS.get(e.step)}, 0)` });
   }
   return out;
 }
+/** The items a lock or an event takes, either way it is done. */
+function itemsAt(step: string): number[] {
+  const lock = [...LOCKS.values()].find((l) => l.step === step);
+  const event = EVENTS.find((e) => e.step === step);
+  const alt = USE_LOCKS[step]?.orUse;
+  return [
+    ...(lock ? [lock.item, ...(alt ? [keyItem(alt.item).id] : [])] : []),
+    ...[event?.use, event?.orUse?.use].filter((u): u is string => !!u).map((u) => keyItem(u).id),
+  ];
+}
+/**
+ * Steps that make others needless once done. She is in the cellar by the
+ * hoist or by the coal chute, and never goes back for the other way, so
+ * its tool would ride in her case for the rest of the day.
+ */
+const MOOTS: Record<string, readonly string[]> = {
+  hoist: ['coal-chute'],
+  'coal-chute': ['hoist', 'pen-pack'],
+};
 /** How many times she uses the item from her case: at tool locks and at events (a key turned by trying a door is not used). */
 function toolUseCount(item: number): number {
   return [...LOCKS.values()].filter((l) => USE_LOCKS[l.step] && (l.item === item || (USE_LOCKS[l.step]!.orUse && keyItem(USE_LOCKS[l.step]!.orUse!.item).id === item))).length
@@ -357,9 +374,19 @@ const KEY_ITEM_GATES: Record<string, { event?: string; file?: string }> = {
 
 /** The lines that take the item out of her case once every other use of it is done; `self` is the use just made. */
 function spendLines(item: number, self: string): string[] {
-  const others = usesOf(item).filter((u) => u.key !== self).map((u) => u.test);
+  const others = usesOf(item).filter((u) => u.step !== self).map((u) => u.test);
   const remove = [`if (item_ck(${item})) {`, `    remove_item(${item});`, '}'];
   return others.length ? [`if (${others.join(' && ')}) {`, ...remove.map((l) => `    ${l}`), '}'] : remove;
+}
+/**
+ * What `step` leaves her no use for, as it is done, beyond the item she
+ * used (`used`): the other item that does it (the crank, once the dynamite
+ * has blasted the rockfall), and the items of the steps it makes needless
+ * (MOOTS). Each leaves once its other uses are done too.
+ */
+function strandLines(step: string, used?: number): string[] {
+  return [step, ...(MOOTS[step] ?? [])].flatMap((s) =>
+    itemsAt(s).filter((item) => !(s === step && item === used)).flatMap((item) => spendLines(item, s)));
 }
 
 /** The door record's animation and lock bytes for a door from one room to another. */
@@ -868,7 +895,9 @@ function main(): void {
           `        set(FG_ROOM, ${pending}, 1);`,
           // remove_item stops the script when she no longer has it; a tool
           // with uses left elsewhere stays in her case.
-          ...spendLines(item, `event ${e.step}`).map((l) => `        ${l}`),
+          ...spendLines(item, e.step).map((l) => `        ${l}`),
+          ...strandLines(e.step, item).map((l) => `        ${l}`),
+          ...(alt && item === alt.id && e.orUse!.mark ? [`        set(FG_COMMON, ${MARK_FLAGS.get(e.orUse!.mark)}, 0);`] : []),
           ...ownHappen.map((l) => `        ${l}`),
           '    }',
           '}',
@@ -887,7 +916,7 @@ function main(): void {
       if (e.orAllDead) {
         const dead = leaving(e.step).map((g) => `ck(FG_ENEMY, ${g.flag}, 0)`);
         if (!dead.length) throw new Error(`${slug}: ${e.step} happens when its enemies are dead, and no group goes until it`);
-        main.push(`if (ck(FG_COMMON, ${f}, 1) && ${dead.join(' && ')}) {`, `    set(FG_COMMON, ${f}, 0);`, `    ${afterLine}`, '}');
+        main.push(`if (ck(FG_COMMON, ${f}, 1) && ${dead.join(' && ')}) {`, `    set(FG_COMMON, ${f}, 0);`, ...strandLines(e.step).map((l) => `    ${l}`), `    ${afterLine}`, '}');
       }
       // What it leaves here to pick up, once it has happened: in the slot of
       // the spot's line, which it replaces until it is taken.
@@ -919,7 +948,8 @@ function main(): void {
         `        set(FG_ROOM, ${pending}, 1);`,
         `        set(FG_LOCK, ${t.flag}, 0);`,
         ...(t.mark !== undefined ? [`        set(FG_COMMON, ${t.mark}, 0);`] : []),
-        ...spendLines(t.item, `lock ${t.flag}`).map((l) => `        ${l}`),
+        ...spendLines(t.item, t.step).map((l) => `        ${l}`),
+        ...strandLines(t.step, t.item).map((l) => `        ${l}`),
         `        ${t.door}`,
         ...music.step(t.step, slug).map((l) => `        ${l}`),
         `        message(${t.done}, 255, 0);`,

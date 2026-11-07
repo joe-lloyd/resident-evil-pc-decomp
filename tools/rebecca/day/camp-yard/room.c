@@ -41,7 +41,7 @@ if (ck(FG_COMMON, 143, 1)) {
     enemy(17, 0, 193, 1, 2, 0, 0, 1986, 0, 0, 16340, 0, 17020, 1, 0, 0, 0);  // a zombie
     enemy(17, 0, 194, 1, 2, 0, 0, 2947, 0, 0, 30280, 0, 4780, 2, 0, 0, 0);  // a zombie
 }
-if (ck(FG_COMMON, 158, 0)) {
+if (ck(FG_COMMON, 158, 0) && ck(FG_COMMON, 143, 1)) {
     enemy(17, 0, 195, 1, 2, 0, 0, 1889, 0, 0, 12600, 0, 9880, 3, 0, 0, 0);  // a zombie
     enemy(17, 0, 196, 1, 2, 0, 0, 2653, 0, 0, 9200, 0, 2400, 4, 0, 0, 0);  // a zombie
 }
@@ -63,6 +63,10 @@ if (ck(FG_COMMON, 143, 1) && ck(FG_ROOM, 12, 0)) {
     set(FG_ENEMY, 193, 0);
     eml_state(0, 2, 3, 0, 0);
     set(FG_ENEMY, 194, 0);
+    eml_state(0, 3, 3, 0, 0);
+    set(FG_ENEMY, 195, 0);
+    eml_state(0, 4, 3, 0, 0);
+    set(FG_ENEMY, 196, 0);
     aot_set(20, 4165, 12240, 2550, 2380, SCE_MESSAGE, 129, 144, 0, 255, 0, 0, 0);
     message(145, 255, 0);
 }
@@ -94,6 +98,11 @@ if (ck(FG_LOCK, 42, 1)) {
         if (item_ck(59)) {
             remove_item(59);
         }
+        if (ck(FG_LOCK, 41, 0) && ck(FG_LOCK, 43, 0)) {
+            if (item_ck(28)) {
+                remove_item(28);
+            }
+        }
         door_aot_set(6, 24310, 22066, 2550, 1700, 0, 1, 11, 3, 170, ROOM_415, 4760, 0, 3995, 3072, 59, 193);
         message(132, 255, 0);
     }
@@ -111,6 +120,9 @@ if (ck(FG_LOCK, 42, 1)) {
             if (item_ck(28)) {
                 remove_item(28);
             }
+        }
+        if (item_ck(59)) {
+            remove_item(59);
         }
         door_aot_set(6, 24310, 22066, 2550, 1700, 0, 1, 11, 3, 170, ROOM_415, 4760, 0, 3995, 3072, 59, 193);
         message(133, 255, 0);
