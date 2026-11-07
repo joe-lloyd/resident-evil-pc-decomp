@@ -60,9 +60,10 @@ export const day: Plan = {
     // Act 1: built, but for the gondola station.
     place(1, 'ridge', 'The ridge', 2, [10, 0], ['Where the game opens', 'Grass in the dawn wind', '', 'Billy has gone; Rebecca looks across the wooded hills toward the mansion'], built('ridge')),
     place(1, 'trail', 'The mountain trail', 2, [10, 1.4], ['Down through the spruces', 'Ferns in the wind', 'Crows', 'Alone for the first time'], built('trail')),
-    place(1, 'yard', 'The station yard', 4, [10, 2.8], ['The hub: the pine, the truck and its winch, his rifle', 'Chimney smoke, hazard lights', 'A Cerberus, once she has the shed key', 'Someone was here this morning'], built('yard')),
+    place(1, 'yard', 'The station yard', 4, [10, 2.8], ['The hub: the pine, the ranger\'s truck and its winch, its toolbox lettered U.S. FOREST SERVICE - STATION 3 and padlocked, his rifle in the grass, its magazine empty', 
+'Chimney smoke, hazard lights', 'A Cerberus, once she has the shed key', 'Someone was here this morning'], built('yard')),
     place(1, 'cabin', 'The cabin', 2, [12.2, 2.2], ['The logbook, the radio, the shed key', 'The lamp flame, a fly', '', 'He left in a hurry, mid-breakfast'], built('lookout')),
-    place(1, 'shed', 'The tool shed', 2, [12.2, 3.4], ['The winch crank, an empty jerrycan, spare fuses', 'Dust in the light', '', 'He tried to mend the chainsaw first'], built('shed')),
+    place(1, 'shed', 'The tool shed', 2, [12.2, 3.4], ['The winch crank, an empty jerrycan, chainsaw fuses too small for anything bigger', 'Dust in the light', '', 'He tried to mend the chainsaw first'], built('shed')),
     place(1, 'bridge', 'The gorge footbridge', 3, [10, 4.2], ['The old footbridge over the gorge', 'The river far below', 'Adders', 'The trail goes on down'], built('bridge')),
     place(1, 'platform', 'The gondola station', 6, [10, 5.6], ['The upper station: the car hanging at the platform, the drive wheel', 'The cable creaking, a loose tarpaulin', 'Crows', 'The way down the mountain, if it ran'], {}),
     place(1, 'booth', "The operator's booth", 2, [12.2, 5.6], ['The control desk, the fuse box, the duty board', 'A wall calendar lifting in the draught', '', 'The operator, Hal, left his post in a hurry too'], {}),
@@ -72,36 +73,41 @@ export const day: Plan = {
     place(2, 'den', 'The hollow', 3, [7.8, 1.4], ['The dogs\' den: the ranger, dead, his keys in his jacket', 'Flies over the body', 'Cerberus', 'What became of him'], {}),
     place(2, 'logging-road', 'The logging road', 4, [5.6, 1.4], ['Deep ruts, a stalled truck', 'Its wipers twitching', 'A zombie logger', 'The infection has reached the mountain'], {}),
     place(2, 'camp-gate', 'The camp gate', 3, [3.4, 1.4], ['The gate, a barricade of logs half pulled down', 'A torn notice', '', 'They tried to keep something out'], {}),
-    place(2, 'camp-yard', 'The camp yard', 8, [1.2, 1.4], ['The camp\'s hub: timber stacks, the cookhouse bell', 'Smoke from a dead fire, the bell swinging', 'Zombie loggers', 'Twenty men worked here'], {}),
-    place(2, 'bunkhouse', 'The bunkhouse', 4, [1.2, 0], ['Bunks, a calendar with the safe\'s numbers', 'A flickering bulb', 'A zombie in a bunk', 'The men got sick one by one'], {}),
+    place(2, 'camp-yard', 'The camp yard', 8, [1.2, 1.4], ['The camp\'s hub: timber stacks, the cookhouse bell, the workshop\'s padlock rusted half through', 'Smoke from a dead fire, the bell swinging', 'Zombie loggers', 'Twenty men worked here'], {}),
+    place(2, 'bunkhouse', 'The bunkhouse', 4, [1.2, 0], ['Bunks, a calendar with the paydays ringed', 'A flickering bulb', 'A zombie in a bunk', 'The men got sick one by one'], {}),
     place(2, 'office', "The foreman's office", 3, [-1, 0], ['The safe, the payroll', 'A desk fan', '', 'Letters: Umbrella paid for the gondola'], {}),
     place(2, 'mess', 'The mess hall', 4, [-1, 1.4], ['Long tables, the cook dead with the office key', 'Steam from a pot, flies', 'Zombies', 'The last meal'], {}),
-    place(2, 'depot', 'The fuel depot', 3, [-1, 2.8], ['A padlocked pump, diesel drums', 'A dripping nozzle', 'Adders', ''], {}),
-    place(2, 'workshop', 'The workshop', 3, [1.2, 2.8], ['The spare drive cog in its crate, logs stacked on it', 'Sparks from a cut cable', '', 'They kept spares for the gondola'], {}),
-    place(2, 'sawmill', 'The sawmill', 6, [3.4, 0], ['The saw, the log crane', 'The water wheel, once running', 'Zombies', ''], {}),
+    place(2, 'depot', 'The fuel depot', 3, [-1, 2.8], ['A padlocked pump, diesel drums, a skid road chained off out the back', 'A dripping nozzle', 'Adders', 'The loggers dragged timber down to the forestry road this way'], {}),
+    place(2, 'workshop', 'The workshop', 3, [1.2, 2.8], ['The spare drive cog in its crate, logs stacked on it under an electric chain hoist; its cable runs to a box marked MILL LINE, dead', 'Sparks from a cut cable', '', 'They kept spares for the gondola'], {}),
+    place(2, 'sawmill', 'The sawmill', 6, [3.4, 0], ['The saw, the wheel\'s dynamo, and chalked on the board the millwright\'s drawing: pond, sluice, wheel, dynamo, the line to the workshop hoist', 'The water wheel, once running', 'Zombies', '']
+, {}),
     place(2, 'pond', 'The mill pond', 4, [5.6, 0], ['The sluice to the mill race', 'Water, reeds, a floating hat', 'A zombie in the water', ''], {}),
-    place(2, 'flume', 'The log flume', 3, [7.8, 0], ['The flume\'s top: a log boat', 'Running water', '', 'A ride down to the gorge'], {}),
+    place(2, 'flume', 'The log flume', 3, [7.8, 0], ['The flume\'s top: a log boat', 'Running water', '', 'A ride down to the gorge']
+
+, {}),
 
     // Act 2, west: the forestry road, the generator and the lookout tower.
     place(2, 'road', 'The forestry road', 5, [7.8, 4.2], ['A chained gate across the road', 'A torn notice on the gate', 'Crows', 'The way the rangers drive up'], {}),
     place(2, 'washout', 'The washout', 4, [5.6, 4.2], ['The road half gone into a gully', 'Water running over the road', 'Adders', ''], {}),
     place(2, 'generator', 'The generator hut', 3, [5.6, 5.6], ['The generator, dry', 'A fan once it runs; the lights come on', '', 'Power for the station, the mine and the gondola'], {}),
-    place(2, 'tower-foot', 'The lookout tower, foot', 3, [3.4, 4.2], ['The tower door, locked', 'The tower creaking in the wind', '', ''], {}),
+    place(2, 'tower-foot', 'The lookout tower, foot', 3, [3.4, 4.2], ['The tower door, locked; the foot of the loggers\' skid road', 'The tower creaking in the wind', '', ''], {}),
     place(2, 'tower-stairs', 'The lookout tower, stairs', 3, [1.2, 4.2], ['Stairs, a broken flight', 'Wind through the boards', 'Crows', ''], {}),
-    place(2, 'tower-top', 'The lookout tower, top', 4, [-1, 4.2], ['The switch house key; the valley seen from above', 'Smoke from the valley, cloud', 'Crows', "Smoke where Bravo came down; the mansion's roof"], {}),
-    place(2, 'switch', 'The switch house', 2, [5.6, 7], ['The breakers for the gondola line', 'Sparking contacts', '', ''], {}),
+    place(2, 'tower-top', 'The lookout tower, top', 4, [-1, 4.2], ['The lineman\'s post: his line log, the switch house key on his hook; the valley seen from above', 'Smoke from the valley, cloud', 'Crows', "The lineman watched the gondola line from up here; smoke where Bravo came down; the mansion's roof"], {}),
+    place(2, 'switch', 'The switch house', 2, [5.6, 7], ['The breakers for the gondola line, a box of line fuses', 'Sparking contacts', '', 'The line crew kept the gondola\'s spares by the breakers'], {}),
     place(2, 'line-track', 'The power line track', 5, [7.8, 7], ['The track under the line to the gondola, a gate at its end', 'The cable humming', 'Adders', ''], {}),
 
     // Act 2, east: the operator's cottage, the quarry and the mine; the summit above.
-    place(2, 'east-path', 'The east path', 4, [14.4, 5.6], ['The path from the gondola station along the slope', 'Grass, a windsock', 'Crows', ''], {}),
+    place(2, 'east-path', 'The east path', 4, [14.4, 5.6], ['The path from the gondola station along the slope, a boarded adit mouth in the bank', 'Grass, a windsock', 'Crows', ''], {}),
     place(2, 'cottage', "The operator's cottage", 4, [14.4, 4.2], ['His diary, the quarry office key on its hook', 'A radio left on', '', 'He went to hide in the mine'], {}),
     place(2, 'quarry', 'The quarry', 6, [16.6, 5.6], ['The quarry floor, the crane, the office', 'Dust blowing off the cut', 'Cerberus', ''], {}),
     place(2, 'quarry-office', 'The quarry office', 2, [16.6, 4.2], ['Dynamite in a locker', 'A clock still ticking', '', ''], {}),
-    place(2, 'mine-entrance', 'The mine entrance', 3, [18.8, 5.6], ['A rockfall across the adit', 'Dust settling', '', 'Someone brought it down on purpose'], {}),
+    place(2, 'mine-entrance', 'The mine entrance', 3, [18.8, 5.6], ['A rockfall across the adit, timbers jammed in it; the quarry crane\'s cable hangs within reach', 'Dust settling', '', 'Someone brought it down on purpose'], {}),
     place(2, 'tunnel', 'The mine tunnel', 5, [18.8, 4.2], ['Rails, timbers, lamps on a cable', 'Lamps swinging', 'Web Spinners', ''], {}),
     place(2, 'mine-office', 'The mine office', 2, [21, 4.2], ['The mine map: the pump and the lift', 'A dripping roof', '', ''], {}),
-    place(2, 'junction', 'The mine junction', 5, [18.8, 2.8], ['The pump house, the lift, a flooded way down', 'Water rising in the sump', 'Web Spinners', ''], {}),
-    place(2, 'gallery', 'The flooded gallery', 4, [16.6, 2.8], ['The operator, drowned, his key on its chain', 'Water draining away', 'A zombie', 'He hid down here and was bitten anyway'], {}),
+    place(2, 'junction', 'The mine junction', 5, [18.8, 2.8], ['The pump house, its intake sunk in the silt on a broken float, the lift, a flooded way down; across the water, Hal on an ore cart with his key on its chain, out of reach', 'Water rising in the sump', 'Web Spinners', '']
+, {}),
+    place(2, 'gallery', 'The flooded gallery', 4, [16.6, 2.8], ['The operator on an ore cart above the water, his key on its chain', 'Water draining away', 'A zombie', 'He hid down here and was bitten anyway']
+, {}),
     place(2, 'mine-lift', 'The mine lift', 2, [18.8, 1.4], ['The cage up to the summit', 'The cable turning', '', ''], {}),
     place(2, 'summit-trail', 'The summit trail', 4, [18.8, 0], ['Bare rock above the trees', 'Cloud blowing over', 'Crows', ''], {}),
     place(2, 'weather', 'The weather station', 3, [16.6, 0], ['A radio that still works', 'The anemometer spinning', '', "Alpha team's helicopter is coming at dusk"], {}),
@@ -117,13 +123,15 @@ export const day: Plan = {
     place(3, 'creek', 'The creek', 5, [10, 11.2], ['A ford, the lodge across it', 'Running water', 'Adders', ''], {}),
     place(3, 'lodge', "The gardener's lodge", 4, [12.2, 11.2], ['The back gate key, his diary', 'A lamp left burning', '', 'He scratched himself raw'], {}),
     place(3, 'estate-wall', 'The estate wall', 5, [10, 12.6], ['The back gate into the Spencer estate', 'Ivy in the wind', 'Crows', 'The mansion over the wall'], {}),
-    place(3, 'kennels', 'The kennels', 5, [10, 14], ['Empty runs, broken chains', 'A gate banging', 'Cerberus, a pack', 'The dogs on the mountain came from here'], {}),
-    place(3, 'back-garden', 'The back garden', 6, [10, 15.4], ['Hedges, the cellar doors', 'Fountain water, moths at a lamp', 'A zombie', ''], {}),
-    place(3, 'garden-shed', 'The garden shed', 2, [12.2, 15.4], ['The cellar key on a board', 'A cobweb trembling', '', ''], {}),
+    place(3, 'kennels', 'The kennels', 5, [10, 14], ['Runs behind wire, their gates hanging broken, one run with a sound gate and bolt; the hoist the dogs\' meat came up on from the house\'s cold store', 'A gate banging', 'Cerberus, a pack, pacing in the runs: they have not seen her, and a noise would bring them out', 'The dogs on the mountain came from here'], {}),
+    place(3, 'back-garden', 'The back garden', 6, [10, 15.4], ['Hedges, the cellar doors barred from inside, a coal chute\'s grate beside them', 'Fountain water, moths at a lamp', 'A zombie', '']
+, {}),
+    place(3, 'garden-shed', 'The garden shed', 2, [12.2, 15.4], ['The cellar key on a board; the gardener\'s last sack of dog meat by the door', 'A cobweb trembling', '', 'He fed the pack himself, until it was too big to feed'], {}),
 
     // Act 4: the mansion.
-    place(4, 'cellar', 'The cellar', 4, [10, 16.8], ['A rack across a crawl passage', 'Candle flames', 'A zombie servant', ''], {}),
-    place(4, 'wine', 'The wine store', 2, [12.2, 16.8], ['Racks, a first aid spray', 'Drips', '', ''], {}),
+    place(4, 'cellar', 'The cellar', 4, [10, 16.8], ['A rack across a crawl passage, the foot of the coal chute, the cold store\'s hoist up to the kennels', 'Candle flames', 'A zombie servant', ''], {}),
+    place(4, 'wine', 'The wine store', 2, [12.2, 16.8], ['Racks, a green herb in a pot by the stair', 'Drips', '', '']
+, {}),
     place(4, 'crawl', 'Under the floor', 3, [10, 18.2], ['The passage under the floorboards, a hatch', 'Light through the boards, footsteps overhead', '', ''], {}),
     place(4, 'save', 'The save room', 6, [10, 19.6], ['Where Chris finds her', 'The typewriter lamp', '', 'She sleeps; Chris walks in'], { existing: 'ROOM1000.RDT' }),
   ],
@@ -145,7 +153,8 @@ export const day: Plan = {
     link('camp-yard', 'mess', 'door'),
     link('camp-yard', 'office', 'door', 'office-key'),
     link('camp-yard', 'depot', 'door', 'cut-depot'),
-    link('camp-yard', 'workshop', 'door', 'safe'),
+    link('depot', 'tower-foot', 'walk', 'skid-road', true),
+    link('camp-yard', 'workshop', 'door', 'workshop-door'),
     link('camp-yard', 'sawmill', 'walk'),
     link('sawmill', 'pond', 'walk'),
     link('pond', 'flume', 'walk'),
@@ -170,6 +179,7 @@ export const day: Plan = {
     link('tunnel', 'mine-office', 'door'),
     link('tunnel', 'junction', 'walk'),
     link('junction', 'gallery', 'walk', 'drain'),
+    link('gallery', 'east-path', 'walk', 'adit', true),
     link('junction', 'mine-lift', 'walk'),
     link('mine-lift', 'summit-trail', 'lift', 'lift-up'),
     link('summit-trail', 'weather', 'door'),
@@ -187,7 +197,8 @@ export const day: Plan = {
     link('estate-wall', 'kennels', 'walk', 'open-gate'),
     link('kennels', 'back-garden', 'walk'),
     link('back-garden', 'garden-shed', 'door'),
-    link('back-garden', 'cellar', 'door', 'bulkhead'),
+    link('back-garden', 'cellar', 'ladder', 'coal-chute'),
+    link('kennels', 'cellar', 'lift', 'hoist'),
 
     link('cellar', 'wine', 'door'),
     link('cellar', 'crawl', 'walk', 'push-rack'),
@@ -210,47 +221,103 @@ export const day: Plan = {
 
     // Act 2, north.
     step(2, 'meet-partner', 'woods', 'learn', ['dog'], "The ranger's partner, tracking the same drag marks; they go on together"),
-    step(2, 'truck-keys', 'den', 'find', ['meet-partner'], "The ranger in the hollow; his partner gives her his keys"),
-    step(2, 'cutters', 'yard', 'find', ['truck-keys'], "Open the truck's toolbox: bolt cutters"),
-    step(2, 'calendar', 'bunkhouse', 'learn', ['dog'], "The bunkhouse calendar: the safe's numbers"),
+    step(2, 'truck-keys', 'den', 'find', ['meet-partner'], "The ranger in the hollow; his partner takes his keys from his jacket and gives them to her"),
+
+    step(2, 'cutters', 'yard', 'find', ['truck-keys'], "Open the ranger's toolbox on his truck with his keys: bolt cutters"),
+    step(2, 'calendar', 'bunkhouse', 'learn', ['dog'], 'The bunkhouse calendar: the paydays ringed in red, one ringed twice'),
     step(2, 'map-camp', 'camp-gate', 'find', ['dog'], "Camp 4's site plan, on the gate's notice board", { optional: true }),
     step(2, 'partner-camp', 'camp-gate', 'learn', ['truck-keys'], 'The partner at the barricade: she takes the camp, Rebecca the road', { optional: true }),
     step(2, 'office-key', 'mess', 'find', ['dog'], 'Take the office key from the dead cook'),
-    step(2, 'safe', 'office', 'find', ['office-key', 'calendar'], "Open the foreman's safe: the workshop key"),
-    step(2, 'mill-race', 'pond', 'do', ['crank', 'dog'], 'Open the sluice with the winch crank: the mill runs'),
-    step(2, 'crane', 'sawmill', 'do', ['mill-race'], 'Run the log crane: the stack lifts off the crate'),
-    step(2, 'cog', 'workshop', 'find', ['crane', 'safe'], 'Take the spare drive cog'),
+    step(2, 'letters', 'office', 'learn', ['office-key'], "The foreman's letters: Umbrella's money came on the payday the men were paid twice, and he set the safe to that date"),
+    step(2, 'safe', 'office', 'find', ['office-key', 'calendar', 'letters'], "Open the foreman's safe with the date: the workshop key and a box of handgun rounds"),
+    {
+      ...step(2, 'workshop-door', 'camp-yard', 'do', ['safe'], 'Unlock the workshop with the key from the safe'),
+      otherWays: [{
+        needs: ['cutters'],
+        label: "Cut the workshop's padlock with the bolt cutters instead. The clatter carries across the camp",
+        stirs: [{ at: 'camp-yard', enemies: 'Zombie loggers out of the bunkhouse and the mess hall, drawn by the noise' }],
+      }, {
+        needs: ['cutters', 'ring-bell'],
+        label: 'Or ring the cookhouse bell first, and cut the padlock while the loggers crowd into the mess hall for a supper that never comes',
+      }],
+    },
+    {
+      ...step(2, 'ring-bell', 'camp-yard', 'do', ['dog'], "Ring the cookhouse bell: the men's habit outlives them, and the loggers shamble to the mess hall", { optional: true }),
+      stirs: [{ at: 'mess', enemies: 'The zombie loggers, crowded round the tables, between her and the dead cook with the office key' }],
+    },
+
+
+    {
+      ...step(2, 'mill-race', 'pond', 'do', ['crank', 'dog'], 'Open the sluice with the winch crank: the mill runs'),
+      stirs: [
+        { at: 'sawmill', enemies: 'Zombie loggers, drawn to the noise of the running mill' },
+        { at: 'flume', enemies: 'A zombie logger at the flume head' },
+      ],
+    },
+    step(2, 'crane', 'workshop', 'do', ['mill-race', 'workshop-door'], "With the mill's dynamo turning, the workshop's electric hoist has power: lift the logs off the crate"),
+
+
+    step(2, 'cog', 'workshop', 'find', ['crane', 'workshop-door'], 'Take the spare drive cog'),
+
     step(2, 'cut-depot', 'camp-yard', 'do', ['cutters'], "Cut the depot's padlock"),
     step(2, 'jerrycan', 'shed', 'find', ['unlock-shed'], 'Take the empty jerrycan'),
     step(2, 'fuel', 'depot', 'find', ['cut-depot', 'jerrycan'], 'Fill the jerrycan with diesel'),
-    step(2, 'flume-ride', 'flume', 'shortcut', ['mill-race'], 'Ride the flume down to the gorge', { optional: true }),
+    step(2, 'skid-road', 'depot', 'shortcut', ['cut-depot'], "Drop the chain on the skid road behind the depot: the loggers' track down to the lookout tower's foot", { optional: true }),
+
+    step(2, 'flume-ride', 'flume', 'shortcut', ['mill-race', 'cog'], "With the cog in her pack, she rides the log boat down the running flume to the gorge footbridge by the gondola station, the quick way home past the logger at the flume head", { optional: true }),
 
     // Act 2, west.
     step(2, 'cut-chain', 'road', 'do', ['cutters'], 'Cut the chain on the road gate'),
-    step(2, 'map-forestry', 'road', 'find', ['dog'], 'The Forest Service road map on the gate board: the road, the lookout, the line, the quarry', { optional: true }),
-    step(2, 'generator-on', 'generator', 'do', ['cut-chain', 'fuel'], 'Fuel the generator: the station lights come on'),
+    step(2, 'map-forestry', 'road', 'find', ['dog'], "The Forest Service road map on the gate board: the road, the lookout, the quarry, and the gondola line's pylons, numbered from the valley up"),
+    {
+      ...step(2, 'generator-on', 'generator', 'do', ['cut-chain', 'fuel'], 'Fuel the generator: the station lights come on'),
+      stirs: [{ at: 'washout', enemies: "Cerberus, drawn down the gully by the generator's noise" }],
+    },
     step(2, 'tower-door', 'tower-foot', 'do', ['cut-chain', 'truck-keys'], "Unlock the tower with the ranger's keys"),
-    step(2, 'switch-key', 'tower-top', 'find', ['tower-door'], "The switch house key; Bravo's smoke, the mansion's roof"),
+    step(2, 'switch-key', 'tower-top', 'find', ['tower-door'], "The switch house key on the lineman's hook; Bravo's smoke, the mansion's roof"),
+    step(2, 'line-log', 'tower-top', 'learn', ['tower-door'], "The lineman's wiring sketch: the feed comes in at the top station, and each pylon's section takes its power from the one before it"),
+
     step(2, 'partner-radio', 'tower-top', 'learn', ['tower-door'], "The partner on the lookout's radio: the dogs came from the estate's kennels", { optional: true }),
-    step(2, 'line-on', 'switch', 'do', ['switch-key', 'generator-on'], 'Close the breakers: power down the line'),
+    step(2, 'line-on', 'switch', 'do', ['switch-key', 'generator-on', 'line-log', 'map-forestry'], "Close the five breakers, each labelled with its pylon's number, in the order the power flows: from the feed at the top station outward, which is the highest number first, since the pylons are numbered from the valley up. A wrong one trips the whole bank and the spark shocks her for a little damage, so she starts again a little hurt"),
+
+
+
+
     step(2, 'line-gate', 'line-track', 'shortcut', ['line-on'], 'Open the line gate to the gondola station', { optional: true }),
 
     // Act 2, east and the summit.
     step(2, 'diary', 'cottage', 'learn', ['winch-pine'], "The operator's diary: he went to hide in the mine", { optional: true }),
     step(2, 'quarry-key', 'cottage', 'find', ['winch-pine'], 'Take the quarry office key'),
     step(2, 'dynamite', 'quarry-office', 'find', ['quarry-key'], 'Take the dynamite'),
-    step(2, 'blast', 'mine-entrance', 'do', ['dynamite'], 'Blast the rockfall at the mine mouth'),
+    {
+      ...step(2, 'blast', 'mine-entrance', 'do', ['dynamite'], 'Blast the rockfall at the mine mouth'),
+      otherWays: [{
+        needs: ['winch-pine', 'crank'],
+        label: "Or hook the quarry crane's cable round the jammed timbers and wind them out with the winch crank: slow work out in the open",
+        stirs: [{ at: 'mine-entrance', enemies: 'Cerberus from the quarry, while she winds' }],
+      }],
+    },
+
     step(2, 'mine-map', 'mine-office', 'learn', ['blast'], 'The mine map: the pump and the lift', { optional: true }),
     step(2, 'map-mine', 'mine-office', 'find', ['blast'], 'The mine survey: the levels, the pump and the lift', { optional: true }),
-    step(2, 'drain', 'junction', 'do', ['blast', 'generator-on'], 'Run the mine pump: the gallery drains'),
+    {
+      ...step(2, 'drain', 'junction', 'do', ['blast', 'generator-on', 'jerrycan'], "The pump has a dead power lamp, lit once the station has power, and its intake is choked in the silt: she ties the empty jerrycan on as its float, and the pump drains the gallery"),
+
+      stirs: [{ at: 'tunnel', enemies: 'Web Spinners, flushed up out of the sump as the water falls' }],
+    },
+
     step(2, 'op-key', 'gallery', 'find', ['drain'], "Hal, alive on the ore cart: he gives her the operator's key, then the bite takes him"),
+    step(2, 'adit', 'gallery', 'shortcut', ['drain'], "With the gallery drained, the old drainage adit at its far end walks out to the boarded mouth on the east path, a room from the gondola station", { optional: true }),
     step(2, 'lift-up', 'mine-lift', 'do', ['blast', 'generator-on'], 'Ride the mine lift up to the summit', { optional: true }),
+
     step(2, 'radio', 'weather', 'learn', ['lift-up'], "The weather radio: Alpha's helicopter comes at dusk", { optional: true }),
     step(2, 'supplies', 'mast', 'find', ['lift-up'], 'Ammunition and a first aid spray', { optional: true }),
 
     // Act 2: the gondola.
-    step(2, 'fuses', 'shed', 'find', ['unlock-shed'], "Take the ranger's spare fuses"),
+    step(2, 'fuses', 'switch', 'find', ['switch-key'], "Take a line fuse from the box by the breakers"),
+
     step(2, 'gondola-runs', 'platform', 'milestone', ['act1-end', 'line-on', 'cog', 'op-key', 'fuses'], 'Fit the cog and the fuse, turn the key: the gondola runs'),
+
 
     // Act 3.
     step(3, 'ride', 'car', 'do', ['gondola-runs'], 'Ride down; the car stops at a pylon'),
@@ -264,8 +331,24 @@ export const day: Plan = {
     step(3, 'gardener-diary', 'lodge', 'learn', ['pry-lodge'], "The gardener's diary: the itching", { optional: true }),
     step(3, 'map-estate', 'lodge', 'find', ['pry-lodge'], 'The estate grounds plan: the wall, the kennels, the garden, the cellar', { optional: true }),
     step(3, 'open-gate', 'estate-wall', 'do', ['gate-key'], 'Open the back gate into the estate'),
-    step(3, 'cellar-key', 'garden-shed', 'find', ['open-gate'], 'Take the cellar key'),
-    step(3, 'bulkhead', 'back-garden', 'milestone', ['cellar-key'], 'Unlock the cellar doors'),
+    step(3, 'cellar-key', 'garden-shed', 'find', ['open-gate'], "Take the cellar key from the gardener's board: it locks the house's cold store and the meat hoist up to the kennels"),
+    step(3, 'dog-meat', 'garden-shed', 'find', ['open-gate'], "Take the gardener's sack of dog meat"),
+    step(3, 'pen-pack', 'kennels', 'do', ['dog-meat'], 'Throw the meat into the run with the sound gate: the pack piles in after it, and she bolts the gate on them'),
+    step(3, 'kill-pack', 'kennels', 'do', ['open-gate'], 'Or shoot the pack down in the yard, at the cost of most of her rounds', { optional: true }),
+    {
+      ...step(3, 'hoist', 'kennels', 'do', ['pen-pack', 'cellar-key'], "With the pack shut in, unlock the meat hoist with the cellar key and ride it down to the house's cold store"),
+      otherWays: [{ needs: ['kill-pack', 'cellar-key'], label: 'Or, with the pack dead, unlock the hoist and ride it down: the meat would have saved her rounds' }],
+    },
+
+    {
+      ...step(3, 'coal-chute', 'back-garden', 'do', ['open-gate', 'crowbar', 'map-estate'], "Prise up the coal chute's grate with Kevin's crowbar, where the grounds plan marks it, and drop into the cellar. The iron rings across the garden"),
+      stirs: [{ at: 'back-garden', enemies: 'The Cerberus pack from the kennels, at the sound, unless she has shut them in' }],
+    },
+    {
+      ...step(3, 'bulkhead', 'cellar', 'milestone', ['hoist'], "Into the mansion's cellar: quietly, by the kennels' hoist with the pack shut in"),
+      otherWays: [{ needs: ['coal-chute'], label: 'Or loudly, down the coal chute, with the pack loose behind her' }],
+    },
+
 
     // Act 4.
     step(4, 'push-rack', 'cellar', 'do', ['bulkhead'], 'Push the rack aside: a crawl passage'),

@@ -2,23 +2,33 @@
 afternoon.
 
 What it tells: the generator's power goes out from here, up the line to the
-Arklay Skyway's upper station, and to the ranger station and the mine. Every
-breaker on the board is down: OFF. The big isolator lever on the south wall
-is down too, and padlocked; its key is not here. Dale came through in the
-night after the dog bit him, bleeding, and tried to put the line back on
-by hand. The control batteries shorted across a contactor and threw him off
-it: there is a black scorch up the board, a burnt rubber glove on the
-floor, and the contactor still spits sparks off the batteries now. His
-blood is on the east door's handle where he let himself out to the line
-track. The sun comes in through the barred window and the door.
+Arklay Skyway's upper station. The line is cut into five sections, one for
+each pylon, and each has its breaker on the board, a big number plate over
+it, 1 to 5. Every breaker is down: OFF. Which order they go up in is not
+written here; the lineman's sketch at the lookout tower shows the feed
+coming in at the top station, at the 5 end. The big isolator lever on the
+south wall is down too, and padlocked; its key is not here. Dale came
+through in the night after the dog bit him, bleeding, and tried to put the
+line back on by hand. The control batteries shorted across a contactor at
+the end of the board and threw him off it: there is a black scorch up the
+board, a burnt rubber glove on the floor, and the contactor still spits
+sparks off the batteries now. The line crew kept their spares by the
+board: a steel box stencilled LINE FUSES on the south wall, its lid up,
+one fuse left in it. His blood is on the east door's handle where he let
+himself out to the line track. The sun comes in through the barred window
+and the door.
 
 Metres: the floor is x 1.0-4.6, y 1.0-4.0, 2.9 high, painted brick. The
 door from the generator hut is in the north wall at x 1.8-2.6. The door out
 to the line track is in the east wall at y 2.2-3.1, standing open. The
-breaker board runs along the west wall; the isolator lever is on the south
-wall at x 3.0; the barred window is high in the south wall at x 1.6-2.4.
+breaker board runs along the west wall: breakers 1 to 5 from north to
+south at y 1.28-3.36, 0.52 m apart, and the contactor at its south end at
+y 3.78. The fuse box is on the south wall at x 2.55, between the DANGER
+sign and the isolator; the isolator lever is on the south wall at x 3.2;
+the barred window is high in the south wall at x 1.6-2.4.
 
 Moving: the sparking contactor and its blue flashes.
+State "line-on": all five breakers thrown up, a green lamp lit over each.
 """
 import math
 import os
@@ -36,7 +46,9 @@ X0, X1, Y0, Y1, H = 1.0, 4.6, 1.0, 4.0, 2.9
 NDOOR = (1.8, 2.6)
 EDOOR = (2.2, 3.1)
 WINDOW = (1.6, 2.4, 1.85, 2.4)    # x0, x1, z0, z1 in the south wall
-SPARK = (X0 + 0.16, 2.5, 1.45)
+BREAKERS = [1.28 + i * 0.52 for i in range(5)]   # y of breakers 1 to 5, north to south
+SPARK = (X0 + 0.16, 3.78, 1.45)                  # the contactor, at the board's south end
+FUSE_BOX = (2.55, 1.1)                           # x and the shelf's top on the south wall
 
 
 def build():
@@ -99,28 +111,29 @@ def build():
     reb.mesh_object("Pines south", tv, tf, mat("needles"))
     reb.trunks("Pine trunks south", mat("bark"), bases)
 
-    # ---- The breaker board along the west wall: slate, five breakers all down, labels.
-    board = reb.prim("cube", "Breaker board", slate, (X0 + 0.04, 2.5, 1.45), (0.08, 2.6, 1.7))
-    reb.prim("cube", "Board frame", mat("iron"), (X0 + 0.05, 2.5, 2.33), (0.1, 2.7, 0.06))
-    reb.prim("cube", "Board frame", mat("iron"), (X0 + 0.05, 2.5, 0.58), (0.1, 2.7, 0.06))
-    labels = ("SKYWAY LINE", "STATION 3", "MINE", "PUMP", "CAMP 4")
+    # ---- The breaker board along the west wall: slate, five breakers all down,
+    # each under a big number plate, and the contactor at its south end.
+    board = reb.prim("cube", "Breaker board", slate, (X0 + 0.04, 2.52, 1.45), (0.08, 2.9, 1.7))
+    reb.prim("cube", "Board frame", mat("iron"), (X0 + 0.05, 2.52, 2.33), (0.1, 3.0, 0.06))
+    reb.prim("cube", "Board frame", mat("iron"), (X0 + 0.05, 2.52, 0.58), (0.1, 3.0, 0.06))
     # Once she closes them (day/events.ts "line-on"): handles up, a green lamp lit over each.
     down, up = [], []
     lamp_on = reb.mat_emit("Breaker lamp, on", (0.3, 1.0, 0.35), 12)
-    for i, label in enumerate(labels):
-        y = 1.45 + i * 0.52
-        if abs(y - SPARK[1]) < 0.2:
-            continue
-        reb.prim("cube", f"Breaker {i}", cab_grey, (X0 + 0.16, y, 1.55), (0.16, 0.34, 0.5), bevel=0.01)
-        handle = kit.rod(f"Breaker handle {i}", mat("black"), (X0 + 0.25, y, 1.55), (X0 + 0.42, y, 1.32), 0.025)
-        knob = reb.prim("sphere", f"Handle knob {i}", mat("red paint"), (X0 + 0.43, y, 1.31), (0.06, 0.06, 0.06), segments=10)
+    enamel = reb.mat_plain("Enamel plate", (0.62, 0.6, 0.52), 0.5)
+    for i, y in enumerate(BREAKERS):
+        n = i + 1
+        reb.prim("cube", f"Breaker {n}", cab_grey, (X0 + 0.16, y, 1.55), (0.16, 0.34, 0.5), bevel=0.01)
+        handle = kit.rod(f"Breaker handle {n}", mat("black"), (X0 + 0.25, y, 1.55), (X0 + 0.42, y, 1.32), 0.025)
+        knob = reb.prim("sphere", f"Handle knob {n}", mat("red paint"), (X0 + 0.43, y, 1.31), (0.06, 0.06, 0.06), segments=10)
         down += [handle, knob]
-        up += [kit.rod(f"Breaker handle up {i}", mat("black"), (X0 + 0.25, y, 1.55), (X0 + 0.42, y, 1.78), 0.025),
-               reb.prim("sphere", f"Handle knob up {i}", mat("red paint"), (X0 + 0.43, y, 1.79), (0.06, 0.06, 0.06), segments=10),
-               reb.prim("sphere", f"Breaker lamp {i}", lamp_on, (X0 + 0.1, y, 2.12), (0.04, 0.04, 0.04), segments=8)]
-        reb.prim("cube", f"Label {i}", mat("white paint"), (X0 + 0.09, y, 1.95), (0.01, 0.4, 0.09))
-        kit.text(f"Label words {i}", label, mat("black"), (X0 + 0.096, y, 1.95), size=0.045, rot=(math.pi / 2, 0, math.pi / 2))
-        down.append(kit.text(f"Off mark {i}", "OFF", mat("red paint"), (X0 + 0.096, y, 1.2), size=0.05, rot=(math.pi / 2, 0, math.pi / 2)))
+        up += [kit.rod(f"Breaker handle up {n}", mat("black"), (X0 + 0.25, y, 1.55), (X0 + 0.42, y, 1.78), 0.025),
+               reb.prim("sphere", f"Handle knob up {n}", mat("red paint"), (X0 + 0.43, y, 1.79), (0.06, 0.06, 0.06), segments=10),
+               reb.prim("sphere", f"Breaker lamp {n}", lamp_on, (X0 + 0.1, y, 2.22), (0.04, 0.04, 0.04), segments=8)]
+        # The number plate: white enamel, a black rim, the pylon's number big.
+        reb.prim("cube", f"Number plate rim {n}", mat("black"), (X0 + 0.086, y, 1.98), (0.008, 0.32, 0.3))
+        reb.prim("cube", f"Number plate {n}", enamel, (X0 + 0.091, y, 1.98), (0.008, 0.28, 0.26))
+        kit.text(f"Number {n}", str(n), mat("black"), (X0 + 0.097, y, 1.975), size=0.24, rot=(math.pi / 2, 0, math.pi / 2))
+        down.append(kit.text(f"Off mark {n}", "OFF", mat("red paint"), (X0 + 0.096, y, 1.2), size=0.05, rot=(math.pi / 2, 0, math.pi / 2)))
     for ob in up:
         ob.hide_render = True
 
@@ -134,9 +147,9 @@ def build():
     reb.prim("cube", "Contactor", mat("black"), (X0 + 0.15, SPARK[1], 1.45), (0.14, 0.34, 0.42), bevel=0.01)
     for dy in (-0.08, 0.0, 0.08):
         reb.prim("cube", "Contact", copper, (X0 + 0.24, SPARK[1] + dy, 1.47), (0.04, 0.03, 0.09))
-    reb.prim("cube", "Contactor cover", cab_grey, (X0 + 0.9, 2.2, 0.02), (0.3, 0.36, 0.03), rot=(0, 0, 0.7))
-    kit.splat("Scorch up the board", scorch, (X0 + 0.085, SPARK[1], 1.8), 0.32, rot=(0, math.pi / 2, 0), seed=7, stretch=(1.0, 1.6), lumps=0.6)
-    kit.splat("Scorch on the floor", scorch, (X0 + 0.5, SPARK[1] + 0.1, 0.0), 0.3, seed=8, lumps=0.6)
+    reb.prim("cube", "Contactor cover", cab_grey, (X0 + 1.0, 3.25, 0.02), (0.3, 0.36, 0.03), rot=(0, 0, 0.7))
+    kit.splat("Scorch up the board", scorch, (X0 + 0.085, SPARK[1] - 0.05, 1.8), 0.3, rot=(0, math.pi / 2, 0), seed=7, stretch=(1.0, 1.6), lumps=0.6)
+    kit.splat("Scorch on the floor", scorch, (X0 + 0.45, SPARK[1] - 0.05, 0.0), 0.3, seed=8, lumps=0.6)
     spark_m = reb.mat_emit("Spark", (0.7, 0.85, 1.0), 25)
     sparks = []
     for i in range(3):
@@ -151,7 +164,31 @@ def build():
             sv += [tuple(a - side), tuple(a + side), tuple(b + side), tuple(b - side)]
             sf.append((k, k + 1, k + 2, k + 3))
         sparks.append(reb.mesh_object(f"Sparks {i}", sv, sf, spark_m, smooth=False))
-    arc = reb.point("Arc flash", (X0 + 0.35, SPARK[1], 1.47), 25, (0.6, 0.8, 1.0), 0.05)
+    # In the corner, so it throws less than it did mid-board, or the south wall burns out white.
+    arc = reb.point("Arc flash", (X0 + 0.35, SPARK[1] - 0.1, 1.47), 10, (0.6, 0.8, 1.0), 0.05)
+
+    # ---- The line fuses: a steel box on a bracket on the south wall, its
+    # lid up against the wall, stencilled; one fuse left in it (fuses).
+    fx, shelf = FUSE_BOX
+    box_m = reb.mat_surface("Fuse box steel", [(0.0, (0.03, 0.045, 0.035)), (0.75, (0.06, 0.08, 0.065)), (1.0, (0.16, 0.08, 0.04))], scale=6, rough=0.45, bump=0.2)
+    stencil = reb.mat_plain("Stencil paint", (0.8, 0.78, 0.68), 0.6)
+    reb.prim("cube", "Fuse box bracket", mat("iron"), (fx, Y1 - 0.14, shelf - 0.02), (0.62, 0.28, 0.04))
+    for dx in (-0.25, 0.25):
+        kit.rod("Bracket stay", mat("iron"), (fx + dx, Y1 - 0.26, shelf - 0.04), (fx + dx, Y1 - 0.01, shelf - 0.28), 0.012, 4)
+    bz = shelf + 0.11
+    reb.prim("cube", "Fuse box floor", box_m, (fx, Y1 - 0.14, shelf + 0.01), (0.56, 0.24, 0.02))
+    reb.prim("cube", "Fuse box front", box_m, (fx, Y1 - 0.255, bz), (0.56, 0.015, 0.22))
+    reb.prim("cube", "Fuse box back", box_m, (fx, Y1 - 0.025, bz), (0.56, 0.015, 0.22))
+    for dx in (-0.275, 0.275):
+        reb.prim("cube", "Fuse box end", box_m, (fx + dx, Y1 - 0.14, bz), (0.015, 0.24, 0.22))
+    reb.prim("cube", "Fuse box inside", mat("black"), (fx, Y1 - 0.14, shelf + 0.021), (0.53, 0.21, 0.002))
+    # The lid, hinged at the back and stood up against the wall.
+    reb.prim("cube", "Fuse box lid", box_m, (fx, Y1 - 0.02, bz + 0.23), (0.58, 0.012, 0.25))
+    for words, dz in (("LINE", 0.048), ("FUSES", -0.048)):
+        kit.text(f"Fuse box stencil {words}", words, stencil, (fx, Y1 - 0.264, bz + dz), size=0.1)
+    for dx in (-0.16, 0.16):
+        reb.prim("cube", "Empty fuse clip", copper, (fx + dx, Y1 - 0.14, shelf + 0.035), (0.03, 0.1, 0.03))
+    room.item("fuses", (fx, Y1 - 0.14, shelf + 0.022))
     # Cable trays overhead and the feeders out through the east wall.
     reb.prim("cube", "Cable tray", mat("iron"), (2.8, 2.5, H - 0.25), (3.6, 0.3, 0.05))
     for k, dy in enumerate((-0.08, 0.0, 0.08)):
@@ -189,9 +226,9 @@ def build():
         reb.prim("cube", "palm", glove_m, (0, 0, 0.03), (0.16, 0.1, 0.05), bevel=0.02),
         reb.prim("cyl", "cuff", glove_m, (-0.16, 0, 0.04), (0.08, 0.08, 0.18), rot=(0, math.pi / 2, 0), segments=10),
     ] + [reb.prim("cube", "finger", glove_m, (0.12, -0.04 + k * 0.027, 0.025), (0.08, 0.022, 0.03), rot=(0, 0, (k - 1.5) * 0.15)) for k in range(4)])
-    glove.location = (X0 + 0.65, 2.75, 0.0)
+    glove.location = (X0 + 1.0, 3.8, 0.0)
     glove.scale = (1.5, 1.5, 1.5)
-    glove.rotation_euler = (0, 0, 2.6)
+    glove.rotation_euler = (0, 0, 3.4)
     reb.prim("cube", "Other glove", reb.mat_plain("Lineman's glove", (0.4, 0.2, 0.02), 0.8), (2.6, 3.4, 0.03), (0.3, 0.12, 0.05), rot=(0, 0, 0.4), bevel=0.02)
     reb.prim("cyl", "Torch", mat("black"), (2.2, 2.2, 0.04), (0.06, 0.06, 0.26), rot=(math.pi / 2, 0, 0.9), segments=12)
     reb.prim("cube", "Meter", mat("yellow paint"), (X0 + 0.95, 3.4, 0.05), (0.12, 0.2, 0.06), rot=(0, 0, 0.3))
@@ -199,7 +236,7 @@ def build():
     reb.prim("cube", "Tool bag", mat("canvas"), (X1 - 0.35, Y1 - 0.35, 0.15), (0.45, 0.25, 0.3), rot=(0, 0, 0.3), bevel=0.05)
     reb.wall(reb.prim("cube", "Tool bag footprint", None, (X1 - 0.35, Y1 - 0.35, 0.2), (0.5, 0.35, 0.4))).hide_render = True
     reb.prim("cube", "Stool", reb.mat_wood("Stool", (0.2, 0.14, 0.08)), (X1 - 0.5, 1.4, 0.3), (0.35, 0.35, 0.04))
-    kit.splat("Burnt hand mark", scorch, (X0 + 0.085, SPARK[1] + 0.25, 1.35), 0.07, rot=(0, math.pi / 2, 0), seed=11, lumps=0.6)
+    kit.splat("Burnt hand mark", scorch, (X0 + 0.085, SPARK[1] - 0.24, 1.3), 0.07, rot=(0, math.pi / 2, 0), seed=11, lumps=0.6)
     kit.web("Web", (X1 - 0.02, Y0 + 0.02, H - 0.02), 0.3, (-1, 1))
 
     # ---- The window: bars, the low sun coming through them.
@@ -221,15 +258,19 @@ def build():
         on = k % 5 in (0, 1) or k in (7, 12)
         for i, s in enumerate(sparks):
             s.hide_render = not (on and (k + i) % 3 != 2)
-        arc.data.energy = 30 if on else 0.0
+        arc.data.energy = 12 if on else 0.0
     anim.custom(spark)
 
     # ---- What the game needs.
     room.door("generator", (NDOOR[0], Y0, NDOOR[1], Y0 + 0.6), arrive=(2.2, 2.1), face=(0, 1))
     room.door("line-track", (X1 - 0.6, EDOOR[0], X1, EDOOR[1]), arrive=(3.4, 2.65), face=(-1, 0))
-    room.spot("line-on", (X0, 1.2, X0 + 0.8, 2.3))  # day/events.ts says what she sees and does here
-    room.check((X0, 2.3, X0 + 0.8, 2.8), "A contactor, burnt black. It's still sparking off the batteries.\nThere's a scorched handprint beside it.")
-    room.check((X0 + 0.4, 2.5, X0 + 1.0, 3.1), "A lineman's rubber glove. It's melted.")
+    # The breakers, one spot in front of each, side by side along the board
+    # (day/events.ts says what she sees and does at them).
+    for i, y in enumerate(BREAKERS):
+        room.spot(f"breaker-{i + 1}", (X0, y - 0.26, X0 + 0.8, y + 0.26))
+    room.check((X0 + 0.8, 1.6, X0 + 1.3, BREAKERS[-1] + 0.26), "The breakers. One for each pylon on the line, numbered 1 to 5.\nAll of them down.")
+    room.check((X0, BREAKERS[-1] + 0.26, X0 + 0.8, Y1), "A contactor, burnt black. It's still sparking off the batteries.\nThere's a scorched handprint beside it.")
+    room.check((X0 + 0.8, BREAKERS[-1] + 0.26, X0 + 1.2, Y1), "A lineman's rubber glove. It's melted.")
     room.check((lx - 0.3, Y1 - 0.9, lx + 0.7, Y1), "MAIN ISOLATOR, SKYWAY LINE. The lever's down, and padlocked.\nNo power reaches the gondola until this goes up.")
     room.check((X1 - 0.6, EDOOR[0] - 0.4, X1, EDOOR[0]), "Blood on the door frame. He went out to the line track.")
     room.export(anim)

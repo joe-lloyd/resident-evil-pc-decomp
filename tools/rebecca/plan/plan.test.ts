@@ -65,6 +65,29 @@ test('a find nothing uses is flagged', () => {
   assert.deepEqual(r.open, [2, 2, 1]);
 });
 
+test('a step can be done by its other way, and what only that way needs still counts as used', () => {
+  const r = check(tiny({
+    links: [{ from: 'a', to: 'b', kind: 'door', opens: 'open' }],
+    steps: [
+      { id: 'key', label: 'key', at: 'a', act: 1, kind: 'find', needs: [], built: 'planned' },
+      { id: 'bar', label: 'bar', at: 'a', act: 1, kind: 'find', needs: [], built: 'planned' },
+      { id: 'open', label: 'open', at: 'a', act: 1, kind: 'do', needs: ['key'], otherWays: [{ needs: ['bar'], label: 'force it' }], built: 'planned' },
+      { id: 'end', label: 'end', at: 'b', act: 1, kind: 'goal', needs: ['open'], built: 'planned' },
+    ],
+  }));
+  assert.deepEqual(r.errors, []);
+  assert.deepEqual(r.warnings, []);
+  assert.deepEqual(r.order, ['key', 'bar', 'open', 'end']);
+});
+
+test('an other way that needs a missing step, or stirs enemies nowhere, is an error', () => {
+  const r = check(tiny({ steps: [
+    { id: 'key', label: 'key', at: 'a', act: 1, kind: 'find', needs: [], otherWays: [{ needs: ['ghost'], label: 'x', stirs: [{ at: 'void', enemies: 'crows' }] }], stirs: [{ at: 'nowhere', enemies: 'dogs' }], built: 'planned' },
+    { id: 'end', label: 'end', at: 'b', act: 1, kind: 'goal', needs: ['key'], built: 'planned' },
+  ] }));
+  assert.deepEqual(r.errors, ['key needs ghost, which is not a step', 'key stirs enemies at nowhere, which is not a place', 'key stirs enemies at void, which is not a place']);
+});
+
 test('every room is on one map, and each map is a step she can take', () => {
   assert.deepEqual(checkMaps(day), []);
 });

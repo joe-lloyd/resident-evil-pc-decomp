@@ -1,17 +1,21 @@
 0: \n...
-1: \nHal. Face down in the\nwater. Something bit him:\nhis arm's\p{0}\nbandaged, black under it.\p{0}\nThere's a key on a chain\nround his neck.
-2: \nHe hid up on this cart,\nout of the water. Blanket,\nlantern.\p{0}\nThere's blood where he\nslid off.
-3: \nDANGER. WINZE. The floor\ndrops away under the water\nthere.
-4: \nCold, black water. I can't\nsee the floor.
-5: \nThe floor's gone under me!
-6: \nMy foot caught on a rail.\nI can stand.
-7: \nSomeone is still down\nhere. I have to find him.
-8: \n\oOver here... Don't come\ntoo close."
-9: \n\oHal? I'm Rebecca. We\nspoke on the phone."
-10: \n\oThe medic. Then you know\nwhat this bite is."
-11: \n\oLet me look at your arm."
-12: \n\oIt's past that. I can\nfeel it in my blood."
-13: \n\oThe drive key. Take it,\nquick."
-14: \n\oGet that car down the\nmountain. Don't stop."
-15: \n\oHal!"
-16: \nHe's gone. There was\nnothing I could do.
+1: \nBoarded up.
+2: \nHal. Face down in the\nwater. Something bit him:\nhis arm's\p{0}\nbandaged, black under it.\p{0}\nThere's a key on a chain\nround his neck.
+3: \nHe hid up on this cart,\nout of the water. Blanket,\nlantern.\p{0}\nThere's blood where he\nslid off.
+4: \nDANGER. WINZE. The floor\ndrops away under the water\nthere.
+5: \nBoards across an old\ntunnel. Daylight through\nthe cracks.\p{0}\nThe water is right up\nagainst them.
+6: \nThe old adit, open to the\ndaylight.
+7: \nI kick the boards out.\nDaylight, at the far end.
+8: \nCold, black water. I can't\nsee the floor.
+9: \nThe floor's gone under me!
+10: \nMy foot caught on a rail.\nI can stand.
+11: \nSomeone is still down\nhere. I have to find him.
+12: \n\oOver here... Don't come\ntoo close."
+13: \n\oHal? I'm Rebecca. We\nspoke on the phone."
+14: \n\oThe medic. Then you know\nwhat this bite is."
+15: \n\oLet me look at your arm."
+16: \n\oIt's past that. I can\nfeel it in my blood."
+17: \n\oThe drive key. Take it,\nquick."
+18: \n\oGet that car down the\nmountain. Don't stop."
+19: \n\oHal!"
+20: \nHe's gone. There was\nnothing I could do.

@@ -112,7 +112,7 @@
    "z0": 4517,
    "x1": 23785,
    "z1": 4578,
-   "name": "Probe: Mill wall n.003"
+   "name": "Probe: Mill wall n.006"
   },
   {
    "shape": "box",
@@ -152,7 +152,7 @@
    "z0": 4772,
    "x1": 23785,
    "z1": 4833,
-   "name": "Probe: Mill wall e"
+   "name": "Probe: Wall post.011"
   },
   {
    "shape": "box",
@@ -160,7 +160,7 @@
    "z0": 5027,
    "x1": 22000,
    "z1": 5088,
-   "name": "Probe: Peavey 0"
+   "name": "Probe: Peavey 1"
   },
   {
    "shape": "box",
@@ -168,7 +168,7 @@
    "z0": 5282,
    "x1": 21745,
    "z1": 5343,
-   "name": "Probe: Peavey 0"
+   "name": "Probe: Peavey 1"
   },
   {
    "shape": "box",
@@ -312,7 +312,7 @@
    "z0": 9620,
    "x1": 23785,
    "z1": 10185,
-   "name": "Probe: Mill wall e.001"
+   "name": "Probe: Wall post.013"
   },
   {
    "shape": "box",
@@ -608,7 +608,7 @@
    "z0": 20327,
    "x1": 23785,
    "z1": 20388,
-   "name": "Probe: Mill wall e.005"
+   "name": "Probe: Wall post.017"
   },
   {
    "shape": "box",
@@ -634,23 +634,6 @@
     7
    ],
    "loop": true
-  },
-  {
-   "name": "crane",
-   "bank": 1,
-   "bit": -1,
-   "motion": {
-    "frames": 12,
-    "ticks": 5
-   },
-   "cameras": [
-    0,
-    2,
-    3,
-    6,
-    7
-   ],
-   "loop": true
   }
  ],
  "probe": {
@@ -664,16 +647,16 @@
   "Saw deck": 43,
   "Carriage rail": 35,
   "Board on the cart.001": 30,
-  "Mill wall e.003": 21,
+  "Mill wall e.003": 20,
   "Oil drum 0": 18,
   "Oil drum 1": 18,
   "Board on the cart": 17,
   "Board on the cart.002": 17,
   "Mill wall n.003": 16,
   "Mill wall n.006": 16,
-  "Mill wall e": 16,
   "Board on the cart.003": 16,
   "Mill wall s.003": 16,
+  "Mill wall e": 15,
   "Carriage rail.001": 14,
   "Edged board.002": 14,
   "Mill wall s.006": 14,
@@ -684,14 +667,14 @@
   "Mill wall s": 11,
   "Saw pulley": 10,
   "Edged board.001": 10,
-  "Mill wall e.005": 10,
-  "Mill wall s.004": 10,
   "Mill wall n.001": 9,
   "Mill wall n.004": 9,
   "Bearing post": 9,
   "Mill wall e.001": 9,
   "Edged board": 9,
+  "Mill wall e.005": 9,
   "Mill wall s.001": 9,
+  "Mill wall s.004": 9,
   "Mill wall n.007": 8,
   "Mill wall n.009": 8,
   "Mandrel": 8,
@@ -707,6 +690,7 @@
   "Mill post.001": 6,
   "Mill wall w.003": 5,
   "Wall post.014": 5,
+  "Wall post.015": 5,
   "Wall post.002": 4,
   "Wall post.004": 4,
   "Wall post.006": 4,
@@ -719,20 +703,19 @@
   "Sawyer's stool": 4,
   "Warning sign": 4,
   "Mill wall w.005": 4,
-  "Wall post.015": 4,
   "Wall post.003": 4,
+  "Wall post.005": 4,
   "Wall post.010": 3,
+  "Wall post.011": 3,
   "Mill wall w": 3,
   "Wall post.013": 3,
   "Setworks lever": 3,
   "Wall post.016": 3,
-  "Wall post.005": 3,
-  "Wall post.011": 2,
+  "Wall post.017": 3,
   "Run down the boards": 2,
   "Where he leant on the rail": 2,
   "Mill wall w.008": 2,
   "Vice": 2,
-  "Wall post.017": 2,
   "Wall post.007": 2,
   "Wall post": 1,
   "Thrown belt": 1,
@@ -886,6 +869,15 @@
   },
   {
    "zone": {
+    "x0": 8245,
+    "z0": 19720,
+    "x1": 10880,
+    "z1": 20740
+   },
+   "text": "Chalk on the board. A drawing: the pond, the sluice, the wheel.\nA dynamo on the wheel's shaft, and a line drawn off to the workshop hoist."
+  },
+  {
+   "zone": {
     "x0": 28900,
     "z0": 14620,
     "x1": 31620,
@@ -914,17 +906,7 @@
  ],
  "saves": null,
  "items": [],
- "spots": [
-  {
-   "step": "crane",
-   "zone": {
-    "x0": 7820,
-    "z0": 10370,
-    "x1": 10540,
-    "z1": 11390
-   }
-  }
- ],
+ "spots": [],
  "entry": null,
  "notes": [
   "high in the north-west corner: the log on the carriage, the blade, the blood on the boards",

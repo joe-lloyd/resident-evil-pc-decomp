@@ -12,12 +12,29 @@ bloody handprint where he slid off the side. He floats face down at the
 edge of the deep water by the rope, the gondola's drive key on a chain at
 his neck. The lantern on the cart is still burning low.
 
+The gallery ends at a wall of rock in the dark east, and low in it is the
+old drainage adit: a timbered tunnel no higher than a man, its sill just
+clear of the water, that once let the gallery drain out to the hillside.
+Somebody boarded it across years ago. The boards are grey and split, nailed
+over the frame, and the water laps at the sill under them. Kicked out,
+they open on a long, low tunnel that climbs away to the east, with a faint
+grey daylight at its far end, coming through the boards over its mouth on
+the east path.
+
 Metres: the floor is x 1.0-15.0, y 2.0-8.0, under knee-deep water (its
 surface 0.45 up), in a gallery 7 m wide under a rock arch about 4 high,
 running east-west. The way back up to the junction is the west end, where
 the floor climbs out of the water into the decline. The winze, the deep
 water, is x 10.5-15.0, y 2.0-4.6, behind a rope on posts. Hal floats at x
-10.0, y 5.2. The cart he hid on stands at x 7.2, y 4.6.
+10.0, y 5.2. The cart he hid on stands at x 7.2, y 4.6. The east end's
+rock wall stands at x 15.3. The adit's mouth is in it at y 5.7-7.1, its
+sill 0.5 up and its cap 2.3 up, boarded across. The door to the east path
+is in front of the boards, x 14.4-15.0, y 5.8-7.0. Coming in from the east
+path she stands at x 13.5, y 7.1, facing west into the gallery. The adit
+runs east-north-east from the mouth, about 15 m, to daylight.
+
+Once she kicks the boards out ("adit"), they lie broken in the adit's
+mouth, one hanging by a nail, and the far end shows a faint daylight.
 
 Moving: the water rippling; Hal's body rising and settling on it; the
 lantern's flame low; drops from the roof.
@@ -31,7 +48,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import reb  # noqa: E402
 import kit  # noqa: E402
 from kit import mat  # noqa: E402
-from mathutils import Matrix, Vector  # noqa: E402
+from mathutils import Matrix, Vector, noise  # noqa: E402
 import bpy  # noqa: E402
 
 X0, X1, Y0, Y1 = 1.0, 15.0, 2.0, 8.0
@@ -39,6 +56,25 @@ WATER = 0.45
 DEEP = (10.5, Y0, X1, 4.6)
 CART = (7.2, 4.6)
 HAL = (10.0, 5.2)
+END = 15.3                      # the rock wall closing the gallery's east end
+ADIT = (5.7, 7.1, 0.5, 2.3)     # the drainage adit's mouth in it: y0, y1, sill, cap
+ADIT_FAR = (29.5, 9.9)          # its far end, the mouth on the east path
+
+
+def rock_face(name, m, origin, u, v, nu, nv, out, depth=0.25, seed=0):
+    """A lumpy rock surface over the rectangle origin + s*u + t*v, pushed back along `out` by noise."""
+    o, u, v, out = Vector(origin), Vector(u), Vector(v), Vector(out).normalized()
+    verts, faces = [], []
+    for j in range(nv + 1):
+        for i in range(nu + 1):
+            p = o + u * (i / nu) + v * (j / nv)
+            d = depth * (0.6 + noise.noise(p * 0.9 + Vector((seed, 0, 0))) + 0.35 * noise.noise(p * 3.0 + Vector((0, seed, 0))))
+            verts.append(tuple(p + out * max(-0.03, d)))
+    for j in range(nv):
+        for i in range(nu):
+            a = j * (nu + 1) + i
+            faces.append((a, a + 1, a + nu + 2, a + nu + 1))
+    return reb.mesh_object(name, verts, faces, m)
 
 
 def web_sheet(name, corner, a, b, size, rng, strands=9):
@@ -115,6 +151,7 @@ def build():
     room.camera((14.8, 6.8, 2.3), (6.0, 3.6, 0.3), 200, "from the far south-east: Hal at the edge of the deep water, the cart, the way back up")
     room.camera((7.0, 7.0, 2.25), (10.2, 4.6, 0.2), 200, "close on Hal, face down, the key on its chain at his neck, the rope and the DANGER board")
     room.camera((12.2, 3.2, 2.3), (5.0, 7.0, 0.3), 200, "from over the winze: the cart under its web, the carts in the water, the decline")
+    room.camera((12.55, 5.75, 2.3), (15.3, 6.4, 0.9), 200, "down the drainage adit's line at the east end: the boards across it, the water at its sill; kicked out, the tunnel to daylight")
 
     rock = kit.dirtied(mat("wet rock"), 0.55, scale=0.8)
     timber = kit.dirtied(reb.mat_wood("Mine timber", (0.13, 0.09, 0.05)), 0.8)
@@ -124,7 +161,6 @@ def build():
 
     # ---- The gallery: a broad arch of rock east-west, its mud floor, the black water over it.
     kit.tunnel("Gallery", rock, [(-4.0, 5.0), (19.0, 5.0)], width=7.6, height=4.0, rough=0.12, seed=21, floor_m=mat("mud"))
-    reb.prim("cube", "The dark east", mat("black"), (18.5, 5.0, 1.5), (0.2, 8.0, 4.0))
     # Not a mask: from the camera over Hal the water fills more than half the
     # frame, more than a camera's mask texture holds, so her legs show over it.
     reb.prim("cube", "Black water", water, ((X0 + X1) / 2 + 1.0, 5.0, WATER), (X1 - X0 + 6.0, 7.4, 0.01))
@@ -168,6 +204,71 @@ def build():
         else:
             tparts.append(kit.rod("Set cap", timber, (x, 1.8, 2.55), (x, 8.2, 2.55), 0.12, 6))
     kit.join("Timber sets", tparts)
+
+    # ---- The east end: a wall of rock, and low in it the old drainage adit,
+    # timbered, boarded across. Its own random stream, so the rest stays as it was.
+    arng = random.Random(183)
+    a0, a1, sill, cap = ADIT
+    rock_face("East end, north", rock, (END, 0.4, -0.2), (0, a0 - 0.4, 0), (0, 0, 5.0), 14, 14, (1, 0, 0), seed=31)
+    rock_face("East end, south", rock, (END, a1, -0.2), (0, 9.6 - a1, 0), (0, 0, 5.0), 8, 14, (1, 0, 0), seed=32)
+    rock_face("East end, under the adit", rock, (END, a0, -0.2), (0, a1 - a0, 0), (0, 0, sill + 0.2), 5, 2, (1, 0, 0), depth=0.1, seed=33)
+    rock_face("East end, over the adit", rock, (END, a0, cap), (0, a1 - a0, 0), (0, 0, 4.8 - cap), 5, 8, (1, 0, 0), seed=34)
+    # The adit: low and narrow, climbing gently away east-north-east to the hillside.
+    fx, fy = ADIT_FAR
+    mid = ((a0 + a1) / 2)
+    adit = kit.tunnel("Drainage adit", rock, [(END - 0.05, mid), (END + 1.2, mid + 0.1), (fx, fy)], width=a1 - a0 + 0.1, height=cap - sill + 0.05, rough=0.08, seed=35, floor_m=kit.dirtied(mat("mud"), 0.5))
+    adit.location.z = sill
+    bpy.data.objects["Drainage adit floor"].location.z = sill
+    old = kit.dirtied(reb.mat_wood("Adit timber", (0.11, 0.08, 0.05)), 0.85, scale=4)
+    sets = []
+    for k, t in enumerate((0.0, 0.18, 0.34, 0.5, 0.66, 0.82)):
+        p = Vector((END + 1.2, mid + 0.1)).lerp(Vector((fx, fy)), t) if k else Vector((END + 0.05, mid))
+        d = (Vector((fx, fy)) - Vector((END + 1.2, mid + 0.1))).normalized() if k else Vector((1, 0))
+        side = Vector((-d.y, d.x)) * ((a1 - a0) / 2 - 0.08)
+        sag = 0.18 if k == 3 else 0.0
+        for s in (-1, 1):
+            q = p + side * s
+            sets.append(kit.rod("Adit post", old, (q.x, q.y, sill - 0.1), (q.x, q.y, cap - 0.05), 0.08, 6))
+        sets.append(kit.rod("Adit cap", old, ((p - side * 1.25).x, (p - side * 1.25).y, cap - 0.02), ((p + side * 1.25).x, (p + side * 1.25).y, cap - 0.02 - sag), 0.09, 6))
+    kit.join("Adit sets", sets)
+    reb.prim("cube", "Adit sill", old, (END - 0.02, mid, sill - 0.06), (0.24, a1 - a0 + 0.3, 0.16))
+    # The boards nailed across the mouth: grey, split, one broken short.
+    boards_m = kit.dirtied(reb.mat_wood("Adit boards", (0.2, 0.17, 0.13)), 0.8, scale=5)
+    bx = END - 0.06   # on the posts' faces
+    boards = []
+    z = sill + 0.12
+    for k in range(6):
+        h = arng.uniform(0.2, 0.25)
+        short = 0.55 if k == 4 else 0.0
+        boards.append(reb.prim("cube", "Adit board", boards_m, (bx - 0.01 * k, mid - short / 2 + arng.uniform(-0.04, 0.04), z + h / 2), (0.04, a1 - a0 + 0.35 - short, h), rot=(arng.uniform(-0.05, 0.05), 0, 0)))
+        z += h + arng.uniform(0.04, 0.09)
+    boards.append(reb.prim("cube", "Adit board, across", boards_m, (bx - 0.07, mid, (sill + cap) / 2), (0.04, 0.22, cap - sill + 0.1), rot=(0.62, 0, 0)))
+    boards = kit.join("Adit boards", boards)
+    kit.web("Web on the boards", (bx - 0.05, a0 - 0.1, cap + 0.05), 0.45, (-1, 1))
+    # Kicked out (plan step "adit"): the boards broken inward onto the adit's
+    # floor, one hanging by a nail, and grey daylight at the far end.
+    kicked = []
+    for k, (t, yaw, tilt) in enumerate(((0.6, 0.5, 0.15), (1.3, -0.3, 0.05), (2.0, 0.9, 0.1))):
+        p = Vector((END + 0.2, mid)).lerp(Vector((fx, fy)), t / 15.0)
+        kicked.append(reb.prim("cube", f"Kicked board {k}", boards_m, (p.x, p.y, sill + 0.05 + 0.04 * k), (1.15, 0.22, 0.04), rot=(tilt, 0, math.pi / 2 + yaw)))
+    kicked.append(reb.prim("cube", "Board hanging by a nail", boards_m, (bx, a0 + 0.2, sill + 0.75), (0.04, 0.22, 1.1), rot=(0.25, 0, 0)))
+    kicked.append(reb.prim("cube", "Board stub", boards_m, (bx, a1 - 0.05, sill + 1.5), (0.04, 0.3, 0.22), rot=(0.1, 0, 0)))
+    far = (Vector((fx, fy)) - Vector((END + 1.2, mid + 0.1))).normalized()
+    day = reb.prim("cube", "Daylight at the far end", reb.mat_emit("Faint daylight", (0.6, 0.66, 0.75), 1.0), (fx - far.x * 0.3, fy - far.y * 0.3, sill + 0.85), (0.05, a1 - a0, cap - sill), rot=(0, 0, math.atan2(far.y, far.x)))
+    slats = []
+    for k in range(5):
+        slats.append(reb.prim("cube", "Far boards", mat("black"), (fx - far.x * 0.4, fy - far.y * 0.4, sill + 0.2 + k * 0.34), (0.03, a1 - a0 + 0.1, 0.24), rot=(0, 0, math.atan2(far.y, far.x))))
+    slats = kit.join("Far boards", slats)
+    daylight = reb.point("Daylight down the adit", (fx - far.x * 2.0, fy - far.y * 2.0, sill + 1.0), 12, (0.65, 0.72, 0.85), 0.8)
+    after_kick = kicked + [day, slats, daylight]
+    for ob in after_kick:
+        ob.hide_render = True
+
+    def kick(done):
+        boards.hide_render = done
+        for ob in after_kick:
+            ob.hide_render = not done
+    room.state("adit", kick)
 
     # ---- The carts: the one he hid on, two more standing in the water, one over on its side.
     cx, cy = CART
@@ -261,6 +362,14 @@ def build():
     # ---- What the game needs.
     room.void(DEEP)
     room.door("junction", (X0, 3.6, X0 + 0.6, 6.4), arrive=(2.6, 5.0), face=(1, 0))
+    # The adit: she kicks the boards out from the gallery side, then goes up it
+    # to the east path (underground to outside: the action button opens it).
+    # The floor ends at the mouth, so she comes back in just out of it.
+    # The spot is the strip in front of the boards and the door the mouth
+    # itself: one zone for both, and the door's line until the boards are
+    # out would take the action button, so she could never kick them.
+    room.spot("adit", (X1 - 1.2, a0 + 0.1, X1 - 0.6, a1 - 0.1))  # day/events.ts says what she sees and does here
+    room.door("east-path", (X1 - 0.6, a0 + 0.1, X1, a1 - 0.1), arrive=(13.5, 7.1), face=(-1, 0), walk=False)
     room.check((hx - 1.3, hy - 0.5, hx + 0.9, hy + 1.0), "Hal. Face down in the water. Something bit him: his arm's\nbandaged, black under it.\nThere's a key on a chain round his neck.")
     room.check((cx - 0.9, cy - 0.7, cx + 0.9, cy + 0.7), "He hid up on this cart, out of the water. Blanket, lantern.\nThere's blood where he slid off.")
     room.check((dx0 - 0.3, dy1, dx0 + 3.5, dy1 + 0.6), "DANGER. WINZE. The floor drops away under the water there.")

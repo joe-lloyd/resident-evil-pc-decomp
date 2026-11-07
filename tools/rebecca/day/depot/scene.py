@@ -3,26 +3,37 @@
 What it tells: the camp ran on diesel, and the depot kept count of every
 gallon. The last entries on the fuel ledger stop mid-week. The tank's hose
 reel is chained and padlocked, so nobody could drain it and run; the
-nozzle still drips into the oil soaked into the gravel under it. Something
-came under the wire at the back: the dirt is dug out under the fence and
-the wire bent up, clawed, with blood on the bent wire. In the weeds along
-the fence and between the drums lie the papery skins adders have shed:
-they like the warm drums. A player should learn that the dogs get in, that
-the snakes are about, and that the fuel is locked away.
+nozzle still drips into the oil soaked into the gravel under it. At the
+back, the depot's east fence has a gate onto the loggers' skid road: skid
+logs laid across a rutted, muddy chute that runs down out of the camp into
+the dense spruce, the way they dragged timber down off the hill. The gate
+is chained shut from inside, the chain hooked, not locked. In the weeds
+along the fence and between the drums lie the papery skins adders have
+shed: they like the warm drums. A player should learn that the snakes are
+about, that the fuel is locked away, and that there is a back way out
+down the skid road.
 
 Metres: the floor is x 1.0-9.6, y 1.0-6.8, the compound inside its chain
 link (in the yard this is x -2.0-6.6, y 15.2-21.0: moved 3 east, 14.2
 north). The gate is in the north fence at x 5.6-7.4, shut, its chain cut:
 she opens it with the action button. The tank lies on its stand along x
 3.9-7.3 at y 5.2, its pump and hose reel at the east end; drums stand in the
-north-west and the south-east corners; the lean-to is in the south-west
-corner, x 1.0-2.6, y 5.0-6.8; the dug-out wire is in the east fence at y
-2.9-3.9. Beyond the north fence is the yard as the yard's own scene builds
-it: the mess hall, the skidder, the office and bunkhouse, the sawmill, the
-workshop and the camp gate.
+north-west corner and along the south fence behind the tank; the lean-to
+is in the south-west corner, x 1.0-2.6, y 5.0-6.8. The skid road gate is in
+the east fence at y 4.95-6.35, south of where the camp's slab fence meets
+it (y 4.8), so it opens outside the camp: its leaf hangs on the south post
+and is chained to the north one, where she drops the chain (spot
+"skid-road"). Through it the walk to the tower's foot (door "tower-foot").
+Outside, the skid road runs east a metre and turns south, down into the
+trees west of the road out. Beyond the north fence is the yard as the
+yard's own scene builds it: the mess hall, the skidder, the office and
+bunkhouse, the sawmill, the workshop and the camp gate.
 
 Moving: diesel dripping from the hung nozzle, the NO SMOKING sign stirring
 on one wire. The weeds and grass are still: no wind reaches the camp.
+
+State "skid-road" (day/events.ts): the chain dropped in the mud by the
+post and the gate standing open, swung out over the chute.
 """
 import math
 import os
@@ -41,6 +52,10 @@ GATE = (5.6, 7.4)
 TANK = (3.9, 7.3, 5.2, 1.6)   # x0, x1, y, centre height
 NOZZLE = (7.85, 4.35, 1.05)
 YARD = (3.0, -14.2)           # the yard's scene, moved onto this one's floor
+FX = X1 + 0.1                 # the east fence
+SKID_GATE = (4.95, 6.35)      # the skid road gate in it (y): latch post, hinge post
+# The skid road: out of the gate, a metre east, then south down into the trees.
+CHUTE = [(9.6, 5.65), (10.5, 5.9), (11.0, 6.8), (11.1, 8.5), (10.9, 11.0), (10.7, 14.0), (10.9, 18.0), (11.5, 24.0), (12.6, 31.0)]
 T = 0.12
 
 
@@ -50,12 +65,23 @@ def Y(x, y):
 
 
 def height(x, y):
-    """The compound and the yard flat; the slope rising south and west into the trees."""
+    """The compound and the yard flat; the slope rising south and west into
+    the trees, but falling away south-east of the camp, where the skid road
+    runs down, sunk in its chute."""
     h = -0.02 + 0.012 * noise.noise(Vector((x * 0.7, y * 0.7, 5)))
-    if y > Y1 + 2.0:
-        h += (y - Y1 - 2.0) * 0.3 + 0.4 * noise.noise(Vector((x * 0.1, y * 0.1, 2)))
+    rise = (y - Y1 - 2.0) * 0.3 + 0.4 * noise.noise(Vector((x * 0.1, y * 0.1, 2))) if y > Y1 + 2.0 else 0.0
+    # Outside the wire only: the compound's own floor stays flat.
+    out = min(1.0, max(0.0, max(x - FX, y - Y1 - 0.1) / 0.8))
+    fall = (-0.16 * max(0.0, y - 5.6) - 0.06 * max(0.0, x - 11.5) * min(1.0, max(0.0, y - 5.0))) * out if x > 8.0 else 0.0
+    w = min(1.0, max(0.0, (x - 8.0) / 2.5))
+    w = w * w * (3 - 2 * w)
+    h += rise * (1 - w) + fall * w
     if x < X0 - 4.0:
         h += (X0 - 4.0 - x) * 0.3
+    if x > FX - 0.2 and y > 5.0:
+        d = kit.path_distance(x, y, [CHUTE])
+        if d < 1.4:
+            h -= 0.16 * (1 - (d / 1.4) ** 2)
     return h
 
 
@@ -168,6 +194,7 @@ def build():
         ((9.3, 1.25, 3.3), (4.2, 5.0, 0.3), "from the north-east corner by the gate: the tank, the nozzle dripping, the lean-to"),
         ((9.3, 6.6, 3.2), (6.0, 1.5, 0.3), "from the south-east drums: the shut gate out to the yard, the mess hall beyond"),
         ((1.3, 1.3, 3.2), (7.6, 5.2, 0.3), "from the north-west drums: the pump and the padlocked reel, the drums in the corner"),
+        ((7.4, 3.4, 3.1), (11.3, 8.0, -0.6), "from over the pump, out through the skid road gate: its chain, the chute going down into the trees"),
     ]
     for eye, look, note in cams:
         room.camera(eye, look, 200, note)
@@ -216,19 +243,13 @@ def build():
             posts.append(kit.rod("Fence post", mat("rust"), (p.x, p.y, 0), (p.x, p.y, 2.1), 0.035, 6))
         kit.rod("Fence top rail", mat("rust"), (a.x, a.y, 2.0), (b.x, b.y, 2.0), 0.02, 6)
         horiz = abs(d.x) > abs(d.y)
-        if not horiz and a.x > X1 and min(a.y, b.y) < 3.4 < max(a.y, b.y):
+        if not horiz and a.x > X1:
             lo, hi = min(a.y, b.y), max(a.y, b.y)
-            for y0, y1 in ((lo, 2.9), (3.9, hi)):
+            for y0, y1 in ((lo, SKID_GATE[0]), (SKID_GATE[1], hi)):
                 reb.prim("cube", "Fence wire", wire, (a.x, (y0 + y1) / 2, 1.0), (0.02, y1 - y0, 2.0))
-            reb.prim("cube", "Fence wire over the hole", wire, (a.x, 3.4, 1.25), (0.02, 1.0, 1.5))
-            reb.prim("cube", "Wire bent up", wire, (a.x + 0.15, 3.4, 0.38), (0.02, 1.0, 0.5), rot=(0, 0.6, 0))
         else:
             reb.prim("cube", "Fence wire", wire, ((a.x + b.x) / 2, (a.y + b.y) / 2, 1.0), (d.length if horiz else 0.02, 0.02 if horiz else d.length, 2.0))
     kit.join("Fence posts", posts)
-    kit.splat("Dug-out dirt", kit.dirtied(mat("dirt"), 0.5), (X1 + 0.35, 3.4, height(X1 + 0.35, 3.4) + 0.012), 0.45, seed=6, stretch=(0.8, 1.4), lumps=0.6)
-    reb.prim("cube", "The hole under the wire", mat("black"), (X1 + 0.1, 3.4, -0.04), (0.5, 0.9, 0.08))
-    kit.scratches("Claw marks on the post", mat("black"), (X1 + 0.08, 2.9, 0.9), (-1, 0), count=4, length=0.4, seed=7)
-    kit.splat("Blood on the bent wire", mat("old blood"), (X1 + 0.12, 3.35, 0.45), 0.1, rot=(0, math.pi / 2 - 0.6, 0), seed=8, stretch=(1.2, 0.8))
     # The gate: two leaves of galvanised pipe, braced, shut across the gap, the chain cut and hanging.
     galv = kit.dirtied(reb.mat_metal("Galvanised pipe", (0.42, 0.43, 0.42), 0.45), 0.6, scale=8)
     for x in GATE:
@@ -296,8 +317,9 @@ def build():
 
     # ---- Drums: a pallet of them in the north-west, more stacked in the south-east, one leaking.
     paints = {"red": (0.28, 0.05, 0.03), "green": (0.06, 0.1, 0.05), "blue": (0.04, 0.07, 0.13)}
+    # The rest stand along the south fence behind the tank, clear of the skid road gate.
     for i, (x, y, tipped, colour) in enumerate(((3.2, 2.2, False, "red"), (3.85, 2.3, False, "green"), (3.5, 2.9, False, "red"), (1.55, 3.0, False, "blue"), (1.55, 3.65, False, "red"), (2.1, 4.25, True, "green"),
-                                                 (8.6, 5.4, False, "red"), (7.85, 6.35, False, "green"), (9.05, 6.2, False, "blue"), (8.4, 6.25, False, "red"))):
+                                                 (7.15, 6.55, False, "red"), (6.55, 6.58, False, "green"), (5.35, 6.58, False, "blue"), (5.95, 6.6, False, "red"))):
         z = 0.12 if 2.7 < x < 4.3 and y < 3.2 else 0.0
         d = kit.drum(f"Drum {i}", kit.drum_paint(f"Drum paint {i}", paints[colour]), (x, y, z), tipped=tipped, rot=rng.uniform(0, 3) if not tipped else 1.2)
         if not tipped:
@@ -308,7 +330,7 @@ def build():
             reb.mask(d)
     reb.prim("cube", "Pallet", mat("planks"), (3.5, 2.5, 0.06), (1.4, 1.3, 0.12))
     oil_spill("Leak from the tipped drum", wet_oil, (2.6, 4.5, height(2.6, 4.5) + 0.009), 0.3, 0.9, seed=4)
-    kit.drum("Drum on top", kit.drum_paint("Drum paint top", paints["red"]), (8.75, 5.95, 0.88), tipped=True, rot=0.3)
+    kit.drum("Drum on top", kit.drum_paint("Drum paint top", paints["red"]), (5.65, 6.59, 0.88), tipped=True, rot=1.5)
 
     # ---- The lean-to in the south-west: a tin roof on posts, shelves of oil, rags.
     for (x, y) in ((1.0, 5.0), (2.6, 5.0), (1.0, 6.8), (2.6, 6.8)):
@@ -331,6 +353,92 @@ def build():
             path.append((x + math.cos(a) * u - math.sin(a) * 0.07 * math.sin(t * 9), y + math.sin(a) * u + math.cos(a) * 0.07 * math.sin(t * 9), z + 0.012))
         tube(sv, sf, path, 0.016, seg=6)
     reb.mesh_object("Shed skins", sv, sf, skin)
+
+    # ---- The skid road gate in the east fence: galvanised posts, one leaf
+    # hung on the south post, chained to the north one with a hooked chain.
+    for y in SKID_GATE:
+        reb.mask(reb.wall(kit.rod("Skid gate post", galv, (FX, y, -0.2), (FX, y, 2.3), 0.07, 10), "circle"))
+        reb.prim("sphere", "Skid gate post cap", galv, (FX, y, 2.31), (0.15, 0.15, 0.08), segments=10)
+    leaf_len = SKID_GATE[1] - SKID_GATE[0] - 0.1
+    skid_hinge = reb.prim("sphere", "Skid gate hinge", mat("iron"), (FX, SKID_GATE[1] - 0.05, 0.0), (0.03, 0.03, 0.03))
+    leaf = [reb.prim("cube", "Skid gate leaf", wire, (0, -leaf_len / 2, 1.0), (0.02, leaf_len, 1.76))]
+    for z in (0.12, 1.0, 1.88):
+        leaf.append(kit.rod("Skid gate frame", galv, (0, 0, z), (0, -leaf_len, z), 0.035, 8))
+    for yy in (0.0, -leaf_len):
+        leaf.append(kit.rod("Skid gate frame", galv, (0, yy, 0.12), (0, yy, 1.88), 0.035, 8))
+    leaf.append(kit.rod("Skid gate brace", galv, (0, 0, 0.12), (0, -leaf_len, 1.0), 0.025, 8))
+    for ob in leaf:
+        ob.parent = skid_hinge
+
+    def links(pts, size=1.6):
+        """Steel chain links along a polyline, one mesh's verts and faces."""
+        v, f = [], []
+        pts = [Vector(q) for q in pts]
+        k = 0
+        for a, b in zip(pts, pts[1:]):
+            d = b - a
+            n = max(1, int(d.length / 0.045))
+            for i in range(n):
+                c = a.lerp(b, (i + 0.5) / n)
+                yaw = math.atan2(d.y, d.x)
+                if abs(d.z) > 0.7 * d.length:
+                    reb.box(v, f, tuple(c), tuple(size * q for q in ((0.012, 0.03, 0.05) if k % 2 else (0.03, 0.012, 0.05))), 0.0)
+                else:
+                    reb.box(v, f, tuple(c), tuple(size * q for q in ((0.05, 0.012, 0.03) if k % 2 else (0.05, 0.03, 0.012))), yaw)
+                k += 1
+        return v, f
+    chain_m = reb.mat_metal("Chain steel", (0.3, 0.3, 0.29), 0.4)
+    latch = Vector((FX, SKID_GATE[0] + 0.025))
+    hv, hf = [], []
+    for z in (1.05, 0.92):
+        ring = [(latch.x + 0.1 * math.cos(2 * math.pi * k / 12), latch.y + 0.12 * math.sin(2 * math.pi * k / 12), z - 0.02 * math.sin(2 * math.pi * k / 12)) for k in range(13)]
+        v, f = links(ring)
+        k0 = len(hv)
+        hv += v
+        hf += [tuple(i + k0 for i in face) for face in f]
+    v, f = links([(latch.x - 0.1, latch.y, 0.92), (latch.x - 0.12, latch.y + 0.02, 0.7), (latch.x - 0.11, latch.y + 0.03, 0.5)])
+    k0 = len(hv)
+    hv += v
+    hf += [tuple(i + k0 for i in face) for face in f]
+    chain_hung = reb.mesh_object("Skid gate chain", hv, hf, chain_m, smooth=False)
+    hook = reb.prim("cube", "Chain hook", chain_m, (latch.x - 0.11, latch.y + 0.03, 0.47), (0.03, 0.05, 0.07))
+    # Dropped: a heap of it in the mud at the post's foot.
+    dv, df = links([(latch.x + 0.05 + 0.18 * math.cos(a) * (1 - a / 14), latch.y + 0.15 + 0.14 * math.sin(a) * (1 - a / 14), height(latch.x, latch.y + 0.15) + 0.02 + 0.006 * a) for a in [k * 0.6 for k in range(20)]])
+    chain_dropped = reb.mesh_object("Skid gate chain, dropped", dv, df, chain_m, smooth=False)
+    chain_dropped.hide_render = True
+
+    # ---- The skid road: a muddy chute sunk in the slope, rutted where the
+    # logs were dragged, skid logs laid across it, down into the spruce.
+    skid_mud = kit.dirtied(reb.mat_surface("Skid road mud", [(0.0, (0.02, 0.015, 0.01)), (0.4, (0.05, 0.038, 0.025)), (0.75, (0.085, 0.065, 0.045)), (1.0, (0.06, 0.05, 0.035))], scale=2.5, detail=12, rough=0.45, bump=0.8), 0.6, scale=0.5)
+    churned = reb.mat_surface("Churned mud", [(0.0, (0.008, 0.006, 0.004)), (0.6, (0.025, 0.019, 0.013)), (1.0, (0.045, 0.035, 0.025))], scale=6, rough=0.2, bump=0.5)
+    kit.path_strip("Skid road chute", skid_mud, CHUTE, height, width=0.95, wobble=0.15, lift=0.012)
+    kit.ruts("Skid road ruts", CHUTE[1:], height, gauge=0.8, width=0.26, m=churned, seed=4.0)
+    line = [Vector(q) for q in CHUTE]
+    run, s_, k = 0.0, 0.7, 0
+    for a, b in zip(line, line[1:]):
+        d = b - a
+        seg = d.length
+        while s_ < run + seg:
+            c = a.lerp(b, (s_ - run) / seg)
+            n = Vector((-d.y, d.x)).normalized()
+            twist = 0.12 * noise.noise(Vector((c.x, c.y, 3.0)))
+            n = Vector((n.x * math.cos(twist) - n.y * math.sin(twist), n.x * math.sin(twist) + n.y * math.cos(twist)))
+            r = 0.11 + 0.04 * random.Random(k).random()
+            ends = [c - n * 1.05, c + n * 1.05]
+            pa, pb = [(e.x, e.y, height(e.x, e.y) + r * 0.45) for e in ends]
+            kit.rough_log(f"Skid log {k}", pa, pb, r, m=mat("logs"), seed=60 + k, stubs=1)
+            k += 1
+            s_ += 0.85 + 0.2 * random.Random(k + 99).random()
+        run += seg
+
+    def skid_road(on):
+        """The chain dropped off the post, the gate swung right back outside."""
+        chain_hung.hide_render = bool(on)
+        hook.hide_render = bool(on)
+        chain_dropped.hide_render = not on
+        skid_hinge.rotation_euler = (0, 0, math.radians(155) if on else 0.0)
+    skid_road(False)
+    room.state("skid-road", skid_road)
 
     # ---- Outside the wire: the yard as its own scene builds it, moved onto this floor.
     tin = reb.mat_surface("Roof tin", [(0.0, (0.16, 0.16, 0.15)), (0.6, (0.26, 0.26, 0.25)), (0.8, (0.3, 0.13, 0.05)), (1.0, (0.18, 0.08, 0.03))], scale=1.6, rough=0.55, bump=0.3)
@@ -393,6 +501,13 @@ def build():
     kit.forest(rng, height, keep_out, (-30, -24, 40, 36), count=260, spacing=1.6, tall=(14, 23), ferns=70, needles=1400)
     kit.forest(rng, height, keep_out, (-10, 4, 20, 22), count=70, spacing=1.5, tall=(12, 20), ferns=40, needles=500)
     kit.far_spruces(rng, height, keep_out=lambda x, y: -30 < x < 40 and -24 < y < 36, count=900, area=(-80, -80, 100, 100))
+
+    # Close round the skid road where it goes down: trunks packed in either
+    # side of the chute, so the way out reads dark and shut in.
+    def off_skid(x, y):
+        return (kit.path_distance(x, y, [CHUTE]) < 1.7 or (abs(x - 13.35) < 1.1 and y < 11.0) or y < 7.2 or (x < FX + 0.4 and y < 7.6)
+                or math.hypot(x - cams[1][0][0], y - cams[1][0][1]) < 3.0)
+    kit.forest(rng, height, off_skid, (8.6, 7.2, 14.6, 26.0), count=45, spacing=1.25, tall=(13, 21), ferns=30, needles=500)
     # Weeds come up through the gravel where nobody walks: thin tufts away from the worn line to the pump.
     def in_gravel(r):
         while True:
@@ -406,9 +521,9 @@ def build():
         reb.card(dv, df, Vector((x, y, height(x, y) + 0.012)), Vector((rng.uniform(-1, 1), rng.uniform(-1, 1), 0)).normalized(), Vector((0, 0, 1)), rng.uniform(0.03, 0.08), rng.uniform(0.08, 0.25), 0.0)
     reb.mesh_object("Needles and bark blown in", dv, df, mat("dead needles"))
     weeds = kit.meadow(rng, 900, lambda r: (r.uniform(X0 - 0.3, X1 + 0.3), r.choice((r.uniform(Y0 - 0.2, Y0 + 0.35), r.uniform(Y1 - 0.4, Y1 + 0.3)))) if r.random() < 0.5 else (r.choice((r.uniform(X0 - 0.2, X0 + 0.4), r.uniform(X1 - 0.4, X1 + 0.3))), r.uniform(Y0, Y1)), height, mat("dead grass"))
-    outer = kit.grass_ground(rng, (-8, 0.5, 18, 16), height, keep_out=lambda x, y: X0 - 0.3 < x < X1 + 0.3 and Y0 - 0.5 < y < Y1 + 0.3 or yard(x, y), per_m2=14)
+    outer = kit.grass_ground(rng, (-8, 0.5, 18, 16), height, keep_out=lambda x, y: X0 - 0.3 < x < X1 + 0.3 and Y0 - 0.5 < y < Y1 + 0.3 or yard(x, y) or kit.path_distance(x, y, [CHUTE]) < 1.05, per_m2=14)
     verge = kit.grass_ground(rng, (-4, -18, 20, 4.8), height, keep_out=lambda x, y: (-1.5 < x < 18.0 and -16.5 < y < 3.8) or X0 - 0.3 < x < X1 + 0.3 and Y0 - 0.5 < y, per_m2=6, m=mat("dead grass"))
-    kit.rocks("Rocks outside", rng, [(-1.5, 8.6, 0.9), (4.2, 10.2, 1.1), (11.6, 8.2, 0.8), (-3.0, 3.4, 0.7), (8.0, 11.5, 1.0)], height)
+    kit.rocks("Rocks outside", rng, [(-1.5, 8.6, 0.9), (4.2, 10.2, 1.1), (8.9, 9.7, 0.8), (-3.0, 3.4, 0.7), (8.0, 11.5, 1.0)], height)
 
     # ---- Light: noon under cloud; mist in the trees; the RE0 sky and ranges.
     sun = kit.time_light("noon", sun_heading=200, sun_energy=3.2, mist=((5.0, 3.0, 6.0), (90, 90, 14), 0.009), sky=((0.6, 0.62, 0.63), (0.4, 0.42, 0.45), 1.15))
@@ -426,7 +541,9 @@ def build():
     room.door("camp-yard", (GATE[0], Y0, GATE[1], Y0 + 0.6), arrive=(6.5, 2.5), face=(0, 1), touch=False)
     room.spot("fuel", (7.6, 3.8, 8.6, 4.4))  # day/events.ts says what she sees and does here
     room.check((tx1 - 1.0, ty - 1.3, tx1, ty - 0.75), "The fuel ledger. Gallons in, gallons out, signed every day.\nThe last entries are a mess. Then they stop.")
-    room.check((8.6, 2.6, X1, 4.2), "The dirt's dug out under the wire, the wire bent up.\nThere's blood on it. Something got in here.")
+    # The skid road gate: she drops its chain at the latch post, then walks out through it.
+    room.spot("skid-road", (8.85, 4.55, X1, SKID_GATE[0] + 0.3))  # day/events.ts says what she sees and does here
+    room.door("tower-foot", (X1 - 0.55, SKID_GATE[0] + 0.3, X1, SKID_GATE[1]), arrive=(8.2, 5.7), face=(-1, 0), walk=True)
     room.check((3.9, 2.0, 4.8, 2.8), "A snake's skin, shed. Another by the tank.\nAdders. They like the warm drums.")
     room.check((X0 + 0.2, 4.6, 2.6, 5.0), "The lean-to. Oil, grease, rags.")
     scene = bpy.context.scene

@@ -243,6 +243,22 @@
   },
   {
    "shape": "box",
+   "x0": 11445,
+   "z0": 6645,
+   "x1": 11505,
+   "z1": 6955,
+   "name": "Probe: Wall e"
+  },
+  {
+   "shape": "box",
+   "x0": 11235,
+   "z0": 7155,
+   "x1": 11460,
+   "z1": 7465,
+   "name": "Probe: Mill line box"
+  },
+  {
+   "shape": "box",
    "x0": 7920,
    "z0": 7410,
    "x1": 8230,
@@ -251,8 +267,32 @@
   },
   {
    "shape": "box",
+   "x0": 10980,
+   "z0": 7662,
+   "x1": 11460,
+   "z1": 7723,
+   "name": "Probe: Mill line box"
+  },
+  {
+   "shape": "box",
+   "x0": 11235,
+   "z0": 7917,
+   "x1": 11460,
+   "z1": 7978,
+   "name": "Probe: Mill line box"
+  },
+  {
+   "shape": "box",
+   "x0": 9957,
+   "z0": 7920,
+   "x1": 10018,
+   "z1": 8230,
+   "name": "Probe: Pendant control"
+  },
+  {
+   "shape": "box",
    "x0": 11445,
-   "z0": 6645,
+   "z0": 8175,
    "x1": 11505,
    "z1": 8485,
    "name": "Probe: Wall e"
@@ -261,9 +301,25 @@
    "shape": "box",
    "x0": 8685,
    "z0": 8682,
-   "x1": 11460,
+   "x1": 9505,
    "z1": 8743,
    "name": "Probe: Log on the crate 0"
+  },
+  {
+   "shape": "box",
+   "x0": 10722,
+   "z0": 8682,
+   "x1": 10783,
+   "z1": 8743,
+   "name": "Probe: Log on the crate 0"
+  },
+  {
+   "shape": "box",
+   "x0": 11235,
+   "z0": 8682,
+   "x1": 11460,
+   "z1": 8743,
+   "name": "Probe: Studs and rafters"
   },
   {
    "shape": "box",
@@ -283,18 +339,26 @@
   },
   {
    "shape": "box",
+   "x0": 6900,
+   "z0": 10212,
+   "x1": 7720,
+   "z1": 10273,
+   "name": "Probe: Waste oil drum"
+  },
+  {
+   "shape": "box",
    "x0": 8175,
    "z0": 8940,
    "x1": 11460,
-   "z1": 10015,
+   "z1": 10270,
    "name": "Probe: Log on the crate 3"
   },
   {
    "shape": "box",
    "x0": 6900,
-   "z0": 10215,
+   "z0": 10467,
    "x1": 11460,
-   "z1": 10525,
+   "z1": 10528,
    "name": "Probe: Log on the crate 2"
   },
   {
@@ -317,14 +381,6 @@
    "shape": "box",
    "x0": 8430,
    "z0": 10722,
-   "x1": 8740,
-   "z1": 10783,
-   "name": "Probe: Log on the crate 2"
-  },
-  {
-   "shape": "box",
-   "x0": 9195,
-   "z0": 10722,
    "x1": 11460,
    "z1": 10783,
    "name": "Probe: Log on the crate 2"
@@ -342,20 +398,28 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "crane",
+   "bank": 1,
+   "bit": -1,
+   "loop": true
+  }
+ ],
  "probe": {
   "Workbench": 104,
-  "Studs and rafters": 42,
+  "Studs and rafters": 41,
   "Wall s": 37,
   "Parts bench": 34,
   "Log on the crate 3": 29,
   "Heavy bench, shoved aside": 28,
   "His blanket": 28,
-  "Log on the crate 2": 27,
-  "Wall e": 26,
+  "Wall e": 27,
+  "Log on the crate 2": 26,
   "Tool chest": 24,
-  "Log on the crate 0": 24,
   "Spare wheel 3": 22,
   "Log on the crate 5": 21,
+  "Log on the crate 0": 19,
   "Waste oil drum": 18,
   "Log on the crate 4": 17,
   "Drawer, open": 15,
@@ -374,6 +438,7 @@
   "Wall w": 4,
   "Brake drum": 4,
   "Oxygen hose": 4,
+  "Mill line box": 4,
   "Engine stand, empty": 4,
   "Wall n": 3,
   "Toolbox tray": 3,
@@ -388,6 +453,7 @@
   "Gas hose": 2,
   "Bottle shoulder 1": 2,
   "Loose hook": 2,
+  "Pendant control": 2,
   "Note": 2,
   "Bar bracket": 1,
   "Door frame": 1,
@@ -405,7 +471,9 @@
   "Spanner 0": 1,
   "Work lamp bulb": 1,
   "Spanner 5": 1,
-  "Carburettor": 1
+  "Box switch handle": 1,
+  "Carburettor": 1,
+  "Choker wrap 0": 1
  },
  "bounds": {
   "x0": 1700,
@@ -437,12 +505,12 @@
  "checks": [
   {
    "zone": {
-    "x0": 8755,
-    "z0": 7905,
+    "x0": 8585,
+    "z0": 8075,
     "x1": 11135,
     "z1": 9010
    },
-   "text": "A crate. ARKLAY SKYWAY - SPARE. DRIVE COG NO 2.\nThe gondola's spare cog. It's under a pile of logs.\nI can't move those. Not by hand."
+   "text": "A crate. ARKLAY SKYWAY - SPARE. DRIVE COG NO 2.\nThe gondola's spare cog, under a pile of logs.\nThey're too heavy to shift by hand. And the hoist above it is dead."
   },
   {
    "zone": {
@@ -494,12 +562,22 @@
  "items": [
   {
    "step": "cog",
-   "x": 2346,
-   "y": -1530,
-   "z": 5440
+   "x": 10115,
+   "y": -1020,
+   "z": 9860
   }
  ],
- "spots": [],
+ "spots": [
+  {
+   "step": "crane",
+   "zone": {
+    "x0": 9265,
+    "z0": 7140,
+    "x1": 10965,
+    "z1": 8024
+   }
+  }
+ ],
  "entry": null,
  "notes": [
   "high in the south-west corner over Gus's mattress: the door, the engine on the hoist, the cable sparking",

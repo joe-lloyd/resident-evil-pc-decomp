@@ -31,6 +31,7 @@ int ShowMessageBox(HWND hWnd, LPCSTR lpMsg, LPCSTR lpCaption, UINT uType)
 BOOL plat_test_link_open(int port) { (void)port; return FALSE; }
 void plat_test_link_poll(void (*on_line)(const char* line)) { (void)on_line; }
 void plat_test_link_send(const char* text) { (void)text; }
+int  plat_test_link_pending(void) { return 0; }
 int  plat_test_link_client_id(void) { return 0; }
 void plat_key_inject_exclusive(BOOL on) { (void)on; }
 void plat_key_inject(int vk, BOOL down) { (void)vk; (void)down; }

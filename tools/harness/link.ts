@@ -37,13 +37,23 @@ export class GameLink {
   readonly lines = new Set<(line: string) => void>();
   /** Settles when the game closes the connection or exits. */
   readonly closed: Promise<void>;
+  /** Set when we close it ourselves, so only an unasked close is reported. */
+  private ending = false;
 
   private constructor(socket: net.Socket) {
     this.socket = socket;
     socket.setEncoding('utf8');
     socket.on('data', (chunk: string) => this.onData(chunk));
-    socket.on('error', () => undefined);
-    this.closed = new Promise((resolve) => socket.once('close', () => resolve()));
+    // An error is followed by close; say why the link ended, since a wait
+    // that times out afterwards otherwise looks like the game hanging.
+    let why = 'the game closed it';
+    socket.on('error', (err) => (why = err.message));
+    this.closed = new Promise((resolve) =>
+      socket.once('close', () => {
+        if (!this.ending) console.log(`test link closed: ${why}`);
+        resolve();
+      }),
+    );
   }
 
   /** Connect, retrying until the game has opened its port. */
@@ -73,6 +83,7 @@ export class GameLink {
   }
 
   close(): void {
+    this.ending = true;
     this.socket.destroy();
   }
 

@@ -9,3 +9,4 @@
 8: \nThe roof's been brought\ndown across the mouth. On\npurpose:\p{0}\nthere's a blasting wire\nrunning out of the rocks.
 9: \nThe mine mouth, blasted\nclear.
 10: \nI wedge the dynamite into\nthe rockfall, light it and\nrun.\p{0}\nThe whole hillside jumps.\nThe way is open.
+11: \nI hook the crane's cable\nround the jammed timbers\nand wind.\p{0}\nSlowly, slowly, they drag\nout. The rocks come down\nafter them.

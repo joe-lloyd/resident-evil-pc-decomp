@@ -70,11 +70,35 @@
   },
   {
    "shape": "box",
+   "x0": 1797,
+   "z0": 2820,
+   "x1": 1858,
+   "z1": 5170,
+   "name": "Probe: Brace"
+  },
+  {
+   "shape": "box",
+   "x0": 1800,
+   "z0": 5367,
+   "x1": 2620,
+   "z1": 5428,
+   "name": "Probe: Dog meat sack"
+  },
+  {
+   "shape": "box",
    "x0": 4605,
    "z0": 4860,
    "x1": 6360,
    "z1": 5425,
    "name": "Probe: Tin roof"
+  },
+  {
+   "shape": "box",
+   "x0": 2310,
+   "z0": 5622,
+   "x1": 2620,
+   "z1": 5683,
+   "name": "Probe: Dog meat sack"
   },
   {
    "shape": "box",
@@ -87,10 +111,10 @@
   {
    "shape": "box",
    "x0": 1797,
-   "z0": 2820,
+   "z0": 5625,
    "x1": 1858,
    "z1": 5935,
-   "name": "Probe: Brace"
+   "name": "Probe: Wall w.003"
   },
   {
    "shape": "box",
@@ -123,14 +147,15 @@
  },
  "probe": {
   "Potting bench": 52,
-  "Wall e": 19,
+  "Wall s": 19,
+  "Wall e": 18,
   "Tin roof": 18,
-  "Wall s": 18,
   "Shelves": 15,
   "Sack 1": 12,
   "Wall n": 10,
   "Wall w": 8,
   "Tray soil": 6,
+  "Dog meat sack": 5,
   "Sack 3": 5,
   "Brace": 4,
   "Sack 0": 4,
@@ -231,6 +256,12 @@
    "x": 2975,
    "y": -2380,
    "z": 1836
+  },
+  {
+   "step": "dog-meat",
+   "x": 2244,
+   "y": -850,
+   "z": 5355
   }
  ],
  "spots": [],

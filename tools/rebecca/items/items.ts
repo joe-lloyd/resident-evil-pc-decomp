@@ -49,11 +49,20 @@ export const KEY_ITEMS: readonly KeyItem[] = [
   { step: 'fuses', id: 0x27, name: 'FUSES', description: 'Spare fuses for the\ngondola\'s board.' , model: { own: 'fuses' } },
   { step: 'crowbar', id: 0x2b, name: 'CROWBAR', description: 'A crowbar from Bravo\'s\nhelicopter.' , model: { own: 'crowbar' } },
   { step: 'gate-key', id: 0x34, name: 'GATE KEY', description: 'An old iron key to the\nestate\'s back gate.' , model: { from: 'Stage1/ROOM10C0.RDT', index: 0 } },
-  { step: 'cellar-key', id: 0x35, name: 'CELLAR KEY', description: 'A key to the cellar doors.' , model: { from: 'Stage1/ROOM1050.RDT', index: 0 } },
+  { step: 'cellar-key', id: 0x35, name: 'CELLAR KEY', description: 'A key to the cellar\'s cold\nstore, and its meat hoist.' , model: { from: 'Stage1/ROOM1050.RDT', index: 0 } },
+  // The wolf medal: RE1 uses it only in the courtyard fountain's script, which her day never runs.
+  { step: 'dog-meat', id: 0x24, name: 'DOG MEAT', description: 'The gardener\'s dog meat,\nin a stained sack.' , model: { own: 'dog-meat' } },
 ];
 
-/** Room-item flags (FG_ITEM) for the key items she picks up in the kit rooms: 160-179. */
-export const KEY_ITEM_FLAGS = Array.from({ length: 20 }, (_, i) => 160 + i);
+/**
+ * Room-item flags (FG_ITEM) for the key items she picks up in the kit rooms:
+ * 160-179, less 172. A new game sets every room-item flag (the item is
+ * there) but two, RE1's own for mansion items it starts as taken
+ * (GameStart.cpp, roomItemsFlagsInit): 1 and 172. An item on 172 would
+ * be gone before she got there.
+ */
+export const NEW_GAME_TAKEN = [1, 172] as const;
+export const KEY_ITEM_FLAGS = Array.from({ length: 20 }, (_, i) => 160 + i).filter((f) => !NEW_GAME_TAKEN.includes(f as 1 | 172));
 
 /** Where a kit room's scene says a key item lies (kit.Room.item): game units, y up negative. */
 export interface ItemSpot {
@@ -82,24 +91,48 @@ export function keyItemModels(spots: readonly ItemSpot[]): PickupModel[] {
 const word = (n: number) => `${n & 0xff}, ${(n >> 8) & 0xff}`;
 /** A key item's zone, square on it: her reach (600 ahead) lands in it from a step away, on a table she stands her radius off, and it leaves the room's checks beside it theirs. */
 const ZONE = 1500;
+/** How far past the nearest floor she can stand on an item's zone reaches. */
+const REACH = 400;
 
 /**
  * A room's key item pickups: each where its scene put it, kept once taken by
  * its own flag (`flags` is consumed), its model in slot `first` onwards.
  * aot ids count up from `id`.
  */
-export function keyItemLines(spots: readonly ItemSpot[], flags: number[], id: number, first: number): string[] {
+/**
+ * The room's key item pickups. `gate`, a script test a pickup waits on (the
+ * cog in its crate until the hoist lifts the logs); `count`, how many uses
+ * the item has, which the engine counts down as she uses it (a tool used at
+ * two locks). `pickups` is each item's item_aot_set line, for an event that
+ * puts it there the moment it happens.
+ */
+export function keyItemLines(
+  spots: readonly ItemSpot[],
+  flags: number[],
+  id: number,
+  first: number,
+  gate: (step: string) => string | undefined = () => undefined,
+  count: (step: string) => number = () => 1,
+  reach: (x: number, z: number) => { x: number; z: number } = (x, z) => ({ x, z }),
+): { lines: string[]; pickups: Map<string, string> } {
   const models = keyItemModels(spots);
-  return spots.flatMap((s) => {
+  const pickups = new Map<string, string>();
+  const lines = spots.flatMap((s) => {
     const k = byStep(s.step);
     const flag = flags.shift();
     if (flag === undefined) throw new Error(`${s.step}: no item flag left`);
     const slot = first + models.findIndex((m) => sameModel(m, k.model));
-    const zone = `${s.x - ZONE / 2}, ${s.z - ZONE / 2}, ${ZONE}, ${ZONE}`;
-    return [
-      `if (ck(FG_ITEM, ${flag}, 0)) {  // ${k.name.toLowerCase()} (${s.step})`,
-      `    item_aot_set(${id++}, ${zone}, ${k.id}, 1, ${slot}, 255, ${word(s.x)}, ${word(s.y & 0xffff)}, ${word(s.z)}, 0, 0, ${flag}, 129, 0, 0);`,
-      '}',
-    ];
+    // The zone round the item, grown to take in the nearest floor she can
+    // stand on (`reach`): an item inside a crate or at the back of a shelf
+    // lies past where she can walk.
+    const near = reach(s.x, s.z);
+    const [x0, z0] = [Math.min(s.x - ZONE / 2, near.x - REACH), Math.min(s.z - ZONE / 2, near.z - REACH)];
+    const [x1, z1] = [Math.max(s.x + ZONE / 2, near.x + REACH), Math.max(s.z + ZONE / 2, near.z + REACH)];
+    const zone = `${x0}, ${z0}, ${x1 - x0}, ${z1 - z0}`;
+    const pick = `item_aot_set(${id++}, ${zone}, ${k.id}, ${count(s.step)}, ${slot}, 255, ${word(s.x)}, ${word(s.y & 0xffff)}, ${word(s.z)}, 0, 0, ${flag}, 129, 0, 0);`;
+    pickups.set(s.step, `if (ck(FG_ITEM, ${flag}, 0)) {\n    ${pick}\n}`);
+    const g = gate(s.step);
+    return [`if (${g ? `${g} && ` : ''}ck(FG_ITEM, ${flag}, 0)) {  // ${k.name.toLowerCase()} (${s.step})`, `    ${pick}`, '}'];
   });
+  return { lines, pickups };
 }

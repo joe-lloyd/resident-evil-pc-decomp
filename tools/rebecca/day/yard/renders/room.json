@@ -92,7 +92,7 @@
    "z0": 5537,
    "x1": 11715,
    "z1": 5598,
-   "name": "Probe: Text"
+   "name": "Probe: Sign post.001"
   },
   {
    "shape": "box",
@@ -180,7 +180,7 @@
    "z0": 10382,
    "x1": 27780,
    "z1": 10443,
-   "name": "Probe: Cabin log.021"
+   "name": "Probe: Cabin log.027"
   },
   {
    "shape": "box",
@@ -356,7 +356,7 @@
    "z0": 16502,
    "x1": 16050,
    "z1": 16563,
-   "name": "Probe: Truck door inside"
+   "name": "Probe: Truck"
   },
   {
    "shape": "box",
@@ -644,7 +644,7 @@
   "Cabin log.041": 58,
   "Tarp": 39,
   "Cabin log.054": 38,
-  "Toolbox": 24,
+  "Toolbox": 23,
   "Cabin log.050": 16,
   "Rain barrel": 16,
   "Chopping block": 14,
@@ -665,7 +665,7 @@
   "Split log.033": 7,
   "Winch cable": 7,
   "Cabin log.021": 6,
-  "Cabin log.030": 6,
+  "Cabin log.027": 6,
   "Cabin door": 6,
   "Window frame.002": 6,
   "Shed window frame": 6,
@@ -673,7 +673,7 @@
   "Truck door inside": 6,
   "Blood under the window": 5,
   "Split log.021": 5,
-  "Cabin log.026": 5,
+  "Cabin log.029": 5,
   "Cabin log.049": 4,
   "Split log.020": 4,
   "Split log.029": 4,
@@ -703,6 +703,7 @@
   "Shed corner post.001": 1,
   "Shed corner post.003": 1,
   "Winch frame": 1,
+  "Toolbox stencil U.S. FOREST SERVICE": 1,
   "Crank socket": 1
  },
  "bounds": {

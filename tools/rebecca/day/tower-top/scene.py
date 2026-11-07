@@ -11,14 +11,19 @@ dawn he went out of the door and over the east rail: the top rail is
 broken there, and there is blood on the post. From here you can still see
 the smoke rising where Bravo's helicopter came down, and far off down the
 valley the roof of a big house among the trees. The switch house key hangs
-on its nail by the door, with its tag.
+on its nail by the door, with its tag. Walt minded the gondola line as well
+as the fire: pinned to the window post over the desk, by the log, is his
+wiring sketch of it, in pencil and red ink. The feed comes in at one end,
+marked TOP STN, and runs through the line's sections drawn as boxes 5, 4,
+3, 2, 1, an arrow between each: each takes its power from the one before.
 
 Metres: the cab floor is z 0, the ground 18 m below. The tower's centre is
 at x 6, y 6. The cab is x 3.7-8.3, y 3.7-8.3; its door is in the south
 wall at x 6.3-7.1. The catwalk runs round it to x 2.7-9.3, y 2.7-9.3. The
 hatch is in the cab floor at x 4.35-6.45, y 5.0-5.9, where the last flight
 comes up from the deck below. The fire finder stands at x 6.8, y 6.8; the
-cot is along the east wall; the desk along the north wall.
+cot is along the east wall; the desk along the north wall, the wiring
+sketch on the window post over its west end at x 5.5-6.5, z 1.05-1.65.
 
 Moving: the smoke column climbing out of the valley, the hatch's rope pull
 swinging, a page of the log lifting, a crow on the catwalk rail.
@@ -424,8 +429,6 @@ def build():
     # ---- The desk along the north wall: the log, the binoculars, the dead radio, a lamp.
     desk = kit.table("Desk", reb.mat_wood("Desk", (0.2, 0.14, 0.08)), P(1.0, -CW + 0.3, 0.0), size=(2.2, 0.55, 0.85))
     reb.wall(desk)
-    # The switch house key, on the desk by the log (switch-key).
-    room.item("switch-key", P(0.5, -CW + 0.3, 0.86))
     reb.prim("cube", "Logbook", mat("paper"), P(0.7, -CW + 0.32, 0.855), (0.42, 0.3, 0.012), rot=(0, 0, 0.08))
     reb.prim("cube", "Logbook cover", reb.mat_plain("Ledger green", (0.06, 0.12, 0.08), 0.6), P(0.7, -CW + 0.32, 0.848), (0.44, 0.32, 0.006), rot=(0, 0, 0.08))
     for i in range(6):
@@ -442,6 +445,59 @@ def build():
     reb.prim("cube", "Handset", mat("black"), P(1.3, -CW + 0.75, 0.03), (0.2, 0.06, 0.05), rot=(0, 0, 0.7))
     lamp, lamp_light, flame = kit.lantern("Lantern", P(-0.1, -CW + 0.3, 0.85), energy=0.0)
     kit.splat("Blood on the desk", mat("old blood"), P(0.2, -CW + 0.35, 0.858), 0.05, seed=4, lumps=0.6)
+    # The lineman's wiring sketch, pinned to the window post over the desk:
+    # TOP STN, the feed in red ink, into the sections drawn as boxes 5 to 1,
+    # an arrow between each. Built facing -y about its own middle, then
+    # turned to face into the cab.
+    sk_rng = random.Random(17)
+    pencil = reb.mat_plain("Pencil", (0.025, 0.025, 0.03), 0.7)
+    red_ink = reb.mat_plain("Red ink", (0.4, 0.03, 0.02), 0.6)
+    ink = Beams()
+
+    def stroke(m, a, b, w=0.014):
+        """A hand-drawn line from a to b, (u, v) on the sheet: it wanders a little and runs on past its ends."""
+        a, b = Vector((*a, 0.0)), Vector((*b, 0.0))
+        d = (b - a).normalized() * 0.008
+        j = lambda: Vector((sk_rng.uniform(-0.004, 0.004), 0.0, sk_rng.uniform(-0.004, 0.004)))
+        pa, pb = a - d + j(), b + d + j()
+        ink.box(m, (pa.x, -0.003, pa.y), (pb.x, -0.003, pb.y), 0.002, w)
+
+    def arrow(m, u, v):
+        for dv in (-0.025, 0.025):
+            stroke(m, (u - 0.03, v + dv), (u, v), 0.012)
+    sheet_w, sheet_h = 1.0, 0.6
+    sheet = [reb.prim("cube", "Sketch paper", mat("old paper"), (0, 0, 0), (sheet_w, 0.003, sheet_h))]
+    row, box, pitch = -0.02, 0.1, 0.15
+    us = [-0.17 + k * pitch for k in range(5)]
+    for k, u in enumerate(us):
+        h = box / 2
+        stroke(pencil, (u - h, row - h), (u + h, row - h))
+        stroke(pencil, (u + h, row - h), (u + h, row + h))
+        stroke(pencil, (u + h, row + h), (u - h, row + h))
+        stroke(pencil, (u - h, row + h), (u - h, row - h))
+        sheet.append(kit.text(f"Sketch section {5 - k}", str(5 - k), pencil, (u, -0.004, row), size=0.075))
+        if k:
+            stroke(red_ink, (us[k - 1] + h, row), (u - h, row), 0.012)
+            arrow(red_ink, u - h - 0.006, row)
+    # The feed: a dot under TOP STN, the red line in to section 5.
+    sheet.append(reb.prim("cyl", "Sketch feed dot", red_ink, (-0.42, -0.003, row), (0.045, 0.045, 0.003), rot=(math.pi / 2, 0, 0), segments=10))
+    stroke(red_ink, (-0.42, row), (us[0] - box / 2, row), 0.016)
+    arrow(red_ink, us[0] - box / 2 - 0.006, row)
+    sheet.append(kit.text("Sketch TOP STN", "TOP STN", pencil, (-0.38, -0.004, 0.11), size=0.055))
+    # His notes, scrawled under the line and over it: too small to read.
+    for v, u0, u1 in ((0.21, -0.3, 0.12), (-0.16, -0.36, 0.28), (-0.21, -0.36, 0.05), (-0.26, -0.2, 0.36)):
+        u = u0
+        while u < u1:
+            n = sk_rng.uniform(0.03, 0.07)
+            stroke(pencil, (u, v + sk_rng.uniform(-0.006, 0.006)), (min(u1, u + n), v + sk_rng.uniform(-0.006, 0.006)), 0.008)
+            u += n + sk_rng.uniform(0.012, 0.025)
+    sheet += ink.build("Sketch lines")
+    sheet.append(reb.prim("sphere", "Drawing pin", mat("red paint"), (0, -0.008, sheet_h / 2 - 0.03), (0.022, 0.012, 0.022), segments=8))
+    sk_pivot = reb.prim("sphere", "Sketch pin point", mat("iron"), P(0.0, -CW + 0.0465, 1.35), (0.001, 0.001, 0.001))
+    sk_pivot.hide_render = True
+    for ob in sheet:
+        ob.parent = sk_pivot
+    sk_pivot.rotation_euler = (0, 0.025, math.pi)
     # The shelf on the west wall: tins, a water jug, a first aid tin raided.
     shelf = reb.prim("cube", "Shelf", timber, P(-CW + 0.15, 1.2, 0.9), (0.3, 1.6, 0.03))
     for i in range(7):
@@ -469,6 +525,7 @@ def build():
     reb.prim("cube", "Key tag", reb.mat_plain("Tag red", (0.4, 0.05, 0.03), 0.7), P(kx + 0.02, CW - 0.09, 1.38), (0.06, 0.004, 0.09))
     reb.prim("cube", "Wall board under the key", timber, P(kx, CW - 0.055, 1.45), (0.4, 0.01, 0.3))
     kit.text("Key board words", "KEYS", mat("white paint"), P(kx, CW - 0.062, 1.56), size=0.04)
+    room.item("switch-key", P(kx, CW - 0.09, 1.42))
     # The door, standing open onto the catwalk.
     dpivot = reb.prim("sphere", "Door hinge", mat("iron"), P(DOOR[1], CW, 1.05), (0.02, 0.02, 0.02))
     reb.prim("cube", "Cab door", timber, (-0.4, 0.0, 0.0), (0.8, 0.05, 2.05)).parent = dpivot
@@ -532,7 +589,8 @@ def build():
     # the hatch's zone takes her down it instead.
     room.door("tower-stairs", P(hx0 - 0.6, hy0)[:2] + P(hx1, hy1 + 0.5)[:2], arrive=P(-1.9, 0.75)[:2], face=(0, 1), walk=False, touch=False)
     room.check(P(fx - 0.8, fy - 0.8)[:2] + P(fx + 0.8, fy + 0.8)[:2], "The fire finder. Its sights are still set on a bearing: 047.\nNorth-east, down in the valley. Where the smoke is.")
-    room.check(P(0.2, -CW)[:2] + P(1.2, -CW + 0.9)[:2], "The log. 01.20, SMOKE SIGHTED, NE, BRG 047. AIRCRAFT? RADIOED, NO ANSWER.\n03.00, DOGS AT THE FOOT OF THE TOWER. 04.40, BURNING UP. CANT STOP SCRATCHING.\nThe last line just says: THEY'RE ON THE STAIRS.")
+    room.check(P(-0.5, -CW)[:2] + P(0.35, -CW + 0.9)[:2], "The lineman's wiring sketch. The feed comes in at the top station,\nand each section of the line takes its power from the one before it.")
+    room.check(P(0.35, -CW)[:2] + P(1.2, -CW + 0.9)[:2], "The log. 01.20, SMOKE SIGHTED, NE, BRG 047. AIRCRAFT? RADIOED, NO ANSWER.\n03.00, DOGS AT THE FOOT OF THE TOWER. 04.40, BURNING UP. CANT STOP SCRATCHING.\nThe last line just says: THEY'RE ON THE STAIRS.")
     room.check(P(1.2, -CW)[:2] + P(2.3, -CW + 0.9)[:2], "The radio set's dead. The handset hangs on its cord.")
     room.check(P(kx - 0.4, CW - 0.7)[:2] + P(kx + 0.4, CW)[:2], "A board of keys by the door. One tag says SWITCH HOUSE.")
     room.check(P(CW - 1.0, -1.6)[:2] + P(CW - 0.7, 0.3)[:2], "His cot. Blood on the canvas, and scratch marks in the wall.\nHe tore at himself.")

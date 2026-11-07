@@ -30,26 +30,46 @@ export const FOE_KINDS = {
 } as const;
 export type Kind = keyof typeof FOE_KINDS;
 
+/**
+ * When a group is there: from the step that brings it (a plan step's
+ * `stirs`) and until the step that takes it away (the kennels' pack, once
+ * penned). Without either it is there from the start.
+ */
+export interface When {
+  readonly after?: string;
+  readonly until?: string;
+}
+export type FoeGroup = readonly [Kind, number] | readonly [Kind, number, When];
+
 /** What each kit room holds, from the plan. */
-export const FOES: Record<string, readonly (readonly [Kind, number])[]> = {
+export const FOES: Record<string, readonly FoeGroup[]> = {
   platform: [['crow', 2]],
   woods: [['cerberus', 2]],
   den: [['cerberus', 1]],
   'logging-road': [['zombie', 1]],
-  'camp-yard': [['zombie', 3]],
+  // The bell calls them to the mess hall; the cutters' noise brings two more
+  // out, unless the bell has called those in to supper too.
+  'camp-yard': [['zombie', 3, { until: 'ring-bell' }], ['zombie', 2, { after: 'workshop-cut', until: 'ring-bell' }]],
   bunkhouse: [['zombie', 1]],
-  mess: [['zombie', 2]],
+  mess: [['zombie', 2], ['zombie', 2, { after: 'ring-bell' }]],
   depot: [['adder', 2]],
-  sawmill: [['zombie', 2]],
+  // The running mill draws loggers to the sawmill and the flume head.
+  sawmill: [['zombie', 2], ['zombie', 1, { after: 'mill-race' }]],
+  flume: [['zombie', 1, { after: 'mill-race' }]],
   pond: [['zombie', 1]],
   road: [['crow', 3]],
-  washout: [['adder', 2]],
+  // The generator's noise brings a dog down the gully.
+  washout: [['adder', 2], ['cerberus', 1, { after: 'generator-on' }]],
   'tower-stairs': [['crow', 2]],
   'tower-top': [['crow', 2]],
   'line-track': [['adder', 2]],
   'east-path': [['crow', 2]],
   quarry: [['cerberus', 1]],
-  tunnel: [['spinner', 1]],
+  // Winding the rockfall clear with the crank, out in the open, brings a dog
+  // over from the quarry. The dynamite is over before one can come.
+  'mine-entrance': [['cerberus', 1, { after: 'rockfall-wound' }]],
+  // Draining the mine flushes spiders up out of the sump.
+  tunnel: [['spinner', 1], ['spinner', 2, { after: 'drain' }]],
   junction: [['spinner', 2]],
   gallery: [['zombie', 1]],
   'summit-trail': [['crow', 3]],
@@ -57,8 +77,10 @@ export const FOES: Record<string, readonly (readonly [Kind, number])[]> = {
   'valley-path': [['cerberus', 1]],
   creek: [['adder', 2]],
   'estate-wall': [['crow', 2]],
-  kennels: [['cerberus', 3]],
-  'back-garden': [['zombie', 1]],
+  // The pack, until penned with the dog meat (or shot).
+  kennels: [['cerberus', 3, { until: 'pen-pack' }]],
+  // The coal chute's iron rings out, and the pack comes unless it is penned.
+  'back-garden': [['zombie', 1], ['cerberus', 2, { after: 'coal-chute', until: 'pen-pack' }]],
   cellar: [['zombie', 1]],
 };
 
@@ -117,20 +139,34 @@ export function place(floor: Floor, count: number): { x: number; z: number }[] {
 export const facing = (from: { x: number; z: number }, to: { x: number; z: number }) =>
   ((Math.round((Math.atan2(-(to.z - from.z), to.x - from.x) / (2 * Math.PI)) * 4096) % 4096) + 4096) % 4096;
 
-/** The room's enemy() lines; `flags` supplies kill flags and is consumed. Slots count up from `slot`. */
-export function foeLines(slug: string, floor: Floor, flags: number[], slot = 0): string[] {
+/**
+ * The room's enemy() lines; `flags` supplies kill flags and is consumed.
+ * Slots count up from `slot`. A group with a `When` stands inside the test
+ * `test` writes for it.
+ */
+export function foeLines(slug: string, floor: Floor, flags: number[], slot = 0, test?: (w: When) => string, foes = FOES): string[] {
   const lines: string[] = [];
-  for (const [kind, count] of FOES[slug] ?? []) {
+  // Every group of the room is placed in one spread, so one a step brings
+  // never stands where another already does.
+  const groups = foes[slug] ?? [];
+  const total = groups.reduce((n, [, count]) => n + count, 0);
+  const all = place(floor, total);
+  if (all.length < total) throw new Error(`${slug}: room for ${all.length} of ${total} enemies`);
+  for (const [kind, count, when] of groups) {
+    const group: string[] = [];
     const k = FOE_KINDS[kind];
-    const spots = place(floor, count);
-    if (spots.length < count) throw new Error(`${slug}: room for ${spots.length} of ${count} ${kind}s`);
+    const spots = all.splice(0, count);
     for (const p of spots) {
       const flag = flags.shift();
       if (flag === undefined) throw new Error(`${slug}: no kill flag left`);
       const near = floor.doors.map((d) => d.arrive).sort((a, c) => Math.hypot(a.x - p.x, a.z - p.z) - Math.hypot(c.x - p.x, c.z - p.z))[0];
       const angle = near ? facing(p, near) : 0;
-      lines.push(`enemy(${k.id}, ${k.behavior}, ${flag}, 1, ${k.sca}, 0, 0, ${angle}, 0, 0, ${p.x}, 0, ${p.z}, ${slot++}, 0, 0, 0);  // a ${kind}`);
+      group.push(`enemy(${k.id}, ${k.behavior}, ${flag}, 1, ${k.sca}, 0, 0, ${angle}, 0, 0, ${p.x}, 0, ${p.z}, ${slot++}, 0, 0, 0);  // a ${kind}`);
     }
+    if (when && (when.after || when.until)) {
+      if (!test) throw new Error(`${slug}: enemies that come or go with a step need a flag test`);
+      lines.push(`if (${test(when)}) {`, ...group.map((l) => `    ${l}`), '}');
+    } else lines.push(...group);
   }
   return lines;
 }

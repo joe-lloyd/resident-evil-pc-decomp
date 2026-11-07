@@ -148,7 +148,7 @@
    "z0": 3327,
    "x1": 16390,
    "z1": 3388,
-   "name": "Probe: Bunk 03"
+   "name": "Probe: Bunk 02"
   },
   {
    "shape": "box",
@@ -492,7 +492,7 @@
     "x1": 12835,
     "z1": 3910
    },
-   "text": "A calendar from a supply company. July 1998.\nSomeone circled three days in red: the 17th, the 31st, the 8th.\nAnd wrote them again at the bottom. 17 31 8."
+   "text": "A calendar from a supply company. July, 1998.\nThe paydays are ringed in red: the 3rd, the 17th, the 31st.\nThe 17th is ringed twice."
   },
   {
    "zone": {

@@ -1,9 +1,9 @@
 0: \n...
 1: \nBlack water, right to the\nroof.
 2: \nThe lift cage. LIFT TO\nSURFACE. The cable goes up\ninto the dark.
-3: \nThe way down goes under\nthe water. It's black.\p{0}\nHis blood goes right to\nthe edge. He went in.
+3: \nThe way down goes under\nthe water. His blood goes\nright to the edge.\p{0}\nSomeone's out there,\nslumped on a cart. Hal?\p{0}\nIt's too far, and too\ndeep, to wade.
 4: \nA dog, one of the big\nones, wrapped up in web.\p{0}\nSomething down here eats\nthem.
 5: \nEgg sacs, all over the\nroof. That one's split\nopen.
-6: \nThe mine's pump. Its pipe\nruns down into the flooded\nway.\p{0}\nI throw its switch.\nNothing. There's no power\ndown here.
+6: \nThe mine's pump. Its\nintake is down in the\p{0}\nsilt: the float that held\nit up is split.\p{0}\nAnd its power lamp is\ndark.
 7: \nThe pump grinds on.
-8: \nI throw the pump's switch.\nIt shudders into life.\p{0}\nThe water's going down.
+8: \nI tie the empty jerrycan\non as a float. The intake\nlifts clear of the silt.\p{0}\nThe pump shudders into\nlife. The water's going\ndown.

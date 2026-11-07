@@ -26,8 +26,23 @@ export interface RoomEvent {
   readonly done: string;
   /** Examining it after. */
   readonly after: string;
-  /** The way it opens, from this room unless `from` names another, and what she sees there until then. */
-  readonly opens?: { readonly from?: string; readonly to: string; readonly blocked: string };
+  /**
+   * The way it opens, from this room unless `from` names another, and what
+   * she sees there until then; `behind`, what she sees from the far side of
+   * a way that only opens from this one (the skid road's chain, the adit's
+   * boards).
+   */
+  readonly opens?: { readonly from?: string; readonly to: string; readonly blocked: string; readonly behind?: string };
+  /** A second item that does it at the same spot, with its own line and the mark (MARK_FLAGS) it leaves (the winch crank on the rockfall). */
+  readonly orUse?: { readonly use: string; readonly done: string; readonly mark?: string };
+  /**
+   * Worked as a row of switches thrown in order (the breakers): spots
+   * `<spot>-1` to `<spot>-<count>`, the right order first to last, and a
+   * wrong one undoes the row and takes `hurt` health (sys_multi 11).
+   */
+  readonly order?: { readonly spot: string; readonly sequence: readonly number[]; readonly hurt: number; readonly thrown: string; readonly wrong: string };
+  /** It also happens once every enemy of the room that goes `until` it is dead (the kennels' pack, shot instead of penned). */
+  readonly orAllDead?: true;
 }
 
 export const EVENTS: readonly RoomEvent[] = [
@@ -38,15 +53,23 @@ export const EVENTS: readonly RoomEvent[] = [
     after: 'The diesel tank. The hand pump drips.',
   },
   {
-    step: 'generator-on', room: 'generator', use: 'fuel',
+    step: 'generator-on', room: 'generator', use: 'fuel', gives: 'jerrycan',
     look: "The generator's panel. The fuel gauge is right down on E.\nIt ran itself dry.",
-    done: 'Diesel in. It coughs, catches... and runs.\nThe lights are coming on.',
+    done: "Diesel in. It coughs, catches... and runs.\nThe lights are coming on. I put the empty can down.",
     after: 'The generator thuds away. The whole hut shakes.',
   },
   {
+    // Five breakers, one per pylon, numbered from the valley up. The
+    // lineman's sketch says the feed comes in at the top station, so the
+    // power goes out from 5 to 1.
     step: 'line-on', room: 'switch', needs: ['generator-on'],
-    look: "The breakers. SKYWAY LINE, STATION 3, MINE. Every one of them is down. OFF.\nThere's no power to switch on.",
-    done: 'I push the breakers up, one by one.\nThe line starts to hum.',
+    order: {
+      spot: 'breaker', sequence: [5, 4, 3, 2, 1], hurt: 12,
+      thrown: 'The breaker holds.',
+      wrong: 'A bang, and a flash off the contacts! The shock throws me back.\nThe whole bank has tripped.',
+    },
+    look: "The breakers, one for each pylon on the line. All of them down.\nThere's no power to switch on.",
+    done: 'The last breaker holds.\nThe line starts to hum.',
     after: "The breakers are up. The line's live.",
   },
   {
@@ -58,15 +81,20 @@ export const EVENTS: readonly RoomEvent[] = [
   },
   {
     step: 'blast', room: 'mine-entrance', use: 'dynamite',
+    orUse: {
+      use: 'crank',
+      mark: 'rockfall-wound',
+      done: "I hook the crane's cable round the jammed timbers and wind.\nSlowly, slowly, they drag out. The rocks come down after them.",
+    },
     look: "The roof's been brought down across the mouth. On purpose:\nthere's a blasting wire running out of the rocks.",
     done: 'I wedge the dynamite into the rockfall, light it and run.\nThe whole hillside jumps. The way is open.',
     after: 'The mine mouth, blasted clear.',
     opens: { to: 'tunnel', blocked: "The gap's too tight for me,\nand the rocks over it are loose." },
   },
   {
-    step: 'drain', room: 'junction', needs: ['generator-on'],
-    look: "The mine's pump. Its pipe runs down into the flooded way.\nI throw its switch. Nothing. There's no power down here.",
-    done: "I throw the pump's switch. It shudders into life.\nThe water's going down.",
+    step: 'drain', room: 'junction', use: 'jerrycan', needs: ['generator-on'],
+    look: "The mine's pump. Its intake is down in the silt: the float that held it up is split.\nAnd its power lamp is dark.",
+    done: "I tie the empty jerrycan on as a float. The intake lifts clear of the silt.\nThe pump shudders into life. The water's going down.",
     after: 'The pump grinds on.',
     opens: { to: 'gallery', blocked: 'Black water, right to the roof.' },
   },
@@ -86,10 +114,10 @@ export const EVENTS: readonly RoomEvent[] = [
     opens: { from: 'flume', to: 'bridge', blocked: 'The flume. Dry as a bone.' },
   },
   {
-    step: 'crane', room: 'sawmill', needs: ['mill-race'],
-    look: "The log crane, on its track. 5 TON.\nIt runs off the mill, and the mill isn't running.",
-    done: 'The crane groans and swings the stack of logs off the crate.',
-    after: 'The crane, its hook swinging.',
+    step: 'crane', room: 'workshop', needs: ['mill-race'],
+    look: "The hoist's control. I press UP. Nothing.\nIts cable runs to the MILL LINE box, and the mill isn't running.",
+    done: 'The hoist whines and lifts the logs off the crate.\nThe lid comes away with them.',
+    after: 'The hoist, the logs hanging from it.',
   },
   {
     step: 'fit-cog', room: 'platform', use: 'cog',
@@ -118,10 +146,46 @@ export const EVENTS: readonly RoomEvent[] = [
     after: 'The rack, pushed back along the wall.',
     opens: { to: 'crawl', blocked: "A low passage. The rack's end is jammed across it." },
   },
+  // Added with the puzzle climb (docs/handoffs/2026-11-06-puzzle-build.md).
+  // New events go on the end: their flags count on from the others'.
+  {
+    step: 'ring-bell', room: 'camp-yard',
+    look: 'The cookhouse bell.',
+    done: 'I haul on the rope. The bell clangs out over the camp.\nSomewhere, things start shuffling toward the mess hall.',
+    after: 'The cookhouse bell. Still swinging.',
+  },
+  {
+    step: 'skid-road', room: 'depot',
+    look: 'A gate onto the skid road, chained shut from this side.',
+    done: 'I lift the chain off its hook. The gate swings open onto the skid road.',
+    after: 'The skid road, down through the trees.',
+    opens: { to: 'tower-foot', blocked: 'The gate is chained.', behind: 'A gate at the top of the skid road. Chained from the other side.' },
+  },
+  {
+    step: 'adit', room: 'gallery', needs: ['drain'],
+    look: 'Boards across an old tunnel. Daylight through the cracks.\nThe water is right up against them.',
+    done: 'I kick the boards out. Daylight, at the far end.',
+    after: 'The old adit, open to the daylight.',
+    opens: { to: 'east-path', blocked: 'Boarded up.', behind: 'An old mine adit in the bank. Boarded up from inside.' },
+  },
+  {
+    step: 'pen-pack', room: 'kennels', use: 'dog-meat', orAllDead: true,
+    look: 'The one run with its gate still on. A good bolt.',
+    done: 'I throw the meat into the run. The pack piles in after it.\nI slam the gate and shoot the bolt.',
+    after: 'The pack, bolted into the run.',
+  },
 ];
 
 /** Common flags (FG_COMMON) for the events, in order: 130-158, which no shipped room script and no engine flag uses. */
 export const EVENT_FLAGS = new Map(EVENTS.map((e, i) => [e.step, 130 + i]));
+
+/**
+ * Marks: common flags for how something was done, where the plan's other
+ * way has a cost of its own (the cutters' noise at the workshop brings the
+ * loggers out; its key does not). From the top of the events' range down.
+ */
+export const MARK_FLAGS = new Map([['workshop-cut', 158], ['rockfall-wound', 157]]);
+if (EVENTS.length + MARK_FLAGS.size > 29) throw new Error('the events and marks have FG_COMMON 130-158, 29 flags');
 
 export function keyItem(step: string): KeyItem {
   const k = KEY_ITEMS.find((i) => i.step === step);
@@ -131,8 +195,14 @@ export function keyItem(step: string): KeyItem {
 
 export const eventsIn = (room: string) => EVENTS.filter((e) => e.room === room);
 
-/** Room-item flags (FG_ITEM) for what events leave to pick up: 247 on. */
-export const GIVE_FLAGS = new Map(EVENTS.filter((e) => e.gives).map((e, i) => [e.gives!, 247 + i]));
+/**
+ * Room-item flags (FG_ITEM) for what events leave to pick up: the diesel
+ * 247, as it always had; the rest from 229 down, the top of the supplies'
+ * range, which count up from 180 (supplies.ts). 248 on are the hand-written
+ * rooms'.
+ */
+const GIVE_FLAG_ORDER = [247, ...Array.from({ length: 20 }, (_, i) => 229 - i)];
+export const GIVE_FLAGS = new Map(EVENTS.filter((e) => e.gives).map((e, i) => [e.gives!, GIVE_FLAG_ORDER[i]!]));
 
 /** The models of what a room's events leave to pick up, after its supplies' and key items' (room.ts, scripts.ts). */
 export function giveModels(room: string): PickupModel[] {

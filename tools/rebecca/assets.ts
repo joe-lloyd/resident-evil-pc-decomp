@@ -1,7 +1,7 @@
 // Restore or save Rebecca's rendered build inputs in the private Forgejo repo.
 //
 //   node tools/rebecca/assets.ts pull
-//   node tools/rebecca/assets.ts push [scene ...]
+//   node tools/rebecca/assets.ts push [scene ... | items]
 //
 // Node 24 and git, with access to https://git.home.arpa/joe/re1-rebecca-assets.
 // RE1_REBECCA_ASSETS_DIR overrides ~/.cache/re1-rebecca-assets.
@@ -70,7 +70,9 @@ if (command === 'pull') {
   for (const file of files(git(root, 'ls-files', '--others', '--ignored', '--exclude-standard', '-z', '--', 'tools/rebecca'))) {
     if (isAsset(file)) {
       // Concurrent scene work must not overwrite another worktree's renders.
-      if (!scenes.length || scenes.some((s) => file.startsWith(`tools/rebecca/day/${s}/renders/`))) list.push(file);
+      // `items` names the key items' icons and models (items/render-items.ts).
+      const named = (s: string) => file.startsWith(s === 'items' ? 'tools/rebecca/items/' : `tools/rebecca/day/${s}/renders/`);
+      if (!scenes.length || scenes.some(named)) list.push(file);
     }
     else if (!/(^|\/)__pycache__\/|^tools\/rebecca\/music\/renders\/|\.log$/.test(file)) {
       throw new Error(`Unrecognized ignored file: ${file}. Add its asset path to assets.ts before pushing.`);

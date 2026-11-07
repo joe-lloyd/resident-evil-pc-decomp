@@ -11,10 +11,14 @@ door is pulled to behind him. The
 shop is as he left it: an engine hanging on the hoist chains, parts on the
 benches, a power cable he cut down short at the ceiling, still live and
 now and then spitting sparks. In the
-corner, under a pile of logs he stacked on it, a crate stencilled ARKLAY
-SKYWAY - SPARE: the gondola's spare drive cog. The logs are far too heavy
-to shift by hand. A player should see the crate, and that the logs are in
-the way.
+corner, under a pile of logs he stacked on it with the electric hoist, a
+crate stencilled ARKLAY SKYWAY - SPARE: the gondola's spare drive cog. The
+hoist still hangs over the pile on its spur rail, its chain choked round
+the top log. Its cable runs along the beams and down the east wall to a
+box stencilled MILL LINE: the shop ran off the sawmill's dynamo, and the
+mill is stopped, so the hoist is dead. The logs are far too heavy to shift
+by hand. A player should see the crate, that the logs are in the way, and
+that the hoist over them needs the mill's power.
 
 Metres: the floor is x 1.0-6.8, y 1.0-6.6, 3.0 high (in the yard the
 workshop is x 13.4-19.2, y 13.8-19.4: this room is it moved 12.4 west and
@@ -22,11 +26,19 @@ workshop is x 13.4-19.2, y 13.8-19.4: this room is it moved 12.4 west and
 the yard. Windows, boarded outside, in the north wall at x 4.6-5.8 and the
 west wall at y 2.6-3.8, from 1.1 to 1.9 high. The bench runs along the west
 wall; the hoist's I-beam crosses at y 3.8, the engine hanging from it at x
-2.9; the crate and its logs are in the south-east corner; Gus's mattress
-lies along the south wall in the west; the cut cable hangs at (4.3, 2.3).
+2.9; a spur rail runs off it at x 5.85 south to the wall, the electric
+hoist on it over the crate; the crate and its logs are in the south-east
+corner; the hoist's pendant control hangs at (5.85, 4.75), where she works
+it; the MILL LINE box is on the east wall at y 4.45; Gus's mattress lies
+along the south wall in the west; the cut cable hangs at (4.3, 2.3).
 
 Moving: the cut cable's sparks now and then, the work lamp dipping with
 them, the hoist chains barely stirring.
+
+State "crane" (worked at the pendant once the mill's dynamo turns,
+day/events.ts): the hoist has wound the logs up off the crate, a choked
+bundle hanging on its chain; the crate's lid is off and leant against it,
+and the cog (cog) lies in its packing.
 """
 import math
 import os
@@ -211,8 +223,6 @@ def build():
     bench = kit.table("Workbench", bench_m, (1.38, 3.7, 0.0), size=(0.7, 3.2, 0.9))
     reb.mask(reb.wall(bench))
     reb.prim("cube", "Bench shelf", bench_m, (1.38, 3.7, 0.25), (0.62, 3.1, 0.03))
-    # The spare drive cog, on the bench (cog).
-    room.item("cog", (1.38, 3.2, 0.9))
     vice = [reb.prim("cube", "vice body", mat("green paint"), (1.6, 2.6, 0.98), (0.2, 0.25, 0.14)),
             reb.prim("cube", "vice jaw", mat("green paint"), (1.78, 2.6, 0.98), (0.06, 0.25, 0.14)),
             kit.rod("vice screw", mat("steel"), (1.6, 2.6, 0.97), (1.95, 2.6, 0.97), 0.015, 6),
@@ -284,9 +294,28 @@ def build():
     reb.prim("cube", "Loose hook", mat("iron"), (0, 0, -1.65), (0.04, 0.1, 0.12)).parent = loose
 
     # ---- The crate in the south-east: ARKLAY SKYWAY - SPARE, under the logs he stacked on it.
+    # A box open at the top under its lid, so the lid can come off: the
+    # box is a mask and never moves; the lid is its own object.
     cx, cy = CRATE
-    cr = crate("Spare crate", crate_m, (cx, cy, 0.0), size=(1.2, 0.8, 0.75))
+    cw, cd, ch = 1.2, 0.8, 0.75
+    parts = [reb.prim("cube", "floor", crate_m, (0, 0, 0.03), (cw, cd, 0.06))]
+    for sx, sy, w, d in ((0, -1, cw, 0.04), (0, 1, cw, 0.04), (-1, 0, 0.04, cd), (1, 0, 0.04, cd)):
+        parts.append(reb.prim("cube", "side", crate_m, (sx * (cw - 0.04) / 2, sy * (cd - 0.04) / 2, ch / 2), (w, d, ch), bevel=0.005))
+        for dz in (0.08, ch - 0.08):
+            parts.append(reb.prim("cube", "slat", crate_m, (sx * (cw / 2 + 0.005), sy * (cd / 2 + 0.005), dz), (w + 0.02 if sy else 0.02, d + 0.02 if sx else 0.02, 0.06)))
+    cr = kit.join("Spare crate", parts, origin=(0, 0, 0))
+    cr.location = (cx, cy, 0.0)
     reb.mask(reb.wall(cr))
+    straw = reb.mat_surface("Packing straw", [(0.0, (0.16, 0.12, 0.06)), (0.6, (0.34, 0.27, 0.14)), (1.0, (0.45, 0.37, 0.2))], scale=40, bump=0.8)
+    reb.prim("cube", "Packing in the crate", straw, (cx, cy, 0.31), (cw - 0.08, cd - 0.08, 0.56))
+    lid_parts = [reb.prim("cube", "boards", crate_m, (0, 0, 0.0), (cw + 0.02, cd + 0.02, 0.035), bevel=0.005)]
+    for dx in (-0.4, 0.0, 0.4):
+        lid_parts.append(reb.prim("cube", "batten", crate_m, (dx, 0, 0.03), (0.08, cd - 0.04, 0.03)))
+    lid = kit.join("Crate lid", lid_parts, origin=(0, 0, 0))
+    lid_rest = (Vector((cx, cy, ch + 0.018)), (0.0, 0.0, 0.0))
+    # Off: stood on its end, leant on the crate's west side.
+    lid_off = (Vector((cx - cw / 2 - 0.23, cy, 0.6)), (0.0, math.radians(-72), 0.0))
+    lid.location, lid.rotation_euler = lid_rest
     kit.text("Crate words", "ARKLAY SKYWAY", stencil, (cx, cy - 0.41, 0.5), size=0.11)
     kit.text("Crate words 2", "- SPARE -", stencil, (cx, cy - 0.41, 0.33), size=0.1)
     kit.text("Crate words 3", "DRIVE COG  NO 2", stencil, (cx, cy - 0.41, 0.2), size=0.05)
@@ -296,11 +325,99 @@ def build():
         for i in range(n):
             y = cy + (i - (n - 1) / 2) * 0.38
             logs.append(((cx - 1.0 + rng.uniform(-0.15, 0.1), y + rng.uniform(-0.06, 0.06), z + rng.uniform(-0.03, 0.03)), (cx + 0.9 + rng.uniform(-0.1, 0.15), y + rng.uniform(-0.06, 0.06), z + rng.uniform(-0.04, 0.04)), 0.19 + rng.uniform(-0.03, 0.03)))
-    # Each log its own: lumpy, a little bent, its ends ragged, the odd branch stub.
-    for i, (a_, b_, r) in enumerate(logs):
-        reb.mask(kit.rough_log(f"Log on the crate {i}", a_, b_, r, seed=30 + i, stubs=2))
+    # Each log its own: lumpy, a little bent, its ends ragged, the odd branch
+    # stub. Not masks: the hoist lifts them.
+    log_obs = [kit.rough_log(f"Log on the crate {i}", a_, b_, r, seed=30 + i, stubs=2) for i, (a_, b_, r) in enumerate(logs)]
     reb.wall(reb.prim("cube", "Log stack footprint", None, (5.85, 5.95, 0.5), (1.9, 1.3, 1.0))).hide_render = True
-    kit.splat("Bark and dirt", kit.dirtied(mat("dirt"), 0.5), (cx - 0.4, cy - 0.7, 0.0), 0.5, seed=21, stretch=(1.5, 0.7))
+
+    # ---- The electric hoist over the crate, on a spur rail off the I-beam;
+    # its cable along the beams and down to the dead MILL LINE box.
+    steel = reb.mat_metal("Hoist grey", (0.1, 0.12, 0.11), 0.5)
+    sy0, sy1 = BEAM_Y, Y1 - 0.06
+    reb.prim("cube", "Spur rail", mat("rust"), (cx, (sy0 + sy1) / 2, 2.82), (0.14, sy1 - sy0, 0.2))
+    reb.prim("cube", "Spur flange", mat("rust"), (cx, (sy0 + sy1) / 2, 2.72), (0.2, sy1 - sy0, 0.03))
+    reb.prim("cube", "Spur bracket", mat("rust"), (cx, Y1 - 0.1, 2.6), (0.3, 0.08, 0.4))
+    hy = cy
+    reb.prim("cube", "Electric hoist trolley", mat("yellow paint"), (cx, hy, 2.63), (0.34, 0.3, 0.12), bevel=0.01)
+    for dy in (-0.1, 0.1):
+        for sx in (-1, 1):
+            reb.prim("cyl", "Trolley wheel", mat("iron"), (cx + sx * 0.13, hy + dy, 2.69), (0.07, 0.07, 0.03), rot=(0, math.pi / 2, 0), segments=10)
+    reb.prim("cube", "Electric hoist body", mat("yellow paint"), (cx, hy, 2.43), (0.3, 0.28, 0.28), bevel=0.03)
+    reb.prim("cyl", "Hoist motor", steel, (cx + 0.29, hy, 2.43), (0.24, 0.24, 0.3), rot=(0, math.pi / 2, 0), segments=16)
+    for k in range(4):
+        reb.prim("cyl", f"Motor fin {k}", steel, (cx + 0.18 + k * 0.07, hy, 2.43), (0.27, 0.27, 0.015), rot=(0, math.pi / 2, 0), segments=16)
+    reb.prim("cube", "Hoist gearbox", mat("yellow paint"), (cx - 0.22, hy, 2.43), (0.12, 0.22, 0.22), bevel=0.02)
+    reb.prim("cube", "Hoist contactor box", steel, (cx, hy - 0.2, 2.45), (0.2, 0.1, 0.18), bevel=0.01)
+    black = mat("black")
+
+    def choker(name, hook, ends, wraps):
+        """Two chain legs from the hook down to the load, and a turn of chain round it at each end."""
+        obs = [kit.tube(f"{name} leg {k}", mat("iron"), [tuple(hook), tuple(hook.lerp(e, 0.5) - Vector((0, 0, 0.02))), tuple(e)], 0.015, 6) for k, e in enumerate(ends)]
+        for k, ring in enumerate(wraps):
+            obs.append(kit.tube(f"{name} wrap {k}", mat("iron"), ring, 0.015, 6))
+        return obs
+
+    def loop(c, r):
+        return [(c.x, c.y + r * math.cos(2 * math.pi * k / 12), c.z + r * math.sin(2 * math.pi * k / 12)) for k in range(13)]
+    # Down: the hook lowered onto the pile, its chain choked round the top log.
+    top = logs[5]
+    tx0 = Vector(top[0]).lerp(Vector(top[1]), 0.3)
+    tx1 = Vector(top[0]).lerp(Vector(top[1]), 0.7)
+    hook_down = Vector((cx, hy, 2.12))
+    down = [chain("Hoist chain, paid out", (cx, hy, 2.29), hook_down, links_=4),
+            reb.prim("cube", "Hoist hook", mat("iron"), hook_down - Vector((0, 0, 0.04)), (0.05, 0.1, 0.1))]
+    down += choker("Choker", hook_down - Vector((0, 0, 0.08)), [tx0 + Vector((0, 0, 0.21)), tx1 + Vector((0, 0, 0.21))], [loop(tx0, 0.21), loop(tx1, 0.21)])
+    # Up: the six logs wound up off the crate in a choked bundle, three over three.
+    hook_up = Vector((cx, hy, 2.22))
+    bundle = []
+    for k in range(6):
+        row, col = divmod(k, 3)
+        bundle.append(Vector((0, cy + (col - 1) * 0.37, 1.77 - row * 0.32)))
+
+    def cinch(c):
+        """A turn of chain round the bundle's cross-section, a rounded box."""
+        pts = []
+        for k in range(17):
+            a = 2 * math.pi * k / 16
+            q = 0.95 / max(abs(math.cos(a)), abs(math.sin(a)), 0.7)
+            pts.append((c.x, c.y + 0.6 * math.cos(a) * q, c.z + 0.38 * math.sin(a) * q))
+        return pts
+    wrap_c = [Vector((cx - 0.5, cy, 1.61)), Vector((cx + 0.45, cy, 1.61))]
+    up = [chain("Hoist chain, wound in", (cx, hy, 2.29), hook_up, links_=2),
+          reb.prim("cube", "Hoist hook, wound in", mat("iron"), hook_up - Vector((0, 0, 0.04)), (0.05, 0.1, 0.1))]
+    up += choker("Choker, wound in", hook_up - Vector((0, 0, 0.08)), [w + Vector((0, 0, 0.36)) for w in wrap_c], [cinch(w) for w in wrap_c])
+    log_rest = [ob.location.copy() for ob in log_obs]
+    log_lift = [Vector((0, b.y - (a_[1] + b_[1]) / 2, b.z - (a_[2] + b_[2]) / 2)) for b, (a_, b_, _r) in zip(bundle, logs)]
+    # The pendant control on its cable, run along the spur to hang where she can reach it, clear of the pile.
+    pend = Vector((cx, 4.75, 1.22))
+    kit.tube("Pendant cable", black, [(cx, hy - 0.2, 2.36), (cx, hy - 0.5, 2.66), (cx, 5.0, 2.66), (cx, pend.y, 2.6), (cx, pend.y, pend.z + 0.12)], 0.008, 6)
+    reb.prim("cube", "Pendant control", mat("yellow paint"), tuple(pend), (0.09, 0.07, 0.24), bevel=0.015)
+    for k, m_ in enumerate((mat("green paint"), mat("red paint"))):
+        reb.prim("cyl", f"Pendant button {k}", m_, (cx, pend.y - 0.04, pend.z + 0.05 - k * 0.09), (0.045, 0.045, 0.02), rot=(math.pi / 2, 0, 0), segments=10)
+    # The power cable: along the spur, the I-beam, down the east wall into the box.
+    bx_, by_ = X1 - 0.14, 4.45
+    kit.tube("Hoist power cable", black, [(cx + 0.29, hy - 0.12, 2.56), (cx + 0.1, hy - 0.4, 2.68), (cx + 0.1, 4.6, 2.68), (cx + 0.1, BEAM_Y + 0.1, 2.68),
+                                          (X1 - 0.12, BEAM_Y + 0.11, 2.68), (X1 - 0.08, BEAM_Y + 0.15, 2.5), (X1 - 0.08, by_, 2.2), (X1 - 0.08, by_, 1.82)], 0.012, 6)
+    box_m = kit.dirtied(reb.mat_plain("Switch box grey", (0.17, 0.19, 0.18), 0.5), 0.6, scale=8)
+    reb.prim("cube", "Mill line box", box_m, (bx_, by_, 1.55), (0.16, 0.42, 0.52), bevel=0.01)
+    reb.prim("cube", "Box door seam", black, (bx_ - 0.082, by_, 1.55), (0.004, 0.36, 0.46))
+    kit.text("Mill line words", "MILL LINE", mat("white paint"), (bx_ - 0.086, by_, 1.69), size=0.07, rot=(math.pi / 2, 0, -math.pi / 2))
+    # The switch handle up at ON, its lamp dark: the line is dead, not off.
+    kit.rod("Box switch handle", mat("red paint"), (bx_ - 0.09, by_ + 0.12, 1.45), (bx_ - 0.16, by_ + 0.12, 1.58), 0.014, 6)
+    reb.prim("sphere", "Box lamp, dark", reb.mat_plain("Dead lamp", (0.12, 0.03, 0.02), 0.3), (bx_ - 0.085, by_ - 0.1, 1.45), (0.04, 0.03, 0.04), segments=10)
+    kit.rod("Box conduit", mat("rust"), (bx_, by_ - 0.1, 1.29), (bx_, by_ - 0.1, 0.9), 0.02, 6)
+    kit.rod("Box conduit out", mat("rust"), (bx_, by_ - 0.1, 0.9), (X1 + 0.1, by_ - 0.1, 0.9), 0.02, 6)
+
+    def crane(on):
+        """The hoist worked: the logs wound up off the crate, the lid off."""
+        for ob, rest, lift in zip(log_obs, log_rest, log_lift):
+            ob.location = rest + lift if on else rest
+        for ob in down:
+            ob.hide_render = bool(on)
+        for ob in up:
+            ob.hide_render = not on
+        lid.location, lid.rotation_euler = lid_off if on else lid_rest
+    crane(False)
     kit.drag_trail("Drag marks of the logs", reb.mat_plain("Bark scrape", (0.12, 0.09, 0.06), 0.9), [(2.8, 1.6), (3.6, 3.0), (4.6, 4.6), (5.2, 5.3)], width=0.25, seed=22)
     # Tyres, welding bottles chained to the wall, a drum.
     # Spare wheels stacked flat: treaded tyres on their rims, each a little askew.
@@ -400,7 +517,11 @@ def build():
 
     # ---- What the game needs.
     room.door("camp-yard", (DOOR[0], Y0, DOOR[1], Y0 + 0.5), arrive=(2.8, 2.35), face=(0, 1))
-    room.check((cx - 0.7, cy - 1.1, cx + 0.7, cy - 0.45), "A crate. ARKLAY SKYWAY - SPARE. DRIVE COG NO 2.\nThe gondola's spare cog. It's under a pile of logs.\nI can't move those. Not by hand.")
+    room.state("crane", crane, loop=True)
+    # At the hoist's pendant, north of the pile (day/events.ts says what she sees and does here).
+    room.spot("crane", (5.45, 4.2, 6.45, 4.72))
+    room.item("cog", (cx + 0.1, cy + 0.05, 0.6))
+    room.check((5.05, 4.75, 6.55, 5.3), "A crate. ARKLAY SKYWAY - SPARE. DRIVE COG NO 2.\nThe gondola's spare cog, under a pile of logs.\nThey're too heavy to shift by hand. And the hoist above it is dead.")
     room.check((1.8, 5.1, 3.6, 5.7), "Someone slept here. Bandages, black with blood. A tally scratched in the tin: six days.\nA note: \"Bit on the hand Tues. Can't stay. Don't come looking. Gus.\"")
     room.check((3.8, 1.9, 4.8, 2.7), "A power cable, cut off short. It's still live. I'm not touching that.")
     room.check((1.75, 2.3, 2.3, 3.2), "A vice, a bench, his tools. The lamp's still on.")

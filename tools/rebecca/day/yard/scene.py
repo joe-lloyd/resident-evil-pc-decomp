@@ -5,7 +5,9 @@ at the north-west corner by the station sign. The cabin stands on the north
 side with its porch to the south, a thin wisp of smoke still rising from the
 stovepipe. A tool shed, padlocked, on the west. The ranger's truck is parked
 in the middle, hazard lights blinking on a dying battery, a winch on its
-front bumper; its tyre tracks run west to the forestry road. In the
+front bumper; its tyre tracks run west to the forestry road. The toolbox
+across the front of its bed is padlocked, and stencilled on its lid,
+U.S. FOREST SERVICE over STATION 3: it is the ranger's. In the
 south-east the trail goes on down the mountain, but last night's storm
 snapped a pine and laid it across the trail, its stump left standing
 splintered. Out by the east edge, the ranger's rifle lies in the grass where
@@ -261,14 +263,20 @@ def stump(bark, wood):
 
 
 def truck_bed_gear(tx0, ty0, ty1, tym):
-    """What is in the bed: the ranger's toolbox bolted across the front, a
-    jerrycan, a coil of rope, a tarp kicked into the back."""
+    """What is in the bed: the ranger's toolbox bolted across the front,
+    stencilled U.S. FOREST SERVICE - STATION 3 on its lid, a jerrycan, a
+    coil of rope, a tarp kicked into the back."""
     steel = reb.mat_surface("Diamond plate", [(0.0, (0.25, 0.25, 0.25)), (0.5, (0.42, 0.42, 0.4)), (1.0, (0.3, 0.3, 0.28))], scale=60, rough=0.35, bump=0.6)
     bx = tx0 + 2.66 - 0.3 - 0.03 - 0.2   # against the bed's front wall
     reb.prim("cube", "Toolbox", steel, (bx, tym, 1.06), (0.4, 1.78, 0.42), bevel=0.02)
     reb.prim("cube", "Toolbox lid seam", kit.mat("black"), (bx - 0.2, tym, 1.22), (0.012, 1.7, 0.01))
     for y in (tym - 0.5, tym + 0.5):
         reb.prim("cube", "Toolbox lock", kit.mat("steel"), (bx - 0.205, y, 1.16), (0.01, 0.08, 0.05))
+    # The stencil, flat on the lid, reading along it from the tailgate's side
+    # of the bed (camera 2 looks down on it). Both lines keep to the lid's
+    # tailgate half: the cab's back hides the half against it from camera 2.
+    for words, dx in (("U.S. FOREST SERVICE", -0.125), ("STATION 3", -0.015)):
+        kit.fit_text(kit.text(f"Toolbox stencil {words}", words, kit.mat("black"), (bx + dx, tym, 1.272), size=0.1, rot=(0, 0, math.pi / 2)), 1.6)
     reb.prim("cube", "Jerrycan", reb.mat_plain("Red can", (0.3, 0.04, 0.03), 0.5), (tx0 + 1.2, ty0 + 0.35, 1.08), (0.35, 0.18, 0.45), bevel=0.02)
     rope = kit.mat("canvas")
     for i in range(4):

@@ -2,11 +2,11 @@
 // init procedure 0
 // To east-path.
 door_aot_set(0, 4420, 6630, 1530, 1360, 1, 0, 33, 1, 0, ROOM_517, 15385, 0, 9690, 3072, UNLOCKED, 193);
-if (ck(FG_ITEM, 165, 0)) {  // quarry key (quarry-key)
-    item_aot_set(1, 2905, 6594, 1500, 1500, 60, 1, 1, 255, 71, 14, 180, 246, 176, 28, 0, 0, 165, 129, 0, 0);
+if (ck(FG_ITEM, 166, 0)) {  // quarry key (quarry-key)
+    item_aot_set(1, 2905, 5766, 1638, 2328, 60, 1, 1, 255, 71, 14, 180, 246, 176, 28, 0, 0, 166, 129, 0, 0);
 }
-if (ck(FG_ITEM, 190, 0)) {  // greenHerb
-    item_aot_set(2, 7770, 3010, 1200, 1200, 68, 1, 0, 255, 178, 32, 0, 0, 26, 14, 0, 0, 190, 129, 1, 0);
+if (ck(FG_ITEM, 191, 0)) {  // greenHerb
+    item_aot_set(2, 7770, 3010, 1200, 1200, 68, 1, 0, 255, 178, 32, 0, 0, 26, 14, 0, 0, 191, 129, 1, 0);
 }
 // Hal's diary, a file.
 if (ck(FG_ITEM, 235, 0)) {

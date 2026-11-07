@@ -359,6 +359,49 @@ def crowbar():
         tube("Claw tine", st, [tuple(tip + Vector((0.0, side * 0.0045, 0.0))), tuple(tip + Vector((-0.016, side * 0.0055, 0.012))), tuple(tip + Vector((-0.04, side * 0.006, 0.014)))], 0.0045, segments=8)
 
 
+def dog_meat():
+    """The gardener's dog meat: a burlap sack the size of a loaf, lying on
+    its side, lumpy with scraps, its neck gathered and tied off with twine,
+    and blood soaked through in dark blotches at its bottom end."""
+    rnd = __import__("random").Random(7)
+    burlap = plain("Burlap", (0.4, 0.3, 0.18), 0.95, scale=45, vary=0.35)
+    soaked = plain("Soaked burlap", (0.11, 0.03, 0.02), 0.7, scale=30, vary=0.4)
+    twine = plain("Twine", (0.55, 0.47, 0.32), 0.9, scale=90, vary=0.2)
+    L, W, H = 0.3, 0.2, 0.12
+    sack = reb.prim("sphere", "Sack", burlap, (0, 0, H / 2), (L, W, H), segments=56)
+    sack.data.materials.append(soaked)
+    # Lumps of what is in it, folds in the cloth, and the flat it sits on.
+    lumps = [(Vector((rnd.uniform(-0.12, 0.1), rnd.uniform(-0.07, 0.07), rnd.uniform(0.04, 0.11))), rnd.uniform(0.035, 0.06)) for _ in range(12)]
+    for v in sack.data.vertices:
+        co = v.co
+        n = co - Vector((0, 0, H / 2))
+        push = sum(max(0.0, 1 - (co - lc).length / r) * 0.022 for lc, r in lumps)
+        push += 0.004 * math.sin(co.x * 90 + co.y * 40) * math.sin(co.z * 70)
+        if n.length:
+            co += n.normalized() * push
+        # The near end draws in toward the neck.
+        if co.x > L * 0.28:
+            k = min(1.0, (co.x - L * 0.28) / (L * 0.22))
+            co.y *= 1 - 0.55 * k
+            co.z = H / 2 + (co.z - H / 2) * (1 - 0.5 * k)
+        co.z = max(co.z, 0.0)
+    # Blood soaked through the far end and along the floor side, the wet
+    # edge ragged.
+    for poly in sack.data.polygons:
+        c = poly.center
+        edge = -0.05 + 0.025 * math.sin(c.y * 45) + 0.018 * math.sin(c.z * 70 + 1.3)
+        poly.material_index = 1 if c.x < edge or c.z < 0.012 else 0
+    # The neck: the cloth gathered in pleats, two ears of it past the tie.
+    for k in range(7):
+        a = 2 * math.pi * k / 7
+        r0 = 0.03
+        tube("Neck pleat", burlap, [(L / 2 - 0.005, r0 * math.cos(a) * 1.3, H * 0.55 + r0 * math.sin(a)), (L / 2 + 0.04, 0.009 * math.cos(a), H * 0.56 + 0.009 * math.sin(a)), (L / 2 + 0.075, 0.02 * math.cos(a + 0.3), H * 0.6 + 0.018 * math.sin(a + 0.3))], 0.007, segments=6)
+    # The twine, wound tight round the neck: three turns, the ends hanging.
+    for k in range(3):
+        reb.prim("cyl", "Twine turn", twine, (L / 2 + 0.035 + k * 0.006, 0, H * 0.56), (0.026, 0.026, 0.005), rot=(0, math.pi / 2, 0), segments=14)
+    tube("Twine end", twine, [(L / 2 + 0.05, 0.012, H * 0.5), (L / 2 + 0.06, 0.03, H * 0.25), (L / 2 + 0.075, 0.04, 0.004)], 0.0025, segments=6)
+
+
 # Each item: its file name (the plan step that gives it, items.ts), the
 # model, how it is laid down on a floor as built, and how the icon turns it
 # corner-on (both XYZ Euler angles, radians).
@@ -370,6 +413,7 @@ ITEMS = [
     ("dynamite", dynamite, (0, 0, 0), (0.5, 0.0, 0.7)),
     ("fuses", fuses, (0, 0, 0), (0.6, 0.0, 0.5)),
     ("crowbar", crowbar, (0, 0, 0), (0.9, -0.45, 0.0)),
+    ("dog-meat", dog_meat, (0, 0, 0), (0.5, 0.0, 0.6)),
 ]
 
 
