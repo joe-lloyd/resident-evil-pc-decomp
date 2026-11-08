@@ -86,7 +86,7 @@
    "z0": 4347,
    "x1": 20385,
    "z1": 4408,
-   "name": "Probe: Portal post"
+   "name": "Probe: Blasted rubble"
   },
   {
    "shape": "box",
@@ -106,6 +106,14 @@
   },
   {
    "shape": "box",
+   "x0": 21860,
+   "z0": 4350,
+   "x1": 25230,
+   "z1": 4660,
+   "name": "Probe: Rockfall"
+  },
+  {
+   "shape": "box",
    "x0": 8600,
    "z0": 4857,
    "x1": 9165,
@@ -115,17 +123,17 @@
   {
    "shape": "box",
    "x0": 21857,
-   "z0": 4350,
+   "z0": 4857,
    "x1": 21918,
-   "z1": 4915,
+   "z1": 4918,
    "name": "Probe: Blasted rubble"
   },
   {
    "shape": "box",
    "x0": 22370,
-   "z0": 4350,
+   "z0": 4857,
    "x1": 25230,
-   "z1": 4915,
+   "z1": 4918,
    "name": "Probe: Rockfall"
   },
   {
@@ -566,10 +574,11 @@
  ],
  "probe": {
   "Boulders": 222,
-  "Rockfall": 144,
+  "Rockfall": 107,
   "Cart on its side": 60,
   "Ore cart": 59,
   "Cart on the trestle": 49,
+  "Jammed timbers": 39,
   "Prop.004": 38,
   "Prop.006": 38,
   "Prop.005": 36,

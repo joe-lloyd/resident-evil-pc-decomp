@@ -8,7 +8,10 @@ Before dawn he came off the catwalk. He lies crumpled on the rocks at the
 east foot of the tower, blood over the stones, his cap thrown off, flies on
 him. The stair starts inside a chain-link cage at the west foot; its door
 stands open, the padlock hanging off the hasp. The hoist rope he hauled his water up on hangs from the deck and
-swings, and the old tower creaks.
+swings, and the old tower creaks. On the north side the loggers' skid
+road comes down off the ridge out of the spruce: a muddy chute with skid
+logs laid across it, ending at the clearing's edge by a chain post, its
+chain hanging slack. It is the back way down to the logging camp's depot.
 
 Metres: the floor is x 1-19, y 2-12. The tower stands at x 9, y 6.5: four
 timber legs on footings at x 5 and 13, y 2.5 and 10.5. The first flight
@@ -16,6 +19,9 @@ starts at its west side inside the cage, x 6.3-7.7, y 6.55-7.55, whose door
 is in the cage's west side. Walt lies at x 13-15, y 7.5-9. The track comes
 in from the washout at the east edge, y 5.5-8.5, past the lookout's sign. The
 privy is in the south-west corner; the hill falls away west and south.
+The skid road comes in at the north edge, x 8.1-9.9, between the tower's
+north legs, its chain post at (10.3, 1.6); it climbs north-west up a
+ridge into the trees, toward the camp.
 
 Moving: the hoist rope swinging, the bicycle's front wheel turning, flies on
 the body, the grass, dust in the low sun.
@@ -37,6 +43,8 @@ TC = (9.0, 6.5)
 CAGE = (6.3, 7.7, 6.55, 7.55)
 BODY = (13.7, 8.2)
 CAMS = [(19.9, 12.9, 3.6), (1.6, 3.0, 2.7), (20.2, 0.9, 3.0)]
+# The skid road from the depot, down the ridge from the north to the clearing's edge.
+SKID = [(9.0, 2.7), (8.9, 1.6), (8.4, -0.5), (7.4, -3.0), (6.2, -6.0), (5.2, -9.5), (4.6, -13.5), (4.4, -18.0), (4.8, -24.0)]
 
 
 # ---- The fire lookout tower. The same code is in every scene that shows it
@@ -247,13 +255,23 @@ def cab_shell(bm, timber, glass, c, z0, door=(0.3, 1.1), roof_m=None):
 
 
 def height(x, y):
-    """The hilltop flat where she walks, falling away all round, least to the east."""
+    """The hilltop flat where she walks, falling away all round, least to the
+    east; to the north a ridge rises from it into the trees, the skid road
+    sunk in its chute down the ridge's back."""
     if X0 - 0.4 < x < X1 + 0.4 and Y0 - 0.4 < y < Y1 + 0.4:
         return 0.0
     h = 0.4 * noise.noise(Vector((x * 0.12, y * 0.12, 6)))
+    north = max(0.0, Y0 - 0.4 - y)
+    ridge = max(0.0, 1.0 - kit.path_distance(x, y, [SKID]) / 8.0) if north > 0 else 0.0
+    ridge = ridge * ridge * (3 - 2 * ridge) * min(1.0, north / 1.5)
     dx = max(0.0, X0 - 0.4 - x) * 0.45 + max(0.0, x - X1 - 0.4) * 0.12
-    dy = max(0.0, Y0 - 0.4 - y) * 0.3 + max(0.0, y - Y1 - 0.4) * 0.45
-    return h - dx - dy
+    dy = north * (0.3 * (1 - ridge) - 0.16 * ridge) + max(0.0, y - Y1 - 0.4) * 0.45
+    h -= dx + dy
+    if y < Y0 + 1.0:
+        d = kit.path_distance(x, y, [SKID])
+        if d < 1.4:
+            h -= 0.14 * (1 - (d / 1.4) ** 2) * min(1.0, max(0.0, (Y0 - 0.2 - y) / 1.0))
+    return h
 
 
 def low_sun(heading, elevation, energy, rgb=(1.0, 0.7, 0.42)):
@@ -442,11 +460,66 @@ def build():
     for dx in (-0.45, 0.45):
         kit.rod("Danger board post", mat("dark wood"), (15.2 + dx, 2.27, -0.2), (15.2 + dx, 2.27, 1.7), 0.04, 6)
 
+    # ---- The skid road's foot: the muddy chute down the ridge out of the
+    # trees, skid logs across it to the clearing's edge, a chain post, the
+    # chain hanging slack. Logs they dragged down lie at the side.
+    skid_mud = kit.dirtied(reb.mat_surface("Skid road mud", [(0.0, (0.03, 0.022, 0.014)), (0.4, (0.065, 0.05, 0.032)), (0.75, (0.1, 0.078, 0.052)), (1.0, (0.075, 0.06, 0.04))], scale=2.5, detail=12, rough=0.45, bump=0.8), 0.6, scale=0.5)
+    churned = reb.mat_surface("Churned mud", [(0.0, (0.01, 0.008, 0.005)), (0.6, (0.03, 0.023, 0.016)), (1.0, (0.055, 0.043, 0.03))], scale=6, rough=0.2, bump=0.5)
+    kit.path_strip("Skid road chute", skid_mud, SKID, height, width=0.95, wobble=0.15, lift=0.012)
+    kit.ruts("Skid road ruts", SKID, height, gauge=0.8, width=0.26, m=churned, seed=6.0)
+    kit.splat("Mud dragged into the clearing", skid_mud, (9.0, 3.1, 0.006), 0.6, seed=31, stretch=(0.9, 1.5), lumps=0.6)
+    line = [Vector(q) for q in SKID]
+    run, s_, k = 0.0, 1.0, 0
+    for a, b in zip(line, line[1:]):
+        d = b - a
+        seg = d.length
+        while s_ < run + seg:
+            c = a.lerp(b, (s_ - run) / seg)
+            n = Vector((-d.y, d.x)).normalized()
+            twist = 0.12 * noise.noise(Vector((c.x, c.y, 3.0)))
+            n = Vector((n.x * math.cos(twist) - n.y * math.sin(twist), n.x * math.sin(twist) + n.y * math.cos(twist)))
+            r = 0.11 + 0.04 * random.Random(k).random()
+            pa, pb = [(e.x, e.y, height(e.x, e.y) + r * 0.45) for e in (c - n * 1.05, c + n * 1.05)]
+            kit.rough_log(f"Skid log {k}", pa, pb, r, m=mat("logs"), seed=60 + k, stubs=1)
+            k += 1
+            s_ += 0.85 + 0.2 * random.Random(k + 99).random()
+        run += seg
+    # The chain post on the east side, its chain slack down into the mud: the way is open.
+    post = (10.3, 1.6)
+    reb.wall(kit.rough_log("Chain post", (post[0], post[1], -0.3), (post[0] + 0.02, post[1], 1.15), 0.12, m=mat("bark"), seed=7, stubs=0), "circle")
+    reb.prim("cyl", "Chain post top", mat("logs"), (post[0] + 0.02, post[1], 1.15), (0.2, 0.2, 0.02), segments=10)
+    chain_m = reb.mat_metal("Chain steel", (0.3, 0.3, 0.29), 0.4)
+    cv, cf = [], []
+    pts = [Vector((post[0] - 0.12, post[1], 0.95)), Vector((post[0] - 0.2, post[1] + 0.05, 0.5)), Vector((post[0] - 0.35, post[1] + 0.15, 0.05)), Vector((post[0] - 0.75, post[1] + 0.05, 0.03)), Vector((post[0] - 1.0, post[1] - 0.3, 0.02))]
+    kk = 0
+    for a, b in zip(pts, pts[1:]):
+        dd = b - a
+        n = max(1, int(dd.length / 0.06))
+        for i in range(n):
+            c = a.lerp(b, (i + 0.5) / n)
+            c.z = max(c.z, height(c.x, c.y) + 0.015)
+            if abs(dd.z) > 0.7 * dd.length:
+                reb.box(cv, cf, tuple(c), (0.02, 0.05, 0.08) if kk % 2 else (0.05, 0.02, 0.08), 0.0)
+            else:
+                reb.box(cv, cf, tuple(c), (0.08, 0.02, 0.05) if kk % 2 else (0.08, 0.05, 0.02), math.atan2(dd.y, dd.x))
+            kk += 1
+    reb.mesh_object("Chain off the post", cv, cf, chain_m, smooth=False)
+    reb.prim("cube", "Chain staple", mat("iron"), (post[0] - 0.12, post[1], 0.97), (0.04, 0.06, 0.06))
+    for i, (a_, b_, r) in enumerate((((5.0, 0.9, 0.0), (7.4, 1.25, 0.0), 0.2), ((5.2, 0.45, 0.0), (7.3, 0.7, 0.0), 0.18))):
+        a_, b_ = (a_[0], a_[1], height(a_[0], a_[1]) + r * 0.6), (b_[0], b_[1], height(b_[0], b_[1]) + r * 0.6)
+        kit.rough_log(f"Log left at the landing {i}", a_, b_, r, m=mat("bark"), seed=80 + i, stubs=3)
+    # Close spruce either side of the skid road up the ridge: it comes out of the dark.
+    def off_skid(x, y):
+        return kit.path_distance(x, y, [SKID]) < 2.1 or y > -1.0 or any((Vector((x, y)) - Vector(c[:2])).length < 4.5 for c in CAMS)
+    kit.forest(rng, height, off_skid, (-1.0, -24.0, 13.5, -1.0), count=70, spacing=1.3, tall=(13, 21), ferns=30, needles=600, dead=0.1)
+
     # ---- The forest round the hilltop, the valley beyond it to the west.
     def keep_out(x, y):
         if X0 - 2.5 < x < X1 + 2.5 and Y0 - 2.5 < y < Y1 + 2.5:
             return True
         if x > X1 and 5.0 < y < 9.5:
+            return True
+        if kit.path_distance(x, y, [SKID]) < 1.8:
             return True
         if x < X0 and -2.0 < y < 9.0 and rng.random() < 0.7:
             return True
@@ -476,6 +549,8 @@ def build():
 
     # ---- What the game needs.
     room.door("washout", (X1 - 0.6, 5.5, X1, 8.5), arrive=(17.3, 7.0), face=(-1, 0))
+    # Up the skid road, back to the logging camp's depot.
+    room.door("depot", (8.1, Y0, 9.9, Y0 + 0.6), arrive=(9.0, 3.6), face=(0, 1), walk=True)
     room.door("tower-stairs", (cx0 - 0.6, cy0, cx0, cy1), arrive=(4.8, 7.05), face=(-1, 0), walk=False, touch=False)
     room.check((BODY[0] - 1.4, BODY[1] - 0.9, BODY[0] + 0.9, BODY[1] + 1.2), "A man in a ranger's shirt, smashed on the rocks.\nHe came off the top. Fell, or jumped.")
     room.check((cx0 - 0.6, cy0 - 0.4, cx0, cy0), "The stair's in a cage. The door's open, the padlock hanging off the hasp.\nHe went up and never locked it behind him.")

@@ -14,11 +14,11 @@ import { fileURLToPath } from 'node:url';
 import { dayRooms } from './rooms.ts';
 import type { DayRoom } from './room.ts';
 import { BOOKS, DOCUMENTS, ITEM_FLAG_BASE } from '../files/documents.ts';
-import { foeLines, KILL_FLAGS, type Floor } from './foes.ts';
+import { FOES, foeLines, KILL_FLAGS, type Floor, type When } from './foes.ts';
 import { ITEM_FLAGS, SUPPLIES, supplyLines, supplyModels } from './supplies.ts';
 import { mapIn, mapLines, mapModels } from '../maps/pickups.ts';
 import { KEY_ITEM_FLAGS, KEY_ITEMS, keyItemLines, keyItemModels, sameModel, type ItemSpot } from '../items/items.ts';
-import { EVENT_FLAGS, EVENTS, eventsIn, giveModels, GIVE_FLAGS, itemModelSlots, keyItem } from './events.ts';
+import { EVENT_FLAGS, EVENTS, eventsIn, giveModels, GIVE_FLAGS, itemModelSlots, keyItem, MARK_FLAGS } from './events.ts';
 import { day } from '../plan/day.ts';
 import { CUES } from '../plan/music.ts';
 import { musicSwitches, musicTable, type StateWrite } from '../music/table.ts';
@@ -188,6 +188,8 @@ const DOOR_STYLE: Record<string, Anim> = {
   'back-garden|cellar': 'plank',
   'cellar|wine': 'panel',
   'cellar|crawl': 'plank',
+  // The old drainage adit: no door, a dark crawl out to the hillside.
+  'east-path|gallery': 'walk',
 };
 /** The walks that go through a gate, by the rooms they join (either way round). */
 const GATES = new Set(['camp-yard|depot', 'road|washout', 'line-track|platform', 'estate-wall|kennels']);
@@ -202,6 +204,9 @@ const CLIMB: Record<string, Anim> = {
   'crawl>save': 'ladderUp',
   'mine-lift>summit-trail': 'liftUp',
   'summit-trail>mine-lift': 'liftDown',
+  // The kennels' meat hoist, its cage down to the cellar and back.
+  'kennels>cellar': 'liftDown',
+  'cellar>kennels': 'liftUp',
 };
 
 /**
@@ -209,7 +214,7 @@ const CLIMB: Record<string, Anim> = {
  * rest open by a scripted event (the blast, the pump, the gondola) and stay
  * open until those are written.
  */
-const ITEM_LOCKS = new Set(['office-key', 'cut-depot', 'safe', 'cut-chain', 'tower-door', 'switch-key', 'quarry-key', 'pry-lodge', 'open-gate', 'bulkhead']);
+const ITEM_LOCKS = new Set(['office-key', 'cut-depot', 'workshop-door', 'cut-chain', 'tower-door', 'switch-key', 'quarry-key', 'pry-lodge', 'open-gate', 'coal-chute', 'hoist']);
 
 /**
  * The key item that opens the way from one room to the next, by the plan:
@@ -243,6 +248,22 @@ const LOCKS = new Map(
   }),
 );
 const lockFor = (from: string, to: string) => LOCKS.get(`${from}>${to}`);
+/**
+ * The script test for a plan step being done, from the flag it raises: an
+ * event's FG_COMMON flag or a lock's g_LocksFlags bit. ck(.., 0) is set.
+ */
+function stepTest(step: string, done: boolean): string {
+  const mark = MARK_FLAGS.get(step);
+  if (mark !== undefined) return `ck(FG_COMMON, ${mark}, ${done ? 0 : 1})`;
+  const event = EVENT_FLAGS.get(step);
+  if (event !== undefined) return `ck(FG_COMMON, ${event}, ${done ? 0 : 1})`;
+  const lock = lockFlag(step);
+  if (lock !== undefined) return `ck(FG_LOCK, ${lock}, ${done ? 0 : 1})`;
+  throw new Error(`${step} raises no flag the room scripts can test`);
+}
+/** The test for a group of enemies a step brings (`after`) or takes away (`until`). */
+const foeWhen = (w: When) => [w.after && stepTest(w.after, true), w.until && stepTest(w.until, false)].filter(Boolean).join(' && ');
+
 /** The lock flag the plan's step raises by unlocking its way, if it is a key item on a lock. */
 export const lockFlag = (step: string): number | undefined => [...LOCKS.values()].find((l) => l.step === step)?.flag;
 
@@ -254,7 +275,16 @@ export const lockFlag = (step: string): number | undefined => [...LOCKS.values()
  * stays shut until she has. What she says before, on doing it, and from the
  * far side.
  */
-const USE_LOCKS: Record<string, { look: string; done: string; behind: string }> = {
+interface UseLock {
+  look: string;
+  done: string;
+  behind: string;
+  /** A second tool that opens it, with its own line, and the mark (MARK_FLAGS) it leaves: the cutters' noise. */
+  orUse?: { item: string; done: string; mark?: string };
+  /** A step that must be done before the tool works here, and her line until it is (the hoist, with the pack loose). */
+  when?: { step: string; early: string };
+}
+const USE_LOCKS: Record<string, UseLock> = {
   'cut-depot': {
     look: "The padlock won't give.\nBolt cutters would go through the shackle.",
     done: 'The cutters bite through the shackle.\nThe padlock drops, and the gate swings free.',
@@ -270,11 +300,99 @@ const USE_LOCKS: Record<string, { look: string; done: string; behind: string }> 
     done: 'I get the crowbar under the hasp and heave.\nThe screws tear out of the frame.',
     behind: "It's padlocked from outside.",
   },
+  'workshop-door': {
+    look: 'A padlock, rusted half through.\nThe workshop key would open it. Or bolt cutters.',
+    done: 'The workshop key turns. The padlock drops into my hand.',
+    behind: "It's padlocked from the yard.",
+    orUse: {
+      item: 'cutters',
+      done: 'The cutters bite through the rusted shackle. It cracks like a shot.\nThe noise rolls round the camp.',
+      mark: 'workshop-cut',
+    },
+  },
+  'coal-chute': {
+    look: 'An iron grate over the coal chute, rusted into its frame.\nA crowbar would lift it.',
+    done: 'I get the crowbar under the grate and heave.\nIt comes up with a shriek of iron. The chute drops into the dark.',
+    behind: "The coal chute. Too steep to climb back up.",
+  },
+  hoist: {
+    look: 'The meat hoist. Its control is padlocked: COLD STORE.',
+    done: 'The cellar key opens the padlock.\nI step into the cage and send it down.',
+    behind: 'The hoist. It works from up at the kennels.',
+    when: { step: 'pen-pack', early: "The meat hoist. I'd never get the cage open with the pack loose." },
+  },
 };
 const useLock = (from: string, to: string) => {
   const lock = lockFor(from, to);
   return lock && USE_LOCKS[lock.step] ? { ...lock, ...USE_LOCKS[lock.step]! } : undefined;
 };
+
+/**
+ * Every lock and event that takes the item, as the test that it is done.
+ * A tool leaves her case only once all of them are done, whichever way
+ * each was done (the owner's ruling: tools are reused).
+ */
+function usesOf(item: number): { step: string; test: string }[] {
+  const out: { step: string; test: string }[] = [];
+  for (const l of LOCKS.values()) {
+    if (itemsAt(l.step).includes(item)) out.push({ step: l.step, test: `ck(FG_LOCK, ${l.flag}, 0)` });
+  }
+  for (const e of EVENTS) {
+    if (itemsAt(e.step).includes(item)) out.push({ step: e.step, test: `ck(FG_COMMON, ${EVENT_FLAGS.get(e.step)}, 0)` });
+  }
+  return out;
+}
+/** The items a lock or an event takes, either way it is done. */
+function itemsAt(step: string): number[] {
+  const lock = [...LOCKS.values()].find((l) => l.step === step);
+  const event = EVENTS.find((e) => e.step === step);
+  const alt = USE_LOCKS[step]?.orUse;
+  return [
+    ...(lock ? [lock.item, ...(alt ? [keyItem(alt.item).id] : [])] : []),
+    ...[event?.use, event?.orUse?.use].filter((u): u is string => !!u).map((u) => keyItem(u).id),
+  ];
+}
+/**
+ * Steps that make others needless once done. She is in the cellar by the
+ * hoist or by the coal chute, and never goes back for the other way, so
+ * its tool would ride in her case for the rest of the day.
+ */
+const MOOTS: Record<string, readonly string[]> = {
+  hoist: ['coal-chute'],
+  'coal-chute': ['hoist', 'pen-pack'],
+};
+/** How many times she uses the item from her case: at tool locks and at events (a key turned by trying a door is not used). */
+function toolUseCount(item: number): number {
+  return [...LOCKS.values()].filter((l) => USE_LOCKS[l.step] && (l.item === item || (USE_LOCKS[l.step]!.orUse && keyItem(USE_LOCKS[l.step]!.orUse!.item).id === item))).length
+    + EVENTS.filter((e) => [e.use, e.orUse?.use].some((u) => u && keyItem(u).id === item)).length;
+}
+
+/**
+ * Key items that wait for something before they are there to take: an
+ * event in their room that reveals them, or a file she has read. The
+ * foreman's safe opens once she has the calendar: she works out the date.
+ */
+const KEY_ITEM_GATES: Record<string, { event?: string; file?: string }> = {
+  cog: { event: 'crane' },
+  safe: { file: 'calendar' },
+};
+
+/** The lines that take the item out of her case once every other use of it is done; `self` is the use just made. */
+function spendLines(item: number, self: string): string[] {
+  const others = usesOf(item).filter((u) => u.step !== self).map((u) => u.test);
+  const remove = [`if (item_ck(${item})) {`, `    remove_item(${item});`, '}'];
+  return others.length ? [`if (${others.join(' && ')}) {`, ...remove.map((l) => `    ${l}`), '}'] : remove;
+}
+/**
+ * What `step` leaves her no use for, as it is done, beyond the item she
+ * used (`used`): the other item that does it (the crank, once the dynamite
+ * has blasted the rockfall), and the items of the steps it makes needless
+ * (MOOTS). Each leaves once its other uses are done too.
+ */
+function strandLines(step: string, used?: number): string[] {
+  return [step, ...(MOOTS[step] ?? [])].flatMap((s) =>
+    itemsAt(s).filter((item) => !(s === step && item === used)).flatMap((item) => spendLines(item, s)));
+}
 
 /** The door record's animation and lock bytes for a door from one room to another. */
 function doorAnim(from: string, to: string, walk: boolean): string {
@@ -491,12 +609,16 @@ function main(): void {
     const msgs = [kit.entry ?? '...'];
     /** Add a room message and return its id (0x80 + index). */
     const say = (text: string) => 128 + msgs.push(text) - 1;
-    const events = eventsIn(slug).filter((e) => kit.spots?.some((sp) => sp.step === e.step));
+    // A row of switches records its spots as <spot>-1, <spot>-2...
+    const spotStep = (e: (typeof EVENTS)[number]) => (e.order ? `${e.order.spot}-1` : e.step);
+    const events = eventsIn(slug).filter((e) => kit.spots?.some((sp) => sp.step === spotStep(e)));
     const spotOf = (step: string) => kit.spots!.find((sp) => sp.step === step)!.zone;
     /** The door an event opens, to write again the moment it happens. */
     const reopen = new Map<string, string>();
     /** The tool locks on this side of the room's doors, worked in main. */
-    const toolUses: { flag: number; item: number; door: string; done: number; step: string }[] = [];
+    const toolUses: { flag: number; item: number; door: string; done: number; step: string; mark?: number }[] = [];
+    /** Tool locks that wait for a step (the hoist, for the pack penned), to arm in main once it happens here. */
+    const waiting: { flag: number; ready: string; lines: string[] }[] = [];
     for (const d of kit.doors ?? []) {
       const game = GAME_ROOMS[d.to];
       const target = bySlug.get(d.to) ?? (game && { slug: d.to, stage: game.stage, room: game.room });
@@ -512,26 +634,44 @@ function main(): void {
       const door = `door_aot_set(${id}, ${size(d.zone)}, ${doorAnim(slug, d.to, walk)}, ${roomName(target)}, ${back.x}, 0, ${back.z}, ${back.angle}, ${doorKey(slug, d.to)}, ${touch ? TOUCH : OPEN});`;
       // A way an event opens, here or from another room: what blocks it until the event's flag is set.
       const gate = EVENTS.find((e) => e.opens?.to === d.to && (e.opens.from ?? e.room) === slug && kits.get(e.room)?.spots?.some((sp) => sp.step === e.step));
+      // A way an event in the next room opens only from there (the skid road's chain, the adit's boards).
+      const shutBehind = EVENTS.find((e) => e.opens?.behind && e.opens.to === slug && (e.opens.from ?? e.room) === d.to && kits.get(e.room)?.spots?.some((sp) => sp.step === e.step));
       // A lock she opens with a tool: shut until she uses it here (USE_LOCKS),
       // and from the far side until she has.
       const tool = useLock(slug, d.to);
       const far = useLock(d.to, slug);
       if (tool) {
         const item = KEY_ITEMS.find((k) => k.id === tool.item)!;
-        const useId = id + 1;
+        const alt = tool.orUse ? keyItem(tool.orUse.item) : undefined;
         const zone = size(d.zone);
-        const arm = `aot_set(${useId}, ${zone}, SCE_USEITEM, 1, 9, 0, ${tool.item - 27}, 0, 1, 0);   // the ${item.name.toLowerCase()} can be used here`;
+        const useId = id + 1;
+        const arms = [
+          `aot_set(${useId}, ${zone}, SCE_USEITEM, 1, 9, 0, ${tool.item - 27}, 0, 1, 0);   // the ${item.name.toLowerCase()} can be used here`,
+          // A second tool on the same zone: standing in both, either item's use bit is on (flag bank 9).
+          ...(alt ? [`aot_set(${useId + 1}, ${zone}, SCE_USEITEM, 1, 9, 0, ${alt.id - 27}, 0, 1, 0);   // and the ${alt.name.toLowerCase()}`] : []),
+        ];
+        const ready = tool.when ? stepTest(tool.when.step, true) : undefined;
+        const look = say(tool.look);
         lines.push(
-          `// Shut until she uses the ${item.name.toLowerCase()} on it: FG_LOCK ${tool.flag} once she has.`,
+          `// Shut until she uses the ${[item, alt].filter(Boolean).map((k) => k!.name.toLowerCase()).join(' or the ')} on it: FG_LOCK ${tool.flag} once she has.`,
           `if (ck(FG_LOCK, ${tool.flag}, 1)) {`,
-          `    aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${say(tool.look)}, 0, 255, 0, 0, 0);`,
-          `    ${arm}`,
+          ...(ready
+            ? [`    if (${ready}) {`, `        aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${look}, 0, 255, 0, 0, 0);`, ...arms.map((a) => `        ${a}`), '    } else {', `        aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${say(tool.when!.early)}, 0, 255, 0, 0, 0);`, '    }']
+            : [`    aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${look}, 0, 255, 0, 0, 0);`, ...arms.map((a) => `    ${a}`)]),
           '} else {',
           `    ${door}`,
           '}',
         );
+        if (ready) waiting.push({ flag: tool.flag, ready, lines: [`aot_set(${id}, ${zone}, SCE_MESSAGE, 129, ${look}, 0, 255, 0, 0, 0);`, ...arms] });
         toolUses.push({ flag: tool.flag, item: tool.item, door, done: say(tool.done), step: tool.step });
-        id += 2;
+        if (alt) toolUses.push({ flag: tool.flag, item: alt.id, door, done: say(tool.orUse!.done), step: tool.step, mark: tool.orUse!.mark ? MARK_FLAGS.get(tool.orUse!.mark) : undefined });
+        id += alt ? 3 : 2;
+        continue;
+      }
+      if (shutBehind) {
+        const f = EVENT_FLAGS.get(shutBehind.step)!;
+        lines.push(`// Shut from this side until ${shutBehind.step} opens it from ${shutBehind.room} (FG_COMMON ${f}).`, `if (ck(FG_COMMON, ${f}, 1)) {`, `    aot_set(${id}, ${size(d.zone)}, SCE_MESSAGE, 129, ${say(shutBehind.opens!.behind!)}, 0, 255, 0, 0, 0);`, '} else {', `    ${door}`, '}');
+        id++;
         continue;
       }
       if (far) {
@@ -582,7 +722,23 @@ function main(): void {
     // models come after the supplies' and the map's (room.ts).
     const keyActions = new Map((kit.items ?? []).map((it, i) => [it.step, id + i]));
     const specSlots = supplyModels(slug).length + mapModels(slug).length;
-    lines.push(...keyItemLines(kit.items ?? [], keyFlags, id, specSlots));
+    // A key item waits for what reveals it (KEY_ITEM_GATES): the event in
+    // this room puts it there as it happens, or a file read elsewhere. A
+    // tool is picked up with as many uses as it has (usesOf).
+    const keyItems = keyItemLines(
+      kit.items ?? [],
+      keyFlags,
+      id,
+      specSlots,
+      (step) => {
+        const g = KEY_ITEM_GATES[step];
+        // A room-item flag is set while the thing lies there and clears as she takes it: taken is 1.
+        return g?.event ? stepTest(g.event, true) : g?.file ? `ck(FG_ITEM, ${ITEM_FLAG_BASE + BOOKS.indexOf(g.file as (typeof BOOKS)[number])}, 1)` : undefined;
+      },
+      (step) => Math.max(1, toolUseCount(keyItem(step).id)),
+      (x, z) => onFloor(slug, { x, z, angle: 0 }),
+    );
+    lines.push(...keyItems.lines);
     id += kit.items?.length ?? 0;
     // The supplies, before the checks too: generous() grows a check toward
     // them, and a pickup comes first where they meet, while it lies there.
@@ -619,7 +775,20 @@ function main(): void {
     // A scene she walks into or that greets her has nobody to fight in it:
     // the room's enemies come once it has run.
     const calm = scenes.filter((sc) => sc.trigger.on === 'enter' || sc.trigger.on === 'zone').map((sc) => `ck(FG_COMMON, ${CUT_FLAGS.get(sc.id)}, 0)`);
-    const foes = foeLines(slug, floor, killFlags);
+    // The kill flags and slots of each enemy group, in foeLines' order, for
+    // the events that take a group away (the bell, the pack).
+    const groupFlags = (FOES[slug] ?? []).map(([, count]) => count);
+    const roomKills = killFlags.slice(0, groupFlags.reduce((a, b) => a + b, 0));
+    const leaving = (step: string) => {
+      const out: { flag: number; slot: number }[] = [];
+      let at = 0;
+      for (const [kind, count, when] of FOES[slug] ?? []) {
+        void kind;
+        for (let k = 0; k < count; k++, at++) if (when?.until === step) out.push({ flag: roomKills[at]!, slot: at });
+      }
+      return out;
+    };
+    const foes = foeLines(slug, floor, killFlags, 0, foeWhen);
     lines.push(...(calm.length && foes.length ? [`if (${calm.join(' && ')}) {`, ...foes.map((l) => `    ${l}`), '}'] : foes));
     // The events (day/events.ts): their zones now, their working in main.
     const main: string[] = [];
@@ -630,6 +799,47 @@ function main(): void {
     const giveSlot0 = specSlots + keyItemModels(kit.items ?? []).length;
     for (const e of events) {
       const f = EVENT_FLAGS.get(e.step)!;
+      // The enemies it takes away, out of the room the moment it happens
+      // (status 0 empties the slot), and dead for good.
+      const gone = leaving(e.step).flatMap((g) => [`eml_state(0, ${g.slot}, 3, 0, 0);`, `set(FG_ENEMY, ${g.flag}, 0);`]);
+      if (e.order) {
+        // A row of switches thrown in order (the breakers). Each raises its
+        // FG_ROOM bit on the action button; main keeps the row's progress in
+        // FG_ROOM bits of its own, which a new room clears. A wrong switch
+        // undoes the row and hurts her (sys_multi 11, a port addition).
+        const o = e.order;
+        const n = o.sequence.length;
+        const ids = o.sequence.map(() => id++);
+        const zones = [...o.sequence].sort((a, b) => a - b).map((k) => size(spotOf(`${o.spot}-${k}`)));
+        const press = zones.map(() => bit++);
+        const prog = o.sequence.map(() => bit++);
+        const [look, after, done, thrown, wrong] = [say(e.look), say(e.after), say(e.done), say(o.thrown), say(o.wrong)];
+        const afterLines = ids.map((aid, i) => `aot_set(${aid}, ${zones[i]}, SCE_MESSAGE, 129, ${after}, 0, 255, 0, 0, 0);`);
+        lines.push(`// ${e.step} (day/events.ts): ${n} switches thrown in the order ${o.sequence.join(', ')}; FG_COMMON ${f} once they are.`, `if (ck(FG_COMMON, ${f}, 1)) {`);
+        ids.forEach((aid, i) => lines.push(`    aot_set(${aid}, ${zones[i]}, SCE_USEITEM, 129, 4, 0, ${press[i]}, 0, 1, 0);   // switch ${i + 1}: FG_ROOM ${press[i]}`));
+        lines.push('} else {', ...afterLines.map((l) => `    ${l}`), '}');
+        const need = (e.needs ?? []).map((nd) => `ck(FG_COMMON, ${EVENT_FLAGS.get(nd)}, 0)`).join(' && ');
+        o.sequence.forEach((sw, k) => {
+          const mine = prog[k]!;
+          const prev = k === 0 ? '' : `ck(FG_ROOM, ${prog[k - 1]}, 0) && `;
+          const right = k === n - 1
+            ? [`set(FG_COMMON, ${f}, 0);`, ...afterLines, ...gone, ...music.step(e.step, slug), `message(${done}, 255, 0);`]
+            : [`set(FG_ROOM, ${mine}, 0);`, `message(${thrown}, 255, 0);`];
+          const wrongLines = [...prog.map((b) => `set(FG_ROOM, ${b}, 1);`), `sys_multi(11, ${o.hurt}, 0);   // the shock: ${o.hurt} health, never the last`, `message(${wrong}, 255, 0);`];
+          const inner = [
+            `if (${prev}ck(FG_ROOM, ${mine}, 1)) {`, ...right.map((l) => `    ${l}`),
+            '} else {', `    if (ck(FG_ROOM, ${mine}, 0)) {`, `        message(${thrown}, 255, 0);`, '    } else {', ...wrongLines.map((l) => `        ${l}`), '    }', '}',
+          ];
+          // A wrong switch is a wrong switch even before the right ones before it: only the first switch thrown right starts the row.
+          main.push(
+            `if (ck(FG_COMMON, ${f}, 1) && ck(FG_ROOM, ${press[sw - 1]}, 0)) {   // switch ${sw}, thrown ${k + 1}${['st', 'nd', 'rd'][k] ?? 'th'}`,
+            `    set(FG_ROOM, ${press[sw - 1]}, 1);`,
+            ...(need ? [`    if (${need}) {`, ...inner.map((l) => `        ${l}`), '    } else {', `        message(${look}, 255, 0);`, '    }'] : inner.map((l) => `    ${l}`)),
+            '}',
+          );
+        });
+        continue;
+      }
       const zone = size(spotOf(e.step));
       const [trigger, msgId] = [id++, id++];
       const look = say(e.look);
@@ -641,9 +851,12 @@ function main(): void {
       // An item can be used here only once what it needs has happened: the
       // engine takes some items out of her case as she uses them (the crank,
       // the jerrycan, the fuses), and a use that cannot work would lose them.
+      const alt = e.orUse ? keyItem(e.orUse.use) : undefined;
+      const altTrigger = alt ? id++ : 0;
       const arm = use === undefined ? '' : `aot_set(${trigger}, ${zone}, SCE_USEITEM, 1, 9, 0, ${use - 27}, 0, 1, 0);   // the ${keyItem(e.use!).name.toLowerCase()} can be used here`;
+      const arms = [arm, ...(alt ? [`aot_set(${altTrigger}, ${zone}, SCE_USEITEM, 1, 9, 0, ${alt.id - 27}, 0, 1, 0);   // and the ${alt.name.toLowerCase()}`] : [])];
       if (use !== undefined) {
-        lines.push(...(need ? [`    if (${need}) {`, `        ${arm}`, '    }'] : [`    ${arm}`]));
+        lines.push(...(need ? [`    if (${need}) {`, ...arms.map((a) => `        ${a}`), '    }'] : arms.map((a) => `    ${a}`)));
         lines.push(`    aot_set(${msgId}, ${zone}, SCE_MESSAGE, 129, ${look}, 0, 255, 0, 0, 0);`);
       } else {
         lines.push(`    aot_set(${trigger}, ${zone}, SCE_USEITEM, 129, 4, 0, ${bit}, 0, 1, 0);   // the action button here raises FG_ROOM ${bit}`);
@@ -655,8 +868,11 @@ function main(): void {
       const giveFlag = e.gives ? GIVE_FLAGS.get(e.gives)! : undefined;
       lines.push('} else {', ...(giveFlag === undefined ? [`    ${afterLine}`] : [`    if (ck(FG_ITEM, ${giveFlag}, 1)) {`, `        ${afterLine}`, '    }']), '}');
       // What happens: the flag, the way it opens, its spot's line after, then hers.
+      const revealed = Object.entries(KEY_ITEM_GATES).filter(([, g]) => g.event === e.step).flatMap(([step]) => keyItems.pickups.get(step)?.split('\n') ?? []);
       const happen = [
         `set(FG_COMMON, ${f}, 0);`,
+        ...gone,
+        ...revealed,
         ...(reopen.has(e.step) ? [reopen.get(e.step)!] : []),
         ...(giveFlag === undefined ? [afterLine] : []),
         // The music it changes (plan/music.ts): the rooms' states, and here at once.
@@ -667,13 +883,16 @@ function main(): void {
         // The status screen is still closing on the frame she uses it, and a
         // message opened then is dropped: the line waits a second (setw
         // restarts the seconds counter, state word 4), as the yard's winch does.
+        // A second item (orUse) is worked the same way, with its own line.
+        for (const [item, line] of [[use, done], ...(alt ? [[alt.id, say(e.orUse!.done)]] : [])] as [number, number][]) {
         const pending = bit++;
         const armed = need ? bit++ : 0;
+        const ownHappen = happen.map((l) => (l === `message(${done}, 255, 0);` ? `message(${line}, 255, 0);` : l));
         main.push(
           `if (ck(FG_COMMON, ${f}, 1)) {`,
           // What it needs may happen while she is in the room (the fuse, then the key).
-          ...(need ? [`    if (${need} && ck(FG_ROOM, ${armed}, 1)) {`, `        set(FG_ROOM, ${armed}, 0);`, `        ${arm}`, '    }'] : []),
-          `    if (ck(FG_ROOM, ${pending}, 1) && testitem(${use})) {`,
+          ...(need ? [`    if (${need} && ck(FG_ROOM, ${armed}, 1)) {`, `        set(FG_ROOM, ${armed}, 0);`, ...arms.map((a) => `        ${a}`), '    }'] : []),
+          `    if (ck(FG_ROOM, ${pending}, 1) && testitem(${item})) {`,
           `        set(FG_ROOM, ${pending}, 0);`,
           '        setw(4, 0, 0);',
           '    }',
@@ -681,16 +900,18 @@ function main(): void {
           // Using a crank puts her in the crank pose; this stands her back
           // up. It holds the script until the pose is done, which runs the
           // block again from the top: so before the pending flag clears.
-          ...(use === 0x1e ? ['        sys_multi(7);'] : []),
+          ...(item === 0x1e ? ['        sys_multi(7);'] : []),
           `        set(FG_ROOM, ${pending}, 1);`,
-          // remove_item stops the script when she no longer has it.
-          `        if (item_ck(${use})) {`,
-          `            remove_item(${use});`,
-          '        }',
-          ...happen.map((l) => `        ${l}`),
+          // remove_item stops the script when she no longer has it; a tool
+          // with uses left elsewhere stays in her case.
+          ...spendLines(item, e.step).map((l) => `        ${l}`),
+          ...strandLines(e.step, item).map((l) => `        ${l}`),
+          ...(alt && item === alt.id && e.orUse!.mark ? [`        set(FG_COMMON, ${MARK_FLAGS.get(e.orUse!.mark)}, 0);`] : []),
+          ...ownHappen.map((l) => `        ${l}`),
           '    }',
           '}',
         );
+        }
       } else {
         const pressed = bit++;
         main.push(
@@ -699,6 +920,12 @@ function main(): void {
           ...(need ? [`    if (${need}) {`, ...happen.map((l) => `        ${l}`), '    } else {', `        message(${look}, 255, 0);`, '    }'] : happen.map((l) => `    ${l}`)),
           '}',
         );
+      }
+      // It also happens once every enemy it takes away is dead (the pack shot, not penned).
+      if (e.orAllDead) {
+        const dead = leaving(e.step).map((g) => `ck(FG_ENEMY, ${g.flag}, 0)`);
+        if (!dead.length) throw new Error(`${slug}: ${e.step} happens when its enemies are dead, and no group goes until it`);
+        main.push(`if (ck(FG_COMMON, ${f}, 1) && ${dead.join(' && ')}) {`, `    set(FG_COMMON, ${f}, 0);`, ...strandLines(e.step).map((l) => `    ${l}`), `    ${afterLine}`, '}');
       }
       // What it leaves here to pick up, once it has happened: in the slot of
       // the spot's line, which it replaces until it is taken.
@@ -715,14 +942,23 @@ function main(): void {
         bit++;
       }
     }
+    // A lock that waits for a step is armed in init only if the step was done
+    // before she came in; done here (the pack penned at the kennels), it is
+    // armed the moment it happens.
+    for (const w of waiting) {
+      const armed = bit++;
+      main.push(
+        `if (ck(FG_LOCK, ${w.flag}, 1) && ${w.ready} && ck(FG_ROOM, ${armed}, 1)) {`,
+        `    set(FG_ROOM, ${armed}, 0);`,
+        ...w.lines.map((l) => `    ${l}`),
+        '}',
+      );
+    }
     // A tool used on a lock: as with an event's item (above), her line waits
     // a second for the status screen to close. The way opens at once. The
     // item leaves her case once every lock it opens is open.
     for (const t of toolUses) {
       const pending = bit++;
-      const others = [...LOCKS.values()].filter((l) => l.item === t.item && l.flag !== t.flag && USE_LOCKS[l.step]);
-      const spent = others.map((l) => `ck(FG_LOCK, ${l.flag}, 0)`).join(' && ');
-      const remove = [`if (item_ck(${t.item})) {`, `    remove_item(${t.item});`, '}'];
       main.push(
         `if (ck(FG_LOCK, ${t.flag}, 1)) {`,
         `    if (ck(FG_ROOM, ${pending}, 1) && testitem(${t.item})) {`,
@@ -732,7 +968,9 @@ function main(): void {
         `    if (ck(FG_ROOM, ${pending}, 0) && cmpw(0, 4, 1, 0)) {`,
         `        set(FG_ROOM, ${pending}, 1);`,
         `        set(FG_LOCK, ${t.flag}, 0);`,
-        ...(spent ? [`        if (${spent}) {`, ...remove.map((l) => `            ${l}`), '        }'] : remove.map((l) => `        ${l}`)),
+        ...(t.mark !== undefined ? [`        set(FG_COMMON, ${t.mark}, 0);`] : []),
+        ...spendLines(t.item, t.step).map((l) => `        ${l}`),
+        ...strandLines(t.step, t.item).map((l) => `        ${l}`),
         `        ${t.door}`,
         ...music.step(t.step, slug).map((l) => `        ${l}`),
         `        message(${t.done}, 255, 0);`,

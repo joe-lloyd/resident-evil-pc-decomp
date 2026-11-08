@@ -8,4 +8,4 @@
 7: \nOily boot prints, going\nout the back. To the\nswitch house.
 8: \nThe generator's panel. The\nfuel gauge is right down\non E.\p{0}\nIt ran itself dry.
 9: \nThe generator thuds away.\nThe whole hut shakes.
-10: \nDiesel in. It coughs,\ncatches... and runs.\p{0}\nThe lights are coming on.
+10: \nDiesel in. It coughs,\ncatches... and runs.\p{0}\nThe lights are coming on.\nI put the empty can down.

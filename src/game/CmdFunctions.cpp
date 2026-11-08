@@ -1460,9 +1460,19 @@ int cmd_enemy_prop_set(void)
     case 3: {
         char mode = (char)(param1 >> 8);
         unsigned char flagVal = (unsigned char)param1;
+        const unsigned char was = ent->status_flags;
         if (mode == 0) ent->status_flags = flagVal;
         else if (mode == 1) ent->status_flags |= flagVal;
         else if (mode == 2) ent->status_flags ^= flagVal;
+        // Port addition, REB mode: Rebecca's rooms take live enemies away with
+        // this (the kennels' pack, penned; the loggers, called in by the bell).
+        // Every enemy loop walks slots until it has seen g_enemy_count with
+        // bit 0 set, and the render loop has no bound, so the count follows
+        // bit 0. Else apply_weapon_damage reads slots it never filled.
+        if (g_bRebMode && ((was ^ ent->status_flags) & 1) != 0) {
+            if (ent->status_flags & 1) g_enemy_count++;
+            else if (g_enemy_count > 0) g_enemy_count--;
+        }
         g_ScdOpcodes += 6;
         return 1;
     }
@@ -1782,6 +1792,7 @@ int cmd_skip_4bytes(void)
 // 6 clear unk_8c, 7 reset to idle, 8 write/or/xor healthStatusFlags, 9 xor joint
 // flags, 10 set/clear unk_e0 bit 0x40. The sampled scripts use only 10, 8 and 0
 // - subcommand 1, the only damage-adjacent one, never turned up.
+// Port addition: 11 hurts her (Rebecca's day, below).
 // ============================================================================
 int cmd_player_prop_set(void)
 {
@@ -1865,6 +1876,18 @@ int cmd_player_prop_set(void)
         }
         g_ScdOpcodes += 4;
         return 1;
+    case 11: {
+        // Port addition (Rebecca's day): a trap that hurts with no enemy
+        // behind it, such as the switch house's breakers shocking her when
+        // she throws one out of order. RE1's scripts have no command that
+        // deals damage. It takes the operand's worth of health but never
+        // the last point, so a trap can hurt her and not kill her. No
+        // shipped RDT uses subcommand 11.
+        const short hurt = (short)*params;
+        g_playerEntity.health = g_playerEntity.health > hurt ? (short)(g_playerEntity.health - hurt) : 1;
+        g_ScdOpcodes += 4;
+        return 1;
+    }
     default:
         return 1;
     }

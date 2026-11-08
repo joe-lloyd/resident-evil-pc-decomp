@@ -17,6 +17,8 @@ static constexpr auto s_rebName1f = STR("JERRYCAN\x07");
 static constexpr auto s_rebDesc1f = STR("An empty jerrycan.");
 static constexpr auto s_rebName20 = STR("DIESEL\x07");
 static constexpr auto s_rebDesc20 = STR("A jerrycan full of diesel.");
+static constexpr auto s_rebName24 = STR("DOG MEAT\x07");
+static constexpr auto s_rebDesc24 = STR("The gardener's dog meat,\\nin a stained sack.");
 static constexpr auto s_rebName27 = STR("FUSES\x07");
 static constexpr auto s_rebDesc27 = STR("Spare fuses for the\\ngondola's board.");
 static constexpr auto s_rebName29 = STR("DRIVE COG\x07");
@@ -28,7 +30,7 @@ static constexpr auto s_rebDesc2b = STR("A crowbar from Bravo's\\nhelicopter.");
 static constexpr auto s_rebName34 = STR("GATE KEY\x07");
 static constexpr auto s_rebDesc34 = STR("An old iron key to the\\nestate's back gate.");
 static constexpr auto s_rebName35 = STR("CELLAR KEY\x07");
-static constexpr auto s_rebDesc35 = STR("A key to the cellar doors.");
+static constexpr auto s_rebDesc35 = STR("A key to the cellar's cold\\nstore, and its meat hoist.");
 static constexpr auto s_rebName37 = STR("SWITCH KEY\x07");
 static constexpr auto s_rebDesc37 = STR("A key tagged \"SWITCH\\nHOUSE\".");
 static constexpr auto s_rebName38 = STR("OPERATOR KEY\x07");
@@ -67,6 +69,7 @@ static const RebItem kRebItems[] = {
     { 0x1e, s_rebName1e.bytes, s_rebDesc1e.bytes },  // crank
     { 0x1f, s_rebName1f.bytes, s_rebDesc1f.bytes },  // jerrycan
     { 0x20, s_rebName20.bytes, s_rebDesc20.bytes },  // fuel
+    { 0x24, s_rebName24.bytes, s_rebDesc24.bytes },  // dog-meat
     { 0x27, s_rebName27.bytes, s_rebDesc27.bytes },  // fuses
     { 0x29, s_rebName29.bytes, s_rebDesc29.bytes },  // cog
     { 0x2a, s_rebName2a.bytes, s_rebDesc2a.bytes },  // dynamite

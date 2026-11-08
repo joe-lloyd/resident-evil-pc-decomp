@@ -188,6 +188,7 @@ void play_sfx(int bank, int soundId)
     case 2:
         if (soundId > 47) return;
         handle = g_emSndBanks[soundId * 2];
+        if (handle != 0) sound_probe_note(&g_soundProbe.slot, s_emSndFile[soundId]);
         break;
 
     case 3:
@@ -1129,6 +1130,7 @@ void Play3DSnd(int bank, int soundId, int vol, int pos) // 0x0047f9c0
     case 2:
         if (soundId > 0x2F) return;
         handle = g_emSndBanks[soundId * 2];
+        if (handle != 0) sound_probe_note(&g_soundProbe.slot, s_emSndFile[soundId]);
         break;
 
     case 3:
@@ -1451,6 +1453,7 @@ void Snd_em(unsigned char em_snd_id) // 0x0047fca0
     if (handle != 0) {
         pan_set(handle, (g_snd_pan_right - g_snd_pan_left) * 0x4E);
         SetSndSlot(g_emSndBanks[em_snd_id * 2], 0);
+        sound_probe_note(&g_soundProbe.slot, s_emSndFile[em_snd_id]);
     }
 }
 

@@ -46,10 +46,37 @@ for (const { from, to, room, flag, item } of [
   });
 }
 
-test('the bolt cutters leave her case after the second of their two locks', () => {
-  // Cutting the road gate takes them only if the depot is open, and the other way round.
-  assert.match(script('road'), /set\(FG_LOCK, 43, 0\);\n\s+if \(ck\(FG_LOCK, 41, 0\)\) \{\n\s+if \(item_ck\(28\)\) \{\n\s+remove_item\(28\);/);
-  assert.match(script('camp-yard'), /set\(FG_LOCK, 41, 0\);\n\s+if \(ck\(FG_LOCK, 43, 0\)\) \{\n\s+if \(item_ck\(28\)\) \{\n\s+remove_item\(28\);/);
+test('the bolt cutters leave her case only after the last of their three locks', () => {
+  // The road gate, the depot and the workshop (its second way, FG_LOCK 42):
+  // cutting one takes them only if the other two are open, however they
+  // were opened. The owner's ruling: tools are reused.
+  assert.match(script('road'), /set\(FG_LOCK, 43, 0\);\n\s+if \(ck\(FG_LOCK, 41, 0\) && ck\(FG_LOCK, 42, 0\)\) \{\n\s+if \(item_ck\(28\)\) \{\n\s+remove_item\(28\);/);
+  assert.match(script('camp-yard'), /set\(FG_LOCK, 41, 0\);\n\s+if \(ck\(FG_LOCK, 42, 0\) && ck\(FG_LOCK, 43, 0\)\) \{\n\s+if \(item_ck\(28\)\) \{\n\s+remove_item\(28\);/);
+});
+
+test('a tool whose last job was done the other way leaves her case with it', () => {
+  // The dynamite blasts the rockfall: the crank (30) goes once the mill race
+  // (FG_COMMON 137) is done, and the crank way drops any dynamite (42).
+  const mine = script('mine-entrance');
+  assert.match(mine, /testitem\(42\)[\s\S]*?remove_item\(42\);\n\s+\}\n\s+if \(ck\(FG_COMMON, 137, 0\)\) \{\n\s+if \(item_ck\(30\)\) \{\n\s+remove_item\(30\);/);
+  assert.match(mine, /testitem\(30\)[\s\S]*?if \(item_ck\(42\)\) \{\n\s+remove_item\(42\);\n\s+\}\n\s+set\(FG_COMMON, 157, 0\);/);
+  // Down the hoist, the coal chute is needless: the crowbar (43) goes once the lodge (FG_LOCK 47) is open.
+  assert.match(script('kennels'), /remove_item\(53\);\n\s+\}\n\s+if \(ck\(FG_LOCK, 47, 0\)\) \{\n\s+if \(item_ck\(43\)\) \{\n\s+remove_item\(43\);/);
+  // Down the chute, the hoist and the pen are: the cellar key (53) and the dog meat (36) go.
+  const chute = script('back-garden');
+  assert.match(chute, /if \(item_ck\(53\)\) \{\n\s+remove_item\(53\);/);
+  assert.match(chute, /if \(item_ck\(36\)\) \{\n\s+remove_item\(36\);/);
+});
+
+test('the bell calls in the loggers the cutters would bring out, and the crank way brings a dog', () => {
+  // Ring-bell is FG_COMMON 143, the cutters' mark 158, the crank's 157.
+  assert.match(script('camp-yard'), /if \(ck\(FG_COMMON, 158, 0\) && ck\(FG_COMMON, 143, 1\)\) \{\n(\s+enemy\(1, [^\n]+\/\/ a bucker\n){2}\}/);
+  assert.match(script('mine-entrance'), /if \(ck\(FG_COMMON, 157, 0\)\) \{\n\s+enemy\(2, [^\n]+\/\/ a cerberus\n\}/);
+});
+
+test('the hoist takes the cellar key the moment the pack is penned, not only once the kennels load again', () => {
+  // Penned is FG_COMMON 146 set; the hoist is FG_LOCK 50; the cellar key 53 (use bit 26).
+  assert.match(script('kennels'), /\nif \(ck\(FG_LOCK, 50, 1\) && ck\(FG_COMMON, 146, 0\) && ck\(FG_ROOM, \d+, 1\)\) \{\n\s+set\(FG_ROOM, \d+, 0\);\n\s+aot_set\(2, [^\n]+SCE_MESSAGE[^\n]+\n\s+aot_set\(3, [^\n]+SCE_USEITEM, 1, 9, 0, 26, /);
 });
 
 test("a key still turns as she tries the door, as RE1's do", () => {
@@ -73,4 +100,35 @@ test('action zones grow by GROW, on each side only half way to the next zone the
   assert.equal(GROW, 510);
   assert.deepEqual(out.doors!.map((d) => d.zone), [z(0, 0, 1000, 600), z(4490, 0, 6510, 1110)]);
   assert.deepEqual(out.checks!.map((c) => c.zone), [z(1490, 2490, 2750, 4110), z(2750, 2490, 4010, 4110), z(8490, 8490, 10110, 10110)]);
+});
+
+test("the foreman's safe gives its key only once she has taken the calendar", async () => {
+  // A room-item flag is set while the thing lies there; taking it clears it.
+  const { BOOKS, ITEM_FLAG_BASE } = await import('../files/documents.ts');
+  const calendar = ITEM_FLAG_BASE + BOOKS.indexOf('calendar');
+  assert.match(script('office'), new RegExp(`if \\(ck\\(FG_ITEM, ${calendar}, 1\\) && ck\\(FG_ITEM, \\d+, 0\\)\\) \\{  // workshop key \\(safe\\)`));
+});
+
+test('every key item lying in a kit room can be reached: its zone takes in floor she stands on', async () => {
+  // An item inside a crate or at the back of a shelf lies past her floor;
+  // its zone grows out to the nearest floor (scripts.ts, items.ts).
+  const { readdirSync, existsSync } = await import('node:fs');
+  const { walkableBy } = await import('./walkable.ts');
+  const { KEY_ITEMS } = await import('../items/items.ts');
+  const ids = new Set(KEY_ITEMS.map((k) => k.id));
+  const bad: string[] = [];
+  for (const slug of readdirSync(new URL('./', import.meta.url))) {
+    const json = new URL(`./${slug}/renders/room.json`, import.meta.url);
+    const c = new URL(`./${slug}/room.c`, import.meta.url);
+    if (!existsSync(json) || !existsSync(c)) continue;
+    const can = walkableBy(JSON.parse(readFileSync(json, 'utf8')));
+    for (const m of readFileSync(c, 'utf8').matchAll(/item_aot_set\(\d+, (\d+), (\d+), (\d+), (\d+), (\d+),/g)) {
+      const [x, z, w, d, item] = m.slice(1).map(Number) as [number, number, number, number, number];
+      if (!ids.has(item)) continue;
+      let ok = false;
+      for (let px = x; px <= x + w && !ok; px += 100) for (let pz = z; pz <= z + d && !ok; pz += 100) ok = can(px, pz);
+      if (!ok) bad.push(`${slug}: item ${item} at (${x}, ${z})`);
+    }
+  }
+  assert.deepEqual(bad, []);
 });

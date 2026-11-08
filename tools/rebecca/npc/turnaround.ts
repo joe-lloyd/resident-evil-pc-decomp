@@ -1,4 +1,4 @@
-// Turnaround renders of her day's people, as the game will have them: each
+// Turnaround renders of her day's people and the camp's dead, as the game will have them: each
 // model built from the player's own file with our skin (people.ts), exported,
 // and rendered in Blender on jellybingus (view.py) inside a render slot, then
 // fetched back.
@@ -16,6 +16,7 @@ import { fileURLToPath } from 'node:url';
 import { withSlot } from '../day/slots.ts';
 import { exportModel } from './export.ts';
 import { people, personModel } from './people.ts';
+import { zombieModel, zombies } from './zombies.ts';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const host = process.env.RE1_LAB_HOST ?? 'jellybingus';
@@ -35,10 +36,14 @@ const [outDir, ...slugs] = args.filter((a) => a !== '--head');
 if (!outDir) throw new Error('usage: turnaround.ts <out dir> [slug ...] [--poses rest,4:29] [--size 512] [--head]');
 const enemy = path.join(process.env.RE1_BASE ?? '/tmp/re1-pc', 'enemy');
 
-for (const person of people.filter((p) => !slugs.length || slugs.includes(p.slug))) {
+const models = [
+  ...people.map((p) => ({ slug: p.slug, file: p.model, make: (f: Uint8Array) => personModel(f, p) })),
+  ...zombies.map((z) => ({ slug: z.slug, file: z.model, make: (f: Uint8Array) => zombieModel(f, z) })),
+];
+for (const person of models.filter((p) => !slugs.length || slugs.includes(p.slug))) {
   const local = path.join(outDir, person.slug);
   mkdirSync(local, { recursive: true });
-  const model = personModel(new Uint8Array(readFileSync(path.join(enemy, person.model))), person);
+  const model = person.make(new Uint8Array(readFileSync(path.join(enemy, person.file))));
   const { model: json, png } = exportModel(model, poses.filter((p) => p !== 'rest'));
   writeFileSync(path.join(local, 'model.json'), JSON.stringify(json));
   writeFileSync(path.join(local, 'texture.png'), png);

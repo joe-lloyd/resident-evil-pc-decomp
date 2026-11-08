@@ -38,6 +38,7 @@ export interface Calendar {
   /** 0 is Sunday. */
   firstWeekday: number;
   days: number;
+  /** Days ringed in red; a day listed twice is ringed twice. */
   circled: number[];
   notes: Record<number, string>;
   scrawl: string;
@@ -176,7 +177,7 @@ export const DOCUMENTS: Doc[] = [
     title: 'Bunkhouse calendar',
     writer: 'Ricky, one of the loggers, on the back of a supply company calendar',
     room: 'bunkhouse',
-    where: "The bunkhouse, act 2: on the wall by the stove. The numbers open the foreman's safe.",
+    where: "The bunkhouse, act 2: on the wall by the stove. The paydays are ringed, the 17th twice: the day the Umbrella money came, which the foreman set his safe to.",
     act: 2,
     slot: 12,
     check: 'A calendar from a supply company.',
@@ -190,9 +191,9 @@ export const DOCUMENTS: Doc[] = [
         month: 'JULY 1998',
         firstWeekday: 3,
         days: 31,
-        circled: [17, 31, 8],
+        circled: [3, 17, 17, 31],
         notes: { 4: '4TH', 12: 'MOM', 22: 'DOC?', 26: 'BALL' },
-        scrawl: '17 31 8',
+        scrawl: 'PAYDAY',
       },
       {
         kind: 'text',
@@ -200,11 +201,11 @@ export const DOCUMENTS: Doc[] = [
         text: `
 Written on the back, in pencil:
 
-The boss changes the safe every spring and then forgets it. He yells till somebody finds it for him.
+Paydays ringed. The 17th twice: the Umbrella money came and we all got paid double.
 
-So it's on here now. 17, 31, 8.
+The boss set his safe to that day. Month, day, year.
 
-Don't tell him.
+He forgets anyway.
 >Ricky
 `,
       },

@@ -14,20 +14,36 @@ aot_set(3, 14153, 1190, 2507, 2380, SCE_MESSAGE, 129, 130, 0, 255, 0, 0, 0);
 aot_set(4, 6630, 11815, 7140, 1275, SCE_MESSAGE, 129, 131, 0, 255, 0, 0, 0);
 aot_set(5, 16320, 5610, 1360, 3230, SCE_MESSAGE, 129, 132, 0, 255, 0, 0, 0);
 aot_set(6, 8670, 9010, 4420, 2805, SCE_MESSAGE, 129, 133, 0, 255, 0, 0, 0);
-enemy(3, 2, 219, 1, 2, 0, 0, 1796, 0, 0, 21100, 0, 16000, 0, 0, 0, 0);  // a spinner
-enemy(3, 2, 220, 1, 2, 0, 0, 2307, 0, 0, 21100, 0, 2400, 1, 0, 0, 0);  // a spinner
+enemy(3, 2, 229, 1, 2, 0, 0, 1796, 0, 0, 21100, 0, 16000, 0, 0, 0, 0);  // a spinner
+enemy(3, 2, 230, 1, 2, 0, 0, 2307, 0, 0, 21100, 0, 2400, 1, 0, 0, 0);  // a spinner
 // drain (day/events.ts), FG_COMMON 135 once it has happened.
 if (ck(FG_COMMON, 135, 1)) {
-    aot_set(7, 17000, 8840, 1870, 2890, SCE_USEITEM, 129, 4, 0, 12, 0, 1, 0);   // the action button here raises FG_ROOM 12
+    if (ck(FG_COMMON, 131, 0)) {
+        aot_set(7, 17000, 8840, 1870, 2890, SCE_USEITEM, 1, 9, 0, 4, 0, 1, 0);   // the jerrycan can be used here
+    }
+    aot_set(8, 17000, 8840, 1870, 2890, SCE_MESSAGE, 129, 134, 0, 255, 0, 0, 0);
 } else {
     aot_set(8, 17000, 8840, 1870, 2890, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
 }
 return;
 
 // main procedure 0
-if (ck(FG_COMMON, 135, 1) && ck(FG_ROOM, 12, 0)) {
-    set(FG_ROOM, 12, 1);
-    if (ck(FG_COMMON, 131, 0)) {
+if (ck(FG_COMMON, 135, 1)) {
+    if (ck(FG_COMMON, 131, 0) && ck(FG_ROOM, 13, 1)) {
+        set(FG_ROOM, 13, 0);
+        aot_set(7, 17000, 8840, 1870, 2890, SCE_USEITEM, 1, 9, 0, 4, 0, 1, 0);   // the jerrycan can be used here
+    }
+    if (ck(FG_ROOM, 12, 1) && testitem(31)) {
+        set(FG_ROOM, 12, 0);
+        setw(4, 0, 0);
+    }
+    if (ck(FG_ROOM, 12, 0) && cmpw(0, 4, 1, 0)) {
+        set(FG_ROOM, 12, 1);
+        if (ck(FG_COMMON, 130, 0)) {
+            if (item_ck(31)) {
+                remove_item(31);
+            }
+        }
         set(FG_COMMON, 135, 0);
         door_aot_set(2, 6630, 13090, 7140, 1530, 0, 1, 8, 0, 0, ROOM_51F, 4420, 0, 8500, 0, UNLOCKED, 193);
         aot_set(8, 17000, 8840, 1870, 2890, SCE_MESSAGE, 129, 135, 0, 255, 0, 0, 0);
@@ -35,8 +51,6 @@ if (ck(FG_COMMON, 135, 1) && ck(FG_ROOM, 12, 0)) {
         tbl37_set(4, 30, 40);   // junction
         bgm_stop(1);
         message(136, 255, 0);
-    } else {
-        message(134, 255, 0);
     }
 }
 return;

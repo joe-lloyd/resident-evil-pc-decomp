@@ -20,36 +20,89 @@ export interface Floor {
   readonly doors: readonly { zone: Rect; arrive: { x: number; z: number } }[];
 }
 
-/** Entity id (cmd_enemy_set operand 1), behaviour byte, and collision records, as RE1 places each kind. */
+/** A zombie's cries, the WAVs RE1's own rows give its zombies, by the slot each plays. */
+const ZOMBIE_CRIES = ['z_taore', 'z_ftL', 'z_ftR', 'z_kamu', 'z_osou', 'z_unaruA', 'z_head', 'z_Hkick', 'z_Ugoron', 'z_unaruB'];
+
+/**
+ * Entity id (cmd_enemy_set operand 1), behaviour byte, and collision records,
+ * as RE1 places each kind; and its cries, the WAVs RE1's own rooms give that
+ * kind in their sound rows (src/game/SoundTables.cpp), by the slot it plays.
+ * The camp's loggers are RE1's three zombie bodies with skins of ours, which
+ * her mode loads for the camp's stages only (npc/zombies.ts); a zombie
+ * anywhere else is RE1's.
+ */
 export const FOE_KINDS = {
-  zombie: { id: 17, behavior: 0, sca: 2 },
-  cerberus: { id: 2, behavior: 1, sca: 2 },
-  crow: { id: 5, behavior: 0, sca: 2 },
-  adder: { id: 10, behavior: 1, sca: 1 },
-  spinner: { id: 3, behavior: 2, sca: 2 },
+  zombie: { id: 17, behavior: 0, sca: 2, sounds: ZOMBIE_CRIES },
+  /** A faller in flannel and jeans, on RE1's first zombie. */
+  faller: { id: 0, behavior: 0, sca: 2, sounds: ZOMBIE_CRIES },
+  /** A bucker in his undershirt and chaps, on the naked zombie; behaviour 4 wanders, as RE1 places that body. */
+  bucker: { id: 1, behavior: 4, sca: 2, sounds: ZOMBIE_CRIES },
+  /** A rigger in a waxed coat and a hard hat, on the green-coated zombie. */
+  rigger: { id: 17, behavior: 0, sca: 2, sounds: ZOMBIE_CRIES },
+  cerberus: { id: 2, behavior: 1, sca: 2, sounds: ['cer_foot', 'cer_taoA', 'cer_unar', 'cer_bite', 'cer_cryA', 'cer_taoB', 'cer_jkMX', 'cer_kamu', 'cer_cryB', 'cer_runMX'] },
+  crow: { id: 5, behavior: 0, sca: 2, sounds: ['RVcar1', 'RVpat', 'RVcar2', 'RVwing1', 'RVwing2', 'RVfryed'] },
+  adder: { id: 10, behavior: 1, sca: 1, sounds: ['PY_mena', 'PY_hit2', 'PY_fall'] },
+  spinner: { id: 3, behavior: 2, sca: 2, sounds: ['kuasi_A', 'kuasi_B', 'kuasi_C', 'sp_rakk', 'sp_atck', 'sp_bomb', 'sp_fumu', 'sp_Doku', 'sp_sanj2'] },
 } as const;
 export type Kind = keyof typeof FOE_KINDS;
 
+/**
+ * An enemy plays sound slot n of its block, block * 10 + n (Snd_em), the
+ * block being cmd_enemy_set's last byte. Each set of cries in a room takes
+ * the next block, in the order the room lists its kinds; kinds that cry
+ * alike (the loggers) share one. Two at most: the room's things sound from
+ * slot 20 (sound/script.ts).
+ */
+const BLOCKS = 2;
+function soundBlocks(slug: string, foes: Record<string, readonly FoeGroup[]>): Map<Kind, number> {
+  const kinds = [...new Set((foes[slug] ?? []).map(([kind]) => kind))];
+  const cries = [...new Set(kinds.map((k) => FOE_KINDS[k].sounds))];
+  if (cries.length > BLOCKS) throw new Error(`${slug}: ${cries.length} kinds of enemy cries (${kinds.join(', ')}); a room has sound for ${BLOCKS}`);
+  return new Map(kinds.map((k) => [k, cries.indexOf(FOE_KINDS[k].sounds)]));
+}
+
+
+/**
+ * When a group is there: from the step that brings it (a plan step's
+ * `stirs`) and until the step that takes it away (the kennels' pack, once
+ * penned). Without either it is there from the start.
+ */
+export interface When {
+  readonly after?: string;
+  readonly until?: string;
+}
+export type FoeGroup = readonly [Kind, number] | readonly [Kind, number, When];
+
 /** What each kit room holds, from the plan. */
-export const FOES: Record<string, readonly (readonly [Kind, number])[]> = {
+export const FOES: Record<string, readonly FoeGroup[]> = {
   platform: [['crow', 2]],
   woods: [['cerberus', 2]],
   den: [['cerberus', 1]],
-  'logging-road': [['zombie', 1]],
-  'camp-yard': [['zombie', 3]],
-  bunkhouse: [['zombie', 1]],
-  mess: [['zombie', 2]],
+  'logging-road': [['faller', 1]],
+  // The bell calls them to the mess hall; the cutters' noise brings two more
+  // out, unless the bell has called those in to supper too.
+  // The two the cutters' noise brings out of the workshop are its buckers, chaps and all.
+  'camp-yard': [['faller', 2, { until: 'ring-bell' }], ['rigger', 1, { until: 'ring-bell' }], ['bucker', 2, { after: 'workshop-cut', until: 'ring-bell' }]],
+  bunkhouse: [['bucker', 1]],
+  mess: [['faller', 1], ['rigger', 1], ['bucker', 1, { after: 'ring-bell' }], ['faller', 1, { after: 'ring-bell' }]],
   depot: [['adder', 2]],
-  sawmill: [['zombie', 2]],
-  pond: [['zombie', 1]],
+  // The running mill draws loggers to the sawmill and the flume head.
+  sawmill: [['bucker', 2], ['rigger', 1, { after: 'mill-race' }]],
+  flume: [['rigger', 1, { after: 'mill-race' }]],
+  pond: [['faller', 1]],
   road: [['crow', 3]],
-  washout: [['adder', 2]],
+  // The generator's noise brings a dog down the gully.
+  washout: [['adder', 2], ['cerberus', 1, { after: 'generator-on' }]],
   'tower-stairs': [['crow', 2]],
   'tower-top': [['crow', 2]],
   'line-track': [['adder', 2]],
   'east-path': [['crow', 2]],
   quarry: [['cerberus', 1]],
-  tunnel: [['spinner', 1]],
+  // Winding the rockfall clear with the crank, out in the open, brings a dog
+  // over from the quarry. The dynamite is over before one can come.
+  'mine-entrance': [['cerberus', 1, { after: 'rockfall-wound' }]],
+  // Draining the mine flushes spiders up out of the sump.
+  tunnel: [['spinner', 1], ['spinner', 2, { after: 'drain' }]],
   junction: [['spinner', 2]],
   gallery: [['zombie', 1]],
   'summit-trail': [['crow', 3]],
@@ -57,8 +110,10 @@ export const FOES: Record<string, readonly (readonly [Kind, number])[]> = {
   'valley-path': [['cerberus', 1]],
   creek: [['adder', 2]],
   'estate-wall': [['crow', 2]],
-  kennels: [['cerberus', 3]],
-  'back-garden': [['zombie', 1]],
+  // The pack, until penned with the dog meat (or shot).
+  kennels: [['cerberus', 3, { until: 'pen-pack' }]],
+  // The coal chute's iron rings out, and the pack comes unless it is penned.
+  'back-garden': [['zombie', 1], ['cerberus', 2, { after: 'coal-chute', until: 'pen-pack' }]],
   cellar: [['zombie', 1]],
 };
 
@@ -117,20 +172,35 @@ export function place(floor: Floor, count: number): { x: number; z: number }[] {
 export const facing = (from: { x: number; z: number }, to: { x: number; z: number }) =>
   ((Math.round((Math.atan2(-(to.z - from.z), to.x - from.x) / (2 * Math.PI)) * 4096) % 4096) + 4096) % 4096;
 
-/** The room's enemy() lines; `flags` supplies kill flags and is consumed. Slots count up from `slot`. */
-export function foeLines(slug: string, floor: Floor, flags: number[], slot = 0): string[] {
+/**
+ * The room's enemy() lines; `flags` supplies kill flags and is consumed.
+ * Slots count up from `slot`. A group with a `When` stands inside the test
+ * `test` writes for it.
+ */
+export function foeLines(slug: string, floor: Floor, flags: number[], slot = 0, test?: (w: When) => string, foes = FOES): string[] {
   const lines: string[] = [];
-  for (const [kind, count] of FOES[slug] ?? []) {
+  // Every group of the room is placed in one spread, so one a step brings
+  // never stands where another already does.
+  const groups = foes[slug] ?? [];
+  const blocks = soundBlocks(slug, foes);
+  const total = groups.reduce((n, [, count]) => n + count, 0);
+  const all = place(floor, total);
+  if (all.length < total) throw new Error(`${slug}: room for ${all.length} of ${total} enemies`);
+  for (const [kind, count, when] of groups) {
+    const group: string[] = [];
     const k = FOE_KINDS[kind];
-    const spots = place(floor, count);
-    if (spots.length < count) throw new Error(`${slug}: room for ${spots.length} of ${count} ${kind}s`);
+    const spots = all.splice(0, count);
     for (const p of spots) {
       const flag = flags.shift();
       if (flag === undefined) throw new Error(`${slug}: no kill flag left`);
       const near = floor.doors.map((d) => d.arrive).sort((a, c) => Math.hypot(a.x - p.x, a.z - p.z) - Math.hypot(c.x - p.x, c.z - p.z))[0];
       const angle = near ? facing(p, near) : 0;
-      lines.push(`enemy(${k.id}, ${k.behavior}, ${flag}, 1, ${k.sca}, 0, 0, ${angle}, 0, 0, ${p.x}, 0, ${p.z}, ${slot++}, 0, 0, 0);  // a ${kind}`);
+      group.push(`enemy(${k.id}, ${k.behavior}, ${flag}, 1, ${k.sca}, 0, 0, ${angle}, 0, 0, ${p.x}, 0, ${p.z}, ${slot++}, 0, 0, ${blocks.get(kind)});  // a ${kind}`);
     }
+    if (when && (when.after || when.until)) {
+      if (!test) throw new Error(`${slug}: enemies that come or go with a step need a flag test`);
+      lines.push(`if (${test(when)}) {`, ...group.map((l) => `    ${l}`), '}');
+    } else lines.push(...group);
   }
   return lines;
 }

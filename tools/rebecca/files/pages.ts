@@ -443,7 +443,8 @@ function calendarPage(cv: Canvas, cal: Calendar): void {
     // A steady pencil: a shaky one would run into the line under it.
     const note = cal.notes[day];
     if (note) write(cv, note, x + 2, y + 12, { c: C.InkSoft });
-    if (cal.circled.includes(day)) cv.loop(x + cw - 3 - width(s) / 2 - 1, y + 6, 10, 7, C.Red);
+    // A day ringed twice is listed twice: a second, wider loop round the first.
+    cal.circled.filter((d) => d === day).forEach((_, k) => cv.loop(x + cw - 3 - width(s) / 2 - 1, y + 6, 10 + k * 3, 7 + k * 2, C.Red));
   }
   bleed(cv, C.Ink, C.InkSoft, box.x0, box.y0, box.x1, box.y1);
   write(cv, cal.scrawl, Math.round((PAGE - width(cal.scrawl, 2)) / 2), gy + rows * ch + 4, { c: C.Red, scale: 2, shaky: 1 });

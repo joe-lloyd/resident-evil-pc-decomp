@@ -422,6 +422,14 @@ const char* GameState_Json(void)
         const char* f = sp.room.recent[(sp.room.plays - n + i) % 8];
         put("%s\"%s\"", i ? "," : "", f ? f : "");
     }
+    // The room's other slot sounds the same way (cries, a lock, the box):
+    // how many played, the last eight.
+    put("],\"slot\":%u,\"slots\":[", sp.slot.plays);
+    const unsigned int m = sp.slot.plays < 8 ? sp.slot.plays : 8;
+    for (unsigned int i = 0; i < m; i++) {
+        const char* f = sp.slot.recent[(sp.slot.plays - m + i) % 8];
+        put("%s\"%s\"", i ? "," : "", f ? f : "");
+    }
     put("]}");
     // Do not persist or send a truncated JSON document.
     if (s_len >= (int)sizeof(s_body)) return NULL;
@@ -456,6 +464,10 @@ void TestMode_Tick(int gameFrame)
     const char* json = GameState_Json();
     if (gameFrame && !editing) s_gameplayFrame = 0;
     if (!json) return;
+    // A client still reading earlier lines gets this state later: the next
+    // one supersedes it, and queueing every frame's would only grow the
+    // backlog. Acks and other replies always queue (reply()).
+    if (plat_test_link_pending() > 0) return;
     if (s_forceState || strcmp(s_body, s_lastBody) != 0) {
         plat_test_link_send(json);
         plat_test_link_send("\n");

@@ -54,6 +54,9 @@ export interface Sound {
   last: string;
   /** The last eight of them (fewer since launch), oldest first: a frame can play several. */
   recent: string[];
+  /** Sounds played from the room's slots besides her steps since launch (enemies' cries, a lock, the item box, the typewriter), and the last eight WAVs, oldest first. */
+  slot: number;
+  slots: string[];
 }
 
 export interface GameState {
@@ -213,6 +216,8 @@ function parseSound(o: Record<string, unknown>): Sound {
     sfx: num(o, 'sfx'),
     last: str(o, 'last'),
     recent: o.recent === undefined ? [] : strings(o.recent, 'snd.recent'),
+    slot: o.slot === undefined ? 0 : num(o, 'slot'),
+    slots: o.slots === undefined ? [] : strings(o.slots, 'snd.slots'),
   };
 }
 

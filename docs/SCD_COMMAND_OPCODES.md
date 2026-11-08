@@ -1086,7 +1086,7 @@ Parameter block layout (starts at opcode stream `+0x0C`, so block offset = strea
 | Address | `0x004312f0` |
 | Length | 4/6/8 bytes (see subCmd) |
 | Returns | `1` |
-| Description | Modifies one property of `g_EnemiesList[enemyIdx]`. Sub-commands select the field and the consumed length; an unknown subCmd consumes nothing (interpreter spins, as in the original). |
+| Description | Modifies one property of `g_EnemiesList[enemyIdx]`. Sub-commands select the field and the consumed length; an unknown subCmd consumes nothing (interpreter spins, as in the original). Port addition, REB mode: when subCmd 3 turns status bit 0 off or on, `g_enemy_count` follows it. Every enemy loop walks slots until it has seen that many with bit 0 set, so a live enemy taken away without it leaves `apply_weapon_damage` reading slots it never filled. |
 
 | Offset | Key | Type | Description |
 |---|---|---|---|
@@ -1105,12 +1105,12 @@ Parameter block layout (starts at opcode stream `+0x0C`, so block offset = strea
 | Address | `0x004314b0` |
 | Length | 2/4 bytes (see subCmd) |
 | Returns | `1` |
-| Description | Multi-subcommand **player** property setter — the twin of `0x28` `cmd_enemy_prop_set`. Sub-commands: 0 clear equipped weapon, 1 enter the being-attacked animation, 3 write/or/xor `player.flags`, 4 force action 1/6, 5 `directionAngle`, 6 clear `unk_8c`, 7 reset to idle, 8 write/or/xor `healthStatusFlags`, 9 xor joint flags, 10 set/clear `unk_e0` bit `0x40`. Sampled scripts use only 10, 8 and 0 — the damage-adjacent sub-command 1 never turned up. Unknown subCmd consumes nothing (interpreter spins, as in the original). |
+| Description | Multi-subcommand **player** property setter — the twin of `0x28` `cmd_enemy_prop_set`. Sub-commands: 0 clear equipped weapon, 1 enter the being-attacked animation, 3 write/or/xor `player.flags`, 4 force action 1/6, 5 `directionAngle`, 6 clear `unk_8c`, 7 reset to idle, 8 write/or/xor `healthStatusFlags`, 9 xor joint flags, 10 set/clear `unk_e0` bit `0x40`, and the port addition 11, hurt her. Sampled scripts use only 10, 8 and 0 — the damage-adjacent sub-command 1 never turned up. Unknown subCmd consumes nothing (interpreter spins, as in the original). |
 
 | Offset | Key | Type | Description |
 |---|---|---|---|
 | +0 | opcode | u8 | `0x33` |
-| +1 | subCmd | u8 | `0` unequip (len 2); `1` hit react: isBeingAttackedFlag + anim reset (len 4); `3` flags SET/OR/XOR (len 4); `4` actionBehavior=1/actionState=6 (len 2); `5` directionAngle=param (len 4); `6` clear unk_8c (len 2); `7` reset to idle (len 2); `8` healthStatusFlags SET/OR/XOR (len 4); `9` toggle joint flags by bitmask (len 4); `10` set/clear `unk_e0` bit `0x40` by `param>>8` (len 4). |
+| +1 | subCmd | u8 | `0` unequip (len 2); `1` hit react: isBeingAttackedFlag + anim reset (len 4); `3` flags SET/OR/XOR (len 4); `4` actionBehavior=1/actionState=6 (len 2); `5` directionAngle=param (len 4); `6` clear unk_8c (len 2); `7` reset to idle (len 2); `8` healthStatusFlags SET/OR/XOR (len 4); `9` toggle joint flags by bitmask (len 4); `10` set/clear `unk_e0` bit `0x40` by `param>>8` (len 4); `11` port addition: take `param` health, never the last point, a trap's hurt in Rebecca's day (len 4). |
 | +2 | param | u16 | Value / operand word (subCmd dependent). |
 
 ### `0x2B` — `cmd_attack_anim_set`

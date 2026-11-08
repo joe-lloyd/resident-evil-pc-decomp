@@ -51,40 +51,29 @@
     11900
    ],
    "fov": 200
+  },
+  {
+   "from": [
+    21335,
+    -3910,
+    9775
+   ],
+   "to": [
+    26010,
+    -1530,
+    10880
+   ],
+   "fov": 200
   }
  ],
  "walls": [
   {
    "shape": "box",
-   "x0": 5622,
-   "z0": 5282,
-   "x1": 5683,
-   "z1": 5343,
-   "name": "Probe: Floating plank.001"
-  },
-  {
-   "shape": "box",
-   "x0": 5625,
-   "z0": 5540,
-   "x1": 5935,
-   "z1": 6105,
-   "name": "Probe: Floating plank.001"
-  },
-  {
-   "shape": "box",
    "x0": 17607,
    "z0": 5285,
    "x1": 17668,
-   "z1": 6105,
-   "name": "Probe: Floating plank.003"
-  },
-  {
-   "shape": "box",
-   "x0": 5877,
-   "z0": 6302,
-   "x1": 5938,
-   "z1": 6363,
-   "name": "Probe: Floating plank.001"
+   "z1": 5595,
+   "name": "Probe: Rope post.004"
   },
   {
    "shape": "box",
@@ -93,22 +82,6 @@
    "x1": 12310,
    "z1": 6873,
    "name": "Probe: Blanket on the cart"
-  },
-  {
-   "shape": "box",
-   "x0": 5880,
-   "z0": 6560,
-   "x1": 6190,
-   "z1": 7125,
-   "name": "Probe: Floating plank.001"
-  },
-  {
-   "shape": "box",
-   "x0": 6132,
-   "z0": 7322,
-   "x1": 6193,
-   "z1": 7383,
-   "name": "Probe: Floating plank.001"
   },
   {
    "shape": "box",
@@ -128,27 +101,11 @@
   },
   {
    "shape": "box",
-   "x0": 16077,
-   "z0": 7832,
-   "x1": 16138,
-   "z1": 7893,
-   "name": "Probe: Blood in the water"
-  },
-  {
-   "shape": "box",
-   "x0": 17100,
+   "x0": 17610,
    "z0": 7832,
    "x1": 25400,
    "z1": 7893,
    "name": "Probe: Winze dark"
-  },
-  {
-   "shape": "box",
-   "x0": 15060,
-   "z0": 8087,
-   "x1": 18940,
-   "z1": 8148,
-   "name": "Probe: Blood in the water"
   },
   {
    "shape": "box",
@@ -160,27 +117,11 @@
   },
   {
    "shape": "box",
-   "x0": 16080,
-   "z0": 8342,
-   "x1": 18940,
-   "z1": 8403,
-   "name": "Probe: Blood in the water"
-  },
-  {
-   "shape": "box",
    "x0": 10980,
    "z0": 7835,
    "x1": 13330,
    "z1": 8655,
    "name": "Probe: Blanket on the cart"
-  },
-  {
-   "shape": "box",
-   "x0": 16080,
-   "z0": 8597,
-   "x1": 18685,
-   "z1": 8658,
-   "name": "Probe: Blood in the water"
   },
   {
    "shape": "box",
@@ -192,30 +133,6 @@
   },
   {
    "shape": "box",
-   "x0": 15312,
-   "z0": 8852,
-   "x1": 15373,
-   "z1": 8913,
-   "name": "Probe: Lamp bulb 1"
-  },
-  {
-   "shape": "box",
-   "x0": 15825,
-   "z0": 8852,
-   "x1": 18685,
-   "z1": 8913,
-   "name": "Probe: Blood in the water"
-  },
-  {
-   "shape": "box",
-   "x0": 15060,
-   "z0": 9107,
-   "x1": 18685,
-   "z1": 9168,
-   "name": "Probe: His shirt floating"
-  },
-  {
-   "shape": "box",
    "x0": 5880,
    "z0": 7835,
    "x1": 7720,
@@ -224,35 +141,11 @@
   },
   {
    "shape": "box",
-   "x0": 13785,
-   "z0": 9110,
-   "x1": 14095,
-   "z1": 9420,
-   "name": "Probe: Floating plank.002"
-  },
-  {
-   "shape": "box",
-   "x0": 14550,
-   "z0": 9362,
-   "x1": 18430,
-   "z1": 9423,
-   "name": "Probe: Hal"
-  },
-  {
-   "shape": "box",
    "x0": 23727,
    "z0": 9362,
    "x1": 23788,
    "z1": 9423,
    "name": "Probe: Lamp cable down"
-  },
-  {
-   "shape": "box",
-   "x0": 14040,
-   "z0": 9617,
-   "x1": 17410,
-   "z1": 9678,
-   "name": "Probe: Hal"
   },
   {
    "shape": "box",
@@ -272,14 +165,6 @@
   },
   {
    "shape": "box",
-   "x0": 14040,
-   "z0": 9872,
-   "x1": 15880,
-   "z1": 9933,
-   "name": "Probe: Hal"
-  },
-  {
-   "shape": "box",
    "x0": 23985,
    "z0": 9872,
    "x1": 24295,
@@ -288,51 +173,11 @@
   },
   {
    "shape": "box",
-   "x0": 14040,
-   "z0": 10127,
-   "x1": 14350,
-   "z1": 10188,
-   "name": "Probe: Floating plank.002"
-  },
-  {
-   "shape": "box",
-   "x0": 15060,
-   "z0": 10127,
-   "x1": 15880,
-   "z1": 10188,
-   "name": "Probe: Hal"
-  },
-  {
-   "shape": "box",
    "x0": 24237,
    "z0": 10127,
    "x1": 24298,
    "z1": 10188,
    "name": "Probe: Lamp cable down"
-  },
-  {
-   "shape": "box",
-   "x0": 14292,
-   "z0": 10382,
-   "x1": 14353,
-   "z1": 10443,
-   "name": "Probe: Floating plank.002"
-  },
-  {
-   "shape": "box",
-   "x0": 15312,
-   "z0": 10382,
-   "x1": 15373,
-   "z1": 10443,
-   "name": "Probe: Bandaged forearm"
-  },
-  {
-   "shape": "box",
-   "x0": 16332,
-   "z0": 9875,
-   "x1": 16393,
-   "z1": 10440,
-   "name": "Probe: Timber sets"
   },
   {
    "shape": "box",
@@ -357,14 +202,6 @@
    "x1": 9250,
    "z1": 10953,
    "name": "Probe: Cart on its side"
-  },
-  {
-   "shape": "box",
-   "x0": 14295,
-   "z0": 10640,
-   "x1": 14605,
-   "z1": 10950,
-   "name": "Probe: Floating plank.002"
   },
   {
    "shape": "box",
@@ -555,39 +392,33 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "adit",
+   "bank": 1,
+   "bit": -1
+  }
+ ],
  "probe": {
   "Blanket on the cart": 69,
   "Cart in the water 1": 58,
   "Cart on its side": 58,
-  "Cart in the water 0": 54,
+  "Cart in the water 0": 56,
   "Decline floor": 52,
-  "Blood in the water": 43,
-  "Winze dark": 37,
-  "Timber sets": 37,
-  "Hal": 35,
-  "His shirt floating": 20,
-  "Floating plank.001": 15,
-  "Floating plank.002": 13,
+  "Winze dark": 39,
+  "Timber sets": 34,
   "Lamp cable down": 9,
   "Floating hard hat": 6,
-  "Floating plank": 5,
   "Blood on the blanket": 4,
-  "Rail": 4,
   "Rope post.001": 3,
-  "Bandaged forearm": 3,
   "Rope post.004": 2,
-  "Floating plank.003": 2,
+  "Rope post": 2,
   "Rope.003": 2,
   "Rope.007": 2,
-  "Floating plank.004": 2,
-  "Hair spread on the water": 2,
-  "Rope post": 1,
   "Rope.001": 1,
   "Rope.002": 1,
   "Rope.004": 1,
-  "Hal's lantern": 1,
-  "Lamp bulb 1": 1,
-  "Rail.001": 1
+  "Hal's lantern": 1
  },
  "bounds": {
   "x0": 1700,
@@ -621,18 +452,25 @@
    },
    "walk": false,
    "touch": false
+  },
+  {
+   "to": "east-path",
+   "zone": {
+    "x0": 24480,
+    "z0": 9860,
+    "x1": 25500,
+    "z1": 11900
+   },
+   "arrive": {
+    "x": 22950,
+    "z": 12070,
+    "angle": 2048
+   },
+   "walk": false,
+   "touch": false
   }
  ],
  "checks": [
-  {
-   "zone": {
-    "x0": 14790,
-    "z0": 7990,
-    "x1": 18530,
-    "z1": 10540
-   },
-   "text": "Hal. Face down in the water. Something bit him: his arm's\nbandaged, black under it.\nThere's a key on a chain round his neck."
-  },
   {
    "zone": {
     "x0": 10710,
@@ -640,7 +478,7 @@
     "x1": 13770,
     "z1": 9010
    },
-   "text": "He hid up on this cart, out of the water. Blanket, lantern.\nThere's blood where he slid off."
+   "text": "He hid up on this cart, out of the water. Blanket, lantern.\nThe blood on it is his."
   },
   {
    "zone": {
@@ -661,12 +499,23 @@
    "z": 7310
   }
  ],
- "spots": [],
+ "spots": [
+  {
+   "step": "adit",
+   "zone": {
+    "x0": 23460,
+    "z0": 9860,
+    "x1": 24480,
+    "z1": 11900
+   }
+  }
+ ],
  "entry": null,
  "notes": [
-  "from the foot of the decline: the black water, the cart he hid on, Hal floating by the rope",
-  "from the far south-east: Hal at the edge of the deep water, the cart, the way back up",
-  "close on Hal, face down, the key on its chain at his neck, the rope and the DANGER board",
-  "from over the winze: the cart under its web, the carts in the water, the decline"
+  "from the foot of the decline: the black water, the cart he hid on, the rope",
+  "from the far south-east: the edge of the deep water, the cart, the way back up",
+  "close on the edge of the deep water, the rope and the DANGER board",
+  "from over the winze: the cart under its web, the carts in the water, the decline",
+  "down the drainage adit's line at the east end: the boards across it, the water at its sill; kicked out, the tunnel to daylight"
  ]
 }

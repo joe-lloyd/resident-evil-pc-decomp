@@ -318,7 +318,7 @@
    "z0": 9872,
    "x1": 22680,
    "z1": 9933,
-   "name": "Probe: Box edging.007"
+   "name": "Probe: Rose heads, dead"
   },
   {
    "shape": "box",
@@ -334,7 +334,7 @@
    "z0": 10127,
    "x1": 14010,
    "z1": 10188,
-   "name": "Probe: Box edging.003"
+   "name": "Probe: Rose heads, dead"
   },
   {
    "shape": "box",
@@ -866,14 +866,6 @@
   },
   {
    "shape": "box",
-   "x0": 21605,
-   "z0": 21857,
-   "x1": 21915,
-   "z1": 21918,
-   "name": "Probe: Cellar padlock"
-  },
-  {
-   "shape": "box",
    "x0": 23135,
    "z0": 21605,
    "x1": 23445,
@@ -949,26 +941,33 @@
   "frames": 16,
   "ticks": 3
  },
+ "states": [
+  {
+   "name": "coal-chute",
+   "bank": 1,
+   "bit": -1
+  }
+ ],
  "probe": {
   "West hedge": 625,
   "Basin lip": 299,
   "Rose heads, dead": 208,
   "Box edging": 71,
   "Box edging.003": 71,
-  "Box edging.012": 59,
-  "Box edging.013": 59,
+  "Box edging.012": 60,
+  "Box edging.009": 59,
   "Box edging.001": 58,
   "Upper bowl": 58,
   "Box edging.008": 58,
-  "Box edging.009": 58,
+  "Box edging.013": 58,
+  "Box edging.007": 54,
   "Box edging.006": 53,
-  "Box edging.007": 53,
   "Box edging.002": 51,
   "Bench seat": 44,
   "Shed inside": 38,
   "Barrow": 30,
-  "Box edging.011": 30,
-  "Box edging.005": 28,
+  "Box edging.011": 29,
+  "Box edging.005": 27,
   "Bulkhead door 1": 25,
   "Urn plinth": 24,
   "Box edging.004": 24,
@@ -995,7 +994,6 @@
   "Shed wall w.005": 3,
   "Clawed bulkhead": 3,
   "Apron on the hedge": 2,
-  "Cellar padlock": 2,
   "Door pilaster": 2,
   "Door pilaster.001": 2,
   "Bloody hand on the door": 1,
@@ -1046,14 +1044,14 @@
   {
    "to": "cellar",
    "zone": {
-    "x0": 20400,
-    "z0": 20400,
-    "x1": 23120,
-    "z1": 21420
+    "x0": 17085,
+    "z0": 20995,
+    "x1": 18785,
+    "z1": 23120
    },
    "arrive": {
-    "x": 21760,
-    "z": 19550,
+    "x": 16065,
+    "z": 21335,
     "angle": 1024
    },
    "walk": false,
@@ -1061,6 +1059,15 @@
   }
  ],
  "checks": [
+  {
+   "zone": {
+    "x0": 20400,
+    "z0": 20400,
+    "x1": 23120,
+    "z1": 21420
+   },
+   "text": "The cellar doors won't move.\nThey're barred from the inside."
+  },
   {
    "zone": {
     "x0": 10540,

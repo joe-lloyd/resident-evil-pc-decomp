@@ -13,6 +13,14 @@ station's windsock on its pole by the drop still swings in the wind off
 the valley, and the bench looks out over all of it. The crows are working
 along the drips.
 
+West of the cottage the bank north of the path is cut back to rock, and in
+the rock face is the mouth of an old drainage adit from the silver mine: a
+timber frame gone grey with weather, boarded shut long ago, a dark seep of
+water still staining the ground under the boards. A faint old track runs
+up to it from the path, grassed over. Once she comes up the adit from the
+flooded gallery and kicks the boards out from inside, they lie broken on
+that track in front of the open, black mouth.
+
 Metres: the floor is x 1.0-18.5, y 1.5-12.0 at z 0. The path comes in at
 the west edge at y 6.5-8.5 and leaves at the east edge at y 7-9, curving
 south past the bench (x 4.2-5.8, y 11.2) and the windsock (x 14.6, y 10.8).
@@ -20,7 +28,11 @@ The cottage stands back from the path, x 7.0-11.4, y 0.6-4.0, its door in
 the south wall at x 8.6-9.5. The woodpile is against its west wall, the
 water butt at its south-east corner, the clothes line from its east wall to
 a pole at x 14.2, y 2.4. A rail fence runs along the drop at y 12.4; south
-of it the mountain falls away to the valley.
+of it the mountain falls away to the valley. The adit's mouth is in a rock
+face across x 1.7-6.0 at y 0.8-1.05, the bank rising nearly three metres over
+it: the frame's posts at x 3.2 and 4.8, its cap 2.05 up, boarded across.
+The door to the gallery is in front of it, x 3.3-4.7, y 1.5-2.1; coming out
+she stands at x 4.0, y 3.0, facing the path.
 
 Moving: the windsock on its pole, the shirts on the line, the grass, a crow
 pecking at the drips.
@@ -42,6 +54,14 @@ COT_DOOR = (8.6, 9.5)
 WALL_H = 2.4
 PATH = [(-6.0, 7.6), (1.0, 7.5), (4.0, 7.3), (6.5, 6.9), (9.0, 6.6), (11.5, 6.8), (14.0, 7.4), (16.5, 7.9), (18.5, 8.0), (25.0, 8.4)]
 SOCK = (14.6, 10.8)
+ADIT = (3.3, 4.7, 1.9, 1.05)   # the adit's mouth in the bank: x0, x1, height; the rock face's y
+BANK = 2.7                     # how high the bank stands over the mouth
+
+
+def bank(x):
+    """The rise of the bank cut back over the adit: full across the mouth, easing off either side."""
+    t = min(1.0, max(0.0, (2.6 - abs(x - (ADIT[0] + ADIT[1]) / 2)) / 1.2))
+    return BANK * t * t * (3 - 2 * t)
 
 
 
@@ -53,6 +73,7 @@ def height(x, y):
     h += 0.4 * noise.noise(Vector((x * 0.15, y * 0.15, 1)))
     if y < Y0 - 1.2:
         h += (Y0 - 1.2 - y) * 0.75
+        h = max(h, bank(x) + 0.15 * noise.noise(Vector((x * 0.8, y * 0.8, 6))))
     if y > Y1 + 0.5:
         h -= (y - Y1 - 0.5) ** 1.3 * 1.4
     return h
@@ -259,6 +280,81 @@ def build():
     kit.splat("Where he stood", mat("blood"), (8.95, 5.0, 0.0), 0.16, seed=14, lumps=0.5)
     reb.cloth("Bloody rag", reb.mat_surface("Bloody rag", [(0.0, (0.4, 0.36, 0.3)), (0.5, (0.25, 0.03, 0.02)), (1.0, (0.1, 0.005, 0.004))], scale=10), (15.1, 7.25, 0.015), (0.3, 0.2), rot=(0, 0, 0.7), cuts=8, lumps=0.02, seed=6)
 
+    # ---- The old drainage adit's mouth in the bank west of the cottage: a rock
+    # face cut back under the slope, a grey timber frame, the boards over it.
+    # Its own random stream, so the rest of the room stays as it was.
+    arng = random.Random(311)
+    ax0, ax1, ah, fy = ADIT
+    amid = (ax0 + ax1) / 2
+    face_m = kit.dirtied(mat("rock"), 0.9, scale=1.2)
+    fv, ff = [], []
+    nu, nv = 30, 14
+    fx0, fx1 = 1.7, 6.0
+    for j in range(nv + 1):
+        for i in range(nu + 1):
+            x = fx0 + (fx1 - fx0) * i / nu
+            # Its top ragged and a little under the bank's, so the grass shows over the cut.
+            z = -0.2 + (bank(x) - 0.05 + 0.3 * noise.noise(Vector((x * 1.3, 2.0, 9)))) * j / nv
+            p = Vector((x, fy, z))
+            # Leaning back into the bank as it rises, but always in front of the
+            # hillside's slope from its row at y 0.74 (flat) to y 0.14 (the bank's top).
+            d = 0.12 * (0.7 + noise.noise(p * 1.1 + Vector((4, 0, 0))) + 0.4 * noise.noise(p * 3.0))
+            fv.append((x, max(0.82 - 0.224 * z, fy - min(0.25, max(0.0, d)) - 0.45 * (j / nv) ** 2), z))
+    for j in range(nv):
+        for i in range(nu):
+            a = j * (nu + 1) + i
+            cx = (fv[a][0] + fv[a + 1][0]) / 2
+            cz = (fv[a][2] + fv[a + nu + 1][2]) / 2
+            if ax0 < cx < ax1 and cz < ah:
+                continue
+            ff.append((a, a + 1, a + nu + 2, a + nu + 1))
+    reb.mesh_object("Adit rock face", fv, ff, face_m)
+    rv, rf = [], []
+    for (x, y, z, r) in ((fx0 - 0.1, fy - 0.35, 0.1, 0.65), (fx1 - 0.15, fy - 0.3, 0.05, 0.5)):
+        reb.boulder(arng, (x, y, z), r, rv, rf)
+    reb.mesh_object("Adit rocks", rv, rf, face_m)
+    # The dark inside, behind the boards.
+    # Unlit, so the low sun on the face cannot grey it.
+    reb.prim("cube", "Dark of the adit", reb.mat_emit("Adit dark", (0.012, 0.011, 0.01), 1.0), (amid, fy - 0.45, ah / 2), (ax1 - ax0 + 0.1, 0.6, ah + 0.1))
+    # The frame: two posts and a cap, grey and split with weather.
+    grey = kit.dirtied(reb.mat_wood("Weathered timber", (0.17, 0.15, 0.12)), 0.75, scale=4)
+    py = fy + 0.06
+    frame = [kit.rod("Adit post", grey, (x, py, -0.05), (x + lean, py, ah + 0.1), 0.11, 6) for x, lean in ((ax0 - 0.1, 0.03), (ax1 + 0.1, -0.02))]
+    frame.append(kit.rod("Adit cap", grey, (ax0 - 0.4, py, ah + 0.15), (ax1 + 0.4, py, ah + 0.12), 0.13, 6))
+    frame.append(kit.rod("Adit lagging", grey, (ax0 - 0.2, py - 0.15, ah + 0.38), (ax1 + 0.25, py - 0.2, ah + 0.36), 0.08, 6))
+    kit.join("Adit frame", frame)
+    # The boards nailed across it, gaps between, one brace; the seep under them.
+    boards_m = kit.dirtied(reb.mat_wood("Adit boards", (0.2, 0.18, 0.15)), 0.8, scale=5)
+    by = py + 0.13
+    boards = []
+    z = 0.1
+    while z < ah - 0.15:
+        h = arng.uniform(0.2, 0.26)
+        boards.append(reb.prim("cube", "Adit board", boards_m, (amid + arng.uniform(-0.05, 0.05), by + arng.uniform(-0.01, 0.01), z + h / 2), (ax1 - ax0 + 0.45, 0.04, h), rot=(0, arng.uniform(-0.05, 0.05), 0)))
+        z += h + arng.uniform(0.05, 0.1)
+    boards.append(reb.prim("cube", "Adit brace", boards_m, (amid, by + 0.04, ah / 2), (0.22, 0.04, ah + 0.3), rot=(0, 0.62, 0)))
+    boards = kit.join("Adit boards", boards)
+    kit.web("Web in the frame", (ax0 + 0.02, by + 0.03, ah + 0.02), 0.4, (1, 1))
+    kit.splat("Seep from the adit", reb.mat_plain("Seep", (0.035, 0.03, 0.02), 0.25), (amid + 0.1, 1.35, height(amid, 1.35) + 0.004), 0.5, seed=41, stretch=(0.7, 1.6), lumps=0.5)
+    kit.splat("Iron stain", reb.mat_plain("Iron stain", (0.2, 0.08, 0.02), 0.7), (amid - 0.15, 1.15, height(amid, 1.15) + 0.006), 0.25, seed=42, stretch=(0.8, 1.3), lumps=0.5)
+    track = [(3.2, PATH[2][1] + 0.05), (3.5, 5.2), (3.9, 3.0), (amid, 1.2)]
+    kit.path_strip("Old track to the adit", mat("dirt"), track, height, width=0.32, lift=0.006)
+    # Kicked out from inside (plan step "adit"): the boards broken out onto the
+    # track in front of the black mouth, lying on the grass they flattened,
+    # one left hanging off the post.
+    kicked = []
+    for k, (x, y, yaw, ln) in enumerate(((3.7, 1.75, 0.5, 1.6), (4.5, 2.1, -0.35, 1.2), (3.9, 2.55, 1.2, 1.7), (4.3, 1.55, 2.6, 0.8), (3.5, 2.9, -0.9, 0.7))):
+        kicked.append(reb.prim("cube", f"Kicked board {k}", boards_m, (x, y, height(x, y) + 0.14 + 0.03 * (k % 2)), (ln, 0.22, 0.04), rot=(0, 0.06 * (k % 3), yaw)))
+    kicked.append(reb.prim("cube", "Board hanging off the post", boards_m, (ax1 + 0.08, by, ah * 0.55), (0.22, 0.04, 1.3), rot=(0, -0.3, 0)))
+    for ob in kicked:
+        ob.hide_render = True
+
+    def kick(done):
+        boards.hide_render = done
+        for ob in kicked:
+            ob.hide_render = not done
+    room.state("adit", kick)
+
     # ---- The slope round it: spruces up behind, boulders, long grass on the shelf.
     def keep_out(x, y):
         return ((X0 - 1.2 < x < X1 + 1.2 and Y0 - 1.5 < y < Y1 + 1.2) or y > Y1 + 1.2
@@ -309,6 +405,8 @@ def build():
     room.door("platform", (X0, 6.5, X0 + 0.6, 8.5), arrive=(2.6, 7.5), face=(1, 0))
     room.door("cottage", (d0, cy1 + 0.15, d1, cy1 + 0.75), arrive=(9.05, 5.7), face=(0, 1), walk=False)
     room.door("quarry", (X1 - 0.6, 7.0, X1, 9.0), arrive=(17.0, 8.0), face=(-1, 0))
+    # Into the mine's adit: a way underground, so it opens with the action button.
+    room.door("gallery", (ax0, Y0, ax1, Y0 + 0.6), arrive=(amid, 3.0), face=(0, 1), walk=False)
     room.check((3.7, 6.6, 5.2, 8.1), "A thermos, dropped on the path. The coffee's long dried.\nThe cup rolled off into the grass.")
     room.check((6.0, 6.2, 8.2, 7.4), "Blood, drop after drop, from the station. He was bleeding as he walked.")
     room.check((d0 - 0.5, cy1 + 0.15, d0, cy1 + 0.8), "A bloody hand on the door frame. He went in.")

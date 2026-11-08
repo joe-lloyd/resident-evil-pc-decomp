@@ -161,7 +161,8 @@ def shoot(name, views, middle, size_):
 
 shoot("", ("front", "side", "back"), centre, extent)
 if want_head:
-    head = [ob for ob in objs if ob.name == "object1"]
+    # The head is the part that stands highest: object 1 for a person, 2 for a zombie.
+    head = [max(objs, key=lambda ob: max((ob.matrix_world @ Vector(c)).z for c in ob.bound_box))]
     middle, size_head = bounds(head)
     shoot("head-", ("front", "side"), middle, size_head * 1.15)
 

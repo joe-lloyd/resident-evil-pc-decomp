@@ -10,7 +10,12 @@ it in the portal's corners, strands trailing out over the rocks, a bundle
 wrapped tight and hung up under the cap. The fall did not close it: a low
 gap at the west side is still open into the dark, and Hal's drops of
 blood go straight to it, with his hand on the post where he ducked in. One
-ore cart stands on the rails, another lies on its side, spilled.
+ore cart stands on the rails, another lies on its side, spilled. The adit's
+first sets came down with the roof: their timbers are jammed through the
+fall, one baulk sticking out of the rocks at the foot. Beside them, the
+quarry crane's steel cable hangs down out of the sky from the jib swung
+out over the hill, its hook dangling at head height: hooked round those
+timbers and wound in, it could drag the fall apart.
 
 Metres: the floor is x 1.0-15.0, y 2.5-11.0 at z 0. The hillside rises
 north of y 2.2. The portal is at x 7.6-10.4: two posts and a cap, the
@@ -18,7 +23,9 @@ opening x 8.0-10.0, 2.7 high. The rockfall fills it from x 8.85 east and
 spills south to y 4.4; the gap is x 8.0-8.85, 1.2 high. The rails come in
 at the west edge at y 7.2 and curve north-east under the fall. The
 plunger box is at x 12.2, y 8.9 behind a boulder. The quarry is off the
-west edge at y 6.0-8.4.
+west edge at y 6.0-8.4. The jammed timbers run out of the fall to x 11.1,
+y 4.2; the crane's hook hangs over the fall's east foot at x 10.95, y 3.85,
+1.1-1.5 up, inside the fall's footprint.
 
 The ore track: the way west to the quarry is part of the room now. West of
 the yard a ravine cuts down through the hill, nine metres deep, a stream
@@ -38,7 +45,8 @@ tipped cart lies at x -1.0-0.2, y 7.4-8.4.
 
 Moving: dust settling over the fall, grit trickling from the cap beam, the
 wrapped bundle turning slowly on its thread, the web sheet stirring in the
-draught up the ravine, the loose plank swinging, the stream.
+draught up the ravine, the loose plank swinging, the stream, the crane's
+hook stirring on its cable.
 """
 import math
 import os
@@ -324,6 +332,20 @@ def build():
     for (x, y, r) in ((7.6, 3.6, 0.3), (11.4, 4.6, 0.35), (10.5, 5.1, 0.25), (6.9, 4.0, 0.2)):
         reb.boulder(rng, (x, y, 0.0), r, rv, rf, squash=0.7, subdivisions=1)
     rockfall = reb.mesh_object("Rockfall", rv, rf, kit.dirtied(mat("rock"), 0.8), smooth=False)
+    # The first sets' timbers, brought down with the roof and jammed through
+    # the fall: a cap across its face, a baulk run out to its foot, a broken post.
+    jv, jf = [], []
+    for a, b, r in (((9.1, FACE_Y - 0.3, 1.95), (11.1, 4.2, 0.17), 0.16),
+                    ((8.95, FACE_Y + 0.35, 1.3), (10.75, FACE_Y + 1.15, 2.35), 0.15),
+                    ((9.6, FACE_Y + 0.8, 0.3), (10.65, 3.85, 1.7), 0.13)):
+        beam(jv, jf, a, b, r)
+    jammed = reb.mesh_object("Jammed timbers", jv, jf, old_timber, smooth=False)
+    # Once the fall is cleared, one of them lies out in the yard on the rubble.
+    jv, jf = [], []
+    beam(jv, jf, (9.2, 4.9, 0.12), (11.0, 5.6, 0.2), 0.12)
+    beam(jv, jf, (6.8, 4.9, 0.1), (7.5, 5.7, 0.12), 0.1)
+    blown = reb.mesh_object("Blown-out timbers", jv, jf, old_timber, smooth=False)
+    blown.hide_render = True
     # Once she blasts it (day/events.ts "blast"): the fall blown out into the
     # yard as low rubble, the adit open and black behind the portal.
     brng = random.Random(77)
@@ -357,11 +379,32 @@ def build():
     strands = kit.join("Strands", strands)
 
     def blast(done):
-        for ob in (rockfall, gap_web, strands):
+        for ob in (rockfall, gap_web, strands, jammed):
             ob.hide_render = done
-        for ob in after_blast:
+        for ob in after_blast + (blown,):
             ob.hide_render = not done
     room.state("blast", blast)
+    # The quarry crane's cable, hanging down from its jib swung out over the
+    # hill, the hook within reach beside the jammed timbers.
+    top = Vector((9.0, -1.0, 30.0))
+    hook_at = Vector((10.95, 3.85, 1.5))
+    crane_pivot = reb.prim("sphere", "Crane jib sheave", mat("iron"), top, (0.05, 0.05, 0.05), segments=6)
+    crane_pivot.hide_render = True
+    cable_m = reb.mat_metal("Crane cable", (0.12, 0.11, 0.1), 0.45)
+    yellow = kit.dirtied(mat("yellow paint"), 0.6, scale=8)
+    down = (hook_at - top).normalized()
+    hang = [kit.rod("Crane cable", cable_m, top, hook_at + down * 0.02, 0.014, 6),
+            reb.prim("cube", "Hook block", yellow, hook_at - Vector((0, 0, 0.1)), (0.16, 0.09, 0.22), bevel=0.02),
+            kit.rod("Hook shank", mat("iron"), hook_at - Vector((0, 0, 0.2)), hook_at - Vector((0, 0, 0.3)), 0.022, 6)]
+    prev = hook_at - Vector((0, 0, 0.3))
+    for k in range(1, 8):
+        a = math.pi * k / 7
+        p = hook_at + Vector((0.09 * math.sin(a), 0, -0.39 + 0.09 * math.cos(a)))
+        hang.append(kit.rod("Hook", yellow, prev, p, 0.022, 6))
+        prev = p
+    for ob in hang:
+        ob.parent = crane_pivot
+        ob.matrix_parent_inverse = crane_pivot.matrix_world.inverted()
     bundle_pivot = reb.prim("sphere", "Bundle thread top", silk, (9.6, FACE_Y + 0.05, ph - 0.05), (0.02, 0.02, 0.02))
     thread = kit.rod("Bundle thread", silk, (0, 0, 0), (0, 0, -0.45), 0.006, 3)
     bundle = reb.prim("sphere", "Wrapped bundle", reb.mat_surface("Cocoon", [(0.0, (0.45, 0.44, 0.4)), (0.7, (0.62, 0.6, 0.56)), (1.0, (0.3, 0.12, 0.08))], scale=16, bump=0.8), (0, 0, -0.8), (0.28, 0.24, 0.7), segments=12)
@@ -577,6 +620,7 @@ def build():
     anim.sway(edge, amount=0.04)
     anim.swing(plank_pivot, axis=0, degrees=10)
     anim.ripple(water)
+    anim.swing(crane_pivot, axis=0, degrees=0.3)
 
     def billow(k):
         ph = anim.phase(k)

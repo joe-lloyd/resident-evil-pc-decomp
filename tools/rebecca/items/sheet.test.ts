@@ -28,7 +28,7 @@ test('her renders replace only their donors\' rows', () => {
   const sheet = new Uint8Array(rows * 1200).fill(40);
   const out = buildIconSheet(sheet, fakeTim(), globalsCpp());
   const row = iconRows(globalsCpp());
-  const drawn = new Set(['cutters', 'cog', 'jerrycan', 'fuel', 'dynamite', 'fuses', 'crowbar'].map((s) => row(KEY_ITEMS.find((k) => k.step === s)!.id)));
+  const drawn = new Set(['cutters', 'cog', 'jerrycan', 'fuel', 'dynamite', 'fuses', 'crowbar', 'dog-meat'].map((s) => row(KEY_ITEMS.find((k) => k.step === s)!.id)));
   for (let r = 0; r < rows; r++) {
     const changed = out.subarray(r * 1200, (r + 1) * 1200).some((b) => b !== 40);
     assert.equal(changed, drawn.has(r), `row ${r}`);

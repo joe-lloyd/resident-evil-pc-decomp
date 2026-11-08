@@ -20,12 +20,14 @@ import { buildCardSheet } from './card.ts';
 import { footstepFiles } from './footsteps.ts';
 import { ambienceFiles } from './sound/ambience.ts';
 import { floorSounds, groundStepFiles, roomsFile, type RoomSounds } from './sound/ground.ts';
+import { scriptSounds } from './sound/script.ts';
 import { buildArms } from './arms.ts';
 import { filePages } from './files/pages.ts';
 import { buildWalk, walkFileName } from './walks.ts';
 import { readPng } from '../harness/image.ts';
 import { dayRooms, dayStart, walks } from './day/rooms.ts';
 import { people, personModel } from './npc/people.ts';
+import { CAMP_STAGES, zombieModel, zombies } from './npc/zombies.ts';
 import { saveRoomFiles } from './saveroom/patch.ts';
 import { buildIconSheet, globalsCpp, iconRows } from './items/sheet.ts';
 import { itemView, itemViewFiles, menuDataCpp, readItemModel } from './items/tmd.ts';
@@ -180,6 +182,16 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
     writeFileSync(path.join(reb, 'enemy', person.model), personModel(readFileSync(findFile(enemyDir, person.model)), person));
     written.push(`enemy/${person.model}`);
   }
+  // The logging camp's dead, in its stages' own folder, which her mode looks
+  // in first (EntityModelLoader.cpp): RE1's zombies with our skins (npc/zombies.ts).
+  for (const zombie of zombies) {
+    const model = zombieModel(readFileSync(findFile(enemyDir, zombie.model)), zombie);
+    for (const stage of CAMP_STAGES) {
+      mkdirSync(path.join(reb, 'enemy', `stage${stage}`), { recursive: true });
+      writeFileSync(path.join(reb, 'enemy', `stage${stage}`, zombie.model), model);
+      written.push(`enemy/stage${stage}/${zombie.model}`);
+    }
+  }
 
   // Her files' pages (files/documents.ts), in place of RE1's in her mode
   // only. The same folder as her items' models above: one name for it, since
@@ -217,10 +229,18 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
     }
     const built = buildDayRoom(room, baseDir, outDir, raeCli);
     written.push(...built.written);
-    roomSounds.push(floorSounds(room.stage, room.room, built.floors));
+    // Every one of the room's 48 slots: what its script and its floors call
+    // for, and nothing else. Its id's own row is some other room's.
+    const floors = floorSounds(room.stage, room.room, built.floors);
+    const script = scriptSounds(room.slug, readFileSync(path.join(here, 'day', room.slug, 'room.c'), 'utf8'));
+    const slots = new Map(Array.from({ length: 48 }, (_, k): [number, string] => [k, '']));
+    for (const [k, name] of [...script, ...floors.slots]) slots.set(k, name);
+    roomSounds.push({ ...floors, slots });
   }
-  // Her rooms' own sounds over their slots' rows (sound/ground.ts): her steps
-  // on each floor, RE1's own from the player's files or ours, shipped here.
+  // Her rooms' own sounds over their slots' rows: her steps on each floor,
+  // RE1's own from the player's files or ours, shipped here (sound/ground.ts);
+  // her enemies' cries and her doors', typewriters' and item boxes' sounds,
+  // RE1's own (sound/script.ts).
   writeFileSync(path.join(reb, 'sound', 'rooms.dat'), roomsFile(roomSounds));
   written.push('sound/rooms.dat');
   for (const { name, bytes } of groundStepFiles()) {

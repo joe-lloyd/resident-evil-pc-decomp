@@ -321,7 +321,7 @@
    "z0": 12000,
    "x1": 2110,
    "z1": 12310,
-   "name": "Probe: Adit in"
+   "name": "Probe: Adit set post.001"
   },
   {
    "shape": "box",
@@ -381,6 +381,14 @@
   },
   {
    "shape": "box",
+   "x0": 3072,
+   "z0": 13527,
+   "x1": 3133,
+   "z1": 13588,
+   "name": "Probe: Ore cart pushed aside"
+  },
+  {
+   "shape": "box",
    "x0": 14037,
    "z0": 13527,
    "x1": 14098,
@@ -397,11 +405,59 @@
   },
   {
    "shape": "box",
-   "x0": 21942,
-   "z0": 13785,
-   "x1": 22003,
-   "z1": 14095,
+   "x0": 2820,
+   "z0": 13782,
+   "x1": 4150,
+   "z1": 13843,
+   "name": "Probe: Ore cart pushed aside"
+  },
+  {
+   "shape": "box",
+   "x0": 21690,
+   "z0": 13782,
+   "x1": 22000,
+   "z1": 13843,
    "name": "Probe: Switch panel"
+  },
+  {
+   "shape": "box",
+   "x0": 2565,
+   "z0": 14037,
+   "x1": 4660,
+   "z1": 14098,
+   "name": "Probe: Ore cart pushed aside"
+  },
+  {
+   "shape": "box",
+   "x0": 21942,
+   "z0": 14037,
+   "x1": 22003,
+   "z1": 14098,
+   "name": "Probe: Switch panel"
+  },
+  {
+   "shape": "box",
+   "x0": 2565,
+   "z0": 14295,
+   "x1": 4915,
+   "z1": 14605,
+   "name": "Probe: Ore cart pushed aside"
+  },
+  {
+   "shape": "box",
+   "x0": 2565,
+   "z0": 14805,
+   "x1": 4660,
+   "z1": 15115,
+   "name": "Probe: Ore cart pushed aside"
+  },
+  {
+   "shape": "box",
+   "x0": 3585,
+   "z0": 15312,
+   "x1": 4660,
+   "z1": 15373,
+   "name": "Probe: Ore cart pushed aside"
   },
   {
    "shape": "box",
@@ -429,12 +485,18 @@
    "name": "drain",
    "bank": 1,
    "bit": -1
+  },
+  {
+   "name": "generator-on",
+   "bank": 1,
+   "bit": -1
   }
  ],
  "probe": {
   "Pump bed": 190,
   "Pump motor": 93,
   "Pump casing": 86,
+  "Ore cart pushed aside": 59,
   "Pump volute": 34,
   "Suction pipe.001": 34,
   "Spares crate": 30,
@@ -471,6 +533,7 @@
   "Discharge pipe.001": 1,
   "Gauge": 1,
   "Hand on the pipe": 1,
+  "Power lamp lens": 1,
   "South rock, east": 1
  },
  "bounds": {
@@ -556,7 +619,7 @@
     "x1": 13260,
     "z1": 13090
    },
-   "text": "The way down goes under the water. It's black.\nHis blood goes right to the edge. He went in."
+   "text": "The way down goes under the water. His blood goes right to the edge.\nSomeone's out there, slumped on a cart. Hal?\nIt's too far, and too deep, to wade."
   },
   {
    "zone": {

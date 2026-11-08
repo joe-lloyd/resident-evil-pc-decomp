@@ -18,7 +18,7 @@ const HALF = SIDE / 2;
 const MARGIN = 1;
 
 /** Texels a triangle can sample: its interior and every texel its edges touch. */
-function cover(uv: readonly (readonly [number, number])[], mark: (x: number, y: number) => void) {
+export function cover(uv: readonly (readonly [number, number])[], mark: (x: number, y: number) => void) {
   const [a, b, c] = uv;
   const xs = uv.map(([u]) => u);
   const ys = uv.map(([, v]) => v);

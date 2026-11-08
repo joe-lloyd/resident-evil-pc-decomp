@@ -39,3 +39,20 @@ test('every key item is a step of the plan that finds it', () => {
     assert.ok(step && step.kind === 'find', `${k.step} is a find step`);
   }
 });
+
+test('no key item, supply or given item sits on a room-item flag a new game starts as taken', async () => {
+  // The engine's table: bit set = the item is there. Read it, not a copy.
+  const { readFileSync } = await import('node:fs');
+  const cpp = readFileSync(new URL('../../../src/game/GameStart.cpp', import.meta.url), 'utf8');
+  const table = cpp.match(/roomItemsFlagsInit\[32\] = \{([^}]*)\}/)![1]!.match(/0x[0-9a-f]{2}/gi)!.map((h) => parseInt(h, 16));
+  const clear: number[] = [];
+  for (let n = 0; n < 256; n++) {
+    const at = (n >> 5) * 4;
+    const word = (table[at]! | (table[at + 1]! << 8) | (table[at + 2]! << 16) | (table[at + 3]! << 24)) >>> 0;
+    if (((word >>> (31 - (n & 31))) & 1) === 0) clear.push(n);
+  }
+  const { KEY_ITEM_FLAGS, NEW_GAME_TAKEN } = await import('./items.ts');
+  const { GIVE_FLAGS } = await import('../day/events.ts');
+  assert.deepEqual(clear, [...NEW_GAME_TAKEN]);
+  for (const f of [...KEY_ITEM_FLAGS, ...GIVE_FLAGS.values()]) assert.ok(!clear.includes(f), `flag ${f} starts taken`);
+});

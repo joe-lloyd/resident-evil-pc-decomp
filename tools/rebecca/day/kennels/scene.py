@@ -2,25 +2,41 @@
 
 What it tells: this is where the dogs on the mountain came from. Four
 chain-link runs stand along the west side, each with its doghouse and its
-name board, and every run's gate has been torn open from inside: one
+name board. Three of the gates have been torn open from inside: one
 hangs off a single hinge, one lies flat in the gravel, the wire bellied
-outward. The chains that held them are snapped at the collar end. The
-straw in the runs is soaked dark, gnawed bones lie among the steel bowls,
-and their paw prints run out across the yard, north to the back gate and
-south toward the house. Their handler is in the third run, in what's left
-of his grey estate uniform, his catch-pole snapped beside him. His hut's
-door stands open and bangs in the wind; his lamp is still lit on the desk
-inside, a feed chart on the wall. A sign on the hut: CAUTION - DOGS.
+outward. The far run, KAISER's, nearest the house, is still whole: a newer
+gate on a heavy frame with a steel kick plate and a heavy bolt, standing
+open. A pack could still be shut in there. The chains that held them are
+snapped at the collar end. The straw in the runs is soaked dark, gnawed
+bones lie among the steel bowls, and their paw prints run out across the
+yard, north to the back gate and south toward the house. Their handler is
+in the third run, in what's left of his grey estate uniform, his
+catch-pole snapped beside him. His hut's door stands open and bangs in
+the wind; his lamp is still lit on the desk inside, a feed chart on the
+wall. A sign on the hut: CAUTION - DOGS.
+
+By the yews on the house side stands the meat hoist the dogs' food came
+up on from the house's cold store: a brick head-house with a tin roof, an
+iron cage lift in its shaft, the cage floor black with old blood and a
+hook hanging in it, the winch drum and its gear wheel under the roof, a
+dim bulb. Its control box stands on a post beside it, the lever
+padlocked. Old blood drips run from the cage across the yard to the runs.
 
 Metres: the floor is x 2-17, y 2-14 at z 0. The estate's back wall runs
 along the north at y 1.6 with the back gate at x 9.2-10.8. The runs are
-x 2.0-6.5, y 3.5-13.1, four of them 2.4 m wide, each gate in the east fence.
-The handler's hut is x 13.0-16.4, y 4.0-7.4, its door in the west wall at
-y 5.2-6.1. The path to the back garden leaves through the south edge at
-x 9-11, between clipped yews; the mansion's back stands dark beyond.
+x 2.0-6.5, y 3.5-13.1, four of them 2.4 m wide, each gate in the east fence;
+the sound gate is the last run's, hinged at y 12.4. The handler's hut is
+x 13.0-16.4, y 4.0-7.4, its door in the west wall at y 5.2-6.1. The hoist's
+head-house is x 11.5-13.1, y 12.8-14.2, the cage x 11.8-12.8, y 13.05-13.95,
+its gate facing north; the control post at (13.45, 12.9). The path to the
+back garden leaves through the south edge at x 9-11, between clipped yews;
+the mansion's back stands dark beyond.
 
 Moving: the hut's door banging, the yard lamp and the hut's lamp
-flickering, a loose chain swinging on the fence.
+flickering, a loose chain swinging on the fence, flies over the cage.
+
+State "pen-pack" (the dog meat thrown into the sound run, day/events.ts):
+the gate swung shut and the bolt thrown into its keeper.
 """
 import math
 import os
@@ -43,6 +59,51 @@ RUN_DOOR = 1.0          # the gate's width in each run's east fence, centred
 HUT = (13.0, 16.4, 4.0, 7.4)
 HUT_DOOR = (5.2, 6.1)
 SOUTH = (9.0, 11.0)
+HOIST = (11.5, 13.1, 12.8, 14.2)   # the head-house
+CAGE = (11.8, 12.8, 13.05, 13.95)
+CONTROL = (13.45, 12.9)
+SOUND_OPEN = 1.75                  # how far the sound gate stands open, radians past shut
+
+
+def trim(ob, rect):
+    """Take the grass cards off a mesh inside rect (x0, y0, x1, y1): none grows
+    through the hoist's floor or its cage."""
+    import bmesh
+    x0, y0, x1, y1 = rect
+    bm = bmesh.new()
+    bm.from_mesh(ob.data)
+    w = ob.matrix_world
+    gone = [f for f in bm.faces if x0 < (w @ f.calc_center_median()).x < x1 and y0 < (w @ f.calc_center_median()).y < y1]
+    bmesh.ops.delete(bm, geom=gone, context="FACES")
+    bm.to_mesh(ob.data)
+    bm.free()
+
+
+def sound_gate(link_m, frame_m, plate_m):
+    """The one gate left whole: a heavier leaf than the others, square-tube
+    frame, a brace, a steel kick plate, two hinges; its heavy bolt is its own
+    object so it can be thrown. Built in the leaf's frame: y 0 at the hinge to
+    RUN_DOOR at the free end, x its thickness, the yard side at -x."""
+    w = RUN_DOOR
+    parts = [reb.prim("cube", "Sound gate wire", link_m, (0, w / 2, 1.1), (0.01, w - 0.06, 1.6))]
+    parts.append(reb.prim("cube", "Kick plate", plate_m, (0, w / 2, 0.32), (0.014, w - 0.04, 0.52)))
+    for y in (0.025, w - 0.025):
+        parts.append(reb.prim("cube", "Gate stile", frame_m, (0, y, 0.98), (0.05, 0.05, 1.9)))
+    for z in (0.05, 0.58, 1.9):
+        parts.append(reb.prim("cube", "Gate rail", frame_m, (0, w / 2, z), (0.05, w, 0.05)))
+    parts.append(kit.rod("Gate brace", frame_m, (0, 0.05, 0.6), (0, w - 0.05, 1.86), 0.02, 6))
+    for z in (0.35, 1.6):
+        parts.append(reb.prim("cyl", "Hinge", mat("iron"), (0, -0.02, z), (0.06, 0.06, 0.14), segments=8))
+    for y in (w - 0.32, w - 0.1):
+        parts.append(reb.prim("cube", "Bolt staple", mat("iron"), (-0.045, y, 1.02), (0.04, 0.05, 0.08)))
+    leaf = kit.join("Sound gate", parts, origin=(0, 0, 0))
+    bolt = kit.join("Sound gate bolt", [
+        kit.rod("Bolt bar", mat("iron"), (-0.07, w - 0.42, 1.02), (-0.07, w - 0.04, 1.02), 0.024, 8),
+        kit.rod("Bolt handle", mat("iron"), (-0.07, w - 0.2, 1.02), (-0.17, w - 0.2, 1.02), 0.016, 6),
+        reb.prim("sphere", "Bolt knob", mat("iron"), (-0.18, w - 0.2, 1.02), (0.045, 0.045, 0.045), segments=8),
+    ], origin=(0, 0, 0))
+    bolt.parent = leaf
+    return leaf, bolt
 
 
 def height(x, y):
@@ -108,6 +169,7 @@ def build():
     room.camera((2.2, 14.6, 4.0), (11.0, 4.5, 0.0), 200, "from over the yews behind the last run: the length of the runs, the gate, the hut")
     room.camera((8.6, 9.0, 2.8), (4.4, 9.6, 0.2), 195, "close on the third run: the handler in the straw, the snapped pole")
     room.camera((12.0, 2.6, 3.6), (11.0, 13.5, 0.0), 200, "from inside the gate, east: the yard, the trough, the path south to the yews and the house")
+    room.camera((10.6, 7.2, 3.4), (9.9, 13.0, 0.4), 200, "from the yard lamp, south: the sound run's gate standing open, the hoist by the yews, the path between")
 
     link_m = chainlink()
     concrete = kit.dirtied(mat("concrete"), 0.8, scale=1.0)
@@ -120,6 +182,8 @@ def build():
     dark_stone = reb.mat_plain("Mansion stone", (0.03, 0.03, 0.035), 0.9)
     lit = reb.mat_emit("Lit window", (1.0, 0.6, 0.28), 5)
     sign_m = mat("yellow paint")
+    sound_frame = reb.mat_surface("Gate paint", [(0.0, (0.07, 0.11, 0.07)), (0.7, (0.1, 0.16, 0.1)), (1.0, (0.25, 0.12, 0.05))], scale=7, rough=0.5, bump=0.2)
+    sound_plate = reb.mat_surface("Kick plate", [(0.0, (0.16, 0.165, 0.16)), (0.6, (0.26, 0.26, 0.25)), (0.85, (0.3, 0.14, 0.06)), (1.0, (0.1, 0.03, 0.015))], scale=5, rough=0.45, bump=0.3)
 
     # ---- Ground: gravel yard, the runs' concrete, mud where the dogs went out.
     reb.terrain("Yard", kit.dirtied(mat("gravel"), 0.9, scale=0.6), (-10, 30), (WALL_Y, 40), height, step=0.5)
@@ -203,7 +267,16 @@ def build():
         if i != 2:
             kit.bones(f"Gnawed bones {i}", (x0 + 1.9, yc - 0.3, 0.0), spread=0.5, seed=10 + i, skull=(i == 3))
         kit.splat(f"Run blood {i}", mat("old blood"), (x0 + 2.4, yc, 0.0), 0.35 + 0.2 * (i == 1), seed=20 + i, stretch=(1.5, 0.9))
-        # The gate, torn out a different way in each run.
+        # The gate, torn out a different way in each run but the last: its
+        # sound gate hangs on its hinges at the south post, standing open.
+        if i == 3:
+            sound_leaf, sound_bolt = sound_gate(link_m, sound_frame, sound_plate)
+            sound_leaf.location, sound_leaf.rotation_euler = (x1 + 0.02, d1, 0), (0, 0, math.pi + SOUND_OPEN)
+            # The keeper on the north post the bolt shoots into.
+            reb.prim("cube", "Bolt keeper", mat("iron"), (x1 + 0.09, d0 - 0.05, 1.02), (0.05, 0.06, 0.09))
+            reb.prim("cube", "Keeper plate", mat("iron"), (x1 + 0.05, d0 - 0.05, 1.02), (0.02, 0.1, 0.16))
+            gates.append(sound_leaf)
+            continue
         g = reb.prim("cube", f"Run gate {i}", link_m, (0, RUN_DOOR / 2, 0.9), (0.01, RUN_DOOR, 1.8))
         frame = [kit.rod("Gate frame", mat("steel"), (0, 0, z), (0, RUN_DOOR, z), 0.018, 6) for z in (0.05, 1.8)]
         frame += [kit.rod("Gate frame", mat("steel"), (0, y, 0.05), (0, y, 1.8), 0.018, 6) for y in (0.0, RUN_DOOR)]
@@ -227,9 +300,10 @@ def build():
     for l_ in links_:
         l_.parent = hook
         l_.matrix_parent_inverse = Matrix.Translation(-hook.location)
-    # A hole dug out under the back fence of the last run.
-    kit.splat("Dug hole", mat("black"), (x0 + 0.1, 12.2, 0.002), 0.35, seed=9, stretch=(0.7, 1.3))
-    kit.splat("Spoil", mat("mud"), (x0 + 0.6, 12.0, 0.004), 0.45, seed=10)
+    # A hole dug out under the back fence of the second run (the last run
+    # stays whole, to pen them in).
+    kit.splat("Dug hole", mat("black"), (x0 + 0.1, 7.4, 0.002), 0.35, seed=9, stretch=(0.7, 1.3))
+    kit.splat("Spoil", mat("mud"), (x0 + 0.6, 7.2, 0.004), 0.45, seed=10)
 
     # ---- The handler, in the third run, in his grey uniform; his catch-pole snapped.
     hx, hy = 3.9, (RUN_Y[2] + RUN_Y[3]) / 2
@@ -309,6 +383,104 @@ def build():
         kit._stain(fv, ff, rng, tuple(p), 0.012, 0.0, 0.3, (1.6, 0.6), 1, points=5, drops=False)
     reb.mesh_object("Spilled feed", fv, ff, reb.mat_plain("Kibble", (0.15, 0.08, 0.04), 0.7), smooth=False)
 
+    # ---- The meat hoist by the yews: a brick head-house over its shaft, the
+    # cage lift in it, the winch under the roof, the control on its post.
+    hrng = random.Random(171)
+    brick = kit.dirtied(mat("brick"), 0.7, scale=1.5)
+    hx0_, hx1_, hy0_, hy1_ = HOIST
+    cx0, cx1, cy0, cy1 = CAGE
+    hmid = (hx0_ + hx1_) / 2
+    reb.wall(reb.prim("cube", "Hoist back wall", brick, (hmid, hy1_ - 0.1, 1.3), (hx1_ - hx0_, 0.2, 2.6)))
+    for x in (hx0_ + 0.1, hx1_ - 0.1):
+        reb.wall(reb.prim("cube", "Hoist side wall", brick, (x, (hy0_ + hy1_) / 2, 1.25), (0.2, hy1_ - hy0_, 2.5)))
+        reb.prim("cube", "Hoist pier cap", stone, (x, hy0_ + 0.1, 2.52), (0.26, 0.26, 0.06))
+    reb.prim("cube", "Hoist lintel", mat("dark wood"), (hmid, hy0_ + 0.08, 2.4), (hx1_ - hx0_, 0.16, 0.2))
+    reb.prim("cube", "Hoist roof", mat("tin"), (hmid, (hy0_ + hy1_) / 2, 2.66), (hx1_ - hx0_ + 0.4, hy1_ - hy0_ + 0.4, 0.05), rot=(-0.12, 0, 0))
+    # The shaft's mouth round the cage, black, in an iron frame on a concrete sill.
+    reb.prim("cube", "Hoist floor", concrete, (hmid, (hy0_ + hy1_) / 2, 0.02), (hx1_ - hx0_ - 0.4, hy1_ - hy0_ - 0.2, 0.06))
+    reb.prim("cube", "Shaft mouth", mat("black"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 0.055), (cx1 - cx0 + 0.16, cy1 - cy0 + 0.12, 0.01))
+    for (a, b) in (((cx0 - 0.09, cy0 - 0.07), (cx1 + 0.09, cy0 - 0.07)), ((cx0 - 0.09, cy0 - 0.07), (cx0 - 0.09, cy1 + 0.06)), ((cx1 + 0.09, cy0 - 0.07), (cx1 + 0.09, cy1 + 0.06))):
+        kit.rod("Shaft frame", mat("rust"), (a[0], a[1], 0.06), (b[0], b[1], 0.06), 0.025, 4)
+    # The cage: plate floor black with blood, a roof, bars, its lattice gate shut.
+    ch = 1.65
+    cage_floor = reb.mat_surface("Cage plate", [(0.0, (0.03, 0.008, 0.005)), (0.5, (0.06, 0.02, 0.012)), (0.8, (0.1, 0.08, 0.07)), (1.0, (0.2, 0.09, 0.04))], scale=8, rough=0.6, bump=0.7)
+    parts = [
+        reb.prim("cube", "Cage floor", cage_floor, ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 0.07), (cx1 - cx0, cy1 - cy0, 0.04)),
+        reb.prim("cube", "Cage roof", mat("iron"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, ch), (cx1 - cx0 + 0.04, cy1 - cy0 + 0.04, 0.05)),
+    ]
+    for x in (cx0, cx1):
+        for y in (cy0, cy1):
+            parts.append(kit.rod("Cage corner", mat("rust"), (x, y, 0.05), (x, y, ch), 0.028, 6))
+    for x in (cx0, cx1):
+        for k in range(1, 6):
+            y = cy0 + (cy1 - cy0) * k / 6
+            parts.append(kit.rod("Cage bar", mat("rust"), (x, y, 0.08), (x, y, ch), 0.01, 4))
+        for z in (0.1, 0.85, ch - 0.05):
+            parts.append(kit.rod("Cage rail", mat("rust"), (x, cy0, z), (x, cy1, z), 0.02, 6))
+    for k in range(1, 7):
+        x = cx0 + (cx1 - cx0) * k / 7
+        parts.append(kit.rod("Cage bar", mat("rust"), (x, cy1, 0.08), (x, cy1, ch), 0.01, 4))
+    # The gate across the front: uprights and a lattice, shut.
+    for k in range(9):
+        x = cx0 + (cx1 - cx0) * k / 8
+        parts.append(kit.rod("Cage gate bar", mat("iron"), (x, cy0 - 0.03, 0.1), (x, cy0 - 0.03, ch - 0.06), 0.011, 4))
+    for z in (0.35, 0.95, 1.4):
+        for k in range(8):
+            xa, xb = cx0 + (cx1 - cx0) * k / 8, cx0 + (cx1 - cx0) * (k + 1) / 8
+            parts.append(kit.rod("Cage lattice", mat("iron"), (xa, cy0 - 0.03, z - 0.14), (xb, cy0 - 0.03, z + 0.14), 0.007, 4))
+            parts.append(kit.rod("Cage lattice", mat("iron"), (xa, cy0 - 0.03, z + 0.14), (xb, cy0 - 0.03, z - 0.14), 0.007, 4))
+    parts.append(kit.rod("Gate handle", mat("steel"), (cx1 - 0.08, cy0 - 0.06, 0.95), (cx1 - 0.08, cy0 - 0.06, 1.15), 0.015, 6))
+    parts.append(reb.prim("cube", "Crosshead", mat("iron"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, ch + 0.12), (cx1 - cx0 + 0.1, 0.14, 0.18)))
+    kit.join("Hoist cage", parts)
+    reb.wall(reb.prim("cube", "Cage footprint", None, ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 0.5), (cx1 - cx0 + 0.1, cy1 - cy0 + 0.1, 1.0))).hide_render = True
+    # In the cage: the hook the carcasses hung on, scraps and old blood.
+    hook_z = ch - 0.05
+    kit.rod("Cage hook chain", mat("rust"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2 + 0.15, hook_z), ((cx0 + cx1) / 2, (cy0 + cy1) / 2 + 0.15, hook_z - 0.35), 0.01, 4)
+    kit.rod("Cage hook", mat("steel"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2 + 0.15, hook_z - 0.35), ((cx0 + cx1) / 2 + 0.06, (cy0 + cy1) / 2 + 0.15, hook_z - 0.5), 0.012, 4)
+    kit.splat("Blood in the cage", mat("old blood"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, 0.092), 0.38, seed=81, stretch=(1.2, 1.0))
+    gristle = reb.mat_surface("Gristle", [(0.0, (0.12, 0.02, 0.015)), (0.6, (0.22, 0.05, 0.035)), (1.0, (0.45, 0.35, 0.28))], scale=12, rough=0.4, bump=0.5)
+    gv, gfc = [], []
+    for _ in range(6):
+        reb.boulder(hrng, (hrng.uniform(cx0 + 0.15, cx1 - 0.15), hrng.uniform(cy0 + 0.2, cy1 - 0.15), 0.12), hrng.uniform(0.03, 0.06), gv, gfc, squash=0.5)
+    reb.mesh_object("Scraps in the cage", gv, gfc, gristle)
+    # The winch under the roof: a drum on the beam, its gear wheel, the cable down to the cage.
+    reb.prim("cube", "Winch beam", mat("dark wood"), (hmid, (cy0 + cy1) / 2, 2.34), (hx1_ - hx0_ - 0.2, 0.18, 0.16))
+    drum_x = hmid - 0.1
+    reb.prim("cyl", "Winch drum", mat("iron"), (drum_x, (cy0 + cy1) / 2 - 0.25, 2.1), (0.3, 0.3, 0.6), rot=(0, math.pi / 2, 0), segments=16)
+    reb.prim("cyl", "Wound cable", mat("rust"), (drum_x, (cy0 + cy1) / 2 - 0.25, 2.1), (0.34, 0.34, 0.5), rot=(0, math.pi / 2, 0), segments=16)
+    reb.prim("cyl", "Winch gear", mat("rust"), (drum_x + 0.38, (cy0 + cy1) / 2 - 0.25, 2.1), (0.5, 0.5, 0.04), rot=(0, math.pi / 2, 0), segments=24)
+    for k in range(6):
+        a = math.pi * k / 6
+        kit.rod("Gear spoke", mat("rust"), (drum_x + 0.39, (cy0 + cy1) / 2 - 0.25 + 0.23 * math.cos(a), 2.1 + 0.23 * math.sin(a)), (drum_x + 0.39, (cy0 + cy1) / 2 - 0.25 - 0.23 * math.cos(a), 2.1 - 0.23 * math.sin(a)), 0.012, 4)
+    for x in (drum_x - 0.32, drum_x + 0.32):
+        kit.rod("Winch hanger", mat("iron"), (x, (cy0 + cy1) / 2 - 0.25, 2.1), (x, (cy0 + cy1) / 2 - 0.05, 2.3), 0.02, 4)
+    kit.rod("Hoist cable", mat("steel"), ((cx0 + cx1) / 2, (cy0 + cy1) / 2 - 0.15, 1.96), ((cx0 + cx1) / 2, (cy0 + cy1) / 2, ch + 0.2), 0.012, 4)
+    # The control: an iron box on a post, its lever padlocked down; a conduit to the house.
+    px, py = CONTROL
+    kit.rod("Control post", mat("iron"), (px, py, 0.0), (px, py, 0.95), 0.04, 8)
+    box_m = kit.dirtied(mat("green paint"), 0.7)
+    reb.prim("cube", "Control box", box_m, (px, py, 1.12), (0.26, 0.2, 0.36), bevel=0.02)
+    reb.prim("cube", "Control lid lip", box_m, (px, py - 0.02, 1.31), (0.3, 0.26, 0.03))
+    # The lever comes down out of the box; its end is padlocked to an arm off the post.
+    kit.rod("Control lever", mat("steel"), (px, py - 0.1, 1.2), (px, py - 0.3, 0.99), 0.016, 6)
+    reb.prim("sphere", "Lever knob", mat("black"), (px, py - 0.32, 1.02), (0.06, 0.06, 0.06), segments=8)
+    kit.rod("Lock arm", mat("iron"), (px, py, 0.92), (px, py - 0.3, 0.92), 0.015, 4)
+    reb.prim("cube", "Lever staple", mat("iron"), (px, py - 0.3, 0.955), (0.03, 0.04, 0.07))
+    reb.prim("cube", "Hoist padlock", reb.mat_metal("Brass", (0.45, 0.33, 0.12), 0.45), (px, py - 0.3, 0.85), (0.08, 0.045, 0.1), bevel=0.01)
+    kit.rod("Padlock shackle", mat("steel"), (px - 0.025, py - 0.3, 0.9), (px - 0.025, py - 0.3, 0.96), 0.008, 4)
+    kit.rod("Padlock shackle", mat("steel"), (px + 0.025, py - 0.3, 0.9), (px + 0.025, py - 0.3, 0.96), 0.008, 4)
+    kit.rod("Conduit", mat("iron"), (px, py + 0.1, 1.2), (hx1_, py + 0.1, 1.9), 0.018, 6)
+    reb.wall(reb.prim("cube", "Control footprint", None, (px, py, 0.5), (0.3, 0.3, 1.0))).hide_render = True
+    # A dim bulb under the lintel, and the old drips from the cage across to the runs.
+    hoist_bulb_m = reb.mat_emit("Hoist bulb", (1.0, 0.78, 0.5), 10)
+    reb.prim("sphere", "Hoist bulb", hoist_bulb_m, (hmid + 0.45, hy0_ + 0.14, 2.22), (0.07, 0.07, 0.09), segments=10)
+    kit.rod("Bulb flex", mat("black"), (hmid + 0.45, hy0_ + 0.14, 2.27), (hmid + 0.45, hy0_ + 0.14, 2.3), 0.008, 4)
+    reb.point("Hoist bulb light", (hmid + 0.45, hy0_ - 0.02, 2.15), 28, (1.0, 0.74, 0.45), 0.05)
+    for k in range(18):
+        t = k / 17
+        p = Vector((12.3, 12.6)).lerp(Vector((RUNS_X[1] + 0.5, 11.9)), t) + Vector((hrng.uniform(-0.25, 0.25), hrng.uniform(-0.2, 0.2)))
+        kit.splat(f"Meat drip {k}", mat("old blood"), (p.x, p.y, height(p.x, p.y) + 0.013), hrng.uniform(0.03, 0.06), seed=90 + k)
+
     # ---- South: clipped yews gone shaggy either side of the path, the house beyond.
     for x0_, x1_ in ((-6.0, SOUTH[0]), (SOUTH[1], 26.0)):
         reb.prim("cube", "Yew hedge", yew, ((x0_ + x1_) / 2, Y1 + 0.9, 1.1), (x1_ - x0_, 1.2, 2.2), bevel=0.25)
@@ -337,8 +509,11 @@ def build():
     kit.forest(rng, lambda x, y: 0.0, lambda x, y: (-8 < x < 30 and y < 30) or (x > -8 and y < 32), (-30, -10, 50, 40), count=30, spacing=3.0, tall=(12, 20), ferns=0, needles=0)
     kit.forest(rng, lambda x, y: 0.0, lambda x, y: not (x > X1 + 2 and y < Y1), (X1 + 2, -6, 34, Y1), count=25, spacing=2.2, tall=(10, 16), ferns=10, needles=0)
     kit.forest(rng, lambda x, y: 0.0, lambda x, y: not (x < -1 and y < Y1), (-16, -6, -1, Y1), count=20, spacing=2.2, tall=(10, 16), ferns=10, needles=0)
-    kit.meadow(rng, 900, lambda r: (r.uniform(X0 - 3, X1 + 3), r.choice((r.uniform(WALL_Y + 0.1, 2.6), r.uniform(Y1 - 0.8, Y1 + 0.2)))), height, mat("dead grass"))
+    dead = kit.meadow(rng, 900, lambda r: (r.uniform(X0 - 3, X1 + 3), r.choice((r.uniform(WALL_Y + 0.1, 2.6), r.uniform(Y1 - 0.8, Y1 + 0.2)))), height, mat("dead grass"))
     weeds = kit.meadow(rng, 700, lambda r: (r.uniform(6.8, X1 + 1), r.uniform(WALL_Y + 0.2, Y1)), height)
+    for ob in (dead, weeds):
+        trim(ob, (HOIST[0] + 0.05, HOIST[2] - 0.05, HOIST[1] - 0.05, HOIST[3]))
+        trim(ob, (CONTROL[0] - 0.15, CONTROL[1] - 0.15, CONTROL[0] + 0.15, CONTROL[1] + 0.15))
 
     # ---- Light: moonlight, the yard lamp, the hut's lamps.
     kit.time_light("night", sun_heading=140, sun_energy=0.14)
@@ -356,6 +531,13 @@ def build():
     anim.flicker(lamp_light, flame, depth=0.25, dropouts=0)
     anim.swing(hook, axis=1, degrees=10)
     anim.sway(weeds, amount=0.04)
+    anim.flies(((CAGE[0] + CAGE[1]) / 2, (CAGE[2] + CAGE[3]) / 2, 0.1), count=7, radius=0.3)
+
+    def pen(done):
+        # The sound gate swung shut on the pack and its bolt shot into the keeper.
+        sound_leaf.rotation_euler = (0, 0, math.pi + (0.0 if done else SOUND_OPEN))
+        sound_bolt.location = (0, 0.18 if done else 0.0, 0)
+    room.state("pen-pack", pen)
 
     # ---- What the game needs.
     room.door("estate-wall", (GATE[0] + 0.1, Y0, GATE[1] - 0.1, Y0 + 0.6), arrive=(10.0, 3.4), face=(0, 1))
@@ -363,10 +545,15 @@ def build():
     room.check((x1, RUN_Y[2] + 0.2, x1 + 0.8, RUN_Y[3] - 0.2), "The gate's been torn off its hinges. From the inside.")
     room.check((3.0, RUN_Y[2] + 0.2, 6.0, RUN_Y[3] - 0.2), "Their handler. What's left of him.\nHis catch-pole is snapped in two.")
     room.check((x1 - 1.2, RUN_Y[0] + 0.2, x1, RUN_Y[1] - 0.2), "A chain, snapped at the collar end.\nWhatever was on it pulled until it broke.")
-    room.check((x1, RUN_Y[0], x1 + 0.6, RUN_Y[-1]), "REX. BRUTUS. SHADOW. KAISER.\nThe dogs on the mountain came from here.")
+    room.check((x1, RUN_Y[0], x1 + 0.6, RUN_Y[3]), "REX. BRUTUS. SHADOW. KAISER.\nThe dogs on the mountain came from here.")
     room.check((hx0 - 0.8, HUT_DOOR[0] - 0.3, hx0, HUT_DOOR[1] + 0.3), "The door won't stay shut.\nThere's a lamp lit on the desk. A feed chart on the wall.")
     room.check((11.3, 10.6, 13.1, 11.4), "A water trough. The water's pink.")
     room.check((7.5, 5.5, 9.5, 8.5), "Paw prints, big ones. Heading out to the gate.\nAnd toward the house.")
+    # The sound run's gate, from the yard in front of it (clear of the name boards' check).
+    d0, d1 = (RUN_Y[3] + RUN_Y[4]) / 2 - RUN_DOOR / 2, (RUN_Y[3] + RUN_Y[4]) / 2 + RUN_DOOR / 2
+    room.spot("pen-pack", (x1 + 0.2, d0 - 0.1, x1 + 1.0, d1 - 0.2))  # day/events.ts says what she sees and does here
+    room.spot("hoist", (CONTROL[0] - 0.35, CONTROL[1] - 0.85, CONTROL[0] + 0.35, CONTROL[1] - 0.35))  # day/events.ts says what she sees and does here
+    room.door("cellar", (CAGE[0] - 0.1, CAGE[2] - 0.75, CAGE[1] + 0.1, CAGE[2] - 0.1), arrive=(12.0, 11.95), face=(0, -1), walk=False)
     room.export(anim, samples=128)
 
 

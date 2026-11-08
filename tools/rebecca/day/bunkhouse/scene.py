@@ -11,9 +11,10 @@ more. Someone was dragged out of the far bunk to the door, and out to the
 fire. Then they held the door against the others: a footlocker and a chair
 were shoved against it, and shoved back when the axe came through; its
 blade is still through the planks of the shut door. The card game on
-the table never finished. Among the girlie calendars, a July 1998 calendar
-from the supply company has three dates circled in red: 17, 31 and 8. A
-player should notice the circled days.
+the table never finished. Among the girlie calendars hangs the supply
+company's July 1998 calendar, the men's paydays ringed in red: the 3rd, the
+17th and the 31st, and the 17th ringed twice, the payday they were paid
+twice. A player should notice the double ring.
 
 Metres: the floor is x 1.0-12.0, y 1.0-6.0, 2.4 high (in the yard the
 bunkhouse is x 6.0-17.0, y -3.4-1.6: this room is it moved 5 east, 4.4
@@ -242,7 +243,7 @@ def build():
         reb.prim("cyl", f"Cup {i}", reb.mat_plain("Enamel", (0.5, 0.52, 0.5), 0.4), (x, Y0 + 0.12, 1.62), (0.08, 0.08, 0.1), segments=10)
     reb.prim("cube", "Radio", reb.mat_plain("Radio brown", (0.15, 0.08, 0.04), 0.5), (6.1, Y0 + 0.12, 1.66), (0.22, 0.16, 0.18))
 
-    # ---- The calendars: the July 1998 one, three days circled red; the girlie ones by the bunks.
+    # ---- The calendars: the July 1998 one, its paydays ringed red; the girlie ones by the bunks.
     cx, cz = 7.05, 1.4
     reb.prim("cube", "Calendar", mat("paper"), (cx, Y0 + 0.012, cz), (0.6, 0.006, 0.8))
     reb.prim("cube", "Calendar picture", reb.mat_plain("Calendar picture", (0.22, 0.3, 0.2), 0.8), (cx, Y0 + 0.017, cz + 0.22), (0.54, 0.004, 0.3))
@@ -256,10 +257,13 @@ def build():
     for d, x, z in days:
         kit.text(f"Day {d}", str(d), mat("black"), (x, Y0 + 0.02, z), size=0.03, rot=(math.pi / 2, 0, math.pi))
     red = reb.mat_plain("Red pen", (0.5, 0.02, 0.02), 0.5)
+    # The paydays, every other Friday, ringed in red pen; the 17th twice, a
+    # second, wider ring round the first. Nothing else written on it.
     for d, x, z in days:
-        if d in (17, 31, 8):
-            ring(f"Circled {d}", red, (x, Y0 + 0.02, z), 0.032, (0, 1))
-    kit.text("Calendar note", "17 31 8", red, (cx - 0.14, Y0 + 0.021, cz - 0.38), size=0.035, rot=(math.pi / 2, 0, math.pi))
+        if d in (3, 17, 31):
+            ring(f"Ringed {d}", red, (x, Y0 + 0.02, z), 0.033, (0, 1))
+        if d == 17:
+            ring("Ringed 17 again", red, (x + 0.003, Y0 + 0.0205, z + 0.002), 0.05, (0, 1), width=0.009)
     for i, (x, y, z, side) in enumerate(((3.1, Y0 + 0.01, 1.5, "n"), (9.6, Y0 + 0.01, 1.45, "n"), (X0 + 0.01, 2.3, 1.4, "w"), (X1 - 0.01, 4.8, 1.45, "e"))):
         if side == "n":
             at, sz, rot = (x, y, z), (0.42, 0.006, 0.6), 0.0
@@ -306,7 +310,7 @@ def build():
 
     # ---- What the game needs.
     room.door("camp-yard", (DOOR[0], Y1 - 0.5, DOOR[1], Y1), arrive=(6.45, 4.6), face=(0, -1))
-    room.check((6.75, Y0, 7.55, 2.3), "A calendar from a supply company. July 1998.\nSomeone circled three days in red: the 17th, the 31st, the 8th.\nAnd wrote them again at the bottom. 17 31 8.")
+    room.check((6.75, Y0, 7.55, 2.3), "A calendar from a supply company. July, 1998.\nThe paydays are ringed in red: the 3rd, the 17th, the 31st.\nThe 17th is ringed twice.")
     room.check((7.6, 2.3, 9.5, 2.8), "He died in his bed. Nobody even pulled the blanket over his face.")
     room.check((mx - 0.9, 4.1, mx + 0.9, 4.65), "Belts, buckled round all four posts. Torn through.\nWhoever they tied here got loose.")
     room.check((dx - 0.4, 4.45, dx + 0.6, 5.1), "A diary, left open on the bunk.\n\"Mike's fever broke at 3. He doesn't know us.\"")

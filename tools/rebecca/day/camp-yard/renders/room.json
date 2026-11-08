@@ -688,7 +688,7 @@
    "z0": 13272,
    "x1": 5428,
    "z1": 13333,
-   "name": "Probe: Bell rope"
+   "name": "Probe: Bell rope tail"
   },
   {
    "shape": "box",
@@ -896,7 +896,7 @@
    "z0": 15567,
    "x1": 16390,
    "z1": 15628,
-   "name": "Probe: Fire ring"
+   "name": "Probe: Burned in the pit"
   },
   {
    "shape": "box",
@@ -936,7 +936,7 @@
    "z0": 17352,
    "x1": 4150,
    "z1": 17413,
-   "name": "Probe: Woodpile roof"
+   "name": "Probe: Mess wall e.005"
   },
   {
    "shape": "box",
@@ -1177,6 +1177,14 @@
    "x1": 17920,
    "z1": 23023,
    "name": "Probe: Skidder"
+  },
+  {
+   "shape": "box",
+   "x0": 24495,
+   "z0": 22962,
+   "x1": 24805,
+   "z1": 23023,
+   "name": "Probe: Shop padlock"
   },
   {
    "shape": "box",
@@ -1429,13 +1437,13 @@
   "Bunkhouse wall s.012": 14,
   "Mess wall e": 14,
   "Garbage can 1": 14,
+  "Bunkhouse wall s.014": 13,
   "Mess wall n": 13,
   "Charred logs": 13,
   "Workshop door": 13,
   "Chainsaw": 13,
   "Bunkhouse wall s": 12,
   "Bunkhouse wall s.011": 12,
-  "Bunkhouse wall s.014": 12,
   "Garbage can 0": 12,
   "Bunkhouse wall s.003": 11,
   "Sawmill wall w.001": 11,
@@ -1443,7 +1451,6 @@
   "Window sill.006": 11,
   "Window sill.005": 10,
   "Bunkhouse wall w": 10,
-  "Bunkhouse wall e": 10,
   "Office door": 10,
   "Mess wall e.001": 10,
   "Window frame.030": 10,
@@ -1451,6 +1458,7 @@
   "Mess door": 10,
   "Window frame.035": 10,
   "Choker chains": 10,
+  "Bunkhouse wall e": 9,
   "Window sill": 9,
   "Window sill.001": 9,
   "Window sill.002": 9,
@@ -1503,6 +1511,7 @@
   "Deck stake.001": 2,
   "Ribs through the char": 2,
   "Choked log 1": 2,
+  "Shop padlock": 2,
   "Workshop wall n.005": 2,
   "Gate chain": 2,
   "Bunkhouse corner.001": 1,
@@ -1520,7 +1529,7 @@
   "Mess corner.002": 1,
   "Mill door 0 frame": 1,
   "Mill door 0 frame.001": 1,
-  "Bell rope": 1,
+  "Bell rope tail": 1,
   "Mess door frame": 1,
   "Mill door 1 frame.001": 1,
   "Window sill.007": 1,
@@ -1716,15 +1725,6 @@
   },
   {
    "zone": {
-    "x0": 4420,
-    "z0": 11560,
-    "x1": 6460,
-    "z1": 13600
-   },
-   "text": "The cookhouse bell. The rope's been cut short."
-  },
-  {
-   "zone": {
     "x0": 17680,
     "z0": 20060,
     "x1": 19040,
@@ -1762,7 +1762,17 @@
  ],
  "saves": null,
  "items": [],
- "spots": [],
+ "spots": [
+  {
+   "step": "ring-bell",
+   "zone": {
+    "x0": 4675,
+    "z0": 12750,
+    "x1": 6205,
+    "z1": 14110
+   }
+  }
+ ],
  "entry": null,
  "notes": [
   "from the gate: the sawhorses, the skidder, the fire pit, the bunkhouse beyond",
