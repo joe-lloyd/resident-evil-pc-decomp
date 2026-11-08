@@ -229,3 +229,32 @@ Open: her puzzle events (the bell, the breakers and their shock, the
 blast, the generator, the crank, the pump, the push) play no sound. RE1
 has candidates for some (power-on, Sw_lever, kickdoor, crank, watergt,
 mv_cp) and none for a bell.
+
+## The camp's dead (2026-11-08)
+
+The logging camp's zombies are loggers: RE1's three zombie bodies, their
+skeletons, meshes and animations kept, with skins painted in
+`tools/rebecca/npc/zombies.ts` (brushes shared with the people, now in
+`npc/brush.ts`).
+
+| Logger | Id | Body | Look |
+| --- | --- | --- | --- |
+| faller | 0 | em1100 | red and black flannel open on a bitten chest, jeans, red braces, knit cap, beard |
+| bucker | 1 | em1101 | sweat-yellowed undershirt, bare arms, orange chainsaw chaps, orange ear defenders |
+| rigger | 17 | em1111 | tan waxed-canvas coat, hi-vis band, hickory shirt, stagged trousers, yellow hard hat |
+
+- Her game loads enemies from the Jill half of `g_emdPathTable`, so the
+  zombies are em11xx: em10xx's mesh and texture with Jill's animations.
+- In REB mode `LoadEntityEMD` looks in `enemy/stage<N>/` first; the build
+  ships the loggers to stage 2 and 3 only, so the mansion's zombies (the
+  back garden, the cellar) and the gallery's stay RE1's. With
+  `RE1_DEBUGLOG=1` the game logs each lookup as `[emd]`.
+- The first body's sheet shares texels between the head and its left
+  forearm and right shin, with no room to part them, so those are bare
+  dead skin, as RE1 paints them.
+- The camp's rooms mix the three (day/foes.ts); kinds that cry alike share
+  a sound block. The harness counts any of ids 0, 1 and 17 as a zombie.
+
+Checked in game in the mess hall, the bunkhouse and the camp yard
+(`~/reb-puzzle-lab/scripts/probe-loggers.ts`). Quarters 1 and 2 and the
+bell and cutters ways pass on the build.
