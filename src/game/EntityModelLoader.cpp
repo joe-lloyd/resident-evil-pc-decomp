@@ -509,7 +509,9 @@ void LoadEntityEMD(Entity* em, unsigned char entity_id)
         snprintf(stagePath, sizeof(stagePath), "enemy/stage%u/%s", (unsigned int)get_stage_id(), emdPath + 6);
         char probe[300];
         snprintf(probe, sizeof(probe), "%s%s", GAME_DATA_ROOT, stagePath);
-        if (AssetFileExists(probe)) emdPath = stagePath;
+        const int own = AssetFileExists(probe);
+        dbg_printf("[emd] stage %u: %s %s\n", (unsigned int)get_stage_id(), stagePath, own ? "ships" : "not shipped, the shared one");
+        if (own) emdPath = stagePath;
     }
 
     sprintf(FILE_PATH, "%s%s", GAME_DATA_ROOT, emdPath);
