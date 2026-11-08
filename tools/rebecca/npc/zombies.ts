@@ -18,7 +18,11 @@ export interface Zombie {
   readonly slug: string;
   /** The entity id her room scripts place: one of RE1's three zombie ids, which all run zombie_update. */
   readonly entity: 0 | 1 | 17;
-  /** The model g_emdPathTable names for that id (EntityModelLoader.cpp), in enemy/. */
+  /**
+   * The model g_emdPathTable names for that id in her game, in enemy/. She
+   * plays on the table's Jill half (player id & 1), whose zombies are em11xx:
+   * the em10xx mesh and texture with Jill's scenario's animations.
+   */
   readonly model: string;
   readonly skin: (t: Texel) => Rgb;
 }
@@ -26,7 +30,7 @@ export interface Zombie {
 // ---------------------------------------------------------------------------
 // The dead
 
-const ROT: Rgb = [124, 124, 104];
+const ROT: Rgb = [100, 100, 82];
 const BRUISE: Rgb = [92, 74, 88];
 const BLOOD: Rgb = [118, 16, 12];
 const DRIED: Rgb = [66, 22, 16];
@@ -83,7 +87,7 @@ interface DeadFace {
 }
 
 /** A dead face: sunken sockets with milky eyes, the nose's dark holes, the mouth open on its teeth, blood down the chin. */
-function deadFace(t: Texel, f: DeadFace, skin: Rgb = [136, 134, 112]): Rgb {
+function deadFace(t: Texel, f: DeadFace, skin: Rgb = [118, 116, 96]): Rgb {
   const [x, y, z] = t.at;
   const ax = Math.abs(x);
   let c = flesh(t, skin);
@@ -252,7 +256,7 @@ function buckerHead(t: Texel): Rgb {
   const cup = Math.hypot((y - 2800) * 0.9, z - 200);
   if (ax > 105 && cup < 70) return scale(cup < 58 ? [214, 104, 26] : [40, 40, 40], lit(t));
   if (Math.abs(z - 200) < 18 && y > 2850) return scale([36, 36, 38], lit(t));
-  let c = deadFace(t, BUCKER_FACE, [146, 144, 116]);
+  let c = deadFace(t, BUCKER_FACE, [122, 120, 98]);
   // Grey stubble on the scalp and jaw.
   if ((y > 2880 || (y < 2760 && z > 150)) && hash(Math.round(x / 3), Math.round(y / 3), Math.round(z / 3)) < 0.35) c = scale(c, 0.78);
   return c;
@@ -408,9 +412,9 @@ export function rigger(t: Texel): Rgb {
 export const CAMP_STAGES = [2, 3] as const;
 
 export const zombies: readonly Zombie[] = [
-  { slug: 'faller', entity: 0, model: 'EM1000.EMD', skin: faller },
-  { slug: 'bucker', entity: 1, model: 'EM1001.EMD', skin: bucker },
-  { slug: 'rigger', entity: 17, model: 'EM1011.EMD', skin: rigger },
+  { slug: 'faller', entity: 0, model: 'EM1100.EMD', skin: faller },
+  { slug: 'bucker', entity: 1, model: 'EM1101.EMD', skin: bucker },
+  { slug: 'rigger', entity: 17, model: 'EM1111.EMD', skin: rigger },
 ];
 
 /**
