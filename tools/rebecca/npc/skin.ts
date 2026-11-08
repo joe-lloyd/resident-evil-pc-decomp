@@ -44,15 +44,21 @@ function medianCut(colours: Map<number, number>, count: number): number[] {
 
 const distance = (a: number, b: number) => [0, 1, 2].reduce((n, k) => n + (((a >> (k * 5)) & 31) - ((b >> (k * 5)) & 31)) ** 2, 0);
 
-/** Our skin as the model's texture: each half gets its own palette of the colours it uses. */
+/**
+ * Our skin as the model's texture: each half gets its own palette of the
+ * colours it uses, or, for a texture with one palette row (the naked
+ * zombie's), the whole sheet shares it.
+ */
 export function fitSkin(texture: Texture, skin: Image): Texture {
   if (skin.width !== SIDE || skin.height !== SIDE) throw new Error(`a skin is ${SIDE}x${SIDE}, got ${skin.width}x${skin.height}`);
-  if (texture.palettes.length !== 2) throw new Error('a skin fits a texture with one palette row per half');
+  const rows = texture.palettes.length;
+  if (rows !== 1 && rows !== 2) throw new Error(`a skin fits a texture with one palette row, or one per half; this one has ${rows}`);
+  const rowOf = (x: number) => (rows === 1 ? 0 : rowAt(x));
   const c555 = Uint16Array.from({ length: SIDE * SIDE }, (_, i) => opaque555(skin.rgb[i * 3]!, skin.rgb[i * 3 + 1]!, skin.rgb[i * 3 + 2]!));
   const pixels = new Uint8Array(SIDE * SIDE);
-  const palettes = [0, 1].map((row) => {
+  const palettes = Array.from({ length: rows }, (_, row) => {
     const used = new Map<number, number>();
-    for (let i = 0; i < SIDE * SIDE; i++) if (rowAt(i % SIDE) === row) used.set(c555[i]!, (used.get(c555[i]!) ?? 0) + 1);
+    for (let i = 0; i < SIDE * SIDE; i++) if (rowOf(i % SIDE) === row) used.set(c555[i]!, (used.get(c555[i]!) ?? 0) + 1);
     const palette = used.size <= COLOURS ? [...used.keys()] : medianCut(used, COLOURS);
     const index = new Map<number, number>();
     const nearest = (c: number) => {
@@ -63,7 +69,7 @@ export function fitSkin(texture: Texture, skin: Image): Texture {
       }
       return at;
     };
-    for (let y = 0; y < SIDE; y++) for (let x = row * HALF; x < (row + 1) * HALF; x++) pixels[y * SIDE + x] = nearest(c555[y * SIDE + x]!);
+    for (let y = 0; y < SIDE; y++) for (let x = 0; x < SIDE; x++) if (rowOf(x) === row) pixels[y * SIDE + x] = nearest(c555[y * SIDE + x]!);
     return Uint16Array.from({ length: COLOURS }, (_, k) => palette[k] ?? 0);
   });
   return { palettes, pixels };
