@@ -27,6 +27,7 @@ import { buildWalk, walkFileName } from './walks.ts';
 import { readPng } from '../harness/image.ts';
 import { dayRooms, dayStart, walks } from './day/rooms.ts';
 import { people, personModel } from './npc/people.ts';
+import { CAMP_STAGES, zombieModel, zombies } from './npc/zombies.ts';
 import { saveRoomFiles } from './saveroom/patch.ts';
 import { buildIconSheet, globalsCpp, iconRows } from './items/sheet.ts';
 import { itemView, itemViewFiles, menuDataCpp, readItemModel } from './items/tmd.ts';
@@ -180,6 +181,16 @@ export function build(baseDir: string, outDir: string, raeCli: string): string[]
   for (const person of people) {
     writeFileSync(path.join(reb, 'enemy', person.model), personModel(readFileSync(findFile(enemyDir, person.model)), person));
     written.push(`enemy/${person.model}`);
+  }
+  // The logging camp's dead, in its stages' own folder, which her mode looks
+  // in first (EntityModelLoader.cpp): RE1's zombies with our skins (npc/zombies.ts).
+  for (const zombie of zombies) {
+    const model = zombieModel(readFileSync(findFile(enemyDir, zombie.model)), zombie);
+    for (const stage of CAMP_STAGES) {
+      mkdirSync(path.join(reb, 'enemy', `stage${stage}`), { recursive: true });
+      writeFileSync(path.join(reb, 'enemy', `stage${stage}`, zombie.model), model);
+      written.push(`enemy/stage${stage}/${zombie.model}`);
+    }
   }
 
   // Her files' pages (files/documents.ts), in place of RE1's in her mode

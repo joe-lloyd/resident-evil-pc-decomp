@@ -70,7 +70,7 @@ test('a tool whose last job was done the other way leaves her case with it', () 
 
 test('the bell calls in the loggers the cutters would bring out, and the crank way brings a dog', () => {
   // Ring-bell is FG_COMMON 143, the cutters' mark 158, the crank's 157.
-  assert.match(script('camp-yard'), /if \(ck\(FG_COMMON, 158, 0\) && ck\(FG_COMMON, 143, 1\)\) \{\n(\s+enemy\(17, [^\n]+\n){2}\}/);
+  assert.match(script('camp-yard'), /if \(ck\(FG_COMMON, 158, 0\) && ck\(FG_COMMON, 143, 1\)\) \{\n(\s+enemy\(1, [^\n]+\/\/ a bucker\n){2}\}/);
   assert.match(script('mine-entrance'), /if \(ck\(FG_COMMON, 157, 0\)\) \{\n\s+enemy\(2, [^\n]+\/\/ a cerberus\n\}/);
 });
 

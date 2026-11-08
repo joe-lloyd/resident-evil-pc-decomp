@@ -166,7 +166,8 @@ function quarterGoals(q: number): Goal[] {
 // named in its comment, saved by a run of the day just before it
 // ---------------------------------------------------------------------------
 
-const ZOMBIE = 17;
+/** RE1's three zombie ids: the camp's loggers wear all three (rebecca/npc/zombies.ts). */
+const ZOMBIES = [0, 1, 17];
 const DOG = 2;
 interface Press { spot: string; before: number; after: number }
 /** What a way's run saw: the end, her health at each switch, and the live enemies in each room it visited. */
@@ -181,7 +182,7 @@ interface Way {
   /** What went wrong, read from what the run saw. */
   checks: (seen: Seen) => string[];
 }
-const seenThere = (seen: Seen, visit: string, type: number) => seen.arrivals.get(visit)?.filter((t) => t === type).length ?? -1;
+const seenThere = (seen: Seen, visit: string, types: readonly number[]) => seen.arrivals.get(visit)?.filter((t) => types.includes(t)).length ?? -1;
 const unless = (ok: boolean, what: string) => (ok ? [] : [what]);
 const lockOf = (from: Slug, to: Slug) => world.doors.find((d) => d.from === from && d.to === to)?.lock?.flag;
 
@@ -204,8 +205,8 @@ const WAYS: Record<string, Way> = {
       { id: 'bell-yard', needs: ['bell-mess'], kind: 'visit', room: 'camp-yard', from: 'mess' },
     ],
     checks: (seen) => [
-      ...unless(seenThere(seen, 'bell-mess', ZOMBIE) >= 2, `the bell should call loggers into the mess hall: ${seenThere(seen, 'bell-mess', ZOMBIE)} there`),
-      ...unless(seenThere(seen, 'bell-yard', ZOMBIE) === 0, `the camp yard should be empty after the bell and the cut: ${seenThere(seen, 'bell-yard', ZOMBIE)} there`),
+      ...unless(seenThere(seen, 'bell-mess', ZOMBIES) >= 2, `the bell should call loggers into the mess hall: ${seenThere(seen, 'bell-mess', ZOMBIES)} there`),
+      ...unless(seenThere(seen, 'bell-yard', ZOMBIES) === 0, `the camp yard should be empty after the bell and the cut: ${seenThere(seen, 'bell-yard', ZOMBIES)} there`),
     ],
   },
   // after-cutters: the cutters on the workshop, no bell: the noise brings two loggers out.
@@ -216,7 +217,7 @@ const WAYS: Record<string, Way> = {
       { id: 'cut-yard', needs: ['cut-mess'], kind: 'visit', room: 'camp-yard', from: 'mess' },
     ],
     checks: (seen) => [
-      ...unless(seenThere(seen, 'cut-yard', ZOMBIE) >= 2, `the cut should bring two loggers into the camp yard: ${seenThere(seen, 'cut-yard', ZOMBIE)} there`),
+      ...unless(seenThere(seen, 'cut-yard', ZOMBIES) >= 2, `the cut should bring two loggers into the camp yard: ${seenThere(seen, 'cut-yard', ZOMBIES)} there`),
       ...unless(seen.end.items.some((i) => i.id === ITEM.cutters && i.qty === 2), `the cutters should stay with two uses: ${JSON.stringify(seen.end.items)}`),
     ],
   },

@@ -20,13 +20,25 @@ export interface Floor {
   readonly doors: readonly { zone: Rect; arrive: { x: number; z: number } }[];
 }
 
+/** A zombie's cries, the WAVs RE1's own rows give its zombies, by the slot each plays. */
+const ZOMBIE_CRIES = ['z_taore', 'z_ftL', 'z_ftR', 'z_kamu', 'z_osou', 'z_unaruA', 'z_head', 'z_Hkick', 'z_Ugoron', 'z_unaruB'];
+
 /**
  * Entity id (cmd_enemy_set operand 1), behaviour byte, and collision records,
  * as RE1 places each kind; and its cries, the WAVs RE1's own rooms give that
  * kind in their sound rows (src/game/SoundTables.cpp), by the slot it plays.
+ * The camp's loggers are RE1's three zombie bodies with skins of ours, which
+ * her mode loads for the camp's stages only (npc/zombies.ts); a zombie
+ * anywhere else is RE1's.
  */
 export const FOE_KINDS = {
-  zombie: { id: 17, behavior: 0, sca: 2, sounds: ['z_taore', 'z_ftL', 'z_ftR', 'z_kamu', 'z_osou', 'z_unaruA', 'z_head', 'z_Hkick', 'z_Ugoron', 'z_unaruB'] },
+  zombie: { id: 17, behavior: 0, sca: 2, sounds: ZOMBIE_CRIES },
+  /** A faller in flannel and jeans, on RE1's first zombie. */
+  faller: { id: 0, behavior: 0, sca: 2, sounds: ZOMBIE_CRIES },
+  /** A bucker in his undershirt and chaps, on the naked zombie; behaviour 4 wanders, as RE1 places that body. */
+  bucker: { id: 1, behavior: 4, sca: 2, sounds: ZOMBIE_CRIES },
+  /** A rigger in a waxed coat and a hard hat, on the green-coated zombie. */
+  rigger: { id: 17, behavior: 0, sca: 2, sounds: ZOMBIE_CRIES },
   cerberus: { id: 2, behavior: 1, sca: 2, sounds: ['cer_foot', 'cer_taoA', 'cer_unar', 'cer_bite', 'cer_cryA', 'cer_taoB', 'cer_jkMX', 'cer_kamu', 'cer_cryB', 'cer_runMX'] },
   crow: { id: 5, behavior: 0, sca: 2, sounds: ['RVcar1', 'RVpat', 'RVcar2', 'RVwing1', 'RVwing2', 'RVfryed'] },
   adder: { id: 10, behavior: 1, sca: 1, sounds: ['PY_mena', 'PY_hit2', 'PY_fall'] },
@@ -36,15 +48,17 @@ export type Kind = keyof typeof FOE_KINDS;
 
 /**
  * An enemy plays sound slot n of its block, block * 10 + n (Snd_em), the
- * block being cmd_enemy_set's last byte. Each kind in a room takes the next
- * block, in the order the room lists them. Two at most: the room's things
- * sound from slot 20 (sound/script.ts).
+ * block being cmd_enemy_set's last byte. Each set of cries in a room takes
+ * the next block, in the order the room lists its kinds; kinds that cry
+ * alike (the loggers) share one. Two at most: the room's things sound from
+ * slot 20 (sound/script.ts).
  */
 const BLOCKS = 2;
 function soundBlocks(slug: string, foes: Record<string, readonly FoeGroup[]>): Map<Kind, number> {
   const kinds = [...new Set((foes[slug] ?? []).map(([kind]) => kind))];
-  if (kinds.length > BLOCKS) throw new Error(`${slug}: ${kinds.length} kinds of enemy (${kinds.join(', ')}); a room has sound for ${BLOCKS}`);
-  return new Map(kinds.map((k, i) => [k, i]));
+  const cries = [...new Set(kinds.map((k) => FOE_KINDS[k].sounds))];
+  if (cries.length > BLOCKS) throw new Error(`${slug}: ${cries.length} kinds of enemy cries (${kinds.join(', ')}); a room has sound for ${BLOCKS}`);
+  return new Map(kinds.map((k) => [k, cries.indexOf(FOE_KINDS[k].sounds)]));
 }
 
 
@@ -64,17 +78,18 @@ export const FOES: Record<string, readonly FoeGroup[]> = {
   platform: [['crow', 2]],
   woods: [['cerberus', 2]],
   den: [['cerberus', 1]],
-  'logging-road': [['zombie', 1]],
+  'logging-road': [['faller', 1]],
   // The bell calls them to the mess hall; the cutters' noise brings two more
   // out, unless the bell has called those in to supper too.
-  'camp-yard': [['zombie', 3, { until: 'ring-bell' }], ['zombie', 2, { after: 'workshop-cut', until: 'ring-bell' }]],
-  bunkhouse: [['zombie', 1]],
-  mess: [['zombie', 2], ['zombie', 2, { after: 'ring-bell' }]],
+  // The two the cutters' noise brings out of the workshop are its buckers, chaps and all.
+  'camp-yard': [['faller', 2, { until: 'ring-bell' }], ['rigger', 1, { until: 'ring-bell' }], ['bucker', 2, { after: 'workshop-cut', until: 'ring-bell' }]],
+  bunkhouse: [['bucker', 1]],
+  mess: [['faller', 1], ['rigger', 1], ['bucker', 1, { after: 'ring-bell' }], ['faller', 1, { after: 'ring-bell' }]],
   depot: [['adder', 2]],
   // The running mill draws loggers to the sawmill and the flume head.
-  sawmill: [['zombie', 2], ['zombie', 1, { after: 'mill-race' }]],
-  flume: [['zombie', 1, { after: 'mill-race' }]],
-  pond: [['zombie', 1]],
+  sawmill: [['bucker', 2], ['rigger', 1, { after: 'mill-race' }]],
+  flume: [['rigger', 1, { after: 'mill-race' }]],
+  pond: [['faller', 1]],
   road: [['crow', 3]],
   // The generator's noise brings a dog down the gully.
   washout: [['adder', 2], ['cerberus', 1, { after: 'generator-on' }]],
