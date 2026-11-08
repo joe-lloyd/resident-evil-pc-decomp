@@ -5,6 +5,7 @@
 #include "../marni/PSXTexture.h"
 #include "FileLoader.h"
 #include <cstdio>
+#include <cstring>
 #include "../system/AssetPath.h"
 #include "dc/EntityModels.h"
 #include "dc/Items.h"        // DC_ITEM_BERETTA_CUSTOM
@@ -497,6 +498,18 @@ void LoadEntityEMD(Entity* em, unsigned char entity_id)
         if (dcPath != NULL) {
             emdPath = dcPath;
         }
+    }
+
+    // Port addition, her mode: a stage's own model for an enemy, under
+    // enemy/stage<N>/, before the one every stage shares. The logging camp's
+    // dead are RE1's zombies with skins of ours (tools/rebecca/npc/zombies.ts);
+    // the mansion's stay RE1's.
+    char stagePath[48];
+    if (g_bRebMode && strncmp(emdPath, "enemy/", 6) == 0) {
+        snprintf(stagePath, sizeof(stagePath), "enemy/stage%u/%s", (unsigned int)get_stage_id(), emdPath + 6);
+        char probe[300];
+        snprintf(probe, sizeof(probe), "%s%s", GAME_DATA_ROOT, stagePath);
+        if (AssetFileExists(probe)) emdPath = stagePath;
     }
 
     sprintf(FILE_PATH, "%s%s", GAME_DATA_ROOT, emdPath);
